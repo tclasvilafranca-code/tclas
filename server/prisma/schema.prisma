@@ -35,6 +35,7 @@ model User {
   xpEvents         XPEvent[]
   badges           UserBadge[]
   exerciseAttempts ExerciseAttempt[]
+  pushSubscriptions PushSubscription[]
 }
 
 model StudentProfile {
@@ -52,10 +53,22 @@ model StudentProfile {
   streakCurrent    Int       @default(0)
   streakLongest    Int       @default(0)
   lastActivityDate DateTime?
+  lastReminderSentAt DateTime? // ultima vez que se le envio un recordatorio de practica (push), para no mandar mas de uno al dia
   onboarded        Boolean   @default(false)
   createdAt        DateTime  @default(now())
 
   repertoire RepertoireEntry[]
+}
+
+// Suscripcion del navegador a notificaciones push (recordatorio de practica diaria).
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
 }
 
 // Biblioteca compartida de piezas/partituras (reutilizable entre alumnos).

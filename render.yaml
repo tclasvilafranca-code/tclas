@@ -14,6 +14,15 @@ services:
         generateValue: true
       - key: DATABASE_URL
         sync: false
+      # Recordatorios de practica (notificaciones push): opcionales. Sin
+      # ellas configuradas, la app funciona igual, simplemente no se mandan
+      # avisos. Generar un par con: npx web-push generate-vapid-keys
+      - key: VAPID_PUBLIC_KEY
+        sync: false
+      - key: VAPID_PRIVATE_KEY
+        sync: false
+      - key: VAPID_SUBJECT
+        sync: false
 
   - name: tclas-web
     type: web

@@ -3,6 +3,7 @@ import cors from "cors";
 import authRoutes from "./routes/auth";
 import contentRoutes from "./routes/content";
 import teacherRoutes from "./routes/teacher";
+import pushRoutes from "./routes/push";
 
 export const app = express();
 app.use(cors());
@@ -13,6 +14,7 @@ app.get("/api/health", (_req, res) => res.json({ ok: true, service: "t-clas pian
 app.use("/api/auth", authRoutes);
 app.use("/api", contentRoutes);
 app.use("/api/teacher", teacherRoutes);
+app.use("/api/push", pushRoutes);
 
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error(err);

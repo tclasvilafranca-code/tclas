@@ -20,7 +20,7 @@ export function ScrollingPlayExercise({ exercise, onSubmit, feedback }: Props) {
   const [running, setRunning] = useState(false);
   const [now, setNow] = useState(0);
   const startRef = useRef(0);
-  const rafRef = useRef<number>();
+  const rafRef = useRef<number | undefined>(undefined);
   const done = cursor >= notes.length;
 
   const startTimes = useMemo(() => {

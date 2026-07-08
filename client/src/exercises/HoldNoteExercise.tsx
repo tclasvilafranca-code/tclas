@@ -17,7 +17,7 @@ export function HoldNoteExercise({ exercise, onSubmit, feedback }: Props) {
   const [progress, setProgress] = useState(0);
   const [releasedEarly, setReleasedEarly] = useState(false);
   const startRef = useRef(0);
-  const rafRef = useRef<number>();
+  const rafRef = useRef<number | undefined>(undefined);
   const submitted = !!feedback;
 
   function tick() {

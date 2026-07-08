@@ -9,6 +9,7 @@ import { PieceDetailModal } from "../components/PieceDetailModal";
 import { MascotBubble } from "../components/MascotBubble";
 import { StreakCalendar } from "../components/StreakCalendar";
 import { ReviewBanner } from "../components/ReviewBanner";
+import { NotificationsToggle } from "../components/NotificationsToggle";
 import { greetingMessage } from "../lib/misol";
 
 export function Home() {
@@ -42,7 +43,9 @@ export function Home() {
         <main className="px-4 py-8">
           <MascotBubble message={greeting} mood="cheer" align="center" className="mb-2 text-left" />
           <StreakCalendar streakCurrent={me.studentProfile.streakCurrent} lastActivityDate={me.studentProfile.lastActivityDate} />
-          <div className="mb-6" />
+          <div className="max-w-md mx-auto flex justify-center mt-3 mb-6">
+            <NotificationsToggle />
+          </div>
 
           <ReviewBanner due={reviewsDue} onOpenLesson={(id) => navigate(`/app/lesson/${id}`)} />
 

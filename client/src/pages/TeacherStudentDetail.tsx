@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api } from "../lib/api";
-import type { CurriculumTree, StudentProfile, PieceLibraryItem } from "../lib/api";
+import type { CurriculumTree, StudentProfile, PieceLibraryItem, StudentSummary, AgeGroup } from "../lib/api";
 
 interface StudentDetailResponse {
   id: string;
@@ -13,31 +13,70 @@ interface StudentDetailResponse {
   badges: { code: string; name: string; icon: string; earnedAt: string }[];
 }
 
+interface SelectedPiece {
+  piece: PieceLibraryItem;
+  durationWeeks: number;
+  teacherNote: string;
+}
+
+const AGE_FILTER_LABEL: Record<"ALL" | AgeGroup, string> = {
+  ALL: "Todos",
+  KIDS: "Kids",
+  TEENS: "Junior",
+  ADULTS: "Adultos",
+};
+
 function todayISO(): string {
   return new Date().toISOString().slice(0, 10);
+}
+
+function suggestedNextDate(pieces: CurriculumTree["pieces"]): string {
+  if (pieces.length === 0) return todayISO();
+  const maxEnd = Math.max(...pieces.map((p) => new Date(p.startDate).getTime() + p.durationWeeks * 7 * 86400000));
+  return new Date(maxEnd).toISOString().slice(0, 10);
 }
 
 export function TeacherStudentDetail() {
   const { id } = useParams<{ id: string }>();
   const [data, setData] = useState<StudentDetailResponse | null>(null);
   const [pieces, setPieces] = useState<PieceLibraryItem[] | null>(null);
+  const [allStudents, setAllStudents] = useState<StudentSummary[] | null>(null);
+
+  // Formulario "anadir una pieza" (rapido, ya existente)
   const [selectedPiece, setSelectedPiece] = useState("");
   const [startDate, setStartDate] = useState(todayISO());
   const [durationWeeks, setDurationWeeks] = useState<number | "">("");
   const [teacherNote, setTeacherNote] = useState("");
   const [saving, setSaving] = useState(false);
 
+  // Constructor de repertorio (multiple piezas de golpe)
+  const [ageFilter, setAgeFilter] = useState<"ALL" | AgeGroup>("ALL");
+  const [selected, setSelected] = useState<SelectedPiece[]>([]);
+  const [bulkStartDate, setBulkStartDate] = useState(todayISO());
+  const [bulkSaving, setBulkSaving] = useState(false);
+
+  // Duplicar repertorio de otro alumno
+  const [duplicateFrom, setDuplicateFrom] = useState("");
+  const [duplicateStartDate, setDuplicateStartDate] = useState(todayISO());
+  const [duplicating, setDuplicating] = useState(false);
+
   function load() {
     if (!id) return;
-    api.get<StudentDetailResponse>(`/teacher/students/${id}`).then(setData);
+    api.get<StudentDetailResponse>(`/teacher/students/${id}`).then((d) => {
+      setData(d);
+      setBulkStartDate(suggestedNextDate(d.curriculum.pieces));
+    });
   }
   useEffect(load, [id]);
   useEffect(() => {
     api.get<PieceLibraryItem[]>("/teacher/pieces").then(setPieces);
+    api.get<StudentSummary[]>("/teacher/students").then(setAllStudents);
   }, []);
 
   const assignedPieceIds = new Set(data?.curriculum.pieces.map((p) => p.piece.id));
+  const selectedIds = new Set(selected.map((s) => s.piece.id));
   const availablePieces = pieces?.filter((p) => !assignedPieceIds.has(p.id)) ?? [];
+  const pickerPieces = availablePieces.filter((p) => (ageFilter === "ALL" ? true : p.ageGroup === ageFilter) && !selectedIds.has(p.id));
 
   async function assignPiece(e: FormEvent) {
     e.preventDefault();
@@ -66,7 +105,60 @@ export function TeacherStudentDetail() {
     load();
   }
 
+  function addToSelection(piece: PieceLibraryItem) {
+    setSelected((s) => [...s, { piece, durationWeeks: piece.defaultWeeks, teacherNote: "" }]);
+  }
+  function removeFromSelection(idx: number) {
+    setSelected((s) => s.filter((_, i) => i !== idx));
+  }
+  function moveSelection(idx: number, dir: -1 | 1) {
+    setSelected((s) => {
+      const copy = [...s];
+      const target = idx + dir;
+      if (target < 0 || target >= copy.length) return s;
+      [copy[idx], copy[target]] = [copy[target], copy[idx]];
+      return copy;
+    });
+  }
+  function updateSelection(idx: number, patch: Partial<SelectedPiece>) {
+    setSelected((s) => s.map((item, i) => (i === idx ? { ...item, ...patch } : item)));
+  }
+
+  async function submitBuilder() {
+    if (!id || selected.length === 0) return;
+    setBulkSaving(true);
+    try {
+      await api.post(`/teacher/students/${id}/repertoire/bulk`, {
+        startDate: new Date(bulkStartDate).toISOString(),
+        items: selected.map((s) => ({ pieceId: s.piece.id, durationWeeks: s.durationWeeks, teacherNote: s.teacherNote })),
+      });
+      setSelected([]);
+      load();
+    } finally {
+      setBulkSaving(false);
+    }
+  }
+
+  async function submitDuplicate() {
+    if (!id || !duplicateFrom) return;
+    const sourceName = allStudents?.find((s) => s.id === duplicateFrom)?.name ?? "ese alumno";
+    if (!confirm(`¿Copiar todo el repertorio de ${sourceName} para ${data?.name}? Se añadira a partir del ${duplicateStartDate}.`)) return;
+    setDuplicating(true);
+    try {
+      await api.post(`/teacher/students/${id}/repertoire/duplicate`, {
+        fromStudentId: duplicateFrom,
+        startDate: new Date(duplicateStartDate).toISOString(),
+      });
+      setDuplicateFrom("");
+      load();
+    } finally {
+      setDuplicating(false);
+    }
+  }
+
   if (!data) return <p className="text-center mt-16 text-tclas-ink/50">Cargando...</p>;
+
+  const otherStudents = allStudents?.filter((s) => s.id !== id && s.piecesAssigned > 0) ?? [];
 
   return (
     <div className="min-h-screen">
@@ -124,7 +216,122 @@ export function TeacherStudentDetail() {
         </section>
 
         <section>
-          <h2 className="font-display text-xl mb-3">Anadir pieza al repertorio</h2>
+          <h2 className="font-display text-xl mb-1">Constructor de repertorio</h2>
+          <p className="text-xs text-tclas-ink/50 mb-3">Elige varias piezas de la biblioteca, en el orden que quieras (puedes mezclar Kids, Junior y Adultos), y añádelas todas de golpe. Las lecciones se generan solas.</p>
+
+          <div className="bg-white/70 border border-tclas-ink/10 rounded-xl p-5 grid gap-4">
+            <div className="flex flex-wrap gap-2">
+              {(["ALL", "KIDS", "TEENS", "ADULTS"] as const).map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setAgeFilter(f)}
+                  className={`text-xs font-semibold rounded-full px-3 py-1.5 border ${ageFilter === f ? "bg-tclas-plum text-tclas-cream border-tclas-plum" : "border-tclas-ink/20 text-tclas-ink/60"}`}
+                >
+                  {AGE_FILTER_LABEL[f]}
+                </button>
+              ))}
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-2 max-h-64 overflow-y-auto pr-1">
+              {pickerPieces.map((p) => (
+                <button
+                  key={p.id}
+                  onClick={() => addToSelection(p)}
+                  className="text-left bg-tclas-cream/60 hover:bg-tclas-gold/10 border border-tclas-ink/10 rounded-lg px-3 py-2 flex items-center gap-2"
+                >
+                  <span className="text-xl">{p.iconEmoji}</span>
+                  <span className="flex-1 min-w-0">
+                    <span className="block text-sm font-semibold truncate">{p.title}</span>
+                    <span className="block text-[11px] text-tclas-ink/50">
+                      {AGE_FILTER_LABEL[p.ageGroup]} · {p.defaultWeeks} sem.{p.seasonalTag ? ` · 🎄` : ""}
+                    </span>
+                  </span>
+                  <span className="text-tclas-plum text-lg leading-none">+</span>
+                </button>
+              ))}
+              {pickerPieces.length === 0 && <p className="text-xs text-tclas-ink/40 col-span-2">No hay mas piezas disponibles con este filtro.</p>}
+            </div>
+
+            {selected.length > 0 && (
+              <div className="grid gap-2 border-t border-tclas-ink/10 pt-4">
+                <p className="text-xs font-semibold text-tclas-ink/60">Repertorio a añadir, en orden ({selected.length}):</p>
+                {selected.map((s, idx) => (
+                  <div key={`${s.piece.id}-${idx}`} className="flex items-center gap-2 bg-tclas-plum/5 rounded-lg px-3 py-2">
+                    <span className="text-xs text-tclas-ink/40 w-5 text-center">{idx + 1}</span>
+                    <span className="text-lg">{s.piece.iconEmoji}</span>
+                    <span className="flex-1 text-sm font-medium truncate">{s.piece.title}</span>
+                    <input
+                      type="number"
+                      min={1}
+                      max={12}
+                      value={s.durationWeeks}
+                      onChange={(e) => updateSelection(idx, { durationWeeks: parseInt(e.target.value, 10) || 1 })}
+                      className="w-14 border border-tclas-ink/20 rounded px-1 py-1 text-xs text-center"
+                      title="Semanas"
+                    />
+                    <span className="text-[10px] text-tclas-ink/40">sem.</span>
+                    <button onClick={() => moveSelection(idx, -1)} disabled={idx === 0} className="text-tclas-ink/40 hover:text-tclas-ink disabled:opacity-20 px-1">
+                      ↑
+                    </button>
+                    <button onClick={() => moveSelection(idx, 1)} disabled={idx === selected.length - 1} className="text-tclas-ink/40 hover:text-tclas-ink disabled:opacity-20 px-1">
+                      ↓
+                    </button>
+                    <button onClick={() => removeFromSelection(idx)} className="text-tclas-rose text-xs hover:underline px-1">
+                      Quitar
+                    </button>
+                  </div>
+                ))}
+
+                <label className="text-sm font-semibold mt-2">
+                  Fecha de inicio del repertorio
+                  <input type="date" value={bulkStartDate} onChange={(e) => setBulkStartDate(e.target.value)} className="block w-full border border-tclas-ink/20 rounded-lg px-3 py-2 mt-1" />
+                </label>
+
+                <button
+                  onClick={submitBuilder}
+                  disabled={bulkSaving}
+                  className="bg-tclas-plum text-tclas-cream rounded-lg py-2.5 font-semibold hover:bg-tclas-plum-light disabled:opacity-50"
+                >
+                  {bulkSaving ? "Añadiendo..." : `Añadir estas ${selected.length} piezas al repertorio`}
+                </button>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {otherStudents.length > 0 && (
+          <section>
+            <h2 className="font-display text-xl mb-1">Duplicar repertorio de otro alumno</h2>
+            <p className="text-xs text-tclas-ink/50 mb-3">Copia todas las piezas (y sus lecciones) de un alumno ya creado, como punto de partida para este.</p>
+            <div className="bg-white/70 border border-tclas-ink/10 rounded-xl p-5 grid gap-3 sm:flex sm:items-end sm:gap-3">
+              <label className="text-sm font-semibold flex-1">
+                Copiar de
+                <select value={duplicateFrom} onChange={(e) => setDuplicateFrom(e.target.value)} className="block w-full border border-tclas-ink/20 rounded-lg px-3 py-2 mt-1">
+                  <option value="">— Elige un alumno —</option>
+                  {otherStudents.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.name} ({s.piecesAssigned} piezas)
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="text-sm font-semibold">
+                Fecha de inicio
+                <input type="date" value={duplicateStartDate} onChange={(e) => setDuplicateStartDate(e.target.value)} className="block border border-tclas-ink/20 rounded-lg px-3 py-2 mt-1" />
+              </label>
+              <button
+                onClick={submitDuplicate}
+                disabled={!duplicateFrom || duplicating}
+                className="bg-tclas-plum text-tclas-cream rounded-lg py-2.5 px-4 font-semibold hover:bg-tclas-plum-light disabled:opacity-50 whitespace-nowrap"
+              >
+                {duplicating ? "Copiando..." : "Duplicar repertorio"}
+              </button>
+            </div>
+          </section>
+        )}
+
+        <section>
+          <h2 className="font-display text-xl mb-3">Añadir una pieza suelta</h2>
           <form onSubmit={assignPiece} className="bg-white/70 border border-tclas-ink/10 rounded-xl p-5 grid gap-3">
             <label className="text-sm font-semibold">
               Pieza
@@ -160,7 +367,7 @@ export function TeacherStudentDetail() {
               <textarea value={teacherNote} onChange={(e) => setTeacherNote(e.target.value)} rows={2} className="block w-full border border-tclas-ink/20 rounded-lg px-3 py-2 mt-1" />
             </label>
             <button disabled={saving || !selectedPiece} className="bg-tclas-plum text-tclas-cream rounded-lg py-2.5 font-semibold hover:bg-tclas-plum-light disabled:opacity-50">
-              {saving ? "Anadiendo..." : "Anadir al repertorio"}
+              {saving ? "Añadiendo..." : "Añadir al repertorio"}
             </button>
           </form>
         </section>

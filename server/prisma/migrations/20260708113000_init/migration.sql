@@ -45,6 +45,8 @@ CREATE TABLE "Piece" (
     "timeSignature" TEXT NOT NULL,
     "seasonalTag" TEXT,
     "iconEmoji" TEXT NOT NULL DEFAULT '🎵',
+    "aboutText" TEXT NOT NULL DEFAULT '',
+    "tips" TEXT NOT NULL DEFAULT '',
     "content" TEXT NOT NULL,
 
     CONSTRAINT "Piece_pkey" PRIMARY KEY ("id")

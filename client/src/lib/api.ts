@@ -188,6 +188,12 @@ export interface PieceLibraryItem {
   iconEmoji: string;
 }
 
+export interface BulkRepertoireItem {
+  pieceId: string;
+  durationWeeks?: number;
+  teacherNote?: string;
+}
+
 export interface NewStudentCredentials {
   id: string;
   name: string;

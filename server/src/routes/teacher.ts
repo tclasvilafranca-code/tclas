@@ -4,7 +4,7 @@ import { z } from "zod";
 import { prisma } from "../prisma";
 import { requireAuth, requireRole, AuthedRequest } from "../auth";
 import { buildCurriculumForUser } from "../curriculum";
-import { createRepertoireEntryWithLessons } from "../repertoire";
+import { createRepertoireEntryWithLessons, bulkAssignRepertoire } from "../repertoire";
 
 const router = Router();
 router.use(requireAuth, requireRole("TEACHER"));
@@ -162,6 +162,65 @@ router.post("/students/:id/repertoire", async (req, res) => {
   });
 
   res.status(201).json(entry);
+});
+
+const bulkAssignSchema = z.object({
+  startDate: z.string().optional(),
+  items: z
+    .array(
+      z.object({
+        pieceId: z.string(),
+        durationWeeks: z.number().int().min(1).max(12).optional(),
+        teacherNote: z.string().optional(),
+      })
+    )
+    .min(1),
+});
+
+router.post("/students/:id/repertoire/bulk", async (req, res) => {
+  const parsed = bulkAssignSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "Datos invalidos", details: parsed.error.flatten() });
+
+  const student = await prisma.user.findUnique({ where: { id: req.params.id }, include: { studentProfile: true } });
+  if (!student?.studentProfile) return res.status(404).json({ error: "Alumno no encontrado" });
+
+  const created = await bulkAssignRepertoire({
+    studentProfileId: student.studentProfile.id,
+    items: parsed.data.items,
+    startDate: parsed.data.startDate ? new Date(parsed.data.startDate) : undefined,
+  });
+
+  res.status(201).json(created);
+});
+
+const duplicateSchema = z.object({
+  fromStudentId: z.string(),
+  startDate: z.string().optional(),
+});
+
+router.post("/students/:id/repertoire/duplicate", async (req, res) => {
+  const parsed = duplicateSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "Datos invalidos", details: parsed.error.flatten() });
+
+  const student = await prisma.user.findUnique({ where: { id: req.params.id }, include: { studentProfile: true } });
+  if (!student?.studentProfile) return res.status(404).json({ error: "Alumno no encontrado" });
+
+  const source = await prisma.user.findUnique({ where: { id: parsed.data.fromStudentId }, include: { studentProfile: true } });
+  if (!source?.studentProfile) return res.status(404).json({ error: "Alumno de origen no encontrado" });
+
+  const sourceEntries = await prisma.repertoireEntry.findMany({
+    where: { studentId: source.studentProfile.id },
+    orderBy: { orderIndex: "asc" },
+  });
+  if (sourceEntries.length === 0) return res.status(400).json({ error: "Ese alumno todavia no tiene repertorio para copiar" });
+
+  const created = await bulkAssignRepertoire({
+    studentProfileId: student.studentProfile.id,
+    items: sourceEntries.map((e) => ({ pieceId: e.pieceId, durationWeeks: e.durationWeeks, teacherNote: e.teacherNote })),
+    startDate: parsed.data.startDate ? new Date(parsed.data.startDate) : undefined,
+  });
+
+  res.status(201).json(created);
 });
 
 router.delete("/students/:id/repertoire/:entryId", async (req, res) => {

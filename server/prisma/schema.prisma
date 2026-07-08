@@ -71,6 +71,8 @@ model Piece {
   timeSignature  String // p.ej. "4/4"
   seasonalTag    String? // p.ej. "christmas"
   iconEmoji      String  @default("🎵")
+  aboutText      String  @default("") // curiosidad/contexto de la pieza o su compositor
+  tips           String  @default("") // consejos practicos para tocarla
   content        String // JSON: PieceContent (ver src/types.ts)
 
   repertoireEntries RepertoireEntry[]

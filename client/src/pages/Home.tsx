@@ -10,6 +10,7 @@ import { MascotBubble } from "../components/MascotBubble";
 import { StreakCalendar } from "../components/StreakCalendar";
 import { ReviewBanner } from "../components/ReviewBanner";
 import { NotificationsToggle } from "../components/NotificationsToggle";
+import { MyPerformance } from "../components/MyPerformance";
 import { greetingMessage } from "../lib/misol";
 
 export function Home() {
@@ -48,6 +49,8 @@ export function Home() {
           </div>
 
           <ReviewBanner due={reviewsDue} onOpenLesson={(id) => navigate(`/app/lesson/${id}`)} />
+
+          <MyPerformance />
 
           {tree.pieces.length === 0 ? (
             <p className="text-center text-tclas-ink/50 mt-16">Todavia no tienes piezas asignadas. ¡Pronto tu profesor/a anadira tu repertorio!</p>

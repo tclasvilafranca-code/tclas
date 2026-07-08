@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { api, ApiError } from "../lib/api";
-import type { LessonDetail, AttemptResult, CompleteLessonResult, ExercisePhase, ExerciseType } from "../lib/api";
+import type { LessonDetail, AttemptResult, CompleteLessonResult, ExerciseType } from "../lib/api";
 import { ExercisePlayer } from "../exercises/ExercisePlayer";
 import { LessonCompleteModal } from "../components/LessonCompleteModal";
 import { playSuccessChime, playErrorBuzz } from "../lib/audio";
@@ -10,13 +10,7 @@ import { MascotBubble } from "../components/MascotBubble";
 import { correctMessage, wrongMessage } from "../lib/misol";
 import { msUntilNextHeart, formatCountdown } from "../lib/hearts";
 import { timerSecondsFor, autoAdvanceDelayFor } from "../lib/pacing";
-
-const PHASE_LABEL: Record<ExercisePhase, { label: string; className: string }> = {
-  VISUAL_AGILITY: { label: "👁️ Agilidad visual", className: "bg-tclas-gold/15 text-tclas-plum" },
-  EAR_ACUITY: { label: "👂 Agudeza auditiva", className: "bg-tclas-plum/10 text-tclas-plum" },
-  NOTE_RUSH: { label: "⚡ Notas al vuelo", className: "bg-tclas-rose/15 text-tclas-rose" },
-  SHEET_PRACTICE: { label: "🎼 Practica de partitura", className: "bg-tclas-sage/15 text-tclas-sage" },
-};
+import { PHASE_LABEL } from "../lib/phases";
 
 // Segundos de respuesta para los tipos de pregunta rapida (opcion multiple/escribir).
 // Los demas tipos (tocar, ritmo, relacionar, ordenar, tramos...) llevan su propio ritmo.

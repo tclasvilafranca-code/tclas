@@ -2,7 +2,7 @@ import { Router } from "express";
 import { z } from "zod";
 import { prisma } from "../prisma";
 import { requireAuth, AuthedRequest } from "../auth";
-import { buildCurriculumForUser, sanitizeExercise } from "../curriculum";
+import { buildCurriculumForUser, sanitizeExercise, computePhaseStats } from "../curriculum";
 import {
   recomputeHearts,
   loseHeart,
@@ -20,6 +20,12 @@ router.get("/curriculum", requireAuth, async (req: AuthedRequest, res) => {
   if (!profile) return res.status(400).json({ error: "Perfil de alumno no encontrado" });
   const tree = await buildCurriculumForUser(req.auth!.userId, profile.id);
   res.json(tree);
+});
+
+// El propio alumno ve en que bloque flaquea, no solo su profesora.
+router.get("/me/stats", requireAuth, async (req: AuthedRequest, res) => {
+  const phaseStats = await computePhaseStats(req.auth!.userId);
+  res.json({ phaseStats });
 });
 
 // Repaso espaciado: piezas ya terminadas cuyo proximo repaso ya ha llegado.

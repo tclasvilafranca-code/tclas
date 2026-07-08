@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "../prisma";
 import { requireAuth, requireRole, AuthedRequest } from "../auth";
-import { buildCurriculumForUser } from "../curriculum";
+import { buildCurriculumForUser, computePhaseStats } from "../curriculum";
 import { createRepertoireEntryWithLessons, bulkAssignRepertoire } from "../repertoire";
 
 const router = Router();
@@ -113,18 +113,7 @@ router.get("/students/:id", async (req: AuthedRequest, res) => {
   // Rendimiento por bloque: cuantas respuestas acierta el alumno en cada tipo
   // de bloque de la sesion (agilidad visual, agudeza auditiva, notas al vuelo,
   // practica de partitura), para que la profesora vea en que flaquea de un vistazo.
-  const attempts = await prisma.exerciseAttempt.findMany({
-    where: { userId: student.id },
-    select: { correct: true, exercise: { select: { phase: true } } },
-  });
-  const phaseTotals = new Map<string, { correct: number; total: number }>();
-  for (const a of attempts) {
-    const entry = phaseTotals.get(a.exercise.phase) ?? { correct: 0, total: 0 };
-    entry.total += 1;
-    if (a.correct) entry.correct += 1;
-    phaseTotals.set(a.exercise.phase, entry);
-  }
-  const phaseStats = Object.fromEntries(phaseTotals);
+  const phaseStats = await computePhaseStats(student.id);
 
   res.json({
     id: student.id,

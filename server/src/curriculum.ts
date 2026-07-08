@@ -4,6 +4,25 @@ import { ExerciseType } from "./types";
 
 const MS_PER_WEEK = 7 * 24 * 60 * 60 * 1000;
 
+/** Porcentaje de acierto historico por bloque (agilidad visual, agudeza
+ * auditiva, notas al vuelo, practica de partitura). Se usa tanto para que la
+ * profesora vea el rendimiento de un alumno como para que el propio alumno
+ * vea el suyo. */
+export async function computePhaseStats(userId: string): Promise<Record<string, { correct: number; total: number }>> {
+  const attempts = await prisma.exerciseAttempt.findMany({
+    where: { userId },
+    select: { correct: true, exercise: { select: { phase: true } } },
+  });
+  const phaseTotals = new Map<string, { correct: number; total: number }>();
+  for (const a of attempts) {
+    const entry = phaseTotals.get(a.exercise.phase) ?? { correct: 0, total: 0 };
+    entry.total += 1;
+    if (a.correct) entry.correct += 1;
+    phaseTotals.set(a.exercise.phase, entry);
+  }
+  return Object.fromEntries(phaseTotals);
+}
+
 function addWeeks(date: Date, weeks: number): Date {
   return new Date(date.getTime() + weeks * MS_PER_WEEK);
 }

@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api } from "../lib/api";
-import type { CurriculumTree, StudentProfile, PieceLibraryItem, StudentSummary, AgeGroup, LessonStatus, ExercisePhase } from "../lib/api";
+import type { CurriculumTree, StudentProfile, PieceLibraryItem, StudentSummary, AgeGroup, LessonStatus, PhaseStats } from "../lib/api";
+import { PHASE_LABEL, PHASE_ORDER } from "../lib/phases";
 
 interface StudentDetailResponse {
   id: string;
@@ -11,16 +12,8 @@ interface StudentDetailResponse {
   profile: StudentProfile;
   curriculum: CurriculumTree;
   badges: { code: string; name: string; icon: string; earnedAt: string }[];
-  phaseStats: Partial<Record<ExercisePhase, { correct: number; total: number }>>;
+  phaseStats: PhaseStats;
 }
-
-const PHASE_LABEL: Record<ExercisePhase, string> = {
-  VISUAL_AGILITY: "👁️ Agilidad visual",
-  EAR_ACUITY: "👂 Agudeza auditiva",
-  NOTE_RUSH: "⚡ Notas al vuelo",
-  SHEET_PRACTICE: "🎼 Practica de partitura",
-};
-const PHASE_ORDER: ExercisePhase[] = ["VISUAL_AGILITY", "EAR_ACUITY", "NOTE_RUSH", "SHEET_PRACTICE"];
 
 interface SelectedPiece {
   piece: PieceLibraryItem;
@@ -236,7 +229,7 @@ export function TeacherStudentDetail() {
                 return (
                   <div key={phase}>
                     <div className="flex items-center justify-between text-xs mb-1">
-                      <span className="font-semibold">{PHASE_LABEL[phase]}</span>
+                      <span className="font-semibold">{PHASE_LABEL[phase].label}</span>
                       <span className="text-tclas-ink/50">
                         {pct}% ({stat.correct}/{stat.total})
                       </span>

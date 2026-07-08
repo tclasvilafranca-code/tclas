@@ -176,6 +176,8 @@ export interface CompleteLessonResult {
   isReview: boolean;
 }
 
+export type PhaseStats = Partial<Record<ExercisePhase, { correct: number; total: number }>>;
+
 export interface ReviewDue {
   entryId: string;
   pieceId: string;

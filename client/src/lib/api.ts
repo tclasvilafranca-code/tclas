@@ -55,7 +55,12 @@ export type ExerciseType =
   | "WRITE_ANSWER"
   | "MATCHING"
   | "ORDERING"
-  | "SPEAK_ALOUD";
+  | "SPEAK_ALOUD"
+  | "DRAG_STAFF"
+  | "HOLD_NOTE"
+  | "SCROLLING_PLAY"
+  | "FILL_BLANK"
+  | "EAR_BUILD";
 
 export interface StudentProfile {
   id: string;
@@ -66,6 +71,7 @@ export interface StudentProfile {
   streakCurrent: number;
   streakLongest: number;
   onboarded: boolean;
+  lastActivityDate: string | null;
 }
 
 export interface Me {
@@ -149,6 +155,7 @@ export interface AttemptResult {
 export interface CompleteLessonResult {
   progress: unknown;
   stars: number;
+  score: number;
   xpAwarded: number;
   profile: StudentProfile;
   newBadges: { code: string; name: string; icon: string }[];

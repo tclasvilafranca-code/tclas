@@ -132,6 +132,26 @@ export function gradeExercise(type: ExerciseType, data: any, userAnswer: unknown
         got.some((g) => normalizeText(g.left) === normalizeText(p.left) && normalizeText(g.right) === normalizeText(p.right))
       );
     }
+    case "DRAG_STAFF":
+      return normalize(userAnswer) === normalize(data.targetNote);
+    case "HOLD_NOTE": {
+      const ans = userAnswer as { note?: string; heldMs?: number } | null;
+      if (!ans || typeof ans.heldMs !== "number") return false;
+      const requiredMs = (data.beats as number) * (60000 / (data.bpm as number));
+      return normalize(ans.note) === normalize(data.note) && ans.heldMs >= requiredMs * 0.7;
+    }
+    case "SCROLLING_PLAY": {
+      const expected = (data.notes as string[]).map((n) => n.toUpperCase());
+      const got = Array.isArray(userAnswer) ? (userAnswer as string[]).map((n) => String(n).toUpperCase()) : [];
+      return expected.length === got.length && expected.every((n, i) => n === got[i]);
+    }
+    case "FILL_BLANK":
+      return normalize(userAnswer) === normalize(data.correctAnswer);
+    case "EAR_BUILD": {
+      const expected = (data.notes as string[]).map((n) => n.toUpperCase());
+      const got = Array.isArray(userAnswer) ? (userAnswer as string[]).map((n) => String(n).toUpperCase()) : [];
+      return expected.length === got.length && expected.every((n, i) => n === got[i]);
+    }
     default:
       return false;
   }
@@ -170,6 +190,12 @@ export function sanitizeExerciseData(type: ExerciseType, data: any) {
       clone.rightItems = shuffle(pairs.map((p) => p.right));
       break;
     }
+    case "DRAG_STAFF":
+      delete clone.targetNote;
+      break;
+    case "FILL_BLANK":
+      delete clone.correctAnswer;
+      break;
     default:
       break;
   }

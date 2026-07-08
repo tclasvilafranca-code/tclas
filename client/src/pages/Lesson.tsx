@@ -118,7 +118,11 @@ export function Lesson() {
         <div className={`px-4 py-4 border-t ${feedback.correct ? "bg-tclas-sage/10 border-tclas-sage/30" : "bg-tclas-rose/10 border-tclas-rose/30"}`}>
           <div className="max-w-xl mx-auto flex items-center justify-between gap-4">
             <MascotBubble message={misolReaction} mood={feedback.correct ? "cheer" : "encourage"} size={44} />
-            <button onClick={handleNext} className="bg-tclas-plum text-tclas-cream rounded-full px-6 py-2 font-semibold hover:bg-tclas-plum-light shrink-0">
+            <button
+              onClick={handleNext}
+              className={`btn-push rounded-2xl px-6 py-2.5 font-bold uppercase tracking-wide text-sm shrink-0
+                ${feedback.correct ? "bg-tclas-sage border-tclas-sage-shadow text-white hover:bg-tclas-sage/90" : "bg-tclas-plum border-tclas-plum-shadow text-tclas-cream hover:bg-tclas-plum-light"}`}
+            >
               Continuar
             </button>
           </div>
@@ -128,6 +132,7 @@ export function Lesson() {
       {result && (
         <LessonCompleteModal
           stars={result.stars}
+          score={result.score}
           xpAwarded={result.xpAwarded}
           passed={result.stars >= 1}
           pieceTitle={lesson.pieceTitle}

@@ -6,6 +6,11 @@ import { WriteAnswerExercise } from "./WriteAnswerExercise";
 import { MatchingExercise } from "./MatchingExercise";
 import { OrderingExercise } from "./OrderingExercise";
 import { SpeakAloudExercise } from "./SpeakAloudExercise";
+import { DragStaffExercise } from "./DragStaffExercise";
+import { HoldNoteExercise } from "./HoldNoteExercise";
+import { ScrollingPlayExercise } from "./ScrollingPlayExercise";
+import { FillBlankExercise } from "./FillBlankExercise";
+import { EarBuildExercise } from "./EarBuildExercise";
 
 interface Props {
   exercise: Exercise;
@@ -33,6 +38,16 @@ export function ExercisePlayer({ exercise, onSubmit, feedback }: Props) {
       return <OrderingExercise key={exercise.id} exercise={exercise} onSubmit={onSubmit} feedback={feedback} />;
     case "SPEAK_ALOUD":
       return <SpeakAloudExercise key={exercise.id} exercise={exercise} onSubmit={onSubmit} feedback={feedback} />;
+    case "DRAG_STAFF":
+      return <DragStaffExercise key={exercise.id} exercise={exercise} onSubmit={onSubmit} feedback={feedback} />;
+    case "HOLD_NOTE":
+      return <HoldNoteExercise key={exercise.id} exercise={exercise} onSubmit={onSubmit} feedback={feedback} />;
+    case "SCROLLING_PLAY":
+      return <ScrollingPlayExercise key={exercise.id} exercise={exercise} onSubmit={onSubmit} feedback={feedback} />;
+    case "FILL_BLANK":
+      return <FillBlankExercise key={exercise.id} exercise={exercise} onSubmit={onSubmit} feedback={feedback} />;
+    case "EAR_BUILD":
+      return <EarBuildExercise key={exercise.id} exercise={exercise} onSubmit={onSubmit} feedback={feedback} />;
     default:
       return <McqLikeExercise key={exercise.id} exercise={exercise} onSubmit={onSubmit} feedback={feedback} />;
   }

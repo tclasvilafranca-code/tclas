@@ -13,6 +13,11 @@ import {
   MatchingData,
   OrderingData,
   SpeakAloudData,
+  DragStaffData,
+  HoldNoteData,
+  ScrollingPlayData,
+  FillBlankData,
+  EarBuildData,
   PieceContent,
   AgeGroup,
 } from "../types";
@@ -33,7 +38,12 @@ export interface ExerciseDef {
     | WriteAnswerData
     | MatchingData
     | OrderingData
-    | SpeakAloudData;
+    | SpeakAloudData
+    | DragStaffData
+    | HoldNoteData
+    | ScrollingPlayData
+    | FillBlankData
+    | EarBuildData;
   explanation: string;
 }
 
@@ -126,6 +136,31 @@ export const sp = (expectedAnswer: string, acceptableAnswers?: string[], promptN
   acceptableAnswers,
   promptNote,
 });
+
+export const ds = (clef: "treble" | "bass", noteLabel: string, targetNote: string): DragStaffData => ({
+  clef,
+  noteLabel,
+  targetNote,
+});
+
+export const hn = (note: string, beats: number, bpm: number): HoldNoteData => ({ note, beats, bpm });
+
+export const scp = (notes: string[], durations: number[], bpm: number, clef: "treble" | "bass" = "treble"): ScrollingPlayData => ({
+  notes,
+  durations,
+  bpm,
+  clef,
+});
+
+export const fb = (
+  clef: "treble" | "bass",
+  notesBefore: string[],
+  notesAfter: string[],
+  options: string[],
+  correctAnswer: string
+): FillBlankData => ({ clef, notesBefore, notesAfter, options, correctAnswer });
+
+export const eb = (notes: string[]): EarBuildData => ({ notes });
 
 function shuffleArray<T>(arr: T[]): T[] {
   const copy = [...arr];

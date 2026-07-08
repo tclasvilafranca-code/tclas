@@ -85,7 +85,9 @@ router.post("/exercises/:id/attempt", requireAuth, async (req: AuthedRequest, re
   res.json({
     correct,
     explanation: exercise.explanation,
-    correctAnswer: correct ? undefined : data.correctAnswer ?? data.answer ?? data.notes ?? data.pattern ?? data.correctOrder ?? data.expectedAnswer,
+    correctAnswer: correct
+      ? undefined
+      : data.correctAnswer ?? data.answer ?? data.notes ?? data.pattern ?? data.correctOrder ?? data.expectedAnswer ?? data.targetNote,
     heartsCurrent,
   });
 });
@@ -157,8 +159,9 @@ router.post("/lessons/:id/complete", requireAuth, async (req: AuthedRequest, res
     }
   }
   profile = profile ? await recomputeHearts(profile) : profile;
+  const score = Math.round(pct * 1000);
 
-  res.json({ progress, stars, xpAwarded, profile, newBadges });
+  res.json({ progress, stars, score, xpAwarded, profile, newBadges });
 });
 
 async function checkAndAwardBadges(userId: string, profile: { xpTotal: number; streakCurrent: number }) {

@@ -6,7 +6,7 @@
 // semanas de practica variada (opcion multiple, escribir, relacionar, ordenar,
 // tocar, oido, ritmo, decir en voz alta) derivada de sus notas reales.
 
-import { PieceDef, LessonDef, ExerciseDef, nn, sr, rt, et, mcq, kp, ch, iv, wa, ma, ord, sp } from "./content/defs";
+import { PieceDef, LessonDef, ExerciseDef, nn, sr, rt, et, mcq, kp, ch, iv, wa, ma, ord, sp, ds, hn, scp, fb, eb } from "./content/defs";
 import { toSolfege, onlyLetter, distractorLetters, chordSymbolToNotes, chordSymbolToSpanish, scaleForKey, intervalName } from "./notes";
 
 function uniq<T>(arr: T[]): T[] {
@@ -69,6 +69,13 @@ function warmupExercises(def: PieceDef, weekNum: number): ExerciseDef[] {
       data: et("note", toSolfege(scale[0]), uniq([toSolfege(scale[0]), toSolfege(scale[2]), toSolfege(scale[4])]), [scale[0]]),
       explanation: `${toSolfege(scale[0])} es la nota principal (tonica) de ${def.keySignature}.`,
     },
+    {
+      type: "HOLD_NOTE",
+      phase: "WARMUP",
+      prompt: `Manten pulsada la tonica (${toSolfege(scale[0])}) durante toda su duracion`,
+      data: hn(scale[0], weekNum % 2 === 0 ? 4 : 2, 60),
+      explanation: "Sostener una nota el tiempo justo entrena el control de la duracion, como en una redonda o una blanca.",
+    },
   ];
 }
 
@@ -121,6 +128,15 @@ function pieceWorkExercises(def: PieceDef, weekNum: number): ExerciseDef[] {
     });
   }
 
+  const dragNote = pick(featured, weekNum + 4);
+  exercises.push({
+    type: "DRAG_STAFF",
+    phase: "PRACTICE",
+    prompt: `Arrastra la nota "${toSolfege(dragNote)}" hasta su sitio correcto en el pentagrama`,
+    data: ds(clef, toSolfege(dragNote), dragNote),
+    explanation: `${toSolfege(dragNote)} (${dragNote}) es una de las notas de "${def.title}".`,
+  });
+
   exercises.push({
     type: "STAFF_READING",
     phase: "PRACTICE",
@@ -145,6 +161,19 @@ function pieceWorkExercises(def: PieceDef, weekNum: number): ExerciseDef[] {
       prompt: `Ordena estas notas para formar el comienzo de "${def.title}"`,
       data: ord(excerpt, clef),
       explanation: "Este es el orden real de la melodia.",
+    });
+  }
+
+  if (content.melody.length >= 3) {
+    const blankIndex = Math.floor(content.melody.length / 2);
+    const blankNote = content.melody[blankIndex];
+    const blankOptions = uniq([toSolfege(blankNote), ...distractorLetters(onlyLetter(blankNote)).map((l) => toSolfege(`${l}4`))]);
+    exercises.push({
+      type: "FILL_BLANK",
+      phase: "PRACTICE",
+      prompt: `Completa la nota que falta en "${def.title}"`,
+      data: fb(clef, content.melody.slice(0, blankIndex), content.melody.slice(blankIndex + 1), blankOptions, toSolfege(blankNote)),
+      explanation: `La nota que falta es ${toSolfege(blankNote)}.`,
     });
   }
 
@@ -209,6 +238,24 @@ function performanceExercises(def: PieceDef, weekNum: number): ExerciseDef[] {
       prompt: `Ahora toca la mano izquierda de "${def.title}"`,
       data: kp(content.bass, "bass", genericBpmFor(def)),
       explanation: "La mano izquierda suele llevar el acompanamiento.",
+    });
+  }
+
+  exercises.push({
+    type: "SCROLLING_PLAY",
+    phase: "PERFORMANCE",
+    prompt: `¡Modo partitura en marcha! Toca "${def.title}" cuando cada nota llegue a la linea`,
+    data: scp(content.melody, content.melodyRhythm, genericBpmFor(def), clef),
+    explanation: "Tocar siguiendo el tempo real es el ultimo paso antes de dominar la pieza.",
+  });
+
+  if (content.featuredNotes.length >= 3) {
+    exercises.push({
+      type: "EAR_BUILD",
+      phase: "PERFORMANCE",
+      prompt: `Dictado de oido: reconstruye esta frase de "${def.title}" nota a nota, solo escuchando`,
+      data: eb(content.featuredNotes.slice(0, 4)),
+      explanation: "Escuchar y reproducir sin ver la partitura es el entrenamiento de oido mas completo.",
     });
   }
 

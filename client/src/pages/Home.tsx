@@ -7,6 +7,7 @@ import { GamificationBar } from "../components/GamificationBar";
 import { PathMap } from "../components/PathMap";
 import { PieceDetailModal } from "../components/PieceDetailModal";
 import { MascotBubble } from "../components/MascotBubble";
+import { StreakCalendar } from "../components/StreakCalendar";
 import { greetingMessage } from "../lib/misol";
 
 export function Home() {
@@ -36,7 +37,9 @@ export function Home() {
 
       {tree && (
         <main className="px-4 py-8">
-          <MascotBubble message={greeting} mood="cheer" align="center" className="mb-8 text-left" />
+          <MascotBubble message={greeting} mood="cheer" align="center" className="mb-2 text-left" />
+          <StreakCalendar streakCurrent={me.studentProfile.streakCurrent} lastActivityDate={me.studentProfile.lastActivityDate} />
+          <div className="mb-6" />
 
           {tree.pieces.length === 0 ? (
             <p className="text-center text-tclas-ink/50 mt-16">Todavia no tienes piezas asignadas. ¡Pronto tu profesor/a anadira tu repertorio!</p>

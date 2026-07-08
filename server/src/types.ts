@@ -16,7 +16,12 @@ export type ExerciseType =
   | "WRITE_ANSWER" // escribir la respuesta (nombre de nota, acorde...) con el teclado del ordenador
   | "MATCHING" // relacionar pares (notas <-> nombres, ritmos <-> valores...)
   | "ORDERING" // ordenar una secuencia desordenada (notas de una melodia)
-  | "SPEAK_ALOUD"; // decir la respuesta en voz alta (Web Speech API, con opcion de omitir)
+  | "SPEAK_ALOUD" // decir la respuesta en voz alta (Web Speech API, con opcion de omitir)
+  | "DRAG_STAFF" // arrastrar una nota hasta su posicion correcta en el pentagrama
+  | "HOLD_NOTE" // mantener pulsada una tecla el tiempo justo (duracion/figura ritmica)
+  | "SCROLLING_PLAY" // partitura que se desplaza (estilo "Guitar Hero"): tocar cada nota al llegar
+  | "FILL_BLANK" // completar el hueco que falta en la melodia real de la pieza
+  | "EAR_BUILD"; // dictado progresivo: reconstruir una frase de oido, nota a nota
 
 // --- Formas del campo Exercise.data (JSON serializado) segun el tipo ---
 
@@ -95,6 +100,37 @@ export interface SpeakAloudData {
   promptNote?: string; // nota a nombrar en voz alta, si aplica
   expectedAnswer: string;
   acceptableAnswers?: string[];
+}
+
+export interface DragStaffData {
+  clef: "treble" | "bass";
+  noteLabel: string; // nombre en solfeo a colocar, p.ej. "Mi"
+  targetNote: string; // nota real, p.ej. "E4" (se retira antes de enviar al cliente)
+}
+
+export interface HoldNoteData {
+  note: string; // nota a mantener pulsada
+  beats: number; // duracion en tiempos (p.ej. 4 = redonda)
+  bpm: number;
+}
+
+export interface ScrollingPlayData {
+  notes: string[]; // secuencia real de la pieza que se desplaza en pantalla
+  durations: number[]; // duraciones relativas paralelas a notes
+  bpm: number;
+  clef?: "treble" | "bass";
+}
+
+export interface FillBlankData {
+  clef: "treble" | "bass";
+  notesBefore: string[]; // notas visibles antes del hueco
+  notesAfter: string[]; // notas visibles despues del hueco
+  options: string[]; // opciones en solfeo para rellenar
+  correctAnswer: string; // en solfeo (se retira antes de enviar al cliente)
+}
+
+export interface EarBuildData {
+  notes: string[]; // frase real a reconstruir de oido, nota a nota
 }
 
 // --- Contenido musical estructurado de una pieza real (biblioteca Piece) ---

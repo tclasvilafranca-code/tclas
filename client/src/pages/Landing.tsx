@@ -82,7 +82,10 @@ export function Landing() {
             </>
           )}
           {error && <p className="text-tclas-rose text-sm">{error}</p>}
-          <button disabled={loading} className="bg-tclas-plum text-tclas-cream rounded-lg py-2.5 font-semibold hover:bg-tclas-plum-light disabled:opacity-50">
+          <button
+            disabled={loading}
+            className="btn-push bg-tclas-plum border-tclas-plum-shadow text-tclas-cream rounded-2xl py-3 font-bold uppercase tracking-wide text-sm hover:bg-tclas-plum-light"
+          >
             {loading ? "Entrando..." : "Entrar"}
           </button>
         </form>

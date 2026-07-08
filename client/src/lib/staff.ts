@@ -2,10 +2,20 @@ import { diatonicStep, parseNote } from "./notes";
 
 // Referencia: nota en la linea inferior del pentagrama (posicion 0).
 const BOTTOM_LINE_REF: Record<"treble" | "bass", string> = { treble: "E4", bass: "G2" };
+const DIATONIC_LETTERS = ["C", "D", "E", "F", "G", "A", "B"];
 
 /** Posicion en "medios espacios" desde la linea inferior del pentagrama (positivo = hacia arriba). */
 export function staffPosition(note: string, clef: "treble" | "bass"): number {
   return diatonicStep(note) - diatonicStep(BOTTOM_LINE_REF[clef]);
+}
+
+/** Inversa de staffPosition: dada una posicion en el pentagrama, calcula la nota natural correspondiente. */
+export function positionToNote(position: number, clef: "treble" | "bass"): string {
+  const bottomStep = diatonicStep(BOTTOM_LINE_REF[clef]);
+  const absStep = Math.round(position) + bottomStep;
+  const octave = Math.floor(absStep / 7);
+  const letterIdx = ((absStep % 7) + 7) % 7;
+  return `${DIATONIC_LETTERS[letterIdx]}${octave}`;
 }
 
 export function needsLedgerLines(position: number): number[] {

@@ -7,10 +7,14 @@
   --color-tclas-ink: #241a2e;
   --color-tclas-plum: #4a1942;
   --color-tclas-plum-light: #6b2a5e;
+  --color-tclas-plum-shadow: #300f2b;
   --color-tclas-gold: #d4a94c;
   --color-tclas-gold-light: #e8c97a;
+  --color-tclas-gold-shadow: #a9822f;
   --color-tclas-rose: #c65b6c;
+  --color-tclas-rose-shadow: #9c3f4d;
   --color-tclas-sage: #6f8a6e;
+  --color-tclas-sage-shadow: #4f6a4e;
   --font-display: "Fraunces", serif;
   --font-sans: "Inter", system-ui, sans-serif;
 }
@@ -52,4 +56,31 @@ h1, h2, h3, .font-display {
 }
 .animate-float-up {
   animation: float-up 0.8s ease-out forwards;
+}
+
+/* Boton "empujable" estilo Duolingo: borde inferior grueso que se aplana al pulsar. */
+.btn-push {
+  border-bottom-width: 4px;
+  border-bottom-style: solid;
+  transition: transform 0.08s ease, border-bottom-width 0.08s ease, margin-top 0.08s ease;
+}
+.btn-push:active:not(:disabled) {
+  transform: translateY(3px);
+  border-bottom-width: 1px;
+}
+.btn-push:disabled {
+  opacity: 0.5;
+}
+
+@keyframes confetti-fall {
+  0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(220px) rotate(540deg); opacity: 0; }
+}
+.animate-confetti {
+  animation: confetti-fall linear forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-confetti, .animate-pop-in, .animate-float-up { animation: none !important; }
+  .btn-push { transition: none; }
 }

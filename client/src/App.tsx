@@ -7,6 +7,7 @@ import { Home } from "./pages/Home";
 import { Lesson } from "./pages/Lesson";
 import { TeacherDashboard } from "./pages/TeacherDashboard";
 import { TeacherStudentDetail } from "./pages/TeacherStudentDetail";
+import { Metronome } from "./components/Metronome";
 
 function Splash() {
   return <div className="min-h-screen flex items-center justify-center text-tclas-ink/40">Cargando t-clas...</div>;
@@ -17,7 +18,12 @@ function RequireStudent({ children }: { children: ReactNode }) {
   if (loading) return <Splash />;
   if (!me) return <Navigate to="/" replace />;
   if (me.role !== "STUDENT") return <Navigate to="/teacher" replace />;
-  return children;
+  return (
+    <>
+      {children}
+      <Metronome />
+    </>
+  );
 }
 
 function RequireTeacher({ children }: { children: ReactNode }) {

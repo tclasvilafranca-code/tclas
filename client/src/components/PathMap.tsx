@@ -10,6 +10,10 @@ const ZIGZAG = [0, 60, 96, 60, 0, -60, -96, -60];
 
 const SEASONAL_LABEL: Record<string, string> = { christmas: "🎄 Navidad" };
 
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("es-ES", { day: "numeric", month: "short" });
+}
+
 export function PathMap({ pieces, onOpenLesson }: Props) {
   let globalIndex = 0;
 
@@ -43,19 +47,37 @@ export function PathMap({ pieces, onOpenLesson }: Props) {
               const offset = ZIGZAG[globalIndex % ZIGZAG.length];
               globalIndex++;
               const locked = lesson.status === "LOCKED";
+              const scheduled = lesson.status === "SCHEDULED";
               const completed = lesson.status === "COMPLETED";
+              const disabled = locked || scheduled;
               return (
                 <div key={lesson.id} style={{ transform: `translateX(${offset}px)` }}>
                   <button
-                    disabled={locked}
+                    disabled={disabled}
                     onClick={() => onOpenLesson(lesson.id)}
-                    title={lesson.title}
+                    title={scheduled ? `Disponible el ${formatDate(lesson.scheduledDate)}` : lesson.title}
                     className={`relative w-20 h-20 rounded-full flex flex-col items-center justify-center border-4 font-bold text-xs transition-transform piano-key-shadow
-                      ${completed ? "bg-tclas-gold border-tclas-gold-light text-tclas-ink" : locked ? "bg-tclas-ink/5 border-tclas-ink/10 text-tclas-ink/30" : "bg-tclas-plum border-tclas-plum-light text-tclas-cream hover:scale-110 animate-pop-in"}`}
+                      ${completed ? "bg-tclas-gold border-tclas-gold-light text-tclas-ink" : disabled ? "bg-tclas-ink/5 border-tclas-ink/10 text-tclas-ink/30" : "bg-tclas-plum border-tclas-plum-light text-tclas-cream hover:scale-110 animate-pop-in"}`}
                   >
-                    {completed ? <span className="text-xl">{"★".repeat(lesson.stars)}</span> : locked ? <span className="text-2xl">🔒</span> : <span className="text-2xl">▶</span>}
+                    {completed ? (
+                      <span className="text-xl">{"★".repeat(lesson.stars)}</span>
+                    ) : scheduled ? (
+                      <span className="text-2xl">📅</span>
+                    ) : locked ? (
+                      <span className="text-2xl">🔒</span>
+                    ) : (
+                      <span className="text-2xl">▶</span>
+                    )}
                   </button>
-                  <p className="text-center text-[11px] text-tclas-ink/50 mt-1 w-24 leading-tight">Semana {lesson.weekIndex}</p>
+                  <p className="text-center text-[11px] text-tclas-ink/50 mt-1 w-24 leading-tight">
+                    Semana {lesson.weekNumber}
+                    {scheduled && (
+                      <>
+                        <br />
+                        {formatDate(lesson.scheduledDate)}
+                      </>
+                    )}
+                  </p>
                 </div>
               );
             })}

@@ -84,7 +84,9 @@ async function main() {
     const existingRepertoire = await prisma.repertoireEntry.findFirst({ where: { studentId: arnau.studentProfile.id } });
     if (!existingRepertoire) {
       console.log("Asignando el repertorio del curso a Arnau...");
-      let cursor = new Date("2026-09-01");
+      // Empieza "hoy" para que la demo sea usable desde el primer dia
+      // (en un alumno real, la profesora elige la fecha real de inicio del curso).
+      let cursor = new Date();
       for (const [i, piece] of pieceRecords.entries()) {
         await createRepertoireEntryWithLessons({
           studentProfileId: arnau.studentProfile.id,

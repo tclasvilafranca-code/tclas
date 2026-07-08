@@ -29,12 +29,20 @@ router.get("/lessons/:id", requireAuth, async (req: AuthedRequest, res) => {
   });
   if (!lesson) return res.status(404).json({ error: "Leccion no encontrada" });
 
+  let weekNumber = lesson.weekIndex;
   if (req.auth!.role === "STUDENT") {
     const profile = await prisma.studentProfile.findUnique({ where: { userId: req.auth!.userId } });
     if (!profile) return res.status(400).json({ error: "Perfil de alumno no encontrado" });
     const tree = await buildCurriculumForUser(req.auth!.userId, profile.id);
-    const flatStatus = tree.pieces.flatMap((p) => p.lessons).find((l) => l.id === lesson.id)?.status;
-    if (!flatStatus || flatStatus === "LOCKED") return res.status(403).json({ error: "Esta leccion todavia esta bloqueada" });
+    const flatLesson = tree.pieces.flatMap((p) => p.lessons).find((l) => l.id === lesson.id);
+    if (!flatLesson || flatLesson.status === "LOCKED") {
+      return res.status(403).json({ error: "Esta leccion todavia esta bloqueada" });
+    }
+    if (flatLesson.status === "SCHEDULED") {
+      const dateStr = new Date(flatLesson.scheduledDate).toLocaleDateString("es-ES");
+      return res.status(403).json({ error: `Esta semana todavia no ha llegado. Estara disponible el ${dateStr}.` });
+    }
+    weekNumber = flatLesson.weekNumber;
   }
 
   res.json({
@@ -43,6 +51,7 @@ router.get("/lessons/:id", requireAuth, async (req: AuthedRequest, res) => {
     description: lesson.description,
     xpReward: lesson.xpReward,
     weekIndex: lesson.weekIndex,
+    weekNumber,
     pieceTitle: lesson.repertoireEntry.piece.title,
     exercises: lesson.exercises.map(sanitizeExercise),
   });

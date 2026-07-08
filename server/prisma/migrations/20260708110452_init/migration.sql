@@ -82,6 +82,7 @@ CREATE TABLE "Exercise" (
     "lessonId" TEXT NOT NULL,
     "index" INTEGER NOT NULL,
     "type" TEXT NOT NULL,
+    "phase" TEXT NOT NULL DEFAULT 'PRACTICE',
     "prompt" TEXT NOT NULL,
     "data" TEXT NOT NULL,
     "explanation" TEXT NOT NULL DEFAULT '',

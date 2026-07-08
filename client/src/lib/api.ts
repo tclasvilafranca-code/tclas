@@ -77,13 +77,17 @@ export interface Me {
   studentProfile: StudentProfile | null;
 }
 
+export type LessonStatus = "LOCKED" | "SCHEDULED" | "AVAILABLE" | "COMPLETED";
+
 export interface LessonNode {
   id: string;
   weekIndex: number;
+  weekNumber: number;
+  scheduledDate: string;
   title: string;
   description: string;
   xpReward: number;
-  status: "LOCKED" | "AVAILABLE" | "COMPLETED";
+  status: LessonStatus;
   stars: number;
 }
 
@@ -113,10 +117,13 @@ export interface CurriculumTree {
   pieces: RepertoireNode[];
 }
 
+export type ExercisePhase = "WARMUP" | "PRACTICE" | "PERFORMANCE";
+
 export interface Exercise {
   id: string;
   index: number;
   type: ExerciseType;
+  phase: ExercisePhase;
   prompt: string;
   data: any;
 }
@@ -127,6 +134,7 @@ export interface LessonDetail {
   description: string;
   xpReward: number;
   weekIndex: number;
+  weekNumber: number;
   pieceTitle: string;
   exercises: Exercise[];
 }

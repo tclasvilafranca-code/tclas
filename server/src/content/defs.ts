@@ -1,5 +1,6 @@
 import {
   ExerciseType,
+  ExercisePhase,
   NoteNameData,
   StaffReadingData,
   RhythmTapData,
@@ -18,6 +19,7 @@ import {
 
 export interface ExerciseDef {
   type: ExerciseType;
+  phase: ExercisePhase;
   prompt: string;
   data:
     | NoteNameData

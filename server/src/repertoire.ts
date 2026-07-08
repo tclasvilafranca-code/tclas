@@ -60,6 +60,7 @@ export async function createRepertoireEntryWithLessons(params: {
           lessonId: lesson.id,
           index: ei + 1,
           type: ex.type,
+          phase: ex.phase,
           prompt: ex.prompt,
           data: JSON.stringify(ex.data),
           explanation: ex.explanation,

@@ -78,3 +78,24 @@ export function chordSymbolToSpanish(symbol: string): string {
   if (quality === "dim") return `${rootName} disminuido`;
   return `${rootName} ${quality}`;
 }
+
+/** Nombre en espanol del intervalo (en semitonos, sin importar la direccion) entre dos notas. */
+const INTERVAL_NAMES = [
+  "Unisono", "2da menor", "2da mayor", "3ra menor", "3ra mayor", "4ta justa",
+  "4ta aumentada", "5ta justa", "6ta menor", "6ta mayor", "7ma menor", "7ma mayor", "Octava",
+];
+export function intervalName(noteA: string, noteB: string): string {
+  const semitones = Math.abs(noteToMidi(noteB) - noteToMidi(noteA)) % 12;
+  return INTERVAL_NAMES[semitones];
+}
+
+/** Escala mayor (8 notas) para las tonalidades usadas en el repertorio, en un registro comodo para calentar. */
+const MAJOR_SCALES: Record<string, string[]> = {
+  "Do Mayor": ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"],
+  "Fa Mayor": ["F4", "G4", "A4", "Bb4", "C5", "D5", "E5", "F5"],
+  "Sol Mayor": ["G4", "A4", "B4", "C5", "D5", "E5", "F#5", "G5"],
+  "Re Mayor": ["D4", "E4", "F#4", "G4", "A4", "B4", "C#5", "D5"],
+};
+export function scaleForKey(keySignature: string): string[] {
+  return MAJOR_SCALES[keySignature] ?? MAJOR_SCALES["Do Mayor"];
+}

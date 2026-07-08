@@ -1,7 +1,8 @@
 export type Role = "STUDENT" | "TEACHER";
 export type AgeGroup = "KIDS" | "TEENS" | "ADULTS";
-export type ProgressStatus = "LOCKED" | "AVAILABLE" | "COMPLETED";
+export type ProgressStatus = "LOCKED" | "SCHEDULED" | "AVAILABLE" | "COMPLETED";
 export type RepertoireStatus = "UPCOMING" | "ACTIVE" | "COMPLETED";
+export type ExercisePhase = "WARMUP" | "PRACTICE" | "PERFORMANCE";
 
 export type ExerciseType =
   | "NOTE_NAME" // identificar el nombre de una nota en el pentagrama

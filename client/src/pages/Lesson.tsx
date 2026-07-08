@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { api } from "../lib/api";
-import type { LessonDetail, AttemptResult, CompleteLessonResult } from "../lib/api";
+import type { LessonDetail, AttemptResult, CompleteLessonResult, ExercisePhase } from "../lib/api";
 import { ExercisePlayer } from "../exercises/ExercisePlayer";
 import { LessonCompleteModal } from "../components/LessonCompleteModal";
 import { playSuccessChime, playErrorBuzz } from "../lib/audio";
 import { useAuth } from "../context/AuthContext";
+
+const PHASE_LABEL: Record<ExercisePhase, { label: string; className: string }> = {
+  WARMUP: { label: "🔥 Calentamiento", className: "bg-tclas-gold/15 text-tclas-plum" },
+  PRACTICE: { label: "🎼 Trabajo de la pieza", className: "bg-tclas-plum/10 text-tclas-plum" },
+  PERFORMANCE: { label: "🎹 ¡A tocar!", className: "bg-tclas-sage/15 text-tclas-sage" },
+};
 
 export function Lesson() {
   const { id } = useParams<{ id: string }>();
@@ -13,6 +19,7 @@ export function Lesson() {
   const { refresh } = useAuth();
 
   const [lesson, setLesson] = useState<LessonDetail | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [index, setIndex] = useState(0);
   const [feedback, setFeedback] = useState<AttemptResult | null>(null);
   const [correctCount, setCorrectCount] = useState(0);
@@ -22,17 +29,33 @@ export function Lesson() {
   useEffect(() => {
     if (!id) return;
     setLesson(null);
+    setLoadError(null);
     setIndex(0);
     setFeedback(null);
     setCorrectCount(0);
     setResult(null);
-    api.get<LessonDetail>(`/lessons/${id}`).then(setLesson);
+    api
+      .get<LessonDetail>(`/lessons/${id}`)
+      .then(setLesson)
+      .catch((err) => setLoadError(err.message || "No se pudo cargar la leccion"));
   }, [id, loadKey]);
+
+  if (loadError) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center px-4 text-center gap-4">
+        <p className="text-tclas-ink/70 max-w-sm">{loadError}</p>
+        <Link to="/app" className="bg-tclas-plum text-tclas-cream rounded-full px-6 py-2 font-semibold hover:bg-tclas-plum-light">
+          Volver a tu camino
+        </Link>
+      </div>
+    );
+  }
 
   if (!lesson) return <p className="text-center mt-16 text-tclas-ink/50">Cargando leccion...</p>;
 
   const exercise = lesson.exercises[index];
   const progressPct = Math.round((index / lesson.exercises.length) * 100);
+  const phase = PHASE_LABEL[exercise.phase] ?? PHASE_LABEL.PRACTICE;
 
   async function handleSubmit(answer: unknown) {
     const res = await api.post<AttemptResult>(`/exercises/${exercise.id}/attempt`, { answer });
@@ -76,9 +99,12 @@ export function Lesson() {
 
       <main className="flex-1 flex items-center justify-center px-4 py-10">
         <div className="w-full max-w-xl">
-          <p className="text-xs uppercase tracking-wide text-tclas-ink/40 text-center mb-6">
-            {lesson.pieceTitle} · Semana {lesson.weekIndex}
-          </p>
+          <div className="text-center mb-6">
+            <p className="text-xs uppercase tracking-wide text-tclas-ink/40 mb-2">
+              {lesson.pieceTitle} · Semana {lesson.weekNumber}
+            </p>
+            <span className={`inline-block text-xs font-semibold rounded-full px-3 py-1 ${phase.className}`}>{phase.label}</span>
+          </div>
           <ExercisePlayer exercise={exercise} onSubmit={handleSubmit} feedback={feedback} />
         </div>
       </main>

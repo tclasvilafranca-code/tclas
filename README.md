@@ -5,9 +5,11 @@ Una app tipo Duolingo para aprender piano, pensada para complementar las clases 
 ## ¿Que incluye este MVP?
 
 - **Repertorio real y personalizado por alumno**: cada alumno tiene su propia lista de piezas (asignadas por la profesora), en el orden y con la duracion que ella decida — no un temario generico igual para todos.
+- **Semanas continuas y bloqueadas por fecha real**: la numeracion de semana (1, 2, 3...) es continua a lo largo de todo el curso (no reinicia en cada pieza), y cada semana solo se desbloquea cuando llega su fecha real — no se puede avanzar a ejercicios de semanas futuras aunque ya te hayas completado todo lo anterior.
+- **Sesion semanal completa (10-15 min)**: cada semana es una sesion de practica estructurada en 3 fases, como haria un profesor de piano: 🔥 **Calentamiento** (escalas, agilidad visual, oido, pulso) → 🎼 **Trabajo de la pieza** (todas sus notas, ritmo, acordes, relacionar, escribir, ordenar) → 🎹 **A tocar** (interpretar, decir notas, repaso). Unos 15-20 ejercicios variados por semana.
 - **12 tipos de ejercicios**: opcion multiple, nombrar notas, lectura de pentagrama, tocar en el teclado, ritmo (tap en tiempo real), oido musical, intervalos, acordes, escribir la respuesta, relacionar (matching), ordenar una secuencia y decir la respuesta en voz alta (reconocimiento de voz del navegador).
-- **Generador automatico de lecciones**: al asignar una pieza a un alumno, la app genera solas las semanas de practica (con ejercicios variados derivados de las notas/ritmo reales de esa pieza) — asignar contenido a un alumno nuevo no requiere escribir codigo.
-- **Camino visual tipo "Candy Crush"**: un camino serpenteante de nodos semana a semana, agrupado por pieza, con estado bloqueado/disponible/completado.
+- **Generador automatico de lecciones**: al asignar una pieza a un alumno, la app genera sola toda la sesion semanal (calentamiento + practica + interpretacion, con ejercicios derivados de las notas/ritmo reales de esa pieza) — asignar contenido a un alumno nuevo no requiere escribir codigo.
+- **Camino visual tipo "Candy Crush"**: un camino serpenteante de nodos semana a semana, agrupado por pieza, con estado bloqueado / programado (📅 fecha futura) / disponible / completado.
 - **Piano virtual interactivo**: se toca con el raton, con el teclado del ordenador (A S D F G H J K...) o conectando un piano/teclado MIDI real via Web MIDI API.
 - **Gamificacion**: XP, rachas diarias, corazones (vidas) con regeneracion, estrellas por leccion e insignias.
 - **Acceso**: la profesora tiene email+contrasena; los alumnos entran con usuario+PIN generados por la profesora (sin autoregistro), pensado para que los mas pequenos puedan entrar facilmente.
@@ -67,12 +69,13 @@ Este repo incluye un `render.yaml` para desplegar en [Render](https://render.com
 
 ## Decisiones de alcance del MVP
 
-- El "bloqueo" de progreso es lineal (una leccion disponible a la vez, en el orden del repertorio del alumno).
+- El "bloqueo" de progreso combina orden secuencial (una leccion a la vez) y fecha real (no se puede adelantar a una semana futura).
 - La deteccion de acordes/ejercicios de ritmo compara contra tolerancias razonables (no hay analisis de audio real del piano fisico; MIDI da notas exactas, pero no se analiza la calidad tonal o el pedal).
 - El ejercicio de "decir en voz alta" usa la Web Speech API del navegador (solo Chrome/Edge la soportan bien); en navegadores sin soporte se puede omitir.
 - Las piezas transcritas son un extracto representativo (la frase inicial), no la partitura completa nota a nota — suficiente para generar practica de calidad sin necesitar transcribir cada compas.
 - No hay todavia sistema de notificaciones push/email para recordar la practica diaria.
 - El plan gratuito de Render "duerme" el backend tras 15 minutos sin uso (la primera peticion tras el reposo tarda ~30-60s en responder). Los datos viven en Neon (Postgres) y no se ven afectados por esto.
+- **Despliegue seguro**: el backend intenta primero `prisma migrate deploy` (aplica cambios de esquema sin tocar los datos); solo si la base de datos aun no tiene historial de migraciones (p.ej. la primera vez tras este cambio) cae de forma automatica en un reseteo, y a partir de ahi todos los despliegues futuros son seguros y no borran el progreso de los alumnos.
 
 ## Proximos pasos sugeridos
 

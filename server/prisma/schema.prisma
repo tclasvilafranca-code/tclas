@@ -115,6 +115,7 @@ model Exercise {
   lesson      Lesson @relation(fields: [lessonId], references: [id])
   index       Int
   type        String // ver ExerciseType en src/types.ts
+  phase       String @default("PRACTICE") // WARMUP | PRACTICE | PERFORMANCE
   prompt      String
   data        String // JSON blob (ver src/types.ts)
   explanation String @default("")

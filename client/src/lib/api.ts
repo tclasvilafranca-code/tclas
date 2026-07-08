@@ -173,6 +173,16 @@ export interface CompleteLessonResult {
   xpAwarded: number;
   profile: StudentProfile;
   newBadges: { code: string; name: string; icon: string }[];
+  isReview: boolean;
+}
+
+export interface ReviewDue {
+  entryId: string;
+  pieceId: string;
+  pieceTitle: string;
+  iconEmoji: string;
+  lessonId: string;
+  reviewStage: number;
 }
 
 export interface Badge {

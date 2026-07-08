@@ -9,6 +9,7 @@ interface Props {
   passed: boolean;
   pieceTitle: string;
   newBadges: { code: string; name: string; icon: string }[];
+  isReview: boolean;
   onContinue: () => void;
   onRetry: () => void;
 }
@@ -49,14 +50,19 @@ function Confetti() {
   );
 }
 
-export function LessonCompleteModal({ stars, score, xpAwarded, passed, pieceTitle, newBadges, onContinue, onRetry }: Props) {
+export function LessonCompleteModal({ stars, score, xpAwarded, passed, pieceTitle, newBadges, isReview, onContinue, onRetry }: Props) {
   const message = useMemo(() => lessonCompleteMessage(stars, pieceTitle), [stars, pieceTitle]);
   return (
     <div className="fixed inset-0 bg-tclas-ink/50 flex items-center justify-center z-50 p-4">
       <div className="relative bg-tclas-cream rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center animate-pop-in border border-tclas-gold/30 overflow-hidden">
         {passed && <Confetti />}
         <MascotOwl mood={stars >= 1 ? "celebrate" : "encourage"} size={84} className="mx-auto mb-2" />
-        <h2 className="font-display text-2xl mb-1">{passed ? "¡Leccion completada!" : "Casi lo tienes"}</h2>
+        {isReview && passed && (
+          <span className="inline-block text-[11px] font-bold uppercase tracking-wide text-tclas-gold-shadow bg-tclas-gold/15 rounded-full px-2.5 py-0.5 mb-1">
+            🔁 Repaso
+          </span>
+        )}
+        <h2 className="font-display text-2xl mb-1">{passed ? (isReview ? "¡Repaso completado!" : "¡Leccion completada!") : "Casi lo tienes"}</h2>
         <div className="flex justify-center gap-1 my-3 text-3xl">
           {[1, 2, 3].map((s) => (
             <span key={s} className={s <= stars ? "text-tclas-gold" : "text-tclas-ink/15"}>
@@ -69,7 +75,8 @@ export function LessonCompleteModal({ stars, score, xpAwarded, passed, pieceTitl
           {score}
           <span className="text-base font-sans font-normal text-tclas-ink/40"> / 1000</span>
         </p>
-        {passed && <p className="text-tclas-plum font-semibold mb-3">+{xpAwarded} XP</p>}
+        {passed && <p className="text-tclas-plum font-semibold mb-1">+{xpAwarded} XP</p>}
+        {passed && isReview && <p className="text-xs text-tclas-ink/50 mb-3">Esta pieza se queda un poco mas fresca en tu memoria.</p>}
         {!passed && <p className="text-tclas-ink/70 mb-3 text-sm">Necesitas al menos un 40% de aciertos para superar la leccion. ¡Intentalo de nuevo!</p>}
 
         {newBadges.length > 0 && (

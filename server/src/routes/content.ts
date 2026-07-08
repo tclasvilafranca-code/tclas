@@ -22,6 +22,39 @@ router.get("/curriculum", requireAuth, async (req: AuthedRequest, res) => {
   res.json(tree);
 });
 
+// Repaso espaciado: piezas ya terminadas cuyo proximo repaso ya ha llegado.
+// Para cada una, propone la leccion donde peor precision tuvo (su punto mas debil).
+router.get("/reviews/due", requireAuth, async (req: AuthedRequest, res) => {
+  const profile = await prisma.studentProfile.findUnique({ where: { userId: req.auth!.userId } });
+  if (!profile) return res.status(400).json({ error: "Perfil de alumno no encontrado" });
+
+  const dueEntries = await prisma.repertoireEntry.findMany({
+    where: { studentId: profile.id, status: "COMPLETED", nextReviewAt: { lte: new Date() } },
+    include: {
+      piece: true,
+      lessons: { include: { progress: { where: { userId: req.auth!.userId } } } },
+    },
+  });
+
+  const due = dueEntries
+    .map((entry) => {
+      const withProgress = entry.lessons.map((l) => ({ lesson: l, precisionScore: l.progress[0]?.precisionScore ?? 0 }));
+      if (withProgress.length === 0) return null;
+      const weakest = withProgress.reduce((min, cur) => (cur.precisionScore < min.precisionScore ? cur : min));
+      return {
+        entryId: entry.id,
+        pieceId: entry.pieceId,
+        pieceTitle: entry.piece.title,
+        iconEmoji: entry.piece.iconEmoji,
+        lessonId: weakest.lesson.id,
+        reviewStage: entry.reviewStage,
+      };
+    })
+    .filter((x): x is NonNullable<typeof x> => x !== null);
+
+  res.json({ due });
+});
+
 router.get("/lessons/:id", requireAuth, async (req: AuthedRequest, res) => {
   const lesson = await prisma.lesson.findUnique({
     where: { id: req.params.id },
@@ -111,6 +144,12 @@ router.post("/exercises/:id/attempt", requireAuth, async (req: AuthedRequest, re
   });
 });
 
+// Repaso espaciado: intervalos crecientes (en dias) entre cada repaso de una
+// pieza ya terminada. A partir del ultimo, se repite ese mismo intervalo
+// indefinidamente como "mantenimiento".
+const REVIEW_INTERVALS_DAYS = [3, 7, 14, 30];
+const REVIEW_XP = 5;
+
 const completeSchema = z.object({
   correctCount: z.number().int().min(0),
   totalCount: z.number().int().min(1),
@@ -157,32 +196,51 @@ router.post("/lessons/:id/complete", requireAuth, async (req: AuthedRequest, res
   let xpAwarded = 0;
   let newBadges: { code: string; name: string; icon: string }[] = [];
   let profile = await prisma.studentProfile.findUnique({ where: { userId } });
+  let isReview = false;
+  const wasAlreadyCompleted = existing?.status === "COMPLETED";
 
-  if (passed && profile) {
-    const wasAlreadyCompleted = existing?.status === "COMPLETED";
-    if (!wasAlreadyCompleted) {
-      xpAwarded = Math.round(lesson.xpReward * (0.5 + 0.5 * (stars / 3)));
-      profile = await awardXP(userId, xpAwarded, `Leccion completada: ${lesson.title}`);
-      profile = await registerDailyActivity(profile);
-      newBadges = await checkAndAwardBadges(userId, profile);
+  if (passed && profile && !wasAlreadyCompleted) {
+    xpAwarded = Math.round(lesson.xpReward * (0.5 + 0.5 * (stars / 3)));
+    profile = await awardXP(userId, xpAwarded, `Leccion completada: ${lesson.title}`);
+    profile = await registerDailyActivity(profile);
+    newBadges = await checkAndAwardBadges(userId, profile);
 
-      const allLessonsInPiece = await prisma.lesson.findMany({ where: { repertoireEntryId: lesson.repertoireEntryId } });
-      const completedInPiece = await prisma.progress.count({
-        where: { userId, status: "COMPLETED", lessonId: { in: allLessonsInPiece.map((l) => l.id) } },
+    const allLessonsInPiece = await prisma.lesson.findMany({ where: { repertoireEntryId: lesson.repertoireEntryId } });
+    const completedInPiece = await prisma.progress.count({
+      where: { userId, status: "COMPLETED", lessonId: { in: allLessonsInPiece.map((l) => l.id) } },
+    });
+    if (completedInPiece >= allLessonsInPiece.length) {
+      await prisma.repertoireEntry.update({
+        where: { id: lesson.repertoireEntryId },
+        data: { status: "COMPLETED", reviewStage: 0, nextReviewAt: new Date(Date.now() + REVIEW_INTERVALS_DAYS[0] * 86400000) },
       });
-      if (completedInPiece >= allLessonsInPiece.length) {
-        await prisma.repertoireEntry.update({ where: { id: lesson.repertoireEntryId }, data: { status: "COMPLETED" } });
-      } else {
-        await prisma.repertoireEntry.updateMany({
-          where: { id: lesson.repertoireEntryId, status: "UPCOMING" },
-          data: { status: "ACTIVE" },
-        });
-      }
+    } else {
+      await prisma.repertoireEntry.updateMany({
+        where: { id: lesson.repertoireEntryId, status: "UPCOMING" },
+        data: { status: "ACTIVE" },
+      });
     }
+  } else if (profile && wasAlreadyCompleted && lesson.repertoireEntry.status === "COMPLETED") {
+    // La pieza entera ya estaba terminada: esta repeticion es una sesion de
+    // repaso espaciado. Si le va bien, alarga el intervalo; si no, se vuelve
+    // a proponer manana en vez de esperar semanas.
+    isReview = true;
+    const stage = lesson.repertoireEntry.reviewStage;
+    const nextStage = passed ? stage + 1 : stage;
+    const nextReviewAt = passed
+      ? new Date(Date.now() + REVIEW_INTERVALS_DAYS[Math.min(nextStage, REVIEW_INTERVALS_DAYS.length - 1)] * 86400000)
+      : new Date(Date.now() + 86400000);
+    await prisma.repertoireEntry.update({
+      where: { id: lesson.repertoireEntryId },
+      data: { reviewStage: nextStage, nextReviewAt },
+    });
+    xpAwarded = REVIEW_XP;
+    profile = await awardXP(userId, REVIEW_XP, `Repaso: ${lesson.title}`);
+    profile = await registerDailyActivity(profile);
   }
   profile = profile ? await recomputeHearts(profile) : profile;
 
-  res.json({ progress, stars, score: precisionScore, xpAwarded, profile, newBadges });
+  res.json({ progress, stars, score: precisionScore, xpAwarded, profile, newBadges, isReview });
 });
 
 async function checkAndAwardBadges(userId: string, profile: { xpTotal: number; streakCurrent: number }) {

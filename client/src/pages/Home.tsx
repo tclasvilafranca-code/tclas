@@ -1,24 +1,27 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
-import type { CurriculumTree } from "../lib/api";
+import type { CurriculumTree, ReviewDue } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 import { GamificationBar } from "../components/GamificationBar";
 import { PathMap } from "../components/PathMap";
 import { PieceDetailModal } from "../components/PieceDetailModal";
 import { MascotBubble } from "../components/MascotBubble";
 import { StreakCalendar } from "../components/StreakCalendar";
+import { ReviewBanner } from "../components/ReviewBanner";
 import { greetingMessage } from "../lib/misol";
 
 export function Home() {
   const { me, logout } = useAuth();
   const [tree, setTree] = useState<CurriculumTree | null>(null);
+  const [reviewsDue, setReviewsDue] = useState<ReviewDue[]>([]);
   const [openPieceId, setOpenPieceId] = useState<string | null>(null);
   const navigate = useNavigate();
   const [greeting] = useState(() => greetingMessage(me?.name ?? "", me?.studentProfile?.streakCurrent ?? 0));
 
   useEffect(() => {
     api.get<CurriculumTree>("/curriculum").then(setTree);
+    api.get<{ due: ReviewDue[] }>("/reviews/due").then((r) => setReviewsDue(r.due));
   }, []);
 
   if (!me?.studentProfile) return null;
@@ -40,6 +43,8 @@ export function Home() {
           <MascotBubble message={greeting} mood="cheer" align="center" className="mb-2 text-left" />
           <StreakCalendar streakCurrent={me.studentProfile.streakCurrent} lastActivityDate={me.studentProfile.lastActivityDate} />
           <div className="mb-6" />
+
+          <ReviewBanner due={reviewsDue} onOpenLesson={(id) => navigate(`/app/lesson/${id}`)} />
 
           {tree.pieces.length === 0 ? (
             <p className="text-center text-tclas-ink/50 mt-16">Todavia no tienes piezas asignadas. ¡Pronto tu profesor/a anadira tu repertorio!</p>

@@ -91,6 +91,11 @@ model RepertoireEntry {
   teacherNote   String    @default("")
   status        String    @default("UPCOMING") // UPCOMING | ACTIVE | COMPLETED
 
+  // Repaso espaciado: una vez completada la pieza, se propone repasarla en
+  // intervalos crecientes (ver REVIEW_INTERVALS_DAYS en routes/content.ts).
+  nextReviewAt DateTime?
+  reviewStage  Int       @default(0)
+
   lessons Lesson[]
 
   @@unique([studentId, orderIndex])

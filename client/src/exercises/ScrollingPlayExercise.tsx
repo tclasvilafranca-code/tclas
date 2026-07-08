@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Exercise } from "../lib/api";
 import { PianoKeyboard } from "../components/PianoKeyboard";
+import { ListenButton } from "../components/ListenButton";
 import { noteToMidi, midiToNoteName } from "../lib/notes";
 import { playErrorBuzz } from "../lib/audio";
 
@@ -14,7 +15,7 @@ const MS_PER_UNIT = 550;
 const HIT_X = 18;
 
 export function ScrollingPlayExercise({ exercise, onSubmit, feedback }: Props) {
-  const { notes, durations } = exercise.data as { notes: string[]; durations: number[] };
+  const { notes, durations, bpm } = exercise.data as { notes: string[]; durations: number[]; bpm: number };
   const [cursor, setCursor] = useState(0);
   const [hit, setHit] = useState<boolean[]>(() => notes.map(() => false));
   const [running, setRunning] = useState(false);
@@ -81,7 +82,12 @@ export function ScrollingPlayExercise({ exercise, onSubmit, feedback }: Props) {
 
   return (
     <div className="text-center">
-      <p className="text-lg font-semibold mb-4">{exercise.prompt}</p>
+      <p className="text-lg font-semibold mb-3">{exercise.prompt}</p>
+      {!running && (
+        <div className="flex justify-center mb-3">
+          <ListenButton notes={notes} rhythm={durations} bpm={bpm} label="Escuchar antes de tocar" />
+        </div>
+      )}
 
       <div className="relative h-24 bg-tclas-ink/5 rounded-xl overflow-hidden mb-6 max-w-xl mx-auto">
         <div className="absolute top-0 bottom-0 border-l-2 border-tclas-gold z-10" style={{ left: `${HIT_X}%` }} />

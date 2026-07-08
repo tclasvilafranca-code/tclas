@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import type { Exercise } from "../lib/api";
 import { StaffView } from "../components/StaffView";
 import { PianoKeyboard } from "../components/PianoKeyboard";
+import { ListenButton } from "../components/ListenButton";
 import { playErrorBuzz } from "../lib/audio";
 import { noteToMidi } from "../lib/notes";
 
@@ -55,7 +56,10 @@ export function SequenceExercise({ exercise, onSubmit, feedback }: Props) {
 
   return (
     <div className="text-center">
-      <p className="text-lg font-semibold mb-4">{prompt}</p>
+      <p className="text-lg font-semibold mb-3">{prompt}</p>
+      <div className="flex justify-center mb-3">
+        <ListenButton notes={targetNotes} bpm={data.tempo ?? 90} />
+      </div>
       <div className="mb-6">
         <StaffView clef={data.clef ?? "treble"} notes={targetNotes} activeIndex={done ? undefined : cursor} correctness={progress} />
       </div>

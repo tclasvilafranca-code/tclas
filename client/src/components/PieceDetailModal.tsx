@@ -4,6 +4,7 @@ import type { PieceDetail } from "../lib/api";
 import { StaffView } from "./StaffView";
 import { PianoKeyboard } from "./PianoKeyboard";
 import { MascotBubble } from "./MascotBubble";
+import { ListenButton } from "./ListenButton";
 import { pieceIntroMessage } from "../lib/misol";
 
 interface Props {
@@ -59,7 +60,10 @@ export function PieceDetailModal({ pieceId, onClose }: Props) {
               <MascotBubble message={intro} mood="cheer" size={44} />
 
               <section>
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-tclas-ink/40 mb-2">Partitura completa</h3>
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-xs font-semibold uppercase tracking-wide text-tclas-ink/40">Partitura completa</h3>
+                  <ListenButton notes={piece.content.melody} rhythm={piece.content.melodyRhythm} label="Escuchar la pieza" />
+                </div>
                 <div className="bg-white/70 rounded-xl border border-tclas-ink/10 p-3 sm:p-4 grid gap-1 overflow-x-auto">
                   {chunk(piece.content.melody, 8).map((row, i) => (
                     <StaffView key={i} clef={piece.content.clef === "bass" ? "bass" : "treble"} notes={row} />

@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import type { Exercise } from "../lib/api";
 import { StaffView } from "../components/StaffView";
 import { PianoKeyboard } from "../components/PianoKeyboard";
+import { ListenButton } from "../components/ListenButton";
 import { noteToMidi, midiToNoteName } from "../lib/notes";
 import { playErrorBuzz } from "../lib/audio";
 
@@ -87,9 +88,12 @@ export function SegmentPracticeExercise({ exercise, onSubmit, feedback }: Props)
           </button>
         ))}
       </div>
-      <p className="text-xs text-tclas-ink/50 mb-4">
+      <p className="text-xs text-tclas-ink/50 mb-3">
         Tramo {segIndex + 1} de {segments.length} · practica cada tramo las veces que quieras
       </p>
+      <div className="flex justify-center mb-4">
+        <ListenButton notes={currentSegment} bpm={100} label="Escuchar este tramo" />
+      </div>
 
       <div className="mb-6 overflow-x-auto">
         <StaffView clef={clef} notes={currentSegment} activeIndex={cursor >= currentSegment.length ? undefined : cursor} correctness={progress} />

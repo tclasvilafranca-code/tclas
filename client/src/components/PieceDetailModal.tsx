@@ -73,6 +73,14 @@ export function PieceDetailModal({ pieceId, onClose }: Props) {
                     ))}
                   </div>
                 )}
+                {piece.content.isDuet && piece.content.duetPart && (
+                  <div className="bg-tclas-plum/5 rounded-xl border border-tclas-plum/20 p-3 sm:p-4 grid gap-1 mt-2 overflow-x-auto">
+                    <p className="text-[10px] uppercase tracking-wide text-tclas-plum/50 mb-1">🎹 Parte de tu profesora o familia (dúo)</p>
+                    {chunk(piece.content.duetPart, 8).map((row, i) => (
+                      <StaffView key={i} clef="bass" notes={row} />
+                    ))}
+                  </div>
+                )}
                 {piece.content.lyricsHook && <p className="text-sm italic text-tclas-ink/60 mt-2 text-center">"{piece.content.lyricsHook}"</p>}
               </section>
 

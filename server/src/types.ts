@@ -157,4 +157,5 @@ export interface PieceContent {
   featuredNotes: string[]; // notas destacadas para practicar (lectura/oido)
   lyricsHook?: string; // primera frase de la letra, si tiene (para dar contexto)
   isDuet?: boolean; // piezas a 4 manos (profesor/familia + alumno)
+  duetPart?: string[]; // la parte real que toca la profesora/familia, en clave de Fa (si isDuet)
 }

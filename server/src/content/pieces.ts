@@ -254,6 +254,7 @@ export const arnauPieces: PieceDef[] = [
       featuredNotes: ["C5", "D5", "E5"],
       lyricsHook: "Rain, rain, go away, come again another day",
       isDuet: true,
+      duetPart: ["C3", "C3", "C3", "C3", "C3", "C3", "G3", "G3", "C3", "C3", "C3"],
     },
   },
   {
@@ -275,6 +276,7 @@ export const arnauPieces: PieceDef[] = [
       featuredNotes: ["C4", "D4", "E4", "F4", "G4"],
       lyricsHook: "Here we go round the mulberry bush",
       isDuet: true,
+      duetPart: ["C3", "C3", "C3", "C3", "G3", "G3", "G3", "G3", "C3", "C3", "C3", "C3"],
     },
   },
   {

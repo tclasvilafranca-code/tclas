@@ -229,6 +229,7 @@ export interface PieceContent {
   featuredNotes: string[];
   lyricsHook?: string;
   isDuet?: boolean;
+  duetPart?: string[];
 }
 
 export interface PieceDetail {

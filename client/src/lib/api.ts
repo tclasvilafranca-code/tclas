@@ -1,3 +1,8 @@
+// En local, Vite hace de proxy de /api hacia el backend (ver vite.config.ts).
+// En produccion, la app web y la API se despliegan por separado, asi que
+// VITE_API_URL debe apuntar a la URL publica del backend (ej. https://tclas-api.onrender.com).
+const API_BASE = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : "/api";
+
 const TOKEN_KEY = "tclas_token";
 
 export function getToken(): string | null {
@@ -12,7 +17,7 @@ export function clearToken() {
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = getToken();
-  const res = await fetch(`/api${path}`, {
+  const res = await fetch(`${API_BASE}${path}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",

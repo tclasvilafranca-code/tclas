@@ -1,14 +1,14 @@
 // t-clas · Piano Learning App
-// Nota: el conector SQLite de Prisma no soporta enums nativos,
-// por eso los campos "tipo/estado" se guardan como String y se
-// validan en la capa de aplicacion (ver src/types.ts).
+// Nota: los campos "tipo/estado" se guardan como String (en vez de enum)
+// para mantener compatibilidad si en el futuro se usara otro motor;
+// se validan en la capa de aplicacion (ver src/types.ts).
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 

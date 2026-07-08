@@ -14,13 +14,21 @@ Una app tipo Duolingo para aprender piano, pensada para complementar las clases 
 ## Arquitectura
 
 ```
-server/   API en Node.js + Express + TypeScript + Prisma (SQLite)
+server/   API en Node.js + Express + TypeScript + Prisma (PostgreSQL)
 client/   App web en React + TypeScript + Vite + Tailwind CSS
 ```
 
-El contenido del curriculo (niveles/unidades/lecciones/ejercicios) vive como datos versionables en `server/src/content/*Track.ts` y se carga a la base de datos con un script de seed, para que el equipo pueda seguir ampliandolo sin tocar el motor de la app.
+El contenido del curriculo (niveles/unidades/lecciones/ejercicios) vive como datos versionables en `server/src/content/*Track.ts` y se carga a la base de datos con un script de seed (idempotente: se puede ejecutar varias veces sin duplicar datos), para que el equipo pueda seguir ampliandolo sin tocar el motor de la app.
 
-## Puesta en marcha
+## Puesta en marcha (desarrollo local)
+
+### 0. Base de datos local
+
+Necesitas un PostgreSQL accesible en `localhost:5432`. La forma mas facil es con Docker:
+
+```bash
+docker compose up -d
+```
 
 ### 1. Backend
 
@@ -48,12 +56,16 @@ npm run dev          # http://localhost:5173 (con proxy a la API en /api)
 | Profesora | azucena@t-clas.com    | profesora123   |
 | Alumno    | alumno@t-clas.com     | alumno123      |
 
+## Publicar la app en internet (gratis)
+
+Este repo incluye un `render.yaml` para desplegar en [Render](https://render.com) con muy pocos clics. Ver la guia paso a paso en [`docs/DEPLOY.md`](docs/DEPLOY.md) — pensada para alguien sin experiencia tecnica.
+
 ## Decisiones de alcance del MVP
 
-- Base de datos SQLite (cero configuracion) en vez de Postgres, para poder levantar el proyecto sin infraestructura externa. Migrar a Postgres solo requiere cambiar el `provider` y `DATABASE_URL` en `server/prisma/schema.prisma`.
 - El "bloqueo" de progreso es lineal (una leccion disponible a la vez por track), sin desbloquear unidades enteras a la vez, para simplificar el MVP.
 - La deteccion de acordes/ejercicios de ritmo compara contra tolerancias razonables (no hay analisis de audio real del piano fisico; MIDI da notas exactas, pero no se analiza la calidad tonal o el pedal).
 - No hay todavia sistema de notificaciones push/email para recordar la practica diaria, ni tienda de recompensas con gemas.
+- El plan gratuito de Render "duerme" el backend tras 15 minutos sin uso (la primera peticion tras el reposo tarda ~30-60s en responder). Esto no afecta a los datos, solo a la velocidad de la primera carga.
 
 ## Proximos pasos sugeridos
 

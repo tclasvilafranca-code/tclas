@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: tclas
+      POSTGRES_PASSWORD: tclas
+      POSTGRES_DB: tclas
+    ports:
+      - "5432:5432"
+    volumes:
+      - tclas_db_data:/var/lib/postgresql/data
+
+volumes:
+  tclas_db_data:

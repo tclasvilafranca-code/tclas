@@ -6,6 +6,12 @@ import { teensTrack } from "../src/content/teensTrack";
 import { adultsTrack } from "../src/content/adultsTrack";
 
 async function seedTrack(def: TrackDef) {
+  const existing = await prisma.track.findUnique({ where: { code: def.code } });
+  if (existing) {
+    console.log(`  Track "${def.name}" ya existe, se omite.`);
+    return existing;
+  }
+
   const track = await prisma.track.create({
     data: { code: def.code, name: def.name, description: def.description, minAge: def.minAge, maxAge: def.maxAge, order: def.order },
   });
@@ -115,16 +121,19 @@ async function main() {
     }
   }
 
-  await prisma.assignment.create({
-    data: {
-      teacherId: teacher.id,
-      studentId: student.id,
-      lessonId: firstLesson?.id,
-      classDate: new Date(),
-      note: "Repasa esta leccion antes de nuestra proxima clase presencial y trae dudas sobre la cadencia I-IV-V-I.",
-      status: "PENDING",
-    },
-  });
+  const hasAssignment = await prisma.assignment.findFirst({ where: { studentId: student.id } });
+  if (!hasAssignment) {
+    await prisma.assignment.create({
+      data: {
+        teacherId: teacher.id,
+        studentId: student.id,
+        lessonId: firstLesson?.id,
+        classDate: new Date(),
+        note: "Repasa esta leccion antes de nuestra proxima clase presencial y trae dudas sobre la cadencia I-IV-V-I.",
+        status: "PENDING",
+      },
+    });
+  }
 
   console.log("\n¡Listo! Cuentas de prueba:");
   console.log("  Profesora -> azucena@t-clas.com / profesora123");

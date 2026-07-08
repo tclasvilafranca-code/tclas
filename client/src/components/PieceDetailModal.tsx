@@ -11,6 +11,12 @@ interface Props {
   onClose: () => void;
 }
 
+function chunk<T>(arr: T[], size: number): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
+}
+
 export function PieceDetailModal({ pieceId, onClose }: Props) {
   const [piece, setPiece] = useState<PieceDetail | null>(null);
   const intro = useMemo(() => (piece ? pieceIntroMessage(piece.title) : ""), [piece?.id]);
@@ -53,15 +59,20 @@ export function PieceDetailModal({ pieceId, onClose }: Props) {
               <MascotBubble message={intro} mood="cheer" size={44} />
 
               <section>
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-tclas-ink/40 mb-2">Partitura (extracto)</h3>
-                <div className="bg-white/70 rounded-xl border border-tclas-ink/10 p-3 sm:p-4 overflow-x-auto">
-                  <StaffView clef={piece.content.clef === "bass" ? "bass" : "treble"} notes={piece.content.melody} />
-                  {piece.content.bass && piece.content.clef === "grand" && (
-                    <div className="mt-1">
-                      <StaffView clef="bass" notes={piece.content.bass} />
-                    </div>
-                  )}
+                <h3 className="text-xs font-semibold uppercase tracking-wide text-tclas-ink/40 mb-2">Partitura completa</h3>
+                <div className="bg-white/70 rounded-xl border border-tclas-ink/10 p-3 sm:p-4 grid gap-1 overflow-x-auto">
+                  {chunk(piece.content.melody, 8).map((row, i) => (
+                    <StaffView key={i} clef={piece.content.clef === "bass" ? "bass" : "treble"} notes={row} />
+                  ))}
                 </div>
+                {piece.content.bass && piece.content.clef === "grand" && (
+                  <div className="bg-white/70 rounded-xl border border-tclas-ink/10 p-3 sm:p-4 grid gap-1 mt-2 overflow-x-auto">
+                    <p className="text-[10px] uppercase tracking-wide text-tclas-ink/30 mb-1">Mano izquierda</p>
+                    {chunk(piece.content.bass, 8).map((row, i) => (
+                      <StaffView key={i} clef="bass" notes={row} />
+                    ))}
+                  </div>
+                )}
                 {piece.content.lyricsHook && <p className="text-sm italic text-tclas-ink/60 mt-2 text-center">"{piece.content.lyricsHook}"</p>}
               </section>
 

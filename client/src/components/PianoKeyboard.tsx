@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { isBlackKey, noteToMidi, midiToNoteName } from "../lib/notes";
 import { playNote } from "../lib/audio";
 import { useMidiInput } from "../lib/midi";
+import { usePitchInput } from "../lib/pitchDetection";
 
 interface PianoKeyboardProps {
   from?: string;
@@ -31,8 +32,10 @@ export function PianoKeyboard({ from = "C3", to = "C5", highlightNotes = [], fee
   const blackWidth = whiteWidth * 0.62;
 
   const trigger = useCallback(
-    (note: string) => {
-      playNote(note);
+    (note: string, opts?: { silent?: boolean }) => {
+      // Silent: la nota ya suena de verdad (piano acustico via microfono), no hace
+      // falta sintetizarla tambien o sonaria "doblada".
+      if (!opts?.silent) playNote(note);
       setPressed((prev) => new Set(prev).add(note));
       setTimeout(() => setPressed((prev) => { const n = new Set(prev); n.delete(note); return n; }), 180);
       onPlay?.(note);
@@ -41,6 +44,8 @@ export function PianoKeyboard({ from = "C3", to = "C5", highlightNotes = [], fee
   );
 
   const { status: midiStatus, deviceName } = useMidiInput(trigger);
+  const micTrigger = useCallback((note: string) => trigger(note, { silent: true }), [trigger]);
+  const { status: micStatus, start: startMic, stop: stopMic, detectedNote } = usePitchInput(micTrigger);
 
   useEffect(() => {
     const baseMidi = noteToMidi("C4");
@@ -58,11 +63,23 @@ export function PianoKeyboard({ from = "C3", to = "C5", highlightNotes = [], fee
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between mb-2 text-xs text-tclas-ink/60 px-1">
-        <span>Toca con el raton, con el teclado (A S D F G H J...) o conecta un piano MIDI.</span>
-        <span className={`px-2 py-0.5 rounded-full ${midiStatus === "connected" ? "bg-tclas-sage/20 text-tclas-sage" : "bg-tclas-ink/5"}`}>
-          {midiStatus === "connected" ? `🎹 MIDI: ${deviceName}` : midiStatus === "unsupported" ? "MIDI no soportado en este navegador" : "Sin piano MIDI conectado"}
-        </span>
+      <div className="flex items-center justify-between mb-2 text-xs text-tclas-ink/60 px-1 flex-wrap gap-1">
+        <span>Toca con el raton, con el teclado (A S D F G H J...), conecta un piano MIDI o usa tu piano real con el micrófono.</span>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className={`px-2 py-0.5 rounded-full ${midiStatus === "connected" ? "bg-tclas-sage/20 text-tclas-sage" : "bg-tclas-ink/5"}`}>
+            {midiStatus === "connected" ? `🎹 MIDI: ${deviceName}` : midiStatus === "unsupported" ? "MIDI no soportado" : "Sin piano MIDI"}
+          </span>
+          <button
+            type="button"
+            onClick={() => (micStatus === "listening" ? stopMic() : startMic())}
+            className={`px-2 py-0.5 rounded-full font-semibold transition-colors
+              ${micStatus === "listening" ? "bg-tclas-rose/20 text-tclas-rose" : micStatus === "denied" ? "bg-tclas-ink/5 text-tclas-ink/30" : "bg-tclas-ink/5 hover:bg-tclas-ink/10"}`}
+            disabled={micStatus === "unsupported"}
+            title="Toca tu piano acustico real y la app intentara reconocer la nota (una nota cada vez, en una sala silenciosa)"
+          >
+            {micStatus === "listening" ? `🎤 Escuchando${detectedNote ? `: ${detectedNote}` : "..."}` : micStatus === "requesting" ? "🎤 Pidiendo permiso..." : micStatus === "denied" ? "🎤 Permiso denegado" : "🎤 Usar micrófono"}
+          </button>
+        </div>
       </div>
       <div className="overflow-x-auto pb-2">
         <div className="relative inline-flex" style={{ height: compact ? 110 : 150 }}>

@@ -1,8 +1,10 @@
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "passwordHash" TEXT NOT NULL,
+    "email" TEXT,
+    "passwordHash" TEXT,
+    "username" TEXT,
+    "pinHash" TEXT,
     "name" TEXT NOT NULL,
     "role" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -14,9 +16,9 @@ CREATE TABLE "User" (
 CREATE TABLE "StudentProfile" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "teacherId" TEXT,
     "ageGroup" TEXT NOT NULL,
     "birthYear" INTEGER,
-    "trackId" TEXT,
     "xpTotal" INTEGER NOT NULL DEFAULT 0,
     "heartsCurrent" INTEGER NOT NULL DEFAULT 5,
     "heartsMax" INTEGER NOT NULL DEFAULT 5,
@@ -31,49 +33,45 @@ CREATE TABLE "StudentProfile" (
 );
 
 -- CreateTable
-CREATE TABLE "Track" (
+CREATE TABLE "Piece" (
     "id" TEXT NOT NULL,
-    "code" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
-    "minAge" INTEGER NOT NULL,
-    "maxAge" INTEGER NOT NULL,
-    "order" INTEGER NOT NULL DEFAULT 0,
+    "title" TEXT NOT NULL,
+    "composer" TEXT NOT NULL DEFAULT '',
+    "arranger" TEXT NOT NULL DEFAULT '',
+    "ageGroup" TEXT NOT NULL,
+    "difficultyTier" INTEGER NOT NULL,
+    "defaultWeeks" INTEGER NOT NULL DEFAULT 3,
+    "keySignature" TEXT NOT NULL,
+    "timeSignature" TEXT NOT NULL,
+    "seasonalTag" TEXT,
+    "iconEmoji" TEXT NOT NULL DEFAULT '🎵',
+    "content" TEXT NOT NULL,
 
-    CONSTRAINT "Track_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Piece_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Level" (
+CREATE TABLE "RepertoireEntry" (
     "id" TEXT NOT NULL,
-    "trackId" TEXT NOT NULL,
-    "index" INTEGER NOT NULL,
-    "title" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
-    "iconEmoji" TEXT NOT NULL DEFAULT '🎹',
+    "studentId" TEXT NOT NULL,
+    "pieceId" TEXT NOT NULL,
+    "orderIndex" INTEGER NOT NULL,
+    "startDate" TIMESTAMP(3) NOT NULL,
+    "durationWeeks" INTEGER NOT NULL,
+    "teacherNote" TEXT NOT NULL DEFAULT '',
+    "status" TEXT NOT NULL DEFAULT 'UPCOMING',
 
-    CONSTRAINT "Level_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Unit" (
-    "id" TEXT NOT NULL,
-    "levelId" TEXT NOT NULL,
-    "index" INTEGER NOT NULL,
-    "title" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
-
-    CONSTRAINT "Unit_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "RepertoireEntry_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Lesson" (
     "id" TEXT NOT NULL,
-    "unitId" TEXT NOT NULL,
-    "index" INTEGER NOT NULL,
+    "repertoireEntryId" TEXT NOT NULL,
+    "weekIndex" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "xpReward" INTEGER NOT NULL DEFAULT 10,
+    "xpReward" INTEGER NOT NULL DEFAULT 15,
 
     CONSTRAINT "Lesson_pkey" PRIMARY KEY ("id")
 );
@@ -149,37 +147,23 @@ CREATE TABLE "UserBadge" (
     CONSTRAINT "UserBadge_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
-CREATE TABLE "Assignment" (
-    "id" TEXT NOT NULL,
-    "teacherId" TEXT NOT NULL,
-    "studentId" TEXT NOT NULL,
-    "lessonId" TEXT,
-    "classDate" TIMESTAMP(3) NOT NULL,
-    "note" TEXT NOT NULL DEFAULT '',
-    "status" TEXT NOT NULL DEFAULT 'PENDING',
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "Assignment_pkey" PRIMARY KEY ("id")
-);
-
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "StudentProfile_userId_key" ON "StudentProfile"("userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Track_code_key" ON "Track"("code");
+CREATE UNIQUE INDEX "Piece_title_key" ON "Piece"("title");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Level_trackId_index_key" ON "Level"("trackId", "index");
+CREATE UNIQUE INDEX "RepertoireEntry_studentId_orderIndex_key" ON "RepertoireEntry"("studentId", "orderIndex");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Unit_levelId_index_key" ON "Unit"("levelId", "index");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Lesson_unitId_index_key" ON "Lesson"("unitId", "index");
+CREATE UNIQUE INDEX "Lesson_repertoireEntryId_weekIndex_key" ON "Lesson"("repertoireEntryId", "weekIndex");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Exercise_lessonId_index_key" ON "Exercise"("lessonId", "index");
@@ -197,16 +181,16 @@ CREATE UNIQUE INDEX "UserBadge_userId_badgeId_key" ON "UserBadge"("userId", "bad
 ALTER TABLE "StudentProfile" ADD CONSTRAINT "StudentProfile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "StudentProfile" ADD CONSTRAINT "StudentProfile_trackId_fkey" FOREIGN KEY ("trackId") REFERENCES "Track"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "StudentProfile" ADD CONSTRAINT "StudentProfile_teacherId_fkey" FOREIGN KEY ("teacherId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Level" ADD CONSTRAINT "Level_trackId_fkey" FOREIGN KEY ("trackId") REFERENCES "Track"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "RepertoireEntry" ADD CONSTRAINT "RepertoireEntry_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "StudentProfile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Unit" ADD CONSTRAINT "Unit_levelId_fkey" FOREIGN KEY ("levelId") REFERENCES "Level"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "RepertoireEntry" ADD CONSTRAINT "RepertoireEntry_pieceId_fkey" FOREIGN KEY ("pieceId") REFERENCES "Piece"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Lesson" ADD CONSTRAINT "Lesson_unitId_fkey" FOREIGN KEY ("unitId") REFERENCES "Unit"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Lesson" ADD CONSTRAINT "Lesson_repertoireEntryId_fkey" FOREIGN KEY ("repertoireEntryId") REFERENCES "RepertoireEntry"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Exercise" ADD CONSTRAINT "Exercise_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "Lesson"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -231,12 +215,3 @@ ALTER TABLE "UserBadge" ADD CONSTRAINT "UserBadge_userId_fkey" FOREIGN KEY ("use
 
 -- AddForeignKey
 ALTER TABLE "UserBadge" ADD CONSTRAINT "UserBadge_badgeId_fkey" FOREIGN KEY ("badgeId") REFERENCES "Badge"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Assignment" ADD CONSTRAINT "Assignment_teacherId_fkey" FOREIGN KEY ("teacherId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Assignment" ADD CONSTRAINT "Assignment_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Assignment" ADD CONSTRAINT "Assignment_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "Lesson"("id") ON DELETE SET NULL ON UPDATE CASCADE;

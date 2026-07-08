@@ -2,15 +2,13 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import type { Role } from "../lib/api";
 
 export function Register() {
-  const { register } = useAuth();
+  const { registerTeacher } = useAuth();
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<Role>("STUDENT");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -19,8 +17,8 @@ export function Register() {
     setError(null);
     setLoading(true);
     try {
-      await register(name, email, password, role);
-      navigate(role === "TEACHER" ? "/teacher" : "/onboarding");
+      await registerTeacher(name, email, password);
+      navigate("/teacher");
     } catch (err: any) {
       setError(err.message || "No se pudo crear la cuenta");
     } finally {
@@ -32,16 +30,8 @@ export function Register() {
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="bg-white/70 rounded-2xl p-8 max-w-sm w-full border border-tclas-ink/10">
         <Link to="/" className="font-display text-xl text-tclas-plum">t-clas 🎹</Link>
-        <h1 className="font-display text-2xl mt-4 mb-6">Crea tu cuenta</h1>
-
-        <div className="flex gap-2 mb-4">
-          <button type="button" onClick={() => setRole("STUDENT")} className={`flex-1 rounded-lg py-2 text-sm font-semibold border-2 ${role === "STUDENT" ? "border-tclas-plum bg-tclas-plum/10" : "border-tclas-ink/15"}`}>
-            Soy alumno/a
-          </button>
-          <button type="button" onClick={() => setRole("TEACHER")} className={`flex-1 rounded-lg py-2 text-sm font-semibold border-2 ${role === "TEACHER" ? "border-tclas-plum bg-tclas-plum/10" : "border-tclas-ink/15"}`}>
-            Soy profesor/a
-          </button>
-        </div>
+        <h1 className="font-display text-2xl mt-4 mb-2">Crea tu cuenta de profesor/a</h1>
+        <p className="text-sm text-tclas-ink/60 mb-6">Tus alumnos no necesitan registrarse: tú les creas su acceso desde tu panel.</p>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <input required placeholder="Nombre" value={name} onChange={(e) => setName(e.target.value)} className="border border-tclas-ink/20 rounded-lg px-4 py-2" />

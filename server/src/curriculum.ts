@@ -3,90 +3,75 @@ import { sanitizeExerciseData } from "./gamification";
 import { ExerciseType } from "./types";
 
 /**
- * Construye el arbol completo del track de un alumno (niveles > unidades > lecciones)
- * calculando dinamicamente el estado de cada leccion:
+ * Construye el camino completo de un alumno: su repertorio de piezas, en orden,
+ * cada una con sus lecciones semanales. El estado de cada leccion se calcula
+ * dinamicamente:
  * - COMPLETED si existe un Progress con ese estado
  * - AVAILABLE la primera leccion no completada en el orden del camino
  * - LOCKED el resto
  */
-export async function buildCurriculumForUser(userId: string, trackId: string) {
-  const track = await prisma.track.findUnique({
-    where: { id: trackId },
+export async function buildCurriculumForUser(userId: string, studentProfileId: string) {
+  const entries = await prisma.repertoireEntry.findMany({
+    where: { studentId: studentProfileId },
+    orderBy: { orderIndex: "asc" },
     include: {
-      levels: {
-        orderBy: { index: "asc" },
-        include: {
-          units: {
-            orderBy: { index: "asc" },
-            include: {
-              lessons: { orderBy: { index: "asc" } },
-            },
-          },
-        },
-      },
+      piece: true,
+      lessons: { orderBy: { weekIndex: "asc" } },
     },
   });
-  if (!track) return null;
 
-  const allLessonIds = track.levels.flatMap((l) => l.units.flatMap((u) => u.lessons.map((les) => les.id)));
+  const allLessonIds = entries.flatMap((e) => e.lessons.map((l) => l.id));
   const progressRows = await prisma.progress.findMany({
     where: { userId, lessonId: { in: allLessonIds } },
   });
   const progressByLesson = new Map(progressRows.map((p) => [p.lessonId, p]));
 
   let frontierOpen = true;
-  const levels = track.levels.map((level) => {
-    const units = level.units.map((unit) => {
-      const lessons = unit.lessons.map((lesson) => {
-        const progress = progressByLesson.get(lesson.id);
-        let status: "LOCKED" | "AVAILABLE" | "COMPLETED";
-        if (progress?.status === "COMPLETED") {
-          status = "COMPLETED";
-        } else if (frontierOpen) {
-          status = "AVAILABLE";
-          frontierOpen = false;
-        } else {
-          status = "LOCKED";
-        }
-        return {
-          id: lesson.id,
-          index: lesson.index,
-          title: lesson.title,
-          description: lesson.description,
-          xpReward: lesson.xpReward,
-          status,
-          stars: progress?.stars ?? 0,
-        };
-      });
-      const unitCompleted = lessons.every((l) => l.status === "COMPLETED");
+  const pieces = entries.map((entry) => {
+    const lessons = entry.lessons.map((lesson) => {
+      const progress = progressByLesson.get(lesson.id);
+      let status: "LOCKED" | "AVAILABLE" | "COMPLETED";
+      if (progress?.status === "COMPLETED") {
+        status = "COMPLETED";
+      } else if (frontierOpen) {
+        status = "AVAILABLE";
+        frontierOpen = false;
+      } else {
+        status = "LOCKED";
+      }
       return {
-        id: unit.id,
-        index: unit.index,
-        title: unit.title,
-        description: unit.description,
-        completed: unitCompleted,
-        lessons,
+        id: lesson.id,
+        weekIndex: lesson.weekIndex,
+        title: lesson.title,
+        description: lesson.description,
+        xpReward: lesson.xpReward,
+        status,
+        stars: progress?.stars ?? 0,
       };
     });
-    const levelCompleted = units.every((u) => u.completed);
+    const completed = lessons.every((l) => l.status === "COMPLETED");
     return {
-      id: level.id,
-      index: level.index,
-      title: level.title,
-      description: level.description,
-      iconEmoji: level.iconEmoji,
-      completed: levelCompleted,
-      units,
+      id: entry.id,
+      orderIndex: entry.orderIndex,
+      startDate: entry.startDate,
+      durationWeeks: entry.durationWeeks,
+      teacherNote: entry.teacherNote,
+      status: entry.status,
+      completed,
+      piece: {
+        id: entry.piece.id,
+        title: entry.piece.title,
+        composer: entry.piece.composer,
+        iconEmoji: entry.piece.iconEmoji,
+        seasonalTag: entry.piece.seasonalTag,
+        keySignature: entry.piece.keySignature,
+        timeSignature: entry.piece.timeSignature,
+      },
+      lessons,
     };
   });
 
-  return {
-    id: track.id,
-    code: track.code,
-    name: track.name,
-    description: track.description,
-    levels,
-  };
+  return { pieces };
 }
 
 export function sanitizeExercise(ex: { id: string; index: number; type: string; prompt: string; data: string; explanation: string }) {

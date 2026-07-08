@@ -4,7 +4,6 @@ import { useAuth } from "./context/AuthContext";
 import { Landing } from "./pages/Landing";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
-import { Onboarding } from "./pages/Onboarding";
 import { Home } from "./pages/Home";
 import { Lesson } from "./pages/Lesson";
 import { TeacherDashboard } from "./pages/TeacherDashboard";
@@ -19,16 +18,6 @@ function RequireStudent({ children }: { children: ReactNode }) {
   if (loading) return <Splash />;
   if (!me) return <Navigate to="/login" replace />;
   if (me.role !== "STUDENT") return <Navigate to="/teacher" replace />;
-  if (!me.studentProfile?.onboarded) return <Navigate to="/onboarding" replace />;
-  return children;
-}
-
-function RequireOnboarding({ children }: { children: ReactNode }) {
-  const { me, loading } = useAuth();
-  if (loading) return <Splash />;
-  if (!me) return <Navigate to="/login" replace />;
-  if (me.role !== "STUDENT") return <Navigate to="/teacher" replace />;
-  if (me.studentProfile?.onboarded) return <Navigate to="/app" replace />;
   return children;
 }
 
@@ -43,7 +32,7 @@ function RequireTeacher({ children }: { children: ReactNode }) {
 function RedirectIfLoggedIn({ children }: { children: ReactNode }) {
   const { me, loading } = useAuth();
   if (loading) return <Splash />;
-  if (me) return <Navigate to={me.role === "TEACHER" ? "/teacher" : me.studentProfile?.onboarded ? "/app" : "/onboarding"} replace />;
+  if (me) return <Navigate to={me.role === "TEACHER" ? "/teacher" : "/app"} replace />;
   return children;
 }
 
@@ -53,7 +42,6 @@ export default function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<RedirectIfLoggedIn><Login /></RedirectIfLoggedIn>} />
       <Route path="/register" element={<RedirectIfLoggedIn><Register /></RedirectIfLoggedIn>} />
-      <Route path="/onboarding" element={<RequireOnboarding><Onboarding /></RequireOnboarding>} />
       <Route path="/app" element={<RequireStudent><Home /></RequireStudent>} />
       <Route path="/app/lesson/:id" element={<RequireStudent><Lesson /></RequireStudent>} />
       <Route path="/teacher" element={<RequireTeacher><TeacherDashboard /></RequireTeacher>} />

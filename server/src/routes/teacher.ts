@@ -1,36 +1,50 @@
 import { Router } from "express";
+import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "../prisma";
 import { requireAuth, requireRole, AuthedRequest } from "../auth";
 import { buildCurriculumForUser } from "../curriculum";
+import { createRepertoireEntryWithLessons } from "../repertoire";
 
 const router = Router();
 router.use(requireAuth, requireRole("TEACHER"));
 
-router.get("/students", async (_req, res) => {
+function slugifyUsername(name: string): string {
+  return name
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "")
+    .slice(0, 16);
+}
+
+function randomPin(): string {
+  return String(Math.floor(1000 + Math.random() * 9000));
+}
+
+router.get("/students", async (req: AuthedRequest, res) => {
   const students = await prisma.user.findMany({
-    where: { role: "STUDENT" },
-    include: { studentProfile: { include: { track: true } } },
+    where: { role: "STUDENT", studentProfile: { teacherId: req.auth!.userId } },
+    include: { studentProfile: true },
     orderBy: { name: "asc" },
   });
 
   const results = await Promise.all(
     students.map(async (s) => {
-      const completedCount = await prisma.progress.count({ where: { userId: s.id, status: "COMPLETED" } });
-      const totalLessons = s.studentProfile?.trackId
-        ? await prisma.lesson.count({ where: { unit: { level: { trackId: s.studentProfile.trackId } } } })
-        : 0;
+      const entries = await prisma.repertoireEntry.findMany({ where: { studentId: s.studentProfile!.id }, include: { lessons: true } });
+      const totalLessons = entries.reduce((a, e) => a + e.lessons.length, 0);
+      const lessonIds = entries.flatMap((e) => e.lessons.map((l) => l.id));
+      const completedLessons = await prisma.progress.count({ where: { userId: s.id, status: "COMPLETED", lessonId: { in: lessonIds } } });
       return {
         id: s.id,
         name: s.name,
-        email: s.email,
+        username: s.username,
         ageGroup: s.studentProfile?.ageGroup,
-        trackName: s.studentProfile?.track?.name ?? null,
         xpTotal: s.studentProfile?.xpTotal ?? 0,
         streakCurrent: s.studentProfile?.streakCurrent ?? 0,
         lastActivityDate: s.studentProfile?.lastActivityDate ?? null,
-        onboarded: s.studentProfile?.onboarded ?? false,
-        completedLessons: completedCount,
+        piecesAssigned: entries.length,
+        completedLessons,
         totalLessons,
       };
     })
@@ -38,22 +52,47 @@ router.get("/students", async (_req, res) => {
   res.json(results);
 });
 
+const createStudentSchema = z.object({
+  name: z.string().min(1),
+  ageGroup: z.enum(["KIDS", "TEENS", "ADULTS"]),
+  birthYear: z.number().int().optional(),
+});
+
+router.post("/students", async (req: AuthedRequest, res) => {
+  const parsed = createStudentSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "Datos invalidos", details: parsed.error.flatten() });
+
+  const base = slugifyUsername(parsed.data.name) || "alumno";
+  let username = base;
+  let suffix = 0;
+  while (await prisma.user.findUnique({ where: { username } })) {
+    suffix += 1;
+    username = `${base}${suffix}`;
+  }
+  const pin = randomPin();
+  const pinHash = await bcrypt.hash(pin, 10);
+
+  const user = await prisma.user.create({
+    data: {
+      name: parsed.data.name,
+      role: "STUDENT",
+      username,
+      pinHash,
+      studentProfile: {
+        create: { ageGroup: parsed.data.ageGroup, birthYear: parsed.data.birthYear, teacherId: req.auth!.userId, onboarded: true },
+      },
+    },
+    include: { studentProfile: true },
+  });
+
+  res.status(201).json({ id: user.id, name: user.name, username, pin, ageGroup: user.studentProfile?.ageGroup });
+});
+
 router.get("/students/:id", async (req, res) => {
-  const student = await prisma.user.findUnique({
-    where: { id: req.params.id },
-    include: { studentProfile: { include: { track: true } } },
-  });
-  if (!student || student.role !== "STUDENT") return res.status(404).json({ error: "Alumno no encontrado" });
+  const student = await prisma.user.findUnique({ where: { id: req.params.id }, include: { studentProfile: true } });
+  if (!student || student.role !== "STUDENT" || !student.studentProfile) return res.status(404).json({ error: "Alumno no encontrado" });
 
-  const curriculum = student.studentProfile?.trackId
-    ? await buildCurriculumForUser(student.id, student.studentProfile.trackId)
-    : null;
-
-  const assignments = await prisma.assignment.findMany({
-    where: { studentId: student.id },
-    include: { lesson: true },
-    orderBy: { classDate: "desc" },
-  });
+  const curriculum = await buildCurriculumForUser(student.id, student.studentProfile.id);
 
   const recentBadges = await prisma.userBadge.findMany({
     where: { userId: student.id },
@@ -64,58 +103,82 @@ router.get("/students/:id", async (req, res) => {
   res.json({
     id: student.id,
     name: student.name,
-    email: student.email,
+    username: student.username,
     profile: student.studentProfile,
     curriculum,
-    assignments,
     badges: recentBadges.map((b) => ({ code: b.badge.code, name: b.badge.name, icon: b.badge.icon, earnedAt: b.earnedAt })),
   });
 });
 
-const assignmentSchema = z.object({
-  studentId: z.string(),
-  lessonId: z.string().optional(),
-  classDate: z.string(),
-  note: z.string().default(""),
+router.get("/pieces", async (req, res) => {
+  const ageGroup = req.query.ageGroup as string | undefined;
+  const pieces = await prisma.piece.findMany({
+    where: ageGroup ? { ageGroup } : undefined,
+    orderBy: [{ difficultyTier: "asc" }, { title: "asc" }],
+  });
+  res.json(
+    pieces.map((p) => ({
+      id: p.id,
+      title: p.title,
+      composer: p.composer,
+      ageGroup: p.ageGroup,
+      difficultyTier: p.difficultyTier,
+      defaultWeeks: p.defaultWeeks,
+      keySignature: p.keySignature,
+      timeSignature: p.timeSignature,
+      seasonalTag: p.seasonalTag,
+      iconEmoji: p.iconEmoji,
+    }))
+  );
 });
 
-router.post("/assignments", async (req: AuthedRequest, res) => {
-  const parsed = assignmentSchema.safeParse(req.body);
+const assignSchema = z.object({
+  pieceId: z.string(),
+  startDate: z.string(),
+  durationWeeks: z.number().int().min(1).max(12).optional(),
+  teacherNote: z.string().default(""),
+});
+
+router.post("/students/:id/repertoire", async (req, res) => {
+  const parsed = assignSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Datos invalidos", details: parsed.error.flatten() });
 
-  const assignment = await prisma.assignment.create({
-    data: {
-      teacherId: req.auth!.userId,
-      studentId: parsed.data.studentId,
-      lessonId: parsed.data.lessonId,
-      classDate: new Date(parsed.data.classDate),
-      note: parsed.data.note,
-    },
-    include: { lesson: true },
+  const student = await prisma.user.findUnique({ where: { id: req.params.id }, include: { studentProfile: true } });
+  if (!student?.studentProfile) return res.status(404).json({ error: "Alumno no encontrado" });
+
+  const piece = await prisma.piece.findUnique({ where: { id: parsed.data.pieceId } });
+  if (!piece) return res.status(404).json({ error: "Pieza no encontrada" });
+
+  const lastEntry = await prisma.repertoireEntry.findFirst({ where: { studentId: student.studentProfile.id }, orderBy: { orderIndex: "desc" } });
+  const orderIndex = (lastEntry?.orderIndex ?? 0) + 1;
+
+  const entry = await createRepertoireEntryWithLessons({
+    studentProfileId: student.studentProfile.id,
+    piece,
+    orderIndex,
+    startDate: new Date(parsed.data.startDate),
+    durationWeeks: parsed.data.durationWeeks,
+    teacherNote: parsed.data.teacherNote,
   });
-  res.status(201).json(assignment);
+
+  res.status(201).json(entry);
 });
 
-router.get("/assignments", async (req, res) => {
-  const studentId = req.query.studentId as string | undefined;
-  const assignments = await prisma.assignment.findMany({
-    where: studentId ? { studentId } : undefined,
-    include: { lesson: true, student: true },
-    orderBy: { classDate: "desc" },
-  });
-  res.json(assignments);
-});
+router.delete("/students/:id/repertoire/:entryId", async (req, res) => {
+  const entry = await prisma.repertoireEntry.findUnique({ where: { id: req.params.entryId }, include: { lessons: true } });
+  if (!entry) return res.status(404).json({ error: "Asignacion no encontrada" });
 
-const updateAssignmentSchema = z.object({ status: z.enum(["PENDING", "DONE"]) });
+  const lessonIds = entry.lessons.map((l) => l.id);
+  const exercises = await prisma.exercise.findMany({ where: { lessonId: { in: lessonIds } } });
+  const exerciseIds = exercises.map((e) => e.id);
 
-router.patch("/assignments/:id", async (req, res) => {
-  const parsed = updateAssignmentSchema.safeParse(req.body);
-  if (!parsed.success) return res.status(400).json({ error: "Datos invalidos" });
-  const assignment = await prisma.assignment.update({
-    where: { id: req.params.id },
-    data: { status: parsed.data.status },
-  });
-  res.json(assignment);
+  await prisma.exerciseAttempt.deleteMany({ where: { exerciseId: { in: exerciseIds } } });
+  await prisma.progress.deleteMany({ where: { lessonId: { in: lessonIds } } });
+  await prisma.exercise.deleteMany({ where: { lessonId: { in: lessonIds } } });
+  await prisma.lesson.deleteMany({ where: { repertoireEntryId: entry.id } });
+  await prisma.repertoireEntry.delete({ where: { id: entry.id } });
+
+  res.status(204).send();
 });
 
 export default router;

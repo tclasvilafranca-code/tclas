@@ -4,12 +4,14 @@ Una app tipo Duolingo para aprender piano, pensada para complementar las clases 
 
 ## ¿Que incluye este MVP?
 
-- **3 caminos de aprendizaje diferenciados por edad**: Los Exploradores del Piano (6-11), Piano Level Up (12-17) y Piano para Adultos (18+), cada uno con 5 niveles, ~11 unidades y 25-26 lecciones (76 lecciones y ~260 ejercicios en total), con pedagogia y tono adaptados a cada grupo.
-- **8 tipos de ejercicios**: nombrar notas, lectura de pentagrama, ritmo (tap en tiempo real), oido musical, teoria (opcion multiple), tocar en el teclado, intervalos y acordes.
+- **Repertorio real y personalizado por alumno**: cada alumno tiene su propia lista de piezas (asignadas por la profesora), en el orden y con la duracion que ella decida — no un temario generico igual para todos.
+- **12 tipos de ejercicios**: opcion multiple, nombrar notas, lectura de pentagrama, tocar en el teclado, ritmo (tap en tiempo real), oido musical, intervalos, acordes, escribir la respuesta, relacionar (matching), ordenar una secuencia y decir la respuesta en voz alta (reconocimiento de voz del navegador).
+- **Generador automatico de lecciones**: al asignar una pieza a un alumno, la app genera solas las semanas de practica (con ejercicios variados derivados de las notas/ritmo reales de esa pieza) — asignar contenido a un alumno nuevo no requiere escribir codigo.
+- **Camino visual tipo "Candy Crush"**: un camino serpenteante de nodos semana a semana, agrupado por pieza, con estado bloqueado/disponible/completado.
 - **Piano virtual interactivo**: se toca con el raton, con el teclado del ordenador (A S D F G H J K...) o conectando un piano/teclado MIDI real via Web MIDI API.
 - **Gamificacion**: XP, rachas diarias, corazones (vidas) con regeneracion, estrellas por leccion e insignias.
-- **Cuentas y roles**: alumno y profesora, con registro/login (JWT).
-- **Panel para Azucena (profesora)**: ve el progreso de cada alumno por nivel, y puede asignar tareas de la app ligadas a la fecha de una clase presencial, con una nota para el alumno.
+- **Acceso**: la profesora tiene email+contrasena; los alumnos entran con usuario+PIN generados por la profesora (sin autoregistro), pensado para que los mas pequenos puedan entrar facilmente.
+- **Panel para Azucena (profesora)**: crea el acceso de cada alumno, gestiona su repertorio (anadir/quitar piezas de la biblioteca compartida, con fecha de inicio y duracion), y ve el progreso de cada uno.
 
 ## Arquitectura
 
@@ -18,7 +20,10 @@ server/   API en Node.js + Express + TypeScript + Prisma (PostgreSQL)
 client/   App web en React + TypeScript + Vite + Tailwind CSS
 ```
 
-El contenido del curriculo (niveles/unidades/lecciones/ejercicios) vive como datos versionables en `server/src/content/*Track.ts` y se carga a la base de datos con un script de seed (idempotente: se puede ejecutar varias veces sin duplicar datos), para que el equipo pueda seguir ampliandolo sin tocar el motor de la app.
+El modelo de contenido tiene 3 capas:
+1. **Biblioteca de piezas** (`server/src/content/pieces.ts`): partituras reales, transcritas a datos (notas, ritmo, acordes) — versionable y ampliable sin tocar el motor.
+2. **Generador** (`server/src/generator.ts`): a partir de una pieza y una duracion en semanas, genera automaticamente las lecciones y sus ejercicios variados.
+3. **Repertorio por alumno** (`RepertoireEntry` en la base de datos): la asignacion real de que alumno lleva que pieza, en que orden y fechas — se gestiona desde el panel de la profesora.
 
 ## Puesta en marcha (desarrollo local)
 
@@ -37,7 +42,7 @@ cd server
 npm install
 cp .env.example .env
 npx prisma migrate dev
-npm run seed        # crea el curriculo + cuentas de prueba
+npm run seed        # crea la biblioteca de piezas + cuentas de prueba (incluye el repertorio real de Arnau)
 npm run dev          # http://localhost:4000
 ```
 
@@ -51,10 +56,10 @@ npm run dev          # http://localhost:5173 (con proxy a la API en /api)
 
 ### Cuentas de prueba (creadas por el seed)
 
-| Rol       | Email                | Contrasena     |
-|-----------|-----------------------|----------------|
-| Profesora | azucena@t-clas.com    | profesora123   |
-| Alumno    | alumno@t-clas.com     | alumno123      |
+| Rol       | Acceso                          |
+|-----------|----------------------------------|
+| Profesora | azucena@t-clas.com / profesora123 |
+| Alumno    | usuario `arnau` / PIN `1234`      |
 
 ## Publicar la app en internet (gratis)
 
@@ -62,14 +67,16 @@ Este repo incluye un `render.yaml` para desplegar en [Render](https://render.com
 
 ## Decisiones de alcance del MVP
 
-- El "bloqueo" de progreso es lineal (una leccion disponible a la vez por track), sin desbloquear unidades enteras a la vez, para simplificar el MVP.
+- El "bloqueo" de progreso es lineal (una leccion disponible a la vez, en el orden del repertorio del alumno).
 - La deteccion de acordes/ejercicios de ritmo compara contra tolerancias razonables (no hay analisis de audio real del piano fisico; MIDI da notas exactas, pero no se analiza la calidad tonal o el pedal).
-- No hay todavia sistema de notificaciones push/email para recordar la practica diaria, ni tienda de recompensas con gemas.
-- El plan gratuito de Render "duerme" el backend tras 15 minutos sin uso (la primera peticion tras el reposo tarda ~30-60s en responder). Esto no afecta a los datos, solo a la velocidad de la primera carga.
+- El ejercicio de "decir en voz alta" usa la Web Speech API del navegador (solo Chrome/Edge la soportan bien); en navegadores sin soporte se puede omitir.
+- Las piezas transcritas son un extracto representativo (la frase inicial), no la partitura completa nota a nota — suficiente para generar practica de calidad sin necesitar transcribir cada compas.
+- No hay todavia sistema de notificaciones push/email para recordar la practica diaria.
+- El plan gratuito de Render "duerme" el backend tras 15 minutos sin uso (la primera peticion tras el reposo tarda ~30-60s en responder). Los datos viven en Neon (Postgres) y no se ven afectados por esto.
 
 ## Proximos pasos sugeridos
 
-1. Ampliar el contenido de los niveles 2-5 de cada track (actualmente tienen 1 unidad/2 lecciones cada uno; el Nivel 1 esta completo con 3 unidades).
-2. Anadir recordatorios (email/push) para mantener la racha diaria.
-3. Exportar/imprimir un resumen de progreso para que Azucena lo revise antes de cada clase presencial.
+1. Anadir un editor visual de piezas en el panel de la profesora (hoy se anaden editando `server/src/content/pieces.ts`).
+2. Replicar el repertorio a mas alumnos (usar a Arnau como plantilla de referencia).
+3. Anadir recordatorios (email/push) para mantener la racha diaria.
 4. Sustituir la tipografia y paleta de marcador de posicion por la identidad visual real de t-clas.

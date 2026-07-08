@@ -77,7 +77,7 @@ export function Lesson() {
       <main className="flex-1 flex items-center justify-center px-4 py-10">
         <div className="w-full max-w-xl">
           <p className="text-xs uppercase tracking-wide text-tclas-ink/40 text-center mb-6">
-            {lesson.levelTitle} · {lesson.unitTitle}
+            {lesson.pieceTitle} · Semana {lesson.weekIndex}
           </p>
           <ExercisePlayer exercise={exercise} onSubmit={handleSubmit} feedback={feedback} />
         </div>

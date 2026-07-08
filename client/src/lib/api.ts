@@ -36,19 +36,30 @@ export const api = {
   get: <T>(path: string) => request<T>(path),
   post: <T>(path: string, body?: unknown) => request<T>(path, { method: "POST", body: body ? JSON.stringify(body) : undefined }),
   patch: <T>(path: string, body?: unknown) => request<T>(path, { method: "PATCH", body: body ? JSON.stringify(body) : undefined }),
+  delete: <T>(path: string) => request<T>(path, { method: "DELETE" }),
 };
 
 // --- Tipos compartidos con el backend ---
 
 export type Role = "STUDENT" | "TEACHER";
 export type AgeGroup = "KIDS" | "TEENS" | "ADULTS";
-export type ExerciseType = "NOTE_NAME" | "STAFF_READING" | "RHYTHM_TAP" | "EAR_TRAINING" | "THEORY_MCQ" | "KEYBOARD_PLAY" | "INTERVAL" | "CHORD";
+export type ExerciseType =
+  | "NOTE_NAME"
+  | "STAFF_READING"
+  | "RHYTHM_TAP"
+  | "EAR_TRAINING"
+  | "THEORY_MCQ"
+  | "KEYBOARD_PLAY"
+  | "INTERVAL"
+  | "CHORD"
+  | "WRITE_ANSWER"
+  | "MATCHING"
+  | "ORDERING"
+  | "SPEAK_ALOUD";
 
 export interface StudentProfile {
   id: string;
   ageGroup: AgeGroup;
-  trackId: string | null;
-  track?: Track | null;
   xpTotal: number;
   heartsCurrent: number;
   heartsMax: number;
@@ -59,24 +70,16 @@ export interface StudentProfile {
 
 export interface Me {
   id: string;
-  email: string;
+  email: string | null;
+  username: string | null;
   name: string;
   role: Role;
   studentProfile: StudentProfile | null;
 }
 
-export interface Track {
-  id: string;
-  code: string;
-  name: string;
-  description: string;
-  minAge: number;
-  maxAge: number;
-}
-
 export interface LessonNode {
   id: string;
-  index: number;
+  weekIndex: number;
   title: string;
   description: string;
   xpReward: number;
@@ -84,31 +87,30 @@ export interface LessonNode {
   stars: number;
 }
 
-export interface UnitNode {
+export interface PieceInfo {
   id: string;
-  index: number;
   title: string;
-  description: string;
+  composer: string;
+  iconEmoji: string;
+  seasonalTag: string | null;
+  keySignature: string;
+  timeSignature: string;
+}
+
+export interface RepertoireNode {
+  id: string;
+  orderIndex: number;
+  startDate: string;
+  durationWeeks: number;
+  teacherNote: string;
+  status: "UPCOMING" | "ACTIVE" | "COMPLETED";
   completed: boolean;
+  piece: PieceInfo;
   lessons: LessonNode[];
 }
 
-export interface LevelNode {
-  id: string;
-  index: number;
-  title: string;
-  description: string;
-  iconEmoji: string;
-  completed: boolean;
-  units: UnitNode[];
-}
-
 export interface CurriculumTree {
-  id: string;
-  code: string;
-  name: string;
-  description: string;
-  levels: LevelNode[];
+  pieces: RepertoireNode[];
 }
 
 export interface Exercise {
@@ -124,8 +126,8 @@ export interface LessonDetail {
   title: string;
   description: string;
   xpReward: number;
-  unitTitle: string;
-  levelTitle: string;
+  weekIndex: number;
+  pieceTitle: string;
   exercises: Exercise[];
 }
 
@@ -155,24 +157,33 @@ export interface Badge {
 export interface StudentSummary {
   id: string;
   name: string;
-  email: string;
+  username: string | null;
   ageGroup: AgeGroup | null;
-  trackName: string | null;
   xpTotal: number;
   streakCurrent: number;
   lastActivityDate: string | null;
-  onboarded: boolean;
+  piecesAssigned: number;
   completedLessons: number;
   totalLessons: number;
 }
 
-export interface Assignment {
+export interface PieceLibraryItem {
   id: string;
-  teacherId: string;
-  studentId: string;
-  lessonId: string | null;
-  lesson?: { id: string; title: string } | null;
-  classDate: string;
-  note: string;
-  status: "PENDING" | "DONE";
+  title: string;
+  composer: string;
+  ageGroup: AgeGroup;
+  difficultyTier: number;
+  defaultWeeks: number;
+  keySignature: string;
+  timeSignature: string;
+  seasonalTag: string | null;
+  iconEmoji: string;
+}
+
+export interface NewStudentCredentials {
+  id: string;
+  name: string;
+  username: string;
+  pin: string;
+  ageGroup: AgeGroup;
 }

@@ -45,10 +45,10 @@ https://tclas-web.onrender.com
 
 ¡Ese es el enlace de tu app! Abrelo, y podras entrar con las cuentas de prueba:
 
-| Rol       | Email                | Contrasena     |
-|-----------|-----------------------|----------------|
-| Profesora | azucena@t-clas.com    | profesora123   |
-| Alumno    | alumno@t-clas.com     | alumno123      |
+| Rol       | Acceso                              |
+|-----------|--------------------------------------|
+| Profesora | azucena@t-clas.com / profesora123    |
+| Alumno    | usuario `arnau` / PIN `1234`         |
 
 ## Si la app carga pero no puedes iniciar sesion (error de conexion)
 

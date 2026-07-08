@@ -2,6 +2,12 @@
 // Nota: los campos "tipo/estado" se guardan como String (en vez de enum)
 // para mantener compatibilidad si en el futuro se usara otro motor;
 // se validan en la capa de aplicacion (ver src/types.ts).
+//
+// Modelo de contenido: cada alumno tiene su propio repertorio de piezas
+// (RepertoireEntry), asignado por su profesor/a desde una biblioteca
+// compartida de piezas (Piece). Cada pieza asignada genera automaticamente
+// unas lecciones semanales (Lesson) con ejercicios variados derivados de
+// la musica real de esa pieza.
 
 generator client {
   provider = "prisma-client-js"
@@ -14,95 +20,93 @@ datasource db {
 
 model User {
   id           String   @id @default(cuid())
-  email        String   @unique
-  passwordHash String
+  email        String?  @unique // profesores: email+password. Alumnos: null (usan username+PIN)
+  passwordHash String?
+  username     String?  @unique // alumnos: usuario corto para entrar
+  pinHash      String? // alumnos: PIN hasheado
   name         String
-  role         String   // "STUDENT" | "TEACHER"
+  role         String // "STUDENT" | "TEACHER"
   createdAt    DateTime @default(now())
 
   studentProfile StudentProfile?
 
-  assignmentsGiven    Assignment[] @relation("TeacherAssignments")
-  assignmentsReceived Assignment[] @relation("StudentAssignments")
-  progress            Progress[]
-  xpEvents            XPEvent[]
-  badges              UserBadge[]
-  exerciseAttempts    ExerciseAttempt[]
+  studentsCreated  StudentProfile[]   @relation("TeacherStudents")
+  progress         Progress[]
+  xpEvents         XPEvent[]
+  badges           UserBadge[]
+  exerciseAttempts ExerciseAttempt[]
 }
 
 model StudentProfile {
-  id               String   @id @default(cuid())
-  userId           String   @unique
-  user             User     @relation(fields: [userId], references: [id])
-  ageGroup         String   // "KIDS" (6-11) | "TEENS" (12-17) | "ADULTS" (18+)
+  id               String    @id @default(cuid())
+  userId           String    @unique
+  user             User      @relation(fields: [userId], references: [id])
+  teacherId        String?
+  teacher          User?     @relation("TeacherStudents", fields: [teacherId], references: [id])
+  ageGroup         String // "KIDS" (6-11) | "TEENS" (12-17) | "ADULTS" (18+)
   birthYear        Int?
-  trackId          String?
-  track            Track?   @relation(fields: [trackId], references: [id])
-  xpTotal          Int      @default(0)
-  heartsCurrent     Int      @default(5)
-  heartsMax         Int      @default(5)
-  heartsUpdatedAt   DateTime @default(now())
-  streakCurrent    Int      @default(0)
-  streakLongest    Int      @default(0)
+  xpTotal          Int       @default(0)
+  heartsCurrent    Int       @default(5)
+  heartsMax        Int       @default(5)
+  heartsUpdatedAt  DateTime  @default(now())
+  streakCurrent    Int       @default(0)
+  streakLongest    Int       @default(0)
   lastActivityDate DateTime?
-  onboarded        Boolean  @default(false)
-  createdAt        DateTime @default(now())
+  onboarded        Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+
+  repertoire RepertoireEntry[]
 }
 
-model Track {
-  id          String   @id @default(cuid())
-  code        String   @unique // "kids" | "teens" | "adults"
-  name        String
-  description String
-  minAge      Int
-  maxAge      Int
-  order       Int      @default(0)
+// Biblioteca compartida de piezas/partituras (reutilizable entre alumnos).
+model Piece {
+  id             String  @id @default(cuid())
+  title          String  @unique
+  composer       String  @default("")
+  arranger       String  @default("")
+  ageGroup       String // KIDS | TEENS | ADULTS: para quien esta pensada principalmente
+  difficultyTier Int // 1 = mas facil ... N = mas dificil, para ordenar sugerencias
+  defaultWeeks   Int     @default(3)
+  keySignature   String // p.ej. "Do Mayor"
+  timeSignature  String // p.ej. "4/4"
+  seasonalTag    String? // p.ej. "christmas"
+  iconEmoji      String  @default("🎵")
+  content        String // JSON: PieceContent (ver src/types.ts)
 
-  levels          Level[]
-  studentProfiles StudentProfile[]
+  repertoireEntries RepertoireEntry[]
 }
 
-model Level {
-  id          String @id @default(cuid())
-  trackId     String
-  track       Track  @relation(fields: [trackId], references: [id])
-  index       Int
-  title       String
-  description String
-  iconEmoji   String @default("🎹")
-
-  units Unit[]
-
-  @@unique([trackId, index])
-}
-
-model Unit {
-  id          String @id @default(cuid())
-  levelId     String
-  level       Level  @relation(fields: [levelId], references: [id])
-  index       Int
-  title       String
-  description String
+// Una pieza asignada a un alumno concreto, en su orden y fechas.
+model RepertoireEntry {
+  id            String    @id @default(cuid())
+  studentId     String
+  student       StudentProfile @relation(fields: [studentId], references: [id])
+  pieceId       String
+  piece         Piece     @relation(fields: [pieceId], references: [id])
+  orderIndex    Int
+  startDate     DateTime
+  durationWeeks Int
+  teacherNote   String    @default("")
+  status        String    @default("UPCOMING") // UPCOMING | ACTIVE | COMPLETED
 
   lessons Lesson[]
 
-  @@unique([levelId, index])
+  @@unique([studentId, orderIndex])
 }
 
 model Lesson {
-  id          String @id @default(cuid())
-  unitId      String
-  unit        Unit   @relation(fields: [unitId], references: [id])
-  index       Int
-  title       String
-  description String
-  xpReward    Int    @default(10)
+  id                String          @id @default(cuid())
+  repertoireEntryId String
+  repertoireEntry   RepertoireEntry @relation(fields: [repertoireEntryId], references: [id])
+  weekIndex         Int // semana dentro de la pieza (1..durationWeeks)
+  title             String
+  description       String
+  xpReward          Int             @default(15)
 
   exercises Exercise[]
   progress  Progress[]
-  assignments Assignment[]
 
-  @@unique([unitId, index])
+  @@unique([repertoireEntryId, weekIndex])
 }
 
 model Exercise {
@@ -110,9 +114,9 @@ model Exercise {
   lessonId    String
   lesson      Lesson @relation(fields: [lessonId], references: [id])
   index       Int
-  type        String // NOTE_NAME | STAFF_READING | RHYTHM_TAP | EAR_TRAINING | THEORY_MCQ | KEYBOARD_PLAY | INTERVAL | CHORD
+  type        String // ver ExerciseType en src/types.ts
   prompt      String
-  data        String // JSON blob: options/correctAnswer/midiNotes/bpm/etc (see src/types.ts)
+  data        String // JSON blob (ver src/types.ts)
   explanation String @default("")
 
   attempts ExerciseAttempt[]
@@ -174,18 +178,4 @@ model UserBadge {
   earnedAt DateTime @default(now())
 
   @@unique([userId, badgeId])
-}
-
-model Assignment {
-  id          String    @id @default(cuid())
-  teacherId   String
-  teacher     User      @relation("TeacherAssignments", fields: [teacherId], references: [id])
-  studentId   String
-  student     User      @relation("StudentAssignments", fields: [studentId], references: [id])
-  lessonId    String?
-  lesson      Lesson?   @relation(fields: [lessonId], references: [id])
-  classDate   DateTime
-  note        String    @default("")
-  status      String    @default("PENDING") // PENDING | DONE
-  createdAt   DateTime  @default(now())
 }

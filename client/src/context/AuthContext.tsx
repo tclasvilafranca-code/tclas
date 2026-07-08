@@ -6,8 +6,9 @@ import type { Me } from "../lib/api";
 interface AuthContextValue {
   me: Me | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<Me>;
-  register: (name: string, email: string, password: string, role: "STUDENT" | "TEACHER") => Promise<Me>;
+  loginTeacher: (email: string, password: string) => Promise<Me>;
+  loginStudent: (username: string, pin: string) => Promise<Me>;
+  registerTeacher: (name: string, email: string, password: string) => Promise<Me>;
   logout: () => void;
   refresh: () => Promise<void>;
 }
@@ -39,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     refresh();
   }, [refresh]);
 
-  const login = useCallback(async (email: string, password: string) => {
+  const loginTeacher = useCallback(async (email: string, password: string) => {
     const data = await api.post<{ token: string; user: Me }>("/auth/login", { email, password });
     setToken(data.token);
     const full = await api.get<Me>("/auth/me");
@@ -47,8 +48,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return full;
   }, []);
 
-  const register = useCallback(async (name: string, email: string, password: string, role: "STUDENT" | "TEACHER") => {
-    const data = await api.post<{ token: string; user: Me }>("/auth/register", { name, email, password, role });
+  const loginStudent = useCallback(async (username: string, pin: string) => {
+    const data = await api.post<{ token: string; user: Me }>("/auth/student-login", { username, pin });
+    setToken(data.token);
+    const full = await api.get<Me>("/auth/me");
+    setMe(full);
+    return full;
+  }, []);
+
+  const registerTeacher = useCallback(async (name: string, email: string, password: string) => {
+    const data = await api.post<{ token: string; user: Me }>("/auth/register", { name, email, password });
     setToken(data.token);
     const full = await api.get<Me>("/auth/me");
     setMe(full);
@@ -60,7 +69,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setMe(null);
   }, []);
 
-  return <AuthContext.Provider value={{ me, loading, login, register, logout, refresh }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ me, loading, loginTeacher, loginStudent, registerTeacher, logout, refresh }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {

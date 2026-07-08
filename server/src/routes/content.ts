@@ -15,64 +15,35 @@ import { ExerciseType } from "../types";
 
 const router = Router();
 
-router.get("/tracks", async (_req, res) => {
-  const tracks = await prisma.track.findMany({ orderBy: { order: "asc" } });
-  res.json(tracks);
-});
-
-const onboardingSchema = z.object({
-  ageGroup: z.enum(["KIDS", "TEENS", "ADULTS"]),
-  trackId: z.string(),
-  birthYear: z.number().int().optional(),
-});
-
-router.post("/onboarding", requireAuth, async (req: AuthedRequest, res) => {
-  if (req.auth!.role !== "STUDENT") return res.status(403).json({ error: "Solo alumnos" });
-  const parsed = onboardingSchema.safeParse(req.body);
-  if (!parsed.success) return res.status(400).json({ error: "Datos invalidos" });
-
-  const track = await prisma.track.findUnique({ where: { id: parsed.data.trackId } });
-  if (!track) return res.status(404).json({ error: "Track no encontrado" });
-
-  const profile = await prisma.studentProfile.update({
-    where: { userId: req.auth!.userId },
-    data: {
-      ageGroup: parsed.data.ageGroup,
-      trackId: parsed.data.trackId,
-      birthYear: parsed.data.birthYear,
-      onboarded: true,
-    },
-  });
-  res.json(profile);
-});
-
 router.get("/curriculum", requireAuth, async (req: AuthedRequest, res) => {
   const profile = await prisma.studentProfile.findUnique({ where: { userId: req.auth!.userId } });
-  if (!profile?.trackId) return res.status(400).json({ error: "El alumno no tiene track asignado todavia" });
-  const tree = await buildCurriculumForUser(req.auth!.userId, profile.trackId);
+  if (!profile) return res.status(400).json({ error: "Perfil de alumno no encontrado" });
+  const tree = await buildCurriculumForUser(req.auth!.userId, profile.id);
   res.json(tree);
 });
 
 router.get("/lessons/:id", requireAuth, async (req: AuthedRequest, res) => {
   const lesson = await prisma.lesson.findUnique({
     where: { id: req.params.id },
-    include: { exercises: { orderBy: { index: "asc" } }, unit: { include: { level: true } } },
+    include: { exercises: { orderBy: { index: "asc" } }, repertoireEntry: { include: { piece: true } } },
   });
   if (!lesson) return res.status(404).json({ error: "Leccion no encontrada" });
 
-  const profile = await prisma.studentProfile.findUnique({ where: { userId: req.auth!.userId } });
-  if (!profile?.trackId) return res.status(400).json({ error: "El alumno no tiene track asignado todavia" });
-  const tree = await buildCurriculumForUser(req.auth!.userId, profile.trackId);
-  const flatStatus = tree?.levels.flatMap((l) => l.units.flatMap((u) => u.lessons)).find((l) => l.id === lesson.id)?.status;
-  if (!flatStatus || flatStatus === "LOCKED") return res.status(403).json({ error: "Esta leccion todavia esta bloqueada" });
+  if (req.auth!.role === "STUDENT") {
+    const profile = await prisma.studentProfile.findUnique({ where: { userId: req.auth!.userId } });
+    if (!profile) return res.status(400).json({ error: "Perfil de alumno no encontrado" });
+    const tree = await buildCurriculumForUser(req.auth!.userId, profile.id);
+    const flatStatus = tree.pieces.flatMap((p) => p.lessons).find((l) => l.id === lesson.id)?.status;
+    if (!flatStatus || flatStatus === "LOCKED") return res.status(403).json({ error: "Esta leccion todavia esta bloqueada" });
+  }
 
   res.json({
     id: lesson.id,
     title: lesson.title,
     description: lesson.description,
     xpReward: lesson.xpReward,
-    unitTitle: lesson.unit.title,
-    levelTitle: lesson.unit.level.title,
+    weekIndex: lesson.weekIndex,
+    pieceTitle: lesson.repertoireEntry.piece.title,
     exercises: lesson.exercises.map(sanitizeExercise),
   });
 });
@@ -105,7 +76,7 @@ router.post("/exercises/:id/attempt", requireAuth, async (req: AuthedRequest, re
   res.json({
     correct,
     explanation: exercise.explanation,
-    correctAnswer: correct ? undefined : data.correctAnswer ?? data.answer ?? data.notes ?? data.pattern,
+    correctAnswer: correct ? undefined : data.correctAnswer ?? data.answer ?? data.notes ?? data.pattern ?? data.correctOrder ?? data.expectedAnswer,
     heartsCurrent,
   });
 });
@@ -120,7 +91,7 @@ router.post("/lessons/:id/complete", requireAuth, async (req: AuthedRequest, res
   if (!parsed.success) return res.status(400).json({ error: "Datos invalidos" });
   const { correctCount, totalCount } = parsed.data;
 
-  const lesson = await prisma.lesson.findUnique({ where: { id: req.params.id } });
+  const lesson = await prisma.lesson.findUnique({ where: { id: req.params.id }, include: { repertoireEntry: true } });
   if (!lesson) return res.status(404).json({ error: "Leccion no encontrada" });
 
   const pct = correctCount / totalCount;
@@ -161,6 +132,19 @@ router.post("/lessons/:id/complete", requireAuth, async (req: AuthedRequest, res
       profile = await awardXP(userId, xpAwarded, `Leccion completada: ${lesson.title}`);
       profile = await registerDailyActivity(profile);
       newBadges = await checkAndAwardBadges(userId, profile);
+
+      const allLessonsInPiece = await prisma.lesson.findMany({ where: { repertoireEntryId: lesson.repertoireEntryId } });
+      const completedInPiece = await prisma.progress.count({
+        where: { userId, status: "COMPLETED", lessonId: { in: allLessonsInPiece.map((l) => l.id) } },
+      });
+      if (completedInPiece >= allLessonsInPiece.length) {
+        await prisma.repertoireEntry.update({ where: { id: lesson.repertoireEntryId }, data: { status: "COMPLETED" } });
+      } else {
+        await prisma.repertoireEntry.updateMany({
+          where: { id: lesson.repertoireEntryId, status: "UPCOMING" },
+          data: { status: "ACTIVE" },
+        });
+      }
     }
   }
   profile = profile ? await recomputeHearts(profile) : profile;

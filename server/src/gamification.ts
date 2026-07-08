@@ -63,6 +63,25 @@ export async function awardXP(userId: string, amount: number, reason: string) {
   });
 }
 
+function shuffle<T>(arr: T[]): T[] {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+/** Normaliza texto libre para comparar respuestas escritas o dictadas: minusculas, sin acentos, sin espacios de sobra. */
+function normalizeText(v: unknown): string {
+  return String(v)
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
 export function gradeExercise(type: ExerciseType, data: any, userAnswer: unknown): boolean {
   const normalize = (v: unknown) =>
     Array.isArray(v) ? v.map((x) => String(x).toUpperCase()) : String(v).toUpperCase();
@@ -90,6 +109,29 @@ export function gradeExercise(type: ExerciseType, data: any, userAnswer: unknown
       if (expected.length !== got.length) return false;
       return expected.every((v, i) => Math.abs(v - Number(got[i])) < 0.3);
     }
+    case "WRITE_ANSWER": {
+      const accepted = [data.correctAnswer, ...(data.acceptableAnswers ?? [])].map(normalizeText);
+      return accepted.includes(normalizeText(userAnswer));
+    }
+    case "SPEAK_ALOUD": {
+      const accepted = [data.expectedAnswer, ...(data.acceptableAnswers ?? [])].map(normalizeText);
+      const said = normalizeText(userAnswer);
+      if (!said) return false;
+      return accepted.some((a) => said === a || said.includes(a) || a.includes(said));
+    }
+    case "ORDERING": {
+      const expected = (data.correctOrder as string[]).map((n) => n.toUpperCase());
+      const got = Array.isArray(userAnswer) ? (userAnswer as string[]).map((n) => String(n).toUpperCase()) : [];
+      return expected.length === got.length && expected.every((n, i) => n === got[i]);
+    }
+    case "MATCHING": {
+      const pairs = data.pairs as { left: string; right: string }[];
+      const got = Array.isArray(userAnswer) ? (userAnswer as { left: string; right: string }[]) : [];
+      if (got.length !== pairs.length) return false;
+      return pairs.every((p) =>
+        got.some((g) => normalizeText(g.left) === normalizeText(p.left) && normalizeText(g.right) === normalizeText(p.right))
+      );
+    }
     default:
       return false;
   }
@@ -108,6 +150,26 @@ export function sanitizeExerciseData(type: ExerciseType, data: any) {
     case "CHORD":
       delete clone.answer;
       break;
+    case "WRITE_ANSWER":
+      delete clone.correctAnswer;
+      delete clone.acceptableAnswers;
+      break;
+    case "SPEAK_ALOUD":
+      delete clone.expectedAnswer;
+      delete clone.acceptableAnswers;
+      break;
+    case "ORDERING":
+      delete clone.correctOrder;
+      break;
+    case "MATCHING": {
+      // no enviar los pares ya emparejados: el cliente recibe las dos columnas
+      // por separado (la derecha mezclada) y el alumno debe reconstruir la relacion.
+      const pairs = clone.pairs as { left: string; right: string }[];
+      delete clone.pairs;
+      clone.leftItems = pairs.map((p) => p.left);
+      clone.rightItems = shuffle(pairs.map((p) => p.right));
+      break;
+    }
     default:
       break;
   }

@@ -44,7 +44,13 @@ export function Home() {
           {tree.pieces.length === 0 ? (
             <p className="text-center text-tclas-ink/50 mt-16">Todavia no tienes piezas asignadas. ¡Pronto tu profesor/a anadira tu repertorio!</p>
           ) : (
-            <PathMap pieces={tree.pieces} onOpenLesson={(id) => navigate(`/app/lesson/${id}`)} onOpenPiece={setOpenPieceId} />
+            <PathMap
+              pieces={tree.pieces}
+              onOpenLesson={(id) => navigate(`/app/lesson/${id}`)}
+              onOpenPiece={setOpenPieceId}
+              heartsCurrent={me.studentProfile.heartsCurrent}
+              heartsUpdatedAt={me.studentProfile.heartsUpdatedAt}
+            />
           )}
         </main>
       )}

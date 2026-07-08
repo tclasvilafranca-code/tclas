@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { api } from "../lib/api";
+import { api, ApiError } from "../lib/api";
 import type { LessonDetail, AttemptResult, CompleteLessonResult, ExercisePhase, ExerciseType } from "../lib/api";
 import { ExercisePlayer } from "../exercises/ExercisePlayer";
 import { LessonCompleteModal } from "../components/LessonCompleteModal";
@@ -8,6 +8,7 @@ import { playSuccessChime, playErrorBuzz } from "../lib/audio";
 import { useAuth } from "../context/AuthContext";
 import { MascotBubble } from "../components/MascotBubble";
 import { correctMessage, wrongMessage } from "../lib/misol";
+import { msUntilNextHeart, formatCountdown } from "../lib/hearts";
 
 const PHASE_LABEL: Record<ExercisePhase, { label: string; className: string }> = {
   VISUAL_AGILITY: { label: "👁️ Agilidad visual", className: "bg-tclas-gold/15 text-tclas-plum" },
@@ -36,6 +37,7 @@ export function Lesson() {
 
   const [lesson, setLesson] = useState<LessonDetail | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [noHearts, setNoHearts] = useState<{ heartsMax: number; heartsUpdatedAt: string } | null>(null);
   const [index, setIndex] = useState(0);
   const [feedback, setFeedback] = useState<AttemptResult | null>(null);
   const [correctCount, setCorrectCount] = useState(0);
@@ -51,6 +53,7 @@ export function Lesson() {
     if (!id) return;
     setLesson(null);
     setLoadError(null);
+    setNoHearts(null);
     setIndex(0);
     setFeedback(null);
     setCorrectCount(0);
@@ -58,7 +61,13 @@ export function Lesson() {
     api
       .get<LessonDetail>(`/lessons/${id}`)
       .then(setLesson)
-      .catch((err) => setLoadError(err.message || "No se pudo cargar la leccion"));
+      .catch((err) => {
+        if (err instanceof ApiError && err.data?.code === "NO_HEARTS") {
+          setNoHearts({ heartsMax: err.data.heartsMax, heartsUpdatedAt: err.data.heartsUpdatedAt });
+        } else {
+          setLoadError(err.message || "No se pudo cargar la leccion");
+        }
+      });
   }, [id, loadKey]);
 
   const exercise = lesson?.exercises[index];
@@ -113,6 +122,34 @@ export function Lesson() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-4 text-center gap-4">
         <p className="text-tclas-ink/70 max-w-sm">{loadError}</p>
+        <Link to="/app" className="bg-tclas-plum text-tclas-cream rounded-full px-6 py-2 font-semibold hover:bg-tclas-plum-light">
+          Volver a tu camino
+        </Link>
+      </div>
+    );
+  }
+
+  if (noHearts) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center px-4 text-center gap-5">
+        <MascotBubble
+          message="¡Ups! Te has quedado sin corazones. Descansa un poco, se van recargando solos con el tiempo."
+          mood="encourage"
+          size={72}
+        />
+        <div className="flex gap-1 text-3xl">
+          {Array.from({ length: noHearts.heartsMax }).map((_, i) => (
+            <span key={i} className="text-tclas-ink/15">
+              ♥
+            </span>
+          ))}
+        </div>
+        <p className="text-sm text-tclas-ink/60">
+          Proximo corazon en <strong className="text-tclas-ink">{formatCountdown(msUntilNextHeart(noHearts.heartsUpdatedAt))}</strong>
+        </p>
+        <p className="text-xs text-tclas-ink/40 max-w-xs">
+          Mientras tanto puedes repasar cualquier pieza que ya hayas completado, eso no gasta corazones.
+        </p>
         <Link to="/app" className="bg-tclas-plum text-tclas-cream rounded-full px-6 py-2 font-semibold hover:bg-tclas-plum-light">
           Volver a tu camino
         </Link>

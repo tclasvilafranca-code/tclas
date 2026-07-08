@@ -31,8 +31,9 @@ router.get("/lessons/:id", requireAuth, async (req: AuthedRequest, res) => {
 
   let weekNumber = lesson.weekIndex;
   if (req.auth!.role === "STUDENT") {
-    const profile = await prisma.studentProfile.findUnique({ where: { userId: req.auth!.userId } });
+    let profile = await prisma.studentProfile.findUnique({ where: { userId: req.auth!.userId } });
     if (!profile) return res.status(400).json({ error: "Perfil de alumno no encontrado" });
+    profile = await recomputeHearts(profile);
     const tree = await buildCurriculumForUser(req.auth!.userId, profile.id);
     const flatLesson = tree.pieces.flatMap((p) => p.lessons).find((l) => l.id === lesson.id);
     if (!flatLesson || flatLesson.status === "LOCKED") {
@@ -41,6 +42,17 @@ router.get("/lessons/:id", requireAuth, async (req: AuthedRequest, res) => {
     if (flatLesson.status === "SCHEDULED") {
       const dateStr = new Date(flatLesson.scheduledDate).toLocaleDateString("es-ES");
       return res.status(403).json({ error: `Esta semana todavia no ha llegado. Estara disponible el ${dateStr}.` });
+    }
+    // Sin corazones no se puede empezar una leccion nueva (las ya completadas se
+    // pueden seguir repasando: no gastan corazones adicionales una vez a 0).
+    if (flatLesson.status === "AVAILABLE" && profile.heartsCurrent <= 0) {
+      return res.status(403).json({
+        error: "Te has quedado sin corazones. Espera a que se recarguen para empezar una leccion nueva.",
+        code: "NO_HEARTS",
+        heartsCurrent: profile.heartsCurrent,
+        heartsMax: profile.heartsMax,
+        heartsUpdatedAt: profile.heartsUpdatedAt,
+      });
     }
     weekNumber = flatLesson.weekNumber;
   }
@@ -115,6 +127,7 @@ router.post("/lessons/:id/complete", requireAuth, async (req: AuthedRequest, res
   const pct = correctCount / totalCount;
   const stars = starsForScore(pct);
   const userId = req.auth!.userId;
+  const precisionScore = Math.round(pct * 1000);
 
   const existing = await prisma.progress.findUnique({ where: { userId_lessonId: { userId, lessonId: lesson.id } } });
   const passed = stars >= 1;
@@ -127,6 +140,7 @@ router.post("/lessons/:id/complete", requireAuth, async (req: AuthedRequest, res
       status: passed ? "COMPLETED" : "AVAILABLE",
       stars,
       bestScore: Math.round(pct * 100),
+      precisionScore,
       attempts: 1,
       completedAt: passed ? new Date() : null,
     },
@@ -134,6 +148,7 @@ router.post("/lessons/:id/complete", requireAuth, async (req: AuthedRequest, res
       status: passed ? "COMPLETED" : "AVAILABLE",
       stars: Math.max(stars, existing?.stars ?? 0),
       bestScore: Math.max(Math.round(pct * 100), existing?.bestScore ?? 0),
+      precisionScore: Math.max(precisionScore, existing?.precisionScore ?? 0),
       attempts: { increment: 1 },
       completedAt: passed ? new Date() : existing?.completedAt ?? null,
     },
@@ -166,9 +181,8 @@ router.post("/lessons/:id/complete", requireAuth, async (req: AuthedRequest, res
     }
   }
   profile = profile ? await recomputeHearts(profile) : profile;
-  const score = Math.round(pct * 1000);
 
-  res.json({ progress, stars, score, xpAwarded, profile, newBadges });
+  res.json({ progress, stars, score: precisionScore, xpAwarded, profile, newBadges });
 });
 
 async function checkAndAwardBadges(userId: string, profile: { xpTotal: number; streakCurrent: number }) {

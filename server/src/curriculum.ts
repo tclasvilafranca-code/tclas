@@ -78,6 +78,7 @@ export async function buildCurriculumForUser(userId: string, studentProfileId: s
         xpReward: lesson.xpReward,
         status,
         stars: progress?.stars ?? 0,
+        precisionScore: progress?.precisionScore ?? 0,
       };
     });
     const completed = lessons.every((l) => l.status === "COMPLETED");

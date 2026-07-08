@@ -15,6 +15,16 @@ export function clearToken() {
   localStorage.removeItem(TOKEN_KEY);
 }
 
+export class ApiError extends Error {
+  status: number;
+  data: any;
+  constructor(message: string, status: number, data: any) {
+    super(message);
+    this.status = status;
+    this.data = data;
+  }
+}
+
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = getToken();
   const res = await fetch(`${API_BASE}${path}`, {
@@ -27,7 +37,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    throw new Error(data.error || `Error ${res.status}`);
+    throw new ApiError(data.error || `Error ${res.status}`, res.status, data);
   }
   return data as T;
 }
@@ -74,6 +84,7 @@ export interface StudentProfile {
   streakLongest: number;
   onboarded: boolean;
   lastActivityDate: string | null;
+  heartsUpdatedAt: string;
 }
 
 export interface Me {
@@ -97,6 +108,7 @@ export interface LessonNode {
   xpReward: number;
   status: LessonStatus;
   stars: number;
+  precisionScore: number;
 }
 
 export interface PieceInfo {

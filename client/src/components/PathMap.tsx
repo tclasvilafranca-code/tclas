@@ -1,9 +1,12 @@
 import type { RepertoireNode } from "../lib/api";
+import { msUntilNextHeart, formatCountdown } from "../lib/hearts";
 
 interface Props {
   pieces: RepertoireNode[];
   onOpenLesson: (lessonId: string) => void;
   onOpenPiece: (pieceId: string) => void;
+  heartsCurrent: number;
+  heartsUpdatedAt: string;
 }
 
 // Patron de zigzag tipo "camino de juego": desplazamiento horizontal ciclico por nodo.
@@ -16,8 +19,9 @@ function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("es-ES", { day: "numeric", month: "short" });
 }
 
-export function PathMap({ pieces, onOpenLesson, onOpenPiece }: Props) {
+export function PathMap({ pieces, onOpenLesson, onOpenPiece, heartsCurrent, heartsUpdatedAt }: Props) {
   let globalIndex = 0;
+  const outOfHearts = heartsCurrent <= 0;
 
   return (
     <div className="max-w-md mx-auto pb-16">
@@ -63,7 +67,8 @@ export function PathMap({ pieces, onOpenLesson, onOpenPiece }: Props) {
               const locked = lesson.status === "LOCKED";
               const scheduled = lesson.status === "SCHEDULED";
               const completed = lesson.status === "COMPLETED";
-              const disabled = locked || scheduled;
+              const noHearts = lesson.status === "AVAILABLE" && outOfHearts;
+              const disabled = locked || scheduled || noHearts;
 
               let connectorAngle = 0;
               let connectorLength = 0;
@@ -85,7 +90,13 @@ export function PathMap({ pieces, onOpenLesson, onOpenPiece }: Props) {
                   <button
                     disabled={disabled}
                     onClick={() => onOpenLesson(lesson.id)}
-                    title={scheduled ? `Disponible el ${formatDate(lesson.scheduledDate)}` : lesson.title}
+                    title={
+                      noHearts
+                        ? `Sin corazones. Proximo corazon en ${formatCountdown(msUntilNextHeart(heartsUpdatedAt))}`
+                        : scheduled
+                          ? `Disponible el ${formatDate(lesson.scheduledDate)}`
+                          : lesson.title
+                    }
                     className={`relative z-10 w-24 h-24 rounded-full flex flex-col items-center justify-center border-4 border-b-[6px] font-bold text-xs btn-push
                       ${
                         completed
@@ -97,6 +108,8 @@ export function PathMap({ pieces, onOpenLesson, onOpenPiece }: Props) {
                   >
                     {completed ? (
                       <span className="text-xl">{"★".repeat(lesson.stars)}</span>
+                    ) : noHearts ? (
+                      <span className="text-2xl">♡</span>
                     ) : scheduled ? (
                       <span className="text-2xl">📅</span>
                     ) : locked ? (
@@ -106,11 +119,17 @@ export function PathMap({ pieces, onOpenLesson, onOpenPiece }: Props) {
                     )}
                   </button>
                   <p className="relative z-10 text-center text-[11px] text-tclas-ink/50 mt-1 w-24 leading-tight">
-                    Semana {lesson.weekNumber}
-                    {scheduled && (
+                    {noHearts ? (
+                      <span className="text-tclas-rose/70">Sin corazones</span>
+                    ) : (
                       <>
-                        <br />
-                        {formatDate(lesson.scheduledDate)}
+                        Semana {lesson.weekNumber}
+                        {scheduled && (
+                          <>
+                            <br />
+                            {formatDate(lesson.scheduledDate)}
+                          </>
+                        )}
                       </>
                     )}
                   </p>

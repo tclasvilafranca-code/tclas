@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api } from "../lib/api";
-import type { CurriculumTree, StudentProfile, PieceLibraryItem, StudentSummary, AgeGroup, LessonStatus } from "../lib/api";
+import type { CurriculumTree, StudentProfile, PieceLibraryItem, StudentSummary, AgeGroup, LessonStatus, ExercisePhase } from "../lib/api";
 
 interface StudentDetailResponse {
   id: string;
@@ -11,7 +11,16 @@ interface StudentDetailResponse {
   profile: StudentProfile;
   curriculum: CurriculumTree;
   badges: { code: string; name: string; icon: string; earnedAt: string }[];
+  phaseStats: Partial<Record<ExercisePhase, { correct: number; total: number }>>;
 }
+
+const PHASE_LABEL: Record<ExercisePhase, string> = {
+  VISUAL_AGILITY: "👁️ Agilidad visual",
+  EAR_ACUITY: "👂 Agudeza auditiva",
+  NOTE_RUSH: "⚡ Notas al vuelo",
+  SHEET_PRACTICE: "🎼 Practica de partitura",
+};
+const PHASE_ORDER: ExercisePhase[] = ["VISUAL_AGILITY", "EAR_ACUITY", "NOTE_RUSH", "SHEET_PRACTICE"];
 
 interface SelectedPiece {
   piece: PieceLibraryItem;
@@ -213,6 +222,36 @@ export function TeacherStudentDetail() {
         </section>
 
         <section>
+          <h2 className="font-display text-xl mb-1">Rendimiento por bloque</h2>
+          <p className="text-xs text-tclas-ink/50 mb-3">Porcentaje de acierto acumulado en cada tipo de bloque de la sesion, para ver donde flaquea {data.name}.</p>
+          <div className="bg-white/70 border border-tclas-ink/10 rounded-xl p-5 grid grid-cols-1 gap-3">
+            {PHASE_ORDER.every((p) => !data.phaseStats[p]?.total) ? (
+              <p className="text-tclas-ink/50 text-sm">Aun no hay suficientes ejercicios respondidos.</p>
+            ) : (
+              PHASE_ORDER.map((phase) => {
+                const stat = data.phaseStats[phase];
+                if (!stat || stat.total === 0) return null;
+                const pct = Math.round((stat.correct / stat.total) * 100);
+                const barColor = pct >= 80 ? "bg-tclas-sage" : pct >= 55 ? "bg-tclas-gold" : "bg-tclas-rose";
+                return (
+                  <div key={phase}>
+                    <div className="flex items-center justify-between text-xs mb-1">
+                      <span className="font-semibold">{PHASE_LABEL[phase]}</span>
+                      <span className="text-tclas-ink/50">
+                        {pct}% ({stat.correct}/{stat.total})
+                      </span>
+                    </div>
+                    <div className="h-2.5 bg-tclas-ink/10 rounded-full overflow-hidden">
+                      <div className={`h-full ${barColor}`} style={{ width: `${pct}%` }} />
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </section>
+
+        <section>
           <h2 className="font-display text-xl mb-3">Repertorio del curso</h2>
           <div className="grid grid-cols-1 gap-2">
             {data.curriculum.pieces.length === 0 && <p className="text-tclas-ink/50 text-sm">Aun no tiene piezas asignadas.</p>}
@@ -256,7 +295,11 @@ export function TeacherStudentDetail() {
                     <span className="text-lg">{w.pieceIcon}</span>
                     <span className="flex-1 min-w-0 truncate">{w.pieceTitle}</span>
                     <span className="text-xs text-tclas-ink/40 hidden sm:inline">{formatShortDate(w.scheduledDate)}</span>
-                    {w.status === "COMPLETED" && <span className="text-xs">{"★".repeat(w.stars)}</span>}
+                    {w.status === "COMPLETED" && (
+                      <span className="text-xs whitespace-nowrap" title="Puntuacion de precision (0-1000)">
+                        {"★".repeat(w.stars)} <span className="text-tclas-ink/40">{w.precisionScore}</span>
+                      </span>
+                    )}
                     <span className={`text-xs whitespace-nowrap ${status.className}`}>{status.label}</span>
                   </div>
                 );

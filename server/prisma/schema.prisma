@@ -143,10 +143,11 @@ model Progress {
   user        User      @relation(fields: [userId], references: [id])
   lessonId    String
   lesson      Lesson    @relation(fields: [lessonId], references: [id])
-  status      String    @default("LOCKED") // LOCKED | AVAILABLE | COMPLETED
-  stars       Int       @default(0)
-  bestScore   Int       @default(0)
-  attempts    Int       @default(0)
+  status         String    @default("LOCKED") // LOCKED | AVAILABLE | COMPLETED
+  stars          Int       @default(0)
+  bestScore      Int       @default(0)
+  precisionScore Int       @default(0) // mejor puntuacion de precision 0-1000 (mas fino que bestScore 0-100)
+  attempts       Int       @default(0)
   completedAt DateTime?
   updatedAt   DateTime  @updatedAt
 

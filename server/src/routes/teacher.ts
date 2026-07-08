@@ -100,6 +100,22 @@ router.get("/students/:id", async (req, res) => {
     orderBy: { earnedAt: "desc" },
   });
 
+  // Rendimiento por bloque: cuantas respuestas acierta el alumno en cada tipo
+  // de bloque de la sesion (agilidad visual, agudeza auditiva, notas al vuelo,
+  // practica de partitura), para que la profesora vea en que flaquea de un vistazo.
+  const attempts = await prisma.exerciseAttempt.findMany({
+    where: { userId: student.id },
+    select: { correct: true, exercise: { select: { phase: true } } },
+  });
+  const phaseTotals = new Map<string, { correct: number; total: number }>();
+  for (const a of attempts) {
+    const entry = phaseTotals.get(a.exercise.phase) ?? { correct: 0, total: 0 };
+    entry.total += 1;
+    if (a.correct) entry.correct += 1;
+    phaseTotals.set(a.exercise.phase, entry);
+  }
+  const phaseStats = Object.fromEntries(phaseTotals);
+
   res.json({
     id: student.id,
     name: student.name,
@@ -107,6 +123,7 @@ router.get("/students/:id", async (req, res) => {
     profile: student.studentProfile,
     curriculum,
     badges: recentBadges.map((b) => ({ code: b.badge.code, name: b.badge.name, icon: b.badge.icon, earnedAt: b.earnedAt })),
+    phaseStats,
   });
 });
 

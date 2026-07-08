@@ -107,7 +107,10 @@ export function gradeExercise(type: ExerciseType, data: any, userAnswer: unknown
       const expected = data.pattern as number[];
       const got = Array.isArray(userAnswer) ? (userAnswer as number[]) : [];
       if (expected.length !== got.length) return false;
-      return expected.every((v, i) => Math.abs(v - Number(got[i])) < 0.3);
+      // Tolerancia generosa: lo importante es notar la diferencia entre negras y
+      // blancas/corcheas, no exigir precision de metronomo profesional al tocar
+      // con el dedo en una pantalla.
+      return expected.every((v, i) => Math.abs(v - Number(got[i])) < 0.45);
     }
     case "WRITE_ANSWER": {
       const accepted = [data.correctAnswer, ...(data.acceptableAnswers ?? [])].map(normalizeText);
@@ -138,7 +141,7 @@ export function gradeExercise(type: ExerciseType, data: any, userAnswer: unknown
       const ans = userAnswer as { note?: string; heldMs?: number } | null;
       if (!ans || typeof ans.heldMs !== "number") return false;
       const requiredMs = (data.beats as number) * (60000 / (data.bpm as number));
-      return normalize(ans.note) === normalize(data.note) && ans.heldMs >= requiredMs * 0.7;
+      return normalize(ans.note) === normalize(data.note) && ans.heldMs >= requiredMs * 0.6;
     }
     case "SCROLLING_PLAY": {
       const expected = (data.notes as string[]).map((n) => n.toUpperCase());
@@ -174,11 +177,13 @@ export function sanitizeExerciseData(type: ExerciseType, data: any) {
     case "NOTE_NAME":
     case "THEORY_MCQ":
       delete clone.correctAnswer;
+      if (Array.isArray(clone.options)) clone.options = shuffle(clone.options);
       break;
     case "EAR_TRAINING":
     case "INTERVAL":
     case "CHORD":
       delete clone.answer;
+      if (Array.isArray(clone.options)) clone.options = shuffle(clone.options);
       break;
     case "WRITE_ANSWER":
       delete clone.correctAnswer;
@@ -205,6 +210,7 @@ export function sanitizeExerciseData(type: ExerciseType, data: any) {
       break;
     case "FILL_BLANK":
       delete clone.correctAnswer;
+      if (Array.isArray(clone.options)) clone.options = shuffle(clone.options);
       break;
     default:
       break;

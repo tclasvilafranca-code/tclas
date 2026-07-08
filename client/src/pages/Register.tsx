@@ -43,7 +43,7 @@ export function Register() {
           </button>
         </form>
         <p className="text-sm text-tclas-ink/60 mt-4">
-          ¿Ya tienes cuenta? <Link to="/login" className="text-tclas-plum font-semibold">Entra aqui</Link>
+          ¿Ya tienes cuenta? <Link to="/" className="text-tclas-plum font-semibold">Entra aqui</Link>
         </p>
       </div>
     </div>

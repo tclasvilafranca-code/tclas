@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import { Landing } from "./pages/Landing";
-import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { Home } from "./pages/Home";
 import { Lesson } from "./pages/Lesson";
@@ -16,7 +15,7 @@ function Splash() {
 function RequireStudent({ children }: { children: ReactNode }) {
   const { me, loading } = useAuth();
   if (loading) return <Splash />;
-  if (!me) return <Navigate to="/login" replace />;
+  if (!me) return <Navigate to="/" replace />;
   if (me.role !== "STUDENT") return <Navigate to="/teacher" replace />;
   return children;
 }
@@ -24,7 +23,7 @@ function RequireStudent({ children }: { children: ReactNode }) {
 function RequireTeacher({ children }: { children: ReactNode }) {
   const { me, loading } = useAuth();
   if (loading) return <Splash />;
-  if (!me) return <Navigate to="/login" replace />;
+  if (!me) return <Navigate to="/" replace />;
   if (me.role !== "TEACHER") return <Navigate to="/app" replace />;
   return children;
 }
@@ -39,8 +38,8 @@ function RedirectIfLoggedIn({ children }: { children: ReactNode }) {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/login" element={<RedirectIfLoggedIn><Login /></RedirectIfLoggedIn>} />
+      <Route path="/" element={<RedirectIfLoggedIn><Landing /></RedirectIfLoggedIn>} />
+      <Route path="/login" element={<Navigate to="/" replace />} />
       <Route path="/register" element={<RedirectIfLoggedIn><Register /></RedirectIfLoggedIn>} />
       <Route path="/app" element={<RequireStudent><Home /></RequireStudent>} />
       <Route path="/app/lesson/:id" element={<RequireStudent><Lesson /></RequireStudent>} />

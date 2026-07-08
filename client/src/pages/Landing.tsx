@@ -1,56 +1,93 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import type { FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export function Landing() {
+  const { loginTeacher, loginStudent } = useAuth();
+  const navigate = useNavigate();
+  const [mode, setMode] = useState<"student" | "teacher">("student");
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [pin, setPin] = useState("");
+
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+    try {
+      if (mode === "teacher") {
+        await loginTeacher(email, password);
+        navigate("/teacher");
+      } else {
+        await loginStudent(username, pin);
+        navigate("/app");
+      }
+    } catch (err: any) {
+      setError(err.message || "No se pudo iniciar sesion");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="flex items-center justify-between px-6 py-5 max-w-5xl mx-auto w-full">
-        <div className="font-display text-2xl text-tclas-plum">t-clas 🎹</div>
-        <nav className="flex gap-3">
-          <Link to="/login" className="px-4 py-2 rounded-full font-semibold text-tclas-plum hover:bg-tclas-plum/10">
-            Entrar
-          </Link>
-          <Link to="/register" className="px-4 py-2 rounded-full font-semibold bg-tclas-plum text-tclas-cream hover:bg-tclas-plum-light">
-            Empezar gratis
-          </Link>
-        </nav>
-      </header>
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-10 gap-8">
+      <div className="text-center max-w-md">
+        <div className="text-5xl mb-3">🎹</div>
+        <h1 className="font-display text-4xl text-tclas-plum mb-2">t-clas</h1>
+        <p className="text-tclas-ink/70">Aprende piano jugando, entre clase y clase con Azucena.</p>
+        <div className="flex justify-center gap-4 mt-4 text-xs text-tclas-ink/50">
+          <span>🧒 Para cada edad</span>
+          <span>🎮 Como un juego</span>
+          <span>🎹 Piano de verdad</span>
+        </div>
+      </div>
 
-      <main className="flex-1 max-w-5xl mx-auto w-full px-6 py-12 flex flex-col items-center text-center gap-6">
-        <span className="bg-tclas-gold/20 text-tclas-plum text-sm font-semibold px-4 py-1 rounded-full">
-          El complemento perfecto para tus clases con Azucena
-        </span>
-        <h1 className="font-display text-5xl md:text-6xl leading-tight max-w-3xl">
-          Aprende piano jugando, <span className="text-tclas-plum">entre clase y clase</span>
-        </h1>
-        <p className="text-lg text-tclas-ink/70 max-w-2xl">
-          t-clas es la app que practica contigo cada dia: lecciones cortas y divertidas de teoria, ritmo, oido y
-          repertorio, pensadas para preparar y reforzar tus clases presenciales de piano.
-        </p>
-        <div className="flex gap-3">
-          <Link to="/register" className="px-6 py-3 rounded-full font-semibold bg-tclas-plum text-tclas-cream hover:bg-tclas-plum-light text-lg">
-            Crear mi cuenta
-          </Link>
-          <Link to="/login" className="px-6 py-3 rounded-full font-semibold border-2 border-tclas-plum text-tclas-plum hover:bg-tclas-plum/10 text-lg">
-            Ya tengo cuenta
-          </Link>
+      <div className="bg-white/70 rounded-2xl p-8 max-w-sm w-full border border-tclas-ink/10">
+        <div className="flex gap-2 mb-5">
+          <button
+            type="button"
+            onClick={() => setMode("student")}
+            className={`flex-1 rounded-lg py-2 text-sm font-semibold border-2 ${mode === "student" ? "border-tclas-plum bg-tclas-plum/10" : "border-tclas-ink/15"}`}
+          >
+            Soy alumno/a
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("teacher")}
+            className={`flex-1 rounded-lg py-2 text-sm font-semibold border-2 ${mode === "teacher" ? "border-tclas-plum bg-tclas-plum/10" : "border-tclas-ink/15"}`}
+          >
+            Soy profesor/a
+          </button>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 mt-12 text-left">
-          {[
-            { icon: "🧒", title: "Para cada edad", text: "Caminos distintos para ninos, adolescentes y adultos, con el ritmo y el estilo que mejor conecta con cada uno." },
-            { icon: "🎮", title: "Como un juego", text: "XP, rachas, corazones e insignias para que practicar en casa se sienta ligero y motivador." },
-            { icon: "🎹", title: "Piano de verdad", text: "Toca con el raton, el teclado del ordenador o conecta tu piano digital por MIDI para practicar con notas reales." },
-          ].map((f) => (
-            <div key={f.title} className="bg-white/60 rounded-2xl p-5 border border-tclas-ink/10">
-              <div className="text-3xl mb-2">{f.icon}</div>
-              <h3 className="font-display text-xl mb-1">{f.title}</h3>
-              <p className="text-sm text-tclas-ink/70">{f.text}</p>
-            </div>
-          ))}
-        </div>
-      </main>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          {mode === "student" ? (
+            <>
+              <input required placeholder="Usuario" value={username} onChange={(e) => setUsername(e.target.value)} className="border border-tclas-ink/20 rounded-lg px-4 py-2" />
+              <input required placeholder="PIN" inputMode="numeric" value={pin} onChange={(e) => setPin(e.target.value)} className="border border-tclas-ink/20 rounded-lg px-4 py-2" />
+            </>
+          ) : (
+            <>
+              <input type="email" required placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="border border-tclas-ink/20 rounded-lg px-4 py-2" />
+              <input type="password" required placeholder="Contrasena" value={password} onChange={(e) => setPassword(e.target.value)} className="border border-tclas-ink/20 rounded-lg px-4 py-2" />
+            </>
+          )}
+          {error && <p className="text-tclas-rose text-sm">{error}</p>}
+          <button disabled={loading} className="bg-tclas-plum text-tclas-cream rounded-lg py-2.5 font-semibold hover:bg-tclas-plum-light disabled:opacity-50">
+            {loading ? "Entrando..." : "Entrar"}
+          </button>
+        </form>
 
-      <footer className="text-center text-xs text-tclas-ink/40 py-6">t-clas · Azucena, profesora de piano</footer>
+        {mode === "student" && <p className="text-xs text-tclas-ink/40 mt-4 text-center">Tu usuario y PIN te los da tu profesor/a.</p>}
+      </div>
+
+      <footer className="text-center text-xs text-tclas-ink/40">t-clas · Azucena, profesora de piano</footer>
     </div>
   );
 }

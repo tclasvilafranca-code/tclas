@@ -75,6 +75,29 @@ router.post("/student-login", async (req, res) => {
   res.json({ token, user: { id: user.id, name: user.name, role: user.role, username: user.username } });
 });
 
+const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1),
+  newPassword: z.string().min(6),
+});
+
+// Solo para profesores (email+password); los alumnos usan PIN y lo cambia
+// su profesora desde el panel, no aqui. No habia ninguna forma de cambiar
+// la contrasena una vez creada la cuenta.
+router.post("/change-password", requireAuth, async (req: AuthedRequest, res) => {
+  const parsed = changePasswordSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "Datos invalidos", details: parsed.error.flatten() });
+
+  const user = await prisma.user.findUnique({ where: { id: req.auth!.userId } });
+  if (!user || !user.passwordHash) return res.status(400).json({ error: "Esta cuenta no usa contrasena" });
+
+  const valid = await bcrypt.compare(parsed.data.currentPassword, user.passwordHash);
+  if (!valid) return res.status(401).json({ error: "La contrasena actual no es correcta" });
+
+  const newHash = await bcrypt.hash(parsed.data.newPassword, 10);
+  await prisma.user.update({ where: { id: user.id }, data: { passwordHash: newHash } });
+  res.json({ ok: true });
+});
+
 router.get("/me", requireAuth, async (req: AuthedRequest, res) => {
   const user = await prisma.user.findUnique({
     where: { id: req.auth!.userId },

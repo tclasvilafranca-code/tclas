@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { api } from "../lib/api";
 import type { StudentSummary, AgeGroup, NewStudentCredentials } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
+import { ChangePasswordModal } from "../components/ChangePasswordModal";
 
 function timeAgo(dateStr: string | null): string {
   if (!dateStr) return "Sin actividad";
@@ -24,6 +25,7 @@ export function TeacherDashboard() {
   const [ageGroup, setAgeGroup] = useState<AgeGroup>("KIDS");
   const [saving, setSaving] = useState(false);
   const [newCreds, setNewCreds] = useState<NewStudentCredentials | null>(null);
+  const [showChangePassword, setShowChangePassword] = useState(false);
 
   function load() {
     api.get<StudentSummary[]>("/teacher/students").then(setStudents);
@@ -48,10 +50,17 @@ export function TeacherDashboard() {
     <div className="min-h-screen">
       <header className="px-4 py-4 flex items-center justify-between border-b border-tclas-ink/10">
         <div className="font-display text-xl text-tclas-plum">t-clas · Panel de {me?.name}</div>
-        <button onClick={logout} className="text-sm text-tclas-ink/50 hover:text-tclas-ink">
-          Salir
-        </button>
+        <div className="flex items-center gap-3">
+          <button onClick={() => setShowChangePassword(true)} className="text-sm text-tclas-ink/50 hover:text-tclas-ink" title="Cambiar contrasena">
+            ⚙️ Contrasena
+          </button>
+          <button onClick={logout} className="text-sm text-tclas-ink/50 hover:text-tclas-ink">
+            Salir
+          </button>
+        </div>
       </header>
+
+      {showChangePassword && <ChangePasswordModal onClose={() => setShowChangePassword(false)} />}
 
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-1">

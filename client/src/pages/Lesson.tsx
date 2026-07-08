@@ -9,6 +9,7 @@ import { useAuth } from "../context/AuthContext";
 import { MascotBubble } from "../components/MascotBubble";
 import { correctMessage, wrongMessage } from "../lib/misol";
 import { msUntilNextHeart, formatCountdown } from "../lib/hearts";
+import { timerSecondsFor, autoAdvanceDelayFor } from "../lib/pacing";
 
 const PHASE_LABEL: Record<ExercisePhase, { label: string; className: string }> = {
   VISUAL_AGILITY: { label: "👁️ Agilidad visual", className: "bg-tclas-gold/15 text-tclas-plum" },
@@ -33,7 +34,8 @@ const TIMED_TYPES: Partial<Record<ExerciseType, number>> = {
 export function Lesson() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { refresh } = useAuth();
+  const { me, refresh } = useAuth();
+  const ageGroup = me?.studentProfile?.ageGroup ?? "TEENS";
 
   const [lesson, setLesson] = useState<LessonDetail | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -76,21 +78,22 @@ export function Lesson() {
     feedbackRef.current = feedback;
   }, [feedback]);
 
-  // Cuenta atras para los tipos de pregunta rapida.
+  // Cuenta atras para los tipos de pregunta rapida (ajustada al ritmo de la franja de edad).
   useEffect(() => {
     if (!exercise) return;
-    const limit = TIMED_TYPES[exercise.type];
-    if (!limit || feedbackRef.current) {
+    const baseLimit = TIMED_TYPES[exercise.type];
+    if (!baseLimit || feedbackRef.current) {
       setTimeLeft(null);
       return;
     }
+    const limit = timerSecondsFor(ageGroup, baseLimit);
     setTimeLeft(limit);
     const start = performance.now();
     let raf: number;
     function tick() {
       if (feedbackRef.current) return;
       const elapsed = (performance.now() - start) / 1000;
-      const remaining = Math.max(0, limit! - elapsed);
+      const remaining = Math.max(0, limit - elapsed);
       setTimeLeft(remaining);
       if (remaining <= 0) {
         handleSubmit("__TIMEOUT__");
@@ -107,10 +110,11 @@ export function Lesson() {
     advancingRef.current = false;
   }, [index]);
 
-  // Auto-avanza tras responder: rapido si acierta, con mas tiempo para leer si falla.
+  // Auto-avanza tras responder: rapido si acierta, con mas tiempo para leer si falla
+  // (ajustado al ritmo de la franja de edad del alumno).
   useEffect(() => {
     if (!feedback) return;
-    const delay = feedback.correct ? 1000 : 3400;
+    const delay = autoAdvanceDelayFor(ageGroup, feedback.correct);
     const t = setTimeout(() => {
       handleNext();
     }, delay);
@@ -161,7 +165,8 @@ export function Lesson() {
 
   const progressPct = Math.round((index / lesson.exercises.length) * 100);
   const phase = PHASE_LABEL[exercise.phase] ?? PHASE_LABEL.SHEET_PRACTICE;
-  const timeLimit = TIMED_TYPES[exercise.type];
+  const baseTimeLimit = TIMED_TYPES[exercise.type];
+  const timeLimit = baseTimeLimit ? timerSecondsFor(ageGroup, baseTimeLimit) : undefined;
 
   async function handleSubmit(answer: unknown) {
     const res = await api.post<AttemptResult>(`/exercises/${exercise!.id}/attempt`, { answer });

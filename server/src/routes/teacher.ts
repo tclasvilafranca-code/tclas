@@ -22,6 +22,16 @@ function randomPin(): string {
   return String(Math.floor(1000 + Math.random() * 9000));
 }
 
+/** Busca un alumno por id, pero SOLO si pertenece a este profesor: evita que
+ * un profesor pueda ver o modificar los alumnos de otro adivinando/copiando
+ * un id (p.ej. desde la URL del panel de otro profesor). */
+async function findOwnedStudent(studentUserId: string, teacherId: string) {
+  return prisma.user.findFirst({
+    where: { id: studentUserId, role: "STUDENT", studentProfile: { teacherId } },
+    include: { studentProfile: true },
+  });
+}
+
 router.get("/students", async (req: AuthedRequest, res) => {
   const students = await prisma.user.findMany({
     where: { role: "STUDENT", studentProfile: { teacherId: req.auth!.userId } },
@@ -88,9 +98,9 @@ router.post("/students", async (req: AuthedRequest, res) => {
   res.status(201).json({ id: user.id, name: user.name, username, pin, ageGroup: user.studentProfile?.ageGroup });
 });
 
-router.get("/students/:id", async (req, res) => {
-  const student = await prisma.user.findUnique({ where: { id: req.params.id }, include: { studentProfile: true } });
-  if (!student || student.role !== "STUDENT" || !student.studentProfile) return res.status(404).json({ error: "Alumno no encontrado" });
+router.get("/students/:id", async (req: AuthedRequest, res) => {
+  const student = await findOwnedStudent(req.params.id, req.auth!.userId);
+  if (!student?.studentProfile) return res.status(404).json({ error: "Alumno no encontrado" });
 
   const curriculum = await buildCurriculumForUser(student.id, student.studentProfile.id);
 
@@ -156,11 +166,11 @@ const assignSchema = z.object({
   teacherNote: z.string().default(""),
 });
 
-router.post("/students/:id/repertoire", async (req, res) => {
+router.post("/students/:id/repertoire", async (req: AuthedRequest, res) => {
   const parsed = assignSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Datos invalidos", details: parsed.error.flatten() });
 
-  const student = await prisma.user.findUnique({ where: { id: req.params.id }, include: { studentProfile: true } });
+  const student = await findOwnedStudent(req.params.id, req.auth!.userId);
   if (!student?.studentProfile) return res.status(404).json({ error: "Alumno no encontrado" });
 
   const piece = await prisma.piece.findUnique({ where: { id: parsed.data.pieceId } });
@@ -194,11 +204,11 @@ const bulkAssignSchema = z.object({
     .min(1),
 });
 
-router.post("/students/:id/repertoire/bulk", async (req, res) => {
+router.post("/students/:id/repertoire/bulk", async (req: AuthedRequest, res) => {
   const parsed = bulkAssignSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Datos invalidos", details: parsed.error.flatten() });
 
-  const student = await prisma.user.findUnique({ where: { id: req.params.id }, include: { studentProfile: true } });
+  const student = await findOwnedStudent(req.params.id, req.auth!.userId);
   if (!student?.studentProfile) return res.status(404).json({ error: "Alumno no encontrado" });
 
   const created = await bulkAssignRepertoire({
@@ -215,14 +225,15 @@ const duplicateSchema = z.object({
   startDate: z.string().optional(),
 });
 
-router.post("/students/:id/repertoire/duplicate", async (req, res) => {
+router.post("/students/:id/repertoire/duplicate", async (req: AuthedRequest, res) => {
   const parsed = duplicateSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Datos invalidos", details: parsed.error.flatten() });
 
-  const student = await prisma.user.findUnique({ where: { id: req.params.id }, include: { studentProfile: true } });
+  const student = await findOwnedStudent(req.params.id, req.auth!.userId);
   if (!student?.studentProfile) return res.status(404).json({ error: "Alumno no encontrado" });
 
-  const source = await prisma.user.findUnique({ where: { id: parsed.data.fromStudentId }, include: { studentProfile: true } });
+  // El alumno de origen tambien debe ser tuyo: si no, no se puede copiar su repertorio.
+  const source = await findOwnedStudent(parsed.data.fromStudentId, req.auth!.userId);
   if (!source?.studentProfile) return res.status(404).json({ error: "Alumno de origen no encontrado" });
 
   const sourceEntries = await prisma.repertoireEntry.findMany({
@@ -240,8 +251,14 @@ router.post("/students/:id/repertoire/duplicate", async (req, res) => {
   res.status(201).json(created);
 });
 
-router.delete("/students/:id/repertoire/:entryId", async (req, res) => {
-  const entry = await prisma.repertoireEntry.findUnique({ where: { id: req.params.entryId }, include: { lessons: true } });
+router.delete("/students/:id/repertoire/:entryId", async (req: AuthedRequest, res) => {
+  const student = await findOwnedStudent(req.params.id, req.auth!.userId);
+  if (!student?.studentProfile) return res.status(404).json({ error: "Alumno no encontrado" });
+
+  const entry = await prisma.repertoireEntry.findFirst({
+    where: { id: req.params.entryId, studentId: student.studentProfile.id },
+    include: { lessons: true },
+  });
   if (!entry) return res.status(404).json({ error: "Asignacion no encontrada" });
 
   const lessonIds = entry.lessons.map((l) => l.id);

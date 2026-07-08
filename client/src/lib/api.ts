@@ -60,7 +60,9 @@ export type ExerciseType =
   | "HOLD_NOTE"
   | "SCROLLING_PLAY"
   | "FILL_BLANK"
-  | "EAR_BUILD";
+  | "EAR_BUILD"
+  | "NOTE_DASH"
+  | "SEGMENT_PRACTICE";
 
 export interface StudentProfile {
   id: string;
@@ -123,7 +125,7 @@ export interface CurriculumTree {
   pieces: RepertoireNode[];
 }
 
-export type ExercisePhase = "WARMUP" | "PRACTICE" | "PERFORMANCE";
+export type ExercisePhase = "VISUAL_AGILITY" | "EAR_ACUITY" | "NOTE_RUSH" | "SHEET_PRACTICE";
 
 export interface Exercise {
   id: string;

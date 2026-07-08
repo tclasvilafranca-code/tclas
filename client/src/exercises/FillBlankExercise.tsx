@@ -18,7 +18,7 @@ export function FillBlankExercise({ exercise, onSubmit, feedback }: Props) {
   const [selected, setSelected] = useState<string | null>(null);
 
   function choose(opt: string) {
-    if (selected) return;
+    if (selected || feedback) return;
     setSelected(opt);
     onSubmit(opt);
   }
@@ -36,16 +36,17 @@ export function FillBlankExercise({ exercise, onSubmit, feedback }: Props) {
       <div className="grid grid-cols-1 gap-2 max-w-sm mx-auto">
         {options.map((opt) => {
           const isSelected = selected === opt;
-          const showCorrect = feedback && isSelected && feedback.correct;
+          const isCorrectAnswer = !!feedback && !feedback.correct && typeof feedback.correctAnswer !== "object" && String(feedback.correctAnswer).toLowerCase() === opt.toLowerCase();
+          const showCorrect = (feedback && isSelected && feedback.correct) || isCorrectAnswer;
           const showWrong = feedback && isSelected && !feedback.correct;
           return (
             <button
               key={opt}
               onClick={() => choose(opt)}
-              disabled={!!selected}
+              disabled={!!selected || !!feedback}
               className={`rounded-xl border-2 py-3 px-4 font-semibold transition-colors
                 ${showCorrect ? "border-tclas-sage bg-tclas-sage/15" : showWrong ? "border-tclas-rose bg-tclas-rose/15" : "border-tclas-ink/15 hover:border-tclas-gold hover:bg-tclas-gold/10"}
-                ${selected && !isSelected ? "opacity-40" : ""}`}
+                ${feedback && !isSelected && !showCorrect ? "opacity-40" : ""}`}
             >
               {opt}
             </button>

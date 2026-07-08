@@ -11,6 +11,8 @@ import { HoldNoteExercise } from "./HoldNoteExercise";
 import { ScrollingPlayExercise } from "./ScrollingPlayExercise";
 import { FillBlankExercise } from "./FillBlankExercise";
 import { EarBuildExercise } from "./EarBuildExercise";
+import { NoteDashExercise } from "./NoteDashExercise";
+import { SegmentPracticeExercise } from "./SegmentPracticeExercise";
 
 interface Props {
   exercise: Exercise;
@@ -48,6 +50,10 @@ export function ExercisePlayer({ exercise, onSubmit, feedback }: Props) {
       return <FillBlankExercise key={exercise.id} exercise={exercise} onSubmit={onSubmit} feedback={feedback} />;
     case "EAR_BUILD":
       return <EarBuildExercise key={exercise.id} exercise={exercise} onSubmit={onSubmit} feedback={feedback} />;
+    case "NOTE_DASH":
+      return <NoteDashExercise key={exercise.id} exercise={exercise} onSubmit={onSubmit} feedback={feedback} />;
+    case "SEGMENT_PRACTICE":
+      return <SegmentPracticeExercise key={exercise.id} exercise={exercise} onSubmit={onSubmit} feedback={feedback} />;
     default:
       return <McqLikeExercise key={exercise.id} exercise={exercise} onSubmit={onSubmit} feedback={feedback} />;
   }

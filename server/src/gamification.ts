@@ -152,6 +152,16 @@ export function gradeExercise(type: ExerciseType, data: any, userAnswer: unknown
       const got = Array.isArray(userAnswer) ? (userAnswer as string[]).map((n) => String(n).toUpperCase()) : [];
       return expected.length === got.length && expected.every((n, i) => n === got[i]);
     }
+    case "NOTE_DASH": {
+      const expected = (data.notes as string[]).map((n) => n.toUpperCase());
+      const got = Array.isArray(userAnswer) ? (userAnswer as string[]).map((n) => String(n).toUpperCase()) : [];
+      return expected.length === got.length && expected.every((n, i) => n === got[i]);
+    }
+    case "SEGMENT_PRACTICE": {
+      const expected = (data.segments as string[][]).flat().map((n) => n.toUpperCase());
+      const got = Array.isArray(userAnswer) ? (userAnswer as string[]).map((n) => String(n).toUpperCase()) : [];
+      return expected.length === got.length && expected.every((n, i) => n === got[i]);
+    }
     default:
       return false;
   }

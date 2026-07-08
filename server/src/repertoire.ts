@@ -3,7 +3,7 @@ import { prisma } from "./prisma";
 import { generateLessonsForPiece } from "./generator";
 import { PieceDef } from "./content/defs";
 
-function pieceToDef(piece: Piece): PieceDef {
+export function pieceToDef(piece: Piece): PieceDef {
   return {
     title: piece.title,
     composer: piece.composer,
@@ -70,6 +70,46 @@ export async function createRepertoireEntryWithLessons(params: {
   }
 
   return entry;
+}
+
+/**
+ * Borra y regenera las lecciones/ejercicios de una asignacion ya existente,
+ * conservando la propia asignacion (fechas, orden, nota). Se usa cuando el
+ * generador de contenido cambia de forma incompatible (p.ej. nuevas fases).
+ */
+export async function regenerateLessonsForEntry(entryId: string, piece: Piece, durationWeeks: number) {
+  const lessonIds = (await prisma.lesson.findMany({ where: { repertoireEntryId: entryId }, select: { id: true } })).map((l) => l.id);
+  const exerciseIds = (await prisma.exercise.findMany({ where: { lessonId: { in: lessonIds } }, select: { id: true } })).map((e) => e.id);
+  await prisma.exerciseAttempt.deleteMany({ where: { exerciseId: { in: exerciseIds } } });
+  await prisma.progress.deleteMany({ where: { lessonId: { in: lessonIds } } });
+  await prisma.exercise.deleteMany({ where: { lessonId: { in: lessonIds } } });
+  await prisma.lesson.deleteMany({ where: { repertoireEntryId: entryId } });
+
+  const lessonDefs = generateLessonsForPiece(pieceToDef(piece), durationWeeks);
+  for (const [li, lessonDef] of lessonDefs.entries()) {
+    const lesson = await prisma.lesson.create({
+      data: {
+        repertoireEntryId: entryId,
+        weekIndex: li + 1,
+        title: lessonDef.title,
+        description: lessonDef.description,
+        xpReward: lessonDef.xpReward ?? 15,
+      },
+    });
+    for (const [ei, ex] of lessonDef.exercises.entries()) {
+      await prisma.exercise.create({
+        data: {
+          lessonId: lesson.id,
+          index: ei + 1,
+          type: ex.type,
+          phase: ex.phase,
+          prompt: ex.prompt,
+          data: JSON.stringify(ex.data),
+          explanation: ex.explanation,
+        },
+      });
+    }
+  }
 }
 
 /**

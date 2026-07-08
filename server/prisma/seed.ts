@@ -1,7 +1,12 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "../src/prisma";
 import { arnauPieces } from "../src/content/pieces";
-import { createRepertoireEntryWithLessons } from "../src/repertoire";
+import { createRepertoireEntryWithLessons, regenerateLessonsForEntry } from "../src/repertoire";
+
+// Fases del generador actual: si un alumno tiene lecciones con fases antiguas
+// (de una version anterior del generador), se regeneran automaticamente para
+// no dejar sesiones a medio migrar.
+const CURRENT_PHASES = new Set(["VISUAL_AGILITY", "EAR_ACUITY", "NOTE_RUSH", "SHEET_PRACTICE"]);
 
 const BADGES = [
   { code: "primera_leccion", name: "Primeros acordes", description: "Completaste tu primera leccion", icon: "🎵" },
@@ -103,6 +108,22 @@ async function main() {
       console.log(`  ${pieceRecords.length} piezas asignadas, curso de septiembre a ${cursor.toISOString().slice(0, 10)}.`);
     } else {
       console.log("  Arnau ya tenia repertorio asignado, se omite.");
+    }
+
+    const entries = await prisma.repertoireEntry.findMany({
+      where: { studentId: arnau.studentProfile.id },
+      include: { lessons: { take: 1, include: { exercises: { take: 1 } } } },
+    });
+    const pieceById = new Map(pieceRecords.map((p) => [p.id, p]));
+    for (const entry of entries) {
+      const firstPhase = entry.lessons[0]?.exercises[0]?.phase;
+      if (firstPhase && !CURRENT_PHASES.has(firstPhase)) {
+        const piece = pieceById.get(entry.pieceId);
+        if (piece) {
+          console.log(`  Regenerando lecciones de "${piece.title}" con el nuevo formato de sesion...`);
+          await regenerateLessonsForEntry(entry.id, piece, entry.durationWeeks);
+        }
+      }
     }
   }
 

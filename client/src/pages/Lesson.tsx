@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { api } from "../lib/api";
-import type { LessonDetail, AttemptResult, CompleteLessonResult, ExercisePhase } from "../lib/api";
+import type { LessonDetail, AttemptResult, CompleteLessonResult, ExercisePhase, ExerciseType } from "../lib/api";
 import { ExercisePlayer } from "../exercises/ExercisePlayer";
 import { LessonCompleteModal } from "../components/LessonCompleteModal";
 import { playSuccessChime, playErrorBuzz } from "../lib/audio";
@@ -10,9 +10,23 @@ import { MascotBubble } from "../components/MascotBubble";
 import { correctMessage, wrongMessage } from "../lib/misol";
 
 const PHASE_LABEL: Record<ExercisePhase, { label: string; className: string }> = {
-  WARMUP: { label: "🔥 Calentamiento", className: "bg-tclas-gold/15 text-tclas-plum" },
-  PRACTICE: { label: "🎼 Trabajo de la pieza", className: "bg-tclas-plum/10 text-tclas-plum" },
-  PERFORMANCE: { label: "🎹 ¡A tocar!", className: "bg-tclas-sage/15 text-tclas-sage" },
+  VISUAL_AGILITY: { label: "👁️ Agilidad visual", className: "bg-tclas-gold/15 text-tclas-plum" },
+  EAR_ACUITY: { label: "👂 Agudeza auditiva", className: "bg-tclas-plum/10 text-tclas-plum" },
+  NOTE_RUSH: { label: "⚡ Notas al vuelo", className: "bg-tclas-rose/15 text-tclas-rose" },
+  SHEET_PRACTICE: { label: "🎼 Practica de partitura", className: "bg-tclas-sage/15 text-tclas-sage" },
+};
+
+// Segundos de respuesta para los tipos de pregunta rapida (opcion multiple/escribir).
+// Los demas tipos (tocar, ritmo, relacionar, ordenar, tramos...) llevan su propio ritmo.
+const TIMED_TYPES: Partial<Record<ExerciseType, number>> = {
+  NOTE_NAME: 6,
+  THEORY_MCQ: 8,
+  EAR_TRAINING: 8,
+  INTERVAL: 8,
+  CHORD: 8,
+  WRITE_ANSWER: 12,
+  DRAG_STAFF: 10,
+  FILL_BLANK: 10,
 };
 
 export function Lesson() {
@@ -28,6 +42,10 @@ export function Lesson() {
   const [result, setResult] = useState<CompleteLessonResult | null>(null);
   const [loadKey, setLoadKey] = useState(0);
   const [misolReaction, setMisolReaction] = useState("");
+  const [timeLeft, setTimeLeft] = useState<number | null>(null);
+
+  const feedbackRef = useRef<AttemptResult | null>(null);
+  const advancingRef = useRef(false);
 
   useEffect(() => {
     if (!id) return;
@@ -43,6 +61,54 @@ export function Lesson() {
       .catch((err) => setLoadError(err.message || "No se pudo cargar la leccion"));
   }, [id, loadKey]);
 
+  const exercise = lesson?.exercises[index];
+
+  useEffect(() => {
+    feedbackRef.current = feedback;
+  }, [feedback]);
+
+  // Cuenta atras para los tipos de pregunta rapida.
+  useEffect(() => {
+    if (!exercise) return;
+    const limit = TIMED_TYPES[exercise.type];
+    if (!limit || feedbackRef.current) {
+      setTimeLeft(null);
+      return;
+    }
+    setTimeLeft(limit);
+    const start = performance.now();
+    let raf: number;
+    function tick() {
+      if (feedbackRef.current) return;
+      const elapsed = (performance.now() - start) / 1000;
+      const remaining = Math.max(0, limit! - elapsed);
+      setTimeLeft(remaining);
+      if (remaining <= 0) {
+        handleSubmit("__TIMEOUT__");
+        return;
+      }
+      raf = requestAnimationFrame(tick);
+    }
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [exercise?.id]);
+
+  useEffect(() => {
+    advancingRef.current = false;
+  }, [index]);
+
+  // Auto-avanza tras responder: rapido si acierta, con mas tiempo para leer si falla.
+  useEffect(() => {
+    if (!feedback) return;
+    const delay = feedback.correct ? 1000 : 3400;
+    const t = setTimeout(() => {
+      handleNext();
+    }, delay);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [feedback]);
+
   if (loadError) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-4 text-center gap-4">
@@ -54,14 +120,14 @@ export function Lesson() {
     );
   }
 
-  if (!lesson) return <p className="text-center mt-16 text-tclas-ink/50">Cargando leccion...</p>;
+  if (!lesson || !exercise) return <p className="text-center mt-16 text-tclas-ink/50">Cargando leccion...</p>;
 
-  const exercise = lesson.exercises[index];
   const progressPct = Math.round((index / lesson.exercises.length) * 100);
-  const phase = PHASE_LABEL[exercise.phase] ?? PHASE_LABEL.PRACTICE;
+  const phase = PHASE_LABEL[exercise.phase] ?? PHASE_LABEL.SHEET_PRACTICE;
+  const timeLimit = TIMED_TYPES[exercise.type];
 
   async function handleSubmit(answer: unknown) {
-    const res = await api.post<AttemptResult>(`/exercises/${exercise.id}/attempt`, { answer });
+    const res = await api.post<AttemptResult>(`/exercises/${exercise!.id}/attempt`, { answer });
     setFeedback(res);
     if (res.correct) {
       playSuccessChime();
@@ -74,6 +140,8 @@ export function Lesson() {
   }
 
   async function handleNext() {
+    if (advancingRef.current) return;
+    advancingRef.current = true;
     if (index + 1 < lesson!.exercises.length) {
       setIndex((i) => i + 1);
       setFeedback(null);
@@ -87,6 +155,9 @@ export function Lesson() {
       await refresh();
     }
   }
+
+  const timerPct = timeLimit && timeLeft !== null ? Math.max(0, timeLeft / timeLimit) : null;
+  const timerColor = timerPct === null ? "" : timerPct > 0.5 ? "bg-tclas-sage" : timerPct > 0.2 ? "bg-tclas-gold" : "bg-tclas-rose";
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -109,6 +180,13 @@ export function Lesson() {
               {lesson.pieceTitle} · Semana {lesson.weekNumber}
             </p>
             <span className={`inline-block text-xs font-semibold rounded-full px-3 py-1 ${phase.className}`}>{phase.label}</span>
+            {timerPct !== null && !feedback && (
+              <div className="max-w-[10rem] mx-auto mt-3">
+                <div className="h-1.5 bg-tclas-ink/10 rounded-full overflow-hidden">
+                  <div className={`h-full ${timerColor}`} style={{ width: `${timerPct * 100}%`, transition: "width 120ms linear" }} />
+                </div>
+              </div>
+            )}
           </div>
           <ExercisePlayer exercise={exercise} onSubmit={handleSubmit} feedback={feedback} />
         </div>
@@ -126,6 +204,12 @@ export function Lesson() {
               Continuar
             </button>
           </div>
+          {!feedback.correct && feedback.correctAnswer !== undefined && (
+            <p className="max-w-xl mx-auto mt-2 text-xs text-tclas-ink/60">
+              Respuesta correcta:{" "}
+              <strong className="text-tclas-ink">{Array.isArray(feedback.correctAnswer) ? feedback.correctAnswer.join(", ") : String(feedback.correctAnswer)}</strong>
+            </p>
+          )}
         </div>
       )}
 

@@ -99,3 +99,14 @@ const MAJOR_SCALES: Record<string, string[]> = {
 export function scaleForKey(keySignature: string): string[] {
   return MAJOR_SCALES[keySignature] ?? MAJOR_SCALES["Do Mayor"];
 }
+
+function shiftOctave(note: string, delta: number): string {
+  const { letter, accidental, octave } = parseNote(note);
+  const acc = accidental === 1 ? "#" : accidental === -1 ? "b" : "";
+  return `${letter}${acc}${octave + delta}`;
+}
+
+/** La misma escala que scaleForKey, desplazada al registro grave (clave de Fa). */
+export function scaleForKeyBass(keySignature: string): string[] {
+  return scaleForKey(keySignature).map((n) => shiftOctave(n, -2));
+}

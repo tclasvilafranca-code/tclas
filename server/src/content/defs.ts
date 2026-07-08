@@ -18,6 +18,8 @@ import {
   ScrollingPlayData,
   FillBlankData,
   EarBuildData,
+  NoteDashData,
+  SegmentPracticeData,
   PieceContent,
   AgeGroup,
 } from "../types";
@@ -43,7 +45,9 @@ export interface ExerciseDef {
     | HoldNoteData
     | ScrollingPlayData
     | FillBlankData
-    | EarBuildData;
+    | EarBuildData
+    | NoteDashData
+    | SegmentPracticeData;
   explanation: string;
 }
 
@@ -161,6 +165,10 @@ export const fb = (
 ): FillBlankData => ({ clef, notesBefore, notesAfter, options, correctAnswer });
 
 export const eb = (notes: string[]): EarBuildData => ({ notes });
+
+export const nd = (clef: "treble" | "bass", notes: string[], timeLimitSec: number): NoteDashData => ({ clef, notes, timeLimitSec });
+
+export const sgp = (clef: "treble" | "bass", segments: string[][]): SegmentPracticeData => ({ clef, segments });
 
 function shuffleArray<T>(arr: T[]): T[] {
   const copy = [...arr];

@@ -2,7 +2,7 @@ export type Role = "STUDENT" | "TEACHER";
 export type AgeGroup = "KIDS" | "TEENS" | "ADULTS";
 export type ProgressStatus = "LOCKED" | "SCHEDULED" | "AVAILABLE" | "COMPLETED";
 export type RepertoireStatus = "UPCOMING" | "ACTIVE" | "COMPLETED";
-export type ExercisePhase = "WARMUP" | "PRACTICE" | "PERFORMANCE";
+export type ExercisePhase = "VISUAL_AGILITY" | "EAR_ACUITY" | "NOTE_RUSH" | "SHEET_PRACTICE";
 
 export type ExerciseType =
   | "NOTE_NAME" // identificar el nombre de una nota en el pentagrama
@@ -21,7 +21,9 @@ export type ExerciseType =
   | "HOLD_NOTE" // mantener pulsada una tecla el tiempo justo (duracion/figura ritmica)
   | "SCROLLING_PLAY" // partitura que se desplaza (estilo "Guitar Hero"): tocar cada nota al llegar
   | "FILL_BLANK" // completar el hueco que falta en la melodia real de la pieza
-  | "EAR_BUILD"; // dictado progresivo: reconstruir una frase de oido, nota a nota
+  | "EAR_BUILD" // dictado progresivo: reconstruir una frase de oido, nota a nota
+  | "NOTE_DASH" // tocar una tirada larga de notas antes de que se acabe el tiempo
+  | "SEGMENT_PRACTICE"; // practicar la pieza real por tramos, a piano, sin presion de tiempo
 
 // --- Formas del campo Exercise.data (JSON serializado) segun el tipo ---
 
@@ -131,6 +133,17 @@ export interface FillBlankData {
 
 export interface EarBuildData {
   notes: string[]; // frase real a reconstruir de oido, nota a nota
+}
+
+export interface NoteDashData {
+  clef: "treble" | "bass";
+  notes: string[]; // tirada larga de notas a tocar en orden
+  timeLimitSec: number;
+}
+
+export interface SegmentPracticeData {
+  clef: "treble" | "bass";
+  segments: string[][]; // la pieza real trozeada en tramos cortos y practicables
 }
 
 // --- Contenido musical estructurado de una pieza real (biblioteca Piece) ---

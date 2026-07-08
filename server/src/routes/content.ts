@@ -87,7 +87,14 @@ router.post("/exercises/:id/attempt", requireAuth, async (req: AuthedRequest, re
     explanation: exercise.explanation,
     correctAnswer: correct
       ? undefined
-      : data.correctAnswer ?? data.answer ?? data.notes ?? data.pattern ?? data.correctOrder ?? data.expectedAnswer ?? data.targetNote,
+      : data.correctAnswer ??
+        data.answer ??
+        data.notes ??
+        data.pattern ??
+        data.correctOrder ??
+        data.expectedAnswer ??
+        data.targetNote ??
+        (data.segments ? (data.segments as string[][]).flat() : undefined),
     heartsCurrent,
   });
 });

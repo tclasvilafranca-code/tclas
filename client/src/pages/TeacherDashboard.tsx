@@ -63,7 +63,7 @@ export function TeacherDashboard() {
         <p className="text-tclas-ink/60 text-sm mb-6">Crea el acceso de cada alumno y gestiona su repertorio personal.</p>
 
         {showForm && (
-          <form onSubmit={createStudent} className="bg-white/70 border border-tclas-ink/10 rounded-xl p-5 grid gap-3 mb-6 max-w-sm">
+          <form onSubmit={createStudent} className="bg-white/70 border border-tclas-ink/10 rounded-xl p-5 grid grid-cols-1 gap-3 mb-6 max-w-sm">
             <label className="text-sm font-semibold">
               Nombre del alumno/a
               <input required value={name} onChange={(e) => setName(e.target.value)} className="block w-full border border-tclas-ink/20 rounded-lg px-3 py-2 mt-1" />
@@ -100,7 +100,7 @@ export function TeacherDashboard() {
         {!students && <p className="text-tclas-ink/50">Cargando...</p>}
         {students && students.length === 0 && <p className="text-tclas-ink/50">Aun no hay alumnos. Crea el primero con el boton de arriba.</p>}
 
-        <div className="grid gap-3">
+        <div className="grid grid-cols-1 gap-3">
           {students?.map((s) => {
             const pct = s.totalLessons > 0 ? Math.round((s.completedLessons / s.totalLessons) * 100) : 0;
             return (

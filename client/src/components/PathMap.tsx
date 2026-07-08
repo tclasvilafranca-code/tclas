@@ -3,6 +3,7 @@ import type { RepertoireNode } from "../lib/api";
 interface Props {
   pieces: RepertoireNode[];
   onOpenLesson: (lessonId: string) => void;
+  onOpenPiece: (pieceId: string) => void;
 }
 
 // Patron de zigzag tipo "camino de juego": desplazamiento horizontal ciclico por nodo.
@@ -14,15 +15,17 @@ function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("es-ES", { day: "numeric", month: "short" });
 }
 
-export function PathMap({ pieces, onOpenLesson }: Props) {
+export function PathMap({ pieces, onOpenLesson, onOpenPiece }: Props) {
   let globalIndex = 0;
 
   return (
     <div className="max-w-md mx-auto pb-16">
       {pieces.map((entry) => (
         <section key={entry.id} className="mb-4">
-          <div
-            className={`mx-auto mb-6 max-w-xs rounded-2xl px-5 py-4 text-center border-2 shadow-sm
+          <button
+            onClick={() => onOpenPiece(entry.piece.id)}
+            title="Ver partitura, informacion y tips"
+            className={`block w-full mx-auto mb-6 max-w-xs rounded-2xl px-5 py-4 text-center border-2 shadow-sm transition-transform hover:scale-[1.02] cursor-pointer
               ${entry.completed ? "bg-tclas-sage/10 border-tclas-sage/40" : entry.status === "ACTIVE" ? "bg-tclas-gold/10 border-tclas-gold/50" : "bg-white/50 border-tclas-ink/10"}`}
           >
             <div className="text-4xl mb-1">{entry.piece.iconEmoji}</div>
@@ -40,7 +43,8 @@ export function PathMap({ pieces, onOpenLesson }: Props) {
               )}
             </div>
             {entry.teacherNote && <p className="text-xs text-tclas-plum mt-2 italic">"{entry.teacherNote}"</p>}
-          </div>
+            <p className="text-[11px] text-tclas-plum/70 mt-2">👆 Toca para ver la partitura</p>
+          </button>
 
           <div className="flex flex-col items-center gap-5">
             {entry.lessons.map((lesson) => {

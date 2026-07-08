@@ -180,6 +180,25 @@ async function checkAndAwardBadges(userId: string, profile: { xpTotal: number; s
   return toAward.map((b) => ({ code: b.code, name: b.name, icon: b.icon }));
 }
 
+router.get("/pieces/:id", requireAuth, async (req: AuthedRequest, res) => {
+  const piece = await prisma.piece.findUnique({ where: { id: req.params.id } });
+  if (!piece) return res.status(404).json({ error: "Pieza no encontrada" });
+
+  res.json({
+    id: piece.id,
+    title: piece.title,
+    composer: piece.composer,
+    arranger: piece.arranger,
+    keySignature: piece.keySignature,
+    timeSignature: piece.timeSignature,
+    seasonalTag: piece.seasonalTag,
+    iconEmoji: piece.iconEmoji,
+    aboutText: piece.aboutText,
+    tips: piece.tips,
+    content: JSON.parse(piece.content),
+  });
+});
+
 router.get("/badges", requireAuth, async (req: AuthedRequest, res) => {
   const userBadges = await prisma.userBadge.findMany({
     where: { userId: req.auth!.userId },

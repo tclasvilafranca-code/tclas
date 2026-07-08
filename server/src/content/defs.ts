@@ -56,6 +56,8 @@ export interface PieceDef {
   timeSignature: string;
   seasonalTag?: string;
   iconEmoji?: string;
+  aboutText?: string;
+  tips?: string;
   content: PieceContent;
 }
 

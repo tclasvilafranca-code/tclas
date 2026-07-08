@@ -5,10 +5,12 @@ import type { CurriculumTree } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 import { GamificationBar } from "../components/GamificationBar";
 import { PathMap } from "../components/PathMap";
+import { PieceDetailModal } from "../components/PieceDetailModal";
 
 export function Home() {
   const { me, logout } = useAuth();
   const [tree, setTree] = useState<CurriculumTree | null>(null);
+  const [openPieceId, setOpenPieceId] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,10 +39,12 @@ export function Home() {
           {tree.pieces.length === 0 ? (
             <p className="text-center text-tclas-ink/50 mt-16">Todavia no tienes piezas asignadas. ¡Pronto tu profesor/a anadira tu repertorio!</p>
           ) : (
-            <PathMap pieces={tree.pieces} onOpenLesson={(id) => navigate(`/app/lesson/${id}`)} />
+            <PathMap pieces={tree.pieces} onOpenLesson={(id) => navigate(`/app/lesson/${id}`)} onOpenPiece={setOpenPieceId} />
           )}
         </main>
       )}
+
+      {openPieceId && <PieceDetailModal pieceId={openPieceId} onClose={() => setOpenPieceId(null)} />}
     </div>
   );
 }

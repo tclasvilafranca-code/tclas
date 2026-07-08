@@ -14,6 +14,9 @@ export const arnauPieces: PieceDef[] = [
     keySignature: "Do Mayor",
     timeSignature: "3/4",
     iconEmoji: "🥜",
+    aboutText:
+      "Esta cancion popular estadounidense del siglo XIX cuenta la historia de un minero que busca oro y pierde a su hija Clementine. Es una de las primeras piezas clasicas para empezar a tocar piano por su melodia sencilla y repetitiva.",
+    tips: "Fijate en que la melodia se mueve casi siempre por notas vecinas. Practica primero solo el ritmo con palmas antes de tocar las notas.",
     content: {
       clef: "treble",
       melody: ["G4", "E4", "G4", "A4", "G4", "F4", "E4", "D4", "C4"],
@@ -32,6 +35,9 @@ export const arnauPieces: PieceDef[] = [
     keySignature: "Do Mayor",
     timeSignature: "3/4",
     iconEmoji: "🥢",
+    aboutText:
+      "Compuesta en 1877 por una joven britanica de solo 16 anos, se hizo famosa porque tradicionalmente se toca con los cantos de las manos, como si fueran palillos chinos (de ahi su nombre en ingles).",
+    tips: "Aqui las dos manos tocan las mismas notas a distancia de una octava. Mantén ambas manos relajadas y muevete en bloque, como si fueran una sola.",
     content: {
       clef: "grand",
       melody: ["F5", "F5", "F5", "E5", "E5", "E5", "D5", "D5", "D5", "C5"],
@@ -51,9 +57,26 @@ export const arnauPieces: PieceDef[] = [
     keySignature: "Do Mayor",
     timeSignature: "4/4",
     iconEmoji: "🐶",
+    aboutText:
+      "Cancion infantil tradicional estadounidense, muy popular en campamentos de verano, que habla en tono comico sobre unas orejas muy muy largas.",
+    tips: "Hay saltos de nota mas grandes que en piezas anteriores. Mira bien el pentagrama antes de tocar cada salto para no perderte.",
     content: {
       clef: "grand",
-      melody: ["G4", "C5", "C5", "C5", "A4", "G4", "F4", "A4", "G4", "F4", "E4", "D4", "C4"],
+      melody: [
+        "G4",
+        "C5",
+        "C5",
+        "C5",
+        "A4",
+        "G4",
+        "F4",
+        "A4",
+        "G4",
+        "F4",
+        "E4",
+        "D4",
+        "C4",
+      ],
       melodyRhythm: [1, 1, 0.5, 0.5, 1, 1, 1, 1, 0.5, 0.5, 1, 1, 2],
       bass: ["C3", "F3", "G3", "C3"],
       bassRhythm: [1, 1, 1, 1],
@@ -71,6 +94,9 @@ export const arnauPieces: PieceDef[] = [
     keySignature: "Do Mayor",
     timeSignature: "4/4",
     iconEmoji: "🐑",
+    aboutText:
+      "Esta rima infantil inglesa es una de las mas antiguas que se conocen, impresa ya en 1744. Comparte la misma melodia que 'Twinkle Twinkle Little Star' y la cancion del abecedario en ingles.",
+    tips: "La mano izquierda ya toca acordes: apoya bien los dedos 1-3-5 juntos y suelta el peso del brazo, no solo de los dedos.",
     content: {
       clef: "grand",
       melody: ["C4", "C4", "G4", "G4", "A4", "A4", "G4"],
@@ -92,6 +118,9 @@ export const arnauPieces: PieceDef[] = [
     keySignature: "Fa Mayor",
     timeSignature: "4/4",
     iconEmoji: "🚌",
+    aboutText:
+      "Cancion infantil clasica en autobuses escolares y colegios de todo el mundo angloparlante, con gestos y sonidos para cada parte del autobus.",
+    tips: "Estamos en Fa Mayor: fijate en el Si bemol. Antes de tocar, localiza esa tecla negra en el teclado.",
     content: {
       clef: "grand",
       melody: ["F4", "F4", "F4", "F4", "A4", "F4", "C5", "C5"],
@@ -113,6 +142,9 @@ export const arnauPieces: PieceDef[] = [
     keySignature: "Fa Mayor",
     timeSignature: "6/8",
     iconEmoji: "🕷️",
+    aboutText:
+      "Rima infantil britanica clasica, conocida desde el siglo XVIII, que cuenta como a la pequena Miss Muffet la asusta una arana mientras merienda.",
+    tips: "El compas es de 6/8: cuenta 'un-dos-tres, cuatro-cinco-seis' en vez de negras sueltas, y sentiras el balanceo tipico de esta pieza.",
     content: {
       clef: "grand",
       melody: ["F4", "G4", "A4", "A4", "G4", "F4"],
@@ -135,12 +167,34 @@ export const arnauPieces: PieceDef[] = [
     timeSignature: "3/4",
     seasonalTag: "christmas",
     iconEmoji: "🎄",
+    aboutText:
+      "Villancico tradicional ingles del siglo XVI, de los mas populares en Navidad en paises de habla inglesa, cantado tradicionalmente de puerta en puerta.",
+    tips: "Es un vals (3/4). Marca bien el primer tiempo de cada compas, un poco mas fuerte que los otros dos.",
     content: {
       clef: "treble",
-      melody: ["C4", "F4", "F4", "G4", "F4", "E4", "D4", "D4", "D4", "G4", "G4", "A4", "G4", "F4", "E4", "D4", "C4"],
+      melody: [
+        "C4",
+        "F4",
+        "F4",
+        "G4",
+        "F4",
+        "E4",
+        "D4",
+        "D4",
+        "D4",
+        "G4",
+        "G4",
+        "A4",
+        "G4",
+        "F4",
+        "E4",
+        "D4",
+        "C4",
+      ],
       melodyRhythm: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
       featuredNotes: ["C4", "D4", "E4", "F4", "G4", "A4"],
-      lyricsHook: "We wish you a merry Christmas, we wish you a merry Christmas",
+      lyricsHook:
+        "We wish you a merry Christmas, we wish you a merry Christmas",
     },
   },
   {
@@ -154,6 +208,9 @@ export const arnauPieces: PieceDef[] = [
     timeSignature: "4/4",
     seasonalTag: "christmas",
     iconEmoji: "🎅",
+    aboutText:
+      "Villancico estadounidense de finales del siglo XIX en el que los ninos le cuentan sus deseos a San Nicolas (Santa Claus) al oido.",
+    tips: "Ya tocamos con las dos manos: la izquierda sostiene notas largas mientras la derecha hace la melodia. Cuenta bien los tiempos de esas notas largas.",
     content: {
       clef: "grand",
       melody: ["E4", "E4", "E4", "F4", "G4", "G4", "F4", "E4", "D4", "C4"],
@@ -174,6 +231,9 @@ export const arnauPieces: PieceDef[] = [
     keySignature: "Fa Mayor",
     timeSignature: "4/4",
     iconEmoji: "🫖",
+    aboutText:
+      "Cancion popular infantil inglesa del siglo XVIII sobre poner la tetera al fuego para tomar el te con las visitas.",
+    tips: "Hay notas rapidas seguidas (corcheas): practica ese grupito muy despacio primero y ve acelerando poco a poco.",
     content: {
       clef: "grand",
       melody: ["C5", "C5", "C5", "A4", "Bb4", "C5"],
@@ -195,6 +255,9 @@ export const arnauPieces: PieceDef[] = [
     keySignature: "Do Mayor",
     timeSignature: "4/4",
     iconEmoji: "🌧️",
+    aboutText:
+      "Rima infantil tradicional inglesa que le pide a la lluvia que se vaya para poder salir a jugar. La tocamos a cuatro manos: tu llevas la melodia y tu profesora o tu familia te acompanan.",
+    tips: "Al ser a duo, escucha el pulso de quien te acompana y no te adelantes. La melodia se repite igual dos veces, asi que la segunda vez ya te la sabras.",
     content: {
       clef: "treble",
       melody: ["E5", "D5", "C5", "E5", "D5", "C5"],
@@ -213,6 +276,9 @@ export const arnauPieces: PieceDef[] = [
     keySignature: "Do Mayor",
     timeSignature: "4/4",
     iconEmoji: "🌳",
+    aboutText:
+      "Cancion de corro tradicional inglesa que se canta mientras los ninos giran en circulo tomados de la mano.",
+    tips: "La melodia sube nota a nota, como una escala. Practicala tambien diciendo el nombre de cada nota mientras la tocas.",
     content: {
       clef: "treble",
       melody: ["C4", "D4", "E4", "F4", "G4", "G4", "G4"],
@@ -232,6 +298,9 @@ export const arnauPieces: PieceDef[] = [
     keySignature: "Do Mayor",
     timeSignature: "4/4",
     iconEmoji: "🎺",
+    aboutText:
+      "Himno gospel estadounidense de origen incierto, hecho mundialmente famoso por el trompetista de jazz Louis Armstrong.",
+    tips: "Los saltos entre las notas se repiten dos veces identicos: si te aprendes el primer grupo, ya sabes la mitad de la pieza.",
     content: {
       clef: "treble",
       melody: ["C4", "E4", "F4", "G4", "C4", "E4", "F4", "G4"],
@@ -250,6 +319,9 @@ export const arnauPieces: PieceDef[] = [
     keySignature: "Do Mayor",
     timeSignature: "3/4",
     iconEmoji: "⛵",
+    aboutText:
+      "Cancion popular escocesa del siglo XIX sobre alguien que espera el regreso de su amor desde el otro lado del mar.",
+    tips: "Es un vals (3/4): imagina que te balanceas suavemente mientras cuentas 1-2-3, 1-2-3, para sentir el compas.",
     content: {
       clef: "treble",
       melody: ["E4", "F4", "G4", "G4", "F4", "E4", "G4", "A4", "G4"],
@@ -267,6 +339,9 @@ export const arnauPieces: PieceDef[] = [
     keySignature: "Do Mayor",
     timeSignature: "4/4",
     iconEmoji: "🐉",
+    aboutText:
+      "Cancion folk de los anos 60 hecha muy famosa por el trio Peter, Paul and Mary, sobre la amistad entre un nino y un dragon magico.",
+    tips: "Fijate en el patron corto-corto-largo al principio de cada frase: practicalo solo con palmas antes de tocarlo en el piano.",
     content: {
       clef: "grand",
       melody: ["G4", "A4", "G4", "E4", "D4", "E4", "F4", "G4"],
@@ -287,6 +362,9 @@ export const arnauPieces: PieceDef[] = [
     keySignature: "Do Mayor",
     timeSignature: "4/4",
     iconEmoji: "🌺",
+    aboutText:
+      "Compuesta en 1878 por la reina Lili'uokalani de Hawai, es probablemente la cancion hawaiana mas conocida del mundo: un canto de despedida y amor.",
+    tips: "La mano izquierda toca un acorde de septima (G7): escucha como ese acorde 'pide' resolver hacia el Do siguiente.",
     content: {
       clef: "grand",
       melody: ["E4", "G4", "C5", "A4", "G4", "F4", "E4", "D4"],
@@ -307,6 +385,9 @@ export const arnauPieces: PieceDef[] = [
     keySignature: "Do Mayor",
     timeSignature: "4/4",
     iconEmoji: "🎸",
+    aboutText:
+      "Cancion del grupo espanol Jarabe de Palo, liderado por Pau Dones, uno de los grandes exitos del pop-rock espanol de los anos 2000.",
+    tips: "Hay varios acordes seguidos: antes de tocar la melodia, prueba solo los acordes con la mano izquierda para familiarizarte con ellos.",
     content: {
       clef: "treble",
       melody: ["E4", "D4", "C4", "E4", "D4", "D4", "E4", "D4", "C4", "C4"],
@@ -325,6 +406,9 @@ export const arnauPieces: PieceDef[] = [
     keySignature: "Re Mayor",
     timeSignature: "4/4",
     iconEmoji: "🐆",
+    aboutText:
+      "Tema principal de la pelicula 'La Pantera Rosa' (1963), compuesto por Henry Mancini, uno de los temas de jazz mas reconocibles del cine.",
+    tips: "Estamos en Re Mayor, con dos sostenidos. Localiza esas teclas negras antes de empezar: son clave en esta pieza.",
     content: {
       clef: "grand",
       melody: ["D4", "F4", "F#4", "G4", "G#4", "A4"],
@@ -344,6 +428,9 @@ export const arnauPieces: PieceDef[] = [
     keySignature: "Sol Mayor",
     timeSignature: "3/4",
     iconEmoji: "⚓",
+    aboutText:
+      "Tema de la serie de dibujos animados Popeye el marino, creado en los anos 30 para el cine y la television.",
+    tips: "Empieza con tres notas repetidas rapidas: cuentalas bien antes de dar el salto hacia la nota aguda final.",
     content: {
       clef: "grand",
       melody: ["D5", "D5", "D5", "B4", "D5", "G5"],
@@ -365,6 +452,9 @@ export const arnauPieces: PieceDef[] = [
     keySignature: "Sol Mayor",
     timeSignature: "4/4",
     iconEmoji: "🟡",
+    aboutText:
+      "Cancion de The Beatles publicada en 1966, uno de los temas mas populares y reconocibles del grupo britanico.",
+    tips: "La mano izquierda cambia de acorde varias veces: anticipa cada cambio mirando el siguiente acorde con antelacion.",
     content: {
       clef: "grand",
       melody: ["D4", "D4", "D4", "D4", "E4", "D4", "C4", "D4"],
@@ -386,6 +476,9 @@ export const arnauPieces: PieceDef[] = [
     keySignature: "Do Mayor",
     timeSignature: "4/4",
     iconEmoji: "🏆",
+    aboutText:
+      "Tema del segundo movimiento de la Sinfonia n.9 'Del Nuevo Mundo' de Antonin Dvorak (1893), una de las melodias mas hermosas y celebres de toda la musica clasica; mas tarde se le puso letra y se conoce tambien como 'Goin' Home'.",
+    tips: "Es la pieza final del curso: tomate tu tiempo, toca despacio y con mucha expresion. No hace falta ir rapido, sino sentir cada nota.",
     content: {
       clef: "grand",
       melody: ["E4", "E4", "F4", "G4", "E4", "D4", "C4"],

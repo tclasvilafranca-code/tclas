@@ -73,16 +73,18 @@ export function RhythmExercise({ exercise, onSubmit, feedback }: Props) {
       <p className="text-lg font-semibold mb-2">{prompt}</p>
       <p className="text-xs text-tclas-ink/50 mb-4">Tempo: {bpm} BPM &middot; Compas {data.timeSignature}</p>
 
-      <div className="flex justify-center gap-2 mb-6">
-        {pattern.map((dur, i) => (
-          <div
-            key={i}
-            className="bg-tclas-plum/10 border-2 border-tclas-plum/30 rounded-md flex items-center justify-center text-xs font-semibold text-tclas-plum"
-            style={{ width: 36 * dur + 20, height: 44 }}
-          >
-            {dur}
-          </div>
-        ))}
+      <div className="overflow-x-auto pb-2 mb-4 -mx-4 px-4">
+        <div className="flex justify-center gap-2 w-max mx-auto">
+          {pattern.map((dur, i) => (
+            <div
+              key={i}
+              className="bg-tclas-plum/10 border-2 border-tclas-plum/30 rounded-md flex items-center justify-center text-xs font-semibold text-tclas-plum shrink-0"
+              style={{ width: 36 * dur + 20, height: 44 }}
+            >
+              {dur}
+            </div>
+          ))}
+        </div>
       </div>
 
       {phase === "idle" && (

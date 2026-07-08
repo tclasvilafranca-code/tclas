@@ -36,22 +36,24 @@ async function main() {
   console.log("Creando biblioteca de piezas...");
   const pieceRecords = [];
   for (const def of arnauPieces) {
+    const pieceFields = {
+      composer: def.composer ?? "",
+      arranger: def.arranger ?? "",
+      ageGroup: def.ageGroup,
+      difficultyTier: def.difficultyTier,
+      defaultWeeks: def.defaultWeeks ?? 3,
+      keySignature: def.keySignature,
+      timeSignature: def.timeSignature,
+      seasonalTag: def.seasonalTag,
+      iconEmoji: def.iconEmoji ?? "🎵",
+      aboutText: def.aboutText ?? "",
+      tips: def.tips ?? "",
+      content: JSON.stringify(def.content),
+    };
     const piece = await prisma.piece.upsert({
       where: { title: def.title },
-      update: {},
-      create: {
-        title: def.title,
-        composer: def.composer ?? "",
-        arranger: def.arranger ?? "",
-        ageGroup: def.ageGroup,
-        difficultyTier: def.difficultyTier,
-        defaultWeeks: def.defaultWeeks ?? 3,
-        keySignature: def.keySignature,
-        timeSignature: def.timeSignature,
-        seasonalTag: def.seasonalTag,
-        iconEmoji: def.iconEmoji ?? "🎵",
-        content: JSON.stringify(def.content),
-      },
+      update: pieceFields,
+      create: { title: def.title, ...pieceFields },
     });
     pieceRecords.push(piece);
   }

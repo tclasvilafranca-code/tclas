@@ -188,6 +188,32 @@ export interface PieceLibraryItem {
   iconEmoji: string;
 }
 
+export interface PieceContent {
+  clef: "treble" | "bass" | "grand";
+  melody: string[];
+  melodyRhythm: number[];
+  bass?: string[];
+  bassRhythm?: number[];
+  chordsUsed?: string[];
+  featuredNotes: string[];
+  lyricsHook?: string;
+  isDuet?: boolean;
+}
+
+export interface PieceDetail {
+  id: string;
+  title: string;
+  composer: string;
+  arranger: string;
+  keySignature: string;
+  timeSignature: string;
+  seasonalTag: string | null;
+  iconEmoji: string;
+  aboutText: string;
+  tips: string;
+  content: PieceContent;
+}
+
 export interface BulkRepertoireItem {
   pieceId: string;
   durationWeeks?: number;

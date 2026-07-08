@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api } from "../lib/api";
-import type { CurriculumTree, StudentProfile, PieceLibraryItem, StudentSummary, AgeGroup } from "../lib/api";
+import type { CurriculumTree, StudentProfile, PieceLibraryItem, StudentSummary, AgeGroup, LessonStatus } from "../lib/api";
 
 interface StudentDetailResponse {
   id: string;
@@ -28,6 +28,23 @@ const AGE_FILTER_LABEL: Record<"ALL" | AgeGroup, string> = {
 
 function todayISO(): string {
   return new Date().toISOString().slice(0, 10);
+}
+
+const WEEK_STATUS_LABEL: Record<LessonStatus, { label: string; className: string }> = {
+  COMPLETED: { label: "✅ Completada", className: "text-tclas-sage" },
+  AVAILABLE: { label: "▶ Disponible, aun no hecha", className: "text-tclas-gold" },
+  SCHEDULED: { label: "📅 Programada", className: "text-tclas-ink/40" },
+  LOCKED: { label: "🔒 Bloqueada", className: "text-tclas-ink/30" },
+};
+
+function isOverdue(status: LessonStatus, scheduledDate: string): boolean {
+  if (status !== "AVAILABLE") return false;
+  const days = (Date.now() - new Date(scheduledDate).getTime()) / 86400000;
+  return days > 7;
+}
+
+function formatShortDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("es-ES", { day: "numeric", month: "short" });
 }
 
 function suggestedNextDate(pieces: CurriculumTree["pieces"]): string {
@@ -160,6 +177,11 @@ export function TeacherStudentDetail() {
 
   const otherStudents = allStudents?.filter((s) => s.id !== id && s.piecesAssigned > 0) ?? [];
 
+  const weeklyActivity = data.curriculum.pieces
+    .flatMap((entry) => entry.lessons.map((lesson) => ({ ...lesson, pieceTitle: entry.piece.title, pieceIcon: entry.piece.iconEmoji })))
+    .sort((a, b) => a.weekNumber - b.weekNumber);
+  const overdueCount = weeklyActivity.filter((w) => isOverdue(w.status, w.scheduledDate)).length;
+
   return (
     <div className="min-h-screen">
       <header className="px-4 py-4 flex items-center gap-4 border-b border-tclas-ink/10">
@@ -170,7 +192,7 @@ export function TeacherStudentDetail() {
         {data.username && <span className="text-xs text-tclas-ink/40 font-mono">usuario: {data.username}</span>}
       </header>
 
-      <main className="max-w-3xl mx-auto px-4 py-8 grid gap-8">
+      <main className="max-w-3xl mx-auto px-4 py-8 grid grid-cols-1 gap-8">
         <section className="bg-white/70 border border-tclas-ink/10 rounded-xl p-5 flex flex-wrap gap-6">
           <div>
             <p className="text-xs text-tclas-ink/50">XP total</p>
@@ -192,21 +214,21 @@ export function TeacherStudentDetail() {
 
         <section>
           <h2 className="font-display text-xl mb-3">Repertorio del curso</h2>
-          <div className="grid gap-2">
+          <div className="grid grid-cols-1 gap-2">
             {data.curriculum.pieces.length === 0 && <p className="text-tclas-ink/50 text-sm">Aun no tiene piezas asignadas.</p>}
             {data.curriculum.pieces.map((entry) => {
               const completedLessons = entry.lessons.filter((l) => l.status === "COMPLETED").length;
               return (
                 <div key={entry.id} className="bg-white/60 border border-tclas-ink/10 rounded-lg p-3 flex items-center gap-3">
-                  <span className="text-2xl">{entry.piece.iconEmoji}</span>
-                  <div className="flex-1">
-                    <p className="text-sm font-semibold">{entry.piece.title}</p>
+                  <span className="text-2xl shrink-0">{entry.piece.iconEmoji}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold truncate">{entry.piece.title}</p>
                     <p className="text-xs text-tclas-ink/50">
                       {new Date(entry.startDate).toLocaleDateString()} · {entry.durationWeeks} semanas · {completedLessons}/{entry.lessons.length} lecciones ·{" "}
                       <span className={entry.status === "COMPLETED" ? "text-tclas-sage" : entry.status === "ACTIVE" ? "text-tclas-gold" : ""}>{entry.status}</span>
                     </p>
                   </div>
-                  <button onClick={() => removePiece(entry.id)} className="text-xs text-tclas-rose hover:underline">
+                  <button onClick={() => removePiece(entry.id)} className="text-xs text-tclas-rose hover:underline shrink-0">
                     Quitar
                   </button>
                 </div>
@@ -216,10 +238,38 @@ export function TeacherStudentDetail() {
         </section>
 
         <section>
+          <div className="flex items-center justify-between mb-1">
+            <h2 className="font-display text-xl">Actividad semana a semana</h2>
+            {overdueCount > 0 && <span className="text-xs font-semibold text-tclas-rose">⚠️ {overdueCount} semana(s) atrasada(s)</span>}
+          </div>
+          <p className="text-xs text-tclas-ink/50 mb-3">Aqui ves si {data.name} va haciendo su sesion cada semana, pieza por pieza.</p>
+          {weeklyActivity.length === 0 ? (
+            <p className="text-tclas-ink/50 text-sm">Aun no tiene semanas asignadas.</p>
+          ) : (
+            <div className="bg-white/70 border border-tclas-ink/10 rounded-xl divide-y divide-tclas-ink/5 max-h-80 overflow-y-auto">
+              {weeklyActivity.map((w) => {
+                const overdue = isOverdue(w.status, w.scheduledDate);
+                const status = overdue ? { label: "⚠️ Atrasada, sin hacer", className: "text-tclas-rose font-semibold" } : WEEK_STATUS_LABEL[w.status];
+                return (
+                  <div key={w.id} className="flex items-center gap-3 px-4 py-2.5 text-sm">
+                    <span className="text-xs text-tclas-ink/40 w-16 shrink-0">Sem. {w.weekNumber}</span>
+                    <span className="text-lg">{w.pieceIcon}</span>
+                    <span className="flex-1 min-w-0 truncate">{w.pieceTitle}</span>
+                    <span className="text-xs text-tclas-ink/40 hidden sm:inline">{formatShortDate(w.scheduledDate)}</span>
+                    {w.status === "COMPLETED" && <span className="text-xs">{"★".repeat(w.stars)}</span>}
+                    <span className={`text-xs whitespace-nowrap ${status.className}`}>{status.label}</span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </section>
+
+        <section>
           <h2 className="font-display text-xl mb-1">Constructor de repertorio</h2>
           <p className="text-xs text-tclas-ink/50 mb-3">Elige varias piezas de la biblioteca, en el orden que quieras (puedes mezclar Kids, Junior y Adultos), y añádelas todas de golpe. Las lecciones se generan solas.</p>
 
-          <div className="bg-white/70 border border-tclas-ink/10 rounded-xl p-5 grid gap-4">
+          <div className="bg-white/70 border border-tclas-ink/10 rounded-xl p-5 grid grid-cols-1 gap-4">
             <div className="flex flex-wrap gap-2">
               {(["ALL", "KIDS", "TEENS", "ADULTS"] as const).map((f) => (
                 <button
@@ -253,13 +303,13 @@ export function TeacherStudentDetail() {
             </div>
 
             {selected.length > 0 && (
-              <div className="grid gap-2 border-t border-tclas-ink/10 pt-4">
+              <div className="grid grid-cols-1 gap-2 border-t border-tclas-ink/10 pt-4">
                 <p className="text-xs font-semibold text-tclas-ink/60">Repertorio a añadir, en orden ({selected.length}):</p>
                 {selected.map((s, idx) => (
                   <div key={`${s.piece.id}-${idx}`} className="flex items-center gap-2 bg-tclas-plum/5 rounded-lg px-3 py-2">
                     <span className="text-xs text-tclas-ink/40 w-5 text-center">{idx + 1}</span>
                     <span className="text-lg">{s.piece.iconEmoji}</span>
-                    <span className="flex-1 text-sm font-medium truncate">{s.piece.title}</span>
+                    <span className="flex-1 min-w-0 text-sm font-medium truncate">{s.piece.title}</span>
                     <input
                       type="number"
                       min={1}
@@ -303,7 +353,7 @@ export function TeacherStudentDetail() {
           <section>
             <h2 className="font-display text-xl mb-1">Duplicar repertorio de otro alumno</h2>
             <p className="text-xs text-tclas-ink/50 mb-3">Copia todas las piezas (y sus lecciones) de un alumno ya creado, como punto de partida para este.</p>
-            <div className="bg-white/70 border border-tclas-ink/10 rounded-xl p-5 grid gap-3 sm:flex sm:items-end sm:gap-3">
+            <div className="bg-white/70 border border-tclas-ink/10 rounded-xl p-5 grid grid-cols-1 gap-3 sm:flex sm:items-end sm:gap-3">
               <label className="text-sm font-semibold flex-1">
                 Copiar de
                 <select value={duplicateFrom} onChange={(e) => setDuplicateFrom(e.target.value)} className="block w-full border border-tclas-ink/20 rounded-lg px-3 py-2 mt-1">
@@ -332,7 +382,7 @@ export function TeacherStudentDetail() {
 
         <section>
           <h2 className="font-display text-xl mb-3">Añadir una pieza suelta</h2>
-          <form onSubmit={assignPiece} className="bg-white/70 border border-tclas-ink/10 rounded-xl p-5 grid gap-3">
+          <form onSubmit={assignPiece} className="bg-white/70 border border-tclas-ink/10 rounded-xl p-5 grid grid-cols-1 gap-3">
             <label className="text-sm font-semibold">
               Pieza
               <select required value={selectedPiece} onChange={(e) => setSelectedPiece(e.target.value)} className="block w-full border border-tclas-ink/20 rounded-lg px-3 py-2 mt-1">

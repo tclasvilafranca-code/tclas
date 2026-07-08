@@ -52,7 +52,7 @@ export function McqLikeExercise({ exercise, onSubmit, feedback }: Props) {
         </div>
       )}
 
-      <div className="grid gap-2 max-w-sm mx-auto">
+      <div className="grid grid-cols-1 gap-2 max-w-sm mx-auto">
         {options.map((opt) => {
           const isSelected = selected === opt;
           const showCorrect = feedback && isSelected && feedback.correct;

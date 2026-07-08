@@ -12,6 +12,13 @@
 
 import { PieceDef, LessonDef, ExerciseDef, nn, sr, rt, et, mcq, kp, ch, iv, wa, ma, ord, sp, ds, hn, scp, fb, eb, nd, sgp } from "./content/defs";
 import { toSolfege, onlyLetter, distractorLetters, chordSymbolToNotes, chordSymbolToSpanish, scaleForKey, scaleForKeyBass, intervalName } from "./notes";
+import { DifficultyAdjustment, DifficultyLevel, NORMAL_DIFFICULTY } from "./adaptive";
+
+// Cuantos distractores (opciones incorrectas) se ofrecen en preguntas de
+// reconocimiento de nota, segun la dificultad ajustada al alumno.
+function distractorCountFor(level: DifficultyLevel): number {
+  return level === "hard" ? 3 : level === "easy" ? 1 : 2;
+}
 
 function uniq<T>(arr: T[]): T[] {
   return Array.from(new Set(arr));
@@ -32,9 +39,10 @@ function genericBpmFor(def: PieceDef): number {
 }
 
 // --- Bloque 1: Agilidad visual (nombrar notas rapido, clave de Sol Y clave de Fa) ---
-function visualAgilityExercises(def: PieceDef, weekNum: number): ExerciseDef[] {
+function visualAgilityExercises(def: PieceDef, weekNum: number, level: DifficultyLevel = "normal"): ExerciseDef[] {
   const trebleScale = scaleForKey(def.keySignature);
   const bassScale = scaleForKeyBass(def.keySignature);
+  const distractorCount = distractorCountFor(level);
   const exercises: ExerciseDef[] = [];
 
   for (let i = 0; i < 3; i++) {
@@ -43,7 +51,7 @@ function visualAgilityExercises(def: PieceDef, weekNum: number): ExerciseDef[] {
       type: "NOTE_NAME",
       phase: "VISUAL_AGILITY",
       prompt: "Agilidad visual: ¿como se llama esta nota? (clave de Sol)",
-      data: nn("treble", trebleNote, uniq([toSolfege(trebleNote), ...distractorLetters(onlyLetter(trebleNote)).map((l) => toSolfege(`${l}4`))]), toSolfege(trebleNote)),
+      data: nn("treble", trebleNote, uniq([toSolfege(trebleNote), ...distractorLetters(onlyLetter(trebleNote), distractorCount).map((l) => toSolfege(`${l}4`))]), toSolfege(trebleNote)),
       explanation: "Reconocer notas rapido en clave de Sol es la base de la lectura a primera vista.",
     });
 
@@ -52,7 +60,7 @@ function visualAgilityExercises(def: PieceDef, weekNum: number): ExerciseDef[] {
       type: "NOTE_NAME",
       phase: "VISUAL_AGILITY",
       prompt: "Agilidad visual: ¿como se llama esta nota? (clave de Fa)",
-      data: nn("bass", bassNote, uniq([toSolfege(bassNote), ...distractorLetters(onlyLetter(bassNote)).map((l) => toSolfege(`${l}4`))]), toSolfege(bassNote)),
+      data: nn("bass", bassNote, uniq([toSolfege(bassNote), ...distractorLetters(onlyLetter(bassNote), distractorCount).map((l) => toSolfege(`${l}4`))]), toSolfege(bassNote)),
       explanation: "La clave de Fa es la de la mano izquierda: cuanto mas la practiques, mas facil se vuelve.",
     });
   }
@@ -61,10 +69,11 @@ function visualAgilityExercises(def: PieceDef, weekNum: number): ExerciseDef[] {
 }
 
 // --- Bloque 2: Agudeza auditiva (escuchar nota/melodia/acorde, clave de Sol y de Fa, o tocar lo escuchado) ---
-function earAcuityExercises(def: PieceDef, weekNum: number): ExerciseDef[] {
+function earAcuityExercises(def: PieceDef, weekNum: number, level: DifficultyLevel = "normal"): ExerciseDef[] {
   const { content } = def;
   const trebleScale = scaleForKey(def.keySignature);
   const bassScale = scaleForKeyBass(def.keySignature);
+  const distractorCount = distractorCountFor(level);
   const exercises: ExerciseDef[] = [];
 
   const trebleNote = pick(trebleScale, weekNum + 1);
@@ -72,7 +81,7 @@ function earAcuityExercises(def: PieceDef, weekNum: number): ExerciseDef[] {
     type: "EAR_TRAINING",
     phase: "EAR_ACUITY",
     prompt: "Agudeza auditiva: escucha... ¿que nota es? (registro agudo, clave de Sol)",
-    data: et("note", toSolfege(trebleNote), uniq([toSolfege(trebleNote), ...distractorLetters(onlyLetter(trebleNote)).map((l) => toSolfege(`${l}4`))]), [trebleNote]),
+    data: et("note", toSolfege(trebleNote), uniq([toSolfege(trebleNote), ...distractorLetters(onlyLetter(trebleNote), distractorCount).map((l) => toSolfege(`${l}4`))]), [trebleNote]),
     explanation: `Has escuchado un ${toSolfege(trebleNote)}.`,
   });
 
@@ -81,7 +90,7 @@ function earAcuityExercises(def: PieceDef, weekNum: number): ExerciseDef[] {
     type: "EAR_TRAINING",
     phase: "EAR_ACUITY",
     prompt: "Agudeza auditiva: escucha... ¿que nota es? (registro grave, clave de Fa)",
-    data: et("note", toSolfege(bassNote), uniq([toSolfege(bassNote), ...distractorLetters(onlyLetter(bassNote)).map((l) => toSolfege(`${l}4`))]), [bassNote]),
+    data: et("note", toSolfege(bassNote), uniq([toSolfege(bassNote), ...distractorLetters(onlyLetter(bassNote), distractorCount).map((l) => toSolfege(`${l}4`))]), [bassNote]),
     explanation: `Has escuchado un ${toSolfege(bassNote)}, en el registro grave de la clave de Fa.`,
   });
 
@@ -126,13 +135,15 @@ function earAcuityExercises(def: PieceDef, weekNum: number): ExerciseDef[] {
 }
 
 // --- Bloque 3: Notas al vuelo (tirada larga de notas contrarreloj) ---
-function noteRushExercises(def: PieceDef, weekNum: number): ExerciseDef[] {
+function noteRushExercises(def: PieceDef, weekNum: number, level: DifficultyLevel = "normal"): ExerciseDef[] {
   const clef = def.content.clef === "bass" ? "bass" : "treble";
   const scale = clef === "bass" ? scaleForKeyBass(def.keySignature) : scaleForKey(def.keySignature);
-  const dashLength = 10 + (weekNum % 3) * 2;
+  const lengthAdjust = level === "hard" ? 3 : level === "easy" ? -3 : 0;
+  const dashLength = Math.max(6, 10 + (weekNum % 3) * 2 + lengthAdjust);
   const notes: string[] = [];
   for (let i = 0; i < dashLength; i++) notes.push(pick(scale, weekNum * 3 + i * 5));
-  const timeLimitSec = Math.round(dashLength * 2.2);
+  const timeMultiplier = level === "hard" ? 0.85 : level === "easy" ? 1.3 : 1;
+  const timeLimitSec = Math.round(dashLength * 2.2 * timeMultiplier);
 
   return [
     {
@@ -320,13 +331,20 @@ function sheetPracticeExercises(def: PieceDef, weekNum: number): ExerciseDef[] {
 
 /** Genera las lecciones semanales (weekIndex 1..durationWeeks) para una pieza asignada.
  * Cada semana es una sesion de 15-20 min en 4 bloques: agilidad visual, agudeza
- * auditiva, notas al vuelo contrarreloj, y practica de partitura (variada + piano). */
-export function generateLessonsForPiece(def: PieceDef, durationWeeks: number): LessonDef[] {
+ * auditiva, notas al vuelo contrarreloj, y practica de partitura (variada + piano).
+ * El parametro adjustment ajusta la dificultad de los 3 primeros bloques segun el
+ * acierto historico real del alumno (ver adaptive.ts); por defecto no ajusta nada. */
+export function generateLessonsForPiece(def: PieceDef, durationWeeks: number, adjustment: DifficultyAdjustment = NORMAL_DIFFICULTY): LessonDef[] {
   const weeks = Math.max(1, durationWeeks);
   const lessons: LessonDef[] = [];
 
   for (let w = 1; w <= weeks; w++) {
-    const exercises = [...visualAgilityExercises(def, w), ...earAcuityExercises(def, w), ...noteRushExercises(def, w), ...sheetPracticeExercises(def, w)];
+    const exercises = [
+      ...visualAgilityExercises(def, w, adjustment.VISUAL_AGILITY),
+      ...earAcuityExercises(def, w, adjustment.EAR_ACUITY),
+      ...noteRushExercises(def, w, adjustment.NOTE_RUSH),
+      ...sheetPracticeExercises(def, w),
+    ];
     lessons.push({
       title: def.title,
       description:

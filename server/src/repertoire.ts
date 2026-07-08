@@ -1,6 +1,7 @@
 import { Piece } from "@prisma/client";
 import { prisma } from "./prisma";
 import { generateLessonsForPiece } from "./generator";
+import { computeAdaptiveDifficulty } from "./adaptive";
 import { PieceDef } from "./content/defs";
 
 export function pieceToDef(piece: Piece): PieceDef {
@@ -43,7 +44,9 @@ export async function createRepertoireEntryWithLessons(params: {
     },
   });
 
-  const lessonDefs = generateLessonsForPiece(pieceToDef(params.piece), durationWeeks);
+  const studentProfile = await prisma.studentProfile.findUnique({ where: { id: params.studentProfileId } });
+  const adjustment = studentProfile ? await computeAdaptiveDifficulty(studentProfile.userId) : undefined;
+  const lessonDefs = generateLessonsForPiece(pieceToDef(params.piece), durationWeeks, adjustment);
   for (const [li, lessonDef] of lessonDefs.entries()) {
     const lesson = await prisma.lesson.create({
       data: {
@@ -78,6 +81,10 @@ export async function createRepertoireEntryWithLessons(params: {
  * generador de contenido cambia de forma incompatible (p.ej. nuevas fases).
  */
 export async function regenerateLessonsForEntry(entryId: string, piece: Piece, durationWeeks: number) {
+  const entry = await prisma.repertoireEntry.findUnique({ where: { id: entryId }, select: { studentId: true } });
+  const studentProfile = entry ? await prisma.studentProfile.findUnique({ where: { id: entry.studentId } }) : null;
+  const adjustment = studentProfile ? await computeAdaptiveDifficulty(studentProfile.userId) : undefined;
+
   const lessonIds = (await prisma.lesson.findMany({ where: { repertoireEntryId: entryId }, select: { id: true } })).map((l) => l.id);
   const exerciseIds = (await prisma.exercise.findMany({ where: { lessonId: { in: lessonIds } }, select: { id: true } })).map((e) => e.id);
   await prisma.exerciseAttempt.deleteMany({ where: { exerciseId: { in: exerciseIds } } });
@@ -85,7 +92,7 @@ export async function regenerateLessonsForEntry(entryId: string, piece: Piece, d
   await prisma.exercise.deleteMany({ where: { lessonId: { in: lessonIds } } });
   await prisma.lesson.deleteMany({ where: { repertoireEntryId: entryId } });
 
-  const lessonDefs = generateLessonsForPiece(pieceToDef(piece), durationWeeks);
+  const lessonDefs = generateLessonsForPiece(pieceToDef(piece), durationWeeks, adjustment);
   for (const [li, lessonDef] of lessonDefs.entries()) {
     const lesson = await prisma.lesson.create({
       data: {

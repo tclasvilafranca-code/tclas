@@ -6,12 +6,15 @@ import { useAuth } from "../context/AuthContext";
 import { GamificationBar } from "../components/GamificationBar";
 import { PathMap } from "../components/PathMap";
 import { PieceDetailModal } from "../components/PieceDetailModal";
+import { MascotBubble } from "../components/MascotBubble";
+import { greetingMessage } from "../lib/misol";
 
 export function Home() {
   const { me, logout } = useAuth();
   const [tree, setTree] = useState<CurriculumTree | null>(null);
   const [openPieceId, setOpenPieceId] = useState<string | null>(null);
   const navigate = useNavigate();
+  const [greeting] = useState(() => greetingMessage(me?.name ?? "", me?.studentProfile?.streakCurrent ?? 0));
 
   useEffect(() => {
     api.get<CurriculumTree>("/curriculum").then(setTree);
@@ -33,8 +36,7 @@ export function Home() {
 
       {tree && (
         <main className="px-4 py-8">
-          <h1 className="font-display text-2xl text-center mb-1">¡Hola, {me.name}! 👋</h1>
-          <p className="text-tclas-ink/60 text-sm text-center mb-8">Este es tu camino de piano de este curso.</p>
+          <MascotBubble message={greeting} mood="cheer" align="center" className="mb-8 text-left" />
 
           {tree.pieces.length === 0 ? (
             <p className="text-center text-tclas-ink/50 mt-16">Todavia no tienes piezas asignadas. ¡Pronto tu profesor/a anadira tu repertorio!</p>

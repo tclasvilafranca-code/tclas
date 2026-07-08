@@ -2,11 +2,14 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { MascotBubble } from "../components/MascotBubble";
+import { landingMessage } from "../lib/misol";
 
 export function Landing() {
   const { loginTeacher, loginStudent } = useAuth();
   const navigate = useNavigate();
   const [mode, setMode] = useState<"student" | "teacher">("student");
+  const [welcome] = useState(landingMessage);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,7 +41,6 @@ export function Landing() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-10 gap-8">
       <div className="text-center max-w-md">
-        <div className="text-5xl mb-3">🎹</div>
         <h1 className="font-display text-4xl text-tclas-plum mb-2">t-clas</h1>
         <p className="text-tclas-ink/70">Aprende piano jugando, entre clase y clase con Azucena.</p>
         <div className="flex justify-center gap-4 mt-4 text-xs text-tclas-ink/50">
@@ -46,6 +48,7 @@ export function Landing() {
           <span>🎮 Como un juego</span>
           <span>🎹 Piano de verdad</span>
         </div>
+        <MascotBubble message={welcome} align="center" className="mt-5 text-left" />
       </div>
 
       <div className="bg-white/70 rounded-2xl p-8 max-w-sm w-full border border-tclas-ink/10">

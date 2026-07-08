@@ -6,6 +6,8 @@ import { ExercisePlayer } from "../exercises/ExercisePlayer";
 import { LessonCompleteModal } from "../components/LessonCompleteModal";
 import { playSuccessChime, playErrorBuzz } from "../lib/audio";
 import { useAuth } from "../context/AuthContext";
+import { MascotBubble } from "../components/MascotBubble";
+import { correctMessage, wrongMessage } from "../lib/misol";
 
 const PHASE_LABEL: Record<ExercisePhase, { label: string; className: string }> = {
   WARMUP: { label: "🔥 Calentamiento", className: "bg-tclas-gold/15 text-tclas-plum" },
@@ -25,6 +27,7 @@ export function Lesson() {
   const [correctCount, setCorrectCount] = useState(0);
   const [result, setResult] = useState<CompleteLessonResult | null>(null);
   const [loadKey, setLoadKey] = useState(0);
+  const [misolReaction, setMisolReaction] = useState("");
 
   useEffect(() => {
     if (!id) return;
@@ -63,8 +66,10 @@ export function Lesson() {
     if (res.correct) {
       playSuccessChime();
       setCorrectCount((c) => c + 1);
+      setMisolReaction(correctMessage());
     } else {
       playErrorBuzz();
+      setMisolReaction(wrongMessage());
     }
   }
 
@@ -112,10 +117,8 @@ export function Lesson() {
       {feedback && (
         <div className={`px-4 py-4 border-t ${feedback.correct ? "bg-tclas-sage/10 border-tclas-sage/30" : "bg-tclas-rose/10 border-tclas-rose/30"}`}>
           <div className="max-w-xl mx-auto flex items-center justify-between gap-4">
-            <p className={`font-semibold ${feedback.correct ? "text-tclas-sage" : "text-tclas-rose"}`}>
-              {feedback.correct ? "¡Correcto!" : "No es correcto"}
-            </p>
-            <button onClick={handleNext} className="bg-tclas-plum text-tclas-cream rounded-full px-6 py-2 font-semibold hover:bg-tclas-plum-light">
+            <MascotBubble message={misolReaction} mood={feedback.correct ? "cheer" : "encourage"} size={44} />
+            <button onClick={handleNext} className="bg-tclas-plum text-tclas-cream rounded-full px-6 py-2 font-semibold hover:bg-tclas-plum-light shrink-0">
               Continuar
             </button>
           </div>
@@ -127,6 +130,7 @@ export function Lesson() {
           stars={result.stars}
           xpAwarded={result.xpAwarded}
           passed={result.stars >= 1}
+          pieceTitle={lesson.pieceTitle}
           newBadges={result.newBadges}
           onContinue={() => navigate("/app")}
           onRetry={() => setLoadKey((k) => k + 1)}

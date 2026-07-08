@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { api } from "../lib/api";
 import type { PieceDetail } from "../lib/api";
 import { StaffView } from "./StaffView";
 import { PianoKeyboard } from "./PianoKeyboard";
+import { MascotBubble } from "./MascotBubble";
+import { pieceIntroMessage } from "../lib/misol";
 
 interface Props {
   pieceId: string;
@@ -11,6 +13,7 @@ interface Props {
 
 export function PieceDetailModal({ pieceId, onClose }: Props) {
   const [piece, setPiece] = useState<PieceDetail | null>(null);
+  const intro = useMemo(() => (piece ? pieceIntroMessage(piece.title) : ""), [piece?.id]);
 
   useEffect(() => {
     setPiece(null);
@@ -47,6 +50,8 @@ export function PieceDetailModal({ pieceId, onClose }: Props) {
             </header>
 
             <div className="px-5 sm:px-6 py-5 grid grid-cols-1 gap-6">
+              <MascotBubble message={intro} mood="cheer" size={44} />
+
               <section>
                 <h3 className="text-xs font-semibold uppercase tracking-wide text-tclas-ink/40 mb-2">Partitura (extracto)</h3>
                 <div className="bg-white/70 rounded-xl border border-tclas-ink/10 p-3 sm:p-4 overflow-x-auto">

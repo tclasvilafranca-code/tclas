@@ -32,10 +32,18 @@ async function main() {
 
   console.log("Creando cuenta de profesora (Azucena)...");
   const teacherPasswordHash = await bcrypt.hash("profesora123", 10);
+  const teacherPinHash = await bcrypt.hash("2311", 10);
+  const teacherAccessFields = { username: "azucenaanguiano", pinHash: teacherPinHash, mustChangePin: false };
   const teacher = await prisma.user.upsert({
     where: { email: "azucena@t-clas.com" },
-    update: {},
-    create: { email: "azucena@t-clas.com", passwordHash: teacherPasswordHash, name: "Azucena", role: "TEACHER" },
+    update: teacherAccessFields,
+    create: {
+      email: "azucena@t-clas.com",
+      passwordHash: teacherPasswordHash,
+      name: "Azucena",
+      role: "TEACHER",
+      ...teacherAccessFields,
+    },
   });
 
   console.log("Creando biblioteca de piezas...");
@@ -128,7 +136,7 @@ async function main() {
   }
 
   console.log("\n¡Listo! Cuentas de acceso:");
-  console.log("  Profesora -> azucena@t-clas.com / profesora123");
+  console.log("  Profesora -> usuario: azucenaanguiano / PIN: 2311");
   if (arnauPin) {
     console.log(`  Arnau (alumno) -> usuario: ${arnauUsername} / PIN: ${arnauPin}`);
   } else {

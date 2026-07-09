@@ -153,6 +153,24 @@ export function IconCheck({ className = "w-5 h-5" }: IconProps) {
   );
 }
 
+export function IconKey({ className = "w-4 h-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={`${BASE} ${className}`} strokeWidth={STROKE} strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="7.5" cy="15.5" r="4" />
+      <path d="M10.5 12.5 19 4M15.5 8l2.5 2.5M18 5.5 20.5 8" />
+    </svg>
+  );
+}
+
+export function IconGear({ className = "w-4 h-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={`${BASE} ${className}`} strokeWidth={STROKE} strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="3" />
+      <path d="M12 3.5v2.4M12 18.1v2.4M20.5 12h-2.4M5.9 12H3.5M17.7 6.3l-1.7 1.7M8 16l-1.7 1.7M17.7 17.7 16 16M8 8 6.3 6.3" />
+    </svg>
+  );
+}
+
 export function IconTarget({ className = "w-5 h-5" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={`${BASE} ${className}`} strokeWidth={STROKE} strokeLinecap="round" strokeLinejoin="round">

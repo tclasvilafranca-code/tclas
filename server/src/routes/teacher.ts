@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "../prisma";
 import { requireAuth, requireRole, AuthedRequest } from "../auth";
-import { buildCurriculumForUser, computePhaseStats } from "../curriculum";
+import { buildCurriculumForUser, computePhaseStats, computePracticeStats } from "../curriculum";
 import { createRepertoireEntryWithLessons, bulkAssignRepertoire } from "../repertoire";
 
 const router = Router();
@@ -45,6 +45,8 @@ router.get("/students", async (req: AuthedRequest, res) => {
       const totalLessons = entries.reduce((a, e) => a + e.lessons.length, 0);
       const lessonIds = entries.flatMap((e) => e.lessons.map((l) => l.id));
       const completedLessons = await prisma.progress.count({ where: { userId: s.id, status: "COMPLETED", lessonId: { in: lessonIds } } });
+      const { last7Days } = await computePracticeStats(s.id, s.studentProfile!.id);
+      const weeklyMinutes = last7Days.reduce((sum, d) => sum + d.minutes, 0);
       return {
         id: s.id,
         name: s.name,
@@ -56,6 +58,8 @@ router.get("/students", async (req: AuthedRequest, res) => {
         piecesAssigned: entries.length,
         completedLessons,
         totalLessons,
+        weeklyMinutes,
+        dailyGoalMinutes: s.studentProfile?.dailyGoalMinutes ?? 15,
       };
     })
   );
@@ -113,7 +117,10 @@ router.get("/students/:id", async (req: AuthedRequest, res) => {
   // Rendimiento por bloque: cuantas respuestas acierta el alumno en cada tipo
   // de bloque de la sesion (agilidad visual, agudeza auditiva, notas al vuelo,
   // practica de partitura), para que la profesora vea en que flaquea de un vistazo.
-  const phaseStats = await computePhaseStats(student.id);
+  const [phaseStats, practiceStats] = await Promise.all([
+    computePhaseStats(student.id),
+    computePracticeStats(student.id, student.studentProfile.id),
+  ]);
 
   res.json({
     id: student.id,
@@ -123,6 +130,7 @@ router.get("/students/:id", async (req: AuthedRequest, res) => {
     curriculum,
     badges: recentBadges.map((b) => ({ code: b.badge.code, name: b.badge.name, icon: b.badge.icon, earnedAt: b.earnedAt })),
     phaseStats,
+    practiceStats,
   });
 });
 

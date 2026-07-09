@@ -5,6 +5,8 @@ import { api } from "../lib/api";
 import type { StudentSummary, AgeGroup, NewStudentCredentials } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 import { ChangePasswordModal } from "../components/ChangePasswordModal";
+import { SetPinAccessModal } from "../components/SetPinAccessModal";
+import { IconGear, IconKey, IconFlame } from "../components/icons";
 
 function timeAgo(dateStr: string | null): string {
   if (!dateStr) return "Sin actividad";
@@ -18,7 +20,7 @@ function timeAgo(dateStr: string | null): string {
 const AGE_GROUP_LABEL: Record<AgeGroup, string> = { KIDS: "Kids (6-11)", TEENS: "Junior (12-17)", ADULTS: "Adultos (18+)" };
 
 export function TeacherDashboard() {
-  const { me, logout } = useAuth();
+  const { me, logout, refresh } = useAuth();
   const [students, setStudents] = useState<StudentSummary[] | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState("");
@@ -26,6 +28,7 @@ export function TeacherDashboard() {
   const [saving, setSaving] = useState(false);
   const [newCreds, setNewCreds] = useState<NewStudentCredentials | null>(null);
   const [showChangePassword, setShowChangePassword] = useState(false);
+  const [showPinAccess, setShowPinAccess] = useState(false);
 
   function load() {
     api.get<StudentSummary[]>("/teacher/students").then(setStudents);
@@ -51,8 +54,11 @@ export function TeacherDashboard() {
       <header className="px-4 py-4 flex items-center justify-between border-b border-tclas-ink/10">
         <div className="font-display text-xl text-tclas-plum">t-clas · Panel de {me?.name}</div>
         <div className="flex items-center gap-3">
-          <button onClick={() => setShowChangePassword(true)} className="text-sm text-tclas-ink/50 hover:text-tclas-ink" title="Cambiar contrasena">
-            ⚙️ Contrasena
+          <button onClick={() => setShowPinAccess(true)} className="flex items-center gap-1.5 text-sm text-tclas-ink/50 hover:text-tclas-ink" title="Entrar con usuario y PIN">
+            <IconKey className="w-4 h-4" /> {me?.username ? "Usuario y PIN" : "Configurar PIN"}
+          </button>
+          <button onClick={() => setShowChangePassword(true)} className="flex items-center gap-1.5 text-sm text-tclas-ink/50 hover:text-tclas-ink" title="Cambiar contrasena">
+            <IconGear className="w-4 h-4" /> Contraseña
           </button>
           <button onClick={logout} className="text-sm text-tclas-ink/50 hover:text-tclas-ink">
             Salir
@@ -61,6 +67,13 @@ export function TeacherDashboard() {
       </header>
 
       {showChangePassword && <ChangePasswordModal onClose={() => setShowChangePassword(false)} />}
+      {showPinAccess && (
+        <SetPinAccessModal
+          currentUsername={me?.username ?? null}
+          onClose={() => setShowPinAccess(false)}
+          onSaved={refresh}
+        />
+      )}
 
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-1">
@@ -132,9 +145,17 @@ export function TeacherDashboard() {
                     </div>
                   )}
                 </div>
-                <div className="text-right text-sm">
+                <div className="text-right text-sm shrink-0">
                   <p className="font-semibold text-tclas-plum">{s.xpTotal} XP</p>
-                  <p className="text-tclas-ink/50">🔥 {s.streakCurrent}</p>
+                  <p className="text-tclas-ink/50 flex items-center justify-end gap-1">
+                    <IconFlame className="w-3.5 h-3.5" /> {s.streakCurrent}
+                  </p>
+                  <p
+                    className={`text-2xs mt-0.5 ${s.weeklyMinutes > 0 ? "text-tclas-sage" : "text-tclas-ink/30"}`}
+                    title="Minutos practicados esta semana"
+                  >
+                    {s.weeklyMinutes} min esta semana
+                  </p>
                 </div>
               </Link>
             );

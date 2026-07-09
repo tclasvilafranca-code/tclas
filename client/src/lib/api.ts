@@ -207,6 +207,8 @@ export interface StudentSummary {
   piecesAssigned: number;
   completedLessons: number;
   totalLessons: number;
+  weeklyMinutes: number;
+  dailyGoalMinutes: number;
 }
 
 export interface PieceLibraryItem {
@@ -253,6 +255,12 @@ export interface BulkRepertoireItem {
   pieceId: string;
   durationWeeks?: number;
   teacherNote?: string;
+}
+
+export interface PracticeStats {
+  totalMinutes: number;
+  last7Days: { date: string; minutes: number }[];
+  piecesCompleted: number;
 }
 
 export interface ProfileStats {

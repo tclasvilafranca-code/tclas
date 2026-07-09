@@ -2,7 +2,7 @@ import { Router } from "express";
 import { z } from "zod";
 import { prisma } from "../prisma";
 import { requireAuth, AuthedRequest } from "../auth";
-import { buildCurriculumForUser, sanitizeExercise, computePhaseStats } from "../curriculum";
+import { buildCurriculumForUser, sanitizeExercise, computePhaseStats, computePracticeStats } from "../curriculum";
 import {
   recomputeHearts,
   loseHeart,
@@ -35,32 +35,18 @@ router.get("/me/profile-stats", requireAuth, async (req: AuthedRequest, res) => 
   const profile = await prisma.studentProfile.findUnique({ where: { userId } });
   if (!profile) return res.status(400).json({ error: "Perfil de alumno no encontrado" });
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const sevenDaysAgo = new Date(today.getTime() - 6 * 86400000);
-
-  const [totalAgg, recentLogs, badgeCount, piecesCompleted, phaseStats] = await Promise.all([
-    prisma.practiceLog.aggregate({ where: { userId }, _sum: { minutes: true } }),
-    prisma.practiceLog.findMany({ where: { userId, date: { gte: sevenDaysAgo } } }),
+  const [practiceStats, badgeCount, phaseStats] = await Promise.all([
+    computePracticeStats(userId, profile.id),
     prisma.userBadge.count({ where: { userId } }),
-    prisma.repertoireEntry.count({ where: { studentId: profile.id, status: "COMPLETED" } }),
     computePhaseStats(userId),
   ]);
 
-  const minutesByDate = new Map(recentLogs.map((l) => [startOfDay(l.date).getTime(), l.minutes]));
-  const last7Days = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(sevenDaysAgo.getTime() + i * 86400000);
-    return { date: d.toISOString().slice(0, 10), minutes: minutesByDate.get(d.getTime()) ?? 0 };
-  });
-
   res.json({
-    totalMinutes: totalAgg._sum.minutes ?? 0,
-    last7Days,
+    ...practiceStats,
     streakCurrent: profile.streakCurrent,
     streakLongest: profile.streakLongest,
     xpTotal: profile.xpTotal,
     badgeCount,
-    piecesCompleted,
     phaseStats,
   });
 });

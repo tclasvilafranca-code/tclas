@@ -2,7 +2,7 @@ import { Router } from "express";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "../prisma";
-import { signToken, requireAuth, AuthedRequest } from "../auth";
+import { signToken, requireAuth, requireRole, AuthedRequest } from "../auth";
 import { recomputeHearts } from "../gamification";
 
 const router = Router();
@@ -56,13 +56,18 @@ router.post("/login", async (req, res) => {
   res.json({ token, user: { id: user.id, email: user.email, name: user.name, role: user.role } });
 });
 
-const studentLoginSchema = z.object({
+const pinLoginSchema = z.object({
   username: z.string().min(1),
   pin: z.string().min(1),
 });
 
-router.post("/student-login", async (req, res) => {
-  const parsed = studentLoginSchema.safeParse(req.body);
+// Entrada por usuario+PIN: pensada originalmente solo para alumnado, pero el
+// mecanismo (buscar por username, comprobar PIN) no depende del rol, asi que
+// tambien sirve para que una profesora entre igual de simple sin email ni
+// contrasena. El rol devuelto es siempre el real de la cuenta (nunca se
+// asume "STUDENT"), para que cada quien llegue a su propio panel.
+router.post("/pin-login", async (req, res) => {
+  const parsed = pinLoginSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Datos invalidos" });
   const { username, pin } = parsed.data;
 
@@ -71,7 +76,7 @@ router.post("/student-login", async (req, res) => {
   const valid = await bcrypt.compare(pin, user.pinHash);
   if (!valid) return res.status(401).json({ error: "Usuario o PIN incorrectos" });
 
-  const token = signToken({ userId: user.id, role: "STUDENT" });
+  const token = signToken({ userId: user.id, role: user.role as "STUDENT" | "TEACHER" });
   res.json({ token, user: { id: user.id, name: user.name, role: user.role, username: user.username } });
 });
 
@@ -96,6 +101,35 @@ router.post("/change-password", requireAuth, async (req: AuthedRequest, res) => 
   const newHash = await bcrypt.hash(parsed.data.newPassword, 10);
   await prisma.user.update({ where: { id: user.id }, data: { passwordHash: newHash } });
   res.json({ ok: true });
+});
+
+const setPinAccessSchema = z.object({
+  username: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .regex(/^[a-z0-9]{3,16}$/, "El usuario debe tener entre 3 y 16 letras/numeros, sin espacios ni simbolos"),
+  pin: z.string().regex(/^\d{4,6}$/, "El PIN debe tener entre 4 y 6 numeros"),
+});
+
+// Autoservicio para que la profesora se ponga (o cambie) su propio usuario+PIN,
+// como el que ya tienen sus alumnos: entra con su email+contrasena de siempre,
+// lo configura una vez, y desde entonces puede entrar tambien con usuario+PIN
+// (ver /auth/pin-login). Solo para profesores: el PIN del alumnado lo gestiona
+// la profesora desde su panel, no cada alumno por su cuenta.
+router.post("/set-pin-access", requireAuth, requireRole("TEACHER"), async (req: AuthedRequest, res) => {
+  const parsed = setPinAccessSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: parsed.error.errors[0]?.message ?? "Datos invalidos" });
+  const { username, pin } = parsed.data;
+
+  const existing = await prisma.user.findUnique({ where: { username } });
+  if (existing && existing.id !== req.auth!.userId) {
+    return res.status(409).json({ error: "Ese usuario ya esta en uso" });
+  }
+
+  const pinHash = await bcrypt.hash(pin, 10);
+  await prisma.user.update({ where: { id: req.auth!.userId }, data: { username, pinHash } });
+  res.json({ ok: true, username });
 });
 
 router.get("/me", requireAuth, async (req: AuthedRequest, res) => {

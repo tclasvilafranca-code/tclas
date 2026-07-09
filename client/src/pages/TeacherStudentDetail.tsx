@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api } from "../lib/api";
-import type { CurriculumTree, StudentProfile, PieceLibraryItem, StudentSummary, AgeGroup, LessonStatus, PhaseStats } from "../lib/api";
+import type { CurriculumTree, StudentProfile, PieceLibraryItem, StudentSummary, AgeGroup, LessonStatus, PhaseStats, PracticeStats } from "../lib/api";
 import { PHASE_LABEL, PHASE_ORDER } from "../lib/phases";
+import { IconFlame, IconClock, IconTarget } from "../components/icons";
 
 interface StudentDetailResponse {
   id: string;
@@ -13,6 +14,16 @@ interface StudentDetailResponse {
   curriculum: CurriculumTree;
   badges: { code: string; name: string; icon: string; earnedAt: string }[];
   phaseStats: PhaseStats;
+  practiceStats: PracticeStats;
+}
+
+const DAY_LETTERS = ["D", "L", "M", "X", "J", "V", "S"];
+
+function formatMinutes(total: number): string {
+  if (total < 60) return `${total} min`;
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+  return m === 0 ? `${h} h` : `${h} h ${m} min`;
 }
 
 interface SelectedPiece {
@@ -201,16 +212,57 @@ export function TeacherStudentDetail() {
             <p className="font-display text-2xl text-tclas-plum">{data.profile.xpTotal}</p>
           </div>
           <div>
-            <p className="text-xs text-tclas-ink/50">Racha actual</p>
-            <p className="font-display text-2xl">🔥 {data.profile.streakCurrent}</p>
+            <p className="text-xs text-tclas-ink/50">Racha actual · récord</p>
+            <p className="font-display text-2xl flex items-center gap-1.5">
+              <IconFlame className="w-5 h-5 text-tclas-gold-shadow" /> {data.profile.streakCurrent} <span className="text-tclas-ink/30 text-lg">· {data.profile.streakLongest}</span>
+            </p>
           </div>
           <div>
-            <p className="text-xs text-tclas-ink/50">Piezas en repertorio</p>
-            <p className="font-semibold">{data.curriculum.pieces.length}</p>
+            <p className="text-xs text-tclas-ink/50">Practicado (total)</p>
+            <p className="font-display text-2xl">{formatMinutes(data.practiceStats.totalMinutes)}</p>
+          </div>
+          <div>
+            <p className="text-xs text-tclas-ink/50">Piezas terminadas</p>
+            <p className="font-semibold text-2xl font-display">{data.practiceStats.piecesCompleted}</p>
           </div>
           <div>
             <p className="text-xs text-tclas-ink/50">Insignias</p>
             <p className="text-xl">{data.badges.map((b) => b.icon).join(" ") || "—"}</p>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="font-display text-xl mb-1 flex items-center gap-2">
+            <IconClock className="w-5 h-5 text-tclas-ink/40" /> Minutos practicados esta semana
+          </h2>
+          <p className="text-xs text-tclas-ink/50 mb-3 flex items-center gap-1.5">
+            <IconTarget className="w-3.5 h-3.5" /> Objetivo diario de {data.name}: {data.profile.dailyGoalMinutes} min
+          </p>
+          <div className="bg-white/70 border border-tclas-ink/10 rounded-xl p-4">
+            {(() => {
+              const maxMinutes = Math.max(1, ...data.practiceStats.last7Days.map((d) => d.minutes));
+              return (
+                <div className="flex items-end justify-between gap-2 h-24">
+                  {data.practiceStats.last7Days.map((d) => {
+                    const date = new Date(d.date + "T00:00:00");
+                    const reachedGoal = d.minutes >= data.profile.dailyGoalMinutes;
+                    const pct = d.minutes === 0 ? 0 : Math.max(8, (d.minutes / maxMinutes) * 100);
+                    return (
+                      <div key={d.date} className="flex-1 flex flex-col items-center justify-end gap-1.5 h-full">
+                        <span className="text-2xs text-tclas-ink/40 tabular-nums">{d.minutes > 0 ? d.minutes : ""}</span>
+                        <div className="w-full rounded-t-md bg-tclas-plum/15 flex items-end" style={{ height: "100%" }}>
+                          <div
+                            className={`w-full rounded-t-md ${reachedGoal ? "bg-tclas-sage" : d.minutes > 0 ? "bg-tclas-gold" : "bg-transparent"}`}
+                            style={{ height: `${pct}%`, transition: "height 300ms ease" }}
+                          />
+                        </div>
+                        <span className="text-2xs font-semibold text-tclas-ink/50">{DAY_LETTERS[date.getDay()]}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
           </div>
         </section>
 

@@ -33,6 +33,34 @@ function startOfDay(date: Date): Date {
   return d;
 }
 
+export interface PracticeStats {
+  totalMinutes: number;
+  last7Days: { date: string; minutes: number }[];
+  piecesCompleted: number;
+}
+
+/** Minutos practicados (total y ultimos 7 dias) y piezas terminadas. Se usa
+ * tanto en el Perfil del propio alumno como en el panel de su profesor/a,
+ * para que ambos vean exactamente los mismos numeros. */
+export async function computePracticeStats(userId: string, studentProfileId: string): Promise<PracticeStats> {
+  const today = startOfDay(new Date());
+  const sevenDaysAgo = new Date(today.getTime() - 6 * 86400000);
+
+  const [totalAgg, recentLogs, piecesCompleted] = await Promise.all([
+    prisma.practiceLog.aggregate({ where: { userId }, _sum: { minutes: true } }),
+    prisma.practiceLog.findMany({ where: { userId, date: { gte: sevenDaysAgo } } }),
+    prisma.repertoireEntry.count({ where: { studentId: studentProfileId, status: "COMPLETED" } }),
+  ]);
+
+  const minutesByDate = new Map(recentLogs.map((l) => [startOfDay(l.date).getTime(), l.minutes]));
+  const last7Days = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(sevenDaysAgo.getTime() + i * 86400000);
+    return { date: d.toISOString().slice(0, 10), minutes: minutesByDate.get(d.getTime()) ?? 0 };
+  });
+
+  return { totalMinutes: totalAgg._sum.minutes ?? 0, last7Days, piecesCompleted };
+}
+
 /**
  * Construye el camino completo de un alumno: su repertorio de piezas, en orden,
  * cada una con sus lecciones semanales. La numeracion de semana es continua a

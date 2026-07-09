@@ -6,9 +6,9 @@ import { MascotBubble } from "../components/MascotBubble";
 import { landingMessage } from "../lib/misol";
 
 export function Landing() {
-  const { loginTeacher, loginStudent } = useAuth();
+  const { loginTeacher, loginWithPin } = useAuth();
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"student" | "teacher">("student");
+  const [useEmailFallback, setUseEmailFallback] = useState(false);
   const [welcome] = useState(landingMessage);
 
   const [email, setEmail] = useState("");
@@ -24,12 +24,15 @@ export function Landing() {
     setError(null);
     setLoading(true);
     try {
-      if (mode === "teacher") {
+      if (useEmailFallback) {
         await loginTeacher(email, password);
         navigate("/teacher");
       } else {
-        await loginStudent(username, pin);
-        navigate("/app");
+        // Usuario+PIN sirve tanto para alumnado como para la profesora: la
+        // app ya sabe a que panel llevar a cada quien por el rol real de su
+        // cuenta, sin tener que elegir de antemano quien eres.
+        const me = await loginWithPin(username, pin);
+        navigate(me.role === "TEACHER" ? "/teacher" : "/app");
       }
     } catch (err: any) {
       setError(err.message || "No se pudo iniciar sesion");
@@ -52,25 +55,8 @@ export function Landing() {
       </div>
 
       <div className="bg-white/70 rounded-2xl p-8 max-w-sm w-full border border-tclas-ink/10">
-        <div className="flex gap-2 mb-5">
-          <button
-            type="button"
-            onClick={() => setMode("student")}
-            className={`flex-1 rounded-lg py-2 text-sm font-semibold border-2 ${mode === "student" ? "border-tclas-plum bg-tclas-plum/10" : "border-tclas-ink/15"}`}
-          >
-            Soy alumno/a
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode("teacher")}
-            className={`flex-1 rounded-lg py-2 text-sm font-semibold border-2 ${mode === "teacher" ? "border-tclas-plum bg-tclas-plum/10" : "border-tclas-ink/15"}`}
-          >
-            Soy profesor/a
-          </button>
-        </div>
-
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          {mode === "student" ? (
+          {!useEmailFallback ? (
             <>
               <input required placeholder="Usuario" value={username} onChange={(e) => setUsername(e.target.value)} className="border border-tclas-ink/20 rounded-lg px-4 py-2" />
               <input required placeholder="PIN" inputMode="numeric" value={pin} onChange={(e) => setPin(e.target.value)} className="border border-tclas-ink/20 rounded-lg px-4 py-2" />
@@ -90,7 +76,19 @@ export function Landing() {
           </button>
         </form>
 
-        {mode === "student" && <p className="text-xs text-tclas-ink/40 mt-4 text-center">Tu usuario y PIN te los da tu profesor/a.</p>}
+        <p className="text-xs text-tclas-ink/40 mt-4 text-center">
+          {!useEmailFallback ? "Tu usuario y PIN te los da tu profesor/a (o los configuraste tu misma)." : "Entrada con email y contrasena."}
+        </p>
+        <button
+          type="button"
+          onClick={() => {
+            setUseEmailFallback((v) => !v);
+            setError(null);
+          }}
+          className="text-xs text-tclas-ink/40 hover:text-tclas-ink/70 underline underline-offset-2 mt-2 block mx-auto"
+        >
+          {!useEmailFallback ? "¿Eres profesora y prefieres entrar con email y contraseña?" : "← Entrar con usuario y PIN"}
+        </button>
       </div>
 
       <footer className="text-center text-xs text-tclas-ink/40">t-clas · Azucena, profesora de piano</footer>

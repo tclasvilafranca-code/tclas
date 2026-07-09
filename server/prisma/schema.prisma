@@ -36,6 +36,20 @@ model User {
   badges           UserBadge[]
   exerciseAttempts ExerciseAttempt[]
   pushSubscriptions PushSubscription[]
+  practiceLogs      PracticeLog[]
+}
+
+// Un registro por alumno y dia, con los minutos practicados ese dia (se sube
+// al terminar cada leccion). Base real para "minutos de estudio" /
+// "tiempo semanal" / graficas de progreso en el Perfil.
+model PracticeLog {
+  id      String   @id @default(cuid())
+  userId  String
+  user    User     @relation(fields: [userId], references: [id])
+  date    DateTime // fecha truncada a medianoche (un registro por dia)
+  minutes Int      @default(0)
+
+  @@unique([userId, date])
 }
 
 model StudentProfile {

@@ -45,6 +45,7 @@ export function Lesson() {
 
   const feedbackRef = useRef<AttemptResult | null>(null);
   const advancingRef = useRef(false);
+  const sessionStartRef = useRef(Date.now());
 
   useEffect(() => {
     if (!id) return;
@@ -55,6 +56,7 @@ export function Lesson() {
     setFeedback(null);
     setCorrectCount(0);
     setResult(null);
+    sessionStartRef.current = Date.now();
     api
       .get<LessonDetail>(`/lessons/${id}`)
       .then(setLesson)
@@ -197,9 +199,11 @@ export function Lesson() {
       setFeedback(null);
     } else {
       const finalCorrect = correctCount;
+      const practiceSeconds = Math.round((Date.now() - sessionStartRef.current) / 1000);
       const res = await api.post<CompleteLessonResult>(`/lessons/${lesson!.id}/complete`, {
         correctCount: finalCorrect,
         totalCount: lesson!.exercises.length,
+        practiceSeconds,
       });
       setResult(res);
       await refresh();

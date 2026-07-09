@@ -28,6 +28,43 @@ router.get("/me/stats", requireAuth, async (req: AuthedRequest, res) => {
   res.json({ phaseStats });
 });
 
+// Estadisticas para la pantalla de Perfil: minutos practicados (total y ultimos
+// 7 dias), racha, XP, insignias y piezas terminadas.
+router.get("/me/profile-stats", requireAuth, async (req: AuthedRequest, res) => {
+  const userId = req.auth!.userId;
+  const profile = await prisma.studentProfile.findUnique({ where: { userId } });
+  if (!profile) return res.status(400).json({ error: "Perfil de alumno no encontrado" });
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const sevenDaysAgo = new Date(today.getTime() - 6 * 86400000);
+
+  const [totalAgg, recentLogs, badgeCount, piecesCompleted, phaseStats] = await Promise.all([
+    prisma.practiceLog.aggregate({ where: { userId }, _sum: { minutes: true } }),
+    prisma.practiceLog.findMany({ where: { userId, date: { gte: sevenDaysAgo } } }),
+    prisma.userBadge.count({ where: { userId } }),
+    prisma.repertoireEntry.count({ where: { studentId: profile.id, status: "COMPLETED" } }),
+    computePhaseStats(userId),
+  ]);
+
+  const minutesByDate = new Map(recentLogs.map((l) => [startOfDay(l.date).getTime(), l.minutes]));
+  const last7Days = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(sevenDaysAgo.getTime() + i * 86400000);
+    return { date: d.toISOString().slice(0, 10), minutes: minutesByDate.get(d.getTime()) ?? 0 };
+  });
+
+  res.json({
+    totalMinutes: totalAgg._sum.minutes ?? 0,
+    last7Days,
+    streakCurrent: profile.streakCurrent,
+    streakLongest: profile.streakLongest,
+    xpTotal: profile.xpTotal,
+    badgeCount,
+    piecesCompleted,
+    phaseStats,
+  });
+});
+
 // Repaso espaciado: piezas ya terminadas cuyo proximo repaso ya ha llegado.
 // Para cada una, propone la leccion donde peor precision tuvo (su punto mas debil).
 router.get("/reviews/due", requireAuth, async (req: AuthedRequest, res) => {
@@ -159,12 +196,21 @@ const REVIEW_XP = 5;
 const completeSchema = z.object({
   correctCount: z.number().int().min(0),
   totalCount: z.number().int().min(1),
+  practiceSeconds: z.number().min(0).optional(),
 });
+
+// Trunca una fecha a medianoche (hora local del servidor), para agrupar
+// la practica en un registro por dia (ver PracticeLog en schema.prisma).
+function startOfDay(d: Date): Date {
+  const truncated = new Date(d);
+  truncated.setHours(0, 0, 0, 0);
+  return truncated;
+}
 
 router.post("/lessons/:id/complete", requireAuth, async (req: AuthedRequest, res) => {
   const parsed = completeSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Datos invalidos" });
-  const { correctCount, totalCount } = parsed.data;
+  const { correctCount, totalCount, practiceSeconds } = parsed.data;
 
   const lesson = await prisma.lesson.findUnique({ where: { id: req.params.id }, include: { repertoireEntry: true } });
   if (!lesson) return res.status(404).json({ error: "Leccion no encontrada" });
@@ -245,6 +291,16 @@ router.post("/lessons/:id/complete", requireAuth, async (req: AuthedRequest, res
     profile = await registerDailyActivity(profile);
   }
   profile = profile ? await recomputeHearts(profile) : profile;
+
+  if (practiceSeconds && practiceSeconds > 0) {
+    const minutes = Math.max(1, Math.round(practiceSeconds / 60));
+    const date = startOfDay(new Date());
+    await prisma.practiceLog.upsert({
+      where: { userId_date: { userId, date } },
+      create: { userId, date, minutes },
+      update: { minutes: { increment: minutes } },
+    });
+  }
 
   res.json({ progress, stars, score: precisionScore, xpAwarded, profile, newBadges, isReview });
 });

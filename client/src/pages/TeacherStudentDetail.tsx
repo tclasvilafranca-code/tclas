@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { api } from "../lib/api";
 import type { CurriculumTree, StudentProfile, PieceLibraryItem, StudentSummary, AgeGroup, LessonStatus, PhaseStats, PracticeStats, Message, Challenge } from "../lib/api";
 import { PHASE_LABEL, PHASE_ORDER } from "../lib/phases";
-import { IconFlame, IconClock, IconTarget, IconChat, IconCheck } from "../components/icons";
+import { IconFlame, IconClock, IconTarget, IconChat, IconCheck, IconCalendarDate } from "../components/icons";
 import { MessageThread } from "../components/MessageThread";
 
 interface StudentDetailResponse {
@@ -117,6 +117,24 @@ export function TeacherStudentDetail() {
     if (!id) return;
     const message = await api.post<Message>(`/teacher/students/${id}/messages`, { body });
     setMessages((prev) => [...(prev ?? []), message]);
+  }
+
+  const [nextClassDate, setNextClassDate] = useState("");
+  const [savingNextClass, setSavingNextClass] = useState(false);
+  useEffect(() => {
+    setNextClassDate(data?.profile.nextClassAt ? data.profile.nextClassAt.slice(0, 10) : "");
+  }, [data?.profile.nextClassAt]);
+
+  async function saveNextClass(dateStr: string) {
+    if (!id) return;
+    setSavingNextClass(true);
+    try {
+      await api.patch(`/teacher/students/${id}/next-class`, { date: dateStr ? new Date(dateStr).toISOString() : null });
+      setNextClassDate(dateStr);
+      setData((d) => (d ? { ...d, profile: { ...d.profile, nextClassAt: dateStr ? new Date(dateStr).toISOString() : null } } : d));
+    } finally {
+      setSavingNextClass(false);
+    }
   }
 
   const assignedPieceIds = new Set(data?.curriculum.pieces.map((p) => p.piece.id));
@@ -244,6 +262,27 @@ export function TeacherStudentDetail() {
           <div>
             <p className="text-xs text-tclas-ink/50">Insignias</p>
             <p className="text-xl">{data.badges.map((b) => b.icon).join(" ") || "—"}</p>
+          </div>
+        </section>
+
+        <section className="bg-white/70 border border-tclas-ink/10 rounded-xl p-5 flex flex-wrap items-center gap-4">
+          <IconCalendarDate className="w-6 h-6 text-tclas-plum/60 shrink-0" />
+          <div className="flex-1 min-w-[12rem]">
+            <p className="text-xs text-tclas-ink/50 mb-1">Próxima clase presencial con {data.name}</p>
+            <div className="flex items-center gap-2">
+              <input
+                type="date"
+                value={nextClassDate}
+                onChange={(e) => saveNextClass(e.target.value)}
+                disabled={savingNextClass}
+                className="border border-tclas-ink/20 rounded-lg px-3 py-1.5 text-sm"
+              />
+              {nextClassDate && (
+                <button onClick={() => saveNextClass("")} className="text-xs text-tclas-rose hover:underline" disabled={savingNextClass}>
+                  Quitar
+                </button>
+              )}
+            </div>
           </div>
         </section>
 

@@ -86,6 +86,7 @@ export interface StudentProfile {
   onboarded: boolean;
   lastActivityDate: string | null;
   heartsUpdatedAt: string;
+  nextClassAt: string | null;
 }
 
 export interface Me {
@@ -225,6 +226,7 @@ export interface StudentSummary {
   unreadMessages: number;
   challengesCompleted: number;
   challengesTotal: number;
+  nextClassAt: string | null;
 }
 
 export interface Message {

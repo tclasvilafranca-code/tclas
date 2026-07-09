@@ -69,6 +69,7 @@ router.get("/students", async (req: AuthedRequest, res) => {
         unreadMessages,
         challengesCompleted,
         challengesTotal: challenges.length,
+        nextClassAt: s.studentProfile?.nextClassAt ?? null,
       };
     })
   );
@@ -185,6 +186,24 @@ router.get("/pieces", async (req, res) => {
       iconEmoji: p.iconEmoji,
     }))
   );
+});
+
+const nextClassSchema = z.object({ date: z.string().nullable() });
+
+// Fecha de la proxima clase presencial: la pone la profesora a mano (no hay
+// un sistema de reservas, solo un recordatorio simple para el alumno).
+router.patch("/students/:id/next-class", async (req: AuthedRequest, res) => {
+  const parsed = nextClassSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "Fecha invalida" });
+
+  const student = await findOwnedStudent(req.params.id, req.auth!.userId);
+  if (!student?.studentProfile) return res.status(404).json({ error: "Alumno no encontrado" });
+
+  await prisma.studentProfile.update({
+    where: { id: student.studentProfile.id },
+    data: { nextClassAt: parsed.data.date ? new Date(parsed.data.date) : null },
+  });
+  res.json({ ok: true });
 });
 
 const assignSchema = z.object({

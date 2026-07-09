@@ -6,7 +6,7 @@ import type { StudentSummary, AgeGroup, NewStudentCredentials } from "../lib/api
 import { useAuth } from "../context/AuthContext";
 import { ChangePasswordModal } from "../components/ChangePasswordModal";
 import { SetPinAccessModal } from "../components/SetPinAccessModal";
-import { IconGear, IconKey, IconFlame, IconChat } from "../components/icons";
+import { IconGear, IconKey, IconFlame, IconChat, IconCalendarDate } from "../components/icons";
 
 function timeAgo(dateStr: string | null): string {
   if (!dateStr) return "Sin actividad";
@@ -15,6 +15,17 @@ function timeAgo(dateStr: string | null): string {
   if (days <= 0) return "Hoy";
   if (days === 1) return "Ayer";
   return `Hace ${days} dias`;
+}
+
+function formatNextClass(dateStr: string | null): string | null {
+  if (!dateStr) return null;
+  const d = new Date(dateStr);
+  const days = Math.round((d.setHours(0, 0, 0, 0) - new Date().setHours(0, 0, 0, 0)) / 86400000);
+  const dateLabel = d.toLocaleDateString("es-ES", { day: "numeric", month: "short" });
+  if (days === 0) return `Hoy (${dateLabel})`;
+  if (days === 1) return `Mañana (${dateLabel})`;
+  if (days > 1) return dateLabel;
+  return `${dateLabel} (pasada)`;
 }
 
 const AGE_GROUP_LABEL: Record<AgeGroup, string> = { KIDS: "Kids (6-11)", TEENS: "Junior (12-17)", ADULTS: "Adultos (18+)" };
@@ -147,6 +158,11 @@ export function TeacherDashboard() {
                   <p className="text-xs text-tclas-ink/50">
                     {s.ageGroup ? AGE_GROUP_LABEL[s.ageGroup] : ""} · {s.piecesAssigned} piezas · {timeAgo(s.lastActivityDate)}
                   </p>
+                  {formatNextClass(s.nextClassAt) && (
+                    <p className="text-2xs text-tclas-plum flex items-center gap-1 mt-0.5">
+                      <IconCalendarDate className="w-3 h-3" /> Próxima clase: {formatNextClass(s.nextClassAt)}
+                    </p>
+                  )}
                   {s.totalLessons > 0 && (
                     <div className="h-1.5 bg-tclas-ink/10 rounded-full mt-2 overflow-hidden max-w-xs">
                       <div className="h-full bg-tclas-gold" style={{ width: `${pct}%` }} />

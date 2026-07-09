@@ -106,6 +106,7 @@ model StudentProfile {
   dailyGoalMinutes Int       @default(15)
   lastActivityDate DateTime?
   lastReminderSentAt DateTime? // ultima vez que se le envio un recordatorio de practica (push), para no mandar mas de uno al dia
+  nextClassAt      DateTime? // proxima clase presencial con su profesor/a, la pone la profesora a mano
   onboarded        Boolean   @default(false)
   createdAt        DateTime  @default(now())
 

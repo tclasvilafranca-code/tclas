@@ -9,6 +9,7 @@ import { ReviewBanner } from "../components/ReviewBanner";
 import { NotificationsToggle } from "../components/NotificationsToggle";
 import { DailyGoalRing } from "../components/DailyGoalRing";
 import { WeeklyChallenges } from "../components/WeeklyChallenges";
+import { UpcomingAgenda } from "../components/UpcomingAgenda";
 import { Skeleton } from "../components/Skeleton";
 import { IconFlame, IconPlay } from "../components/icons";
 import { greetingMessage } from "../lib/misol";
@@ -98,6 +99,8 @@ export function Inicio() {
       )}
 
       {tree && <WeeklyChallenges />}
+
+      {tree && <UpcomingAgenda tree={tree} nextClassAt={me.studentProfile.nextClassAt} />}
 
       {tree && !next && tree.pieces.length > 0 && (
         <p className="text-center text-sm text-tclas-ink/50 max-w-md mx-auto mt-4">

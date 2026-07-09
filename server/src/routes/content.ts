@@ -65,6 +65,19 @@ router.get("/me/profile-stats", requireAuth, async (req: AuthedRequest, res) => 
   });
 });
 
+const dailyGoalSchema = z.object({ dailyGoalMinutes: z.number().int().min(5).max(180) });
+
+router.patch("/me/daily-goal", requireAuth, async (req: AuthedRequest, res) => {
+  const parsed = dailyGoalSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "Objetivo invalido (entre 5 y 180 minutos)" });
+
+  const profile = await prisma.studentProfile.update({
+    where: { userId: req.auth!.userId },
+    data: { dailyGoalMinutes: parsed.data.dailyGoalMinutes },
+  });
+  res.json({ dailyGoalMinutes: profile.dailyGoalMinutes });
+});
+
 // Repaso espaciado: piezas ya terminadas cuyo proximo repaso ya ha llegado.
 // Para cada una, propone la leccion donde peor precision tuvo (su punto mas debil).
 router.get("/reviews/due", requireAuth, async (req: AuthedRequest, res) => {

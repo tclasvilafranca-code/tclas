@@ -82,6 +82,7 @@ export interface StudentProfile {
   heartsMax: number;
   streakCurrent: number;
   streakLongest: number;
+  dailyGoalMinutes: number;
   onboarded: boolean;
   lastActivityDate: string | null;
   heartsUpdatedAt: string;

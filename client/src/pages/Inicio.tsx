@@ -7,6 +7,7 @@ import { MascotBubble } from "../components/MascotBubble";
 import { StreakCalendar } from "../components/StreakCalendar";
 import { ReviewBanner } from "../components/ReviewBanner";
 import { NotificationsToggle } from "../components/NotificationsToggle";
+import { DailyGoalRing } from "../components/DailyGoalRing";
 import { greetingMessage } from "../lib/misol";
 
 interface NextLesson {
@@ -24,7 +25,7 @@ function findNextLesson(tree: CurriculumTree): NextLesson | null {
 }
 
 export function Inicio() {
-  const { me } = useAuth();
+  const { me, refresh } = useAuth();
   const [tree, setTree] = useState<CurriculumTree | null>(null);
   const [reviewsDue, setReviewsDue] = useState<ReviewDue[]>([]);
   const [stats, setStats] = useState<ProfileStats | null>(null);
@@ -48,11 +49,12 @@ export function Inicio() {
       <StreakCalendar streakCurrent={me.studentProfile.streakCurrent} lastActivityDate={me.studentProfile.lastActivityDate} />
 
       <div className="max-w-md mx-auto grid grid-cols-2 gap-3 mt-5 mb-6">
-        <div className="bg-white/70 border border-tclas-ink/10 rounded-xl px-4 py-3 text-center">
-          <p className="text-2xl font-display text-tclas-plum">{minutesToday}</p>
-          <p className="text-[11px] uppercase tracking-wide text-tclas-ink/40">min. practicados hoy</p>
-        </div>
-        <div className="bg-white/70 border border-tclas-ink/10 rounded-xl px-4 py-3 text-center">
+        <DailyGoalRing
+          minutesToday={minutesToday}
+          goalMinutes={me.studentProfile.dailyGoalMinutes}
+          onGoalChange={() => refresh()}
+        />
+        <div className="bg-white/70 border border-tclas-ink/10 rounded-xl px-4 py-3 flex flex-col items-center justify-center text-center">
           <p className="text-2xl font-display text-tclas-gold-shadow">{me.studentProfile.streakCurrent}🔥</p>
           <p className="text-[11px] uppercase tracking-wide text-tclas-ink/40">días de racha</p>
         </div>

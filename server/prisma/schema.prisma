@@ -66,6 +66,7 @@ model StudentProfile {
   heartsUpdatedAt  DateTime  @default(now())
   streakCurrent    Int       @default(0)
   streakLongest    Int       @default(0)
+  dailyGoalMinutes Int       @default(15)
   lastActivityDate DateTime?
   lastReminderSentAt DateTime? // ultima vez que se le envio un recordatorio de practica (push), para no mandar mas de uno al dia
   onboarded        Boolean   @default(false)

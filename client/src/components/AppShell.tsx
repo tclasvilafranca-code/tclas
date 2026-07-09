@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { GamificationBar } from "./GamificationBar";
 import { BottomNav } from "./BottomNav";
@@ -8,6 +8,7 @@ import { BottomNav } from "./BottomNav";
 // contenido de la seccion en medio, navegacion inferior siempre visible abajo.
 export function AppShell() {
   const { me, logout } = useAuth();
+  const location = useLocation();
   if (!me?.studentProfile) return null;
 
   return (
@@ -20,7 +21,9 @@ export function AppShell() {
         </button>
       </header>
 
-      <Outlet />
+      <div key={location.pathname} className="animate-page-enter">
+        <Outlet />
+      </div>
 
       <BottomNav />
     </div>

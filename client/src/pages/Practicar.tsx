@@ -3,6 +3,31 @@ import { api } from "../lib/api";
 import type { CurriculumTree, PieceDetail, RepertoireNode } from "../lib/api";
 import { PieceDetailContent } from "../components/PieceDetailContent";
 import { MascotBubble } from "../components/MascotBubble";
+import { Skeleton } from "../components/Skeleton";
+import { IconCheck } from "../components/icons";
+
+function PieceGridSkeleton() {
+  return (
+    <div className="max-w-md mx-auto grid grid-cols-2 gap-3">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div key={i} className="flex flex-col items-center gap-2 bg-white/60 border border-tclas-ink/10 rounded-2xl px-3 py-4">
+          <Skeleton className="w-9 h-9 rounded-full" />
+          <Skeleton className="h-3 w-20" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PieceDetailSkeleton() {
+  return (
+    <div className="max-w-2xl mx-auto flex flex-col gap-3">
+      <Skeleton className="h-40 w-full rounded-xl" />
+      <Skeleton className="h-40 w-full rounded-xl" />
+      <Skeleton className="h-24 w-full rounded-xl mt-3" />
+    </div>
+  );
+}
 
 // Seccion de practica libre: elige cualquier pieza que ya hayas empezado (o
 // terminado) y prueba su partitura y su piano sin exigencias ni corazones en
@@ -38,9 +63,7 @@ export function Practicar() {
             </h1>
           </div>
         </div>
-        <div className="max-w-2xl mx-auto">
-          {!piece ? <p className="text-center py-16 text-tclas-ink/50">Cargando partitura...</p> : <PieceDetailContent piece={piece} showIntro={false} />}
-        </div>
+        {!piece ? <PieceDetailSkeleton /> : <div className="max-w-2xl mx-auto"><PieceDetailContent piece={piece} showIntro={false} /></div>}
       </main>
     );
   }
@@ -52,7 +75,7 @@ export function Practicar() {
         <p className="text-sm text-tclas-ink/50">Elige una pieza y tócala libremente, sin corazones ni presión.</p>
       </div>
 
-      {!tree && <p className="text-center mt-16 text-tclas-ink/50">Cargando...</p>}
+      {!tree && <PieceGridSkeleton />}
 
       {tree && practicable.length === 0 && (
         <div className="max-w-sm mx-auto text-center mt-10">
@@ -75,7 +98,11 @@ export function Practicar() {
             >
               <span className="text-3xl">{entry.piece.iconEmoji}</span>
               <span className="text-sm font-semibold leading-tight line-clamp-2">{entry.piece.title}</span>
-              {entry.status === "COMPLETED" && <span className="text-[10px] text-tclas-sage font-semibold">✓ Completada</span>}
+              {entry.status === "COMPLETED" && (
+                <span className="flex items-center gap-1 text-[10px] text-tclas-sage font-semibold">
+                  <IconCheck className="w-3 h-3" /> Completada
+                </span>
+              )}
             </button>
           ))}
         </div>

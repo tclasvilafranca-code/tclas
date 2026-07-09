@@ -1,5 +1,6 @@
 import type { RepertoireNode } from "../lib/api";
 import { msUntilNextHeart, formatCountdown } from "../lib/hearts";
+import { IconStar, IconHeart, IconCalendarDate, IconLock, IconPlay } from "./icons";
 
 interface Props {
   pieces: RepertoireNode[];
@@ -107,15 +108,19 @@ export function PathMap({ pieces, onOpenLesson, onOpenPiece, heartsCurrent, hear
                       }`}
                   >
                     {completed ? (
-                      <span className="text-xl">{"★".repeat(lesson.stars)}</span>
+                      <span className="flex gap-0.5">
+                        {Array.from({ length: lesson.stars }).map((_, si) => (
+                          <IconStar key={si} className="w-4 h-4" />
+                        ))}
+                      </span>
                     ) : noHearts ? (
-                      <span className="text-2xl">♡</span>
+                      <IconHeart className="w-7 h-7" filled={false} />
                     ) : scheduled ? (
-                      <span className="text-2xl">📅</span>
+                      <IconCalendarDate className="w-7 h-7" />
                     ) : locked ? (
-                      <span className="text-2xl">🔒</span>
+                      <IconLock className="w-7 h-7" />
                     ) : (
-                      <span className="text-2xl">▶</span>
+                      <IconPlay className="w-7 h-7 ml-0.5" />
                     )}
                   </button>
                   <p className="relative z-10 text-center text-[11px] text-tclas-ink/50 mt-1 w-24 leading-tight">

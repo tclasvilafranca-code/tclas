@@ -11,6 +11,7 @@ import { correctMessage, wrongMessage } from "../lib/misol";
 import { msUntilNextHeart, formatCountdown } from "../lib/hearts";
 import { timerSecondsFor, autoAdvanceDelayFor } from "../lib/pacing";
 import { PHASE_LABEL } from "../lib/phases";
+import { Skeleton } from "../components/Skeleton";
 
 // Segundos de respuesta para los tipos de pregunta rapida (opcion multiple/escribir).
 // Los demas tipos (tocar, ritmo, relacionar, ordenar, tramos...) llevan su propio ritmo.
@@ -171,7 +172,23 @@ export function Lesson() {
     );
   }
 
-  if (!lesson || !exercise) return <p className="text-center mt-16 text-tclas-ink/50">Cargando leccion...</p>;
+  if (!lesson || !exercise) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <div className="px-4 py-4 flex items-center gap-4 border-b border-tclas-ink/10">
+          <Skeleton className="w-6 h-6 rounded-full" />
+          <Skeleton className="flex-1 h-3 rounded-full" />
+        </div>
+        <div className="flex-1 flex items-center justify-center px-4 py-10">
+          <div className="w-full max-w-xl flex flex-col items-center gap-4">
+            <Skeleton className="h-3 w-40" />
+            <Skeleton className="h-5 w-56" />
+            <Skeleton className="h-52 w-full rounded-2xl mt-4" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const progressPct = Math.round((index / lesson.exercises.length) * 100);
   const phase = PHASE_LABEL[exercise.phase] ?? PHASE_LABEL.SHEET_PRACTICE;

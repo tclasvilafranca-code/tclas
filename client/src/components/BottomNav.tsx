@@ -1,10 +1,11 @@
 import { NavLink } from "react-router-dom";
+import { IconHome, IconPath, IconPiano, IconProfile } from "./icons";
 
 const TABS = [
-  { to: "/app", label: "Inicio", icon: "🏠", end: true },
-  { to: "/app/aprender", label: "Aprender", icon: "🗺️", end: false },
-  { to: "/app/practicar", label: "Practicar", icon: "🎹", end: false },
-  { to: "/app/perfil", label: "Perfil", icon: "⭐", end: false },
+  { to: "/app", label: "Inicio", Icon: IconHome, end: true },
+  { to: "/app/aprender", label: "Aprender", Icon: IconPath, end: false },
+  { to: "/app/practicar", label: "Practicar", Icon: IconPiano, end: false },
+  { to: "/app/perfil", label: "Perfil", Icon: IconProfile, end: false },
 ];
 
 // Barra de navegacion inferior persistente (estilo Duolingo): siempre visible
@@ -30,7 +31,7 @@ export function BottomNav() {
           >
             {({ isActive }) => (
               <>
-                <span className={`text-xl leading-none transition-transform ${isActive ? "scale-110" : ""}`}>{tab.icon}</span>
+                <tab.Icon className={`w-6 h-6 transition-transform ${isActive ? "scale-110" : ""}`} />
                 {tab.label}
               </>
             )}

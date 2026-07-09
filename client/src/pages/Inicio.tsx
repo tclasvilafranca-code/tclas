@@ -8,6 +8,8 @@ import { StreakCalendar } from "../components/StreakCalendar";
 import { ReviewBanner } from "../components/ReviewBanner";
 import { NotificationsToggle } from "../components/NotificationsToggle";
 import { DailyGoalRing } from "../components/DailyGoalRing";
+import { Skeleton } from "../components/Skeleton";
+import { IconFlame, IconPlay } from "../components/icons";
 import { greetingMessage } from "../lib/misol";
 
 interface NextLesson {
@@ -55,7 +57,9 @@ export function Inicio() {
           onGoalChange={() => refresh()}
         />
         <div className="bg-white/70 border border-tclas-ink/10 rounded-xl px-4 py-3 flex flex-col items-center justify-center text-center">
-          <p className="text-2xl font-display text-tclas-gold-shadow">{me.studentProfile.streakCurrent}🔥</p>
+          <p className="flex items-center gap-1.5 text-2xl font-display text-tclas-gold-shadow">
+            {me.studentProfile.streakCurrent} <IconFlame className="w-5 h-5" />
+          </p>
           <p className="text-[11px] uppercase tracking-wide text-tclas-ink/40">días de racha</p>
         </div>
       </div>
@@ -66,7 +70,16 @@ export function Inicio() {
 
       <ReviewBanner due={reviewsDue} onOpenLesson={(id) => navigate(`/app/lesson/${id}`)} />
 
-      {!tree && <p className="text-center mt-10 text-tclas-ink/50">Cargando tu camino musical...</p>}
+      {!tree && (
+        <div className="w-full max-w-md mx-auto flex items-center gap-4 rounded-2xl px-5 py-4 bg-white/70 border border-tclas-ink/10">
+          <Skeleton className="w-11 h-11 rounded-full shrink-0" />
+          <div className="flex-1 min-w-0 flex flex-col gap-2">
+            <Skeleton className="h-2.5 w-24" />
+            <Skeleton className="h-4 w-40" />
+            <Skeleton className="h-2.5 w-32" />
+          </div>
+        </div>
+      )}
 
       {tree && next && (
         <button
@@ -79,7 +92,7 @@ export function Inicio() {
             <span className="block font-display text-lg leading-tight truncate">{next.pieceTitle}</span>
             <span className="block text-xs text-tclas-cream/70">Semana {next.lesson.weekNumber} · {next.lesson.title}</span>
           </span>
-          <span className="text-tclas-cream text-2xl shrink-0">▶</span>
+          <IconPlay className="text-tclas-cream w-6 h-6 shrink-0" />
         </button>
       )}
 
@@ -90,7 +103,14 @@ export function Inicio() {
       )}
 
       {tree && tree.pieces.length === 0 && (
-        <p className="text-center text-tclas-ink/50 mt-16">Todavía no tienes piezas asignadas. ¡Pronto tu profesor/a añadirá tu repertorio!</p>
+        <div className="max-w-sm mx-auto mt-10">
+          <MascotBubble
+            message="Todavía no tienes piezas asignadas. En cuanto tu profesor/a añada tu repertorio, aparecerá aquí."
+            mood="encourage"
+            align="center"
+            className="justify-center text-left"
+          />
+        </div>
       )}
     </main>
   );

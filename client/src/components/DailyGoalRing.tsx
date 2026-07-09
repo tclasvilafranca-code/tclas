@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api } from "../lib/api";
+import { IconCheck } from "./icons";
 
 interface Props {
   minutesToday: number;
@@ -50,7 +51,7 @@ export function DailyGoalRing({ minutesToday, goalMinutes, onGoalChange }: Props
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-lg font-display leading-none">{reached ? "🎯" : minutesToday}</span>
+          {reached ? <IconCheck className="w-6 h-6 text-tclas-sage" /> : <span className="text-lg font-display leading-none">{minutesToday}</span>}
           {!reached && <span className="text-[9px] text-tclas-ink/40">de {goalMinutes}</span>}
         </div>
       </div>

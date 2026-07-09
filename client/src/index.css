@@ -72,6 +72,16 @@ h1, h2, h3, .font-display {
   opacity: 0.5;
 }
 
+/* Transicion suave al cambiar de seccion (Inicio/Aprender/Practicar/Perfil),
+   para que la navegacion se sienta con intencion y no un salto brusco. */
+@keyframes page-enter {
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-page-enter {
+  animation: page-enter 0.22s ease-out;
+}
+
 @keyframes confetti-fall {
   0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
   100% { transform: translateY(220px) rotate(540deg); opacity: 0; }
@@ -81,6 +91,6 @@ h1, h2, h3, .font-display {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-confetti, .animate-pop-in, .animate-float-up { animation: none !important; }
+  .animate-confetti, .animate-pop-in, .animate-float-up, .animate-page-enter { animation: none !important; }
   .btn-push { transition: none; }
 }

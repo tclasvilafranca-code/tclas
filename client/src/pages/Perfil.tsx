@@ -5,6 +5,8 @@ import { useAuth } from "../context/AuthContext";
 import { StreakCalendar } from "../components/StreakCalendar";
 import { MyPerformance } from "../components/MyPerformance";
 import { MascotOwl } from "../components/MascotOwl";
+import { IconClock, IconStar, IconTrophy } from "../components/icons";
+import { Skeleton } from "../components/Skeleton";
 
 const DAY_LETTERS = ["D", "L", "M", "X", "J", "V", "S"];
 
@@ -19,10 +21,14 @@ export function Perfil() {
   const { me } = useAuth();
   const [stats, setStats] = useState<ProfileStats | null>(null);
   const [badges, setBadges] = useState<Badge[]>([]);
+  const [badgesLoaded, setBadgesLoaded] = useState(false);
 
   useEffect(() => {
     api.get<ProfileStats>("/me/profile-stats").then(setStats);
-    api.get<Badge[]>("/badges").then(setBadges);
+    api.get<Badge[]>("/badges").then((b) => {
+      setBadges(b);
+      setBadgesLoaded(true);
+    });
   }, []);
 
   if (!me?.studentProfile) return null;
@@ -39,16 +45,19 @@ export function Perfil() {
 
       <div className="max-w-md mx-auto grid grid-cols-3 gap-3 mb-6">
         <div className="bg-white/70 border border-tclas-ink/10 rounded-xl px-3 py-3 text-center">
-          <p className="text-xl font-display text-tclas-plum">{stats ? formatMinutes(stats.totalMinutes) : "…"}</p>
-          <p className="text-[10px] uppercase tracking-wide text-tclas-ink/40">practicados</p>
+          <IconClock className="w-4 h-4 mx-auto mb-1 text-tclas-plum/50" />
+          {stats ? <p className="text-xl font-display text-tclas-plum">{formatMinutes(stats.totalMinutes)}</p> : <Skeleton className="h-6 w-12 mx-auto" />}
+          <p className="text-[10px] uppercase tracking-wide text-tclas-ink/40 mt-1">practicados</p>
         </div>
         <div className="bg-white/70 border border-tclas-ink/10 rounded-xl px-3 py-3 text-center">
+          <IconStar className="w-4 h-4 mx-auto mb-1 text-tclas-gold-shadow/60" />
           <p className="text-xl font-display text-tclas-gold-shadow">{me.studentProfile.xpTotal}</p>
           <p className="text-[10px] uppercase tracking-wide text-tclas-ink/40">XP total</p>
         </div>
         <div className="bg-white/70 border border-tclas-ink/10 rounded-xl px-3 py-3 text-center">
-          <p className="text-xl font-display text-tclas-sage">{stats?.piecesCompleted ?? "…"}</p>
-          <p className="text-[10px] uppercase tracking-wide text-tclas-ink/40">piezas terminadas</p>
+          <IconTrophy className="w-4 h-4 mx-auto mb-1 text-tclas-sage/60" />
+          {stats ? <p className="text-xl font-display text-tclas-sage">{stats.piecesCompleted}</p> : <Skeleton className="h-6 w-6 mx-auto" />}
+          <p className="text-[10px] uppercase tracking-wide text-tclas-ink/40 mt-1">piezas terminadas</p>
         </div>
       </div>
 
@@ -67,7 +76,11 @@ export function Perfil() {
         <h2 className="text-xs font-semibold uppercase tracking-wide text-tclas-ink/40 mb-2 px-1">Minutos practicados esta semana</h2>
         <div className="bg-white/70 border border-tclas-ink/10 rounded-xl p-4">
           {!stats ? (
-            <p className="text-center text-sm text-tclas-ink/40 py-4">Cargando...</p>
+            <div className="flex items-end justify-between gap-2 h-28">
+              {Array.from({ length: 7 }).map((_, i) => (
+                <Skeleton key={i} className="flex-1" style={{ height: `${30 + ((i * 17) % 60)}%` }} />
+              ))}
+            </div>
           ) : (
             <div className="flex items-end justify-between gap-2 h-28">
               {stats.last7Days.map((d) => {
@@ -99,7 +112,16 @@ export function Perfil() {
         <h2 className="text-xs font-semibold uppercase tracking-wide text-tclas-ink/40 mb-2 px-1">
           Insignias {badges.length > 0 && `(${badges.length})`}
         </h2>
-        {badges.length === 0 ? (
+        {!badgesLoaded ? (
+          <div className="grid grid-cols-3 gap-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="bg-white/70 border border-tclas-ink/10 rounded-xl p-3 text-center flex flex-col items-center gap-1.5">
+                <Skeleton className="w-8 h-8 rounded-full" />
+                <Skeleton className="h-2.5 w-12" />
+              </div>
+            ))}
+          </div>
+        ) : badges.length === 0 ? (
           <p className="text-sm text-tclas-ink/40 bg-white/70 border border-tclas-ink/10 rounded-xl p-4 text-center">
             Todavía no has ganado ninguna insignia. ¡Sigue practicando!
           </p>

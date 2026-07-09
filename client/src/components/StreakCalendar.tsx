@@ -1,3 +1,5 @@
+import { IconFlame } from "./icons";
+
 interface Props {
   streakCurrent: number;
   lastActivityDate: string | null;
@@ -34,7 +36,7 @@ export function StreakCalendar({ streakCurrent, lastActivityDate }: Props) {
               ${d.lit ? "bg-tclas-gold/20" : "bg-tclas-ink/5"}
               ${d.isToday && !d.lit ? "ring-2 ring-tclas-gold/50" : ""}`}
           >
-            {d.lit ? "🔥" : ""}
+            {d.lit && <IconFlame className="w-4 h-4 text-tclas-gold-shadow" />}
           </div>
           <span className={`text-[10px] ${d.isToday ? "font-bold text-tclas-plum" : "text-tclas-ink/40"}`}>{DAY_LETTERS[d.date.getDay()]}</span>
         </div>

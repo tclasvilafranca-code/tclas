@@ -1,4 +1,5 @@
 import type { ReviewDue } from "../lib/api";
+import { IconRepeat } from "./icons";
 
 interface Props {
   due: ReviewDue[];
@@ -10,8 +11,8 @@ export function ReviewBanner({ due, onOpenLesson }: Props) {
 
   return (
     <div className="max-w-md mx-auto mb-6 bg-tclas-gold/10 border-2 border-dashed border-tclas-gold/40 rounded-2xl px-4 py-4">
-      <p className="text-xs font-semibold uppercase tracking-wide text-tclas-gold-shadow mb-2">
-        🔁 Repaso de hoy · mantén vivas tus piezas
+      <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-tclas-gold-shadow mb-2">
+        <IconRepeat className="w-3.5 h-3.5" /> Repaso de hoy · mantén vivas tus piezas
       </p>
       <div className="flex flex-col gap-2">
         {due.map((r) => (

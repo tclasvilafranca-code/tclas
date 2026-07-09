@@ -169,6 +169,16 @@ export interface AttemptResult {
   heartsCurrent?: number;
 }
 
+export interface Challenge {
+  code: string;
+  label: string;
+  icon: string;
+  progress: number;
+  target: number;
+  completed: boolean;
+  xpReward: number;
+}
+
 export interface CompleteLessonResult {
   progress: unknown;
   stars: number;
@@ -177,6 +187,7 @@ export interface CompleteLessonResult {
   profile: StudentProfile;
   newBadges: { code: string; name: string; icon: string }[];
   isReview: boolean;
+  newChallenges: { code: string; label: string; icon: string; xpReward: number }[];
 }
 
 export type PhaseStats = Partial<Record<ExercisePhase, { correct: number; total: number }>>;
@@ -212,6 +223,8 @@ export interface StudentSummary {
   weeklyMinutes: number;
   dailyGoalMinutes: number;
   unreadMessages: number;
+  challengesCompleted: number;
+  challengesTotal: number;
 }
 
 export interface Message {

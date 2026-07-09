@@ -40,6 +40,7 @@ model User {
   practiceLogs      PracticeLog[]
   sentMessages     Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
+  challengeCompletions ChallengeCompletion[]
 }
 
 // Mensajeria directa entre profesor/a y alumno/a (una conversacion por par,
@@ -58,6 +59,21 @@ model Message {
 
   @@index([senderId, recipientId])
   @@index([recipientId, senderId])
+}
+
+// Un registro por reto semanal ya conseguido (evita dar la recompensa dos
+// veces si se vuelve a comprobar el mismo reto la misma semana). La semana
+// se identifica por su lunes a medianoche.
+model ChallengeCompletion {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  challengeCode String
+  weekStart     DateTime
+  xpAwarded     Int
+  createdAt     DateTime @default(now())
+
+  @@unique([userId, challengeCode, weekStart])
 }
 
 // Un registro por alumno y dia, con los minutos practicados ese dia (se sube

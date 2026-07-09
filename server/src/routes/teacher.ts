@@ -6,6 +6,7 @@ import { requireAuth, requireRole, AuthedRequest } from "../auth";
 import { buildCurriculumForUser, computePhaseStats, computePracticeStats } from "../curriculum";
 import { createRepertoireEntryWithLessons, bulkAssignRepertoire } from "../repertoire";
 import { getThread, sendMessage, countUnread } from "../messages";
+import { getWeeklyChallenges } from "../challenges";
 
 const router = Router();
 router.use(requireAuth, requireRole("TEACHER"));
@@ -50,6 +51,8 @@ router.get("/students", async (req: AuthedRequest, res) => {
       const { last7Days } = await computePracticeStats(s.id, s.studentProfile!.id);
       const weeklyMinutes = last7Days.reduce((sum, d) => sum + d.minutes, 0);
       const unreadMessages = await countUnread(req.auth!.userId, s.id);
+      const challenges = await getWeeklyChallenges(s.id);
+      const challengesCompleted = challenges.filter((c) => c.completed).length;
       return {
         id: s.id,
         name: s.name,
@@ -64,6 +67,8 @@ router.get("/students", async (req: AuthedRequest, res) => {
         weeklyMinutes,
         dailyGoalMinutes: s.studentProfile?.dailyGoalMinutes ?? 15,
         unreadMessages,
+        challengesCompleted,
+        challengesTotal: challenges.length,
       };
     })
   );
@@ -121,9 +126,10 @@ router.get("/students/:id", async (req: AuthedRequest, res) => {
   // Rendimiento por bloque: cuantas respuestas acierta el alumno en cada tipo
   // de bloque de la sesion (agilidad visual, agudeza auditiva, notas al vuelo,
   // practica de partitura), para que la profesora vea en que flaquea de un vistazo.
-  const [phaseStats, practiceStats] = await Promise.all([
+  const [phaseStats, practiceStats, challenges] = await Promise.all([
     computePhaseStats(student.id),
     computePracticeStats(student.id, student.studentProfile.id),
+    getWeeklyChallenges(student.id),
   ]);
 
   res.json({
@@ -135,6 +141,7 @@ router.get("/students/:id", async (req: AuthedRequest, res) => {
     badges: recentBadges.map((b) => ({ code: b.badge.code, name: b.badge.name, icon: b.badge.icon, earnedAt: b.earnedAt })),
     phaseStats,
     practiceStats,
+    challenges,
   });
 });
 

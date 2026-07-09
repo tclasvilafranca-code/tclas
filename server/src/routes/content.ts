@@ -13,6 +13,7 @@ import {
 } from "../gamification";
 import { ExerciseType } from "../types";
 import { getThread, sendMessage, countUnread } from "../messages";
+import { getWeeklyChallenges, checkAndAwardChallenges } from "../challenges";
 
 const router = Router();
 
@@ -41,6 +42,14 @@ router.post("/me/messages", requireAuth, async (req: AuthedRequest, res) => {
 router.get("/me/messages/unread-count", requireAuth, async (req: AuthedRequest, res) => {
   const count = await countUnread(req.auth!.userId);
   res.json({ count });
+});
+
+// Retos de la semana natural (lunes-domingo): practicar varios dias,
+// completar lecciones, sumar minutos. Solo lectura: la recompensa se
+// concede al completar una leccion (ver /lessons/:id/complete).
+router.get("/me/challenges", requireAuth, async (req: AuthedRequest, res) => {
+  const challenges = await getWeeklyChallenges(req.auth!.userId);
+  res.json({ challenges });
 });
 
 router.get("/curriculum", requireAuth, async (req: AuthedRequest, res) => {
@@ -329,7 +338,9 @@ router.post("/lessons/:id/complete", requireAuth, async (req: AuthedRequest, res
     });
   }
 
-  res.json({ progress, stars, score: precisionScore, xpAwarded, profile, newBadges, isReview });
+  const newChallenges = passed ? await checkAndAwardChallenges(userId) : [];
+
+  res.json({ progress, stars, score: precisionScore, xpAwarded, profile, newBadges, isReview, newChallenges });
 });
 
 async function checkAndAwardBadges(userId: string, profile: { xpTotal: number; streakCurrent: number }) {

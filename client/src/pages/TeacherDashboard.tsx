@@ -164,6 +164,9 @@ export function TeacherDashboard() {
                   >
                     {s.weeklyMinutes} min esta semana
                   </p>
+                  <p className="text-2xs text-tclas-ink/40 mt-0.5" title="Retos semanales cumplidos">
+                    🎯 {s.challengesCompleted}/{s.challengesTotal} retos
+                  </p>
                 </div>
               </Link>
             );

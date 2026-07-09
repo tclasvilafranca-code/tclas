@@ -9,6 +9,7 @@ interface Props {
   passed: boolean;
   pieceTitle: string;
   newBadges: { code: string; name: string; icon: string }[];
+  newChallenges: { code: string; label: string; icon: string; xpReward: number }[];
   isReview: boolean;
   onContinue: () => void;
   onRetry: () => void;
@@ -50,7 +51,7 @@ function Confetti() {
   );
 }
 
-export function LessonCompleteModal({ stars, score, xpAwarded, passed, pieceTitle, newBadges, isReview, onContinue, onRetry }: Props) {
+export function LessonCompleteModal({ stars, score, xpAwarded, passed, pieceTitle, newBadges, newChallenges, isReview, onContinue, onRetry }: Props) {
   const message = useMemo(() => lessonCompleteMessage(stars, pieceTitle), [stars, pieceTitle]);
   return (
     <div className="fixed inset-0 bg-tclas-ink/50 flex items-center justify-center z-50 p-4">
@@ -85,6 +86,17 @@ export function LessonCompleteModal({ stars, score, xpAwarded, passed, pieceTitl
             {newBadges.map((b) => (
               <div key={b.code} className="flex items-center justify-center gap-2 text-tclas-ink font-semibold">
                 <span className="text-2xl">{b.icon}</span> {b.name}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {newChallenges.length > 0 && (
+          <div className="bg-tclas-sage/10 rounded-xl p-3 mb-4">
+            <p className="text-xs uppercase tracking-wide text-tclas-sage mb-2">¡Reto de la semana cumplido!</p>
+            {newChallenges.map((c) => (
+              <div key={c.code} className="flex items-center justify-center gap-2 text-tclas-ink font-semibold text-sm">
+                <span className="text-xl">{c.icon}</span> {c.label} <span className="text-tclas-sage">+{c.xpReward} XP</span>
               </div>
             ))}
           </div>

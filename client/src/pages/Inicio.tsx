@@ -8,6 +8,7 @@ import { StreakCalendar } from "../components/StreakCalendar";
 import { ReviewBanner } from "../components/ReviewBanner";
 import { NotificationsToggle } from "../components/NotificationsToggle";
 import { DailyGoalRing } from "../components/DailyGoalRing";
+import { WeeklyChallenges } from "../components/WeeklyChallenges";
 import { Skeleton } from "../components/Skeleton";
 import { IconFlame, IconPlay } from "../components/icons";
 import { greetingMessage } from "../lib/misol";
@@ -95,6 +96,8 @@ export function Inicio() {
           <IconPlay className="text-tclas-cream w-6 h-6 shrink-0" />
         </button>
       )}
+
+      {tree && <WeeklyChallenges />}
 
       {tree && !next && tree.pieces.length > 0 && (
         <p className="text-center text-sm text-tclas-ink/50 max-w-md mx-auto mt-4">

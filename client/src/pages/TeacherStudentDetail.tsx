@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api } from "../lib/api";
-import type { CurriculumTree, StudentProfile, PieceLibraryItem, StudentSummary, AgeGroup, LessonStatus, PhaseStats, PracticeStats, Message } from "../lib/api";
+import type { CurriculumTree, StudentProfile, PieceLibraryItem, StudentSummary, AgeGroup, LessonStatus, PhaseStats, PracticeStats, Message, Challenge } from "../lib/api";
 import { PHASE_LABEL, PHASE_ORDER } from "../lib/phases";
-import { IconFlame, IconClock, IconTarget, IconChat } from "../components/icons";
+import { IconFlame, IconClock, IconTarget, IconChat, IconCheck } from "../components/icons";
 import { MessageThread } from "../components/MessageThread";
 
 interface StudentDetailResponse {
@@ -16,6 +16,7 @@ interface StudentDetailResponse {
   badges: { code: string; name: string; icon: string; earnedAt: string }[];
   phaseStats: PhaseStats;
   practiceStats: PracticeStats;
+  challenges: Challenge[];
 }
 
 const DAY_LETTERS = ["D", "L", "M", "X", "J", "V", "S"];
@@ -278,6 +279,35 @@ export function TeacherStudentDetail() {
                 </div>
               );
             })()}
+          </div>
+        </section>
+
+        <section>
+          <h2 className="font-display text-xl mb-1 flex items-center gap-2">
+            <IconTarget className="w-5 h-5 text-tclas-ink/40" /> Retos de esta semana
+          </h2>
+          <p className="text-xs text-tclas-ink/50 mb-3">Objetivos automáticos de la semana natural (lunes a domingo).</p>
+          <div className="bg-white/70 border border-tclas-ink/10 rounded-xl p-4 grid gap-3">
+            {data.challenges.map((c) => {
+              const pct = Math.min(100, Math.round((c.progress / c.target) * 100));
+              return (
+                <div key={c.code} className="flex items-center gap-3">
+                  <span className="text-xl shrink-0">{c.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between text-xs mb-1">
+                      <span className={`font-semibold ${c.completed ? "text-tclas-sage" : "text-tclas-ink"}`}>{c.label}</span>
+                      <span className="text-tclas-ink/40 shrink-0 ml-2">
+                        {Math.min(c.progress, c.target)}/{c.target}
+                      </span>
+                    </div>
+                    <div className="h-2 bg-tclas-ink/10 rounded-full overflow-hidden">
+                      <div className={`h-full ${c.completed ? "bg-tclas-sage" : "bg-tclas-gold"}`} style={{ width: `${pct}%` }} />
+                    </div>
+                  </div>
+                  {c.completed && <IconCheck className="w-4 h-4 text-tclas-sage shrink-0" />}
+                </div>
+              );
+            })}
           </div>
         </section>
 

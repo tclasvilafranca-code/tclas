@@ -299,6 +299,7 @@ export function Lesson() {
           passed={result.stars >= 1}
           pieceTitle={lesson.pieceTitle}
           newBadges={result.newBadges}
+          newChallenges={result.newChallenges}
           isReview={result.isReview}
           onContinue={() => navigate("/app")}
           onRetry={() => setLoadKey((k) => k + 1)}

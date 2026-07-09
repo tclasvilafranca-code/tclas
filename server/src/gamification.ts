@@ -1,6 +1,7 @@
 import { StudentProfile } from "@prisma/client";
 import { prisma } from "./prisma";
 import { ExerciseType } from "./types";
+import { notesEqual } from "./notes";
 
 const HEART_REGEN_MS = 2 * 60 * 60 * 1000; // 1 corazon cada 2h
 
@@ -82,6 +83,19 @@ function normalizeText(v: unknown): string {
     .replace(/\s+/g, " ");
 }
 
+/** Compara dos secuencias de notas por tono real, no por como esten escritas
+ * (p.ej. "A#4" tocada en el piano debe contar igual que un objetivo "Bb4"). */
+function notesArraysEqual(expected: string[], got: unknown): boolean {
+  if (!Array.isArray(got) || expected.length !== got.length) return false;
+  return expected.every((n, i) => {
+    try {
+      return notesEqual(n, String(got[i]));
+    } catch {
+      return false;
+    }
+  });
+}
+
 export function gradeExercise(type: ExerciseType, data: any, userAnswer: unknown): boolean {
   const normalize = (v: unknown) =>
     Array.isArray(v) ? v.map((x) => String(x).toUpperCase()) : String(v).toUpperCase();
@@ -98,11 +112,8 @@ export function gradeExercise(type: ExerciseType, data: any, userAnswer: unknown
     case "CHORD":
       return normalize(userAnswer) === normalize(data.answer);
     case "STAFF_READING":
-    case "KEYBOARD_PLAY": {
-      const expected = (data.notes as string[]).map((n) => n.toUpperCase());
-      const got = Array.isArray(userAnswer) ? (userAnswer as string[]).map((n) => String(n).toUpperCase()) : [];
-      return expected.length === got.length && expected.every((n, i) => n === got[i]);
-    }
+    case "KEYBOARD_PLAY":
+      return notesArraysEqual(data.notes as string[], userAnswer);
     case "RHYTHM_TAP": {
       const expected = data.pattern as number[];
       const got = Array.isArray(userAnswer) ? (userAnswer as number[]) : [];
@@ -136,35 +147,23 @@ export function gradeExercise(type: ExerciseType, data: any, userAnswer: unknown
       );
     }
     case "DRAG_STAFF":
-      return normalize(userAnswer) === normalize(data.targetNote);
+      return notesEqual(String(userAnswer), data.targetNote as string);
     case "HOLD_NOTE": {
       const ans = userAnswer as { note?: string; heldMs?: number } | null;
-      if (!ans || typeof ans.heldMs !== "number") return false;
+      if (!ans || typeof ans.heldMs !== "number" || !ans.note) return false;
       const requiredMs = (data.beats as number) * (60000 / (data.bpm as number));
-      return normalize(ans.note) === normalize(data.note) && ans.heldMs >= requiredMs * 0.6;
+      return notesEqual(ans.note, data.note as string) && ans.heldMs >= requiredMs * 0.6;
     }
-    case "SCROLLING_PLAY": {
-      const expected = (data.notes as string[]).map((n) => n.toUpperCase());
-      const got = Array.isArray(userAnswer) ? (userAnswer as string[]).map((n) => String(n).toUpperCase()) : [];
-      return expected.length === got.length && expected.every((n, i) => n === got[i]);
-    }
+    case "SCROLLING_PLAY":
+      return notesArraysEqual(data.notes as string[], userAnswer);
     case "FILL_BLANK":
       return normalize(userAnswer) === normalize(data.correctAnswer);
-    case "EAR_BUILD": {
-      const expected = (data.notes as string[]).map((n) => n.toUpperCase());
-      const got = Array.isArray(userAnswer) ? (userAnswer as string[]).map((n) => String(n).toUpperCase()) : [];
-      return expected.length === got.length && expected.every((n, i) => n === got[i]);
-    }
-    case "NOTE_DASH": {
-      const expected = (data.notes as string[]).map((n) => n.toUpperCase());
-      const got = Array.isArray(userAnswer) ? (userAnswer as string[]).map((n) => String(n).toUpperCase()) : [];
-      return expected.length === got.length && expected.every((n, i) => n === got[i]);
-    }
-    case "SEGMENT_PRACTICE": {
-      const expected = (data.segments as string[][]).flat().map((n) => n.toUpperCase());
-      const got = Array.isArray(userAnswer) ? (userAnswer as string[]).map((n) => String(n).toUpperCase()) : [];
-      return expected.length === got.length && expected.every((n, i) => n === got[i]);
-    }
+    case "EAR_BUILD":
+      return notesArraysEqual(data.notes as string[], userAnswer);
+    case "NOTE_DASH":
+      return notesArraysEqual(data.notes as string[], userAnswer);
+    case "SEGMENT_PRACTICE":
+      return notesArraysEqual((data.segments as string[][]).flat(), userAnswer);
     default:
       return false;
   }

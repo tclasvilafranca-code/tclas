@@ -16,6 +16,34 @@ describe("gradeExercise", () => {
     expect(gradeExercise("KEYBOARD_PLAY", data, ["C4", "D4"])).toBe(false);
   });
 
+  // Regresion: una pieza en Fa Mayor usa "Bb4" en su contenido, pero el teclado en
+  // pantalla (y el MIDI/microfono) siempre sueltan la tecla como "A#4" (incluso
+  // aunque sea fisicamente la misma tecla). Antes de este arreglo, cualquier
+  // ejercicio de tocar con una nota con bemol era literalmente imposible de
+  // completar: el alumno se quedaba atascado sin poder avanzar ni retroceder.
+  it("KEYBOARD_PLAY/STAFF_READING/SCROLLING_PLAY/EAR_BUILD/NOTE_DASH aceptan la nota enarmonica equivalente (Bb4 == A#4)", () => {
+    const data = { notes: ["F4", "Bb4", "C5"] };
+    for (const type of ["KEYBOARD_PLAY", "STAFF_READING", "SCROLLING_PLAY", "EAR_BUILD", "NOTE_DASH"] as const) {
+      expect(gradeExercise(type, data, ["F4", "A#4", "C5"])).toBe(true);
+      expect(gradeExercise(type, data, ["F4", "B4", "C5"])).toBe(false);
+    }
+  });
+
+  it("DRAG_STAFF acepta la nota enarmonica equivalente", () => {
+    expect(gradeExercise("DRAG_STAFF", { targetNote: "Bb4" }, "A#4")).toBe(true);
+    expect(gradeExercise("DRAG_STAFF", { targetNote: "Bb4" }, "B4")).toBe(false);
+  });
+
+  it("HOLD_NOTE acepta la nota enarmonica equivalente", () => {
+    const data = { note: "Bb4", beats: 2, bpm: 60 };
+    expect(gradeExercise("HOLD_NOTE", data, { note: "A#4", heldMs: 2000 })).toBe(true);
+  });
+
+  it("SEGMENT_PRACTICE acepta la nota enarmonica equivalente", () => {
+    const data = { segments: [["F4", "Bb4"], ["C5"]] };
+    expect(gradeExercise("SEGMENT_PRACTICE", data, ["F4", "A#4", "C5"])).toBe(true);
+  });
+
   it("RHYTHM_TAP tiene tolerancia generosa (no exige precision de metronomo)", () => {
     const data = { pattern: [1, 1, 2] };
     expect(gradeExercise("RHYTHM_TAP", data, [1.2, 0.85, 2.3])).toBe(true);

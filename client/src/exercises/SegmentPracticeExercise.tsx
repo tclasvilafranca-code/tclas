@@ -3,7 +3,7 @@ import type { Exercise } from "../lib/api";
 import { StaffView } from "../components/StaffView";
 import { PianoKeyboard } from "../components/PianoKeyboard";
 import { ListenButton } from "../components/ListenButton";
-import { noteToMidi, midiToNoteName } from "../lib/notes";
+import { noteToMidi, midiToNoteName, notesEqual } from "../lib/notes";
 import { playErrorBuzz } from "../lib/audio";
 
 interface Props {
@@ -41,7 +41,7 @@ export function SegmentPracticeExercise({ exercise, onSubmit, feedback }: Props)
 
   function handlePlay(note: string) {
     if (submitted || cursor >= currentSegment.length) return;
-    if (note === currentSegment[cursor]) {
+    if (notesEqual(note, currentSegment[cursor])) {
       setProgress((p) => {
         const c = [...p];
         c[cursor] = "correct";

@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import type { Exercise } from "../lib/api";
 import { PianoKeyboard } from "../components/PianoKeyboard";
 import { playNote, playErrorBuzz } from "../lib/audio";
-import { noteToMidi, midiToNoteName } from "../lib/notes";
+import { noteToMidi, midiToNoteName, notesEqual } from "../lib/notes";
 
 interface Props {
   exercise: Exercise;
@@ -30,7 +30,7 @@ export function EarBuildExercise({ exercise, onSubmit, feedback }: Props) {
   function handlePlay(note: string) {
     if (feedback) return;
     const target = notes[revealed - 1];
-    if (note === target) {
+    if (notesEqual(note, target)) {
       if (revealed >= notes.length) {
         onSubmit(notes);
       } else {

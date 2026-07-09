@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Exercise } from "../lib/api";
 import { StaffView } from "../components/StaffView";
 import { PianoKeyboard } from "../components/PianoKeyboard";
-import { noteToMidi, midiToNoteName } from "../lib/notes";
+import { noteToMidi, midiToNoteName, notesEqual } from "../lib/notes";
 import { playErrorBuzz } from "../lib/audio";
 
 interface Props {
@@ -41,7 +41,7 @@ export function NoteDashExercise({ exercise, onSubmit, feedback }: Props) {
 
   function handlePlay(note: string) {
     if (done || feedback || !started) return;
-    if (note === notes[cursor]) {
+    if (notesEqual(note, notes[cursor])) {
       setProgress((p) => {
         const c = [...p];
         c[cursor] = "correct";

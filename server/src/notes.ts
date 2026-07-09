@@ -22,6 +22,18 @@ export function noteToMidi(note: string): number {
   return LETTER_SEMITONES[letter] + accidental + (octave + 1) * 12;
 }
 
+// Pone en mayuscula solo la letra inicial (A-G), sin tocar el simbolo de
+// alteracion ("b" de bemol debe quedar en minuscula para que parseNote lo entienda).
+function normalizeNoteCase(note: string): string {
+  return note.length > 0 ? note[0].toUpperCase() + note.slice(1) : note;
+}
+
+/** Compara dos notas por su tono real (semitono), no por como esten escritas:
+ * "A#4" y "Bb4" sueltan la misma tecla del piano y deben contar como iguales. */
+export function notesEqual(a: string, b: string): boolean {
+  return noteToMidi(normalizeNoteCase(a)) === noteToMidi(normalizeNoteCase(b));
+}
+
 const SHARP_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 export function midiToNoteName(midi: number): string {
   const octave = Math.floor(midi / 12) - 1;

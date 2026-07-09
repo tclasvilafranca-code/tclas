@@ -4,7 +4,7 @@ import { StaffView } from "../components/StaffView";
 import { PianoKeyboard } from "../components/PianoKeyboard";
 import { ListenButton } from "../components/ListenButton";
 import { playErrorBuzz } from "../lib/audio";
-import { noteToMidi } from "../lib/notes";
+import { noteToMidi, notesEqual } from "../lib/notes";
 
 interface Props {
   exercise: Exercise;
@@ -35,7 +35,7 @@ export function SequenceExercise({ exercise, onSubmit, feedback }: Props) {
   function handlePlay(note: string) {
     if (done || feedback) return;
     const expected = targetNotes[cursor];
-    if (note === expected) {
+    if (notesEqual(note, expected)) {
       const next = [...progress];
       next[cursor] = "correct";
       setProgress(next);

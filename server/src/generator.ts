@@ -11,7 +11,7 @@
 // toda la sesion semanal derivada de su musica real.
 
 import { PieceDef, LessonDef, ExerciseDef, nn, sr, rt, et, mcq, kp, ch, iv, wa, ma, ord, sp, ds, hn, scp, fb, eb, nd, sgp } from "./content/defs";
-import { toSolfege, onlyLetter, distractorLetters, chordSymbolToNotes, chordSymbolToSpanish, scaleForKey, scaleForKeyBass, intervalName } from "./notes";
+import { toSolfege, onlyLetter, distractorLetters, chordSymbolToNotes, chordSymbolToSpanish, scaleForKey, scaleForKeyBass, intervalName, parseNote } from "./notes";
 import { DifficultyAdjustment, DifficultyLevel, NORMAL_DIFFICULTY } from "./adaptive";
 
 // Cuantos distractores (opciones incorrectas) se ofrecen en preguntas de
@@ -205,7 +205,11 @@ function sheetPracticeExercises(def: PieceDef, weekNum: number): ExerciseDef[] {
     });
   }
 
-  const dragNote = pick(featured, weekNum + 4);
+  // Arrastrar sobre el pentagrama solo puede soltar en posiciones naturales (sin
+  // sostenido/bemol), asi que la nota objetivo tiene que ser siempre natural o
+  // el ejercicio seria imposible de completar.
+  const naturalFeatured = featured.filter((n) => parseNote(n).accidental === 0);
+  const dragNote = pick(naturalFeatured.length > 0 ? naturalFeatured : featured, weekNum + 4);
   exercises.push({
     type: "DRAG_STAFF",
     phase: "SHEET_PRACTICE",

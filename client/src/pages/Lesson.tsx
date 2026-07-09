@@ -41,6 +41,7 @@ export function Lesson() {
   const [loadKey, setLoadKey] = useState(0);
   const [misolReaction, setMisolReaction] = useState("");
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  const [showSkip, setShowSkip] = useState(false);
 
   const feedbackRef = useRef<AttemptResult | null>(null);
   const advancingRef = useRef(false);
@@ -115,6 +116,19 @@ export function Lesson() {
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [feedback]);
+
+  // Red de seguridad: los ejercicios de "toca la secuencia correcta" no tienen
+  // cuenta atras ni boton de enviar manual, asi que si algo falla (una nota
+  // que nunca coincide, un cuelgue...) el alumno podria quedarse atascado sin
+  // poder avanzar NI retroceder. Pasados unos segundos se ofrece la opcion de
+  // saltar el ejercicio, para que nunca sea un callejon sin salida.
+  useEffect(() => {
+    setShowSkip(false);
+    if (!exercise || TIMED_TYPES[exercise.type]) return;
+    const t = setTimeout(() => setShowSkip(true), 8000);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [exercise?.id]);
 
   if (loadError) {
     return (
@@ -225,6 +239,13 @@ export function Lesson() {
             )}
           </div>
           <ExercisePlayer exercise={exercise} onSubmit={handleSubmit} feedback={feedback} />
+          {showSkip && !feedback && (
+            <p className="text-center mt-6">
+              <button onClick={() => handleSubmit("__SKIP__")} className="text-xs text-tclas-ink/40 hover:text-tclas-ink/70 underline underline-offset-2">
+                ¿Te cuesta este ejercicio? Saltarlo
+              </button>
+            </p>
+          )}
         </div>
       </main>
 

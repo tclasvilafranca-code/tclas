@@ -31,6 +31,15 @@ export function PianoKeyboard({ from = "C3", to = "C5", highlightNotes = [], fee
   const whiteWidth = compact ? 34 : 44;
   const blackWidth = whiteWidth * 0.62;
 
+  // Comparar por tono real (semitono), no por como este escrita la nota objetivo:
+  // "Bb4" y "A#4" son la misma tecla del piano.
+  const highlightMidis = useMemo(() => new Set(highlightNotes.map(noteToMidi)), [highlightNotes]);
+  const feedbackByMidi = useMemo(() => {
+    const map = new Map<number, "correct" | "wrong">();
+    for (const [n, v] of Object.entries(feedback)) map.set(noteToMidi(n), v);
+    return map;
+  }, [feedback]);
+
   const trigger = useCallback(
     (note: string, opts?: { silent?: boolean }) => {
       // Silent: la nota ya suena de verdad (piano acustico via microfono), no hace
@@ -87,8 +96,8 @@ export function PianoKeyboard({ from = "C3", to = "C5", highlightNotes = [], fee
             .filter((n) => !isBlackKey(n))
             .map((note) => {
               whiteIndex++;
-              const isHighlighted = highlightNotes.includes(note);
-              const fb = feedback[note];
+              const isHighlighted = highlightMidis.has(noteToMidi(note));
+              const fb = feedbackByMidi.get(noteToMidi(note));
               return (
                 <button
                   key={note}
@@ -109,8 +118,8 @@ export function PianoKeyboard({ from = "C3", to = "C5", highlightNotes = [], fee
                 wIdx++;
                 return null;
               }
-              const isHighlighted = highlightNotes.includes(note);
-              const fb = feedback[note];
+              const isHighlighted = highlightMidis.has(noteToMidi(note));
+              const fb = feedbackByMidi.get(noteToMidi(note));
               return (
                 <button
                   key={note}

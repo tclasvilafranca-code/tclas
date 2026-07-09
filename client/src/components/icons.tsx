@@ -145,6 +145,23 @@ export function IconRepeat({ className = "w-4 h-4" }: IconProps) {
   );
 }
 
+export function IconChat({ className = "w-5 h-5" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={`${BASE} ${className}`} strokeWidth={STROKE} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 5.5h16v11H9.5L5 20.5v-4H4Z" />
+      <path d="M8 9.5h8M8 12.5h5" />
+    </svg>
+  );
+}
+
+export function IconSend({ className = "w-5 h-5" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={`fill-current ${className}`}>
+      <path d="M3.5 4 20.5 12 3.5 20l1.7-6.8L14 12l-8.8-1.2Z" />
+    </svg>
+  );
+}
+
 export function IconCheck({ className = "w-5 h-5" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={`${BASE} ${className}`} strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">

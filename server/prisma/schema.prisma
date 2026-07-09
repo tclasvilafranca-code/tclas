@@ -38,6 +38,26 @@ model User {
   exerciseAttempts ExerciseAttempt[]
   pushSubscriptions PushSubscription[]
   practiceLogs      PracticeLog[]
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+}
+
+// Mensajeria directa entre profesor/a y alumno/a (una conversacion por par,
+// identificada por remitente+destinatario). Sencillo a proposito: no hay
+// grupos ni multiples profesores por alumno, asi que un par de ids basta
+// para reconstruir el hilo completo de una conversacion.
+model Message {
+  id          String    @id @default(cuid())
+  senderId    String
+  sender      User      @relation("SentMessages", fields: [senderId], references: [id])
+  recipientId String
+  recipient   User      @relation("ReceivedMessages", fields: [recipientId], references: [id])
+  body        String
+  readAt      DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([senderId, recipientId])
+  @@index([recipientId, senderId])
 }
 
 // Un registro por alumno y dia, con los minutos practicados ese dia (se sube

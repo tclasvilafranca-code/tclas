@@ -12,8 +12,36 @@ import {
   starsForScore,
 } from "../gamification";
 import { ExerciseType } from "../types";
+import { getThread, sendMessage, countUnread } from "../messages";
 
 const router = Router();
+
+const sendMessageSchema = z.object({ body: z.string().trim().min(1).max(2000) });
+
+// Mensajeria con su profesor/a: el alumno solo tiene una conversacion (la
+// de su profesor/a asignado), asi que no hace falta elegir destinatario.
+router.get("/me/messages", requireAuth, async (req: AuthedRequest, res) => {
+  const profile = await prisma.studentProfile.findUnique({ where: { userId: req.auth!.userId } });
+  if (!profile?.teacherId) return res.json({ messages: [] });
+  const messages = await getThread(req.auth!.userId, profile.teacherId);
+  res.json({ messages });
+});
+
+router.post("/me/messages", requireAuth, async (req: AuthedRequest, res) => {
+  const parsed = sendMessageSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "El mensaje no puede estar vacio" });
+
+  const profile = await prisma.studentProfile.findUnique({ where: { userId: req.auth!.userId } });
+  if (!profile?.teacherId) return res.status(400).json({ error: "No tienes profesor/a asignado" });
+
+  const message = await sendMessage(req.auth!.userId, profile.teacherId, parsed.data.body);
+  res.status(201).json({ id: message.id, body: message.body, fromMe: true, createdAt: message.createdAt.toISOString() });
+});
+
+router.get("/me/messages/unread-count", requireAuth, async (req: AuthedRequest, res) => {
+  const count = await countUnread(req.auth!.userId);
+  res.json({ count });
+});
 
 router.get("/curriculum", requireAuth, async (req: AuthedRequest, res) => {
   const profile = await prisma.studentProfile.findUnique({ where: { userId: req.auth!.userId } });

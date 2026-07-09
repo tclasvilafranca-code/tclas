@@ -95,6 +95,7 @@ export interface Me {
   name: string;
   role: Role;
   mustChangePin: boolean;
+  teacherName: string | null;
   studentProfile: StudentProfile | null;
 }
 
@@ -210,6 +211,14 @@ export interface StudentSummary {
   totalLessons: number;
   weeklyMinutes: number;
   dailyGoalMinutes: number;
+  unreadMessages: number;
+}
+
+export interface Message {
+  id: string;
+  body: string;
+  fromMe: boolean;
+  createdAt: string;
 }
 
 export interface PieceLibraryItem {

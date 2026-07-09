@@ -6,7 +6,7 @@ import type { StudentSummary, AgeGroup, NewStudentCredentials } from "../lib/api
 import { useAuth } from "../context/AuthContext";
 import { ChangePasswordModal } from "../components/ChangePasswordModal";
 import { SetPinAccessModal } from "../components/SetPinAccessModal";
-import { IconGear, IconKey, IconFlame } from "../components/icons";
+import { IconGear, IconKey, IconFlame, IconChat } from "../components/icons";
 
 function timeAgo(dateStr: string | null): string {
   if (!dateStr) return "Sin actividad";
@@ -132,8 +132,15 @@ export function TeacherDashboard() {
                 to={`/teacher/students/${s.id}`}
                 className="bg-white/70 border border-tclas-ink/10 rounded-xl p-4 flex items-center gap-4 hover:border-tclas-gold transition-colors"
               >
-                <div className="w-12 h-12 rounded-full bg-tclas-plum text-tclas-cream flex items-center justify-center font-display text-lg">
-                  {s.name.charAt(0).toUpperCase()}
+                <div className="relative shrink-0">
+                  <div className="w-12 h-12 rounded-full bg-tclas-plum text-tclas-cream flex items-center justify-center font-display text-lg">
+                    {s.name.charAt(0).toUpperCase()}
+                  </div>
+                  {s.unreadMessages > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-tclas-rose text-white rounded-full w-5 h-5 flex items-center justify-center" title="Mensajes sin leer">
+                      <IconChat className="w-3 h-3" />
+                    </span>
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold truncate">{s.name}</p>

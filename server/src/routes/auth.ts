@@ -155,11 +155,12 @@ router.post("/change-pin", requireAuth, async (req: AuthedRequest, res) => {
 router.get("/me", requireAuth, async (req: AuthedRequest, res) => {
   const user = await prisma.user.findUnique({
     where: { id: req.auth!.userId },
-    include: { studentProfile: true },
+    include: { studentProfile: { include: { teacher: { select: { name: true } } } } },
   });
   if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
 
-  let studentProfile = user.studentProfile;
+  const teacherName = user.studentProfile?.teacher?.name ?? null;
+  let studentProfile = user.studentProfile ? (({ teacher, ...rest }) => rest)(user.studentProfile) : null;
   if (studentProfile) {
     studentProfile = await recomputeHearts(studentProfile);
   }
@@ -171,6 +172,7 @@ router.get("/me", requireAuth, async (req: AuthedRequest, res) => {
     name: user.name,
     role: user.role,
     mustChangePin: user.mustChangePin,
+    teacherName,
     studentProfile,
   });
 });

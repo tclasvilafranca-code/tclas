@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api } from "../lib/api";
-import type { CurriculumTree, StudentProfile, PieceLibraryItem, StudentSummary, AgeGroup, LessonStatus, PhaseStats, PracticeStats } from "../lib/api";
+import type { CurriculumTree, StudentProfile, PieceLibraryItem, StudentSummary, AgeGroup, LessonStatus, PhaseStats, PracticeStats, Message } from "../lib/api";
 import { PHASE_LABEL, PHASE_ORDER } from "../lib/phases";
-import { IconFlame, IconClock, IconTarget } from "../components/icons";
+import { IconFlame, IconClock, IconTarget, IconChat } from "../components/icons";
+import { MessageThread } from "../components/MessageThread";
 
 interface StudentDetailResponse {
   id: string;
@@ -90,6 +91,9 @@ export function TeacherStudentDetail() {
   const [duplicateStartDate, setDuplicateStartDate] = useState(todayISO());
   const [duplicating, setDuplicating] = useState(false);
 
+  // Mensajeria con este alumno
+  const [messages, setMessages] = useState<Message[] | null>(null);
+
   function load() {
     if (!id) return;
     api.get<StudentDetailResponse>(`/teacher/students/${id}`).then((d) => {
@@ -102,6 +106,17 @@ export function TeacherStudentDetail() {
     api.get<PieceLibraryItem[]>("/teacher/pieces").then(setPieces);
     api.get<StudentSummary[]>("/teacher/students").then(setAllStudents);
   }, []);
+  useEffect(() => {
+    if (!id) return;
+    setMessages(null);
+    api.get<{ messages: Message[] }>(`/teacher/students/${id}/messages`).then((r) => setMessages(r.messages));
+  }, [id]);
+
+  async function sendMessage(body: string) {
+    if (!id) return;
+    const message = await api.post<Message>(`/teacher/students/${id}/messages`, { body });
+    setMessages((prev) => [...(prev ?? []), message]);
+  }
 
   const assignedPieceIds = new Set(data?.curriculum.pieces.map((p) => p.piece.id));
   const selectedIds = new Set(selected.map((s) => s.piece.id));
@@ -264,6 +279,14 @@ export function TeacherStudentDetail() {
               );
             })()}
           </div>
+        </section>
+
+        <section>
+          <h2 className="font-display text-xl mb-1 flex items-center gap-2">
+            <IconChat className="w-5 h-5 text-tclas-ink/40" /> Mensajes con {data.name}
+          </h2>
+          <p className="text-xs text-tclas-ink/50 mb-3">Escríbele directamente aquí: comentarios sobre su práctica, ánimos, o lo que necesite.</p>
+          <MessageThread messages={messages} otherName={data.name} onSend={sendMessage} />
         </section>
 
         <section>

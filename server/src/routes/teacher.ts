@@ -5,6 +5,7 @@ import { prisma } from "../prisma";
 import { requireAuth, requireRole, AuthedRequest } from "../auth";
 import { buildCurriculumForUser, computePhaseStats, computePracticeStats } from "../curriculum";
 import { createRepertoireEntryWithLessons, bulkAssignRepertoire } from "../repertoire";
+import { getThread, sendMessage, countUnread } from "../messages";
 
 const router = Router();
 router.use(requireAuth, requireRole("TEACHER"));
@@ -48,6 +49,7 @@ router.get("/students", async (req: AuthedRequest, res) => {
       const completedLessons = await prisma.progress.count({ where: { userId: s.id, status: "COMPLETED", lessonId: { in: lessonIds } } });
       const { last7Days } = await computePracticeStats(s.id, s.studentProfile!.id);
       const weeklyMinutes = last7Days.reduce((sum, d) => sum + d.minutes, 0);
+      const unreadMessages = await countUnread(req.auth!.userId, s.id);
       return {
         id: s.id,
         name: s.name,
@@ -61,6 +63,7 @@ router.get("/students", async (req: AuthedRequest, res) => {
         totalLessons,
         weeklyMinutes,
         dailyGoalMinutes: s.studentProfile?.dailyGoalMinutes ?? 15,
+        unreadMessages,
       };
     })
   );
@@ -133,6 +136,26 @@ router.get("/students/:id", async (req: AuthedRequest, res) => {
     phaseStats,
     practiceStats,
   });
+});
+
+const teacherMessageSchema = z.object({ body: z.string().trim().min(1).max(2000) });
+
+router.get("/students/:id/messages", async (req: AuthedRequest, res) => {
+  const student = await findOwnedStudent(req.params.id, req.auth!.userId);
+  if (!student) return res.status(404).json({ error: "Alumno no encontrado" });
+  const messages = await getThread(req.auth!.userId, student.id);
+  res.json({ messages });
+});
+
+router.post("/students/:id/messages", async (req: AuthedRequest, res) => {
+  const parsed = teacherMessageSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "El mensaje no puede estar vacio" });
+
+  const student = await findOwnedStudent(req.params.id, req.auth!.userId);
+  if (!student) return res.status(404).json({ error: "Alumno no encontrado" });
+
+  const message = await sendMessage(req.auth!.userId, student.id, parsed.data.body);
+  res.status(201).json({ id: message.id, body: message.body, fromMe: true, createdAt: message.createdAt.toISOString() });
 });
 
 router.get("/pieces", async (req, res) => {

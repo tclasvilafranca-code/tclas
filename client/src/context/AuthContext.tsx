@@ -6,7 +6,6 @@ import type { Me } from "../lib/api";
 interface AuthContextValue {
   me: Me | null;
   loading: boolean;
-  loginTeacher: (email: string, password: string) => Promise<Me>;
   loginWithPin: (username: string, pin: string) => Promise<Me>;
   registerTeacher: (name: string, email: string, password: string) => Promise<Me>;
   logout: () => void;
@@ -40,14 +39,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     refresh();
   }, [refresh]);
 
-  const loginTeacher = useCallback(async (email: string, password: string) => {
-    const data = await api.post<{ token: string; user: Me }>("/auth/login", { email, password });
-    setToken(data.token);
-    const full = await api.get<Me>("/auth/me");
-    setMe(full);
-    return full;
-  }, []);
-
   const loginWithPin = useCallback(async (username: string, pin: string) => {
     const data = await api.post<{ token: string; user: Me }>("/auth/pin-login", { username, pin });
     setToken(data.token);
@@ -70,7 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ me, loading, loginTeacher, loginWithPin, registerTeacher, logout, refresh }}>
+    <AuthContext.Provider value={{ me, loading, loginWithPin, registerTeacher, logout, refresh }}>
       {children}
     </AuthContext.Provider>
   );

@@ -55,7 +55,7 @@ export function SetPinAccessModal({ currentUsername, onClose, onSaved }: Props) 
             <p className="font-mono text-lg mb-2">
               usuario: <b>{username}</b>
             </p>
-            <p className="text-xs text-tclas-ink/50 mb-4">La próxima vez que entres con este PIN, te pedirá confirmarlo o cambiarlo.</p>
+            <p className="text-xs text-tclas-ink/50 mb-4">Este PIN ya es definitivo: la próxima vez entra directamente con usuario y PIN.</p>
             <button onClick={onClose} className="bg-tclas-plum text-tclas-cream rounded-lg py-2.5 px-6 font-semibold hover:bg-tclas-plum-light">
               Cerrar
             </button>

@@ -117,9 +117,9 @@ const setPinAccessSchema = z.object({
 // lo configura una vez, y desde entonces puede entrar tambien con usuario+PIN
 // (ver /auth/pin-login). Solo para profesores: el PIN del alumnado lo gestiona
 // la profesora desde su panel, no cada alumno por su cuenta.
-// Marca mustChangePin=true siempre: es un flujo de configuracion rapida (igual
-// que el PIN por defecto de un alumno nuevo), asi que la proxima vez que entre
-// con usuario+PIN se le pedira confirmarlo/cambiarlo una vez mas.
+// No marca mustChangePin: a diferencia del PIN por defecto (1234) de un
+// alumno nuevo, aqui es la propia profesora quien elige su PIN a proposito,
+// asi que se queda como definitivo sin pedirle confirmarlo otra vez.
 router.post("/set-pin-access", requireAuth, requireRole("TEACHER"), async (req: AuthedRequest, res) => {
   const parsed = setPinAccessSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: parsed.error.errors[0]?.message ?? "Datos invalidos" });
@@ -131,7 +131,7 @@ router.post("/set-pin-access", requireAuth, requireRole("TEACHER"), async (req: 
   }
 
   const pinHash = await bcrypt.hash(pin, 10);
-  await prisma.user.update({ where: { id: req.auth!.userId }, data: { username, pinHash, mustChangePin: true } });
+  await prisma.user.update({ where: { id: req.auth!.userId }, data: { username, pinHash, mustChangePin: false } });
   res.json({ ok: true, username });
 });
 

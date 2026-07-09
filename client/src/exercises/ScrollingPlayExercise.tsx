@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Exercise } from "../lib/api";
 import { PianoKeyboard } from "../components/PianoKeyboard";
+import type { FallingNote } from "../components/PianoKeyboard";
 import { ListenButton } from "../components/ListenButton";
 import { noteToMidi, midiToNoteName, notesEqual } from "../lib/notes";
 import { playErrorBuzz } from "../lib/audio";
@@ -12,12 +13,17 @@ interface Props {
 }
 
 const MS_PER_UNIT = 550;
-const HIT_X = 18;
+// Cuanto antes de su turno aparece una nota cayendo (mas alto en el carril).
+// Si se retrasa (el alumno va mas lento que el tempo de referencia), se queda
+// "aparcada" justo encima de su tecla en vez de seguir cayendo, esperando a
+// que le toque el turno: el juego nunca es contra-reloj, solo marca el ritmo.
+const LOOKAHEAD_MS = 1700;
+const LANE_HEIGHT = 190;
+const STACK_OFFSET_PX = 26;
 
 export function ScrollingPlayExercise({ exercise, onSubmit, feedback }: Props) {
   const { notes, durations, bpm } = exercise.data as { notes: string[]; durations: number[]; bpm: number };
   const [cursor, setCursor] = useState(0);
-  const [hit, setHit] = useState<boolean[]>(() => notes.map(() => false));
   const [running, setRunning] = useState(false);
   const [now, setNow] = useState(0);
   const startRef = useRef(0);
@@ -33,7 +39,6 @@ export function ScrollingPlayExercise({ exercise, onSubmit, feedback }: Props) {
     }
     return times;
   }, [durations]);
-  const totalMs = (startTimes[startTimes.length - 1] ?? 0) + 900;
 
   useEffect(() => {
     if (!running) return;
@@ -64,11 +69,6 @@ export function ScrollingPlayExercise({ exercise, onSubmit, feedback }: Props) {
   function handlePlay(note: string) {
     if (done || feedback || !running) return;
     if (notesEqual(note, notes[cursor])) {
-      setHit((h) => {
-        const c = [...h];
-        c[cursor] = true;
-        return c;
-      });
       const newCursor = cursor + 1;
       setCursor(newCursor);
       if (newCursor >= notes.length) {
@@ -80,6 +80,29 @@ export function ScrollingPlayExercise({ exercise, onSubmit, feedback }: Props) {
     }
   }
 
+  const fallingNotes: FallingNote[] = useMemo(() => {
+    if (!running) return [];
+    const list: FallingNote[] = [];
+    // Si dos notas seguidas comparten la misma tecla y ambas ya estan "aparcadas"
+    // en la linea (el alumno va mas lento que el tempo), se apilan una encima de
+    // otra en vez de superponerse exactamente: si no, la nota realmente siguiente
+    // (isNext, en dorado) quedaria tapada por su propia repeticion futura.
+    const parkedCountByMidi = new Map<number, number>();
+    for (let i = cursor; i < notes.length; i++) {
+      const timeUntilHit = startTimes[i] - now;
+      if (timeUntilHit > LOOKAHEAD_MS) break; // las siguientes estan aun mas lejos en el tiempo
+      let progress = 1 - timeUntilHit / LOOKAHEAD_MS;
+      if (progress >= 1) {
+        const midi = noteToMidi(notes[i]);
+        const stack = parkedCountByMidi.get(midi) ?? 0;
+        parkedCountByMidi.set(midi, stack + 1);
+        progress = 1 - (stack * STACK_OFFSET_PX) / LANE_HEIGHT;
+      }
+      list.push({ id: i, note: notes[i], progress, isNext: i === cursor });
+    }
+    return list;
+  }, [running, cursor, notes, startTimes, now]);
+
   return (
     <div className="text-center">
       <p className="text-lg font-semibold mb-3">{exercise.prompt}</p>
@@ -89,33 +112,23 @@ export function ScrollingPlayExercise({ exercise, onSubmit, feedback }: Props) {
         </div>
       )}
 
-      <div className="relative h-24 bg-tclas-ink/5 rounded-xl overflow-hidden mb-6 max-w-xl mx-auto">
-        <div className="absolute top-0 bottom-0 border-l-2 border-tclas-gold z-10" style={{ left: `${HIT_X}%` }} />
-        {running &&
-          notes.map((n, i) => {
-            if (hit[i]) return null;
-            const x = HIT_X + ((startTimes[i] - now) / totalMs) * (100 - HIT_X);
-            if (x < -8 || x > 104) return null;
-            const isNext = i === cursor;
-            return (
-              <div
-                key={i}
-                className={`absolute top-1/2 -translate-y-1/2 w-9 h-9 rounded-full text-xs font-bold flex items-center justify-center transition-colors
-                  ${isNext ? "bg-tclas-gold text-tclas-ink" : "bg-tclas-plum text-tclas-cream"}`}
-                style={{ left: `${x}%` }}
-              >
-                {n.replace(/[0-9#b]/g, "")}
-              </div>
-            );
-          })}
-        {!running && (
-          <button onClick={start} className="absolute inset-0 flex items-center justify-center bg-tclas-plum/90 text-tclas-cream font-semibold">
-            {done ? "¡Hecho!" : "▶ Empezar"}
-          </button>
-        )}
-      </div>
+      {!running && (
+        <button
+          onClick={start}
+          className="btn-push mb-4 bg-tclas-plum border-2 border-b-4 border-tclas-plum-light border-b-tclas-plum-shadow text-tclas-cream rounded-xl px-6 py-2.5 font-bold uppercase tracking-wide text-sm"
+        >
+          {done ? "¡Hecho!" : "▶ Empezar"}
+        </button>
+      )}
 
-      <PianoKeyboard from={from} to={to} onPlay={handlePlay} highlightNotes={done || feedback || !running ? [] : [notes[cursor]]} />
+      <PianoKeyboard
+        from={from}
+        to={to}
+        onPlay={handlePlay}
+        highlightNotes={done || feedback || !running ? [] : [notes[cursor]]}
+        fallingNotes={running ? fallingNotes : undefined}
+        fallingLaneHeight={LANE_HEIGHT}
+      />
 
       {feedback && <p className="mt-4 text-sm text-tclas-ink/70 max-w-md mx-auto">{feedback.explanation}</p>}
     </div>

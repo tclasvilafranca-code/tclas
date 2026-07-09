@@ -4,6 +4,16 @@ import { playNote } from "../lib/audio";
 import { useMidiInput } from "../lib/midi";
 import { usePitchInput } from "../lib/pitchDetection";
 
+export interface FallingNote {
+  id: string | number;
+  note: string;
+  // 0 = arriba del todo (recien aparece), 1 = justo sobre su tecla ("linea de golpe").
+  // Se deja subir por encima de 1 (clampeado fuera) o quedarse en 1 mientras espera a
+  // que le toque el turno, para que la nota "aterrice" exactamente sobre su tecla real.
+  progress: number;
+  isNext: boolean;
+}
+
 interface PianoKeyboardProps {
   from?: string;
   to?: string;
@@ -11,6 +21,8 @@ interface PianoKeyboardProps {
   feedback?: Record<string, "correct" | "wrong">;
   onPlay?: (note: string) => void;
   compact?: boolean;
+  fallingNotes?: FallingNote[];
+  fallingLaneHeight?: number;
 }
 
 const KEY_MAP: Record<string, number> = {
@@ -25,11 +37,39 @@ function range(from: string, to: string): string[] {
   return notes;
 }
 
-export function PianoKeyboard({ from = "C3", to = "C5", highlightNotes = [], feedback = {}, onPlay, compact = false }: PianoKeyboardProps) {
+export function PianoKeyboard({
+  from = "C3",
+  to = "C5",
+  highlightNotes = [],
+  feedback = {},
+  onPlay,
+  compact = false,
+  fallingNotes,
+  fallingLaneHeight = 200,
+}: PianoKeyboardProps) {
   const [pressed, setPressed] = useState<Set<string>>(new Set());
   const allNotes = useMemo(() => range(from, to), [from, to]);
   const whiteWidth = compact ? 34 : 44;
   const blackWidth = whiteWidth * 0.62;
+  const keyHeight = compact ? 110 : 150;
+  const laneHeight = fallingNotes ? fallingLaneHeight : 0;
+
+  // Centro en x de cada tecla (por semitono), para que las notas que caen en el
+  // carril de arriba aterricen exactamente sobre su tecla real: mismo calculo
+  // que usan los botones de abajo, asi que nunca se pueden desalinear.
+  const keyCenterX = useMemo(() => {
+    const map = new Map<number, { x: number; width: number; isBlack: boolean }>();
+    let wIdx = -1;
+    for (const note of allNotes) {
+      if (isBlackKey(note)) {
+        map.set(noteToMidi(note), { x: wIdx * whiteWidth + whiteWidth, width: blackWidth, isBlack: true });
+      } else {
+        wIdx++;
+        map.set(noteToMidi(note), { x: wIdx * whiteWidth + whiteWidth / 2, width: whiteWidth, isBlack: false });
+      }
+    }
+    return map;
+  }, [allNotes, whiteWidth, blackWidth]);
 
   // Comparar por tono real (semitono), no por como este escrita la nota objetivo:
   // "Bb4" y "A#4" son la misma tecla del piano.
@@ -91,7 +131,33 @@ export function PianoKeyboard({ from = "C3", to = "C5", highlightNotes = [], fee
         </div>
       </div>
       <div className="overflow-x-auto pb-2">
-        <div className="relative inline-flex" style={{ height: compact ? 110 : 150 }}>
+        <div className="relative inline-flex" style={{ height: keyHeight + laneHeight }}>
+          {fallingNotes && (
+            <div
+              aria-hidden="true"
+              className="absolute inset-x-0 border-t-2 border-dashed border-tclas-gold/60 z-20"
+              style={{ top: laneHeight }}
+            />
+          )}
+          {fallingNotes &&
+            fallingNotes.map((f) => {
+              const layout = keyCenterX.get(noteToMidi(f.note));
+              if (!layout) return null;
+              const size = layout.isBlack ? layout.width * 0.9 : layout.width * 0.72;
+              const clamped = Math.min(1.02, Math.max(-0.12, f.progress));
+              if (clamped < -0.1 || clamped > 1.02) return null;
+              const top = clamped * laneHeight - size / 2;
+              return (
+                <div
+                  key={f.id}
+                  className={`absolute rounded-full flex items-center justify-center text-[10px] font-bold z-10 transition-colors
+                    ${f.isNext ? "bg-tclas-gold text-tclas-ink" : "bg-tclas-plum/80 text-tclas-cream"}`}
+                  style={{ width: size, height: size, left: layout.x - size / 2, top }}
+                >
+                  {f.note.replace(/[0-9#b]/g, "")}
+                </div>
+              );
+            })}
           {allNotes
             .filter((n) => !isBlackKey(n))
             .map((note) => {
@@ -102,8 +168,8 @@ export function PianoKeyboard({ from = "C3", to = "C5", highlightNotes = [], fee
                 <button
                   key={note}
                   onClick={() => trigger(note)}
-                  style={{ width: whiteWidth, left: whiteIndex * whiteWidth }}
-                  className={`absolute top-0 h-full rounded-b-md border border-tclas-ink/20 piano-key-shadow transition-colors
+                  style={{ width: whiteWidth, left: whiteIndex * whiteWidth, top: laneHeight, height: keyHeight }}
+                  className={`absolute rounded-b-md border border-tclas-ink/20 piano-key-shadow transition-colors
                     ${fb === "correct" ? "bg-tclas-sage/40" : fb === "wrong" ? "bg-tclas-rose/40" : pressed.has(note) ? "bg-tclas-gold/40" : "bg-white"}
                     ${isHighlighted ? "ring-2 ring-tclas-gold ring-inset" : ""}`}
                 >
@@ -124,8 +190,8 @@ export function PianoKeyboard({ from = "C3", to = "C5", highlightNotes = [], fee
                 <button
                   key={note}
                   onClick={() => trigger(note)}
-                  style={{ width: blackWidth, left: wIdx * whiteWidth + whiteWidth - blackWidth / 2, height: "60%" }}
-                  className={`absolute top-0 rounded-b-md z-10 transition-colors
+                  style={{ width: blackWidth, left: wIdx * whiteWidth + whiteWidth - blackWidth / 2, top: laneHeight, height: keyHeight * 0.6 }}
+                  className={`absolute rounded-b-md z-10 transition-colors
                     ${fb === "correct" ? "bg-tclas-sage" : fb === "wrong" ? "bg-tclas-rose" : pressed.has(note) ? "bg-tclas-gold" : "bg-tclas-ink"}
                     ${isHighlighted ? "ring-2 ring-tclas-gold" : ""}`}
                 />

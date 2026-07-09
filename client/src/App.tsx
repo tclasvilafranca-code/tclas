@@ -3,10 +3,14 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import { Landing } from "./pages/Landing";
 import { Register } from "./pages/Register";
-import { Home } from "./pages/Home";
+import { Inicio } from "./pages/Inicio";
+import { Aprender } from "./pages/Aprender";
+import { Practicar } from "./pages/Practicar";
+import { Perfil } from "./pages/Perfil";
 import { Lesson } from "./pages/Lesson";
 import { TeacherDashboard } from "./pages/TeacherDashboard";
 import { TeacherStudentDetail } from "./pages/TeacherStudentDetail";
+import { AppShell } from "./components/AppShell";
 import { Metronome } from "./components/Metronome";
 
 function Splash() {
@@ -47,7 +51,12 @@ export default function App() {
       <Route path="/" element={<RedirectIfLoggedIn><Landing /></RedirectIfLoggedIn>} />
       <Route path="/login" element={<Navigate to="/" replace />} />
       <Route path="/register" element={<RedirectIfLoggedIn><Register /></RedirectIfLoggedIn>} />
-      <Route path="/app" element={<RequireStudent><Home /></RequireStudent>} />
+      <Route path="/app" element={<RequireStudent><AppShell /></RequireStudent>}>
+        <Route index element={<Inicio />} />
+        <Route path="aprender" element={<Aprender />} />
+        <Route path="practicar" element={<Practicar />} />
+        <Route path="perfil" element={<Perfil />} />
+      </Route>
       <Route path="/app/lesson/:id" element={<RequireStudent><Lesson /></RequireStudent>} />
       <Route path="/teacher" element={<RequireTeacher><TeacherDashboard /></RequireTeacher>} />
       <Route path="/teacher/students/:id" element={<RequireTeacher><TeacherStudentDetail /></RequireTeacher>} />

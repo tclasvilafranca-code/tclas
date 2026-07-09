@@ -254,6 +254,17 @@ export interface BulkRepertoireItem {
   teacherNote?: string;
 }
 
+export interface ProfileStats {
+  totalMinutes: number;
+  last7Days: { date: string; minutes: number }[];
+  streakCurrent: number;
+  streakLongest: number;
+  xpTotal: number;
+  badgeCount: number;
+  piecesCompleted: number;
+  phaseStats: PhaseStats;
+}
+
 export interface NewStudentCredentials {
   id: string;
   name: string;

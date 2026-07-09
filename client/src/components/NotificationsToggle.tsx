@@ -43,7 +43,7 @@ export function NotificationsToggle() {
         <IconBell className="w-3.5 h-3.5" active={subscribed} />
         {subscribed ? "Recordatorios activados" : "Activar recordatorios de práctica"}
       </button>
-      {error && <p className="text-[11px] text-tclas-rose mt-1">{error}</p>}
+      {error && <p className="text-2xs text-tclas-rose mt-1">{error}</p>}
     </div>
   );
 }

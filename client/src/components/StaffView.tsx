@@ -5,17 +5,18 @@ interface StaffViewProps {
   notes: string[];
   activeIndex?: number;
   correctness?: ("pending" | "correct" | "wrong")[];
+  height?: number;
 }
 
 const LINE_Y = [100, 88, 76, 64, 52];
 const NOTE_SPACING = 46;
 const LEFT_MARGIN = 70;
 
-export function StaffView({ clef, notes, activeIndex, correctness }: StaffViewProps) {
+export function StaffView({ clef, notes, activeIndex, correctness, height = 160 }: StaffViewProps) {
   const width = LEFT_MARGIN + notes.length * NOTE_SPACING + 30;
 
   return (
-    <svg viewBox={`0 0 ${width} 160`} width="100%" height="160" className="max-w-xl mx-auto select-none">
+    <svg viewBox={`0 0 ${width} 160`} width="100%" height={height} className="max-w-xl mx-auto select-none">
       {LINE_Y.map((y) => (
         <line key={y} x1={10} y1={y} x2={width - 10} y2={y} stroke="currentColor" strokeWidth={1.5} className="text-tclas-ink/70" />
       ))}

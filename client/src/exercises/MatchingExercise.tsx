@@ -11,11 +11,11 @@ interface Props {
 function Cell({ value }: { value: string }) {
   if (value.startsWith("STAFF:")) {
     const [, note, clef] = value.split(":");
-    return (
-      <div className="scale-75 -my-3">
-        <StaffView clef={clef as "treble" | "bass"} notes={[note]} />
-      </div>
-    );
+    // Alto fijo y pequeno (no un transform CSS, que solo escala visualmente
+    // y deja el hueco original reservado en el documento): asi cada celda
+    // ocupa solo el espacio que realmente se ve, y la lista no se alarga
+    // mucho mas de lo necesario obligando a bajar la pagina.
+    return <StaffView clef={clef as "treble" | "bass"} notes={[note]} height={44} />;
   }
   return <span>{value}</span>;
 }
@@ -52,16 +52,16 @@ export function MatchingExercise({ exercise, onSubmit, feedback }: Props) {
 
   return (
     <div className="text-center">
-      <p className="text-lg font-semibold mb-6">{exercise.prompt}</p>
-      <div className="grid grid-cols-2 gap-8 max-w-md mx-auto">
-        <div className="flex flex-col gap-3">
+      <p className="text-lg font-semibold mb-4">{exercise.prompt}</p>
+      <div className="grid grid-cols-2 gap-4 sm:gap-6 max-w-md mx-auto">
+        <div className="flex flex-col gap-2">
           {leftItems.map((left) => {
             const pair = matched.find((m) => m.left === left);
             return (
               <button
                 key={left}
                 onClick={() => (pair ? undo(left) : chooseLeft(left))}
-                className={`rounded-xl border-2 py-2 px-3 font-semibold min-h-[3rem] flex items-center justify-center transition-colors
+                className={`rounded-xl border-2 py-1.5 px-3 font-semibold min-h-[2.5rem] flex items-center justify-center transition-colors
                   ${pair ? "border-tclas-sage bg-tclas-sage/15" : selectedLeft === left ? "border-tclas-gold bg-tclas-gold/15" : "border-tclas-ink/15 hover:border-tclas-gold"}`}
               >
                 <Cell value={left} />
@@ -69,13 +69,13 @@ export function MatchingExercise({ exercise, onSubmit, feedback }: Props) {
             );
           })}
         </div>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           {rightItems.map((right) => (
             <button
               key={right}
               onClick={() => chooseRight(right)}
               disabled={usedRights.has(right)}
-              className={`rounded-xl border-2 py-2 px-3 font-semibold min-h-[3rem] flex items-center justify-center transition-colors
+              className={`rounded-xl border-2 py-1.5 px-3 font-semibold min-h-[2.5rem] flex items-center justify-center transition-colors
                 ${usedRights.has(right) ? "border-tclas-sage bg-tclas-sage/15 opacity-60" : "border-tclas-ink/15 hover:border-tclas-gold"}`}
             >
               <Cell value={right} />

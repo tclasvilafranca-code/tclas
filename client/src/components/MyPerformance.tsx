@@ -46,7 +46,7 @@ export function MyPerformance() {
                   </div>
                 );
               })}
-              <p className="text-[11px] text-tclas-ink/40 text-center mt-1">
+              <p className="text-2xs text-tclas-ink/40 text-center mt-1">
                 Lo que esté en {""}
                 <span className="text-tclas-rose font-semibold">rojo</span> es lo que más te ayudaría practicar.
               </p>

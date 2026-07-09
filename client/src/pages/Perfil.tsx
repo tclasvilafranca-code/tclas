@@ -47,17 +47,17 @@ export function Perfil() {
         <div className="bg-white/70 border border-tclas-ink/10 rounded-xl px-3 py-3 text-center">
           <IconClock className="w-4 h-4 mx-auto mb-1 text-tclas-plum/50" />
           {stats ? <p className="text-xl font-display text-tclas-plum">{formatMinutes(stats.totalMinutes)}</p> : <Skeleton className="h-6 w-12 mx-auto" />}
-          <p className="text-[10px] uppercase tracking-wide text-tclas-ink/40 mt-1">practicados</p>
+          <p className="text-2xs uppercase tracking-wide text-tclas-ink/40 mt-1">practicados</p>
         </div>
         <div className="bg-white/70 border border-tclas-ink/10 rounded-xl px-3 py-3 text-center">
           <IconStar className="w-4 h-4 mx-auto mb-1 text-tclas-gold-shadow/60" />
           <p className="text-xl font-display text-tclas-gold-shadow">{me.studentProfile.xpTotal}</p>
-          <p className="text-[10px] uppercase tracking-wide text-tclas-ink/40">XP total</p>
+          <p className="text-2xs uppercase tracking-wide text-tclas-ink/40">XP total</p>
         </div>
         <div className="bg-white/70 border border-tclas-ink/10 rounded-xl px-3 py-3 text-center">
           <IconTrophy className="w-4 h-4 mx-auto mb-1 text-tclas-sage/60" />
           {stats ? <p className="text-xl font-display text-tclas-sage">{stats.piecesCompleted}</p> : <Skeleton className="h-6 w-6 mx-auto" />}
-          <p className="text-[10px] uppercase tracking-wide text-tclas-ink/40 mt-1">piezas terminadas</p>
+          <p className="text-2xs uppercase tracking-wide text-tclas-ink/40 mt-1">piezas terminadas</p>
         </div>
       </div>
 
@@ -88,14 +88,14 @@ export function Perfil() {
                 const pct = d.minutes === 0 ? 0 : Math.max(8, (d.minutes / maxMinutes) * 100);
                 return (
                   <div key={d.date} className="flex-1 flex flex-col items-center justify-end gap-1.5 h-full">
-                    <span className="text-[10px] text-tclas-ink/40 tabular-nums">{d.minutes > 0 ? d.minutes : ""}</span>
+                    <span className="text-2xs text-tclas-ink/40 tabular-nums">{d.minutes > 0 ? d.minutes : ""}</span>
                     <div className="w-full rounded-t-md bg-tclas-plum/15 flex items-end" style={{ height: "100%" }}>
                       <div
                         className={`w-full rounded-t-md ${d.minutes > 0 ? "bg-tclas-gold" : "bg-transparent"}`}
                         style={{ height: `${pct}%`, transition: "height 300ms ease" }}
                       />
                     </div>
-                    <span className="text-[10px] font-semibold text-tclas-ink/50">{DAY_LETTERS[date.getDay()]}</span>
+                    <span className="text-2xs font-semibold text-tclas-ink/50">{DAY_LETTERS[date.getDay()]}</span>
                   </div>
                 );
               })}
@@ -130,7 +130,7 @@ export function Perfil() {
             {badges.map((b) => (
               <div key={b.code} title={b.description} className="bg-white/70 border border-tclas-ink/10 rounded-xl p-3 text-center">
                 <span className="text-3xl block mb-1">{b.icon}</span>
-                <span className="text-[11px] font-semibold leading-tight block">{b.name}</span>
+                <span className="text-2xs font-semibold leading-tight block">{b.name}</span>
               </div>
             ))}
           </div>

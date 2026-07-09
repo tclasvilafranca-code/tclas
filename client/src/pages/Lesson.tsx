@@ -179,8 +179,8 @@ export function Lesson() {
           <Skeleton className="w-6 h-6 rounded-full" />
           <Skeleton className="flex-1 h-3 rounded-full" />
         </div>
-        <div className="flex-1 flex items-center justify-center px-4 py-10">
-          <div className="w-full max-w-xl flex flex-col items-center gap-4">
+        <div className="flex-1 flex items-start justify-center px-4 py-6">
+          <div className="w-full max-w-xl flex flex-col items-center gap-4 mt-6">
             <Skeleton className="h-3 w-40" />
             <Skeleton className="h-5 w-56" />
             <Skeleton className="h-52 w-full rounded-2xl mt-4" />
@@ -244,15 +244,15 @@ export function Lesson() {
         </span>
       </header>
 
-      <main className="flex-1 flex items-center justify-center px-4 py-10">
+      <main className="flex-1 flex items-start justify-center px-4 py-6">
         <div className="w-full max-w-xl">
-          <div className="text-center mb-6">
-            <p className="text-xs uppercase tracking-wide text-tclas-ink/40 mb-2">
+          <div className="text-center mb-4">
+            <p className="text-xs uppercase tracking-wide text-tclas-ink/40 mb-1.5">
               {lesson.pieceTitle} · Semana {lesson.weekNumber}
             </p>
             <span className={`inline-block text-xs font-semibold rounded-full px-3 py-1 ${phase.className}`}>{phase.label}</span>
             {timerPct !== null && !feedback && (
-              <div className="max-w-[10rem] mx-auto mt-3">
+              <div className="max-w-[10rem] mx-auto mt-2">
                 <div className="h-1.5 bg-tclas-ink/10 rounded-full overflow-hidden">
                   <div className={`h-full ${timerColor}`} style={{ width: `${timerPct * 100}%`, transition: "width 120ms linear" }} />
                 </div>

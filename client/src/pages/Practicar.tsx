@@ -99,7 +99,7 @@ export function Practicar() {
               <span className="text-3xl">{entry.piece.iconEmoji}</span>
               <span className="text-sm font-semibold leading-tight line-clamp-2">{entry.piece.title}</span>
               {entry.status === "COMPLETED" && (
-                <span className="flex items-center gap-1 text-[10px] text-tclas-sage font-semibold">
+                <span className="flex items-center gap-1 text-2xs text-tclas-sage font-semibold">
                   <IconCheck className="w-3 h-3" /> Completada
                 </span>
               )}

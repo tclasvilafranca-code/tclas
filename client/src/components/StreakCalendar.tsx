@@ -38,7 +38,7 @@ export function StreakCalendar({ streakCurrent, lastActivityDate }: Props) {
           >
             {d.lit && <IconFlame className="w-4 h-4 text-tclas-gold-shadow" />}
           </div>
-          <span className={`text-[10px] ${d.isToday ? "font-bold text-tclas-plum" : "text-tclas-ink/40"}`}>{DAY_LETTERS[d.date.getDay()]}</span>
+          <span className={`text-2xs ${d.isToday ? "font-bold text-tclas-plum" : "text-tclas-ink/40"}`}>{DAY_LETTERS[d.date.getDay()]}</span>
         </div>
       ))}
     </div>

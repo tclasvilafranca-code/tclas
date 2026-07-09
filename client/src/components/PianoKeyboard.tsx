@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { isBlackKey, noteToMidi, midiToNoteName } from "../lib/notes";
 import { playNote } from "../lib/audio";
 import { useMidiInput } from "../lib/midi";
@@ -49,10 +49,33 @@ export function PianoKeyboard({
 }: PianoKeyboardProps) {
   const [pressed, setPressed] = useState<Set<string>>(new Set());
   const allNotes = useMemo(() => range(from, to), [from, to]);
-  const whiteWidth = compact ? 34 : 44;
+  const whiteKeyCount = useMemo(() => allNotes.filter((n) => !isBlackKey(n)).length, [allNotes]);
+
+  // El teclado se encoge para caber entero sin scroll horizontal cuando el
+  // rango de notas lo permite (la queja real era tener que desplazarse para
+  // ver teclas). Solo si ni siquiera al tamano minimo tappable cabe entero
+  // (rangos muy amplios) se deja el scroll horizontal como red de seguridad.
+  const maxWhiteWidth = compact ? 34 : 44;
+  const minWhiteWidth = compact ? 22 : 26;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver((entries) => setContainerWidth(entries[0].contentRect.width));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const whiteWidth = containerWidth
+    ? Math.min(maxWhiteWidth, Math.max(minWhiteWidth, Math.floor(containerWidth / whiteKeyCount)))
+    : maxWhiteWidth;
   const blackWidth = whiteWidth * 0.62;
   const keyHeight = compact ? 110 : 150;
   const laneHeight = fallingNotes ? fallingLaneHeight : 0;
+  const totalWidth = whiteKeyCount * whiteWidth;
+  const fitsWithoutScroll = containerWidth > 0 && totalWidth <= containerWidth;
 
   // Centro en x de cada tecla (por semitono), para que las notas que caen en el
   // carril de arriba aterricen exactamente sobre su tecla real: mismo calculo
@@ -111,7 +134,7 @@ export function PianoKeyboard({
   let whiteIndex = -1;
 
   return (
-    <div className="w-full">
+    <div className="w-full" ref={containerRef}>
       <div className="flex items-center justify-between mb-2 text-xs text-tclas-ink/60 px-1 flex-wrap gap-1">
         <span>Toca con el raton, con el teclado (A S D F G H J...), conecta un piano MIDI o usa tu piano real con el micrófono.</span>
         <div className="flex items-center gap-1.5 shrink-0">
@@ -130,8 +153,8 @@ export function PianoKeyboard({
           </button>
         </div>
       </div>
-      <div className="overflow-x-auto pb-2">
-        <div className="relative inline-flex" style={{ height: keyHeight + laneHeight }}>
+      <div className={`overflow-x-auto pb-2 ${fitsWithoutScroll ? "flex justify-center" : ""}`}>
+        <div className="relative inline-flex shrink-0" style={{ height: keyHeight + laneHeight, width: totalWidth }}>
           {fallingNotes && (
             <div
               aria-hidden="true"
@@ -150,7 +173,7 @@ export function PianoKeyboard({
               return (
                 <div
                   key={f.id}
-                  className={`absolute rounded-full flex items-center justify-center text-[10px] font-bold z-10 transition-colors
+                  className={`absolute rounded-full flex items-center justify-center text-2xs font-bold z-10 transition-colors
                     ${f.isNext ? "bg-tclas-gold text-tclas-ink" : "bg-tclas-plum/80 text-tclas-cream"}`}
                   style={{ width: size, height: size, left: layout.x - size / 2, top }}
                 >
@@ -173,7 +196,7 @@ export function PianoKeyboard({
                     ${fb === "correct" ? "bg-tclas-sage/40" : fb === "wrong" ? "bg-tclas-rose/40" : pressed.has(note) ? "bg-tclas-gold/40" : "bg-white"}
                     ${isHighlighted ? "ring-2 ring-tclas-gold ring-inset" : ""}`}
                 >
-                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 text-[10px] text-tclas-ink/40">{note}</span>
+                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 text-2xs text-tclas-ink/40">{note}</span>
                 </button>
               );
             })}

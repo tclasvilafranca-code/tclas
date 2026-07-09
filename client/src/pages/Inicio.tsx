@@ -60,7 +60,7 @@ export function Inicio() {
           <p className="flex items-center gap-1.5 text-2xl font-display text-tclas-gold-shadow">
             {me.studentProfile.streakCurrent} <IconFlame className="w-5 h-5" />
           </p>
-          <p className="text-[11px] uppercase tracking-wide text-tclas-ink/40">días de racha</p>
+          <p className="text-2xs uppercase tracking-wide text-tclas-ink/40">días de racha</p>
         </div>
       </div>
 
@@ -88,7 +88,7 @@ export function Inicio() {
         >
           <span className="text-4xl shrink-0">{next.iconEmoji}</span>
           <span className="flex-1 min-w-0 text-tclas-cream">
-            <span className="block text-[11px] uppercase tracking-wide text-tclas-cream/60">Continuar lección</span>
+            <span className="block text-2xs uppercase tracking-wide text-tclas-cream/60">Continuar lección</span>
             <span className="block font-display text-lg leading-tight truncate">{next.pieceTitle}</span>
             <span className="block text-xs text-tclas-cream/70">Semana {next.lesson.weekNumber} · {next.lesson.title}</span>
           </span>

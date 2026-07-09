@@ -24,7 +24,7 @@ export function ReviewBanner({ due, onOpenLesson }: Props) {
             <span className="text-2xl shrink-0">{r.iconEmoji}</span>
             <span className="flex-1 min-w-0">
               <span className="block text-sm font-semibold truncate">{r.pieceTitle}</span>
-              <span className="block text-[11px] text-tclas-ink/50">Repasarla ahora te ayuda a no olvidarla</span>
+              <span className="block text-2xs text-tclas-ink/50">Repasarla ahora te ayuda a no olvidarla</span>
             </span>
             <span className="text-xs font-bold text-tclas-gold-shadow shrink-0">Repasar ›</span>
           </button>

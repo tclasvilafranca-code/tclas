@@ -58,7 +58,7 @@ export function LessonCompleteModal({ stars, score, xpAwarded, passed, pieceTitl
         {passed && <Confetti />}
         <MascotOwl mood={stars >= 1 ? "celebrate" : "encourage"} size={84} className="mx-auto mb-2" />
         {isReview && passed && (
-          <span className="inline-block text-[11px] font-bold uppercase tracking-wide text-tclas-gold-shadow bg-tclas-gold/15 rounded-full px-2.5 py-0.5 mb-1">
+          <span className="inline-block text-2xs font-bold uppercase tracking-wide text-tclas-gold-shadow bg-tclas-gold/15 rounded-full px-2.5 py-0.5 mb-1">
             🔁 Repaso
           </span>
         )}

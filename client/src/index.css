@@ -2,6 +2,11 @@
 @import "tailwindcss";
 
 @theme {
+  /* Escala tipografica: un unico paso "micro" (11px) para etiquetas/leyendas,
+     en vez de valores sueltos (9/10/11px) repartidos sin criterio por la app. */
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+
   --color-tclas-cream: #fbf6ee;
   --color-tclas-cream-dark: #efe6d6;
   --color-tclas-ink: #241a2e;

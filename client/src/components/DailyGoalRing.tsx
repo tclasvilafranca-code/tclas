@@ -52,10 +52,10 @@ export function DailyGoalRing({ minutesToday, goalMinutes, onGoalChange }: Props
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           {reached ? <IconCheck className="w-6 h-6 text-tclas-sage" /> : <span className="text-lg font-display leading-none">{minutesToday}</span>}
-          {!reached && <span className="text-[9px] text-tclas-ink/40">de {goalMinutes}</span>}
+          {!reached && <span className="text-2xs text-tclas-ink/40">de {goalMinutes}</span>}
         </div>
       </div>
-      <p className="text-[11px] uppercase tracking-wide text-tclas-ink/40 mt-2">Objetivo de hoy</p>
+      <p className="text-2xs uppercase tracking-wide text-tclas-ink/40 mt-2">Objetivo de hoy</p>
 
       {editing ? (
         <div className="flex items-center gap-2 mt-1.5">
@@ -74,12 +74,12 @@ export function DailyGoalRing({ minutesToday, goalMinutes, onGoalChange }: Props
           >
             +
           </button>
-          <button onClick={() => setEditing(false)} className="text-[11px] text-tclas-plum underline underline-offset-2 ml-1">
+          <button onClick={() => setEditing(false)} className="text-2xs text-tclas-plum underline underline-offset-2 ml-1">
             Listo
           </button>
         </div>
       ) : (
-        <button onClick={() => setEditing(true)} className="text-[11px] text-tclas-ink/40 hover:text-tclas-ink/70 underline underline-offset-2 mt-0.5">
+        <button onClick={() => setEditing(true)} className="text-2xs text-tclas-ink/40 hover:text-tclas-ink/70 underline underline-offset-2 mt-0.5">
           Cambiar objetivo
         </button>
       )}

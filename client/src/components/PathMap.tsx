@@ -123,7 +123,7 @@ export function PathMap({ pieces, onOpenLesson, onOpenPiece, heartsCurrent, hear
                       <IconPlay className="w-7 h-7 ml-0.5" />
                     )}
                   </button>
-                  <p className="relative z-10 text-center text-[11px] text-tclas-ink/50 mt-1 w-24 leading-tight">
+                  <p className="relative z-10 text-center text-2xs text-tclas-ink/50 mt-1 w-24 leading-tight">
                     {noHearts ? (
                       <span className="text-tclas-rose/70">Sin corazones</span>
                     ) : (

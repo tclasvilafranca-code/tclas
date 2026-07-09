@@ -39,7 +39,7 @@ export function PieceDetailContent({ piece, showIntro = true }: Props) {
         </div>
         {piece.content.bass && piece.content.clef === "grand" && (
           <div className="bg-white/70 rounded-xl border border-tclas-ink/10 p-3 sm:p-4 grid gap-1 mt-2 overflow-x-auto">
-            <p className="text-[10px] uppercase tracking-wide text-tclas-ink/30 mb-1">Mano izquierda</p>
+            <p className="text-2xs uppercase tracking-wide text-tclas-ink/30 mb-1">Mano izquierda</p>
             {chunk(piece.content.bass, 8).map((row, i) => (
               <StaffView key={i} clef="bass" notes={row} />
             ))}
@@ -47,7 +47,7 @@ export function PieceDetailContent({ piece, showIntro = true }: Props) {
         )}
         {piece.content.isDuet && piece.content.duetPart && (
           <div className="bg-tclas-plum/5 rounded-xl border border-tclas-plum/20 p-3 sm:p-4 grid gap-1 mt-2 overflow-x-auto">
-            <p className="text-[10px] uppercase tracking-wide text-tclas-plum/50 mb-1">🎹 Parte de tu profesora o familia (dúo)</p>
+            <p className="text-2xs uppercase tracking-wide text-tclas-plum/50 mb-1">🎹 Parte de tu profesora o familia (dúo)</p>
             {chunk(piece.content.duetPart, 8).map((row, i) => (
               <StaffView key={i} clef="bass" notes={row} />
             ))}

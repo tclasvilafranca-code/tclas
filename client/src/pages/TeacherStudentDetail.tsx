@@ -328,7 +328,7 @@ export function TeacherStudentDetail() {
                   <span className="text-xl">{p.iconEmoji}</span>
                   <span className="flex-1 min-w-0">
                     <span className="block text-sm font-semibold truncate">{p.title}</span>
-                    <span className="block text-[11px] text-tclas-ink/50">
+                    <span className="block text-2xs text-tclas-ink/50">
                       {AGE_FILTER_LABEL[p.ageGroup]} · {p.defaultWeeks} sem.{p.seasonalTag ? ` · 🎄` : ""}
                     </span>
                   </span>
@@ -355,7 +355,7 @@ export function TeacherStudentDetail() {
                       className="w-14 border border-tclas-ink/20 rounded px-1 py-1 text-xs text-center"
                       title="Semanas"
                     />
-                    <span className="text-[10px] text-tclas-ink/40">sem.</span>
+                    <span className="text-2xs text-tclas-ink/40">sem.</span>
                     <button onClick={() => moveSelection(idx, -1)} disabled={idx === 0} className="text-tclas-ink/40 hover:text-tclas-ink disabled:opacity-20 px-1">
                       ↑
                     </button>

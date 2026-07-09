@@ -24,7 +24,7 @@ export function BottomNav() {
             to={tab.to}
             end={tab.end}
             className={({ isActive }) =>
-              `flex flex-col items-center gap-0.5 py-2.5 text-[11px] font-semibold transition-colors ${
+              `flex flex-col items-center gap-0.5 py-2.5 text-2xs font-semibold transition-colors ${
                 isActive ? "text-tclas-plum" : "text-tclas-ink/40 hover:text-tclas-ink/60"
               }`
             }

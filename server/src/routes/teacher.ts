@@ -18,9 +18,10 @@ function slugifyUsername(name: string): string {
     .slice(0, 16);
 }
 
-function randomPin(): string {
-  return String(Math.floor(1000 + Math.random() * 9000));
-}
+// PIN por defecto para cualquier acceso nuevo (alumno o profesor/a): sencillo
+// de dar de viva voz o apuntar en un papel, y siempre obliga a cambiarlo en
+// el primer login (ver mustChangePin) para que no quede como PIN definitivo.
+const DEFAULT_PIN = "1234";
 
 /** Busca un alumno por id, pero SOLO si pertenece a este profesor: evita que
  * un profesor pueda ver o modificar los alumnos de otro adivinando/copiando
@@ -83,8 +84,7 @@ router.post("/students", async (req: AuthedRequest, res) => {
     suffix += 1;
     username = `${base}${suffix}`;
   }
-  const pin = randomPin();
-  const pinHash = await bcrypt.hash(pin, 10);
+  const pinHash = await bcrypt.hash(DEFAULT_PIN, 10);
 
   const user = await prisma.user.create({
     data: {
@@ -92,6 +92,7 @@ router.post("/students", async (req: AuthedRequest, res) => {
       role: "STUDENT",
       username,
       pinHash,
+      mustChangePin: true,
       studentProfile: {
         create: { ageGroup: parsed.data.ageGroup, birthYear: parsed.data.birthYear, teacherId: req.auth!.userId, onboarded: true },
       },
@@ -99,7 +100,7 @@ router.post("/students", async (req: AuthedRequest, res) => {
     include: { studentProfile: true },
   });
 
-  res.status(201).json({ id: user.id, name: user.name, username, pin, ageGroup: user.studentProfile?.ageGroup });
+  res.status(201).json({ id: user.id, name: user.name, username, pin: DEFAULT_PIN, ageGroup: user.studentProfile?.ageGroup });
 });
 
 router.get("/students/:id", async (req: AuthedRequest, res) => {

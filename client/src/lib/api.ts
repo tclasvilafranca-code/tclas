@@ -94,6 +94,7 @@ export interface Me {
   username: string | null;
   name: string;
   role: Role;
+  mustChangePin: boolean;
   studentProfile: StudentProfile | null;
 }
 

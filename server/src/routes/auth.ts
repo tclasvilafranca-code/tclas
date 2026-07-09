@@ -117,6 +117,9 @@ const setPinAccessSchema = z.object({
 // lo configura una vez, y desde entonces puede entrar tambien con usuario+PIN
 // (ver /auth/pin-login). Solo para profesores: el PIN del alumnado lo gestiona
 // la profesora desde su panel, no cada alumno por su cuenta.
+// Marca mustChangePin=true siempre: es un flujo de configuracion rapida (igual
+// que el PIN por defecto de un alumno nuevo), asi que la proxima vez que entre
+// con usuario+PIN se le pedira confirmarlo/cambiarlo una vez mas.
 router.post("/set-pin-access", requireAuth, requireRole("TEACHER"), async (req: AuthedRequest, res) => {
   const parsed = setPinAccessSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: parsed.error.errors[0]?.message ?? "Datos invalidos" });
@@ -128,8 +131,25 @@ router.post("/set-pin-access", requireAuth, requireRole("TEACHER"), async (req: 
   }
 
   const pinHash = await bcrypt.hash(pin, 10);
-  await prisma.user.update({ where: { id: req.auth!.userId }, data: { username, pinHash } });
+  await prisma.user.update({ where: { id: req.auth!.userId }, data: { username, pinHash, mustChangePin: true } });
   res.json({ ok: true, username });
+});
+
+const changePinSchema = z.object({
+  newPin: z.string().regex(/^\d{4,6}$/, "El PIN debe tener entre 4 y 6 numeros"),
+});
+
+// Cambiar el propio PIN: lo usa cualquier cuenta (alumno o profesor/a) para
+// salir del PIN por defecto (1234) la primera vez que entra, y sirve tambien
+// como cambio de PIN normal despues. No pide el PIN actual porque ya se
+// acaba de usar para autenticar esta misma sesion.
+router.post("/change-pin", requireAuth, async (req: AuthedRequest, res) => {
+  const parsed = changePinSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: parsed.error.errors[0]?.message ?? "Datos invalidos" });
+
+  const pinHash = await bcrypt.hash(parsed.data.newPin, 10);
+  await prisma.user.update({ where: { id: req.auth!.userId }, data: { pinHash, mustChangePin: false } });
+  res.json({ ok: true });
 });
 
 router.get("/me", requireAuth, async (req: AuthedRequest, res) => {
@@ -150,6 +170,7 @@ router.get("/me", requireAuth, async (req: AuthedRequest, res) => {
     username: user.username,
     name: user.name,
     role: user.role,
+    mustChangePin: user.mustChangePin,
     studentProfile,
   });
 });

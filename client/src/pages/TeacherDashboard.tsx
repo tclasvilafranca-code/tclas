@@ -113,6 +113,7 @@ export function TeacherDashboard() {
             <p className="font-mono text-lg">
               PIN: <b>{newCreds.pin}</b>
             </p>
+            <p className="text-xs text-tclas-ink/50 mt-2">Al entrar por primera vez, le pedirá cambiar este PIN por uno propio.</p>
             <button onClick={() => setNewCreds(null)} className="text-xs text-tclas-ink/50 underline mt-3">
               Cerrar
             </button>

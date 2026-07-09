@@ -52,9 +52,10 @@ export function SetPinAccessModal({ currentUsername, onClose, onSaved }: Props) 
         {done ? (
           <div className="text-center py-4">
             <p className="text-tclas-sage font-semibold mb-2">¡Listo! Ya puedes entrar con usuario y PIN.</p>
-            <p className="font-mono text-lg mb-4">
+            <p className="font-mono text-lg mb-2">
               usuario: <b>{username}</b>
             </p>
+            <p className="text-xs text-tclas-ink/50 mb-4">La próxima vez que entres con este PIN, te pedirá confirmarlo o cambiarlo.</p>
             <button onClick={onClose} className="bg-tclas-plum text-tclas-cream rounded-lg py-2.5 px-6 font-semibold hover:bg-tclas-plum-light">
               Cerrar
             </button>

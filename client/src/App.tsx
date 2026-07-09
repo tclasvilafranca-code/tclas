@@ -12,6 +12,7 @@ import { TeacherDashboard } from "./pages/TeacherDashboard";
 import { TeacherStudentDetail } from "./pages/TeacherStudentDetail";
 import { AppShell } from "./components/AppShell";
 import { Metronome } from "./components/Metronome";
+import { ForceChangePinScreen } from "./components/ForceChangePinScreen";
 
 function Splash() {
   return <div className="min-h-screen flex items-center justify-center text-tclas-ink/40">Cargando t-clas...</div>;
@@ -22,6 +23,7 @@ function RequireStudent({ children }: { children: ReactNode }) {
   if (loading) return <Splash />;
   if (!me) return <Navigate to="/" replace />;
   if (me.role !== "STUDENT") return <Navigate to="/teacher" replace />;
+  if (me.mustChangePin) return <ForceChangePinScreen />;
   return (
     <>
       {children}
@@ -35,6 +37,7 @@ function RequireTeacher({ children }: { children: ReactNode }) {
   if (loading) return <Splash />;
   if (!me) return <Navigate to="/" replace />;
   if (me.role !== "TEACHER") return <Navigate to="/app" replace />;
+  if (me.mustChangePin) return <ForceChangePinScreen />;
   return children;
 }
 

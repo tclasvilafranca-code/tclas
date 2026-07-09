@@ -24,6 +24,7 @@ model User {
   passwordHash String?
   username     String?  @unique // alumnos: usuario corto para entrar
   pinHash      String? // alumnos: PIN hasheado
+  mustChangePin Boolean @default(false) // true tras crear el acceso con el PIN por defecto (1234): obliga a cambiarlo en el primer login
   name         String
   role         String // "STUDENT" | "TEACHER"
   createdAt    DateTime @default(now())

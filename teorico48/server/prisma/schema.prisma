@@ -30,6 +30,9 @@ model User {
   resetTokenHash      String?
   resetTokenExpiresAt DateTime?
 
+  // Se incrementa al cambiar la contrasena para invalidar tokens JWT ya emitidos
+  tokenVersion Int @default(0)
+
   // Aceptacion legal en el registro (fecha, para poder acreditarla)
   termsAcceptedAt DateTime?
 
@@ -57,7 +60,10 @@ model Question {
   options     Json // string[4]
   correctIndex Int
   explanation String
-  // Preguntas "graves" (alcohol, drogas, velocidad...) restan doble en el examen real
+  // Etiqueta informativa para preguntas de temas especialmente delicados
+  // (alcohol, drogas, velocidad...). No afecta a la puntuación del test:
+  // la regla de aprobado es siempre "máximo 3 fallos de 30", igual que en
+  // el examen real.
   isSerious   Boolean @default(false)
 
   answers Answer[]

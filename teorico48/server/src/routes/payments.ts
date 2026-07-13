@@ -2,6 +2,7 @@ import { Router } from "express";
 import Stripe from "stripe";
 import { PrismaClient } from "@prisma/client";
 import { requireAuth, AuthedRequest } from "../middleware/auth";
+import { asyncHandler } from "../lib/asyncHandler";
 
 const prisma = new PrismaClient();
 export const paymentsRouter = Router();
@@ -12,27 +13,31 @@ const stripe = stripeSecret ? new Stripe(stripeSecret) : null;
 const PACK_PRICE_ID = process.env.STRIPE_PACK_PRICE_ID; // precio "Pack 48h" creado en el dashboard de Stripe
 const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
 
-paymentsRouter.post("/checkout", requireAuth, async (req: AuthedRequest, res) => {
-  if (!stripe || !PACK_PRICE_ID) {
-    return res.status(503).json({ error: "Los pagos todavía no están configurados en el servidor" });
-  }
+paymentsRouter.post(
+  "/checkout",
+  requireAuth,
+  asyncHandler(async (req: AuthedRequest, res) => {
+    if (!stripe || !PACK_PRICE_ID) {
+      return res.status(503).json({ error: "Los pagos todavía no están configurados en el servidor" });
+    }
 
-  const user = await prisma.user.findUnique({ where: { id: req.userId } });
-  if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
-  if (user.isPremium) return res.status(400).json({ error: "Ya tienes el Pack 48h activo" });
+    const user = await prisma.user.findUnique({ where: { id: req.userId } });
+    if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
+    if (user.isPremium) return res.status(400).json({ error: "Ya tienes el Pack 48h activo" });
 
-  const session = await stripe.checkout.sessions.create({
-    mode: "payment",
-    payment_method_types: ["card"],
-    line_items: [{ price: PACK_PRICE_ID, quantity: 1 }],
-    customer_email: user.email,
-    client_reference_id: user.id,
-    success_url: `${CLIENT_URL}/paywall?success=1`,
-    cancel_url: `${CLIENT_URL}/paywall?canceled=1`,
-  });
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      payment_method_types: ["card"],
+      line_items: [{ price: PACK_PRICE_ID, quantity: 1 }],
+      customer_email: user.email,
+      client_reference_id: user.id,
+      success_url: `${CLIENT_URL}/paywall?success=1`,
+      cancel_url: `${CLIENT_URL}/paywall?canceled=1`,
+    });
 
-  res.json({ url: session.url });
-});
+    res.json({ url: session.url });
+  })
+);
 
 // Nota: esta ruta necesita el body en crudo (raw), se monta por separado en index.ts
 export async function stripeWebhookHandler(req: import("express").Request, res: import("express").Response) {

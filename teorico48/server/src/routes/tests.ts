@@ -4,16 +4,20 @@ import { PrismaClient } from "@prisma/client";
 import { requireAuth, AuthedRequest } from "../middleware/auth";
 import { generateExam, generateReviewOfFails, isPassed, EXAM_SIZE } from "../generator";
 import { BADGES, levelForXp, unlockedBadgeIds, updateStreak, xpForAttempt } from "../gamification";
+import { asyncHandler } from "../lib/asyncHandler";
 
 const prisma = new PrismaClient();
 export const testsRouter = Router();
 
 const FREE_DAILY_EXAMS = 1;
 
-testsRouter.get("/categories", async (_req, res) => {
-  const categories = await prisma.category.findMany({ orderBy: { name: "asc" } });
-  res.json({ categories });
-});
+testsRouter.get(
+  "/categories",
+  asyncHandler(async (_req, res) => {
+    const categories = await prisma.category.findMany({ orderBy: { name: "asc" } });
+    res.json({ categories });
+  })
+);
 
 function publicQuestion(q: { id: string; text: string; imageUrl: string | null; options: unknown; category: { name: string; slug: string } }) {
   return {
@@ -25,7 +29,7 @@ function publicQuestion(q: { id: string; text: string; imageUrl: string | null; 
   };
 }
 
-testsRouter.post("/exam", requireAuth, async (req: AuthedRequest, res) => {
+testsRouter.post("/exam", requireAuth, asyncHandler(async (req: AuthedRequest, res) => {
   const user = await prisma.user.findUnique({ where: { id: req.userId } });
   if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
 
@@ -33,7 +37,9 @@ testsRouter.post("/exam", requireAuth, async (req: AuthedRequest, res) => {
     const since = new Date();
     since.setHours(0, 0, 0, 0);
     const todaysExams = await prisma.testAttempt.count({
-      where: { userId: user.id, mode: "exam", startedAt: { gte: since } },
+      // Solo cuentan los intentos completados: si el usuario abandona un
+      // simulacro sin terminarlo, no debe perder su intento gratuito del día.
+      where: { userId: user.id, mode: "exam", finishedAt: { gte: since } },
     });
     if (todaysExams >= FREE_DAILY_EXAMS) {
       return res.status(403).json({
@@ -56,9 +62,9 @@ testsRouter.post("/exam", requireAuth, async (req: AuthedRequest, res) => {
     attemptId: attempt.id,
     questions: questions.map(publicQuestion),
   });
-});
+}));
 
-testsRouter.post("/review", requireAuth, async (req: AuthedRequest, res) => {
+testsRouter.post("/review", requireAuth, asyncHandler(async (req: AuthedRequest, res) => {
   const user = await prisma.user.findUnique({ where: { id: req.userId } });
   if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
 
@@ -82,7 +88,7 @@ testsRouter.post("/review", requireAuth, async (req: AuthedRequest, res) => {
     attemptId: attempt.id,
     questions: questions.map(publicQuestion),
   });
-});
+}));
 
 const submitSchema = z.object({
   answers: z.array(
@@ -93,7 +99,7 @@ const submitSchema = z.object({
   ),
 });
 
-testsRouter.post("/:attemptId/submit", requireAuth, async (req: AuthedRequest, res) => {
+testsRouter.post("/:attemptId/submit", requireAuth, asyncHandler(async (req: AuthedRequest, res) => {
   const parsed = submitSchema.safeParse(req.body);
   if (!parsed.success) {
     return res.status(400).json({ error: parsed.error.issues[0].message });
@@ -203,9 +209,9 @@ testsRouter.post("/:attemptId/submit", requireAuth, async (req: AuthedRequest, r
       newBadges,
     },
   });
-});
+}));
 
-testsRouter.get("/stats", requireAuth, async (req: AuthedRequest, res) => {
+testsRouter.get("/stats", requireAuth, asyncHandler(async (req: AuthedRequest, res) => {
   const user = await prisma.user.findUniqueOrThrow({ where: { id: req.userId } });
   const attempts = await prisma.testAttempt.findMany({
     where: { userId: req.userId, finishedAt: { not: null } },
@@ -231,13 +237,13 @@ testsRouter.get("/stats", requireAuth, async (req: AuthedRequest, res) => {
     totalPassed: stats.totalPassed,
     badges: BADGES.map((b) => ({ id: b.id, label: b.label, emoji: b.emoji, unlocked: unlocked.has(b.id) })),
   });
-});
+}));
 
-testsRouter.get("/history", requireAuth, async (req: AuthedRequest, res) => {
+testsRouter.get("/history", requireAuth, asyncHandler(async (req: AuthedRequest, res) => {
   const attempts = await prisma.testAttempt.findMany({
     where: { userId: req.userId, finishedAt: { not: null } },
     orderBy: { finishedAt: "desc" },
     take: 20,
   });
   res.json({ attempts });
-});
+}));

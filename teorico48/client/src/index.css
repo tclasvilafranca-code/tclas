@@ -1,18 +1,44 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --color-t48-ink: #101828;
-  --color-t48-blue: #1d4ed8;
-  --color-t48-blue-dark: #1e3a8a;
-  --color-t48-green: #16a34a;
-  --color-t48-red: #dc2626;
-  --color-t48-amber: #d97706;
+  --color-t48-ink: #111827;
+  --color-t48-blue: #2563eb;
+  --color-t48-blue-dark: #1e40af;
+  --color-t48-green: #22c55e;
+  --color-t48-green-dark: #16a34a;
+  --color-t48-amber: #facc15;
+  --color-t48-red: #ef4444;
   --color-t48-bg: #f8fafc;
 }
 
 body {
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "Manrope", system-ui, sans-serif;
   background-color: var(--color-t48-bg);
   color: var(--color-t48-ink);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }

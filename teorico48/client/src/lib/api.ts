@@ -54,6 +54,7 @@ export const api = {
       body: JSON.stringify({ answers }),
     }),
   history: () => request<{ attempts: Attempt[] }>("/tests/history"),
+  stats: () => request<Stats>("/tests/stats"),
   checkout: () => request<{ url: string }>("/payments/checkout", { method: "POST" }),
 };
 
@@ -62,6 +63,27 @@ export interface User {
   email: string;
   examDate: string | null;
   isPremium: boolean;
+  xp: number;
+  level: number;
+  currentStreak: number;
+  longestStreak: number;
+}
+
+export interface Badge {
+  id: string;
+  label: string;
+  emoji: string;
+  unlocked: boolean;
+}
+
+export interface Stats {
+  xp: number;
+  level: number;
+  currentStreak: number;
+  longestStreak: number;
+  totalAttempts: number;
+  totalPassed: number;
+  badges: Badge[];
 }
 
 export interface Category {
@@ -92,6 +114,14 @@ export interface SubmitResult {
     explanation: string;
     category: string;
   }[];
+  gamification: {
+    xpGained: number;
+    totalXp: number;
+    level: number;
+    leveledUp: boolean;
+    currentStreak: number;
+    newBadges: { id: string; label: string; emoji: string }[];
+  };
 }
 
 export interface Attempt {

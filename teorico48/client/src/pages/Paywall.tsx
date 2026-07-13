@@ -26,8 +26,11 @@ export function Paywall() {
   if (user?.isPremium) {
     return (
       <div className="mx-auto max-w-md px-4 py-16 text-center">
-        <p className="text-2xl font-bold text-t48-green">Ya tienes el Pack 48h activo 🎉</p>
-        <button onClick={() => navigate("/dashboard")} className="mt-4 rounded-lg bg-t48-blue px-4 py-2 font-semibold text-white">
+        <p className="text-2xl font-extrabold text-t48-green-dark">Ya tienes el Pack 48h activo 🎉</p>
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="mt-4 rounded-xl bg-t48-blue px-4 py-2.5 font-bold text-white transition-transform hover:scale-[1.02] active:scale-95"
+        >
           Ir al panel
         </button>
       </div>
@@ -37,20 +40,20 @@ export function Paywall() {
   return (
     <div className="mx-auto max-w-md px-4 py-16">
       {params.get("success") && (
-        <p className="mb-4 rounded-lg bg-t48-green/10 p-3 text-center text-t48-green">
+        <p className="mb-4 rounded-xl bg-t48-green/10 p-3 text-center font-medium text-t48-green-dark">
           Pago recibido, confirmando tu acceso...{" "}
           <button onClick={() => refreshUser()} className="underline">Actualizar</button>
         </p>
       )}
       {params.get("canceled") && (
-        <p className="mb-4 rounded-lg bg-t48-amber/10 p-3 text-center text-t48-amber">Pago cancelado.</p>
+        <p className="mb-4 rounded-xl bg-t48-amber/10 p-3 text-center font-medium text-amber-700">Pago cancelado.</p>
       )}
 
-      <div className="rounded-xl border border-slate-200 bg-white p-6 text-center">
-        <p className="text-sm font-semibold uppercase tracking-wide text-t48-amber">Pack 48h</p>
-        <p className="mt-2 text-4xl font-extrabold text-t48-ink">9,99 €</p>
-        <p className="mt-1 text-sm text-slate-500">Pago único, sin suscripción</p>
-        <ul className="mt-5 space-y-2 text-left text-sm text-slate-600">
+      <div className="rounded-3xl border border-slate-200 bg-white p-7 text-center shadow-sm">
+        <p className="text-sm font-bold uppercase tracking-wide text-amber-600">Pack 48h</p>
+        <p className="mt-2 text-5xl font-extrabold tracking-tight text-t48-ink">9,99 €</p>
+        <p className="mt-1 text-sm text-slate-400">Pago único · sin suscripción</p>
+        <ul className="mt-6 space-y-2.5 text-left text-sm font-medium text-slate-600">
           <li>✔ Simulacros ilimitados</li>
           <li>✔ Modo repaso centrado en tus fallos</li>
           <li>✔ Plan de estudio con cuenta atrás</li>
@@ -58,11 +61,11 @@ export function Paywall() {
         <button
           onClick={handleCheckout}
           disabled={busy}
-          className="mt-6 w-full rounded-lg bg-t48-amber px-4 py-2.5 font-semibold text-white disabled:opacity-50"
+          className="mt-7 w-full rounded-xl bg-t48-amber px-4 py-3 font-bold text-t48-ink transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-50"
         >
           {busy ? "Un momento..." : "Desbloquear ahora"}
         </button>
-        {error && <p className="mt-3 text-sm text-t48-red">{error}</p>}
+        {error && <p className="mt-3 text-sm font-medium text-t48-red">{error}</p>}
       </div>
     </div>
   );

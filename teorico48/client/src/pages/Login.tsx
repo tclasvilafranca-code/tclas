@@ -71,17 +71,17 @@ export function Register() {
 function Fields(props: { email: string; setEmail: (v: string) => void; password: string; setPassword: (v: string) => void }) {
   return (
     <>
-      <label className="block text-sm font-medium text-slate-700">
+      <label className="block text-sm font-semibold text-slate-600">
         Email
         <input
           type="email"
           required
           value={props.email}
           onChange={(e) => props.setEmail(e.target.value)}
-          className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+          className="mt-1.5 w-full rounded-xl border border-slate-200 px-3.5 py-2.5 outline-none transition-colors focus:border-t48-blue"
         />
       </label>
-      <label className="mt-4 block text-sm font-medium text-slate-700">
+      <label className="mt-4 block text-sm font-semibold text-slate-600">
         Contraseña
         <input
           type="password"
@@ -89,7 +89,7 @@ function Fields(props: { email: string; setEmail: (v: string) => void; password:
           minLength={6}
           value={props.password}
           onChange={(e) => props.setPassword(e.target.value)}
-          className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+          className="mt-1.5 w-full rounded-xl border border-slate-200 px-3.5 py-2.5 outline-none transition-colors focus:border-t48-blue"
         />
       </label>
     </>
@@ -105,15 +105,15 @@ function AuthForm(props: {
   children: ReactNode;
 }) {
   return (
-    <div className="mx-auto max-w-sm px-4 py-16">
-      <h1 className="mb-6 text-center text-2xl font-bold text-t48-ink">{props.title}</h1>
-      <form onSubmit={props.onSubmit} className="rounded-xl border border-slate-200 bg-white p-6">
+    <div className="mx-auto max-w-sm px-4 py-20">
+      <h1 className="mb-6 text-center text-2xl font-extrabold tracking-tight text-t48-ink">{props.title}</h1>
+      <form onSubmit={props.onSubmit} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         {props.children}
-        {props.error && <p className="mt-3 text-sm text-t48-red">{props.error}</p>}
+        {props.error && <p className="mt-3 text-sm font-medium text-t48-red">{props.error}</p>}
         <button
           type="submit"
           disabled={props.busy}
-          className="mt-6 w-full rounded-lg bg-t48-blue px-4 py-2.5 font-semibold text-white hover:bg-t48-blue-dark disabled:opacity-50"
+          className="mt-6 w-full rounded-xl bg-t48-blue px-4 py-3 font-bold text-white transition-transform hover:scale-[1.02] hover:bg-t48-blue-dark active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
         >
           {props.busy ? "Un momento..." : props.submitLabel}
         </button>

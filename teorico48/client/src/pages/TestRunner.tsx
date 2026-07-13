@@ -44,13 +44,16 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
     }
   }
 
-  if (loading) return <div className="p-8 text-center text-slate-500">Preparando tu test...</div>;
+  if (loading) return <div className="p-16 text-center text-slate-400">Preparando tu test...</div>;
 
   if (error) {
     return (
       <div className="mx-auto max-w-md px-4 py-16 text-center">
-        <p className="text-t48-red">{error}</p>
-        <button onClick={() => navigate("/dashboard")} className="mt-4 rounded-lg bg-t48-blue px-4 py-2 font-semibold text-white">
+        <p className="font-medium text-t48-red">{error}</p>
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="mt-4 rounded-xl bg-t48-blue px-4 py-2.5 font-bold text-white transition-transform hover:scale-[1.02] active:scale-95"
+        >
           Volver al panel
         </button>
       </div>
@@ -62,30 +65,30 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
-      <div className="mb-4 flex items-center justify-between text-sm text-slate-500">
-        <span>Pregunta {current + 1} de {questions.length}</span>
+      <div className="mb-3 flex items-center justify-between text-sm font-semibold text-slate-400">
+        <span>{current + 1} / {questions.length}</span>
         <span>{answeredCount}/{questions.length} respondidas</span>
       </div>
-      <div className="h-2 w-full rounded-full bg-slate-200">
+      <div className="h-2 w-full rounded-full bg-slate-100">
         <div
-          className="h-2 rounded-full bg-t48-blue transition-all"
+          className="h-2 rounded-full bg-t48-blue transition-all duration-300"
           style={{ width: `${((current + 1) / questions.length) * 100}%` }}
         />
       </div>
 
       {q && (
-        <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6">
-          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-t48-blue">{q.category}</p>
-          <p className="text-lg font-medium text-t48-ink">{q.text}</p>
-          <div className="mt-4 flex flex-col gap-2">
+        <div key={q.id} className="mt-6 animate-[fadeIn_0.15s_ease-out] rounded-2xl border border-slate-200 bg-white p-6">
+          <p className="mb-1.5 text-xs font-bold uppercase tracking-wide text-t48-blue">{q.category}</p>
+          <p className="text-lg font-bold leading-snug text-t48-ink">{q.text}</p>
+          <div className="mt-5 flex flex-col gap-2">
             {q.options.map((opt, i) => (
               <button
                 key={i}
                 onClick={() => select(q.id, i)}
-                className={`rounded-lg border px-4 py-3 text-left ${
+                className={`rounded-xl border px-4 py-3 text-left transition-all duration-150 ${
                   answers[q.id] === i
                     ? "border-t48-blue bg-t48-blue/10 font-semibold text-t48-blue-dark"
-                    : "border-slate-200 hover:border-t48-blue"
+                    : "border-slate-200 hover:border-t48-blue/50 hover:bg-slate-50"
                 }`}
               >
                 {opt}
@@ -99,14 +102,14 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
         <button
           onClick={() => setCurrent((c) => Math.max(0, c - 1))}
           disabled={current === 0}
-          className="rounded-lg border border-slate-300 px-4 py-2 font-medium text-slate-700 disabled:opacity-40"
+          className="rounded-xl border border-slate-200 px-4 py-2.5 font-bold text-slate-600 transition-colors hover:bg-slate-50 disabled:opacity-30"
         >
           Anterior
         </button>
         {current < questions.length - 1 ? (
           <button
             onClick={() => setCurrent((c) => Math.min(questions.length - 1, c + 1))}
-            className="rounded-lg bg-t48-blue px-4 py-2 font-semibold text-white"
+            className="rounded-xl bg-t48-blue px-5 py-2.5 font-bold text-white transition-transform hover:scale-[1.02] active:scale-95"
           >
             Siguiente
           </button>
@@ -114,9 +117,9 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className="rounded-lg bg-t48-green px-5 py-2 font-semibold text-white disabled:opacity-50"
+            className="rounded-xl bg-t48-green px-5 py-2.5 font-bold text-white transition-transform hover:scale-[1.02] hover:bg-t48-green-dark active:scale-95 disabled:opacity-50"
           >
-            {submitting ? "Enviando..." : "Terminar y corregir"}
+            {submitting ? "Corrigiendo..." : "Terminar y corregir"}
           </button>
         )}
       </div>

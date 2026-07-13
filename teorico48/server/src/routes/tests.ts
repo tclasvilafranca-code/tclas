@@ -3,6 +3,7 @@ import { z } from "zod";
 import { PrismaClient } from "@prisma/client";
 import { requireAuth, AuthedRequest } from "../middleware/auth";
 import { generateExam, generateReviewOfFails, isPassed, EXAM_SIZE } from "../generator";
+import { BADGES, levelForXp, unlockedBadgeIds, updateStreak, xpForAttempt } from "../gamification";
 
 const prisma = new PrismaClient();
 export const testsRouter = Router();
@@ -128,9 +129,49 @@ testsRouter.post("/:attemptId/submit", requireAuth, async (req: AuthedRequest, r
   const total = answerRows.length;
   const passed = isPassed(score, total);
 
+  // Snapshot de intentos previos (antes de cerrar este) para saber qué medallas eran nuevas.
+  const priorAttempts = await prisma.testAttempt.findMany({
+    where: { userId: req.userId, finishedAt: { not: null } },
+    select: { score: true, total: true, passed: true },
+  });
+
   const updated = await prisma.testAttempt.update({
     where: { id: attempt.id },
     data: { finishedAt: new Date(), score, total, passed },
+  });
+
+  const user = await prisma.user.findUniqueOrThrow({ where: { id: req.userId } });
+  const xpGained = xpForAttempt(score, total, passed);
+  const streak = updateStreak(user.lastActivityDate, user.currentStreak, user.longestStreak);
+  const newXp = user.xp + xpGained;
+
+  const beforeStats = {
+    xp: user.xp,
+    longestStreak: user.longestStreak,
+    totalAttempts: priorAttempts.length,
+    totalPassed: priorAttempts.filter((a) => a.passed).length,
+    hasPerfect: priorAttempts.some((a) => a.score !== null && a.total !== null && a.score === a.total),
+  };
+  const afterStats = {
+    xp: newXp,
+    longestStreak: streak.longestStreak,
+    totalAttempts: beforeStats.totalAttempts + 1,
+    totalPassed: beforeStats.totalPassed + (passed ? 1 : 0),
+    hasPerfect: beforeStats.hasPerfect || score === total,
+  };
+
+  const badgesBefore = new Set(unlockedBadgeIds(beforeStats));
+  const newBadgeIds = unlockedBadgeIds(afterStats).filter((id) => !badgesBefore.has(id));
+  const newBadges = BADGES.filter((b) => newBadgeIds.includes(b.id)).map((b) => ({ id: b.id, label: b.label, emoji: b.emoji }));
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      xp: newXp,
+      currentStreak: streak.currentStreak,
+      longestStreak: streak.longestStreak,
+      lastActivityDate: streak.lastActivityDate,
+    },
   });
 
   const detail = await prisma.answer.findMany({
@@ -153,6 +194,42 @@ testsRouter.post("/:attemptId/submit", requireAuth, async (req: AuthedRequest, r
       category: d.question.category.name,
     })),
     attempt: updated,
+    gamification: {
+      xpGained,
+      totalXp: newXp,
+      level: levelForXp(newXp),
+      leveledUp: levelForXp(user.xp) !== levelForXp(newXp),
+      currentStreak: streak.currentStreak,
+      newBadges,
+    },
+  });
+});
+
+testsRouter.get("/stats", requireAuth, async (req: AuthedRequest, res) => {
+  const user = await prisma.user.findUniqueOrThrow({ where: { id: req.userId } });
+  const attempts = await prisma.testAttempt.findMany({
+    where: { userId: req.userId, finishedAt: { not: null } },
+    select: { score: true, total: true, passed: true },
+  });
+
+  const stats = {
+    xp: user.xp,
+    longestStreak: user.longestStreak,
+    totalAttempts: attempts.length,
+    totalPassed: attempts.filter((a) => a.passed).length,
+    hasPerfect: attempts.some((a) => a.score !== null && a.total !== null && a.score === a.total),
+  };
+
+  const unlocked = new Set(unlockedBadgeIds(stats));
+
+  res.json({
+    xp: user.xp,
+    level: levelForXp(user.xp),
+    currentStreak: user.currentStreak,
+    longestStreak: user.longestStreak,
+    totalAttempts: stats.totalAttempts,
+    totalPassed: stats.totalPassed,
+    badges: BADGES.map((b) => ({ id: b.id, label: b.label, emoji: b.emoji, unlocked: unlocked.has(b.id) })),
   });
 });
 

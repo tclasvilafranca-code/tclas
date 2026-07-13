@@ -20,6 +20,12 @@ model User {
   isPremium        Boolean @default(false)
   stripeCustomerId String?
 
+  // Gamificacion
+  xp               Int       @default(0)
+  currentStreak    Int       @default(0)
+  longestStreak    Int       @default(0)
+  lastActivityDate DateTime?
+
   attempts TestAttempt[]
 
   @@map("users")

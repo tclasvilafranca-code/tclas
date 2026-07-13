@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { PrismaClient } from "@prisma/client";
 import { signToken, requireAuth, AuthedRequest } from "../middleware/auth";
+import { levelForXp } from "../gamification";
 
 const prisma = new PrismaClient();
 export const authRouter = Router();
@@ -68,11 +69,23 @@ authRouter.put("/me/exam-date", requireAuth, async (req: AuthedRequest, res) => 
   res.json({ user: toPublicUser(user) });
 });
 
-function toPublicUser(user: { id: string; email: string; examDate: Date | null; isPremium: boolean }) {
+function toPublicUser(user: {
+  id: string;
+  email: string;
+  examDate: Date | null;
+  isPremium: boolean;
+  xp: number;
+  currentStreak: number;
+  longestStreak: number;
+}) {
   return {
     id: user.id,
     email: user.email,
     examDate: user.examDate,
     isPremium: user.isPremium,
+    xp: user.xp,
+    level: levelForXp(user.xp),
+    currentStreak: user.currentStreak,
+    longestStreak: user.longestStreak,
   };
 }

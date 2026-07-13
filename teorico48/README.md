@@ -1,8 +1,11 @@
-# Teórico 48h
+# Teórico48
+
+_Aprende. Practica. Aprueba._
 
 App para preparar el examen teórico del carnet de conducir con simulacros
-cronometrados, repaso automático de fallos y un plan con cuenta atrás hasta
-el examen. Incluye monetización con un pago único ("Pack 48h") vía Stripe.
+cronometrados, repaso automático de fallos, gamificación (XP, nivel, rachas
+y medallas) y un plan con cuenta atrás hasta el examen. Incluye monetización
+con un pago único ("Pack 48h") vía Stripe.
 
 Este proyecto es independiente de la app de piano (`client/`, `server/` en la
 raíz del repo) — vive en su propia carpeta `teorico48/` con su propio

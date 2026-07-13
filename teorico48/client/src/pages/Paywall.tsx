@@ -68,7 +68,7 @@ export function Paywall() {
         <button
           onClick={handleCheckout}
           disabled={busy}
-          className="mt-7 w-full rounded-xl bg-t48-amber px-4 py-3 font-bold text-t48-ink transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-50"
+          className="mt-7 w-full rounded-md bg-t48-blue px-4 py-3 font-semibold text-white transition-colors hover:bg-t48-blue-dark disabled:opacity-50"
         >
           {busy ? "Un momento..." : "Desbloquear ahora"}
         </button>

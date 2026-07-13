@@ -29,7 +29,7 @@ export function Results() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
       <div
-        className={`animate-[popIn_0.35s_ease-out] rounded-3xl border p-8 text-center ${
+        className={`animate-[fadeIn_0.25s_ease-out] rounded-3xl border p-8 text-center ${
           result.passed ? "border-t48-green/30 bg-t48-green/10" : "border-t48-red/30 bg-t48-red/10"
         }`}
       >
@@ -43,17 +43,17 @@ export function Results() {
 
         {g && (
           <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-            <span className="rounded-full bg-t48-blue/10 px-3 py-1 text-sm font-bold text-t48-blue-dark">
+            <span className="rounded-md border border-slate-200 bg-white px-3 py-1 text-sm font-semibold text-t48-ink">
               +{g.xpGained} XP
             </span>
             {g.leveledUp && (
-              <span className="flex items-center gap-1.5 rounded-full bg-t48-amber/20 px-3 py-1 text-sm font-bold text-amber-700">
-                <Star className="h-3.5 w-3.5" /> Nivel {g.level}
+              <span className="flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-1 text-sm font-semibold text-t48-ink">
+                <Star className="h-3.5 w-3.5 text-amber-500" /> Nivel {g.level}
               </span>
             )}
             {g.currentStreak > 1 && (
-              <span className="flex items-center gap-1.5 rounded-full bg-orange-50 px-3 py-1 text-sm font-bold text-orange-600">
-                <Flame className="h-3.5 w-3.5" /> Racha de {g.currentStreak}
+              <span className="flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-1 text-sm font-semibold text-t48-ink">
+                <Flame className="h-3.5 w-3.5 text-slate-400" /> Racha de {g.currentStreak}
               </span>
             )}
           </div>
@@ -64,9 +64,9 @@ export function Results() {
             {g.newBadges.map((b) => (
               <span
                 key={b.id}
-                className="animate-[popIn_0.4s_ease-out] flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-sm font-bold text-t48-ink shadow-sm"
+                className="animate-[fadeIn_0.3s_ease-out] flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-t48-ink"
               >
-                {badgeIcon(b.id)} Nueva medalla: {b.label}
+                <span className="text-t48-blue">{badgeIcon(b.id)}</span> Nueva medalla: {b.label}
               </span>
             ))}
           </div>

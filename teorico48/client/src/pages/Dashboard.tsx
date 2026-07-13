@@ -134,14 +134,17 @@ export function Dashboard() {
       </div>
 
       {!user?.isPremium && (
-        <div className="mt-4 rounded-2xl border border-t48-amber/40 bg-t48-amber/10 p-5">
-          <p className="font-bold text-t48-ink">Simulacros ilimitados + repaso de fallos</p>
+        <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-5">
+          <span className="inline-block rounded-md border border-amber-200 bg-amber-50 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-amber-700">
+            Pack 48h
+          </span>
+          <p className="mt-2 font-bold text-t48-ink">Simulacros ilimitados + repaso de fallos</p>
           <p className="mt-1 text-sm text-slate-500">
             Con la cuenta gratis solo puedes hacer 1 simulacro al día.
           </p>
           <Link
             to="/paywall"
-            className="mt-3 inline-block rounded-xl bg-t48-amber px-4 py-2 font-bold text-t48-ink transition-transform hover:scale-[1.02] active:scale-95"
+            className="mt-3 inline-block rounded-md bg-t48-blue px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-t48-blue-dark"
           >
             Ver Pack 48h
           </Link>
@@ -160,11 +163,11 @@ export function Dashboard() {
                 key={b.id}
                 title={b.label}
                 aria-label={`${b.label}${b.unlocked ? "" : " (bloqueada)"}`}
-                className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold ${
-                  b.unlocked ? "bg-t48-blue/10 text-t48-blue-dark" : "bg-slate-100 text-slate-400"
+                className={`flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium ${
+                  b.unlocked ? "border-slate-200 bg-white text-t48-ink" : "border-dashed border-slate-200 text-slate-300"
                 }`}
               >
-                {badgeIcon(b.id)}
+                <span className={b.unlocked ? "text-t48-blue" : ""}>{badgeIcon(b.id)}</span>
                 {b.label}
               </div>
             ))}

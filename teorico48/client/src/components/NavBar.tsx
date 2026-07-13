@@ -7,29 +7,36 @@ export function NavBar() {
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 z-10 border-b border-slate-200/70 bg-white/90 backdrop-blur">
+    <header className="sticky top-0 z-10 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3.5 sm:px-6">
         <Link to="/" className="text-lg font-extrabold tracking-tight text-t48-ink transition-opacity hover:opacity-80">
           Teórico<span className="text-t48-blue">48</span>
         </Link>
-        <nav className="flex items-center gap-2 text-sm font-semibold sm:gap-3">
+        <nav className="flex items-center gap-1 text-sm sm:gap-1.5">
           {user ? (
             <>
-              {user.currentStreak > 0 && (
-                <span className="hidden items-center gap-1.5 rounded-full bg-orange-50 px-2.5 py-1 text-orange-600 sm:inline-flex">
-                  <Flame className="h-3.5 w-3.5" /> {user.currentStreak}
+              <div className="mr-1 hidden items-center gap-3 border-r border-slate-200 pr-3 text-slate-500 sm:flex">
+                {user.currentStreak > 0 && (
+                  <span className="flex items-center gap-1.5">
+                    <Flame className="h-4 w-4 text-slate-400" />
+                    <span className="font-semibold text-t48-ink">{user.currentStreak}</span>
+                  </span>
+                )}
+                <span className="flex items-center gap-1.5">
+                  <Star className="h-4 w-4 text-slate-400" filled={false} />
+                  <span className="font-semibold text-t48-ink">Nivel {user.level}</span>
                 </span>
-              )}
-              <span className="hidden items-center gap-1.5 rounded-full bg-t48-blue/10 px-2.5 py-1 text-t48-blue-dark sm:inline-flex">
-                <Star className="h-3.5 w-3.5" /> Nivel {user.level}
-              </span>
-              <Link to="/dashboard" className="rounded-full px-3 py-1.5 text-slate-600 transition-colors hover:bg-slate-100 hover:text-t48-ink">
+              </div>
+              <Link
+                to="/dashboard"
+                className="rounded-md px-3 py-1.5 font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-t48-ink"
+              >
                 Panel
               </Link>
               {!user.isPremium && (
                 <Link
                   to="/paywall"
-                  className="rounded-full bg-t48-amber px-3 py-1.5 text-t48-ink transition-transform hover:scale-105 active:scale-95"
+                  className="rounded-md border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-amber-700 transition-colors hover:bg-amber-100"
                 >
                   Pack 48h
                 </Link>
@@ -39,19 +46,19 @@ export function NavBar() {
                   logout();
                   navigate("/");
                 }}
-                className="rounded-full px-3 py-1.5 text-slate-500 transition-colors hover:bg-red-50 hover:text-t48-red"
+                className="rounded-md px-3 py-1.5 font-medium text-slate-500 transition-colors hover:bg-slate-100 hover:text-t48-ink"
               >
                 Salir
               </button>
             </>
           ) : (
             <>
-              <Link to="/login" className="rounded-full px-3 py-1.5 text-slate-600 transition-colors hover:bg-slate-100 hover:text-t48-ink">
+              <Link to="/login" className="rounded-md px-3 py-1.5 font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-t48-ink">
                 Entrar
               </Link>
               <Link
                 to="/register"
-                className="rounded-full bg-t48-blue px-4 py-1.5 text-white transition-transform hover:scale-105 hover:bg-t48-blue-dark active:scale-95"
+                className="rounded-md bg-t48-blue px-4 py-1.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark"
               >
                 Empieza gratis
               </Link>

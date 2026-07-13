@@ -7,6 +7,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { TestRunner } from "./pages/TestRunner";
 import { Results } from "./pages/Results";
 import { Paywall } from "./pages/Paywall";
+import { NotFound } from "./pages/NotFound";
 
 export default function App() {
   return (
@@ -56,6 +57,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );

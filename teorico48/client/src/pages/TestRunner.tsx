@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api, ApiError } from "../lib/api";
 import type { Question, SubmitResult } from "../lib/api";
+import { CheckCircle } from "../components/Icons";
 
 export function TestRunner({ mode }: { mode: "exam" | "review" }) {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
   const [answers, setAnswers] = useState<Record<string, number | null>>({});
   const [current, setCurrent] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [noFailsYet, setNoFailsYet] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -21,7 +23,11 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
         setQuestions(r.questions);
       })
       .catch((err) => {
-        setError(err instanceof ApiError ? err.message : "No se pudo iniciar el test");
+        if (err instanceof ApiError && err.status === 404) {
+          setNoFailsYet(true);
+        } else {
+          setError(err instanceof ApiError ? err.message : "No se pudo iniciar el test");
+        }
       })
       .finally(() => setLoading(false));
   }, [mode]);
@@ -44,7 +50,25 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
     }
   }
 
-  if (loading) return <div className="p-16 text-center text-slate-400">Preparando tu test...</div>;
+  if (loading) return <div className="p-16 text-center text-slate-500">Preparando tu test...</div>;
+
+  if (noFailsYet) {
+    return (
+      <div className="mx-auto max-w-md px-4 py-16 text-center">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-t48-green/10 text-t48-green-dark">
+          <CheckCircle className="h-6 w-6" />
+        </div>
+        <p className="mt-4 font-bold text-t48-ink">Todavía no has fallado ninguna pregunta</p>
+        <p className="mt-1 text-sm text-slate-500">Haz un simulacro y, si fallas algo, aparecerá aquí para repasarlo.</p>
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="mt-5 rounded-xl bg-t48-blue px-4 py-2.5 font-bold text-white transition-transform hover:scale-[1.02] active:scale-95"
+        >
+          Volver al panel
+        </button>
+      </div>
+    );
+  }
 
   if (error) {
     return (
@@ -65,7 +89,7 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
-      <div className="mb-3 flex items-center justify-between text-sm font-semibold text-slate-400">
+      <div className="mb-3 flex items-center justify-between text-sm font-semibold text-slate-500">
         <span>{current + 1} / {questions.length}</span>
         <span>{answeredCount}/{questions.length} respondidas</span>
       </div>
@@ -77,7 +101,12 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
       </div>
 
       {q && (
-        <div key={q.id} className="mt-6 animate-[fadeIn_0.15s_ease-out] rounded-2xl border border-slate-200 bg-white p-6">
+        <div
+          key={q.id}
+          role="group"
+          aria-label={`Pregunta ${current + 1} de ${questions.length}`}
+          className="mt-6 animate-[fadeIn_0.15s_ease-out] rounded-2xl border border-slate-200 bg-white p-6"
+        >
           <p className="mb-1.5 text-xs font-bold uppercase tracking-wide text-t48-blue">{q.category}</p>
           <p className="text-lg font-bold leading-snug text-t48-ink">{q.text}</p>
           <div className="mt-5 flex flex-col gap-2">
@@ -85,7 +114,8 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
               <button
                 key={i}
                 onClick={() => select(q.id, i)}
-                className={`rounded-xl border px-4 py-3 text-left transition-all duration-150 ${
+                aria-pressed={answers[q.id] === i}
+                className={`rounded-xl border px-4 py-3 text-left transition-all duration-150 focus-visible:ring-2 focus-visible:ring-t48-blue/40 focus-visible:outline-none ${
                   answers[q.id] === i
                     ? "border-t48-blue bg-t48-blue/10 font-semibold text-t48-blue-dark"
                     : "border-slate-200 hover:border-t48-blue/50 hover:bg-slate-50"

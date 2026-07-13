@@ -78,7 +78,7 @@ function Fields(props: { email: string; setEmail: (v: string) => void; password:
           required
           value={props.email}
           onChange={(e) => props.setEmail(e.target.value)}
-          className="mt-1.5 w-full rounded-xl border border-slate-200 px-3.5 py-2.5 outline-none transition-colors focus:border-t48-blue"
+          className="mt-1.5 w-full rounded-xl border border-slate-200 px-3.5 py-2.5 outline-none transition-colors focus:border-t48-blue focus:ring-2 focus:ring-t48-blue/25"
         />
       </label>
       <label className="mt-4 block text-sm font-semibold text-slate-600">
@@ -89,7 +89,7 @@ function Fields(props: { email: string; setEmail: (v: string) => void; password:
           minLength={6}
           value={props.password}
           onChange={(e) => props.setPassword(e.target.value)}
-          className="mt-1.5 w-full rounded-xl border border-slate-200 px-3.5 py-2.5 outline-none transition-colors focus:border-t48-blue"
+          className="mt-1.5 w-full rounded-xl border border-slate-200 px-3.5 py-2.5 outline-none transition-colors focus:border-t48-blue focus:ring-2 focus:ring-t48-blue/25"
         />
       </label>
     </>

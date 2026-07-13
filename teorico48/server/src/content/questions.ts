@@ -239,6 +239,41 @@ export const questions: SeedQuestion[] = [
     correctIndex: 0,
     explanation: "Para salidas próximas conviene entrar y circular por el carril derecho, señalizando la salida con antelación.",
   },
+  {
+    category: "prioridad",
+    text: "En un carril reservado a un sentido único de circulación, si un vehículo aparece de frente por error, quien detecta la situación debe:",
+    options: ["Facilitar el paso deteniéndose o apartándose si es posible, priorizando evitar la colisión", "Continuar igual, la prioridad es siempre de quien circula bien", "Acelerar para pasar antes", "Tocar el claxon y seguir recto"],
+    correctIndex: 0,
+    explanation: "Ante un riesgo inminente de colisión frontal, la prioridad práctica es evitar el accidente, no defender quién tenía razón.",
+  },
+  {
+    category: "prioridad",
+    text: "En una vía con prioridad de paso señalizada, ¿se mantiene esa prioridad en todas las intersecciones sucesivas?",
+    options: ["Sí, hasta que una señal indique lo contrario", "No, hay que cederla en cada cruce", "Solo se mantiene 100 metros", "Solo aplica en el primer cruce"],
+    correctIndex: 0,
+    explanation: "La prioridad señalizada en una vía se mantiene en los sucesivos cruces hasta que una señal anule o modifique esa condición.",
+  },
+  {
+    category: "prioridad",
+    text: "Al incorporarse a una glorieta, ¿quién debe ceder el paso?",
+    options: ["Quien entra en la glorieta, a los vehículos que ya circulan por ella", "Quien ya circula por la glorieta, a los que entran", "Nadie, tienen la misma prioridad", "Depende del tamaño del vehículo"],
+    correctIndex: 0,
+    explanation: "La prioridad general en las glorietas es de quienes ya circulan dentro de ellas frente a quienes pretenden incorporarse.",
+  },
+  {
+    category: "prioridad",
+    text: "Un peatón que empieza a cruzar por un paso sin semáforo cuando el vehículo ya está muy cerca y no puede detenerse con seguridad:",
+    options: ["Debería esperar a que el vehículo pase, aunque tenga preferencia en general", "Tiene siempre prioridad absoluta, pase lo que pase", "Debe cruzar corriendo para no entorpecer", "Pierde toda protección legal por haber empezado tarde"],
+    correctIndex: 0,
+    explanation: "Aunque el peatón tiene preferencia en los pasos señalizados, la prudencia exige no iniciar el cruce si un vehículo está tan cerca que no puede parar con seguridad.",
+  },
+  {
+    category: "prioridad",
+    text: "En un cruce en el que un semáforo está averiado (apagado), ¿qué normas de prioridad se aplican?",
+    options: ["Las de una intersección sin semáforos: señales verticales o, en su defecto, prioridad a la derecha", "Ninguna, hay que parar y esperar indefinidamente", "Prioridad automática para quien llegue primero, sin más criterio", "Prioridad para el vehículo de mayor tamaño"],
+    correctIndex: 0,
+    explanation: "Si el semáforo no funciona, se aplican las normas de prioridad de una intersección normal: señalización vertical existente o, en su ausencia, la prioridad de paso por la derecha.",
+  },
 
   // ---- VELOCIDAD ----
   {
@@ -1400,5 +1435,268 @@ export const questions: SeedQuestion[] = [
     options: ["Un vehículo demasiado lento puede suponer un riesgo para el resto del tráfico rápido", "No existe ninguna velocidad mínima en ningún caso", "La velocidad mínima solo aplica en autopistas de peaje", "Solo afecta a los camiones"],
     correctIndex: 0,
     explanation: "Las vías rápidas exigen que los vehículos puedan mantener una velocidad mínima para no crear un riesgo por la gran diferencia de velocidades con el resto del tráfico.",
+  },
+
+  // ---- SEÑALES (tercera tanda: nieve/hielo) ----
+  {
+    category: "senales",
+    text: "La señal R-412 indica:",
+    options: ["Obligación de usar cadenas o neumáticos de invierno", "Prohibido el paso a camiones", "Zona de lavado obligatorio", "Fin de la autopista"],
+    correctIndex: 0,
+    explanation: "La R-412 obliga a circular con cadenas u otro sistema antideslizante homologado (o neumáticos de invierno) cuando así lo indique la señalización.",
+  },
+  {
+    category: "senales",
+    text: "La variante R-412b, más restrictiva que la R-412, significa:",
+    options: [
+      "No se puede continuar la marcha si no se dispone de neumáticos de invierno homologados (en esa variante no basta con llevar solo cadenas)",
+      "Que las cadenas están prohibidas en ese tramo",
+      "Que solo pueden circular motocicletas",
+      "Que la vía está cerrada permanentemente",
+    ],
+    correctIndex: 0,
+    explanation: "La R-412b es una variante reforzada que puede exigir específicamente neumáticos de invierno homologados, no solo cadenas.",
+  },
+
+  // ---- ADELANTAMIENTO (segunda tanda: ciclistas) ----
+  {
+    category: "adelantamiento",
+    text: "Al adelantar a un ciclista, la distancia lateral de seguridad mínima exigida es:",
+    options: ["1,5 metros", "0,5 metros", "3 metros", "No hay una distancia mínima fijada"],
+    correctIndex: 0,
+    explanation: "El Reglamento General de Circulación exige una separación lateral mínima de 1,5 metros al adelantar a un ciclista.",
+  },
+  {
+    category: "adelantamiento",
+    text: "Para adelantar a un ciclista respetando la distancia lateral de 1,5 metros, si es necesario, el conductor debe:",
+    options: [
+      "Ocupar parte del carril contrario si puede hacerlo con seguridad, aunque haya línea continua",
+      "Nunca invadir el carril contrario bajo ninguna circunstancia",
+      "Tocar el claxon para que el ciclista se aparte",
+      "Adelantar solo si el ciclista circula por el arcén"
+    ],
+    correctIndex: 0,
+    explanation: "La normativa prioriza la seguridad del ciclista: se permite invadir el carril contrario si es imprescindible para respetar la distancia mínima, siempre con visibilidad y seguridad suficientes.",
+  },
+  {
+    category: "adelantamiento",
+    text: "No respetar la distancia mínima de 1,5 m al adelantar a un ciclista es una infracción:",
+    options: ["Grave, sancionable con hasta 200 €", "Leve, sin sanción económica", "Solo sancionable si hay contacto físico", "No está sancionada en ningún caso"],
+    correctIndex: 0,
+    explanation: "Incumplir la distancia mínima de seguridad al adelantar a un ciclista se sanciona como infracción grave.",
+  },
+  {
+    category: "adelantamiento",
+    text: "Al circular detrás de un grupo de ciclistas en carretera, un vehículo debe:",
+    options: ["Mantener una distancia de seguridad mayor de la habitual y no presionarlos con el vehículo", "Pegarse todo lo posible para pasar cuanto antes", "Adelantar aunque no haya visibilidad suficiente", "Tocar el claxon de forma continua hasta que se aparten"],
+    correctIndex: 0,
+    explanation: "Los ciclistas son usuarios vulnerables; hay que mantener una distancia amplia y no presionarlos ni intimidarlos con el vehículo.",
+  },
+
+  // ---- PARADA Y ESTACIONAMIENTO (segunda tanda) ----
+  {
+    category: "parada-estacionamiento",
+    text: "¿Se puede parar o estacionar sobre un carril bici?",
+    options: ["No, está prohibido", "Sí, si es un momento", "Sí, fuera de las horas punta", "Sí, siempre que no haya ciclistas circulando en ese momento"],
+    correctIndex: 0,
+    explanation: "Los carriles bici son un espacio reservado a la circulación de bicicletas; parar o estacionar en ellos está prohibido.",
+  },
+  {
+    category: "parada-estacionamiento",
+    text: "Estacionar en las inmediaciones de una salida de emergencia o de bomberos señalizada:",
+    options: ["Está prohibido", "Está permitido si no hay ningún vehículo de emergencia a la vista", "Solo está prohibido de noche", "Depende del ayuntamiento"],
+    correctIndex: 0,
+    explanation: "Las zonas de acceso a salidas de emergencia deben permanecer libres en todo momento, por lo que estacionar ahí está prohibido.",
+  },
+  {
+    category: "parada-estacionamiento",
+    text: "¿Está permitido parar en un carril reservado para VAO (alta ocupación) si el vehículo va vacío de pasajeros?",
+    options: ["No, ni siquiera para parar brevemente", "Sí, si es solo un momento", "Sí, si se encienden las luces de emergencia", "Sí, en fines de semana"],
+    correctIndex: 0,
+    explanation: "Los carriles VAO están reservados a vehículos con la ocupación mínima exigida; ni circular ni parar en ellos está permitido si no se cumple esa condición.",
+  },
+  {
+    category: "parada-estacionamiento",
+    text: "Detener el vehículo en un cambio de rasante o una curva sin visibilidad, aunque sea con las luces de emergencia puestas:",
+    options: ["Debe evitarse siempre que sea posible, por el riesgo grave que supone", "Es igual de seguro que en cualquier otro punto de la vía", "Solo es peligroso de noche", "Está permitido si dura menos de un minuto"],
+    correctIndex: 0,
+    explanation: "Detenerse en un punto sin visibilidad para el resto de conductores es muy peligroso; hay que buscar, siempre que sea posible, un lugar seguro y visible.",
+  },
+
+  // ---- SANCIONES Y PUNTOS (segunda tanda) ----
+  {
+    category: "sanciones-puntos",
+    text: "Circular sin haber obtenido nunca el permiso de conducir correspondiente al vehículo es:",
+    options: ["Un delito", "Una infracción leve", "Una infracción grave sin más", "Legal si se circula muy despacio"],
+    correctIndex: 0,
+    explanation: "Conducir sin haber obtenido nunca el permiso exigido para ese vehículo constituye delito, no una simple infracción administrativa.",
+  },
+  {
+    category: "sanciones-puntos",
+    text: "Superar el límite de velocidad en más de un 50% en vía urbana es, según la normativa, una infracción:",
+    options: ["Muy grave", "Leve", "Grave, con la mínima sanción", "No sancionable si es de madrugada"],
+    correctIndex: 0,
+    explanation: "Los excesos de velocidad muy elevados se consideran infracción muy grave, con sanciones económicas altas y pérdida de puntos.",
+  },
+  {
+    category: "sanciones-puntos",
+    text: "¿Qué ocurre si un conductor novel comete una infracción grave que resta puntos durante su periodo de prueba?",
+    options: ["El plazo para pasar de 8 a 12 puntos se reinicia o se ve afectado, según la normativa vigente", "No pasa nada, el saldo de puntos sube igualmente", "Pierde el permiso de forma automática siempre", "Se le concede un permiso especial"],
+    correctIndex: 0,
+    explanation: "Las infracciones que restan puntos durante el periodo de conductor novel afectan a la progresión hacia el saldo de 12 puntos.",
+  },
+  {
+    category: "sanciones-puntos",
+    text: "Circular con un dispositivo homologado de manos libres para hablar por teléfono mientras se conduce:",
+    options: ["Está permitido, a diferencia de sujetar el teléfono con la mano", "Está prohibido igualmente", "Solo está permitido a taxistas", "Resta los mismos puntos que sujetarlo con la mano"],
+    correctIndex: 0,
+    explanation: "Usar un sistema de manos libres homologado sí está permitido; lo prohibido es sujetar o manipular el dispositivo con la mano mientras se conduce.",
+  },
+
+  // ---- MECÁNICA Y DOCUMENTACIÓN (segunda tanda: permisos y neumáticos de invierno) ----
+  {
+    category: "mecanica-documentos",
+    text: "¿A partir de qué edad se puede obtener el permiso AM para conducir un ciclomotor?",
+    options: ["15 años cumplidos", "14 años cumplidos", "16 años cumplidos", "18 años cumplidos"],
+    correctIndex: 0,
+    explanation: "El permiso AM, que habilita para conducir ciclomotores, se puede obtener a partir de los 15 años cumplidos.",
+  },
+  {
+    category: "mecanica-documentos",
+    text: "Si ya se dispone del permiso de conducir tipo B, ¿es necesario sacarse también el permiso AM para conducir un ciclomotor?",
+    options: ["No, el permiso B ya habilita para conducir ciclomotores", "Sí, son trámites totalmente independientes", "Solo si el ciclomotor es de tres ruedas", "Solo para mayores de 65 años"],
+    correctIndex: 0,
+    explanation: "Quien ya tiene el permiso B no necesita el AM, ya que el B incluye la autorización para conducir ciclomotores.",
+  },
+  {
+    category: "mecanica-documentos",
+    text: "¿A partir de qué edad se puede obtener el permiso de conducir de la clase B (turismos)?",
+    options: ["18 años cumplidos", "16 años cumplidos", "17 años cumplidos", "21 años cumplidos"],
+    correctIndex: 0,
+    explanation: "La edad mínima general para obtener el permiso B es de 18 años cumplidos.",
+  },
+  {
+    category: "mecanica-documentos",
+    text: "Un neumático homologado como 'de invierno' debe llevar el marcado:",
+    options: ["El símbolo de la montaña de tres picos con copo de nieve (3PMSF)", "Solo las siglas M+S", "Un punto de color azul en el lateral", "No existe ningún marcado específico"],
+    correctIndex: 0,
+    explanation: "Solo el pictograma 3PMSF (montaña con copo de nieve) certifica oficialmente que un neumático cumple los estándares de invierno; las siglas M+S por sí solas no bastan.",
+  },
+  {
+    category: "mecanica-documentos",
+    text: "Circular sin cadenas o neumáticos de invierno homologados en un tramo señalizado con la R-412, en caso de nieve o hielo:",
+    options: ["Puede ser sancionado, además del riesgo real de quedarse inmovilizado", "Es indiferente si el vehículo es 4x4", "Solo afecta a camiones", "Solo es aplicable en Pirineos"],
+    correctIndex: 0,
+    explanation: "Ignorar la señalización de cadenas obligatorias puede acarrear sanción económica y, además, deja al vehículo sin capacidad real de circular con seguridad por nieve o hielo.",
+  },
+  {
+    category: "mecanica-documentos",
+    text: "Antes de un viaje largo, revisar el estado de los neumáticos, los niveles (aceite, líquido de frenos, refrigerante) y las luces es:",
+    options: ["Una buena práctica de mantenimiento preventivo", "Innecesario si el vehículo es nuevo", "Solo obligatorio para profesionales", "Solo necesario una vez al año"],
+    correctIndex: 0,
+    explanation: "Revisar estos elementos antes de un trayecto largo reduce mucho el riesgo de avería o accidente por fallo mecánico.",
+  },
+
+  // ---- VELOCIDAD (tercera tanda) ----
+  {
+    category: "velocidad",
+    text: "Circulando sobre nieve o hielo, la distancia de frenado respecto a una calzada seca:",
+    options: ["Se multiplica varias veces, por lo que hay que reducir mucho la velocidad", "Es prácticamente la misma", "Se reduce a la mitad", "Solo cambia si el vehículo es de tracción trasera"],
+    correctIndex: 0,
+    explanation: "Sobre hielo o nieve la adherencia cae drásticamente y la distancia de frenado puede multiplicarse varias veces respecto al asfalto seco.",
+  },
+  {
+    category: "velocidad",
+    text: "En un carril de circulación lenta señalizado en una subida pronunciada, los vehículos pesados o lentos deben:",
+    options: ["Utilizar ese carril para no entorpecer al resto del tráfico", "Ignorarlo si no hay tráfico detrás", "Circular por el arcén en su lugar", "Utilizarlo solo de noche"],
+    correctIndex: 0,
+    explanation: "Los carriles de circulación lenta en pendientes están para que los vehículos que no pueden mantener la velocidad general no entorpezcan al resto.",
+  },
+  {
+    category: "velocidad",
+    text: "Frenar en seco de forma innecesaria sin causa justificada:",
+    options: ["Puede ser sancionable si genera riesgo para los vehículos que circulan detrás", "Nunca tiene consecuencias legales", "Es recomendable para 'enseñar' a quien va muy pegado", "Solo importa si hay accidente"],
+    correctIndex: 0,
+    explanation: "Frenar bruscamente sin necesidad puede provocar una colisión por alcance y constituir una conducción negligente sancionable.",
+  },
+
+  // ---- ALCOHOL Y DROGAS (tercera tanda) ----
+  {
+    category: "alcohol-drogas",
+    text: "El efecto del alcohol combinado con la fatiga o el sueño:",
+    options: ["Se potencia, multiplicando el riesgo respecto a cada factor por separado", "Se anula mutuamente", "Solo afecta si se conduce de noche", "No tiene relación entre ambos factores"],
+    correctIndex: 0,
+    explanation: "Alcohol y fatiga no se suman, se potencian: combinados, el deterioro de reflejos y atención es mucho mayor que cada uno por separado.",
+  },
+  {
+    category: "alcohol-drogas",
+    text: "Los efectos del cannabis al volante incluyen:",
+    options: ["Alteración de la percepción del tiempo y la distancia, y reducción de los reflejos", "Ninguna alteración relevante", "Mejora de la concentración", "Solo afecta a la vista, no a los reflejos"],
+    correctIndex: 0,
+    explanation: "El cannabis altera la percepción espacio-temporal y ralentiza los reflejos, aumentando notablemente el riesgo de accidente.",
+  },
+
+  // ---- LUCES (tercera tanda) ----
+  {
+    category: "luces",
+    text: "Circular con niebla muy densa, con las luces antiniebla delanteras y traseras encendidas, exige además:",
+    options: ["Reducir mucho la velocidad y aumentar la distancia de seguridad", "Mantener la velocidad habitual, las luces ya compensan la falta de visibilidad", "Circular con las luces largas en vez de las de cruce", "Seguir muy de cerca al vehículo de delante para no perderlo de vista"],
+    correctIndex: 0,
+    explanation: "Las luces antiniebla ayudan a ser visto y a ver un poco más, pero no sustituyen a la reducción de velocidad y al aumento de distancia que exige la niebla densa.",
+  },
+  {
+    category: "luces",
+    text: "Un vehículo detenido por avería de noche en el arcén de una autovía debe mantener encendidas, además de la señalización V16:",
+    options: ["Las luces de posición, si es posible mantenerlas", "Las luces largas apuntando hacia atrás", "Ninguna luz, para no gastar la batería", "Solo las antiniebla traseras"],
+    correctIndex: 0,
+    explanation: "Mantener el vehículo visible con las luces de posición, junto con la V16, ayuda a que otros conductores lo detecten a tiempo.",
+  },
+
+  // ---- MENORES Y TRANSPORTE (tercera tanda) ----
+  {
+    category: "menores-transporte",
+    text: "En un autobús urbano sin sistemas de retención infantil individuales, un menor debe viajar:",
+    options: ["Sentado siempre que sea posible, sujeto según las normas específicas de ese tipo de transporte", "De pie sin ninguna sujeción, es indiferente", "En brazos de un adulto sujeto solo por el cinturón del adulto", "En el suelo del pasillo"],
+    correctIndex: 0,
+    explanation: "El transporte colectivo urbano tiene normas específicas distintas a las del vehículo particular, pero siempre priorizando la seguridad del menor sentado.",
+  },
+  {
+    category: "menores-transporte",
+    text: "Un elevador (cojín elevador) homologado para niños se diferencia de una silla completa en que:",
+    options: ["Eleva al menor para que el cinturón del vehículo le quede bien ajustado, sin respaldo propio con arnés", "Nunca es una opción homologada", "Sustituye completamente al cinturón de seguridad", "Solo sirve para menores de 1 año"],
+    correctIndex: 0,
+    explanation: "El elevador ajusta la posición del menor para que el cinturón del propio vehículo pase correctamente por hombro y cadera, sin arnés propio.",
+  },
+
+  // ---- MEDIO AMBIENTE (tercera tanda) ----
+  {
+    category: "medio-ambiente",
+    text: "Compartir vehículo (carpooling) para trayectos habituales al trabajo o los estudios:",
+    options: ["Reduce el número de vehículos en circulación y las emisiones asociadas", "No tiene ningún efecto ambiental", "Está prohibido en la mayoría de ciudades", "Solo es viable para trayectos muy largos"],
+    correctIndex: 0,
+    explanation: "Compartir coche para el mismo trayecto reduce el número de vehículos circulando y, con ello, las emisiones totales.",
+  },
+  {
+    category: "medio-ambiente",
+    text: "El uso de la marcha más larga posible a baja velocidad, sin forzar el motor, en conducción eficiente:",
+    options: ["Reduce revoluciones y consumo", "Aumenta siempre el consumo", "No tiene relación con el consumo", "Solo aplica a vehículos diésel"],
+    correctIndex: 0,
+    explanation: "Circular con marchas largas a bajas revoluciones (sin forzar el motor) reduce el consumo de combustible en la conducción habitual.",
+  },
+
+  // ---- AUTOPISTAS Y VÍAS ESPECIALES (tercera tanda) ----
+  {
+    category: "autopistas-vias-especiales",
+    text: "Circular marcha atrás en una autopista o autovía, aunque sea para no perder una salida:",
+    options: ["Está terminantemente prohibido, es una infracción muy grave", "Está permitido si se hace con precaución", "Solo está prohibido de día", "Está permitido en el arcén"],
+    correctIndex: 0,
+    explanation: "Circular marcha atrás en autopista o autovía es una maniobra extremadamente peligrosa y está prohibida como infracción muy grave.",
+  },
+  {
+    category: "autopistas-vias-especiales",
+    text: "Los vehículos que circulan por el carril central o izquierdo de una autovía de tres carriles sin estar adelantando:",
+    options: ["Están entorpeciendo la circulación y deben volver al carril derecho cuando puedan", "Actúan correctamente en cualquier caso", "Solo tienen problema si van a menos de 60 km/h", "Tienen prioridad sobre el resto de carriles"],
+    correctIndex: 0,
+    explanation: "Circular de forma continuada por carriles distintos del derecho sin necesidad de adelantar entorpece la circulación y es sancionable.",
   },
 ];

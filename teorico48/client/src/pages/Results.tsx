@@ -11,7 +11,7 @@ export function Results() {
   if (!result) {
     return (
       <div className="mx-auto max-w-md px-4 py-16 text-center">
-        <p className="text-slate-400">No hay resultados que mostrar.</p>
+        <p className="text-slate-500">No hay resultados que mostrar.</p>
         <button
           onClick={() => navigate("/dashboard")}
           className="mt-4 rounded-xl bg-t48-blue px-4 py-2.5 font-bold text-white transition-transform hover:scale-[1.02] active:scale-95"

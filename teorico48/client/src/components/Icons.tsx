@@ -9,6 +9,8 @@ const base = {
   strokeWidth: 1.75,
   strokeLinecap: "round" as const,
   strokeLinejoin: "round" as const,
+  "aria-hidden": "true" as const,
+  focusable: "false" as const,
 };
 
 export function Flame({ className = "h-5 w-5" }: IconProps) {
@@ -29,6 +31,8 @@ export function Star({ className = "h-5 w-5", filled = true }: IconProps & { fil
       strokeWidth={1.5}
       strokeLinejoin="round"
       className={className}
+      aria-hidden="true"
+      focusable="false"
     >
       <path d="M12 3.2l2.7 5.6 6.1.7-4.5 4.3 1.2 6-5.5-3-5.5 3 1.2-6-4.5-4.3 6.1-.7L12 3.2Z" />
     </svg>
@@ -101,7 +105,7 @@ export function BookOpen({ className = "h-5 w-5" }: IconProps) {
 
 export function Bolt({ className = "h-5 w-5" }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true" focusable="false">
       <path d="M13.2 2 5 13.6h5.4l-1 8.4L18.6 10h-5.4l1-8Z" />
     </svg>
   );

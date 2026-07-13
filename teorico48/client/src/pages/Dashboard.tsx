@@ -61,13 +61,13 @@ export function Dashboard() {
             <div className="mt-1.5 h-1.5 w-full rounded-full bg-slate-100">
               <div className="h-1.5 rounded-full bg-t48-blue transition-all" style={{ width: `${xpIntoLevel}%` }} />
             </div>
-            <p className="mt-1 text-xs text-slate-400">{stats.xp} XP</p>
+            <p className="mt-1 text-xs text-slate-500">{stats.xp} XP</p>
           </StatCard>
           <StatCard icon={<Flame className="h-4 w-4" />} label={`${stats.currentStreak} día${stats.currentStreak === 1 ? "" : "s"} de racha`}>
-            <p className="mt-1 text-xs text-slate-400">Récord: {stats.longestStreak}</p>
+            <p className="mt-1 text-xs text-slate-500">Récord: {stats.longestStreak}</p>
           </StatCard>
           <StatCard icon={<CheckCircle className="h-4 w-4" />} label={`${stats.totalPassed}/${stats.totalAttempts} aprobados`}>
-            <p className="mt-1 text-xs text-slate-400">Tests completados</p>
+            <p className="mt-1 text-xs text-slate-500">Tests completados</p>
           </StatCard>
         </div>
       )}
@@ -83,7 +83,7 @@ export function Dashboard() {
             </p>
           )
         ) : (
-          <p className="mt-2 text-slate-400">Añade la fecha de tu examen para ver la cuenta atrás.</p>
+          <p className="mt-2 text-slate-500">Añade la fecha de tu examen para ver la cuenta atrás.</p>
         )}
         <form onSubmit={handleSaveDate} className="mt-4 flex flex-wrap items-end gap-3">
           <label className="text-sm font-semibold text-slate-600">
@@ -92,7 +92,7 @@ export function Dashboard() {
               type="datetime-local"
               value={examDateInput}
               onChange={(e) => setExamDateInput(e.target.value)}
-              className="mt-1.5 block rounded-xl border border-slate-200 px-3.5 py-2.5 outline-none focus:border-t48-blue"
+              className="mt-1.5 block rounded-xl border border-slate-200 px-3.5 py-2.5 outline-none transition-colors focus:border-t48-blue focus:ring-2 focus:ring-t48-blue/25"
             />
           </label>
           <button
@@ -148,16 +148,20 @@ export function Dashboard() {
         </div>
       )}
 
-      {stats && stats.badges.some((b) => b.unlocked) && (
+      {stats && (
         <div className="mt-8">
           <h2 className="font-bold text-t48-ink">Medallas</h2>
+          {stats.badges.every((b) => !b.unlocked) && (
+            <p className="mt-1 text-sm text-slate-500">Haz tu primer test para empezar a desbloquearlas.</p>
+          )}
           <div className="mt-3 flex flex-wrap gap-2">
             {stats.badges.map((b) => (
               <div
                 key={b.id}
                 title={b.label}
+                aria-label={`${b.label}${b.unlocked ? "" : " (bloqueada)"}`}
                 className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold ${
-                  b.unlocked ? "bg-t48-blue/10 text-t48-blue-dark" : "bg-slate-100 text-slate-300"
+                  b.unlocked ? "bg-t48-blue/10 text-t48-blue-dark" : "bg-slate-100 text-slate-400"
                 }`}
               >
                 {badgeIcon(b.id)}
@@ -171,7 +175,12 @@ export function Dashboard() {
       <div className="mt-8">
         <h2 className="font-bold text-t48-ink">Historial reciente</h2>
         {attempts.length === 0 ? (
-          <p className="mt-2 text-sm text-slate-400">Todavía no has hecho ningún test.</p>
+          <div className="mt-2 flex flex-wrap items-center gap-3">
+            <p className="text-sm text-slate-500">Todavía no has hecho ningún test.</p>
+            <Link to="/exam" className="text-sm font-bold text-t48-blue hover:text-t48-blue-dark">
+              Hacer el primero →
+            </Link>
+          </div>
         ) : (
           <ul className="mt-3 divide-y divide-slate-100 rounded-2xl border border-slate-200 bg-white">
             {attempts.map((a) => (

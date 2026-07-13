@@ -39,7 +39,7 @@ export function Landing() {
         <Feature icon={<Clock className="h-5 w-5" />} title="Cuenta atrás" text="Dinos cuándo te examinas y organizamos tu estudio." />
       </div>
 
-      <p className="mt-16 text-xs text-slate-400">
+      <p className="mt-16 text-xs text-slate-500">
         El método funciona si tú le pones las horas — no prometemos magia, solo un buen atajo.
       </p>
     </div>

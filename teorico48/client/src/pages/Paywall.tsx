@@ -53,7 +53,7 @@ export function Paywall() {
       <div className="rounded-3xl border border-slate-200 bg-white p-7 text-center shadow-sm">
         <p className="text-sm font-bold uppercase tracking-wide text-amber-600">Pack 48h</p>
         <p className="mt-2 text-5xl font-extrabold tracking-tight text-t48-ink">9,99 €</p>
-        <p className="mt-1 text-sm text-slate-400">Pago único · sin suscripción</p>
+        <p className="mt-1 text-sm text-slate-500">Pago único · sin suscripción</p>
         <ul className="mt-6 space-y-2.5 text-left text-sm font-medium text-slate-600">
           <li className="flex items-center gap-2">
             <CheckCircle className="h-4 w-4 shrink-0 text-t48-green-dark" /> Simulacros ilimitados

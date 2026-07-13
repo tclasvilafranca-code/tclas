@@ -89,9 +89,10 @@ la app.
 ## Publicar en internet (gratis, con Render)
 
 Este proyecto incluye su propio `render.yaml` en `teorico48/render.yaml`
-(distinto del de la app de piano, que está en la raíz del repo). Al crear un
-Blueprint nuevo en Render, indica la ruta `teorico48/render.yaml` en las
-opciones avanzadas para que despliegue esta app y no la del piano.
+(distinto del de la app de piano, que está en la raíz del repo). Ver la guía
+paso a paso en [`docs/DEPLOY.md`](docs/DEPLOY.md) — pensada para alguien sin
+experiencia técnica, incluye cómo activar Stripe y el email de recuperación
+de contraseña.
 
 ## Decisiones de alcance del MVP
 

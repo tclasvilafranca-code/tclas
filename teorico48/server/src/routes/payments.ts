@@ -51,15 +51,25 @@ export async function stripeWebhookHandler(req: import("express").Request, res: 
     return res.status(400).send(`Webhook error: ${(err as Error).message}`);
   }
 
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object as Stripe.Checkout.Session;
-    const userId = session.client_reference_id;
-    if (userId) {
-      await prisma.user.update({
-        where: { id: userId },
-        data: { isPremium: true, stripeCustomerId: (session.customer as string) ?? undefined },
-      });
+  try {
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object as Stripe.Checkout.Session;
+      const userId = session.client_reference_id;
+      if (userId) {
+        await prisma.user.update({
+          where: { id: userId },
+          data: { isPremium: true, stripeCustomerId: (session.customer as string) ?? undefined },
+        });
+        console.log(`Pack 48h activado para el usuario ${userId} (sesión ${session.id})`);
+      } else {
+        console.error(`checkout.session.completed sin client_reference_id (sesión ${session.id})`);
+      }
     }
+  } catch (err) {
+    // Devolvemos 500 para que Stripe reintente la entrega del webhook más tarde
+    // en vez de dar por hecho, silenciosamente, que el usuario ya tiene acceso.
+    console.error("Error procesando el webhook de Stripe:", err);
+    return res.status(500).send("Error interno procesando el webhook");
   }
 
   res.json({ received: true });

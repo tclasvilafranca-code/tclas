@@ -29,6 +29,11 @@ export function Login() {
   return (
     <AuthForm title="Entrar" onSubmit={handleSubmit} error={error} busy={busy} submitLabel="Entrar">
       <Fields email={email} setEmail={setEmail} password={password} setPassword={setPassword} />
+      <p className="mt-3 text-right text-sm">
+        <Link to="/forgot-password" className="font-medium text-t48-blue hover:text-t48-blue-dark">
+          ¿Has olvidado tu contraseña?
+        </Link>
+      </p>
       <p className="mt-4 text-center text-sm text-slate-500">
         ¿No tienes cuenta? <Link to="/register" className="font-semibold text-t48-blue">Regístrate</Link>
       </p>
@@ -41,15 +46,20 @@ export function Register() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
+    if (!acceptedTerms) {
+      setError("Debes aceptar los términos de uso y la política de privacidad");
+      return;
+    }
     setBusy(true);
     try {
-      await register(email, password);
+      await register(email, password, acceptedTerms);
       navigate("/dashboard");
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Error al crear la cuenta");
@@ -61,6 +71,25 @@ export function Register() {
   return (
     <AuthForm title="Crear cuenta gratis" onSubmit={handleSubmit} error={error} busy={busy} submitLabel="Crear cuenta">
       <Fields email={email} setEmail={setEmail} password={password} setPassword={setPassword} />
+      <label className="mt-4 flex items-start gap-2 text-sm text-slate-600">
+        <input
+          type="checkbox"
+          checked={acceptedTerms}
+          onChange={(e) => setAcceptedTerms(e.target.checked)}
+          className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-t48-blue focus:ring-t48-blue/40"
+        />
+        <span>
+          He leído y acepto los{" "}
+          <Link to="/terminos" target="_blank" className="font-semibold text-t48-blue hover:text-t48-blue-dark">
+            términos de uso
+          </Link>{" "}
+          y la{" "}
+          <Link to="/privacidad" target="_blank" className="font-semibold text-t48-blue hover:text-t48-blue-dark">
+            política de privacidad
+          </Link>
+          .
+        </span>
+      </label>
       <p className="mt-4 text-center text-sm text-slate-500">
         ¿Ya tienes cuenta? <Link to="/login" className="font-semibold text-t48-blue">Entra</Link>
       </p>

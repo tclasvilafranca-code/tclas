@@ -26,6 +26,13 @@ model User {
   longestStreak    Int       @default(0)
   lastActivityDate DateTime?
 
+  // Recuperacion de contrasena: se guarda un hash del token, nunca el token en claro
+  resetTokenHash      String?
+  resetTokenExpiresAt DateTime?
+
+  // Aceptacion legal en el registro (fecha, para poder acreditarla)
+  termsAcceptedAt DateTime?
+
   attempts TestAttempt[]
 
   @@map("users")

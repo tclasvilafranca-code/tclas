@@ -1,20 +1,35 @@
 import { Router } from "express";
 import bcrypt from "bcryptjs";
+import { randomBytes, createHash } from "crypto";
 import { z } from "zod";
 import { PrismaClient } from "@prisma/client";
 import { signToken, requireAuth, AuthedRequest } from "../middleware/auth";
 import { levelForXp } from "../gamification";
+import { sendEmail } from "../mailer";
 
 const prisma = new PrismaClient();
 export const authRouter = Router();
+
+const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5174";
+const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hora
 
 const credentialsSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
 });
 
+const registerSchema = credentialsSchema.extend({
+  acceptedTerms: z.literal(true, {
+    errorMap: () => ({ message: "Debes aceptar los términos de uso y la política de privacidad" }),
+  }),
+});
+
+function hashToken(rawToken: string) {
+  return createHash("sha256").update(rawToken).digest("hex");
+}
+
 authRouter.post("/register", async (req, res) => {
-  const parsed = credentialsSchema.safeParse(req.body);
+  const parsed = registerSchema.safeParse(req.body);
   if (!parsed.success) {
     return res.status(400).json({ error: parsed.error.issues[0].message });
   }
@@ -26,7 +41,9 @@ authRouter.post("/register", async (req, res) => {
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
-  const user = await prisma.user.create({ data: { email, passwordHash } });
+  const user = await prisma.user.create({
+    data: { email, passwordHash, termsAcceptedAt: new Date() },
+  });
 
   res.status(201).json({ token: signToken(user.id), user: toPublicUser(user) });
 });
@@ -67,6 +84,76 @@ authRouter.put("/me/exam-date", requireAuth, async (req: AuthedRequest, res) => 
     data: { examDate: parsed.data.examDate ? new Date(parsed.data.examDate) : null },
   });
   res.json({ user: toPublicUser(user) });
+});
+
+const forgotPasswordSchema = z.object({ email: z.string().email() });
+
+authRouter.post("/forgot-password", async (req, res) => {
+  const parsed = forgotPasswordSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: parsed.error.issues[0].message });
+  }
+
+  const user = await prisma.user.findUnique({ where: { email: parsed.data.email } });
+
+  // Respuesta siempre igual, exista o no la cuenta: evita revelar qué emails están registrados.
+  if (user) {
+    const rawToken = randomBytes(32).toString("hex");
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        resetTokenHash: hashToken(rawToken),
+        resetTokenExpiresAt: new Date(Date.now() + RESET_TOKEN_TTL_MS),
+      },
+    });
+
+    const resetUrl = `${CLIENT_URL}/reset-password?uid=${user.id}&token=${rawToken}`;
+    await sendEmail({
+      to: user.email,
+      subject: "Recupera tu contraseña de Teórico48",
+      html: `
+        <p>Hola,</p>
+        <p>Hemos recibido una solicitud para restablecer tu contraseña de Teórico48.</p>
+        <p><a href="${resetUrl}">Elige una nueva contraseña</a></p>
+        <p>Este enlace caduca en 1 hora. Si no has sido tú, puedes ignorar este email.</p>
+      `,
+    });
+  }
+
+  res.json({ message: "Si existe una cuenta con ese email, te hemos enviado un enlace para restablecer la contraseña." });
+});
+
+const resetPasswordSchema = z.object({
+  userId: z.string(),
+  token: z.string(),
+  newPassword: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+});
+
+authRouter.post("/reset-password", async (req, res) => {
+  const parsed = resetPasswordSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: parsed.error.issues[0].message });
+  }
+  const { userId, token, newPassword } = parsed.data;
+
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (
+    !user ||
+    !user.resetTokenHash ||
+    !user.resetTokenExpiresAt ||
+    user.resetTokenExpiresAt.getTime() < Date.now() ||
+    user.resetTokenHash !== hashToken(token)
+  ) {
+    return res.status(400).json({ error: "El enlace no es válido o ha caducado. Pide uno nuevo." });
+  }
+
+  const passwordHash = await bcrypt.hash(newPassword, 10);
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { passwordHash, resetTokenHash: null, resetTokenExpiresAt: null },
+  });
+
+  res.json({ message: "Contraseña actualizada. Ya puedes iniciar sesión." });
 });
 
 function toPublicUser(user: {

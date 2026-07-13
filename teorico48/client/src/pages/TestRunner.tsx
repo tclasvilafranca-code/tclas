@@ -62,7 +62,7 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
         <p className="mt-1 text-sm text-slate-500">Haz un simulacro y, si fallas algo, aparecerá aquí para repasarlo.</p>
         <button
           onClick={() => navigate("/dashboard")}
-          className="mt-5 rounded-xl bg-t48-blue px-4 py-2.5 font-bold text-white transition-transform hover:scale-[1.02] active:scale-95"
+          className="mt-5 rounded-md bg-t48-blue px-4 py-2.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark"
         >
           Volver al panel
         </button>
@@ -76,7 +76,7 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
         <p className="font-medium text-t48-red">{error}</p>
         <button
           onClick={() => navigate("/dashboard")}
-          className="mt-4 rounded-xl bg-t48-blue px-4 py-2.5 font-bold text-white transition-transform hover:scale-[1.02] active:scale-95"
+          className="mt-4 rounded-md bg-t48-blue px-4 py-2.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark"
         >
           Volver al panel
         </button>
@@ -132,14 +132,14 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
         <button
           onClick={() => setCurrent((c) => Math.max(0, c - 1))}
           disabled={current === 0}
-          className="rounded-xl border border-slate-200 px-4 py-2.5 font-bold text-slate-600 transition-colors hover:bg-slate-50 disabled:opacity-30"
+          className="rounded-md border border-slate-200 px-4 py-2.5 font-semibold text-slate-600 transition-colors hover:bg-slate-50 disabled:opacity-30"
         >
           Anterior
         </button>
         {current < questions.length - 1 ? (
           <button
             onClick={() => setCurrent((c) => Math.min(questions.length - 1, c + 1))}
-            className="rounded-xl bg-t48-blue px-5 py-2.5 font-bold text-white transition-transform hover:scale-[1.02] active:scale-95"
+            className="rounded-md bg-t48-blue px-5 py-2.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark"
           >
             Siguiente
           </button>
@@ -147,7 +147,7 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className="rounded-xl bg-t48-green px-5 py-2.5 font-bold text-white transition-transform hover:scale-[1.02] hover:bg-t48-green-dark active:scale-95 disabled:opacity-50"
+            className="rounded-md bg-t48-green px-5 py-2.5 font-semibold text-white transition-colors hover:bg-t48-green-dark disabled:opacity-50"
           >
             {submitting ? "Corrigiendo..." : "Terminar y corregir"}
           </button>

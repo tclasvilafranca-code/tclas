@@ -30,7 +30,7 @@ export function Paywall() {
         <p className="text-2xl font-extrabold text-t48-green-dark">Ya tienes el Pack 48h activo</p>
         <button
           onClick={() => navigate("/dashboard")}
-          className="mt-4 rounded-xl bg-t48-blue px-4 py-2.5 font-bold text-white transition-transform hover:scale-[1.02] active:scale-95"
+          className="mt-4 rounded-md bg-t48-blue px-4 py-2.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark"
         >
           Ir al panel
         </button>

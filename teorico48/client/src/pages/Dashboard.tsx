@@ -98,7 +98,7 @@ export function Dashboard() {
           <button
             type="submit"
             disabled={savingDate}
-            className="rounded-xl bg-t48-blue px-4 py-2.5 font-bold text-white transition-transform hover:scale-[1.02] hover:bg-t48-blue-dark active:scale-95 disabled:opacity-50"
+            className="rounded-md bg-t48-blue px-4 py-2.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark disabled:opacity-50"
           >
             Guardar
           </button>

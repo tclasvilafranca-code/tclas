@@ -14,7 +14,7 @@ export function Results() {
         <p className="text-slate-500">No hay resultados que mostrar.</p>
         <button
           onClick={() => navigate("/dashboard")}
-          className="mt-4 rounded-xl bg-t48-blue px-4 py-2.5 font-bold text-white transition-transform hover:scale-[1.02] active:scale-95"
+          className="mt-4 rounded-md bg-t48-blue px-4 py-2.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark"
         >
           Volver al panel
         </button>
@@ -98,13 +98,13 @@ export function Results() {
       <div className="mt-8 flex justify-center gap-3">
         <Link
           to="/dashboard"
-          className="rounded-xl border border-slate-200 px-5 py-2.5 font-bold text-slate-600 transition-colors hover:bg-slate-50"
+          className="rounded-md border border-slate-200 px-5 py-2.5 font-semibold text-slate-600 transition-colors hover:bg-slate-50"
         >
           Volver al panel
         </Link>
         <Link
           to="/exam"
-          className="rounded-xl bg-t48-blue px-5 py-2.5 font-bold text-white transition-transform hover:scale-[1.02] active:scale-95"
+          className="rounded-md bg-t48-blue px-5 py-2.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark"
         >
           Otro simulacro
         </Link>

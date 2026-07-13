@@ -113,7 +113,7 @@ function AuthForm(props: {
         <button
           type="submit"
           disabled={props.busy}
-          className="mt-6 w-full rounded-xl bg-t48-blue px-4 py-3 font-bold text-white transition-transform hover:scale-[1.02] hover:bg-t48-blue-dark active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
+          className="mt-6 w-full rounded-md bg-t48-blue px-4 py-3 font-semibold text-white transition-colors hover:bg-t48-blue-dark disabled:opacity-50"
         >
           {props.busy ? "Un momento..." : props.submitLabel}
         </button>

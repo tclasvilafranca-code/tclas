@@ -21,13 +21,13 @@ export function Landing() {
       <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
         <Link
           to={user ? "/dashboard" : "/register"}
-          className="w-full rounded-2xl bg-t48-blue px-7 py-3.5 text-lg font-bold text-white shadow-lg shadow-t48-blue/25 transition-transform hover:scale-[1.03] hover:bg-t48-blue-dark active:scale-95 sm:w-auto"
+          className="w-full rounded-md bg-t48-blue px-7 py-3.5 text-lg font-semibold text-white shadow-sm transition-colors hover:bg-t48-blue-dark sm:w-auto"
         >
           {user ? "Ir a mi panel" : "Empieza gratis"}
         </Link>
         <Link
           to="/login"
-          className="w-full rounded-2xl px-7 py-3.5 text-lg font-bold text-slate-500 transition-colors hover:bg-slate-100 hover:text-t48-ink sm:w-auto"
+          className="w-full rounded-md px-7 py-3.5 text-lg font-semibold text-slate-500 transition-colors hover:bg-slate-100 hover:text-t48-ink sm:w-auto"
         >
           Ya tengo cuenta
         </Link>

@@ -11,7 +11,7 @@ export function NotFound() {
       <p className="mt-3 text-slate-500">Puede que el enlace esté roto o que la página se haya movido.</p>
       <Link
         to={user ? "/dashboard" : "/"}
-        className="mt-6 inline-block rounded-xl bg-t48-blue px-5 py-2.5 font-bold text-white transition-transform hover:scale-[1.02] active:scale-95"
+        className="mt-6 inline-block rounded-md bg-t48-blue px-5 py-2.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark"
       >
         {user ? "Ir a mi panel" : "Volver al inicio"}
       </Link>

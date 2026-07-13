@@ -1,5 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import type { SubmitResult } from "../lib/api";
+import { badgeIcon } from "../lib/badgeIcons";
+import { Flame, Star } from "../components/Icons";
 
 export function Results() {
   const location = useLocation();
@@ -33,7 +35,7 @@ export function Results() {
       >
         <p className="text-6xl font-extrabold tabular-nums text-t48-ink">{pct}%</p>
         <p className={`mt-2 text-2xl font-extrabold ${result.passed ? "text-t48-green-dark" : "text-t48-red"}`}>
-          {result.passed ? "¡Aprobado! 🎉" : "Suspenso, pero cerca"}
+          {result.passed ? "¡Aprobado!" : "Suspenso, pero cerca"}
         </p>
         <p className="mt-1 text-slate-500">
           {result.score}/{result.total} correctas · {fails} fallo{fails !== 1 ? "s" : ""} (máx. 3 para aprobar)
@@ -45,13 +47,13 @@ export function Results() {
               +{g.xpGained} XP
             </span>
             {g.leveledUp && (
-              <span className="rounded-full bg-t48-amber/20 px-3 py-1 text-sm font-bold text-amber-700">
-                ⭐ ¡Nivel {g.level}!
+              <span className="flex items-center gap-1.5 rounded-full bg-t48-amber/20 px-3 py-1 text-sm font-bold text-amber-700">
+                <Star className="h-3.5 w-3.5" /> Nivel {g.level}
               </span>
             )}
             {g.currentStreak > 1 && (
-              <span className="rounded-full bg-orange-50 px-3 py-1 text-sm font-bold text-orange-600">
-                🔥 Racha de {g.currentStreak}
+              <span className="flex items-center gap-1.5 rounded-full bg-orange-50 px-3 py-1 text-sm font-bold text-orange-600">
+                <Flame className="h-3.5 w-3.5" /> Racha de {g.currentStreak}
               </span>
             )}
           </div>
@@ -62,9 +64,9 @@ export function Results() {
             {g.newBadges.map((b) => (
               <span
                 key={b.id}
-                className="animate-[popIn_0.4s_ease-out] rounded-full bg-white px-3 py-1.5 text-sm font-bold text-t48-ink shadow-sm"
+                className="animate-[popIn_0.4s_ease-out] flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-sm font-bold text-t48-ink shadow-sm"
               >
-                {b.emoji} Nueva medalla: {b.label}
+                {badgeIcon(b.id)} Nueva medalla: {b.label}
               </span>
             ))}
           </div>

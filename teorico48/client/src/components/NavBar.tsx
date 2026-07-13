@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { Flame, Star } from "./Icons";
 
 export function NavBar() {
   const { user, logout } = useAuth();
@@ -15,12 +16,12 @@ export function NavBar() {
           {user ? (
             <>
               {user.currentStreak > 0 && (
-                <span className="hidden items-center gap-1 rounded-full bg-orange-50 px-2.5 py-1 text-orange-600 sm:inline-flex">
-                  🔥 {user.currentStreak}
+                <span className="hidden items-center gap-1.5 rounded-full bg-orange-50 px-2.5 py-1 text-orange-600 sm:inline-flex">
+                  <Flame className="h-3.5 w-3.5" /> {user.currentStreak}
                 </span>
               )}
-              <span className="hidden items-center gap-1 rounded-full bg-t48-blue/10 px-2.5 py-1 text-t48-blue-dark sm:inline-flex">
-                ⭐ Nivel {user.level}
+              <span className="hidden items-center gap-1.5 rounded-full bg-t48-blue/10 px-2.5 py-1 text-t48-blue-dark sm:inline-flex">
+                <Star className="h-3.5 w-3.5" /> Nivel {user.level}
               </span>
               <Link to="/dashboard" className="rounded-full px-3 py-1.5 text-slate-600 transition-colors hover:bg-slate-100 hover:text-t48-ink">
                 Panel

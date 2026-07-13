@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { api, ApiError } from "../lib/api";
+import { CheckCircle } from "../components/Icons";
 
 export function Paywall() {
   const { user, refreshUser } = useAuth();
@@ -26,7 +27,7 @@ export function Paywall() {
   if (user?.isPremium) {
     return (
       <div className="mx-auto max-w-md px-4 py-16 text-center">
-        <p className="text-2xl font-extrabold text-t48-green-dark">Ya tienes el Pack 48h activo 🎉</p>
+        <p className="text-2xl font-extrabold text-t48-green-dark">Ya tienes el Pack 48h activo</p>
         <button
           onClick={() => navigate("/dashboard")}
           className="mt-4 rounded-xl bg-t48-blue px-4 py-2.5 font-bold text-white transition-transform hover:scale-[1.02] active:scale-95"
@@ -54,9 +55,15 @@ export function Paywall() {
         <p className="mt-2 text-5xl font-extrabold tracking-tight text-t48-ink">9,99 €</p>
         <p className="mt-1 text-sm text-slate-400">Pago único · sin suscripción</p>
         <ul className="mt-6 space-y-2.5 text-left text-sm font-medium text-slate-600">
-          <li>✔ Simulacros ilimitados</li>
-          <li>✔ Modo repaso centrado en tus fallos</li>
-          <li>✔ Plan de estudio con cuenta atrás</li>
+          <li className="flex items-center gap-2">
+            <CheckCircle className="h-4 w-4 shrink-0 text-t48-green-dark" /> Simulacros ilimitados
+          </li>
+          <li className="flex items-center gap-2">
+            <CheckCircle className="h-4 w-4 shrink-0 text-t48-green-dark" /> Modo repaso centrado en tus fallos
+          </li>
+          <li className="flex items-center gap-2">
+            <CheckCircle className="h-4 w-4 shrink-0 text-t48-green-dark" /> Plan de estudio con cuenta atrás
+          </li>
         </ul>
         <button
           onClick={handleCheckout}

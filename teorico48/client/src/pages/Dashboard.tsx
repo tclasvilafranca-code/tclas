@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { api } from "../lib/api";
 import type { Attempt, Stats } from "../lib/api";
+import { badgeIcon } from "../lib/badgeIcons";
+import { CheckCircle, Flame, Lock, Repeat, Star, Target } from "../components/Icons";
 
 function useCountdown(examDate: string | null) {
   const [now, setNow] = useState(Date.now());
@@ -51,20 +53,20 @@ export function Dashboard() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:py-10">
-      <h1 className="text-2xl font-extrabold tracking-tight text-t48-ink">Hola de nuevo 👋</h1>
+      <h1 className="text-2xl font-extrabold tracking-tight text-t48-ink">Hola de nuevo</h1>
 
       {stats && (
         <div className="mt-5 grid gap-3 sm:grid-cols-3">
-          <StatCard emoji="⭐" label={`Nivel ${stats.level}`}>
+          <StatCard icon={<Star className="h-4 w-4" />} label={`Nivel ${stats.level}`}>
             <div className="mt-1.5 h-1.5 w-full rounded-full bg-slate-100">
               <div className="h-1.5 rounded-full bg-t48-blue transition-all" style={{ width: `${xpIntoLevel}%` }} />
             </div>
             <p className="mt-1 text-xs text-slate-400">{stats.xp} XP</p>
           </StatCard>
-          <StatCard emoji="🔥" label={`${stats.currentStreak} día${stats.currentStreak === 1 ? "" : "s"} de racha`}>
+          <StatCard icon={<Flame className="h-4 w-4" />} label={`${stats.currentStreak} día${stats.currentStreak === 1 ? "" : "s"} de racha`}>
             <p className="mt-1 text-xs text-slate-400">Récord: {stats.longestStreak}</p>
           </StatCard>
-          <StatCard emoji="✅" label={`${stats.totalPassed}/${stats.totalAttempts} aprobados`}>
+          <StatCard icon={<CheckCircle className="h-4 w-4" />} label={`${stats.totalPassed}/${stats.totalAttempts} aprobados`}>
             <p className="mt-1 text-xs text-slate-400">Tests completados</p>
           </StatCard>
         </div>
@@ -108,16 +110,23 @@ export function Dashboard() {
           to="/exam"
           className="group rounded-2xl border border-slate-200 bg-white p-6 transition-all hover:-translate-y-0.5 hover:border-t48-blue hover:shadow-md"
         >
-          <div className="text-2xl">🎯</div>
-          <h2 className="mt-2 font-bold text-t48-ink">Hacer un simulacro</h2>
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-t48-blue/10 text-t48-blue">
+            <Target className="h-5 w-5" />
+          </div>
+          <h2 className="mt-3 font-bold text-t48-ink">Hacer un simulacro</h2>
           <p className="mt-1 text-sm text-slate-500">30 preguntas, como el examen real. Máx. 3 fallos.</p>
         </Link>
         <Link
           to="/review"
           className="group rounded-2xl border border-slate-200 bg-white p-6 transition-all hover:-translate-y-0.5 hover:border-t48-blue hover:shadow-md"
         >
-          <div className="text-2xl">🔁</div>
-          <h2 className="mt-2 font-bold text-t48-ink">Repasar mis fallos {!user?.isPremium && "🔒"}</h2>
+          <div className="flex items-center justify-between">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-t48-blue/10 text-t48-blue">
+              <Repeat className="h-5 w-5" />
+            </div>
+            {!user?.isPremium && <Lock className="h-4 w-4 text-slate-300" />}
+          </div>
+          <h2 className="mt-3 font-bold text-t48-ink">Repasar mis fallos</h2>
           <p className="mt-1 text-sm text-slate-500">
             {user?.isPremium ? "Solo las preguntas que sueles fallar." : "Función del Pack 48h."}
           </p>
@@ -151,7 +160,7 @@ export function Dashboard() {
                   b.unlocked ? "bg-t48-blue/10 text-t48-blue-dark" : "bg-slate-100 text-slate-300"
                 }`}
               >
-                <span className={b.unlocked ? "" : "grayscale"}>{b.emoji}</span>
+                {badgeIcon(b.id)}
                 {b.label}
               </div>
             ))}
@@ -182,11 +191,11 @@ export function Dashboard() {
   );
 }
 
-function StatCard({ emoji, label, children }: { emoji: string; label: string; children?: ReactNode }) {
+function StatCard({ icon, label, children }: { icon: ReactNode; label: string; children?: ReactNode }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-4">
-      <div className="flex items-center gap-2">
-        <span className="text-xl">{emoji}</span>
+      <div className="flex items-center gap-2 text-t48-blue">
+        {icon}
         <span className="font-bold text-t48-ink">{label}</span>
       </div>
       {children}

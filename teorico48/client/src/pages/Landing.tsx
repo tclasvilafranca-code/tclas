@@ -1,5 +1,7 @@
+import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { Bolt, Clock, Flame, Target } from "../components/Icons";
 
 export function Landing() {
   const { user } = useAuth();
@@ -7,7 +9,7 @@ export function Landing() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-20 text-center sm:py-28">
       <p className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-t48-blue/10 px-4 py-1.5 text-sm font-bold text-t48-blue-dark">
-        ⚡ Aprende. Practica. Aprueba.
+        <Bolt className="h-3.5 w-3.5" /> Aprende. Practica. Aprueba.
       </p>
       <h1 className="text-5xl font-extrabold tracking-tight text-t48-ink sm:text-6xl">
         Aprueba el teórico<br />en <span className="text-t48-blue">48 horas</span>
@@ -32,9 +34,9 @@ export function Landing() {
       </div>
 
       <div className="mt-20 grid gap-4 text-left sm:grid-cols-3">
-        <Feature emoji="🎯" title="Tests reales" text="30 preguntas, mismas reglas que el examen. Máx. 3 fallos." />
-        <Feature emoji="🔥" title="Repasa tus fallos" text="Lo que fallas, vuelve. Así se aprende el doble de rápido." />
-        <Feature emoji="⏱️" title="Cuenta atrás" text="Dinos cuándo te examinas y organizamos tu estudio." />
+        <Feature icon={<Target className="h-5 w-5" />} title="Tests reales" text="30 preguntas, mismas reglas que el examen. Máx. 3 fallos." />
+        <Feature icon={<Flame className="h-5 w-5" />} title="Repasa tus fallos" text="Lo que fallas, vuelve. Así se aprende el doble de rápido." />
+        <Feature icon={<Clock className="h-5 w-5" />} title="Cuenta atrás" text="Dinos cuándo te examinas y organizamos tu estudio." />
       </div>
 
       <p className="mt-16 text-xs text-slate-400">
@@ -44,11 +46,11 @@ export function Landing() {
   );
 }
 
-function Feature({ emoji, title, text }: { emoji: string; title: string; text: string }) {
+function Feature({ icon, title, text }: { icon: ReactNode; title: string; text: string }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-5 transition-transform hover:-translate-y-0.5 hover:shadow-md">
-      <div className="text-2xl">{emoji}</div>
-      <h3 className="mt-2 font-bold text-t48-ink">{title}</h3>
+      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-t48-blue/10 text-t48-blue">{icon}</div>
+      <h3 className="mt-3 font-bold text-t48-ink">{title}</h3>
       <p className="mt-1 text-sm text-slate-500">{text}</p>
     </div>
   );

@@ -1,0 +1,41 @@
+services:
+  - name: teorico48-api
+    type: web
+    runtime: node
+    plan: free
+    region: oregon
+    rootDir: teorico48/server
+    buildCommand: npm install && npx prisma generate && (npx prisma migrate deploy || (npx prisma db push --accept-data-loss)) && npm run build
+    startCommand: npm run seed && node dist/index.js
+    envVars:
+      - key: NODE_VERSION
+        value: 20.18.0
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: CLIENT_URL
+        sync: false
+      # Stripe: crea un producto de pago unico "Pack 48h" en tu dashboard de
+      # Stripe y rellena estas 3 claves para activar los pagos. Sin ellas la
+      # app funciona igual, pero el boton de pago dara error.
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PACK_PRICE_ID
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+
+  - name: teorico48-web
+    type: web
+    runtime: static
+    rootDir: teorico48/client
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

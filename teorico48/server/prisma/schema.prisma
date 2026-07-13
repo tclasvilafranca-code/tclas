@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  // Cuenta atras: fecha en la que el alumno tiene el examen real
+  examDate     DateTime?
+
+  // Monetizacion: pago unico "Pack 48h"
+  isPremium        Boolean @default(false)
+  stripeCustomerId String?
+
+  attempts TestAttempt[]
+
+  @@map("users")
+}
+
+model Category {
+  id   String @id @default(cuid())
+  slug String @unique
+  name String
+
+  questions Question[]
+
+  @@map("categories")
+}
+
+model Question {
+  id          String   @id @default(cuid())
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  text        String
+  imageUrl    String?
+  options     Json // string[4]
+  correctIndex Int
+  explanation String
+  // Preguntas "graves" (alcohol, drogas, velocidad...) restan doble en el examen real
+  isSerious   Boolean @default(false)
+
+  answers Answer[]
+
+  @@map("questions")
+}
+
+enum AttemptMode {
+  practice
+  exam
+}
+
+model TestAttempt {
+  id         String      @id @default(cuid())
+  userId     String
+  user       User        @relation(fields: [userId], references: [id])
+  mode       AttemptMode
+  startedAt  DateTime    @default(now())
+  finishedAt DateTime?
+  score      Int? // aciertos
+  total      Int?
+  passed     Boolean?
+
+  answers Answer[]
+
+  @@map("test_attempts")
+}
+
+model Answer {
+  id            String      @id @default(cuid())
+  attemptId     String
+  attempt       TestAttempt @relation(fields: [attemptId], references: [id])
+  questionId    String
+  question      Question    @relation(fields: [questionId], references: [id])
+  selectedIndex Int?
+  correct       Boolean
+
+  @@map("answers")
+}

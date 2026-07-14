@@ -68,6 +68,14 @@ export function Landing() {
           {params.get("compra") === "cancelada" && (
             <p className="mt-4 text-sm font-medium text-amber-200">Pago cancelado. Puedes intentarlo cuando quieras.</p>
           )}
+          {!user && (
+            <p className="mt-5 text-sm text-slate-300">
+              ¿Ya tienes tu código de acceso?{" "}
+              <Link to="/register" className="font-semibold text-white underline underline-offset-2">
+                Regístrate aquí
+              </Link>
+            </p>
+          )}
         </div>
       </section>
 

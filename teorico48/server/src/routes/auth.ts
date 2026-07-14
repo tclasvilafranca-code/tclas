@@ -139,7 +139,15 @@ authRouter.post(
     const valid = await bcrypt.compare(password, user.passwordHash);
     if (!valid) return res.status(401).json({ error: "Email o contraseña incorrectos" });
 
-    res.json({ token: signToken(user.id, user.tokenVersion), user: toPublicUser(user) });
+    // Solo se permite una sesión activa a la vez: cada login invalida
+    // cualquier token emitido antes (de otro dispositivo), para dificultar
+    // que varias personas compartan la misma cuenta a la vez.
+    const updated = await prisma.user.update({
+      where: { id: user.id },
+      data: { tokenVersion: { increment: 1 } },
+    });
+
+    res.json({ token: signToken(updated.id, updated.tokenVersion), user: toPublicUser(updated) });
   })
 );
 

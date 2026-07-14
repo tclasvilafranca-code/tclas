@@ -7,6 +7,7 @@ import type { Attempt, Stats } from "../lib/api";
 import { badgeIcon } from "../lib/badgeIcons";
 import { BarChart, BookOpen, CheckCircle, Flame, Lock, Repeat, Star, Target } from "../components/Icons";
 import { AnimatedNumber } from "../components/AnimatedNumber";
+import { PlanCard } from "../components/PlanCard";
 import { THEORY_EXPRESS } from "../content/theoryExpress";
 
 function useCountdown(examDate: string | null) {
@@ -87,6 +88,8 @@ export function Dashboard() {
           )}
         </div>
       )}
+
+      <PlanCard stats={stats} />
 
       {stats && (
         <div className="mt-5 grid anim-stagger gap-3 sm:grid-cols-3">

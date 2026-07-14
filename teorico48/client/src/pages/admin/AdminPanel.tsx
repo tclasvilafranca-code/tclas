@@ -105,7 +105,7 @@ export function AdminPanel() {
             Nota (opcional)
             <input
               type="text"
-              placeholder="p. ej. Instagram, TikTok..."
+              placeholder="p. ej. compra 14/07, regalo..."
               value={note}
               onChange={(e) => setNote(e.target.value)}
               className="mt-1.5 w-full rounded-xl border border-slate-200 px-3 py-2 outline-none focus:border-t48-blue focus:ring-2 focus:ring-t48-blue/25"

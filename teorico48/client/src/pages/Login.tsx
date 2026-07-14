@@ -83,7 +83,7 @@ export function Register() {
           required
           value={accessCode}
           onChange={(e) => setAccessCode(e.target.value)}
-          placeholder="Te lo pasamos por Instagram/TikTok"
+          placeholder="Te lo enviamos por email al comprar"
           className="mt-1.5 w-full rounded-xl border border-slate-200 px-3.5 py-2.5 uppercase tracking-wide outline-none transition-colors placeholder:normal-case focus:border-t48-blue focus:ring-2 focus:ring-t48-blue/25"
         />
       </label>

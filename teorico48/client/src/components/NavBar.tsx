@@ -70,7 +70,7 @@ export function NavBar() {
                 disabled={busy}
                 className="rounded-md bg-t48-blue px-4 py-1.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark disabled:opacity-60"
               >
-                {busy ? "Un momento..." : "Empieza ahora"}
+                {busy ? "Un momento..." : "Comprar ahora"}
               </button>
             </>
           )}

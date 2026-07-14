@@ -52,7 +52,7 @@ export function Landing() {
               </Link>
             ) : (
               <button onClick={handleStart} disabled={busy} className="btn-primary w-full px-7 py-3.5 text-lg sm:w-auto">
-                {busy ? "Redirigiendo..." : "Empieza ahora"}
+                {busy ? "Redirigiendo..." : "Comprar ahora"}
               </button>
             )}
             {!user && (
@@ -70,10 +70,11 @@ export function Landing() {
           )}
           {!user && (
             <p className="mt-5 text-sm text-slate-300">
-              ¿Ya tienes tu código de acceso?{" "}
+              ¿Ya compraste y tienes tu código por email? Antes de iniciar sesión, primero{" "}
               <Link to="/register" className="font-semibold text-white underline underline-offset-2">
-                Regístrate aquí
+                crea tu cuenta con él
               </Link>
+              .
             </p>
           )}
         </div>

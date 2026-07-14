@@ -71,9 +71,14 @@ export const api = {
       body: JSON.stringify({ examDate }),
     }),
   categories: () => request<{ categories: Category[] }>("/tests/categories"),
+  categoryStats: () => request<{ categories: CategoryStat[] }>("/tests/category-stats"),
   startExam: () => request<{ attemptId: string; questions: Question[] }>("/tests/exam", { method: "POST" }),
   startReview: () => request<{ attemptId: string; questions: Question[] }>("/tests/review", { method: "POST" }),
-  startLearn: () => request<{ attemptId: string; questions: LearnQuestion[] }>("/tests/learn", { method: "POST" }),
+  startLearn: (categorySlug?: string) =>
+    request<{ attemptId: string; questions: LearnQuestion[] }>("/tests/learn", {
+      method: "POST",
+      body: JSON.stringify(categorySlug ? { categorySlug } : {}),
+    }),
   submitAttempt: (attemptId: string, answers: { questionId: string; selectedIndex: number | null }[]) =>
     request<SubmitResult>(`/tests/${attemptId}/submit`, {
       method: "POST",
@@ -133,6 +138,14 @@ export interface Category {
   id: string;
   slug: string;
   name: string;
+}
+
+export interface CategoryStat {
+  slug: string;
+  name: string;
+  answered: number;
+  correct: number;
+  accuracy: number | null;
 }
 
 export interface Question {

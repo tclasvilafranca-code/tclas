@@ -248,3 +248,12 @@ export function ShieldCheck({ className = "h-5 w-5" }: IconProps) {
     </svg>
   );
 }
+
+export function BarChart({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M4 20V10M12 20V4M20 20v-7" />
+      <path d="M2.5 20h19" />
+    </svg>
+  );
+}

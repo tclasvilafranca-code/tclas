@@ -15,9 +15,14 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-/** Genera un simulacro repartiendo preguntas entre todas las categorías disponibles. */
-export async function generateExam(size: number = EXAM_SIZE) {
-  const allQuestions = await prisma.question.findMany({ include: { category: true } });
+/** Genera un simulacro. Sin categorySlug, reparte entre todas las categorías
+ * disponibles (simula el examen real); con categorySlug, se centra solo en
+ * esa categoría (práctica dirigida del Modo Aprendizaje). */
+export async function generateExam(size: number = EXAM_SIZE, categorySlug?: string) {
+  const allQuestions = await prisma.question.findMany({
+    where: categorySlug ? { category: { slug: categorySlug } } : undefined,
+    include: { category: true },
+  });
   if (allQuestions.length === 0) return [];
   const shuffled = shuffle(allQuestions);
   return shuffled.slice(0, Math.min(size, shuffled.length));

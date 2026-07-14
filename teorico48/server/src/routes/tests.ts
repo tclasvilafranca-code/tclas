@@ -19,6 +19,49 @@ testsRouter.get(
   })
 );
 
+// Precisión por categoría a partir de TODO el historial de respuestas
+// (simulacro, repaso y Modo Aprendizaje incluidos): a diferencia de las
+// estadísticas de "aprobados", aquí interesa la señal completa para saber
+// de verdad en qué falla cada alumno, no solo lo que cuenta como examen real.
+testsRouter.get("/category-stats", requireAuth, asyncHandler(async (req: AuthedRequest, res) => {
+  const [categories, answers] = await Promise.all([
+    prisma.category.findMany({ orderBy: { name: "asc" } }),
+    prisma.answer.findMany({
+      where: { attempt: { userId: req.userId, finishedAt: { not: null } } },
+      select: { correct: true, question: { select: { categoryId: true } } },
+    }),
+  ]);
+
+  const totals = new Map<string, { total: number; correct: number }>();
+  for (const a of answers) {
+    const entry = totals.get(a.question.categoryId) ?? { total: 0, correct: 0 };
+    entry.total += 1;
+    if (a.correct) entry.correct += 1;
+    totals.set(a.question.categoryId, entry);
+  }
+
+  const stats = categories
+    .map((c) => {
+      const t = totals.get(c.id) ?? { total: 0, correct: 0 };
+      return {
+        slug: c.slug,
+        name: c.name,
+        answered: t.total,
+        correct: t.correct,
+        accuracy: t.total > 0 ? Math.round((t.correct / t.total) * 100) : null,
+      };
+    })
+    // Peor precisión primero; las categorías sin practicar van al final.
+    .sort((a, b) => {
+      if (a.accuracy === null && b.accuracy === null) return 0;
+      if (a.accuracy === null) return 1;
+      if (b.accuracy === null) return -1;
+      return a.accuracy - b.accuracy;
+    });
+
+  res.json({ categories: stats });
+}));
+
 function publicQuestion(q: { id: string; text: string; imageUrl: string | null; options: unknown; category: { name: string; slug: string } }) {
   return {
     id: q.id,
@@ -87,15 +130,22 @@ testsRouter.post("/exam", requireAuth, asyncHandler(async (req: AuthedRequest, r
   });
 }));
 
+const learnSchema = z.object({ categorySlug: z.string().trim().min(1).optional() });
+
 // Modo Aprendizaje: gratis y sin límite diario, a propósito — es la fase
 // previa al simulacro real, pensada para animar a estudiar sin restricciones.
+// Admite categorySlug para practicar de forma dirigida solo una categoría.
 testsRouter.post("/learn", requireAuth, asyncHandler(async (req: AuthedRequest, res) => {
+  const parsed = learnSchema.safeParse(req.body ?? {});
+  if (!parsed.success) {
+    return res.status(400).json({ error: parsed.error.issues[0].message });
+  }
   const user = await prisma.user.findUnique({ where: { id: req.userId } });
   if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
 
-  const questions = await generateExam(EXAM_SIZE);
+  const questions = await generateExam(EXAM_SIZE, parsed.data.categorySlug);
   if (questions.length === 0) {
-    return res.status(500).json({ error: "Todavía no hay preguntas cargadas" });
+    return res.status(404).json({ error: "No hay preguntas disponibles para esa categoría todavía" });
   }
 
   const attempt = await prisma.testAttempt.create({

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { api, ApiError } from "../lib/api";
 import type { LearnQuestion, Question, SubmitResult } from "../lib/api";
 import { CheckCircle, XCircle } from "../components/Icons";
@@ -8,6 +8,9 @@ type Mode = "exam" | "review" | "learn";
 
 export function TestRunner({ mode }: { mode: Mode }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const categorySlug = (location.state as { categorySlug?: string; categoryName?: string } | null)?.categorySlug;
+  const categoryName = (location.state as { categorySlug?: string; categoryName?: string } | null)?.categoryName;
   const [attemptId, setAttemptId] = useState<string | null>(null);
   const [questions, setQuestions] = useState<Question[] | LearnQuestion[]>([]);
   const [answers, setAnswers] = useState<Record<string, number | null>>({});
@@ -22,7 +25,7 @@ export function TestRunner({ mode }: { mode: Mode }) {
   const isLearn = mode === "learn";
 
   useEffect(() => {
-    const start = mode === "exam" ? api.startExam() : mode === "review" ? api.startReview() : api.startLearn();
+    const start = mode === "exam" ? api.startExam() : mode === "review" ? api.startReview() : api.startLearn(categorySlug);
     start
       .then((r) => {
         setAttemptId(r.attemptId);
@@ -36,6 +39,7 @@ export function TestRunner({ mode }: { mode: Mode }) {
         }
       })
       .finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
   function select(questionId: string, index: number) {
@@ -121,7 +125,7 @@ export function TestRunner({ mode }: { mode: Mode }) {
         <span className="tabular-nums">{current + 1} / {questions.length}</span>
         {isLearn ? (
           <span className="flex items-center gap-1.5 rounded-md bg-t48-blue/10 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-t48-blue">
-            Modo Aprendizaje
+            Modo Aprendizaje{categoryName ? ` · ${categoryName}` : ""}
           </span>
         ) : (
           <span className="tabular-nums">{answeredCount}/{questions.length} respondidas</span>

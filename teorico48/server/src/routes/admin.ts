@@ -46,7 +46,6 @@ const createCodesSchema = z.object({
   count: z.number().int().min(1).max(50).default(1),
   note: z.string().trim().max(200).optional(),
   expiresInDays: z.number().int().min(1).max(365).optional(),
-  grantsPremium: z.boolean().optional().default(false),
 });
 
 adminRouter.post(
@@ -57,7 +56,7 @@ adminRouter.post(
     if (!parsed.success) {
       return res.status(400).json({ error: parsed.error.issues[0].message });
     }
-    const { count, note, expiresInDays, grantsPremium } = parsed.data;
+    const { count, note, expiresInDays } = parsed.data;
     const expiresAt = expiresInDays ? new Date(Date.now() + expiresInDays * 24 * 60 * 60 * 1000) : null;
 
     const codes = await Promise.all(
@@ -66,7 +65,7 @@ adminRouter.post(
         for (let attempt = 0; attempt < 5; attempt++) {
           try {
             return await prisma.accessCode.create({
-              data: { code: generateCode(), note: note || null, expiresAt, grantsPremium },
+              data: { code: generateCode(), note: note || null, expiresAt },
             });
           } catch (err: any) {
             if (err?.code !== "P2002") throw err;
@@ -97,7 +96,6 @@ adminRouter.get(
         createdAt: c.createdAt,
         expiresAt: c.expiresAt,
         usedAt: c.usedAt,
-        grantsPremium: c.grantsPremium,
         usedByEmail: c.usedByUser?.email ?? null,
       })),
     });

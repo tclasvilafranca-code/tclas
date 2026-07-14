@@ -92,12 +92,11 @@ seed`, que solo añade preguntas si la tabla está vacía — en despliegues fut
 Sin estos tres valores, la app funciona igual pero el botón de pago devuelve un error controlado en vez de
 romperse — puedes desplegar primero y activar Stripe más tarde con calma.
 
-**Cómo funciona la venta desde la portada:** el botón "Empieza ahora" de la portada lleva directo a Stripe con
-este mismo precio "Pack 48h", sin necesidad de tener cuenta previa. Cuando alguien paga, te llega un email (a
-`OWNER_EMAIL`) con su dirección de correo. Entra en `/admin`, genera un código marcando la casilla **"Concede
-Pack 48h al canjearse"**, y envíaselo tú mismo por email con las instrucciones de registro — al crear la cuenta
-con ese código, le queda activado el Pack 48h automáticamente, sin tener que pagar una segunda vez dentro de la
-app.
+**Cómo funciona la venta desde la portada:** el botón "Comprar ahora" de la portada lleva directo a Stripe con
+este mismo precio, sin necesidad de tener cuenta previa. Cuando alguien paga, te llega un email (a `OWNER_EMAIL`)
+con su dirección de correo. Entra en `/admin`, genera un código y envíaselo tú mismo por email con las
+instrucciones de registro — toda cuenta creada con un código de acceso tiene ya el acceso completo desde el
+primer momento (simulacros ilimitados y repaso de fallos incluidos), sin ningún pago adicional dentro de la app.
 
 ## Paso 6 · Activar el email de "recuperar contraseña" (opcional)
 

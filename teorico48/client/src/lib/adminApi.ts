@@ -35,7 +35,6 @@ export interface AccessCode {
   createdAt: string;
   expiresAt: string | null;
   usedAt: string | null;
-  grantsPremium: boolean;
   usedByEmail: string | null;
 }
 
@@ -50,7 +49,7 @@ export const adminApi = {
     localStorage.setItem(ADMIN_TOKEN_KEY, token);
   },
   listCodes: () => request<{ codes: AccessCode[] }>("/access-codes"),
-  generateCodes: (input: { count: number; note?: string; expiresInDays?: number; grantsPremium?: boolean }) =>
+  generateCodes: (input: { count: number; note?: string; expiresInDays?: number }) =>
     request<{ codes: AccessCode[] }>("/access-codes", {
       method: "POST",
       body: JSON.stringify(input),

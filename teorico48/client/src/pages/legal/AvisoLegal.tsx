@@ -28,14 +28,13 @@ export function AvisoLegal() {
       <h2 className="mt-2 text-lg font-bold text-t48-ink">Objeto</h2>
       <p>
         Teórico48 es una aplicación web de preparación del examen teórico del permiso de conducir, que ofrece
-        simulacros de examen, repaso de fallos y seguimiento del progreso del usuario. El acceso a determinadas
-        funciones (simulacros ilimitados y repaso de fallos) requiere la contratación del producto de pago único
-        "Pack 48h".
+        simulacros de examen, repaso de fallos y seguimiento del progreso del usuario. El acceso al Servicio
+        requiere la compra previa de una licencia de pago único.
       </p>
 
       <h2 className="mt-2 text-lg font-bold text-t48-ink">Condiciones de acceso y uso</h2>
       <p>
-        El acceso a Teórico48 es gratuito en su modalidad básica, sin perjuicio del coste de conexión a internet
+        El acceso a Teórico48 requiere la compra de la licencia, sin perjuicio del coste de conexión a internet
         que corresponda al usuario. El uso del Servicio atribuye la condición de usuario y supone la aceptación
         plena de este aviso legal, de los{" "}
         <a href="/terminos" className="font-semibold text-t48-blue">

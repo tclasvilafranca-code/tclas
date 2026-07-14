@@ -9,8 +9,6 @@ import { asyncHandler } from "../lib/asyncHandler";
 const prisma = new PrismaClient();
 export const testsRouter = Router();
 
-const FREE_DAILY_EXAMS = 1;
-
 testsRouter.get(
   "/categories",
   asyncHandler(async (_req, res) => {
@@ -99,22 +97,6 @@ testsRouter.post("/exam", requireAuth, asyncHandler(async (req: AuthedRequest, r
   const user = await prisma.user.findUnique({ where: { id: req.userId } });
   if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
 
-  if (!user.isPremium) {
-    const since = new Date();
-    since.setHours(0, 0, 0, 0);
-    const todaysExams = await prisma.testAttempt.count({
-      // Solo cuentan los intentos completados: si el usuario abandona un
-      // simulacro sin terminarlo, no debe perder su intento gratuito del día.
-      where: { userId: user.id, mode: "exam", finishedAt: { gte: since } },
-    });
-    if (todaysExams >= FREE_DAILY_EXAMS) {
-      return res.status(403).json({
-        error: "Has alcanzado el límite de simulacros gratuitos de hoy. Hazte con el Pack 48h para simulacros ilimitados.",
-        upgradeRequired: true,
-      });
-    }
-  }
-
   const questions = await generateExam(EXAM_SIZE);
   if (questions.length === 0) {
     return res.status(500).json({ error: "Todavía no hay preguntas cargadas" });
@@ -161,13 +143,6 @@ testsRouter.post("/learn", requireAuth, asyncHandler(async (req: AuthedRequest, 
 testsRouter.post("/review", requireAuth, asyncHandler(async (req: AuthedRequest, res) => {
   const user = await prisma.user.findUnique({ where: { id: req.userId } });
   if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
-
-  if (!user.isPremium) {
-    return res.status(403).json({
-      error: "El modo repaso de fallos es una función premium. Hazte con el Pack 48h para desbloquearlo.",
-      upgradeRequired: true,
-    });
-  }
 
   const questions = await generateReviewOfFails(user.id, EXAM_SIZE);
   if (questions.length === 0) {

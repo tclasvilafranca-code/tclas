@@ -19,7 +19,6 @@ export function AdminPanel() {
   const [count, setCount] = useState(1);
   const [note, setNote] = useState("");
   const [expiresInDays, setExpiresInDays] = useState("");
-  const [grantsPremium, setGrantsPremium] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
@@ -53,10 +52,8 @@ export function AdminPanel() {
         count,
         note: note.trim() || undefined,
         expiresInDays: expiresInDays ? Number(expiresInDays) : undefined,
-        grantsPremium,
       });
       setNote("");
-      setGrantsPremium(false);
       await loadCodes();
     } catch (err) {
       setError(err instanceof AdminApiError ? err.message : "No se pudieron generar los códigos");
@@ -123,15 +120,6 @@ export function AdminPanel() {
             className="mt-1.5 w-full rounded-xl border border-slate-200 px-3 py-2 outline-none focus:border-t48-blue focus:ring-2 focus:ring-t48-blue/25 sm:w-56"
           />
         </label>
-        <label className="mt-3 flex items-center gap-2 text-sm font-semibold text-slate-600">
-          <input
-            type="checkbox"
-            checked={grantsPremium}
-            onChange={(e) => setGrantsPremium(e.target.checked)}
-            className="h-4 w-4 rounded border-slate-300 text-t48-blue focus:ring-t48-blue/25"
-          />
-          Concede Pack 48h al canjearse (código de una compra de licencia)
-        </label>
         {error && <p className="mt-3 text-sm font-medium text-t48-red">{error}</p>}
         <button
           type="submit"
@@ -163,11 +151,6 @@ export function AdminPanel() {
                     >
                       {copiedCode === c.code ? "¡Copiado!" : "Copiar"}
                     </button>
-                    {c.grantsPremium && (
-                      <span className="rounded-md border border-amber-200 bg-amber-50 px-1.5 py-0.5 text-xs font-bold uppercase tracking-wide text-amber-700">
-                        Pack 48h
-                      </span>
-                    )}
                     {c.note && <span className="text-slate-400">· {c.note}</span>}
                   </div>
                   <span className={`font-semibold ${status.className}`}>{status.label}</span>

@@ -14,7 +14,6 @@ import { CategoryStats } from "./pages/CategoryStats";
 import { TeoriaExpress } from "./pages/TeoriaExpress";
 import { TestRunner } from "./pages/TestRunner";
 import { Results } from "./pages/Results";
-import { Paywall } from "./pages/Paywall";
 import { Gracias } from "./pages/Gracias";
 import { NotFound } from "./pages/NotFound";
 import { AvisoLegal } from "./pages/legal/AvisoLegal";
@@ -98,14 +97,6 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <Results />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/paywall"
-            element={
-              <ProtectedRoute>
-                <Paywall />
               </ProtectedRoute>
             }
           />

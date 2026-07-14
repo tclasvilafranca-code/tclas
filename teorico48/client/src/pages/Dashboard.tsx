@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { api, ApiError } from "../lib/api";
 import type { Attempt, Stats } from "../lib/api";
 import { badgeIcon } from "../lib/badgeIcons";
-import { BarChart, BookOpen, CheckCircle, Flame, Lock, Repeat, Star, Target } from "../components/Icons";
+import { BarChart, BookOpen, CheckCircle, Flame, Repeat, Star, Target } from "../components/Icons";
 import { AnimatedNumber } from "../components/AnimatedNumber";
 import { PlanCard } from "../components/PlanCard";
 import { THEORY_EXPRESS } from "../content/theoryExpress";
@@ -186,34 +186,13 @@ export function Dashboard() {
           <p className="mt-1 text-sm text-slate-500">30 preguntas, como el examen real. Máx. 3 fallos.</p>
         </Link>
         <Link to="/review" className="card-lift group rounded-2xl border border-slate-200 bg-white p-6 hover:border-t48-blue">
-          <div className="flex items-center justify-between">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-t48-blue/10 text-t48-blue transition-transform duration-200 group-hover:scale-105">
-              <Repeat className="h-5 w-5" />
-            </div>
-            {!user?.isPremium && <Lock className="h-4 w-4 text-slate-300" />}
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-t48-blue/10 text-t48-blue transition-transform duration-200 group-hover:scale-105">
+            <Repeat className="h-5 w-5" />
           </div>
           <h2 className="mt-3 font-bold text-t48-ink">Repasar mis fallos</h2>
-          <p className="mt-1 text-sm text-slate-500">
-            {user?.isPremium ? "Solo las preguntas que sueles fallar." : "Función del Pack 48h."}
-          </p>
+          <p className="mt-1 text-sm text-slate-500">Solo las preguntas que sueles fallar.</p>
         </Link>
       </div>
-
-      {!user?.isPremium && (
-        <div className="card-lift relative mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white p-5">
-          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-t48-amber via-amber-400 to-t48-blue" />
-          <span className="inline-block rounded-md border border-amber-200 bg-amber-50 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-amber-700">
-            Pack 48h
-          </span>
-          <p className="mt-2 font-bold text-t48-ink">Simulacros ilimitados + repaso de fallos</p>
-          <p className="mt-1 text-sm text-slate-500">
-            Con la cuenta gratis solo puedes hacer 1 simulacro al día.
-          </p>
-          <Link to="/paywall" className="btn-primary mt-3 px-4 py-2 text-sm">
-            Ver Pack 48h
-          </Link>
-        </div>
-      )}
 
       {stats && (
         <div className="mt-8">

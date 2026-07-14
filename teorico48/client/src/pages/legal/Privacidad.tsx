@@ -30,9 +30,9 @@ export function Privacidad() {
         <li>Datos de registro: email y contraseña (la contraseña se almacena siempre cifrada, nunca en claro).</li>
         <li>Datos de uso: fecha de examen (opcional), resultados de simulacros, respuestas, progreso, XP, rachas y medallas conseguidas.</li>
         <li>
-          Datos de pago: al contratar el Pack 48h, el pago se procesa directamente por{" "}
-          <strong>Stripe</strong>, pasarela de pago externa. Teórico48 no almacena ni tiene acceso a los datos
-          completos de tu tarjeta.
+          Datos de compra: al comprar la licencia, antes incluso de crear una cuenta, el pago se procesa
+          directamente por <strong>Stripe</strong>, pasarela de pago externa, que recoge tu email para poder
+          enviarte el código de acceso. Teórico48 no almacena ni tiene acceso a los datos completos de tu tarjeta.
         </li>
         <li>Datos técnicos básicos derivados del uso del servicio (por ejemplo, fecha de conexión), en la medida necesaria para el funcionamiento y la seguridad de la aplicación.</li>
       </ul>
@@ -41,14 +41,14 @@ export function Privacidad() {
       <ul className="list-disc space-y-1 pl-5">
         <li>Gestionar tu cuenta y darte acceso a las funcionalidades de la aplicación.</li>
         <li>Generar y corregir los simulacros, calcular tu progreso, XP, rachas y medallas.</li>
-        <li>Procesar el pago único del Pack 48h y activar el acceso premium correspondiente.</li>
+        <li>Procesar el pago único de la licencia y generar el código de acceso para crear la cuenta.</li>
         <li>Enviarte comunicaciones estrictamente necesarias para el servicio (por ejemplo, un email para restablecer tu contraseña si lo solicitas).</li>
       </ul>
 
       <h2 className="mt-2 text-lg font-bold text-t48-ink">Legitimación</h2>
       <p>
-        El tratamiento se basa en la ejecución del contrato de prestación del Servicio (registro y uso de la
-        aplicación, y contratación del Pack 48h) y, cuando corresponda, en tu consentimiento expreso.
+        El tratamiento se basa en la ejecución del contrato de prestación del Servicio (compra de la licencia,
+        registro y uso de la aplicación) y, cuando corresponda, en tu consentimiento expreso.
       </p>
 
       <h2 className="mt-2 text-lg font-bold text-t48-ink">Plazo de conservación</h2>
@@ -61,9 +61,9 @@ export function Privacidad() {
       <h2 className="mt-2 text-lg font-bold text-t48-ink">Destinatarios y encargados del tratamiento</h2>
       <p>Para poder prestar el Servicio, algunos datos se comparten con los siguientes proveedores, que actúan como encargados del tratamiento:</p>
       <ul className="list-disc space-y-1 pl-5">
-        <li><strong>Stripe</strong> (procesamiento de pagos del Pack 48h).</li>
+        <li><strong>Stripe</strong> (procesamiento del pago de la licencia).</li>
         <li><strong>Render</strong> u otro proveedor de alojamiento (hosting de la aplicación y la base de datos).</li>
-        <li><strong>Resend</strong> u otro proveedor de email transaccional (envío del correo de restablecimiento de contraseña).</li>
+        <li><strong>Resend</strong> u otro proveedor de email transaccional (restablecimiento de contraseña, verificación de email y aviso de nuevas compras).</li>
       </ul>
       <p>No se venden ni ceden datos a terceros con fines publicitarios.</p>
 

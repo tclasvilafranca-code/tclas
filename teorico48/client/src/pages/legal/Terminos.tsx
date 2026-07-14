@@ -20,29 +20,30 @@ export function Terminos() {
 
       <h2 className="mt-2 text-lg font-bold text-t48-ink">2. Descripción del servicio</h2>
       <p>
-        Teórico48 ofrece, en su plan gratuito, un simulacro de examen al día y seguimiento básico de progreso. El
-        producto de pago único "Pack 48h" desbloquea simulacros ilimitados y el modo de repaso centrado en las
-        preguntas falladas por el usuario, sin límite de tiempo de acceso ni renovación automática: es un pago
-        único, no una suscripción.
+        El acceso a Teórico48 se obtiene mediante la compra de una licencia de pago único, sin límite de tiempo de
+        acceso ni renovación automática: no es una suscripción. Tras la compra, el usuario recibe por email un
+        código de acceso para crear su cuenta, que da acceso completo desde el primer momento a simulacros
+        ilimitados, el modo de repaso centrado en las preguntas falladas y el resto de funciones de la aplicación.
       </p>
 
       <h2 className="mt-2 text-lg font-bold text-t48-ink">3. Registro y responsabilidad del usuario</h2>
       <p>
-        Para usar Teórico48 debes registrarte con un email y una contraseña. Eres responsable de mantener la
-        confidencialidad de tus credenciales y de toda actividad realizada desde tu cuenta. Debes proporcionar
-        datos veraces en el registro.
+        Para usar Teórico48 debes crear una cuenta con un email, una contraseña y el código de acceso recibido tras
+        la compra; cada código solo puede canjearse una vez. Eres responsable de mantener la confidencialidad de
+        tus credenciales y de toda actividad realizada desde tu cuenta. Debes proporcionar datos veraces en el
+        registro.
       </p>
 
       <h2 className="mt-2 text-lg font-bold text-t48-ink">4. Precio, pago y derecho de desistimiento</h2>
       <p>
-        El precio del Pack 48h se muestra en la propia aplicación antes de iniciar el pago e incluye los impuestos
-        aplicables. El pago se procesa a través de Stripe. Al tratarse de contenido y funcionalidades digitales
-        que se activan de forma inmediata tras el pago, al contratar el Pack 48h el usuario solicita expresamente
-        el inicio de la prestación del servicio antes de que finalice el plazo legal de desistimiento de 14 días
-        naturales, por lo que dicho derecho de desistimiento no resultará de aplicación una vez el acceso premium
-        haya sido activado, conforme al artículo 103.m) del Real Decreto Legislativo 1/2007. Si consideras que ha
-        habido un error en el cobro, contacta con <LegalPlaceholder>[email de contacto]</LegalPlaceholder> antes de
-        iniciar cualquier disputa con tu banco.
+        El precio de la licencia se muestra antes de iniciar el pago e incluye los impuestos aplicables. El pago
+        se procesa a través de Stripe, antes de crear la cuenta. Al tratarse de contenido y funcionalidades
+        digitales que se activan de forma inmediata mediante el código de acceso enviado tras el pago, al comprar
+        la licencia el usuario solicita expresamente el inicio de la prestación del servicio antes de que finalice
+        el plazo legal de desistimiento de 14 días naturales, por lo que dicho derecho de desistimiento no
+        resultará de aplicación una vez se haya entregado el código de acceso, conforme al artículo 103.m) del Real
+        Decreto Legislativo 1/2007. Si consideras que ha habido un error en el cobro, contacta con{" "}
+        <LegalPlaceholder>[email de contacto]</LegalPlaceholder> antes de iniciar cualquier disputa con tu banco.
       </p>
 
       <h2 className="mt-2 text-lg font-bold text-t48-ink">5. Naturaleza educativa del contenido</h2>

@@ -93,13 +93,10 @@ authRouter.post(
           throw new InvalidAccessCodeError();
         }
 
-        // El código ya se marcó como usado arriba; leemos si concede el Pack 48h
-        // (típicamente porque viene de una compra de la licencia) para activar
-        // el acceso premium desde el primer momento, sin cobrar dos veces.
-        const usedCode = await tx.accessCode.findUnique({ where: { code: accessCode } });
-
+        // Todo código de acceso viene de una compra de la licencia completa,
+        // así que toda cuenta nace con acceso total desde el primer momento.
         const createdUser = await tx.user.create({
-          data: { email, passwordHash, termsAcceptedAt: new Date(), isPremium: usedCode?.grantsPremium ?? false },
+          data: { email, passwordHash, termsAcceptedAt: new Date(), isPremium: true },
         });
 
         await tx.accessCode.update({

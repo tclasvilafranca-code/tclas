@@ -42,14 +42,6 @@ export function NavBar() {
               >
                 Panel
               </Link>
-              {!user.isPremium && (
-                <Link
-                  to="/paywall"
-                  className="rounded-md border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-amber-700 transition-colors hover:bg-amber-100"
-                >
-                  Pack 48h
-                </Link>
-              )}
               <button
                 onClick={() => {
                   logout();

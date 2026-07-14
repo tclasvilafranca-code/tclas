@@ -3,7 +3,7 @@ import { z } from "zod";
 import { PrismaClient } from "@prisma/client";
 import { requireAuth, AuthedRequest } from "../middleware/auth";
 import { generateExam, generateReviewOfFails, isPassed, EXAM_SIZE } from "../generator";
-import { BADGES, levelForXp, unlockedBadgeIds, updateStreak, xpForAttempt } from "../gamification";
+import { BADGES, XP_PER_CORRECT, levelForXp, unlockedBadgeIds, updateStreak, xpForAttempt } from "../gamification";
 import { asyncHandler } from "../lib/asyncHandler";
 
 const prisma = new PrismaClient();
@@ -26,6 +26,29 @@ function publicQuestion(q: { id: string; text: string; imageUrl: string | null; 
     imageUrl: q.imageUrl,
     options: q.options,
     category: q.category.name,
+  };
+}
+
+// El modo Aprendizaje corrige al instante, así que a diferencia de
+// publicQuestion() sí incluye la respuesta correcta y su explicación
+// desde el principio: el cliente solo las revela tras responder.
+function learnQuestion(q: {
+  id: string;
+  text: string;
+  imageUrl: string | null;
+  options: unknown;
+  correctIndex: number;
+  explanation: string;
+  category: { name: string; slug: string };
+}) {
+  return {
+    id: q.id,
+    text: q.text,
+    imageUrl: q.imageUrl,
+    options: q.options,
+    category: q.category.name,
+    correctIndex: q.correctIndex,
+    explanation: q.explanation,
   };
 }
 
@@ -61,6 +84,27 @@ testsRouter.post("/exam", requireAuth, asyncHandler(async (req: AuthedRequest, r
   res.json({
     attemptId: attempt.id,
     questions: questions.map(publicQuestion),
+  });
+}));
+
+// Modo Aprendizaje: gratis y sin límite diario, a propósito — es la fase
+// previa al simulacro real, pensada para animar a estudiar sin restricciones.
+testsRouter.post("/learn", requireAuth, asyncHandler(async (req: AuthedRequest, res) => {
+  const user = await prisma.user.findUnique({ where: { id: req.userId } });
+  if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
+
+  const questions = await generateExam(EXAM_SIZE);
+  if (questions.length === 0) {
+    return res.status(500).json({ error: "Todavía no hay preguntas cargadas" });
+  }
+
+  const attempt = await prisma.testAttempt.create({
+    data: { userId: user.id, mode: "learn", total: questions.length },
+  });
+
+  res.json({
+    attemptId: attempt.id,
+    questions: questions.map(learnQuestion),
   });
 }));
 
@@ -134,10 +178,15 @@ testsRouter.post("/:attemptId/submit", requireAuth, asyncHandler(async (req: Aut
 
   const total = answerRows.length;
   const passed = isPassed(score, total);
+  // El modo Aprendizaje es una fase previa de estudio, no un intento real:
+  // no cuenta para las estadísticas de simulacros ni da el bonus de
+  // aprobado/perfecto, solo XP por cada acierto.
+  const isLearnMode = attempt.mode === "learn";
 
   // Snapshot de intentos previos (antes de cerrar este) para saber qué medallas eran nuevas.
+  // Se excluye el modo Aprendizaje: no debe contar como "test completado" real.
   const priorAttempts = await prisma.testAttempt.findMany({
-    where: { userId: req.userId, finishedAt: { not: null } },
+    where: { userId: req.userId, finishedAt: { not: null }, mode: { not: "learn" } },
     select: { score: true, total: true, passed: true },
   });
 
@@ -147,7 +196,7 @@ testsRouter.post("/:attemptId/submit", requireAuth, asyncHandler(async (req: Aut
   });
 
   const user = await prisma.user.findUniqueOrThrow({ where: { id: req.userId } });
-  const xpGained = xpForAttempt(score, total, passed);
+  const xpGained = isLearnMode ? score * XP_PER_CORRECT : xpForAttempt(score, total, passed);
   const streak = updateStreak(user.lastActivityDate, user.currentStreak, user.longestStreak);
   const newXp = user.xp + xpGained;
 
@@ -162,9 +211,9 @@ testsRouter.post("/:attemptId/submit", requireAuth, asyncHandler(async (req: Aut
   const afterStats = {
     xp: newXp,
     longestStreak: streak.longestStreak,
-    totalAttempts: beforeStats.totalAttempts + 1,
-    totalPassed: beforeStats.totalPassed + (passed ? 1 : 0),
-    hasPerfect: beforeStats.hasPerfect || score === total,
+    totalAttempts: beforeStats.totalAttempts + (isLearnMode ? 0 : 1),
+    totalPassed: beforeStats.totalPassed + (!isLearnMode && passed ? 1 : 0),
+    hasPerfect: beforeStats.hasPerfect || (!isLearnMode && score === total),
     theorySessionsCompleted: beforeStats.theorySessionsCompleted,
   };
 
@@ -216,7 +265,8 @@ testsRouter.post("/:attemptId/submit", requireAuth, asyncHandler(async (req: Aut
 testsRouter.get("/stats", requireAuth, asyncHandler(async (req: AuthedRequest, res) => {
   const user = await prisma.user.findUniqueOrThrow({ where: { id: req.userId } });
   const attempts = await prisma.testAttempt.findMany({
-    where: { userId: req.userId, finishedAt: { not: null } },
+    // El modo Aprendizaje no cuenta como simulacro real para estas estadísticas.
+    where: { userId: req.userId, finishedAt: { not: null }, mode: { not: "learn" } },
     select: { score: true, total: true, passed: true },
   });
 

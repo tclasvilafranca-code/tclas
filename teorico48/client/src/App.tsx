@@ -59,6 +59,14 @@ export default function App() {
             }
           />
           <Route
+            path="/learn"
+            element={
+              <ProtectedRoute>
+                <TestRunner mode="learn" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/exam"
             element={
               <ProtectedRoute>

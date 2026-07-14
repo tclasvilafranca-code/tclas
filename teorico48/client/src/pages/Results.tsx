@@ -23,23 +23,34 @@ export function Results() {
   const fails = result.total - result.score;
   const pct = Math.round((result.score / result.total) * 100);
   const g = result.gamification;
+  const isLearnMode = result.attempt?.mode === "learn";
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
       <div
         className={`animate-[fadeIn_0.25s_ease-out] rounded-3xl border p-8 text-center ${
-          result.passed ? "border-t48-green/30 bg-t48-green/10" : "border-t48-red/30 bg-t48-red/10"
+          isLearnMode ? "border-t48-blue/30 bg-t48-blue/5" : result.passed ? "border-t48-green/30 bg-t48-green/10" : "border-t48-red/30 bg-t48-red/10"
         }`}
       >
         <div className="flex justify-center">
-          <ScoreRing percent={pct} passed={result.passed} />
+          <ScoreRing percent={pct} passed={isLearnMode ? true : result.passed} />
         </div>
-        <p className={`mt-3 animate-[fadeIn_0.4s_ease-out_0.2s_both] text-2xl font-extrabold ${result.passed ? "text-t48-green-dark" : "text-t48-red"}`}>
-          {result.passed ? "¡Aprobado!" : "Suspenso, pero cerca"}
+        <p
+          className={`mt-3 animate-[fadeIn_0.4s_ease-out_0.2s_both] text-2xl font-extrabold ${
+            isLearnMode ? "text-t48-blue-dark" : result.passed ? "text-t48-green-dark" : "text-t48-red"
+          }`}
+        >
+          {isLearnMode ? "Sesión de aprendizaje completada" : result.passed ? "¡Aprobado!" : "Suspenso, pero cerca"}
         </p>
         <p className="mt-1 animate-[fadeIn_0.4s_ease-out_0.25s_both] text-slate-500">
-          {result.score}/{result.total} correctas · {fails} fallo{fails !== 1 ? "s" : ""} (máx. 3 para aprobar)
+          {result.score}/{result.total} correctas · {fails} fallo{fails !== 1 ? "s" : ""}
+          {isLearnMode ? "" : " (máx. 3 para aprobar)"}
         </p>
+        {isLearnMode && (
+          <p className="mt-1 animate-[fadeIn_0.4s_ease-out_0.3s_both] text-xs text-slate-400">
+            Esto no cuenta como simulacro real — para eso está el examen cronometrado.
+          </p>
+        )}
 
         {g && (
           <div className="mt-5 flex flex-wrap items-center justify-center gap-2 anim-stagger">
@@ -101,7 +112,7 @@ export function Results() {
           Volver al panel
         </Link>
         <Link to="/exam" className="btn-primary px-5 py-2.5">
-          Otro simulacro
+          {isLearnMode ? "Hacer el simulacro real" : "Otro simulacro"}
         </Link>
       </div>
     </div>

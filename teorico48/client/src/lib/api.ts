@@ -73,6 +73,7 @@ export const api = {
   categories: () => request<{ categories: Category[] }>("/tests/categories"),
   startExam: () => request<{ attemptId: string; questions: Question[] }>("/tests/exam", { method: "POST" }),
   startReview: () => request<{ attemptId: string; questions: Question[] }>("/tests/review", { method: "POST" }),
+  startLearn: () => request<{ attemptId: string; questions: LearnQuestion[] }>("/tests/learn", { method: "POST" }),
   submitAttempt: (attemptId: string, answers: { questionId: string; selectedIndex: number | null }[]) =>
     request<SubmitResult>(`/tests/${attemptId}/submit`, {
       method: "POST",
@@ -142,6 +143,13 @@ export interface Question {
   category: string;
 }
 
+/** En modo Aprendizaje la respuesta correcta y su explicación llegan desde
+ * el principio: el cliente solo las revela después de que el usuario responda. */
+export interface LearnQuestion extends Question {
+  correctIndex: number;
+  explanation: string;
+}
+
 export interface SubmitResult {
   score: number;
   total: number;
@@ -164,11 +172,12 @@ export interface SubmitResult {
     currentStreak: number;
     newBadges: { id: string; label: string; emoji: string }[];
   };
+  attempt: Attempt;
 }
 
 export interface Attempt {
   id: string;
-  mode: "practice" | "exam";
+  mode: "practice" | "exam" | "learn";
   startedAt: string;
   finishedAt: string | null;
   score: number | null;

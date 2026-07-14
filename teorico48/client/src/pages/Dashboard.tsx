@@ -154,6 +154,16 @@ export function Dashboard() {
         </div>
       </Link>
 
+      <Link to="/learn" className="card-lift group mt-4 flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 hover:border-t48-blue">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-t48-blue/10 text-t48-blue transition-transform duration-200 group-hover:scale-105">
+          <CheckCircle className="h-5 w-5" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <h2 className="font-bold text-t48-ink">Modo Aprendizaje</h2>
+          <p className="mt-0.5 text-sm text-slate-500">Corrección al instante, pregunta a pregunta. Gratis y sin límite.</p>
+        </div>
+      </Link>
+
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <Link to="/exam" className="card-lift group rounded-2xl border border-slate-200 bg-white p-6 hover:border-t48-blue">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-t48-blue/10 text-t48-blue transition-transform duration-200 group-hover:scale-105">
@@ -230,7 +240,8 @@ export function Dashboard() {
             {attempts.map((a) => (
               <li key={a.id} className="flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-slate-50">
                 <span className="text-slate-500">
-                  {a.finishedAt ? new Date(a.finishedAt).toLocaleString() : "—"} · {a.mode === "exam" ? "Simulacro" : "Repaso"}
+                  {a.finishedAt ? new Date(a.finishedAt).toLocaleString() : "—"} ·{" "}
+                  {a.mode === "exam" ? "Simulacro" : a.mode === "learn" ? "Aprendizaje" : "Repaso"}
                 </span>
                 <span className={`font-bold ${a.passed ? "text-t48-green-dark" : "text-t48-red"}`}>
                   {a.score}/{a.total} {a.passed ? "Aprobado" : "Suspenso"}

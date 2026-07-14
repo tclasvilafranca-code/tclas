@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api, ApiError } from "../lib/api";
-import type { Question, SubmitResult } from "../lib/api";
-import { CheckCircle } from "../components/Icons";
+import type { LearnQuestion, Question, SubmitResult } from "../lib/api";
+import { CheckCircle, XCircle } from "../components/Icons";
 
-export function TestRunner({ mode }: { mode: "exam" | "review" }) {
+type Mode = "exam" | "review" | "learn";
+
+export function TestRunner({ mode }: { mode: Mode }) {
   const navigate = useNavigate();
   const [attemptId, setAttemptId] = useState<string | null>(null);
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<Question[] | LearnQuestion[]>([]);
   const [answers, setAnswers] = useState<Record<string, number | null>>({});
+  const [revealed, setRevealed] = useState<Record<string, boolean>>({});
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState<"next" | "prev">("next");
   const [error, setError] = useState<string | null>(null);
@@ -16,8 +19,10 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const isLearn = mode === "learn";
+
   useEffect(() => {
-    const start = mode === "exam" ? api.startExam() : api.startReview();
+    const start = mode === "exam" ? api.startExam() : mode === "review" ? api.startReview() : api.startLearn();
     start
       .then((r) => {
         setAttemptId(r.attemptId);
@@ -34,7 +39,11 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
   }, [mode]);
 
   function select(questionId: string, index: number) {
+    if (isLearn && revealed[questionId]) return;
     setAnswers((prev) => ({ ...prev, [questionId]: index }));
+    if (isLearn) {
+      setRevealed((prev) => ({ ...prev, [questionId]: true }));
+    }
   }
 
   function goTo(index: number, dir: "next" | "prev") {
@@ -102,12 +111,21 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
 
   const q = questions[current];
   const answeredCount = Object.keys(answers).length;
+  const questionRevealed = isLearn && !!q && revealed[q.id];
+  const learnQuestion = isLearn ? (q as LearnQuestion) : null;
+  const canAdvance = !isLearn || questionRevealed;
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
       <div className="mb-3 flex items-center justify-between text-sm font-semibold text-slate-500">
         <span className="tabular-nums">{current + 1} / {questions.length}</span>
-        <span className="tabular-nums">{answeredCount}/{questions.length} respondidas</span>
+        {isLearn ? (
+          <span className="flex items-center gap-1.5 rounded-md bg-t48-blue/10 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-t48-blue">
+            Modo Aprendizaje
+          </span>
+        ) : (
+          <span className="tabular-nums">{answeredCount}/{questions.length} respondidas</span>
+        )}
       </div>
       <div className="progress-track h-2 w-full rounded-full">
         <div
@@ -128,22 +146,39 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
           <div className="mt-5 flex flex-col gap-2">
             {q.options.map((opt, i) => {
               const selected = answers[q.id] === i;
+              let style = selected
+                ? "is-selected border-t48-blue bg-t48-blue/10 font-semibold text-t48-blue-dark shadow-sm"
+                : "border-slate-200 hover:border-t48-blue/50 hover:bg-slate-50";
+              const isCorrectOption = learnQuestion && i === learnQuestion.correctIndex;
+              if (questionRevealed && isCorrectOption) {
+                style = "border-t48-green bg-t48-green/10 font-semibold text-t48-green-dark";
+              } else if (questionRevealed && selected && !isCorrectOption) {
+                style = "border-t48-red bg-t48-red/10 font-semibold text-t48-red";
+              }
               return (
                 <button
                   key={i}
                   onClick={() => select(q.id, i)}
+                  disabled={questionRevealed}
                   aria-pressed={selected}
-                  className={`option-btn rounded-xl border px-4 py-3 text-left focus-visible:ring-2 focus-visible:ring-t48-blue/40 focus-visible:outline-none ${
-                    selected
-                      ? "is-selected border-t48-blue bg-t48-blue/10 font-semibold text-t48-blue-dark shadow-sm"
-                      : "border-slate-200 hover:border-t48-blue/50 hover:bg-slate-50"
-                  }`}
+                  className={`option-btn flex items-center justify-between rounded-xl border px-4 py-3 text-left disabled:cursor-default focus-visible:ring-2 focus-visible:ring-t48-blue/40 focus-visible:outline-none ${style}`}
                 >
-                  {opt}
+                  <span>{opt}</span>
+                  {questionRevealed && isCorrectOption && <CheckCircle className="option-check h-4 w-4 shrink-0" />}
+                  {questionRevealed && selected && !isCorrectOption && <XCircle className="option-check h-4 w-4 shrink-0" />}
                 </button>
               );
             })}
           </div>
+
+          {questionRevealed && learnQuestion && (
+            <div className="anim-slide-right mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+              <p className="font-semibold text-t48-ink">
+                {answers[q.id] === learnQuestion.correctIndex ? "¡Correcto!" : "No era esa."}
+              </p>
+              <p className="mt-1">{learnQuestion.explanation}</p>
+            </div>
+          )}
         </div>
       )}
 
@@ -158,13 +193,14 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
         {current < questions.length - 1 ? (
           <button
             onClick={() => goTo(Math.min(questions.length - 1, current + 1), "next")}
+            disabled={!canAdvance}
             className="btn-primary px-5 py-2.5"
           >
             Siguiente
           </button>
         ) : (
-          <button onClick={handleSubmit} disabled={submitting} className="btn-success px-5 py-2.5">
-            {submitting ? "Corrigiendo..." : "Terminar y corregir"}
+          <button onClick={handleSubmit} disabled={submitting || !canAdvance} className="btn-success px-5 py-2.5">
+            {submitting ? "Un momento..." : "Terminar"}
           </button>
         )}
       </div>

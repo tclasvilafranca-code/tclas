@@ -1,13 +1,17 @@
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import type { SubmitResult } from "../lib/api";
 import { badgeIcon } from "../lib/badgeIcons";
-import { Flame, Star } from "../components/Icons";
+import { Flame, Share, Star } from "../components/Icons";
 import { ScoreRing } from "../components/ScoreRing";
+import { renderShareCard } from "../lib/shareCard";
 
 export function Results() {
   const location = useLocation();
   const navigate = useNavigate();
   const result = (location.state as { result?: SubmitResult } | null)?.result;
+  const [sharing, setSharing] = useState(false);
+  const [shareError, setShareError] = useState<string | null>(null);
 
   if (!result) {
     return (
@@ -24,6 +28,42 @@ export function Results() {
   const pct = Math.round((result.score / result.total) * 100);
   const g = result.gamification;
   const isLearnMode = result.attempt?.mode === "learn";
+
+  async function handleShare() {
+    if (!result) return;
+    setShareError(null);
+    setSharing(true);
+    try {
+      const blob = await renderShareCard({
+        percent: pct,
+        score: result.score,
+        total: result.total,
+        passed: result.passed,
+        isLearnMode,
+        level: g?.level ?? 1,
+        streak: g?.currentStreak ?? 0,
+        xpGained: g?.xpGained ?? 0,
+      });
+      const file = new File([blob], "teorico48-resultado.png", { type: "image/png" });
+      const shareData = { files: [file], title: "Teórico48", text: "Mi resultado en Teórico48" };
+      if (navigator.canShare?.(shareData)) {
+        await navigator.share(shareData);
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "teorico48-resultado.png";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    } catch (err) {
+      if (err instanceof Error && err.name !== "AbortError") {
+        setShareError("No se pudo generar la imagen para compartir. Inténtalo de nuevo.");
+      }
+    } finally {
+      setSharing(false);
+    }
+  }
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
@@ -82,6 +122,12 @@ export function Results() {
             ))}
           </div>
         )}
+
+        <button onClick={handleShare} disabled={sharing} className="btn-secondary mt-5 px-4 py-2 text-sm">
+          <Share className="h-4 w-4" />
+          {sharing ? "Generando..." : "Compartir resultado"}
+        </button>
+        {shareError && <p className="mt-2 text-xs font-medium text-t48-red">{shareError}</p>}
       </div>
 
       <div className="mt-8 space-y-3">

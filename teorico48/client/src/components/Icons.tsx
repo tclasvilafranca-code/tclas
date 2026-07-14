@@ -257,3 +257,14 @@ export function BarChart({ className = "h-5 w-5" }: IconProps) {
     </svg>
   );
 }
+
+export function Share({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <circle cx="18" cy="5.5" r="2.5" />
+      <circle cx="6" cy="12" r="2.5" />
+      <circle cx="18" cy="18.5" r="2.5" />
+      <path d="M8.2 10.7 15.8 6.8M8.2 13.3l7.6 3.9" />
+    </svg>
+  );
+}

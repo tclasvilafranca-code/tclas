@@ -10,6 +10,7 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<Record<string, number | null>>({});
   const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState<"next" | "prev">("next");
   const [error, setError] = useState<string | null>(null);
   const [noFailsYet, setNoFailsYet] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -36,6 +37,11 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
     setAnswers((prev) => ({ ...prev, [questionId]: index }));
   }
 
+  function goTo(index: number, dir: "next" | "prev") {
+    setDirection(dir);
+    setCurrent(index);
+  }
+
   async function handleSubmit() {
     if (!attemptId) return;
     setSubmitting(true);
@@ -50,7 +56,23 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
     }
   }
 
-  if (loading) return <div className="p-16 text-center text-slate-500">Preparando tu test...</div>;
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-8">
+        <div className="h-2 w-full animate-pulse rounded-full bg-slate-100" />
+        <div className="mt-6 animate-pulse rounded-2xl border border-slate-200 bg-white p-6">
+          <div className="h-3 w-24 rounded bg-slate-100" />
+          <div className="mt-3 h-5 w-3/4 rounded bg-slate-100" />
+          <div className="mt-5 flex flex-col gap-2">
+            <div className="h-11 rounded-xl bg-slate-100" />
+            <div className="h-11 rounded-xl bg-slate-100" />
+            <div className="h-11 rounded-xl bg-slate-100" />
+            <div className="h-11 rounded-xl bg-slate-100" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (noFailsYet) {
     return (
@@ -60,10 +82,7 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
         </div>
         <p className="mt-4 font-bold text-t48-ink">Todavía no has fallado ninguna pregunta</p>
         <p className="mt-1 text-sm text-slate-500">Haz un simulacro y, si fallas algo, aparecerá aquí para repasarlo.</p>
-        <button
-          onClick={() => navigate("/dashboard")}
-          className="mt-5 rounded-md bg-t48-blue px-4 py-2.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark"
-        >
+        <button onClick={() => navigate("/dashboard")} className="btn-primary mt-5 px-4 py-2.5">
           Volver al panel
         </button>
       </div>
@@ -74,10 +93,7 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
     return (
       <div className="mx-auto max-w-md px-4 py-16 text-center">
         <p className="font-medium text-t48-red">{error}</p>
-        <button
-          onClick={() => navigate("/dashboard")}
-          className="mt-4 rounded-md bg-t48-blue px-4 py-2.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark"
-        >
+        <button onClick={() => navigate("/dashboard")} className="btn-primary mt-4 px-4 py-2.5">
           Volver al panel
         </button>
       </div>
@@ -90,12 +106,12 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
       <div className="mb-3 flex items-center justify-between text-sm font-semibold text-slate-500">
-        <span>{current + 1} / {questions.length}</span>
-        <span>{answeredCount}/{questions.length} respondidas</span>
+        <span className="tabular-nums">{current + 1} / {questions.length}</span>
+        <span className="tabular-nums">{answeredCount}/{questions.length} respondidas</span>
       </div>
-      <div className="h-2 w-full rounded-full bg-slate-100">
+      <div className="progress-track h-2 w-full rounded-full">
         <div
-          className="h-2 rounded-full bg-t48-blue transition-all duration-300"
+          className="progress-fill h-2 rounded-full"
           style={{ width: `${((current + 1) / questions.length) * 100}%` }}
         />
       </div>
@@ -105,50 +121,49 @@ export function TestRunner({ mode }: { mode: "exam" | "review" }) {
           key={q.id}
           role="group"
           aria-label={`Pregunta ${current + 1} de ${questions.length}`}
-          className="mt-6 animate-[fadeIn_0.15s_ease-out] rounded-2xl border border-slate-200 bg-white p-6"
+          className={`mt-6 rounded-2xl border border-slate-200 bg-white p-6 ${direction === "next" ? "anim-slide-right" : "anim-slide-left"}`}
         >
           <p className="mb-1.5 text-xs font-bold uppercase tracking-wide text-t48-blue">{q.category}</p>
           <p className="text-lg font-bold leading-snug text-t48-ink">{q.text}</p>
           <div className="mt-5 flex flex-col gap-2">
-            {q.options.map((opt, i) => (
-              <button
-                key={i}
-                onClick={() => select(q.id, i)}
-                aria-pressed={answers[q.id] === i}
-                className={`rounded-xl border px-4 py-3 text-left transition-all duration-150 focus-visible:ring-2 focus-visible:ring-t48-blue/40 focus-visible:outline-none ${
-                  answers[q.id] === i
-                    ? "border-t48-blue bg-t48-blue/10 font-semibold text-t48-blue-dark"
-                    : "border-slate-200 hover:border-t48-blue/50 hover:bg-slate-50"
-                }`}
-              >
-                {opt}
-              </button>
-            ))}
+            {q.options.map((opt, i) => {
+              const selected = answers[q.id] === i;
+              return (
+                <button
+                  key={i}
+                  onClick={() => select(q.id, i)}
+                  aria-pressed={selected}
+                  className={`option-btn rounded-xl border px-4 py-3 text-left focus-visible:ring-2 focus-visible:ring-t48-blue/40 focus-visible:outline-none ${
+                    selected
+                      ? "is-selected border-t48-blue bg-t48-blue/10 font-semibold text-t48-blue-dark shadow-sm"
+                      : "border-slate-200 hover:border-t48-blue/50 hover:bg-slate-50"
+                  }`}
+                >
+                  {opt}
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
 
       <div className="mt-6 flex items-center justify-between">
         <button
-          onClick={() => setCurrent((c) => Math.max(0, c - 1))}
+          onClick={() => goTo(Math.max(0, current - 1), "prev")}
           disabled={current === 0}
-          className="rounded-md border border-slate-200 px-4 py-2.5 font-semibold text-slate-600 transition-colors hover:bg-slate-50 disabled:opacity-30"
+          className="btn-secondary px-4 py-2.5"
         >
           Anterior
         </button>
         {current < questions.length - 1 ? (
           <button
-            onClick={() => setCurrent((c) => Math.min(questions.length - 1, c + 1))}
-            className="rounded-md bg-t48-blue px-5 py-2.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark"
+            onClick={() => goTo(Math.min(questions.length - 1, current + 1), "next")}
+            className="btn-primary px-5 py-2.5"
           >
             Siguiente
           </button>
         ) : (
-          <button
-            onClick={handleSubmit}
-            disabled={submitting}
-            className="rounded-md bg-t48-green px-5 py-2.5 font-semibold text-white transition-colors hover:bg-t48-green-dark disabled:opacity-50"
-          >
+          <button onClick={handleSubmit} disabled={submitting} className="btn-success px-5 py-2.5">
             {submitting ? "Corrigiendo..." : "Terminar y corregir"}
           </button>
         )}

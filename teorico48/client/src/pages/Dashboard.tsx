@@ -6,6 +6,7 @@ import { api, ApiError } from "../lib/api";
 import type { Attempt, Stats } from "../lib/api";
 import { badgeIcon } from "../lib/badgeIcons";
 import { BookOpen, CheckCircle, Flame, Lock, Repeat, Star, Target } from "../components/Icons";
+import { AnimatedNumber } from "../components/AnimatedNumber";
 import { THEORY_EXPRESS } from "../content/theoryExpress";
 
 function useCountdown(examDate: string | null) {
@@ -88,23 +89,30 @@ export function Dashboard() {
       )}
 
       {stats && (
-        <div className="mt-5 grid gap-3 sm:grid-cols-3">
-          <StatCard icon={<Star className="h-4 w-4" />} label={`Nivel ${stats.level}`}>
-            <div className="mt-1.5 h-1.5 w-full rounded-full bg-slate-100">
-              <div className="h-1.5 rounded-full bg-t48-blue transition-all" style={{ width: `${xpIntoLevel}%` }} />
+        <div className="mt-5 grid anim-stagger gap-3 sm:grid-cols-3">
+          <StatCard icon={<Star className="h-4 w-4" />} label={<>Nivel <AnimatedNumber value={stats.level} /></>}>
+            <div className="progress-track mt-1.5 h-1.5 w-full rounded-full">
+              <div className="progress-fill h-1.5 rounded-full" style={{ width: `${xpIntoLevel}%` }} />
             </div>
-            <p className="mt-1 text-xs text-slate-500">{stats.xp} XP</p>
+            <p className="mt-1 text-xs text-slate-500">
+              <AnimatedNumber value={stats.xp} /> XP
+            </p>
           </StatCard>
-          <StatCard icon={<Flame className="h-4 w-4" />} label={`${stats.currentStreak} día${stats.currentStreak === 1 ? "" : "s"} de racha`}>
-            <p className="mt-1 text-xs text-slate-500">Récord: {stats.longestStreak}</p>
+          <StatCard
+            icon={<Flame className={`h-4 w-4 ${stats.currentStreak > 0 ? "text-t48-amber" : ""}`} />}
+            label={<><AnimatedNumber value={stats.currentStreak} /> día{stats.currentStreak === 1 ? "" : "s"} de racha</>}
+          >
+            <p className="mt-1 text-xs text-slate-500">
+              Récord: <AnimatedNumber value={stats.longestStreak} />
+            </p>
           </StatCard>
-          <StatCard icon={<CheckCircle className="h-4 w-4" />} label={`${stats.totalPassed}/${stats.totalAttempts} aprobados`}>
+          <StatCard icon={<CheckCircle className="h-4 w-4" />} label={<><AnimatedNumber value={stats.totalPassed} />/{stats.totalAttempts} aprobados</>}>
             <p className="mt-1 text-xs text-slate-500">Tests completados</p>
           </StatCard>
         </div>
       )}
 
-      <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-6">
+      <div className="card-lift mt-4 rounded-2xl border border-slate-200 bg-white p-6">
         <h2 className="font-bold text-t48-ink">Cuenta atrás hasta tu examen</h2>
         {countdown ? (
           countdown.past ? (
@@ -127,21 +135,14 @@ export function Dashboard() {
               className="mt-1.5 block rounded-xl border border-slate-200 px-3.5 py-2.5 outline-none transition-colors focus:border-t48-blue focus:ring-2 focus:ring-t48-blue/25"
             />
           </label>
-          <button
-            type="submit"
-            disabled={savingDate}
-            className="rounded-md bg-t48-blue px-4 py-2.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark disabled:opacity-50"
-          >
+          <button type="submit" disabled={savingDate} className="btn-primary px-4 py-2.5">
             Guardar
           </button>
         </form>
       </div>
 
-      <Link
-        to="/teoria"
-        className="group mt-4 flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-t48-blue hover:shadow-md"
-      >
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-t48-blue/10 text-t48-blue">
+      <Link to="/teoria" className="card-lift group mt-4 flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 hover:border-t48-blue">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-t48-blue/10 text-t48-blue transition-transform duration-200 group-hover:scale-105">
           <BookOpen className="h-5 w-5" />
         </div>
         <div className="min-w-0 flex-1">
@@ -154,22 +155,16 @@ export function Dashboard() {
       </Link>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
-        <Link
-          to="/exam"
-          className="group rounded-2xl border border-slate-200 bg-white p-6 transition-all hover:-translate-y-0.5 hover:border-t48-blue hover:shadow-md"
-        >
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-t48-blue/10 text-t48-blue">
+        <Link to="/exam" className="card-lift group rounded-2xl border border-slate-200 bg-white p-6 hover:border-t48-blue">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-t48-blue/10 text-t48-blue transition-transform duration-200 group-hover:scale-105">
             <Target className="h-5 w-5" />
           </div>
           <h2 className="mt-3 font-bold text-t48-ink">Hacer un simulacro</h2>
           <p className="mt-1 text-sm text-slate-500">30 preguntas, como el examen real. Máx. 3 fallos.</p>
         </Link>
-        <Link
-          to="/review"
-          className="group rounded-2xl border border-slate-200 bg-white p-6 transition-all hover:-translate-y-0.5 hover:border-t48-blue hover:shadow-md"
-        >
+        <Link to="/review" className="card-lift group rounded-2xl border border-slate-200 bg-white p-6 hover:border-t48-blue">
           <div className="flex items-center justify-between">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-t48-blue/10 text-t48-blue">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-t48-blue/10 text-t48-blue transition-transform duration-200 group-hover:scale-105">
               <Repeat className="h-5 w-5" />
             </div>
             {!user?.isPremium && <Lock className="h-4 w-4 text-slate-300" />}
@@ -182,7 +177,8 @@ export function Dashboard() {
       </div>
 
       {!user?.isPremium && (
-        <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-5">
+        <div className="card-lift relative mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white p-5">
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-t48-amber via-amber-400 to-t48-blue" />
           <span className="inline-block rounded-md border border-amber-200 bg-amber-50 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-amber-700">
             Pack 48h
           </span>
@@ -190,10 +186,7 @@ export function Dashboard() {
           <p className="mt-1 text-sm text-slate-500">
             Con la cuenta gratis solo puedes hacer 1 simulacro al día.
           </p>
-          <Link
-            to="/paywall"
-            className="mt-3 inline-block rounded-md bg-t48-blue px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-t48-blue-dark"
-          >
+          <Link to="/paywall" className="btn-primary mt-3 px-4 py-2 text-sm">
             Ver Pack 48h
           </Link>
         </div>
@@ -205,14 +198,14 @@ export function Dashboard() {
           {stats.badges.every((b) => !b.unlocked) && (
             <p className="mt-1 text-sm text-slate-500">Haz tu primer test para empezar a desbloquearlas.</p>
           )}
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-3 flex flex-wrap gap-2 anim-stagger">
             {stats.badges.map((b) => (
               <div
                 key={b.id}
                 title={b.label}
                 aria-label={`${b.label}${b.unlocked ? "" : " (bloqueada)"}`}
-                className={`flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium ${
-                  b.unlocked ? "border-slate-200 bg-white text-t48-ink" : "border-dashed border-slate-200 text-slate-300"
+                className={`flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium transition-transform duration-150 ${
+                  b.unlocked ? "border-slate-200 bg-white text-t48-ink hover:-translate-y-0.5 hover:shadow-sm" : "border-dashed border-slate-200 text-slate-300"
                 }`}
               >
                 <span className={b.unlocked ? "text-t48-blue" : ""}>{badgeIcon(b.id)}</span>
@@ -235,7 +228,7 @@ export function Dashboard() {
         ) : (
           <ul className="mt-3 divide-y divide-slate-100 rounded-2xl border border-slate-200 bg-white">
             {attempts.map((a) => (
-              <li key={a.id} className="flex items-center justify-between px-4 py-3 text-sm">
+              <li key={a.id} className="flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-slate-50">
                 <span className="text-slate-500">
                   {a.finishedAt ? new Date(a.finishedAt).toLocaleString() : "—"} · {a.mode === "exam" ? "Simulacro" : "Repaso"}
                 </span>
@@ -251,12 +244,12 @@ export function Dashboard() {
   );
 }
 
-function StatCard({ icon, label, children }: { icon: ReactNode; label: string; children?: ReactNode }) {
+function StatCard({ icon, label, children }: { icon: ReactNode; label: ReactNode; children?: ReactNode }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4">
+    <div className="card-lift rounded-2xl border border-slate-200 bg-white p-4">
       <div className="flex items-center gap-2 text-t48-blue">
         {icon}
-        <span className="font-bold text-t48-ink">{label}</span>
+        <span className="font-bold tabular-nums text-t48-ink">{label}</span>
       </div>
       {children}
     </div>

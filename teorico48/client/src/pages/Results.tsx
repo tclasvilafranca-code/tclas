@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import type { SubmitResult } from "../lib/api";
 import { badgeIcon } from "../lib/badgeIcons";
 import { Flame, Star } from "../components/Icons";
+import { ScoreRing } from "../components/ScoreRing";
 
 export function Results() {
   const location = useLocation();
@@ -12,10 +13,7 @@ export function Results() {
     return (
       <div className="mx-auto max-w-md px-4 py-16 text-center">
         <p className="text-slate-500">No hay resultados que mostrar.</p>
-        <button
-          onClick={() => navigate("/dashboard")}
-          className="mt-4 rounded-md bg-t48-blue px-4 py-2.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark"
-        >
+        <button onClick={() => navigate("/dashboard")} className="btn-primary mt-4 px-4 py-2.5">
           Volver al panel
         </button>
       </div>
@@ -33,26 +31,28 @@ export function Results() {
           result.passed ? "border-t48-green/30 bg-t48-green/10" : "border-t48-red/30 bg-t48-red/10"
         }`}
       >
-        <p className="text-6xl font-extrabold tabular-nums text-t48-ink">{pct}%</p>
-        <p className={`mt-2 text-2xl font-extrabold ${result.passed ? "text-t48-green-dark" : "text-t48-red"}`}>
+        <div className="flex justify-center">
+          <ScoreRing percent={pct} passed={result.passed} />
+        </div>
+        <p className={`mt-3 animate-[fadeIn_0.4s_ease-out_0.2s_both] text-2xl font-extrabold ${result.passed ? "text-t48-green-dark" : "text-t48-red"}`}>
           {result.passed ? "¡Aprobado!" : "Suspenso, pero cerca"}
         </p>
-        <p className="mt-1 text-slate-500">
+        <p className="mt-1 animate-[fadeIn_0.4s_ease-out_0.25s_both] text-slate-500">
           {result.score}/{result.total} correctas · {fails} fallo{fails !== 1 ? "s" : ""} (máx. 3 para aprobar)
         </p>
 
         {g && (
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-            <span className="rounded-md border border-slate-200 bg-white px-3 py-1 text-sm font-semibold text-t48-ink">
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-2 anim-stagger">
+            <span className="rounded-md border border-slate-200 bg-white px-3 py-1 text-sm font-semibold text-t48-ink shadow-sm">
               +{g.xpGained} XP
             </span>
             {g.leveledUp && (
-              <span className="flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-1 text-sm font-semibold text-t48-ink">
+              <span className="flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-1 text-sm font-semibold text-t48-ink shadow-sm">
                 <Star className="h-3.5 w-3.5 text-amber-500" /> Nivel {g.level}
               </span>
             )}
             {g.currentStreak > 1 && (
-              <span className="flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-1 text-sm font-semibold text-t48-ink">
+              <span className="flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-1 text-sm font-semibold text-t48-ink shadow-sm">
                 <Flame className="h-3.5 w-3.5 text-slate-400" /> Racha de {g.currentStreak}
               </span>
             )}
@@ -60,11 +60,11 @@ export function Results() {
         )}
 
         {g && g.newBadges.length > 0 && (
-          <div className="mt-4 flex flex-wrap justify-center gap-2">
+          <div className="mt-4 flex flex-wrap justify-center gap-2 anim-stagger">
             {g.newBadges.map((b) => (
               <span
                 key={b.id}
-                className="animate-[fadeIn_0.3s_ease-out] flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-t48-ink"
+                className="flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-t48-ink shadow-sm"
               >
                 <span className="text-t48-blue">{badgeIcon(b.id)}</span> Nueva medalla: {b.label}
               </span>
@@ -74,10 +74,11 @@ export function Results() {
       </div>
 
       <div className="mt-8 space-y-3">
-        {result.results.map((r) => (
+        {result.results.map((r, i) => (
           <div
             key={r.questionId}
-            className={`rounded-2xl border p-4 ${r.correct ? "border-slate-200" : "border-t48-red/30 bg-t48-red/5"}`}
+            style={{ animationDelay: `${Math.min(i, 10) * 30}ms` }}
+            className={`animate-[fadeIn_0.35s_ease-out_both] rounded-2xl border p-4 ${r.correct ? "border-slate-200" : "border-t48-red/30 bg-t48-red/5"}`}
           >
             <p className="text-xs font-bold uppercase tracking-wide text-t48-blue">{r.category}</p>
             <p className="mt-1 font-semibold text-t48-ink">{r.text}</p>
@@ -96,16 +97,10 @@ export function Results() {
       </div>
 
       <div className="mt-8 flex justify-center gap-3">
-        <Link
-          to="/dashboard"
-          className="rounded-md border border-slate-200 px-5 py-2.5 font-semibold text-slate-600 transition-colors hover:bg-slate-50"
-        >
+        <Link to="/dashboard" className="btn-secondary px-5 py-2.5">
           Volver al panel
         </Link>
-        <Link
-          to="/exam"
-          className="rounded-md bg-t48-blue px-5 py-2.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark"
-        >
+        <Link to="/exam" className="btn-primary px-5 py-2.5">
           Otro simulacro
         </Link>
       </div>

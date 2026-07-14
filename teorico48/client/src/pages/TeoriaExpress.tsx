@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { api, ApiError } from "../lib/api";
+import { AnimatedNumber } from "../components/AnimatedNumber";
 import { THEORY_EXPRESS } from "../content/theoryExpress";
 import type { TheoryChapter, TheoryIconKey, TheorySession } from "../content/theoryExpress";
 import {
@@ -109,7 +110,7 @@ export function TeoriaExpress() {
         Lo esencial del temario, en 3 sesiones cortas. Nada de relleno: solo lo que decide el examen y lo que te hace mejor conductor.
       </p>
 
-      <div className="mt-6 flex flex-col gap-3">
+      <div className="mt-6 flex anim-stagger flex-col gap-3">
         {THEORY_EXPRESS.map((session, i) => {
           const done = completedSessions.has(session.id);
           const prevDone = i === 0 || completedSessions.has(THEORY_EXPRESS[i - 1].id);
@@ -119,16 +120,14 @@ export function TeoriaExpress() {
               key={session.id}
               disabled={locked}
               onClick={() => setActiveSessionId(session.id)}
-              className={`group flex items-center gap-4 rounded-2xl border p-5 text-left transition-all ${
-                locked
-                  ? "border-slate-200 bg-slate-50 opacity-60"
-                  : "border-slate-200 bg-white hover:-translate-y-0.5 hover:border-t48-blue hover:shadow-md"
+              className={`group flex items-center gap-4 rounded-2xl border p-5 text-left ${
+                locked ? "border-slate-200 bg-slate-50 opacity-60" : "card-lift border-slate-200 bg-white hover:border-t48-blue"
               }`}
             >
               <div
-                className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${
-                  done ? "bg-t48-green/10 text-t48-green-dark" : locked ? "bg-slate-100 text-slate-400" : "bg-t48-blue/10 text-t48-blue"
-                }`}
+                className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-transform duration-200 ${
+                  locked ? "bg-slate-100 text-slate-400" : "bg-t48-blue/10 text-t48-blue group-hover:scale-105"
+                } ${done ? "!bg-t48-green/10 !text-t48-green-dark" : ""}`}
               >
                 {locked ? <Lock className="h-5 w-5" /> : done ? <CheckCircle className="h-5 w-5" /> : <BookOpen className="h-5 w-5" />}
               </div>
@@ -154,6 +153,7 @@ function SessionPlayer({ session, onExit, onFinish }: { session: TheorySession; 
     const saved = Number(localStorage.getItem(storageKey(session.id)) ?? 0);
     return Number.isFinite(saved) && saved >= 0 && saved < steps.length ? saved : 0;
   });
+  const [direction, setDirection] = useState<"next" | "prev">("next");
   const [checkSelection, setCheckSelection] = useState<number | null>(null);
 
   useEffect(() => {
@@ -168,12 +168,14 @@ function SessionPlayer({ session, onExit, onFinish }: { session: TheorySession; 
     if (isLastStep) {
       onFinish();
     } else {
+      setDirection("next");
       setStepIndex((i) => i + 1);
     }
   }
 
   function goPrev() {
     setCheckSelection(null);
+    setDirection("prev");
     setStepIndex((i) => Math.max(0, i - 1));
   }
 
@@ -182,21 +184,24 @@ function SessionPlayer({ session, onExit, onFinish }: { session: TheorySession; 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
       <div className="mb-3 flex items-center justify-between text-sm font-semibold text-slate-500">
-        <button onClick={onExit} className="hover:text-t48-ink">
+        <button onClick={onExit} className="transition-colors hover:text-t48-ink">
           ← Salir
         </button>
-        <span>
+        <span className="tabular-nums">
           {stepIndex + 1} / {steps.length}
         </span>
       </div>
-      <div className="h-2 w-full rounded-full bg-slate-100">
+      <div className="progress-track h-2 w-full rounded-full">
         <div
-          className="h-2 rounded-full bg-t48-blue transition-all duration-300"
+          className="progress-fill h-2 rounded-full"
           style={{ width: `${((stepIndex + 1) / steps.length) * 100}%` }}
         />
       </div>
 
-      <div key={stepIndex} className="mt-6 animate-[fadeIn_0.15s_ease-out] rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+      <div
+        key={stepIndex}
+        className={`mt-6 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 ${direction === "next" ? "anim-slide-right" : "anim-slide-left"}`}
+      >
         <p className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-t48-blue">
           <Icon className="h-4 w-4" />
           {step.chapter.title}
@@ -216,18 +221,10 @@ function SessionPlayer({ session, onExit, onFinish }: { session: TheorySession; 
       </div>
 
       <div className="mt-6 flex items-center justify-between">
-        <button
-          onClick={goPrev}
-          disabled={stepIndex === 0}
-          className="rounded-md border border-slate-200 px-4 py-2.5 font-semibold text-slate-600 transition-colors hover:bg-slate-50 disabled:opacity-30"
-        >
+        <button onClick={goPrev} disabled={stepIndex === 0} className="btn-secondary px-4 py-2.5">
           Anterior
         </button>
-        <button
-          onClick={goNext}
-          disabled={step.kind === "check" && checkSelection === null}
-          className="rounded-md bg-t48-blue px-5 py-2.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark disabled:opacity-40"
-        >
+        <button onClick={goNext} disabled={step.kind === "check" && checkSelection === null} className="btn-primary px-5 py-2.5">
           {isLastStep ? "Terminar sesión" : "Siguiente"}
         </button>
       </div>
@@ -253,11 +250,11 @@ function CheckCard({ chapter, selection, onSelect }: { chapter: TheoryChapter; s
               key={i}
               onClick={() => selection === null && onSelect(i)}
               disabled={selection !== null}
-              className={`flex items-center justify-between rounded-xl border px-4 py-3 text-left transition-all duration-150 disabled:cursor-default ${style}`}
+              className={`option-btn flex items-center justify-between rounded-xl border px-4 py-3 text-left disabled:cursor-default ${style}`}
             >
               <span>{opt}</span>
-              {revealed && isCorrect && <CheckCircle className="h-4 w-4 shrink-0" />}
-              {revealed && chosen && !isCorrect && <XCircle className="h-4 w-4 shrink-0" />}
+              {revealed && isCorrect && <CheckCircle className="option-check h-4 w-4 shrink-0" />}
+              {revealed && chosen && !isCorrect && <XCircle className="option-check h-4 w-4 shrink-0" />}
             </button>
           );
         })}
@@ -275,20 +272,20 @@ function SessionCompleteScreen({
 }) {
   return (
     <div className="mx-auto max-w-md px-4 py-16 text-center">
-      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-t48-green/10 text-t48-green-dark">
-        <Star className="h-7 w-7" />
+      <div className="mx-auto flex h-16 w-16 animate-[popIn_0.4s_cubic-bezier(0.34,1.56,0.64,1)_both] items-center justify-center rounded-2xl bg-t48-green/10 text-t48-green-dark">
+        <Star className="h-8 w-8" />
       </div>
-      <h1 className="mt-4 text-xl font-extrabold text-t48-ink">Sesión completada</h1>
+      <h1 className="mt-4 animate-[fadeIn_0.4s_ease-out_0.1s_both] text-xl font-extrabold text-t48-ink">Sesión completada</h1>
       {completion.xpGained > 0 ? (
-        <p className="mt-2 text-slate-500">
-          Has ganado <span className="font-bold text-t48-blue">+{completion.xpGained} XP</span>.
+        <p className="mt-2 animate-[fadeIn_0.4s_ease-out_0.15s_both] text-slate-500">
+          Has ganado <span className="font-bold text-t48-blue">+<AnimatedNumber value={completion.xpGained} /> XP</span>.
         </p>
       ) : (
         <p className="mt-2 text-slate-500">Ya habías completado esta sesión antes.</p>
       )}
 
       {completion.newBadges.length > 0 && (
-        <div className="mt-4 flex flex-wrap justify-center gap-2">
+        <div className="mt-4 flex flex-wrap justify-center gap-2 anim-stagger">
           {completion.newBadges.map((b) => (
             <span key={b.id} className="flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-t48-ink">
               <Medal className="h-4 w-4 text-t48-blue" />
@@ -298,10 +295,7 @@ function SessionCompleteScreen({
         </div>
       )}
 
-      <button
-        onClick={onContinue}
-        className="mt-6 rounded-md bg-t48-blue px-5 py-2.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark"
-      >
+      <button onClick={onContinue} className="btn-primary mt-6 px-5 py-2.5">
         Volver a Teoría Express
       </button>
     </div>

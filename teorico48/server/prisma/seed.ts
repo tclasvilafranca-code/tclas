@@ -27,14 +27,14 @@ async function main() {
     categoryIds.set(cat.slug, created.id);
   }
 
-  // Idempotente: si ya hay preguntas, no duplicar en cada arranque.
-  const existing = await prisma.question.count();
-  if (existing > 0) {
-    console.log(`Ya existen ${existing} preguntas, se omite la carga del banco.`);
-    return;
-  }
+  // Idempotente por pregunta (no por arranque): permite ampliar el banco de
+  // preguntas.ts en el futuro y volver a sembrar sin duplicar las que ya
+  // existen en la base de datos.
+  const existingTexts = new Set((await prisma.question.findMany({ select: { text: true } })).map((q) => q.text));
 
+  let created = 0;
   for (const q of questions) {
+    if (existingTexts.has(q.text)) continue;
     const categoryId = categoryIds.get(q.category);
     if (!categoryId) throw new Error(`Categoria desconocida: ${q.category}`);
     const { options, correctIndex } = shuffleOptions(q.options, q.correctIndex);
@@ -48,9 +48,10 @@ async function main() {
         isSerious: q.isSerious ?? false,
       },
     });
+    created += 1;
   }
 
-  console.log(`Cargadas ${questions.length} preguntas en ${categories.length} categorias.`);
+  console.log(`Cargadas ${created} preguntas nuevas (${questions.length - created} ya existían) en ${categories.length} categorías.`);
 }
 
 main()

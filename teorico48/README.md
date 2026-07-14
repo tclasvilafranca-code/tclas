@@ -18,11 +18,15 @@ server/   API en Node.js + Express + TypeScript + Prisma (PostgreSQL)
 client/   App web en React + TypeScript + Vite + Tailwind CSS
 ```
 
-- **Banco de preguntas** (`server/src/content/questions.ts`): preguntas
-  originales agrupadas en 6 categorías (señales, prioridad, velocidad,
-  alcohol/drogas, mecánica/documentación, seguridad vial). Al cargarlas
-  (`npm run seed`) el orden de las opciones se baraja para que la respuesta
-  correcta no quede siempre en la misma posición.
+- **Banco de preguntas** (`server/src/content/questions.ts`): 500 preguntas
+  originales agrupadas en 14 categorías (señales, prioridad, velocidad,
+  adelantamiento, parada/estacionamiento, luces, alcohol/drogas, sanciones y
+  puntos, mecánica/documentación, menores/transporte, medio ambiente,
+  autopistas y vías especiales, seguridad vial, y patinetes eléctricos/VMP).
+  Al cargarlas (`npm run seed`) el orden de las opciones se baraja para que
+  la respuesta correcta no quede siempre en la misma posición; el seed es
+  idempotente por pregunta, así que se puede ampliar este archivo y volver a
+  ejecutar `npm run seed` sin duplicar nada.
 - **Generador de simulacros** (`server/src/generator.ts`): monta tests de 30
   preguntas al azar (modo examen) o centrados solo en las preguntas que el
   alumno ha fallado antes (modo repaso, función premium).
@@ -48,7 +52,7 @@ cd teorico48/server
 npm install
 cp .env.example .env
 npx prisma migrate dev
-npm run seed          # carga el banco de preguntas (60 preguntas)
+npm run seed          # carga el banco de preguntas (500 preguntas)
 npm run dev           # http://localhost:4001
 ```
 
@@ -107,12 +111,13 @@ de contraseña.
 
 ## Decisiones de alcance del MVP
 
-- **Contenido**: las 60 preguntas semilla son un punto de partida para tener
-  la app funcionando ya — están escritas a mano a partir del conocimiento
-  general del temario público de circulación, no son preguntas oficiales de
-  ningún examen real ni de ninguna academia. Antes de usarlas para preparar
-  un examen real de verdad, conviene revisarlas y ampliarlas con alguien
-  que conozca bien el temario actualizado (las normas cambian).
+- **Contenido**: las 500 preguntas semilla están escritas a mano a partir
+  del conocimiento general del temario público de circulación (contrastado
+  con el manual oficial de la DGT en Lectura Fácil y otras fuentes públicas
+  en julio de 2026), no son preguntas oficiales de ningún examen real ni de
+  ninguna academia. Antes de usarlas para preparar un examen real de verdad,
+  conviene revisarlas con alguien que conozca bien el temario actualizado
+  (las normas cambian).
 - **Límite del plan gratuito**: 1 simulacro completo al día; el modo repaso
   de fallos y los simulacros ilimitados son de pago (Pack 48h).
 - **Regla de aprobado**: máximo 3 fallos sobre 30 preguntas, igual que en el
@@ -120,7 +125,8 @@ de contraseña.
 - **Sin recordatorios** push/email todavía para avisar de la cuenta atrás.
 - **Sin editor visual de preguntas**: hoy se añaden editando
   `server/src/content/questions.ts` y volviendo a correr `npm run seed`
-  (solo carga si la tabla está vacía, así no duplica en cada despliegue).
+  (el seed es idempotente por pregunta: solo añade las que no existen, no
+  duplica nada en despliegues sucesivos).
 
 ## Próximos pasos sugeridos
 

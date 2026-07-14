@@ -30,6 +30,11 @@ model User {
   resetTokenHash      String?
   resetTokenExpiresAt DateTime?
 
+  // Verificacion de email: no bloquea el uso de la app, solo informa/anima a confirmar
+  emailVerified        Boolean   @default(false)
+  verifyTokenHash      String?
+  verifyTokenExpiresAt DateTime?
+
   // Se incrementa al cambiar la contrasena para invalidar tokens JWT ya emitidos
   tokenVersion Int @default(0)
 

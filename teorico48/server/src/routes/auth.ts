@@ -14,6 +14,7 @@ export const authRouter = Router();
 
 const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5174";
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hora
+const VERIFY_TOKEN_TTL_MS = 24 * 60 * 60 * 1000; // 24 horas
 
 const credentialsSchema = z.object({
   email: z.string().email(),
@@ -28,6 +29,29 @@ const registerSchema = credentialsSchema.extend({
 
 function hashToken(rawToken: string) {
   return createHash("sha256").update(rawToken).digest("hex");
+}
+
+async function sendVerificationEmail(user: { id: string; email: string }) {
+  const rawToken = randomBytes(32).toString("hex");
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      verifyTokenHash: hashToken(rawToken),
+      verifyTokenExpiresAt: new Date(Date.now() + VERIFY_TOKEN_TTL_MS),
+    },
+  });
+
+  const verifyUrl = `${CLIENT_URL}/verify-email?uid=${user.id}&token=${rawToken}`;
+  await sendEmail({
+    to: user.email,
+    subject: "Confirma tu email de Teórico48",
+    html: `
+      <p>Hola,</p>
+      <p>Gracias por crear tu cuenta en Teórico48. Confirma tu email para terminar de configurarla:</p>
+      <p><a href="${verifyUrl}">Confirmar mi email</a></p>
+      <p>Este enlace caduca en 24 horas. Puedes seguir usando la app aunque no lo confirmes todavía.</p>
+    `,
+  });
 }
 
 authRouter.post(
@@ -51,6 +75,8 @@ authRouter.post(
         data: { email, passwordHash, termsAcceptedAt: new Date() },
       });
       res.status(201).json({ token: signToken(user.id, user.tokenVersion), user: toPublicUser(user) });
+      // No bloquea la respuesta: si el email tarda o falla, el registro ya se ha completado.
+      sendVerificationEmail(user).catch((err) => console.error("No se pudo enviar el email de verificación:", err));
     } catch (err) {
       // Carrera entre el chequeo anterior y la creación: dos registros a la vez con el mismo email.
       if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
@@ -205,6 +231,54 @@ authRouter.post(
   })
 );
 
+const verifyEmailSchema = z.object({ userId: z.string(), token: z.string() });
+
+authRouter.post(
+  "/verify-email",
+  authLimiter,
+  asyncHandler(async (req, res) => {
+    const parsed = verifyEmailSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({ error: parsed.error.issues[0].message });
+    }
+    const { userId, token } = parsed.data;
+
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (
+      !user ||
+      !user.verifyTokenHash ||
+      !user.verifyTokenExpiresAt ||
+      user.verifyTokenExpiresAt.getTime() < Date.now() ||
+      user.verifyTokenHash !== hashToken(token)
+    ) {
+      return res.status(400).json({ error: "El enlace no es válido o ha caducado. Pide uno nuevo desde tu panel." });
+    }
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { emailVerified: true, verifyTokenHash: null, verifyTokenExpiresAt: null },
+    });
+
+    res.json({ message: "Email verificado correctamente." });
+  })
+);
+
+authRouter.post(
+  "/resend-verification",
+  requireAuth,
+  forgotPasswordLimiter,
+  asyncHandler(async (req: AuthedRequest, res) => {
+    const user = await prisma.user.findUnique({ where: { id: req.userId } });
+    if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
+    if (user.emailVerified) {
+      return res.status(400).json({ error: "Tu email ya está verificado" });
+    }
+
+    await sendVerificationEmail(user);
+    res.json({ message: "Te hemos enviado un nuevo enlace de verificación." });
+  })
+);
+
 function toPublicUser(user: {
   id: string;
   email: string;
@@ -213,6 +287,7 @@ function toPublicUser(user: {
   xp: number;
   currentStreak: number;
   longestStreak: number;
+  emailVerified: boolean;
 }) {
   return {
     id: user.id,
@@ -223,5 +298,6 @@ function toPublicUser(user: {
     level: levelForXp(user.xp),
     currentStreak: user.currentStreak,
     longestStreak: user.longestStreak,
+    emailVerified: user.emailVerified,
   };
 }

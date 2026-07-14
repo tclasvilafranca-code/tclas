@@ -57,6 +57,13 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ userId, token, newPassword }),
     }),
+  verifyEmail: (userId: string, token: string) =>
+    request<{ message: string }>("/auth/verify-email", {
+      method: "POST",
+      body: JSON.stringify({ userId, token }),
+    }),
+  resendVerification: () =>
+    request<{ message: string }>("/auth/resend-verification", { method: "POST" }),
   me: () => request<{ user: User }>("/auth/me"),
   setExamDate: (examDate: string | null) =>
     request<{ user: User }>("/auth/me/exam-date", {
@@ -85,6 +92,7 @@ export interface User {
   level: number;
   currentStreak: number;
   longestStreak: number;
+  emailVerified: boolean;
 }
 
 export interface Badge {

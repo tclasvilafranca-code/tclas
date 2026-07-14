@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { api } from "../lib/api";
+import { api, ApiError } from "../lib/api";
 import type { Attempt, Stats } from "../lib/api";
 import { badgeIcon } from "../lib/badgeIcons";
 import { CheckCircle, Flame, Lock, Repeat, Star, Target } from "../components/Icons";
@@ -32,6 +32,18 @@ export function Dashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [examDateInput, setExamDateInput] = useState(user?.examDate?.slice(0, 16) ?? "");
   const [savingDate, setSavingDate] = useState(false);
+  const [resendState, setResendState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+
+  async function handleResendVerification() {
+    setResendState("sending");
+    try {
+      await api.resendVerification();
+      setResendState("sent");
+    } catch (err) {
+      setResendState("error");
+      if (!(err instanceof ApiError)) throw err;
+    }
+  }
 
   useEffect(() => {
     api.history().then((r) => setAttempts(r.attempts)).catch(() => {});
@@ -54,6 +66,25 @@ export function Dashboard() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:py-10">
       <h1 className="text-2xl font-extrabold tracking-tight text-t48-ink">Hola de nuevo</h1>
+
+      {user && !user.emailVerified && (
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm">
+          <p className="text-amber-800">
+            {resendState === "sent"
+              ? "Te hemos enviado un nuevo enlace. Revisa tu bandeja de entrada (y spam)."
+              : "Confirma tu email para proteger tu cuenta y poder recuperarla si lo necesitas."}
+          </p>
+          {resendState !== "sent" && (
+            <button
+              onClick={handleResendVerification}
+              disabled={resendState === "sending"}
+              className="shrink-0 rounded-md border border-amber-300 bg-white px-3 py-1.5 font-semibold text-amber-800 transition-colors hover:bg-amber-100 disabled:opacity-50"
+            >
+              {resendState === "sending" ? "Enviando..." : resendState === "error" ? "Reintentar" : "Reenviar email"}
+            </button>
+          )}
+        </div>
+      )}
 
       {stats && (
         <div className="mt-5 grid gap-3 sm:grid-cols-3">

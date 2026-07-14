@@ -15,6 +15,7 @@ import { TeoriaExpress } from "./pages/TeoriaExpress";
 import { TestRunner } from "./pages/TestRunner";
 import { Results } from "./pages/Results";
 import { Paywall } from "./pages/Paywall";
+import { Gracias } from "./pages/Gracias";
 import { NotFound } from "./pages/NotFound";
 import { AvisoLegal } from "./pages/legal/AvisoLegal";
 import { Privacidad } from "./pages/legal/Privacidad";
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/comprar/gracias" element={<Gracias />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/verify-email" element={<VerifyEmail />} />

@@ -52,6 +52,7 @@ Render te pedirá rellenar algunos valores (marcados como "secretos") antes de d
 | `STRIPE_SECRET_KEY`, `STRIPE_PACK_PRICE_ID`, `STRIPE_WEBHOOK_SECRET` | Déjalos vacíos por ahora — se explican en el Paso 5 |
 | `RESEND_API_KEY` | Déjalo vacío por ahora — se explica en el Paso 6 |
 | `ADMIN_PASSWORD` | Una contraseña fuerte, solo para ti — te da acceso a `/admin` para generar códigos de acceso |
+| `OWNER_EMAIL` | Tu email — ahí llega el aviso cada vez que alguien compra la licencia desde el botón "Empieza ahora" |
 
 **En `teorico48-web`:**
 
@@ -90,6 +91,13 @@ seed`, que solo añade preguntas si la tabla está vacía — en despliegues fut
 
 Sin estos tres valores, la app funciona igual pero el botón de pago devuelve un error controlado en vez de
 romperse — puedes desplegar primero y activar Stripe más tarde con calma.
+
+**Cómo funciona la venta desde la portada:** el botón "Empieza ahora" de la portada lleva directo a Stripe con
+este mismo precio "Pack 48h", sin necesidad de tener cuenta previa. Cuando alguien paga, te llega un email (a
+`OWNER_EMAIL`) con su dirección de correo. Entra en `/admin`, genera un código marcando la casilla **"Concede
+Pack 48h al canjearse"**, y envíaselo tú mismo por email con las instrucciones de registro — al crear la cuenta
+con ese código, le queda activado el Pack 48h automáticamente, sin tener que pagar una segunda vez dentro de la
+app.
 
 ## Paso 6 · Activar el email de "recuperar contraseña" (opcional)
 

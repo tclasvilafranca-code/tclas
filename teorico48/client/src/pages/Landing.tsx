@@ -1,10 +1,25 @@
 import type { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { startLicenseCheckout } from "../lib/checkout";
 import { Bolt, CheckCircle, Clock, Flame, Star, Target } from "../components/Icons";
 
 export function Landing() {
   const { user } = useAuth();
+  const [params] = useSearchParams();
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleStart() {
+    setError(null);
+    setBusy(true);
+    const err = await startLicenseCheckout();
+    if (err) {
+      setError(err);
+      setBusy(false);
+    }
+  }
 
   return (
     <div>
@@ -31,19 +46,28 @@ export function Landing() {
           </p>
 
           <div className="mt-9 flex animate-[fadeIn_0.6s_ease-out_0.15s_both] flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link
-              to={user ? "/dashboard" : "/register"}
-              className="btn-primary w-full px-7 py-3.5 text-lg sm:w-auto"
-            >
-              {user ? "Ir a mi panel" : "Empieza gratis"}
-            </Link>
-            <Link
-              to="/login"
-              className="w-full rounded-md border border-white/15 px-7 py-3.5 text-lg font-semibold text-white/90 transition-colors hover:bg-white/10 sm:w-auto"
-            >
-              Ya tengo cuenta
-            </Link>
+            {user ? (
+              <Link to="/dashboard" className="btn-primary w-full px-7 py-3.5 text-lg sm:w-auto">
+                Ir a mi panel
+              </Link>
+            ) : (
+              <button onClick={handleStart} disabled={busy} className="btn-primary w-full px-7 py-3.5 text-lg sm:w-auto">
+                {busy ? "Redirigiendo..." : "Empieza ahora"}
+              </button>
+            )}
+            {!user && (
+              <Link
+                to="/login"
+                className="w-full rounded-md border border-white/15 px-7 py-3.5 text-lg font-semibold text-white/90 transition-colors hover:bg-white/10 sm:w-auto"
+              >
+                Inicia sesión
+              </Link>
+            )}
           </div>
+          {error && <p className="mt-4 text-sm font-medium text-red-300">{error}</p>}
+          {params.get("compra") === "cancelada" && (
+            <p className="mt-4 text-sm font-medium text-amber-200">Pago cancelado. Puedes intentarlo cuando quieras.</p>
+          )}
         </div>
       </section>
 

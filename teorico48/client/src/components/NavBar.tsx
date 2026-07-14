@@ -1,10 +1,19 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { startLicenseCheckout } from "../lib/checkout";
 import { Flame, Star } from "./Icons";
 
 export function NavBar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [busy, setBusy] = useState(false);
+
+  async function handleStart() {
+    setBusy(true);
+    const err = await startLicenseCheckout();
+    if (err) setBusy(false);
+  }
 
   return (
     <header className="sticky top-0 z-10 border-b border-slate-200 bg-white/95 backdrop-blur">
@@ -56,12 +65,13 @@ export function NavBar() {
               <Link to="/login" className="rounded-md px-3 py-1.5 font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-t48-ink">
                 Entrar
               </Link>
-              <Link
-                to="/register"
-                className="rounded-md bg-t48-blue px-4 py-1.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark"
+              <button
+                onClick={handleStart}
+                disabled={busy}
+                className="rounded-md bg-t48-blue px-4 py-1.5 font-semibold text-white transition-colors hover:bg-t48-blue-dark disabled:opacity-60"
               >
-                Empieza gratis
-              </Link>
+                {busy ? "Un momento..." : "Empieza ahora"}
+              </button>
             </>
           )}
         </nav>

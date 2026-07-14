@@ -87,6 +87,7 @@ export const api = {
   history: () => request<{ attempts: Attempt[] }>("/tests/history"),
   stats: () => request<Stats>("/tests/stats"),
   checkout: () => request<{ url: string }>("/payments/checkout", { method: "POST" }),
+  checkoutLicense: () => request<{ url: string }>("/payments/checkout-license", { method: "POST" }),
   completeTheorySession: (sessionId: string) =>
     request<CompleteTheorySessionResult>("/theory/complete-session", {
       method: "POST",

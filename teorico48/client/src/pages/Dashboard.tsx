@@ -5,7 +5,8 @@ import { useAuth } from "../context/AuthContext";
 import { api, ApiError } from "../lib/api";
 import type { Attempt, Stats } from "../lib/api";
 import { badgeIcon } from "../lib/badgeIcons";
-import { CheckCircle, Flame, Lock, Repeat, Star, Target } from "../components/Icons";
+import { BookOpen, CheckCircle, Flame, Lock, Repeat, Star, Target } from "../components/Icons";
+import { THEORY_EXPRESS } from "../content/theoryExpress";
 
 function useCountdown(examDate: string | null) {
   const [now, setNow] = useState(Date.now());
@@ -135,6 +136,22 @@ export function Dashboard() {
           </button>
         </form>
       </div>
+
+      <Link
+        to="/teoria"
+        className="group mt-4 flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-t48-blue hover:shadow-md"
+      >
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-t48-blue/10 text-t48-blue">
+          <BookOpen className="h-5 w-5" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <h2 className="font-bold text-t48-ink">Teoría Express</h2>
+          <p className="mt-0.5 text-sm text-slate-500">
+            Lo esencial del temario en 3 sesiones cortas
+            {user ? ` · ${(user.theoryCompletedSessions ?? []).length}/${THEORY_EXPRESS.length} completadas` : ""}
+          </p>
+        </div>
+      </Link>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <Link

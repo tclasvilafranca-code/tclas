@@ -1,6 +1,7 @@
 export const XP_PER_CORRECT = 10;
 export const XP_PASS_BONUS = 50;
 export const XP_PERFECT_BONUS = 100;
+export const XP_PER_THEORY_SESSION = 40;
 const XP_PER_LEVEL = 100;
 
 export function xpForAttempt(score: number, total: number, passed: boolean) {
@@ -58,6 +59,7 @@ export interface BadgeStats {
   totalAttempts: number;
   totalPassed: number;
   hasPerfect: boolean;
+  theorySessionsCompleted: number;
 }
 
 export interface Badge {
@@ -77,6 +79,7 @@ export const BADGES: Badge[] = [
   { id: "xp-1000", label: "1.000 XP", emoji: "💎", check: (s) => s.xp >= 1000 },
   { id: "perfecto", label: "Test perfecto", emoji: "🏆", check: (s) => s.hasPerfect },
   { id: "diez-tests", label: "10 tests completados", emoji: "📚", check: (s) => s.totalAttempts >= 10 },
+  { id: "teoria-express", label: "Teoría Express completa", emoji: "🧠", check: (s) => s.theorySessionsCompleted >= 3 },
 ];
 
 export function unlockedBadgeIds(stats: BadgeStats): string[] {

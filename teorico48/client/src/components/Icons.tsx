@@ -128,3 +128,123 @@ export function XCircle({ className = "h-5 w-5" }: IconProps) {
     </svg>
   );
 }
+
+export function Sign({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M12 3.5 21 19H3L12 3.5Z" />
+      <path d="M12 10v4" />
+      <circle cx="12" cy="16.5" r="0.6" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function Overtake({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M4 8h11M15 8l-3-3M15 8l-3 3" />
+      <path d="M20 16H9M9 16l3-3M9 16l3 3" />
+    </svg>
+  );
+}
+
+export function Parking({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <rect x="4" y="3.5" width="16" height="17" rx="2.5" />
+      <path d="M9.5 16V8h3a2.6 2.6 0 0 1 0 5.2h-3" />
+    </svg>
+  );
+}
+
+export function Lightbulb({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M9 18h6M9.7 21h4.6" />
+      <path d="M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.9v.7h5v-.7c0-.8.4-1.5 1-1.9A6 6 0 0 0 12 3Z" />
+    </svg>
+  );
+}
+
+export function Drop({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M12 3.5c3 3.6 5.5 7 5.5 9.9a5.5 5.5 0 1 1-11 0c0-2.9 2.5-6.3 5.5-9.9Z" />
+    </svg>
+  );
+}
+
+export function Wrench({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M14.5 6.5a4 4 0 0 1-5 3.9L4.5 15.4a1.8 1.8 0 0 0 2.5 2.5l5-5a4 4 0 0 1 4-5.1l-2.6 2.6-2-2 2.6-2.6c.3-.1.6-.2 1-.3Z" />
+    </svg>
+  );
+}
+
+export function Radar({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none" />
+      <path d="M12 12 17 8" />
+      <path d="M8.5 8.5a5 5 0 0 1 7 0M6 6a8.5 8.5 0 0 1 12 0" />
+    </svg>
+  );
+}
+
+export function Child({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <circle cx="12" cy="6" r="2.3" />
+      <path d="M7 20v-4.5A3.5 3.5 0 0 1 10.5 12h3A3.5 3.5 0 0 1 17 15.5V20" />
+    </svg>
+  );
+}
+
+export function Users({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <circle cx="9" cy="8" r="2.6" />
+      <path d="M4 19v-1.5A3.5 3.5 0 0 1 7.5 14h3a3.5 3.5 0 0 1 3.5 3.5V19" />
+      <path d="M15.2 6.3a2.6 2.6 0 0 1 0 5M17.8 14a3.4 3.4 0 0 1 2.2 3.2V19" />
+    </svg>
+  );
+}
+
+export function Leaf({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M5 19c0-7.5 5-13 14-13 0 9-5.5 14-14 13Z" />
+      <path d="M5 19c3-3 6-6 9.5-10" />
+    </svg>
+  );
+}
+
+export function Road({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M9 3 5 21M15 3l4 18" />
+      <path d="M12 3v3M12 10.5v3M12 18v3" />
+    </svg>
+  );
+}
+
+export function Scooter({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <circle cx="6" cy="19" r="2" />
+      <circle cx="18" cy="19" r="2" />
+      <path d="M6 19h6.5L16 8.5h3M9 8.5h5.5" />
+      <path d="M9 3.5h2.2" />
+    </svg>
+  );
+}
+
+export function ShieldCheck({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M12 3.3 19 6v5.5c0 4.5-3 7.6-7 9.2-4-1.6-7-4.7-7-9.2V6l7-2.7Z" />
+      <path d="M9 12l2.1 2.1L15.5 10" />
+    </svg>
+  );
+}

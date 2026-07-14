@@ -41,6 +41,10 @@ model User {
   // Aceptacion legal en el registro (fecha, para poder acreditarla)
   termsAcceptedAt DateTime?
 
+  // IDs de las sesiones de Teoria Express ya completadas (s1, s2, s3...):
+  // evita volver a dar la recompensa de XP si se repite una sesion.
+  theoryCompletedSessions String[] @default([])
+
   attempts TestAttempt[]
   usedAccessCode AccessCode?
 

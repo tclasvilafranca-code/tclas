@@ -10,6 +10,7 @@ import { ForgotPassword } from "./pages/ForgotPassword";
 import { ResetPassword } from "./pages/ResetPassword";
 import { VerifyEmail } from "./pages/VerifyEmail";
 import { Dashboard } from "./pages/Dashboard";
+import { TeoriaExpress } from "./pages/TeoriaExpress";
 import { TestRunner } from "./pages/TestRunner";
 import { Results } from "./pages/Results";
 import { Paywall } from "./pages/Paywall";
@@ -46,6 +47,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/teoria"
+            element={
+              <ProtectedRoute>
+                <TeoriaExpress />
               </ProtectedRoute>
             }
           />

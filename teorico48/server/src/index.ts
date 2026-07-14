@@ -6,6 +6,7 @@ import { authRouter } from "./routes/auth";
 import { testsRouter } from "./routes/tests";
 import { paymentsRouter, stripeWebhookHandler } from "./routes/payments";
 import { adminRouter } from "./routes/admin";
+import { theoryRouter } from "./routes/theory";
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/tests", testsRouter);
 app.use("/api/payments", paymentsRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/theory", theoryRouter);
 
 // Middleware de error final: cualquier error inesperado llega aquí (via
 // asyncHandler) en vez de tumbar el proceso o filtrar detalles internos.

@@ -81,6 +81,11 @@ export const api = {
   history: () => request<{ attempts: Attempt[] }>("/tests/history"),
   stats: () => request<Stats>("/tests/stats"),
   checkout: () => request<{ url: string }>("/payments/checkout", { method: "POST" }),
+  completeTheorySession: (sessionId: string) =>
+    request<CompleteTheorySessionResult>("/theory/complete-session", {
+      method: "POST",
+      body: JSON.stringify({ sessionId }),
+    }),
 };
 
 export interface User {
@@ -93,6 +98,17 @@ export interface User {
   currentStreak: number;
   longestStreak: number;
   emailVerified: boolean;
+  theoryCompletedSessions: string[];
+}
+
+export interface CompleteTheorySessionResult {
+  alreadyCompleted: boolean;
+  xpGained: number;
+  totalXp: number;
+  level: number;
+  leveledUp?: boolean;
+  theoryCompletedSessions: string[];
+  newBadges: { id: string; label: string; emoji: string }[];
 }
 
 export interface Badge {

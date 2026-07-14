@@ -322,6 +322,7 @@ function toPublicUser(user: {
   currentStreak: number;
   longestStreak: number;
   emailVerified: boolean;
+  theoryCompletedSessions: string[];
 }) {
   return {
     id: user.id,
@@ -333,5 +334,6 @@ function toPublicUser(user: {
     currentStreak: user.currentStreak,
     longestStreak: user.longestStreak,
     emailVerified: user.emailVerified,
+    theoryCompletedSessions: user.theoryCompletedSessions,
   };
 }

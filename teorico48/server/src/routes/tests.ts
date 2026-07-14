@@ -157,6 +157,7 @@ testsRouter.post("/:attemptId/submit", requireAuth, asyncHandler(async (req: Aut
     totalAttempts: priorAttempts.length,
     totalPassed: priorAttempts.filter((a) => a.passed).length,
     hasPerfect: priorAttempts.some((a) => a.score !== null && a.total !== null && a.score === a.total),
+    theorySessionsCompleted: user.theoryCompletedSessions.length,
   };
   const afterStats = {
     xp: newXp,
@@ -164,6 +165,7 @@ testsRouter.post("/:attemptId/submit", requireAuth, asyncHandler(async (req: Aut
     totalAttempts: beforeStats.totalAttempts + 1,
     totalPassed: beforeStats.totalPassed + (passed ? 1 : 0),
     hasPerfect: beforeStats.hasPerfect || score === total,
+    theorySessionsCompleted: beforeStats.theorySessionsCompleted,
   };
 
   const badgesBefore = new Set(unlockedBadgeIds(beforeStats));
@@ -224,6 +226,7 @@ testsRouter.get("/stats", requireAuth, asyncHandler(async (req: AuthedRequest, r
     totalAttempts: attempts.length,
     totalPassed: attempts.filter((a) => a.passed).length,
     hasPerfect: attempts.some((a) => a.score !== null && a.total !== null && a.score === a.total),
+    theorySessionsCompleted: user.theoryCompletedSessions.length,
   };
 
   const unlocked = new Set(unlockedBadgeIds(stats));

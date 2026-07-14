@@ -8,6 +8,7 @@ import { badgeIcon } from "../lib/badgeIcons";
 import { BarChart, BookOpen, CheckCircle, Flame, Repeat, Star, Target } from "../components/Icons";
 import { AnimatedNumber } from "../components/AnimatedNumber";
 import { PlanCard } from "../components/PlanCard";
+import { InstallAppPrompt } from "../components/InstallAppPrompt";
 import { THEORY_EXPRESS } from "../content/theoryExpress";
 
 function useCountdown(examDate: string | null) {
@@ -88,6 +89,8 @@ export function Dashboard() {
           )}
         </div>
       )}
+
+      <InstallAppPrompt />
 
       <PlanCard stats={stats} />
 

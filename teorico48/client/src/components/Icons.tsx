@@ -268,3 +268,13 @@ export function Share({ className = "h-5 w-5" }: IconProps) {
     </svg>
   );
 }
+
+export function Download({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M12 3v12" />
+      <path d="M7 10.5 12 15.5 17 10.5" />
+      <path d="M4.5 18.5h15" />
+    </svg>
+  );
+}

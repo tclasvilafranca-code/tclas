@@ -51,8 +51,15 @@ export function Landing() {
                 Ir a mi panel
               </Link>
             ) : (
-              <button onClick={handleStart} disabled={busy} className="btn-primary w-full px-7 py-3.5 text-lg sm:w-auto">
-                {busy ? "Redirigiendo..." : "Comprar ahora"}
+              <button onClick={handleStart} disabled={busy} className="btn-primary w-full flex-col gap-0.5 px-7 py-3 text-lg leading-tight sm:w-auto">
+                {busy ? (
+                  "Redirigiendo..."
+                ) : (
+                  <>
+                    Comprar ahora
+                    <span className="text-xs font-medium text-white/80">Por solo 19,90€</span>
+                  </>
+                )}
               </button>
             )}
             {!user && (
@@ -64,7 +71,6 @@ export function Landing() {
               </Link>
             )}
           </div>
-          {!user && <p className="mt-2.5 text-xs text-slate-400">Por solo 19,90€</p>}
           {error && <p className="mt-4 text-sm font-medium text-red-300">{error}</p>}
           {params.get("compra") === "cancelada" && (
             <p className="mt-4 text-sm font-medium text-amber-200">Pago cancelado. Puedes intentarlo cuando quieras.</p>

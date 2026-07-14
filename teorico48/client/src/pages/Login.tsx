@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { ApiError } from "../lib/api";
 
 export function Login() {
-  const { login } = useAuth();
+  const { login, sessionExpired } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,6 +28,11 @@ export function Login() {
 
   return (
     <AuthForm title="Entrar" onSubmit={handleSubmit} error={error} busy={busy} submitLabel="Entrar">
+      {sessionExpired && (
+        <p className="mb-4 rounded-lg bg-t48-blue/10 p-3 text-sm font-medium text-t48-blue-dark">
+          Tu sesión ha caducado. Vuelve a iniciar sesión para seguir.
+        </p>
+      )}
       <Fields email={email} setEmail={setEmail} password={password} setPassword={setPassword} />
       <p className="mt-3 text-right text-sm">
         <Link to="/forgot-password" className="font-medium text-t48-blue hover:text-t48-blue-dark">

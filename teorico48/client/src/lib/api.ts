@@ -10,6 +10,10 @@ export class ApiError extends Error {
   }
 }
 
+/** Emitido cuando una petición autenticada recibe 401: la sesión ya no es válida
+ * (token caducado, o invalidado por un cambio de contraseña en otro dispositivo). */
+export const SESSION_EXPIRED_EVENT = "teorico48:session-expired";
+
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = localStorage.getItem("token");
   const res = await fetch(`${API_BASE}/api${path}`, {
@@ -23,6 +27,10 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
+    if (res.status === 401 && token) {
+      localStorage.removeItem("token");
+      window.dispatchEvent(new Event(SESSION_EXPIRED_EVENT));
+    }
     throw new ApiError(data.error ?? "Error de red", res.status, data.upgradeRequired);
   }
   return data as T;

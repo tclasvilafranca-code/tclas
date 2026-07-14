@@ -42,8 +42,23 @@ model User {
   termsAcceptedAt DateTime?
 
   attempts TestAttempt[]
+  usedAccessCode AccessCode?
 
   @@map("users")
+}
+
+model AccessCode {
+  id        String    @id @default(cuid())
+  code      String    @unique
+  note      String?
+  createdAt DateTime  @default(now())
+  expiresAt DateTime?
+  usedAt    DateTime?
+
+  usedByUserId String? @unique
+  usedByUser   User?   @relation(fields: [usedByUserId], references: [id])
+
+  @@map("access_codes")
 }
 
 model Category {

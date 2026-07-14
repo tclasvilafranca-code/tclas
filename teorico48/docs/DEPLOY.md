@@ -51,6 +51,7 @@ Render te pedirá rellenar algunos valores (marcados como "secretos") antes de d
 | `CLIENT_URL` | `https://teorico48-web.onrender.com` (o la URL real si Render le puso otro nombre) |
 | `STRIPE_SECRET_KEY`, `STRIPE_PACK_PRICE_ID`, `STRIPE_WEBHOOK_SECRET` | Déjalos vacíos por ahora — se explican en el Paso 5 |
 | `RESEND_API_KEY` | Déjalo vacío por ahora — se explica en el Paso 6 |
+| `ADMIN_PASSWORD` | Una contraseña fuerte, solo para ti — te da acceso a `/admin` para generar códigos de acceso |
 
 **En `teorico48-web`:**
 

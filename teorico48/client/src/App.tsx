@@ -1,8 +1,9 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { NavBar } from "./components/NavBar";
 import { Footer } from "./components/Footer";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { RequireAdmin } from "./components/RequireAdmin";
 import { Landing } from "./pages/Landing";
 import { Login, Register } from "./pages/Login";
 import { ForgotPassword } from "./pages/ForgotPassword";
@@ -16,12 +17,19 @@ import { NotFound } from "./pages/NotFound";
 import { AvisoLegal } from "./pages/legal/AvisoLegal";
 import { Privacidad } from "./pages/legal/Privacidad";
 import { Terminos } from "./pages/legal/Terminos";
+import { AdminLogin } from "./pages/admin/AdminLogin";
+import { AdminPanel } from "./pages/admin/AdminPanel";
 
 export default function App() {
+  const { pathname } = useLocation();
+  // El panel de administrador es una sesión totalmente distinta a la de los
+  // usuarios: no tiene sentido mostrar la navegación ni el pie de página normales.
+  const isAdminArea = pathname.startsWith("/admin");
+
   return (
     <div className="flex min-h-screen flex-col">
       <ScrollToTop />
-      <NavBar />
+      {!isAdminArea && <NavBar />}
       <div className="flex-1">
         <Routes>
           <Route path="/" element={<Landing />} />
@@ -73,10 +81,19 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/admin"
+            element={
+              <RequireAdmin>
+                <AdminPanel />
+              </RequireAdmin>
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
-      <Footer />
+      {!isAdminArea && <Footer />}
     </div>
   );
 }

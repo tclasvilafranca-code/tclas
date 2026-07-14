@@ -51,6 +51,7 @@ export function Register() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [accessCode, setAccessCode] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -64,7 +65,7 @@ export function Register() {
     }
     setBusy(true);
     try {
-      await register(email, password, acceptedTerms);
+      await register(email, password, acceptedTerms, accessCode);
       navigate("/dashboard");
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Error al crear la cuenta");
@@ -74,8 +75,21 @@ export function Register() {
   }
 
   return (
-    <AuthForm title="Crear cuenta gratis" onSubmit={handleSubmit} error={error} busy={busy} submitLabel="Crear cuenta">
-      <Fields email={email} setEmail={setEmail} password={password} setPassword={setPassword} />
+    <AuthForm title="Crear cuenta" onSubmit={handleSubmit} error={error} busy={busy} submitLabel="Crear cuenta">
+      <label className="block text-sm font-semibold text-slate-600">
+        Código de acceso
+        <input
+          type="text"
+          required
+          value={accessCode}
+          onChange={(e) => setAccessCode(e.target.value)}
+          placeholder="Te lo pasamos por Instagram/TikTok"
+          className="mt-1.5 w-full rounded-xl border border-slate-200 px-3.5 py-2.5 uppercase tracking-wide outline-none transition-colors placeholder:normal-case focus:border-t48-blue focus:ring-2 focus:ring-t48-blue/25"
+        />
+      </label>
+      <div className="mt-4">
+        <Fields email={email} setEmail={setEmail} password={password} setPassword={setPassword} />
+      </div>
       <label className="mt-4 flex items-start gap-2 text-sm text-slate-600">
         <input
           type="checkbox"

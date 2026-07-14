@@ -8,7 +8,7 @@ interface AuthContextValue {
   loading: boolean;
   sessionExpired: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string, acceptedTerms: boolean) => Promise<void>;
+  register: (email: string, password: string, acceptedTerms: boolean, accessCode: string) => Promise<void>;
   logout: () => void;
   refreshUser: () => Promise<void>;
 }
@@ -54,8 +54,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setSessionExpired(false);
   }
 
-  async function register(email: string, password: string, acceptedTerms: boolean) {
-    const { token, user } = await api.register(email, password, acceptedTerms);
+  async function register(email: string, password: string, acceptedTerms: boolean, accessCode: string) {
+    const { token, user } = await api.register(email, password, acceptedTerms, accessCode);
     localStorage.setItem("token", token);
     setUser(user);
     setSessionExpired(false);

@@ -60,6 +60,17 @@ npm install
 npm run dev            # http://localhost:5174 (con proxy a la API en /api)
 ```
 
+## Acceso por código (registro cerrado)
+
+El registro **no es libre**: para crear una cuenta hace falta un código de
+acceso válido. Los códigos se generan desde un panel de administrador en
+`/admin` (contraseña propia, nada que ver con las cuentas de los usuarios):
+
+1. Define `ADMIN_PASSWORD` en `server/.env` (una contraseña fuerte, solo para ti).
+2. Entra en `https://tu-web/admin` con esa contraseña.
+3. Genera uno o varios códigos (con una nota opcional para saber a quién se los diste, y una caducidad opcional).
+4. Pásaselos a quien quieras que pruebe la app (Instagram, TikTok, Gmail...). Cada código solo sirve para una cuenta.
+
 ## Pagos (Stripe) — Pack 48h
 
 El backend usa Stripe Checkout (pago único) para desbloquear simulacros

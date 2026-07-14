@@ -39,3 +39,29 @@ export async function requireAuth(req: AuthedRequest, res: Response, next: NextF
     return res.status(401).json({ error: "Token inválido o caducado" });
   }
 }
+
+// --- Panel de administrador (Bruno) ---
+// No hay tabla de administradores: una única contraseña por variable de
+// entorno y un JWT de corta duración con un campo "admin" que no puede
+// aparecer en un token de usuario normal.
+
+export function signAdminToken() {
+  return jwt.sign({ admin: true }, JWT_SECRET!, { expiresIn: "12h" });
+}
+
+export function requireAdmin(req: Request, res: Response, next: NextFunction) {
+  const header = req.headers.authorization;
+  const token = header?.startsWith("Bearer ") ? header.slice(7) : null;
+  if (!token) {
+    return res.status(401).json({ error: "No autenticado como administrador" });
+  }
+  try {
+    const payload = jwt.verify(token, JWT_SECRET!) as { admin?: boolean };
+    if (payload.admin !== true) {
+      return res.status(401).json({ error: "Token de administrador inválido" });
+    }
+    next();
+  } catch {
+    return res.status(401).json({ error: "Sesión de administrador caducada" });
+  }
+}

@@ -25,7 +25,14 @@ const registerSchema = credentialsSchema.extend({
   acceptedTerms: z.literal(true, {
     errorMap: () => ({ message: "Debes aceptar los términos de uso y la política de privacidad" }),
   }),
+  accessCode: z
+    .string()
+    .trim()
+    .min(1, "Introduce tu código de acceso")
+    .transform((v) => v.toUpperCase()),
 });
+
+class InvalidAccessCodeError extends Error {}
 
 function hashToken(rawToken: string) {
   return createHash("sha256").update(rawToken).digest("hex");
@@ -62,7 +69,7 @@ authRouter.post(
     if (!parsed.success) {
       return res.status(400).json({ error: parsed.error.issues[0].message });
     }
-    const { email, password } = parsed.data;
+    const { email, password, accessCode } = parsed.data;
 
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {
@@ -71,13 +78,40 @@ authRouter.post(
 
     const passwordHash = await bcrypt.hash(password, 10);
     try {
-      const user = await prisma.user.create({
-        data: { email, passwordHash, termsAcceptedAt: new Date() },
+      const user = await prisma.$transaction(async (tx) => {
+        // Reclama el código de forma atómica: si dos registros compiten por el
+        // mismo código a la vez, solo uno consigue marcarlo como usado.
+        const claim = await tx.accessCode.updateMany({
+          where: {
+            code: accessCode,
+            usedAt: null,
+            OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
+          },
+          data: { usedAt: new Date() },
+        });
+        if (claim.count === 0) {
+          throw new InvalidAccessCodeError();
+        }
+
+        const createdUser = await tx.user.create({
+          data: { email, passwordHash, termsAcceptedAt: new Date() },
+        });
+
+        await tx.accessCode.update({
+          where: { code: accessCode },
+          data: { usedByUserId: createdUser.id },
+        });
+
+        return createdUser;
       });
+
       res.status(201).json({ token: signToken(user.id, user.tokenVersion), user: toPublicUser(user) });
       // No bloquea la respuesta: si el email tarda o falla, el registro ya se ha completado.
       sendVerificationEmail(user).catch((err) => console.error("No se pudo enviar el email de verificación:", err));
     } catch (err) {
+      if (err instanceof InvalidAccessCodeError) {
+        return res.status(400).json({ error: "Ese código de acceso no es válido, ya se ha usado o ha caducado" });
+      }
       // Carrera entre el chequeo anterior y la creación: dos registros a la vez con el mismo email.
       if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
         return res.status(409).json({ error: "Ya existe una cuenta con ese email" });

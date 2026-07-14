@@ -64,6 +64,7 @@ export function Landing() {
               </Link>
             )}
           </div>
+          {!user && <p className="mt-2.5 text-xs text-slate-400">Por solo 19,90€</p>}
           {error && <p className="mt-4 text-sm font-medium text-red-300">{error}</p>}
           {params.get("compra") === "cancelada" && (
             <p className="mt-4 text-sm font-medium text-amber-200">Pago cancelado. Puedes intentarlo cuando quieras.</p>

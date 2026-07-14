@@ -25,6 +25,8 @@ services:
         sync: false
       - key: STRIPE_WEBHOOK_SECRET
         sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
 
   - name: teorico48-web
     type: web

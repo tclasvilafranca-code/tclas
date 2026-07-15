@@ -67,10 +67,11 @@ def build_theory_page(c, qr_path, song):
     y = H - 34
     c.setFont('DejaVuSans-Bold', 8.6)
     c.setFillColor(DARKGREEN)
-    c.drawString(MARGIN, y, 'NIVEL 1 · EMPIEZO')
+    c.drawString(MARGIN, y, song.get('nivel_kicker', 'NIVEL 1 · EMPIEZO'))
     c.setFont('DejaVuSans', 8.6)
     c.setFillColor(GRAY)
-    c.drawRightString(W - MARGIN, y, f"Canción {song['num']} de 20")
+    total_songs = song.get('total_songs', 20)
+    c.drawRightString(W - MARGIN, y, f"Canción {song['num']} de {total_songs}")
 
     y -= 22
     c.setFont('DejaVuSerif-Bold', 21)

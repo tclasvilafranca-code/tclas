@@ -52,13 +52,13 @@ def page1(c):
     y = exercise_heading(c, y, 3, 'Acordes I–IV–V en Re mayor', 2,
                           'Re–Sol–La: los tres acordes de esta tonalidad. El bajo del vals se apoya siempre en ellos.')
     y -= 12
-    pattern_a = [(['D3', 'F#3', 'A3'], 'Re'), (['G2', 'B2', 'D3'], 'Sol'), (['A2', 'C#3', 'E3'], 'La')] * 4
+    pattern_a = [(['D3', 'F#3', 'A3'], 'Re'), (['G2', 'B2', 'D3'], 'Sol'), (['E2', 'A2', 'C#3'], 'La')] * 4
     eva = [{'pitches': p, 'dur': 'q', 'label': l} for p, l in pattern_a]
     y = system_block(c, x0, w0, y, gap, 'a) Re-Sol-La, un acorde por tiempo', eva, clef='bass', time_sig=TS)
 
     pattern_b = []
     for chord_low, chord_up, lab in [(['D2'], ['F#3', 'A3'], 'Re'), (['G2'], ['B2', 'D3'], 'Sol'),
-                                       (['A2'], ['C#3', 'E3'], 'La'), (['D2'], ['F#3', 'A3'], 'Re')]:
+                                       (['A2'], ['A2', 'C#3'], 'La'), (['D2'], ['F#3', 'A3'], 'Re')]:
         pattern_b.append({'pitches': chord_low, 'dur': 'q', 'label': lab})
         pattern_b.append({'pitches': chord_up, 'dur': 'q'})
         pattern_b.append({'pitches': chord_up, 'dur': 'q'})

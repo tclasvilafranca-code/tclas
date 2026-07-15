@@ -7,11 +7,11 @@ from page_layout_common import *
 SONG_KICKER = 'DILAN · OCTUBRE · A SKY FULL OF STARS (COLDPLAY)'
 TS = (4, 4)
 
-FA = ['F4', 'A4', 'C5']
+FA = ['F4', 'A4']
 SIB = ['Bb4', 'D5', 'F5']
 DO = ['C5', 'E5', 'G5']
 FA_B = ['F3', 'A3', 'C4']
-SIB_B = ['Bb2', 'D3', 'F3']
+SIB_B = ['Bb2', 'D3']
 DO_B = ['C3', 'E3', 'G3']
 
 
@@ -70,7 +70,7 @@ def page1(c):
     y = exercise_heading(c, y, 3, 'Acordes I–IV–V en Fa mayor', 2,
                           'Fa–Sib–Do: los tres acordes de esta tonalidad, la base del estribillo.')
     y -= 12
-    pattern_a = [(['F3', 'A3', 'C4'], 'Fa'), (['Bb2', 'D3', 'F3'], 'Sib'),
+    pattern_a = [(['F3', 'A3', 'C4'], 'Fa'), (['Bb2', 'D3'], 'Sib'),
                  (['C3', 'E3', 'G3'], 'Do'), (['F3', 'A3', 'C4'], 'Fa')] * 4
     eva = [{'pitches': p, 'dur': 'q', 'label': l} for p, l in pattern_a]
     y = system_block(c, x0, w0, y, gap, 'a) Fa-Sib-Do-Fa, un acorde por tiempo', eva, clef='bass', time_sig=TS)
@@ -121,7 +121,7 @@ def page2(c):
     y = grand_staff_block(c, x0, w0, y, gap, treb3, bass3, 'a) Los acordes cambian más rápido: el pulso no se despista', grand_gap_mult=7.3, time_sig=TS)
 
     treb4 = [{'pitch': p, 'dur': 'e', 'beam': i // 2} for i, p in enumerate(
-             ['F4', 'A4', 'C5', 'A4', 'Bb4', 'D5', 'F5', 'D5'] * 2)]
+             ['F4', 'A4', 'Bb4', 'C5', 'A4', 'D5', 'F5', 'D5'] * 2)]
     y = system_block(c, x0, w0, y, gap, 'b) Variación: el mismo dibujo, en corcheas iguales', treb4, clef='treble', time_sig=TS)
     y -= 4
 

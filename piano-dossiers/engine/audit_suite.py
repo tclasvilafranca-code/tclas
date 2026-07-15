@@ -37,7 +37,7 @@ def audit_music(build_fn, page_w=595.276, page_h=841.89):
     patched_modules = [plc]
     import sys
     for modname, mod in list(sys.modules.items()):
-        if modname.startswith('page_theory') and hasattr(mod, 'draw_system'):
+        if modname.startswith(('page_theory', 'page_harmony')) and hasattr(mod, 'draw_system'):
             mod.draw_system = patched
             patched_modules.append(mod)
     try:

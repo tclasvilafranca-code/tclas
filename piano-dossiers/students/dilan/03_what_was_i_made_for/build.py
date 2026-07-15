@@ -4,7 +4,7 @@ from reportlab.pdfgen import canvas
 from pypdf import PdfWriter, PdfReader
 from page_theory_generic import build_theory_page, W, H
 from page_exercises import page1, page2
-from page_worksheet_generic import build_worksheet
+from page_harmony_generic import build_harmony_page
 
 HERE = os.path.dirname(__file__)
 ASSETS = os.path.join(HERE, '..', '..', '..', 'assets')
@@ -27,27 +27,27 @@ song3 = dict(
   total_songs=5,
 )
 
-cfg3 = {
- 'kicker': 'DILAN · OCTUBRE · WHAT WAS I MADE FOR?',
- 'sec1_treble': ['Do', 'Mi', 'Sol', 'Do', 'Re', 'Fa', 'La', 'Do'],
- 'sec1_bass': ['Sol', 'Si', 'Re', 'Sol', 'La', 'Do', 'Mi', 'Sol'],
- 'sec2_title': 'Marca dónde hay un compás de silencio',
- 'sec2_desc': 'Con una X, marca en el aire debajo de la línea dónde crees que iría un compás de silencio en este patrón. Luego dibuja la plica de las notas.',
- 'sec2_pitches': ['E4', 'E4', 'D4', 'C4', 'C4', 'C4', 'D4', 'E4', 'F4', 'E4', 'D4', 'C4'],
- 'sec3_title': 'Colorea solo las notas DO (tu nota casa)',
- 'sec3_desc': 'Repasa cada nota y pinta de azul únicamente las que sean DO. Las demás, déjalas en blanco.',
- 'sec3_treble': ['C4', 'E4', 'G4', 'C4', 'D4', 'C4', 'F4', 'E4', 'C4', 'A4', 'G4', 'C4'],
- 'sec3_bass': ['C3', 'E3', 'G3', 'C3', 'D3', 'C3', 'F3', 'E3', 'C3', 'A3', 'G3', 'C3'],
- 'pista_text': 'en clave de Sol, DO está en la primera línea adicional bajo el pentagrama (con su rayita); en clave de Fa, DO está en el segundo espacio.',
- 'quiz_pitches': ['C4', 'E4', 'G4', 'D4', 'F4', 'A4', 'C4'],
-}
+cfg3 = dict(
+  kicker='DILAN · OCTUBRE · WHAT WAS I MADE FOR?',
+  intervals_desc='Toca (o imagina) cada pareja de notas, siempre desde DO, y escribe el intervalo: 2ª, 3ª, 4ª, 5ª, 6ª u 8ª.',
+  intervals=[('C4', 'D4'), ('C4', 'E4'), ('C4', 'F4'), ('C4', 'G4'), ('C4', 'A4'), ('C4', 'C5')],
+  chords_desc='Identifica cada acorde: nómbralo (Do, Mim, Fa, Lam...) y di si es mayor o menor.',
+  chords=[['C4', 'E4', 'G4'], ['E4', 'G4', 'B4'], ['F4', 'A4', 'C5'], ['A4', 'C5', 'E5']],
+  song_title='What Was I Made For?', song_key='Do mayor',
+  progression_desc='Esta es la progresión real de la canción (primeros 8 acordes). Escribe el grado de cada uno en Do mayor.',
+  progression=['Do', 'Mim', 'Fa', 'Do', 'Mim', 'Fa', 'Lam', 'Sol'],
+  progression_mode='roman',
+  rhythm_desc='Lee y marca el ritmo: un compás entero de silencio, y luego la entrada de la melodía.',
+  rhythm_events=[{'rest': True, 'dur': 'w'}] + [{'pitch': 'B4', 'dur': 'q'}] * 4,
+  rhythm_time_sig=(4, 4),
+)
 
 
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
     theory_path = os.path.join(HERE, '_theory.pdf')
     ex_path = os.path.join(HERE, '_exercises.pdf')
-    work_path = os.path.join(HERE, '_worksheet.pdf')
+    harmony_path = os.path.join(HERE, '_harmony.pdf')
 
     c = canvas.Canvas(theory_path, pagesize=(W, H))
     build_theory_page(c, os.path.join(ASSETS, 'asset_qr_real.png'), song3)
@@ -58,14 +58,14 @@ def main():
     page2(c)
     c.save()
 
-    c = canvas.Canvas(work_path, pagesize=(W, H))
-    build_worksheet(c, cfg3)
+    c = canvas.Canvas(harmony_path, pagesize=(W, H))
+    build_harmony_page(c, cfg3)
     c.save()
 
     writer = PdfWriter()
     for p in PdfReader(SOURCE_PDF).pages:
         writer.add_page(p)
-    for path in (theory_path, ex_path, work_path):
+    for path in (theory_path, ex_path, harmony_path):
         for p in PdfReader(path).pages:
             writer.add_page(p)
 
@@ -73,7 +73,7 @@ def main():
     with open(out_path, 'wb') as f:
         writer.write(f)
 
-    for p in (theory_path, ex_path, work_path):
+    for p in (theory_path, ex_path, harmony_path):
         os.remove(p)
     print('generated', out_path)
 

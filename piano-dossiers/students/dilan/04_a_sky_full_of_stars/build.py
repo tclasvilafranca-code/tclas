@@ -4,7 +4,7 @@ from reportlab.pdfgen import canvas
 from pypdf import PdfWriter, PdfReader
 from page_theory_generic import build_theory_page, W, H
 from page_exercises import page1, page2
-from page_worksheet_generic import build_worksheet
+from page_harmony_generic import build_harmony_page
 
 HERE = os.path.dirname(__file__)
 ASSETS = os.path.join(HERE, '..', '..', '..', 'assets')
@@ -38,27 +38,27 @@ song4 = dict(
   total_songs=5,
 )
 
-cfg4 = {
- 'kicker': 'DILAN · OCTUBRE · A SKY FULL OF STARS',
- 'sec1_treble': ['Fa', 'La', 'Do', 'Fa', 'Sol', 'Sib', 'Re', 'Fa'],
- 'sec1_bass': ['Do', 'Mi', 'Sol', 'Do', 'Sib', 'Re', 'Fa', 'Do'],
- 'sec2_title': 'Marca el pulso largo-corto y dibuja la plica',
- 'sec2_desc': 'Rodea cada pareja de notas (larga-corta) del pulso. Luego dibújales la plica en la dirección correcta.',
- 'sec2_pitches': ['F4', 'F4', 'Bb4', 'Bb4', 'C5', 'C5', 'F4', 'F4', 'Bb4', 'Bb4', 'C5', 'C5'],
- 'sec3_title': 'Colorea solo las notas FA (tu nota casa)',
- 'sec3_desc': 'Repasa cada nota y pinta de naranja únicamente las que sean FA. Las demás, déjalas en blanco.',
- 'sec3_treble': ['F4', 'A4', 'C5', 'F4', 'Bb4', 'F4', 'G4', 'A4', 'F4', 'D5', 'C5', 'F4'],
- 'sec3_bass': ['F3', 'A3', 'C4', 'F3', 'Bb3', 'F3', 'G3', 'A3', 'F3', 'D4', 'C4', 'F3'],
- 'pista_text': 'en clave de Sol, FA está en el primer espacio; en clave de Fa, FA está en la cuarta línea.',
- 'quiz_pitches': ['F4', 'A4', 'C5', 'G4', 'Bb4', 'D5', 'F4'],
-}
+cfg4 = dict(
+  kicker='DILAN · OCTUBRE · A SKY FULL OF STARS',
+  intervals_desc='Toca (o imagina) cada pareja de notas, siempre desde FA, y escribe el intervalo: 2ª, 3ª, 4ª, 5ª, 6ª u 8ª.',
+  intervals=[('F4', 'G4'), ('F4', 'A4'), ('F4', 'Bb4'), ('F4', 'C5'), ('F4', 'D5'), ('F4', 'F5')],
+  chords_desc='Identifica cada acorde: nómbralo (Fa, Sib, Do, Rem...) y di si es mayor o menor.',
+  chords=[['F4', 'A4', 'C5'], ['Bb4', 'D5', 'F5'], ['C4', 'E4', 'G4'], ['D4', 'F4', 'A4']],
+  song_title='A Sky Full of Stars', song_key='Fa mayor',
+  progression_desc='El estribillo se apoya en estos tres acordes de Fa mayor, con el pulso largo-corto encima. Escribe si cada uno es tónica (T), subdominante (SD) o dominante (D).',
+  progression=['Fa', 'Sib', 'Do', 'Fa'],
+  progression_mode='function',
+  rhythm_desc='Lee y marca el pulso largo-corto real: negra con puntillo + corchea, cuatro veces seguidas.',
+  rhythm_events=[{'pitch': 'B4', 'dur': 'q.'}, {'pitch': 'B4', 'dur': 'e'}] * 4,
+  rhythm_time_sig=(4, 4),
+)
 
 
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
     theory_path = os.path.join(HERE, '_theory.pdf')
     ex_path = os.path.join(HERE, '_exercises.pdf')
-    work_path = os.path.join(HERE, '_worksheet.pdf')
+    harmony_path = os.path.join(HERE, '_harmony.pdf')
 
     c = canvas.Canvas(theory_path, pagesize=(W, H))
     build_theory_page(c, os.path.join(ASSETS, 'asset_qr_real.png'), song4)
@@ -69,14 +69,14 @@ def main():
     page2(c)
     c.save()
 
-    c = canvas.Canvas(work_path, pagesize=(W, H))
-    build_worksheet(c, cfg4)
+    c = canvas.Canvas(harmony_path, pagesize=(W, H))
+    build_harmony_page(c, cfg4)
     c.save()
 
     writer = PdfWriter()
     for p in PdfReader(SOURCE_PDF).pages:
         writer.add_page(p)
-    for path in (theory_path, ex_path, work_path):
+    for path in (theory_path, ex_path, harmony_path):
         for p in PdfReader(path).pages:
             writer.add_page(p)
 
@@ -84,7 +84,7 @@ def main():
     with open(out_path, 'wb') as f:
         writer.write(f)
 
-    for p in (theory_path, ex_path, work_path):
+    for p in (theory_path, ex_path, harmony_path):
         os.remove(p)
     print('generated', out_path)
 

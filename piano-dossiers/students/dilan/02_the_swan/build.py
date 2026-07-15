@@ -4,7 +4,7 @@ from reportlab.pdfgen import canvas
 from pypdf import PdfWriter, PdfReader
 from page_theory_generic import build_theory_page, W, H
 from page_exercises import page1, page2
-from page_worksheet_generic import build_worksheet
+from page_harmony_generic import build_harmony_page
 
 HERE = os.path.dirname(__file__)
 ASSETS = os.path.join(HERE, '..', '..', '..', 'assets')
@@ -39,27 +39,27 @@ song2 = dict(
   total_songs=5,
 )
 
-cfg2 = {
- 'kicker': 'DILAN · SEPTIEMBRE-OCTUBRE · THE SWAN',
- 'sec1_treble': ['Sol', 'Si', 'Re', 'Sol', 'La', 'Do', 'Mi', 'Sol'],
- 'sec1_bass': ['Re', 'Fa#', 'La', 'Re', 'Do', 'Mi', 'Sol', 'Re'],
- 'sec2_title': 'Marca el arpegio del agua y dibuja la plica',
- 'sec2_desc': 'Rodea cada grupo de tres notas (Sol-Si-Re) del arpegio fluido. Luego dibújales la plica en la dirección correcta.',
- 'sec2_pitches': ['G4', 'B4', 'D5', 'G4', 'B4', 'D5', 'G4', 'B4', 'D5', 'G4', 'B4', 'D5'],
- 'sec3_title': 'Colorea solo las notas SOL (tu nota casa)',
- 'sec3_desc': 'Repasa cada nota y pinta de verde únicamente las que sean SOL. Las demás, déjalas en blanco.',
- 'sec3_treble': ['G4', 'B4', 'D5', 'G4', 'A4', 'G4', 'C5', 'B4', 'G4', 'E4', 'D5', 'G4'],
- 'sec3_bass': ['G3', 'B3', 'D4', 'G3', 'A3', 'G3', 'C4', 'B3', 'G3', 'E3', 'D4', 'G3'],
- 'pista_text': 'en clave de Sol, SOL está en la segunda línea; en clave de Fa, SOL está en la primera línea, la de abajo.',
- 'quiz_pitches': ['G4', 'B4', 'D5', 'A4', 'C5', 'E5', 'G4'],
-}
+cfg2 = dict(
+  kicker='DILAN · SEPTIEMBRE-OCTUBRE · THE SWAN',
+  intervals_desc='Toca (o imagina) cada pareja de notas, siempre desde SOL, y escribe el intervalo: 2ª, 3ª, 4ª, 5ª, 6ª u 8ª.',
+  intervals=[('G4', 'A4'), ('G4', 'B4'), ('G4', 'C5'), ('G4', 'D5'), ('G4', 'E5'), ('G4', 'G5')],
+  chords_desc='Identifica cada acorde: nómbralo (Sol, Do, Re, Mim...) y di si es mayor o menor.',
+  chords=[['G4', 'B4', 'D5'], ['C4', 'E4', 'G4'], ['D4', 'F#4', 'A4'], ['E4', 'G4', 'B4']],
+  song_title='The Swan', song_key='Sol mayor',
+  progression_desc='El Cisne está escrito en notación clásica, sin cifrado de acordes — pero toda la pieza se sostiene sobre estos tres acordes. Escribe si cada uno es tónica (T), subdominante (SD) o dominante (D).',
+  progression=['Sol', 'Do', 'Re', 'Sol'],
+  progression_mode='function',
+  rhythm_desc='Lee y marca el ritmo real de la frase: una nota larga que respira y luego tres negras que avanzan, en 3/4.',
+  rhythm_events=([{'pitch': 'B4', 'dur': 'h.'}] + [{'pitch': 'B4', 'dur': 'q'}] * 3) * 2,
+  rhythm_time_sig=(3, 4),
+)
 
 
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
     theory_path = os.path.join(HERE, '_theory.pdf')
     ex_path = os.path.join(HERE, '_exercises.pdf')
-    work_path = os.path.join(HERE, '_worksheet.pdf')
+    harmony_path = os.path.join(HERE, '_harmony.pdf')
 
     c = canvas.Canvas(theory_path, pagesize=(W, H))
     build_theory_page(c, os.path.join(ASSETS, 'asset_qr_real.png'), song2)
@@ -70,14 +70,14 @@ def main():
     page2(c)
     c.save()
 
-    c = canvas.Canvas(work_path, pagesize=(W, H))
-    build_worksheet(c, cfg2)
+    c = canvas.Canvas(harmony_path, pagesize=(W, H))
+    build_harmony_page(c, cfg2)
     c.save()
 
     writer = PdfWriter()
     for p in PdfReader(SOURCE_PDF).pages:
         writer.add_page(p)
-    for path in (theory_path, ex_path, work_path):
+    for path in (theory_path, ex_path, harmony_path):
         for p in PdfReader(path).pages:
             writer.add_page(p)
 
@@ -85,7 +85,7 @@ def main():
     with open(out_path, 'wb') as f:
         writer.write(f)
 
-    for p in (theory_path, ex_path, work_path):
+    for p in (theory_path, ex_path, harmony_path):
         os.remove(p)
     print('generated', out_path)
 

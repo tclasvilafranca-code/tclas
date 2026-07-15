@@ -4,7 +4,7 @@ from reportlab.pdfgen import canvas
 from pypdf import PdfWriter, PdfReader
 from page_theory_generic import build_theory_page, W, H
 from page_exercises import page1, page2
-from page_worksheet_generic import build_worksheet
+from page_harmony_generic import build_harmony_page
 
 HERE = os.path.dirname(__file__)
 ASSETS = os.path.join(HERE, '..', '..', '..', 'assets')
@@ -39,27 +39,27 @@ song1 = dict(
   total_songs=5,
 )
 
-cfg1 = {
- 'kicker': 'DILAN · SEPTIEMBRE · CAN’T HELP FALLING IN LOVE',
- 'sec1_treble': ['Re', 'Fa#', 'La', 'Re', 'Mi', 'Sol', 'Si', 'Re'],
- 'sec1_bass': ['La', 'Fa#', 'Re', 'La', 'Sol', 'Mi', 'Do#', 'La'],
- 'sec2_title': 'Marca el arpegio del vals y dibuja la plica',
- 'sec2_desc': 'Rodea cada grupo de tres notas (Re-Fa#-La) del arpegio. Luego dibújales la plica en la dirección correcta.',
- 'sec2_pitches': ['D4', 'F#4', 'A4', 'D4', 'F#4', 'A4', 'D4', 'F#4', 'A4', 'D4', 'F#4', 'A4'],
- 'sec3_title': 'Colorea solo las notas RE (tu nota casa)',
- 'sec3_desc': 'Repasa cada nota y pinta de azul únicamente las que sean RE. Las demás, déjalas en blanco.',
- 'sec3_treble': ['D4', 'F#4', 'A4', 'D4', 'E4', 'D4', 'G4', 'F#4', 'D4', 'B4', 'A4', 'D4'],
- 'sec3_bass': ['D3', 'F#3', 'A3', 'D3', 'E3', 'D3', 'G3', 'F#3', 'D3', 'B3', 'A3', 'D3'],
- 'pista_text': 'en clave de Sol, RE está justo debajo de la primera línea (sin rayita); en clave de Fa, RE está en la tercera línea, la del medio.',
- 'quiz_pitches': ['D4', 'F#4', 'A4', 'E4', 'G4', 'B4', 'D4'],
-}
+cfg1 = dict(
+  kicker='DILAN · SEPTIEMBRE · CAN’T HELP FALLING IN LOVE',
+  intervals_desc='Toca (o imagina) cada pareja de notas, siempre desde RE, y escribe el intervalo: 2ª, 3ª, 4ª, 5ª, 6ª u 8ª.',
+  intervals=[('D4', 'E4'), ('D4', 'F#4'), ('D4', 'G4'), ('D4', 'A4'), ('D4', 'B4'), ('D4', 'D5')],
+  chords_desc='Identifica cada acorde: nómbralo (Re, Fa#m, Sim, Sol...) y di si es mayor o menor.',
+  chords=[['D4', 'F#4', 'A4'], ['F#4', 'A4', 'C#5'], ['B4', 'D5', 'F#5'], ['G4', 'B4', 'D5']],
+  song_title="Can't Help Falling in Love", song_key='Re mayor',
+  progression_desc='Esta es la progresión real de la canción (primeros 8 acordes). Escribe el grado de cada uno en Re mayor.',
+  progression=['Re', 'Fa#m', 'Sim', 'Sol', 'Re', 'La', 'La7', 'Sol'],
+  progression_mode='roman',
+  rhythm_desc='Lee y marca el ritmo real de la melodía: tres negras y una nota larga, en 3/4.',
+  rhythm_events=([{'pitch': 'B4', 'dur': 'q'}] * 3 + [{'pitch': 'B4', 'dur': 'h.'}]) * 2,
+  rhythm_time_sig=(3, 4),
+)
 
 
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
     theory_path = os.path.join(HERE, '_theory.pdf')
     ex_path = os.path.join(HERE, '_exercises.pdf')
-    work_path = os.path.join(HERE, '_worksheet.pdf')
+    harmony_path = os.path.join(HERE, '_harmony.pdf')
 
     c = canvas.Canvas(theory_path, pagesize=(W, H))
     build_theory_page(c, os.path.join(ASSETS, 'asset_qr_real.png'), song1)
@@ -70,14 +70,14 @@ def main():
     page2(c)
     c.save()
 
-    c = canvas.Canvas(work_path, pagesize=(W, H))
-    build_worksheet(c, cfg1)
+    c = canvas.Canvas(harmony_path, pagesize=(W, H))
+    build_harmony_page(c, cfg1)
     c.save()
 
     writer = PdfWriter()
     for p in PdfReader(SOURCE_PDF).pages:
         writer.add_page(p)
-    for path in (theory_path, ex_path, work_path):
+    for path in (theory_path, ex_path, harmony_path):
         for p in PdfReader(path).pages:
             writer.add_page(p)
 
@@ -85,7 +85,7 @@ def main():
     with open(out_path, 'wb') as f:
         writer.write(f)
 
-    for p in (theory_path, ex_path, work_path):
+    for p in (theory_path, ex_path, harmony_path):
         os.remove(p)
     print('generated', out_path)
 

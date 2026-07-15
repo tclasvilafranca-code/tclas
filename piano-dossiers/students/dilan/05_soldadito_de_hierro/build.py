@@ -4,7 +4,7 @@ from reportlab.pdfgen import canvas
 from pypdf import PdfWriter, PdfReader
 from page_theory_generic import build_theory_page, W, H
 from page_exercises import page1, page2
-from page_worksheet_generic import build_worksheet
+from page_harmony_generic import build_harmony_page
 
 HERE = os.path.dirname(__file__)
 ASSETS = os.path.join(HERE, '..', '..', '..', 'assets')
@@ -13,41 +13,54 @@ OUT_DIR = os.path.join(HERE, '..', '..', '..', 'output')
 
 song5 = dict(
   num=5, title='Soldadito de Hierro', subtitle='Nil Moliner · arr. Campamento Musical Bye Bye Beethoven',
-  tonalidad='Do mayor', compas='4/4', tempo='Enérgico ♩≈84', forma='Estrofa',
+  tonalidad='La menor', compas='4/4', tempo='Enérgico ♩≈84', forma='Estrofa',
   dificultad='Un reto rítmico ligero', manos='Melodía + acordes',
-  la_cancion='Una canción española muy rítmica: la mano derecha se mueve en grupos de tres notas, ligera y rápida, mientras la izquierda descansa en acordes largos.',
+  la_cancion='Una canción española muy rítmica, en La menor: la mano derecha se mueve en grupos de tres notas, ligera y rápida, mientras la izquierda sostiene acordes largos.',
   difficult_cc='cc. 1–4', difficult_title='Grupos de tres, ligeros y rápidos',
   reto='mover los grupos de tres con ligereza, sin que se atropellen ni se frenen.',
   truco='practica cada grupo de tres muy despacio, como un giro pequeño de la muñeca, y ve acelerando poco a poco.',
-  sabias_que='"Soldadito de Hierro" es del cantautor español Nil Moliner. Esta versión para piano forma parte del repertorio del Campamento Musical Bye Bye Beethoven.',
+  sabias_que='"Soldadito de Hierro" es del cantautor español Nil Moliner. La armadura no lleva alteraciones, pero la armonía real (Lam-Rem-Mi7-Lam) confirma que está en La menor, no en Do mayor: la misma armadura puede pertenecer a dos tonalidades relativas distintas.',
   mini_staff_events=[{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-                      [('C4', 1), ('D4', 2), ('E4', 3), ('F4', 4), ('G4', 5), ('F4', 4)]] +
-                     [{'pitch': 'C4', 'dur': 'h', 'number': 1}],
+                      [('A4', 1), ('B4', 2), ('C5', 3), ('D5', 4), ('E5', 5), ('D5', 4)]] +
+                     [{'pitch': 'C5', 'dur': 'h', 'number': 3}],
+  tonic_solfege='La', quinta_solfege='Mi',
+  keyboard_notes=['La', 'Si', 'Do', 'Re', 'Mi', 'Fa', 'Sol'], keyboard_highlight=0,
+  posicion_titulo='A tocar — posición de Lam',
+  posicion_texto='Mano derecha en posición de LA menor (un dedo por tecla); izquierda: acordes Lam, Rem y Mi7 (el V7 lleva Sol sostenido).',
+  ritmo_texto='Ritmo: compás de 4/4, enérgico — los grupos de tres notas se mueven ligeros dentro de cada tiempo.',
+  estudiar_steps=['Busca LA y tócala 3 veces (tu nota casa).',
+                   'Mano derecha sola: los grupos de tres, muy despacio al principio.',
+                   'Acordes Lam-Rem-Mi7 con la izquierda, uno por compás.',
+                   'Las dos manos juntas: lento primero, luego un poco más rápido.'],
+  checklist_items=['Encuentro LA y pongo bien los dedos.', 'Los grupos de tres suenan ligeros, no atropellados.',
+                    'Toco el Mi7 con el Sol sostenido, sin fallar.', 'Junto las dos manos con precisión.'],
   nivel_kicker='DILAN · NIVEL MEDIO-ALTO · NOVIEMBRE',
   total_songs=5,
 )
 
-cfg5 = {
- 'kicker': 'DILAN · NOVIEMBRE · SOLDADITO DE HIERRO',
- 'sec1_treble': ['Do', 'Re', 'Mi', 'Fa', 'Sol', 'La', 'Si', 'Do'],
- 'sec1_bass': ['Sol', 'Fa', 'Mi', 'Re', 'Do', 'Si', 'La', 'Sol'],
- 'sec2_title': 'Marca cada grupo de tres y dibuja la plica',
- 'sec2_desc': 'Rodea cada grupo de tres notas seguidas. Luego dibújales la plica en la dirección correcta.',
- 'sec2_pitches': ['C4', 'D4', 'E4', 'C4', 'D4', 'E4', 'E4', 'F4', 'G4', 'E4', 'F4', 'G4'],
- 'sec3_title': 'Colorea solo las notas DO (tu nota casa)',
- 'sec3_desc': 'Repasa cada nota y pinta de rojo únicamente las que sean DO. Las demás, déjalas en blanco.',
- 'sec3_treble': ['C4', 'D4', 'E4', 'C4', 'G4', 'C4', 'A4', 'F4', 'C4', 'E4', 'D4', 'C4'],
- 'sec3_bass': ['C3', 'D3', 'E3', 'C3', 'G3', 'C3', 'A3', 'F3', 'C3', 'E3', 'D3', 'C3'],
- 'pista_text': 'en clave de Sol, DO está en la primera línea adicional bajo el pentagrama (con su rayita); en clave de Fa, DO está en el segundo espacio.',
- 'quiz_pitches': ['C4', 'D4', 'E4', 'F4', 'G4', 'B4', 'C4'],
-}
+cfg5 = dict(
+  kicker='DILAN · NOVIEMBRE · SOLDADITO DE HIERRO',
+  intervals_desc='Toca (o imagina) cada pareja de notas, siempre desde LA, y escribe el intervalo: 2ª, 3ª, 4ª, 5ª, 6ª u 8ª.',
+  intervals=[('A4', 'B4'), ('A4', 'C5'), ('A4', 'D5'), ('A4', 'E5'), ('A4', 'F5'), ('A4', 'A5')],
+  chords_desc='Identifica cada acorde: nómbralo (Lam, Rem, Mi, Do...) y di si es mayor o menor.',
+  chords=[['A4', 'C5', 'E5'], ['D4', 'F4', 'A4'], ['E4', 'G#4', 'B4'], ['C4', 'E4', 'G4']],
+  song_title='Soldadito de Hierro', song_key='La menor',
+  progression_desc='Estos son los 4 acordes que abren la canción y que se repiten. Escribe el grado de cada uno en La menor (i, iv, V7...).',
+  progression=['Lam', 'Rem', 'Mi7', 'Lam'],
+  progression_mode='roman',
+  rhythm_desc='Lee y marca el ritmo: negras tranquilas en el primer compás, grupos de tres ligeros en el segundo.',
+  rhythm_events=([{'pitch': 'B4', 'dur': 'q'}] * 4 +
+                 [{'pitch': 'B4', 'dur': 'e', 'beam': 0}] * 3 + [{'pitch': 'B4', 'dur': 'q'}] +
+                 [{'pitch': 'B4', 'dur': 'e', 'beam': 1}] * 3),
+  rhythm_time_sig=(4, 4),
+)
 
 
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
     theory_path = os.path.join(HERE, '_theory.pdf')
     ex_path = os.path.join(HERE, '_exercises.pdf')
-    work_path = os.path.join(HERE, '_worksheet.pdf')
+    harmony_path = os.path.join(HERE, '_harmony.pdf')
 
     c = canvas.Canvas(theory_path, pagesize=(W, H))
     build_theory_page(c, os.path.join(ASSETS, 'asset_qr_real.png'), song5)
@@ -58,14 +71,14 @@ def main():
     page2(c)
     c.save()
 
-    c = canvas.Canvas(work_path, pagesize=(W, H))
-    build_worksheet(c, cfg5)
+    c = canvas.Canvas(harmony_path, pagesize=(W, H))
+    build_harmony_page(c, cfg5)
     c.save()
 
     writer = PdfWriter()
     for p in PdfReader(SOURCE_PDF).pages:
         writer.add_page(p)
-    for path in (theory_path, ex_path, work_path):
+    for path in (theory_path, ex_path, harmony_path):
         for p in PdfReader(path).pages:
             writer.add_page(p)
 
@@ -73,7 +86,7 @@ def main():
     with open(out_path, 'wb') as f:
         writer.write(f)
 
-    for p in (theory_path, ex_path, work_path):
+    for p in (theory_path, ex_path, harmony_path):
         os.remove(p)
     print('generated', out_path)
 

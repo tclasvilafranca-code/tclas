@@ -99,7 +99,7 @@ def page2(c):
     y = grand_staff_block(c, x0, w0, y, gap, treb3, bass3, 'a) La izquierda sostiene; la derecha fluye', grand_gap_mult=7.3, time_sig=TS)
 
     treb4 = [{'pitch': p, 'dur': 'e', 'beam': i // 2} for i, p in enumerate(
-             ['G4', 'B4', 'A4', 'C5', 'B4', 'A4'] * 3)]
+             ['G4', 'B4', 'C5', 'B4', 'A4', 'G4'] * 3)]
     y = system_block(c, x0, w0, y, gap, 'b) Variación: la melodía en corcheas ligadas', treb4, clef='treble', time_sig=TS)
     y -= 4
 

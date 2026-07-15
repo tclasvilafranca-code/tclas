@@ -88,7 +88,11 @@ def build_theory_page(c, qr_path, song):
     c.drawRightString(W - MARGIN, y, f"Canción {song['num']} de {total_songs}")
 
     y -= 22
-    c.setFont('DejaVuSerif-Bold', 21)
+    title_avail_w = (W - MARGIN - 62 - 10) - MARGIN  # 62 == qr_size, defined just below
+    title_size = 21
+    while title_size > 13.5 and stringWidth(song['title'], 'DejaVuSerif-Bold', title_size) > title_avail_w:
+        title_size -= 0.5
+    c.setFont('DejaVuSerif-Bold', title_size)
     c.setFillColor(INK)
     c.drawString(MARGIN, y, song['title'])
     c.setFont('DejaVuSans', 9.3)

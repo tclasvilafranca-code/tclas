@@ -40,6 +40,9 @@ SONGS = [
     ('07_arabesque', 'Dilan_07_Arabesque.pdf',
      dict(num=7, title='Arabesque', subtitle='Burgmüller · a 4 manos',
           tonalidad='Do mayor', dificultad=3)),
+    ('08_adagio_sol_menor', 'Dilan_08_Adagio_En_Sol_Menor.pdf',
+     dict(num=8, title='Adagio en Sol menor', subtitle='Tomaso Albinoni',
+          tonalidad='Sol menor', dificultad=3)),
 ]
 
 MONTHS = [
@@ -48,6 +51,7 @@ MONTHS = [
     ('Noviembre', [SONGS[4][2]]),
     ('Enero', [SONGS[5][2]]),
     ('Febrero', [SONGS[6][2]]),
+    ('Marzo', [SONGS[7][2]]),
 ]
 
 

@@ -251,7 +251,11 @@ def draw_chord(c, cx, staff_bottom_y, staff_top_y, gap, pitches, dur='h', clef='
     if label:
         c.setFont('DejaVuSans-Bold', gap * 0.85)
         c.setFillColor(DARKGREEN)
-        c.drawCentredString(cx, min(cys) - gap * 1.6, label)
+        # clear of the chord's lowest note AND of the staff itself -- a chord
+        # whose lowest note sits inside/near the staff (e.g. a root note on
+        # a middle line) would otherwise place the label on top of a staff line
+        label_y = min(min(cys), staff_bottom_y) - gap * 1.6
+        c.drawCentredString(cx, label_y, label)
 
 def draw_beam(c, x1, y1, x2, y2, stem_dir='up', gap=9):
     c.setStrokeColor(INK)

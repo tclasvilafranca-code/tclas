@@ -79,6 +79,18 @@ SONGS = [
     ('20_when_we_were_young', 'Dilan_20_When_We_Were_Young.pdf',
      dict(num=20, title='When We Were Young', subtitle='Adele',
           tonalidad='Re menor', dificultad=3)),
+    ('21_thinking_out_loud', 'Dilan_21_Thinking_Out_Loud.pdf',
+     dict(num=21, title='Thinking Out Loud', subtitle='Ed Sheeran',
+          tonalidad='Re mayor', dificultad=3)),
+    ('22_my_favourite_things', 'Dilan_22_My_Favourite_Things.pdf',
+     dict(num=22, title='My Favourite Things', subtitle='Sound of Music',
+          tonalidad='Mi menor', dificultad=3)),
+    ('23_bohemian_rhapsody', 'Dilan_23_Bohemian_Rhapsody.pdf',
+     dict(num=23, title='Bohemian Rhapsody', subtitle='Queen',
+          tonalidad='Sib mayor', dificultad=4)),
+    ('24_your_song', 'Dilan_24_Your_Song.pdf',
+     dict(num=24, title='Your Song', subtitle='Elton John · cierre de curso',
+          tonalidad='Mib mayor', dificultad=4)),
 ]
 
 MONTHS = [
@@ -91,6 +103,7 @@ MONTHS = [
     ('Marzo', [SONGS[10][2]]),
     ('Abril', [SONGS[11][2], SONGS[12][2], SONGS[13][2], SONGS[14][2]]),
     ('Mayo', [SONGS[15][2], SONGS[16][2], SONGS[17][2], SONGS[18][2], SONGS[19][2]]),
+    ('Junio', [SONGS[20][2], SONGS[21][2], SONGS[22][2], SONGS[23][2]]),
 ]
 
 

@@ -34,6 +34,15 @@ SONGS = [
     ('05_soldadito_de_hierro', 'Dilan_05_Soldadito_De_Hierro.pdf',
      dict(num=5, title='Soldadito de Hierro', subtitle='Nil Moliner',
           tonalidad='La menor', dificultad=2)),
+    ('06_merry_little_christmas', 'Dilan_06_Merry_Little_Christmas.pdf',
+     dict(num=6, title='Have Yourself a Merry Little Christmas', subtitle='Ralph Blane · Hugh Martin',
+          tonalidad='Do mayor', dificultad=2)),
+    ('07_santa_tell_me', 'Dilan_07_Santa_Tell_Me.pdf',
+     dict(num=7, title='Santa Tell Me', subtitle='Ariana Grande',
+          tonalidad='Mi menor', dificultad=2)),
+    ('08_beginning_to_look_like_christmas', 'Dilan_08_Beginning_To_Look_Like_Christmas.pdf',
+     dict(num=8, title="It's Beginning to Look a Lot Like Christmas", subtitle='Piano Duet · a 4 manos',
+          tonalidad='Do mayor', dificultad=3)),
     ('09_writings_on_the_wall', 'Dilan_09_Writings_On_The_Wall.pdf',
      dict(num=9, title="Writing's on the Wall", subtitle='Sam Smith · James Bond',
           tonalidad='Fa mayor', dificultad=2)),
@@ -49,15 +58,11 @@ MONTHS = [
     ('Septiembre', [SONGS[0][2], SONGS[1][2]]),
     ('Octubre', [SONGS[2][2], SONGS[3][2]]),
     ('Noviembre', [SONGS[4][2]]),
-    ('Enero', [SONGS[5][2]]),
-    ('Febrero', [SONGS[6][2]]),
-    ('Marzo', [SONGS[7][2]]),
+    ('Diciembre', [SONGS[5][2], SONGS[6][2], SONGS[7][2]]),
+    ('Enero', [SONGS[8][2]]),
+    ('Febrero', [SONGS[9][2]]),
+    ('Marzo', [SONGS[10][2]]),
 ]
-
-# NOTA: reindexado 06/07/08 -> 09/10/11 para dejar hueco a los 3 villancicos de
-# Diciembre (num 6,7,8), que se añadirán como SONGS[5:8] cuando esten listos.
-# El orden de visualización en MONTHS ya sigue el calendario real (Dic entre
-# Nov y Ene), independientemente de en que orden aparezcan en la lista SONGS.
 
 
 def _run_song_build(folder):

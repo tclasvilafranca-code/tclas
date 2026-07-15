@@ -205,12 +205,15 @@ def draw_note(c, cx, staff_bottom_y, staff_top_y, gap, pitch, dur='q', stem_dir=
     if number is not None:
         c.setFont('DejaVuSans-Bold', gap * 0.85)
         c.setFillColor(DARKGREEN)
-        ny = cy - gap * 1.55 if stem_dir == 'up' else cy + gap * 1.3
+        # a note near/above the top of the staff would otherwise push its
+        # fingering number up into the caption drawn above the system --
+        # cap how far above the staff top the number can rise
+        ny = cy - gap * 1.55 if stem_dir == 'up' else min(cy + gap * 1.3, staff_top_y + gap * 0.6)
         c.drawCentredString(cx, ny, str(number))
     if label is not None:
         c.setFont('DejaVuSans', gap * 0.78)
         c.setFillColor(GRAY)
-        ly2 = cy - gap * 1.55 if stem_dir == 'up' else cy + gap * 1.35
+        ly2 = cy - gap * 1.55 if stem_dir == 'up' else min(cy + gap * 1.35, staff_top_y + gap * 0.6)
         if number is not None:
             ly2 -= gap * 0.95
         c.drawCentredString(cx, ly2, label)

@@ -13,21 +13,11 @@ export function PedirExamen() {
       </button>
       <h1 className="mt-3 text-2xl font-extrabold tracking-tight text-t48-ink">Pide tu cita para el examen real</h1>
       <p className="mt-1.5 text-slate-500">
-        Cuando te sientas preparado, así es como se gestiona de verdad la cita del examen teórico en España. El
-        trámite es distinto según cómo te estés preparando.
+        Cuando te sientas preparado, así es como se pide de verdad la cita del examen teórico por libre en España.
       </p>
 
       <div className="card-lift mt-6 rounded-2xl border border-slate-200 bg-white p-6">
-        <h2 className="font-bold text-t48-ink">Si vas por autoescuela</h2>
-        <p className="mt-2 text-sm text-slate-500">
-          Ellos gestionan todo el trámite por ti: pagan la tasa, piden tu informe psicofísico y te asignan la cita.
-          Solo tienes que avisarles de que ya te sientes listo para presentarte.
-        </p>
-      </div>
-
-      <div className="card-lift mt-4 rounded-2xl border border-slate-200 bg-white p-6">
-        <h2 className="font-bold text-t48-ink">Si vas por libre (sin autoescuela)</h2>
-        <ol className="mt-3 space-y-4 text-sm text-slate-600">
+        <ol className="space-y-4 text-sm text-slate-600">
           <Step n={1} title="Consigue el informe de aptitud psicofísica">
             Acude a un Centro de Reconocimiento de Conductores autorizado (búscalo cerca de ti) e indica que es
             para el permiso de conducir. El informe solo es válido durante 90 días, así que pídelo cerca de la

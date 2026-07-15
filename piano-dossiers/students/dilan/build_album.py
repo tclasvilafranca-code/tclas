@@ -55,6 +55,15 @@ SONGS = [
     ('12_al_calor_del_amor_en_un_bar', 'Dilan_12_Al_Calor_Del_Amor_En_Un_Bar.pdf',
      dict(num=12, title='Al Calor del Amor en un Bar', subtitle='Gabinete Caligari',
           tonalidad='Mi menor', dificultad=2)),
+    ('13_despacito', 'Dilan_13_Despacito.pdf',
+     dict(num=13, title='Despacito', subtitle='Luis Fonsi & Daddy Yankee',
+          tonalidad='La menor', dificultad=2)),
+    ('14_when_i_was_your_man', 'Dilan_14_When_I_Was_Your_Man.pdf',
+     dict(num=14, title='When I Was Your Man', subtitle='Bruno Mars',
+          tonalidad='Do mayor', dificultad=2)),
+    ('15_schindlers_list', 'Dilan_15_Schindlers_List.pdf',
+     dict(num=15, title="Theme from Schindler's List", subtitle='John Williams',
+          tonalidad='Sol menor', dificultad=3)),
 ]
 
 MONTHS = [
@@ -65,7 +74,7 @@ MONTHS = [
     ('Enero', [SONGS[8][2]]),
     ('Febrero', [SONGS[9][2]]),
     ('Marzo', [SONGS[10][2]]),
-    ('Abril', [SONGS[11][2]]),
+    ('Abril', [SONGS[11][2], SONGS[12][2], SONGS[13][2], SONGS[14][2]]),
 ]
 
 

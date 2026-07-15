@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """Generador de la PORTADA de album: una pagina de indice con el logo T-Clas,
    el nombre del alumno y el listado del repertorio agrupado por mes.
-   Parametrizado, igual que page_theory_generic y page_worksheet_generic."""
+   Parametrizado, igual que page_theory_generic y page_worksheet_generic.
+   Si el repertorio no cabe en una sola pagina, continua automaticamente
+   en paginas siguientes (nunca desborda por abajo)."""
 from reportlab.lib.colors import HexColor, white
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from notation import *
@@ -10,17 +12,20 @@ W, H = 595.276, 841.89
 MARGIN = 46
 CONTENT_W = W - 2 * MARGIN
 STAR_FULL, STAR_EMPTY = '★', '☆'
+FOOTER_Y = 40  # nunca dibujar contenido de fila por debajo de esta y
 
 
 def _stars(level, total=4):
     return STAR_FULL * level + STAR_EMPTY * (total - level)
 
 
-def build_portada(c, logo_path, alumno, subtitle, months):
-    """months: list of (month_label, [song_row, ...]) in the order they should
-       appear, where song_row is a dict with keys:
-         num, title, subtitle (compositor/arreglista), tonalidad, dificultad (1-4)
-    """
+def _draw_footer(c):
+    c.setFont('DejaVuSans', 7.6)
+    c.setFillColor(HexColor('#8A8A8A'))
+    c.drawCentredString(W / 2, 22, 'El Cuaderno del Pianista · T-Clas')
+
+
+def _draw_header_full(c, logo_path, alumno, subtitle):
     c.setFillColor(DARKGREEN)
     c.rect(0, H - 5, W, 5, fill=1, stroke=0)
 
@@ -55,11 +60,41 @@ def build_portada(c, logo_path, alumno, subtitle, months):
     c.setFillColor(INK)
     c.drawString(MARGIN, y, 'Repertorio de este cuaderno')
     y -= 20
+    return y
 
+
+def _draw_header_continuation(c, alumno):
+    c.setFillColor(DARKGREEN)
+    c.rect(0, H - 5, W, 5, fill=1, stroke=0)
+    y = H - 44
+    c.setFont('DejaVuSans-Bold', 8.6)
+    c.setFillColor(DARKGREEN)
+    c.drawString(MARGIN, y, f'{alumno.upper()} · REPERTORIO (CONTINUACIÓN)')
+    y -= 24
+    c.setStrokeColor(LIGHTLINE)
+    c.setLineWidth(0.8)
+    c.line(MARGIN, y, W - MARGIN, y)
+    y -= 20
+    return y
+
+
+def build_portada(c, logo_path, alumno, subtitle, months):
+    """months: list of (month_label, [song_row, ...]) in the order they should
+       appear, where song_row is a dict with keys:
+         num, title, subtitle (compositor/arreglista), tonalidad, dificultad (1-4)
+       Paginates automatically if the repertoire doesn't fit on one page.
+    """
     row_h = 30
     month_h = 20
 
+    y = _draw_header_full(c, logo_path, alumno, subtitle)
+
     for month_label, rows in months:
+        if y - (month_h + row_h) < FOOTER_Y:
+            _draw_footer(c)
+            c.showPage()
+            y = _draw_header_continuation(c, alumno)
+
         c.setFillColor(DARKGREEN)
         c.roundRect(MARGIN, y - 15, CONTENT_W, 15, 3, fill=1, stroke=0)
         c.setFont('DejaVuSans-Bold', 8.4)
@@ -68,6 +103,11 @@ def build_portada(c, logo_path, alumno, subtitle, months):
         y -= month_h
 
         for row in rows:
+            if y - row_h < FOOTER_Y:
+                _draw_footer(c)
+                c.showPage()
+                y = _draw_header_continuation(c, alumno)
+
             c.setFillColor(HexColor('#F6F3EA'))
             c.roundRect(MARGIN, y - row_h + 6, CONTENT_W, row_h - 8, 4, fill=1, stroke=0)
 
@@ -97,6 +137,4 @@ def build_portada(c, logo_path, alumno, subtitle, months):
 
             y -= row_h
 
-    c.setFont('DejaVuSans', 7.6)
-    c.setFillColor(HexColor('#8A8A8A'))
-    c.drawCentredString(W / 2, 22, 'El Cuaderno del Pianista · T-Clas')
+    _draw_footer(c)

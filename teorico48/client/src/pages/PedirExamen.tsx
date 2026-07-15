@@ -1,10 +1,30 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { api } from "../lib/api";
+import type { Attempt, CategoryStat } from "../lib/api";
+import { computeReadiness } from "../lib/readiness";
 import { Calendar, CheckCircle } from "../components/Icons";
+import { ScoreRing } from "../components/ScoreRing";
 
 const DGT_SOLICITUD_URL = "https://sede.dgt.gob.es/es/permisos-de-conducir/obtencion-y-gestion-de-permisos/solicitud-de-prueba-de-aptitud-de-examen/";
 
+function readinessColor(percent: number): string {
+  if (percent >= 80) return "var(--color-t48-green-dark)";
+  if (percent >= 50) return "var(--color-t48-amber)";
+  return "var(--color-t48-red)";
+}
+
 export function PedirExamen() {
   const navigate = useNavigate();
+  const [attempts, setAttempts] = useState<Attempt[]>([]);
+  const [categories, setCategories] = useState<CategoryStat[]>([]);
+
+  useEffect(() => {
+    api.history().then((r) => setAttempts(r.attempts)).catch(() => {});
+    api.categoryStats().then((r) => setCategories(r.categories)).catch(() => {});
+  }, []);
+
+  const readiness = computeReadiness(attempts, categories);
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:py-10">
@@ -16,7 +36,26 @@ export function PedirExamen() {
         Cuando te sientas preparado, así es como se pide de verdad la cita del examen teórico por libre en España.
       </p>
 
-      <div className="card-lift mt-6 rounded-2xl border border-slate-200 bg-white p-6">
+      <div className="card-lift mt-6 flex flex-col items-center gap-3 rounded-2xl border border-slate-200 bg-white p-6 text-center">
+        {readiness ? (
+          <>
+            <ScoreRing percent={readiness.percent} color={readinessColor(readiness.percent)} size={120} />
+            <p className="font-bold text-t48-ink">Tu preparación estimada</p>
+            <p className="max-w-sm text-sm text-slate-500">
+              Calculado a partir de{" "}
+              {readiness.examsConsidered === 1 ? "tu último simulacro real" : `tus últimos ${readiness.examsConsidered} simulacros reales`}{" "}
+              y tu precisión por categoría. Es solo una estimación orientativa, no una garantía.
+            </p>
+          </>
+        ) : (
+          <p className="text-sm text-slate-500">
+            Haz al menos un simulacro real (30 preguntas, en las mismas condiciones que el examen) para ver aquí tu
+            preparación estimada.
+          </p>
+        )}
+      </div>
+
+      <div className="card-lift mt-4 rounded-2xl border border-slate-200 bg-white p-6">
         <ol className="space-y-4 text-sm text-slate-600">
           <Step n={1} title="Consigue el informe de aptitud psicofísica">
             Acude a un Centro de Reconocimiento de Conductores autorizado (búscalo cerca de ti) e indica que es

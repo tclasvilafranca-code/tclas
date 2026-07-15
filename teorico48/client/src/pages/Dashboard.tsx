@@ -3,13 +3,21 @@ import type { FormEvent, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { api, ApiError } from "../lib/api";
-import type { Attempt, Stats } from "../lib/api";
+import type { Attempt, CategoryStat, Stats } from "../lib/api";
 import { badgeIcon } from "../lib/badgeIcons";
+import { computeReadiness } from "../lib/readiness";
 import { BarChart, BookOpen, Calendar, CheckCircle, Flame, Repeat, Star, Target } from "../components/Icons";
 import { AnimatedNumber } from "../components/AnimatedNumber";
 import { PlanCard } from "../components/PlanCard";
 import { InstallAppPrompt } from "../components/InstallAppPrompt";
+import { ScoreRing } from "../components/ScoreRing";
 import { THEORY_EXPRESS } from "../content/theoryExpress";
+
+function readinessColor(percent: number): string {
+  if (percent >= 80) return "var(--color-t48-green-dark)";
+  if (percent >= 50) return "var(--color-t48-amber)";
+  return "var(--color-t48-red)";
+}
 
 function useCountdown(examDate: string | null) {
   const [now, setNow] = useState(Date.now());
@@ -34,6 +42,7 @@ export function Dashboard() {
   const countdown = useCountdown(user?.examDate ?? null);
   const [attempts, setAttempts] = useState<Attempt[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
+  const [categories, setCategories] = useState<CategoryStat[]>([]);
   const [examDateInput, setExamDateInput] = useState(user?.examDate?.slice(0, 16) ?? "");
   const [savingDate, setSavingDate] = useState(false);
   const [resendState, setResendState] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -52,7 +61,10 @@ export function Dashboard() {
   useEffect(() => {
     api.history().then((r) => setAttempts(r.attempts)).catch(() => {});
     api.stats().then(setStats).catch(() => {});
+    api.categoryStats().then((r) => setCategories(r.categories)).catch(() => {});
   }, []);
+
+  const readiness = computeReadiness(attempts, categories);
 
   async function handleSaveDate(e: FormEvent) {
     e.preventDefault();
@@ -147,14 +159,24 @@ export function Dashboard() {
         </form>
       </div>
 
-      <Link to="/pedir-examen" className="card-lift group mt-4 flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 hover:border-t48-blue">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-t48-blue/10 text-t48-blue transition-transform duration-200 group-hover:scale-105">
-          <Calendar className="h-5 w-5" />
+      <Link to="/pedir-examen" className="card-lift group mt-4 flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-5 hover:border-t48-blue">
+        <div className="flex min-w-0 items-center gap-4">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-t48-blue/10 text-t48-blue transition-transform duration-200 group-hover:scale-105">
+            <Calendar className="h-5 w-5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h2 className="font-bold text-t48-ink">Pide tu cita para el examen real</h2>
+            <p className="mt-0.5 text-sm text-slate-500">Cuando te sientas listo, así se pide de verdad en la DGT.</p>
+          </div>
         </div>
-        <div className="min-w-0 flex-1">
-          <h2 className="font-bold text-t48-ink">Pide tu cita para el examen real</h2>
-          <p className="mt-0.5 text-sm text-slate-500">Cuando te sientas listo, así se pide de verdad en la DGT.</p>
-        </div>
+        {readiness && (
+          <div className="flex shrink-0 flex-col items-center">
+            <ScoreRing percent={readiness.percent} color={readinessColor(readiness.percent)} size={56} />
+            <span className="mt-1 whitespace-nowrap text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+              Preparación
+            </span>
+          </div>
+        )}
       </Link>
 
       <Link to="/teoria" className="card-lift group mt-4 flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 hover:border-t48-blue">

@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
 import { AnimatedNumber } from "./AnimatedNumber";
 
-export function ScoreRing({ percent, passed, size = 168 }: { percent: number; passed: boolean; size?: number }) {
+export function ScoreRing({
+  percent,
+  passed,
+  color,
+  size = 168,
+}: {
+  percent: number;
+  passed?: boolean;
+  color?: string;
+  size?: number;
+}) {
   const [animatedPercent, setAnimatedPercent] = useState(0);
-  const stroke = 12;
+  const stroke = Math.max(6, Math.round(size * 0.0714));
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (animatedPercent / 100) * circumference;
@@ -13,7 +23,7 @@ export function ScoreRing({ percent, passed, size = 168 }: { percent: number; pa
     return () => cancelAnimationFrame(id);
   }, [percent]);
 
-  const color = passed ? "var(--color-t48-green-dark)" : "var(--color-t48-red)";
+  const resolvedColor = color ?? (passed ? "var(--color-t48-green-dark)" : "var(--color-t48-red)");
 
   return (
     <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
@@ -23,7 +33,7 @@ export function ScoreRing({ percent, passed, size = 168 }: { percent: number; pa
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke={color}
+          stroke={resolvedColor}
           strokeWidth={stroke}
           fill="none"
           strokeLinecap="round"
@@ -33,7 +43,7 @@ export function ScoreRing({ percent, passed, size = 168 }: { percent: number; pa
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-4xl font-extrabold tabular-nums text-t48-ink">
+        <span className="font-extrabold tabular-nums text-t48-ink" style={{ fontSize: Math.round(size * 0.214) }}>
           <AnimatedNumber value={percent} duration={900} />%
         </span>
       </div>

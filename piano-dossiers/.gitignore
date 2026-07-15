@@ -1,3 +1,7 @@
 __pycache__/
 *.pyc
 output/*.pdf
+
+# Partituras originales de alumnos: material con copyright de terceros,
+# no se versiona. Solo se versionan los dosieres generados (derivados).
+students/*/source/

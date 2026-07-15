@@ -23,6 +23,17 @@ song17 = dict(
   mini_staff_events=[{'pitch': p, 'dur': 'q', 'number': n} for p, n in
                       [('G4', 1), ('A4', 2), ('B4', 3), ('C5', 4), ('B4', 3), ('A4', 2)]] +
                      [{'pitch': 'G4', 'dur': 'h', 'number': 1}],
+  tonic_solfege='Sol', quinta_solfege='Re',
+  keyboard_notes=['Sol', 'La', 'Si', 'Do', 'Re', 'Mi', 'Fa#'], keyboard_highlight=0,
+  posicion_titulo='A tocar — posición de Sol',
+  posicion_texto='Mano derecha en posición de SOL mayor (un dedo por tecla); izquierda: acordes Sol, Re y Do.',
+  ritmo_texto='Ritmo: compás de 4/4 — casi siempre entras después de un silencio, a contratiempo.',
+  estudiar_steps=['Busca SOL y tócala 3 veces (tu nota casa).',
+                   'El silencio y la entrada, solos, contando por dentro.',
+                   'Los acordes Sol-Re-Do con la izquierda, cambiando en cada entrada.',
+                   'Las dos manos juntas, entrando siempre con seguridad.'],
+  checklist_items=['Encuentro SOL y pongo bien los dedos.', 'Entro justo en mi sitio después del silencio.',
+                    'Sé los acordes Sol, Re y Do de memoria.', 'Junto las dos manos sin dudar en la entrada.'],
   nivel_kicker='DILAN · NIVEL MEDIO-ALTO · MAYO',
   total_songs=24,
 )

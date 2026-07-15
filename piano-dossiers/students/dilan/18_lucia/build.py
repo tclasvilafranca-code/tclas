@@ -23,6 +23,17 @@ song18 = dict(
   mini_staff_events=[{'pitch': p, 'dur': 'q', 'number': n} for p, n in
                       [('A4', 1), ('B4', 2), ('C5', 3), ('D5', 4), ('C5', 3), ('B4', 2)]] +
                      [{'pitch': 'A4', 'dur': 'h', 'number': 1}],
+  tonic_solfege='La', quinta_solfege='Mi',
+  keyboard_notes=['La', 'Si', 'Do', 'Re', 'Mi', 'Fa', 'Sol'], keyboard_highlight=0,
+  posicion_titulo='A tocar — posición de Lam',
+  posicion_texto='Mano derecha en posición de LA menor (un dedo por tecla); izquierda: la ola arpegiada sobre Lam, Rem y Mi7.',
+  ritmo_texto='Ritmo: compás de 4/4, Andante — deja que la ola de la izquierda fluya regular, como un runrún.',
+  estudiar_steps=['Busca LA y tócala 3 veces (tu nota casa).',
+                   'La ola de la izquierda sola, hasta que salga sin mirar.',
+                   'Los acordes Lam-Rem-Mi7 con la izquierda, cada uno con su ola.',
+                   'Las dos manos juntas, dejando que la ola fluya sola.'],
+  checklist_items=['Encuentro LA y pongo bien los dedos.', 'Mi ola de la izquierda suena regular y fluida.',
+                    'Sé los acordes Lam, Rem y Mi7 de memoria.', 'Junto las dos manos sin pararme a pensar.'],
   nivel_kicker='DILAN · NIVEL MEDIO-ALTO · MAYO',
   total_songs=24,
 )

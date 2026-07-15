@@ -23,6 +23,17 @@ song13 = dict(
   mini_staff_events=[{'pitch': p, 'dur': 'q', 'number': n} for p, n in
                       [('A4', 1), ('B4', 2), ('C5', 3), ('D5', 4), ('C5', 3), ('B4', 2)]] +
                      [{'pitch': 'A4', 'dur': 'h', 'number': 1}],
+  tonic_solfege='La', quinta_solfege='Mi',
+  keyboard_notes=['La', 'Si', 'Do', 'Re', 'Mi', 'Fa', 'Sol'], keyboard_highlight=0,
+  posicion_titulo='A tocar — posición de Lam',
+  posicion_texto='Mano derecha en posición de LA menor (un dedo por tecla); izquierda: el ostinato 3+3+2 y acordes Lam, Rem, Mim.',
+  ritmo_texto='Ritmo: compás de 4/4 — el ostinato de la izquierda se agrupa 3+3+2 corcheas, no de dos en dos.',
+  estudiar_steps=['Busca LA y tócala 3 veces (tu nota casa).',
+                   'El ostinato 3+3+2 solo con la izquierda, contando en voz alta.',
+                   'Los acordes Lam-Rem-Mim con la izquierda, uno por compás.',
+                   'Las dos manos juntas, sin que la izquierda se contagie del ritmo de la derecha.'],
+  checklist_items=['Encuentro LA y pongo bien los dedos.', 'Mi ostinato 3+3+2 suena firme y regular.',
+                    'Sé los acordes Lam, Rem y Mim de memoria.', 'Junto las dos manos sin perder el ostinato.'],
   nivel_kicker='DILAN · NIVEL MEDIO-ALTO · ABRIL',
   total_songs=24,
 )

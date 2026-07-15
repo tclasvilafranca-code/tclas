@@ -64,6 +64,21 @@ SONGS = [
     ('15_schindlers_list', 'Dilan_15_Schindlers_List.pdf',
      dict(num=15, title="Theme from Schindler's List", subtitle='John Williams',
           tonalidad='Sol menor', dificultad=3)),
+    ('16_amiga_mia', 'Dilan_16_Amiga_Mia.pdf',
+     dict(num=16, title='Amiga Mía', subtitle='Alejandro Sanz',
+          tonalidad='Re mayor', dificultad=2)),
+    ('17_la_promesa', 'Dilan_17_La_Promesa.pdf',
+     dict(num=17, title='La Promesa', subtitle='Melendi',
+          tonalidad='Sol mayor', dificultad=2)),
+    ('18_lucia', 'Dilan_18_Lucia.pdf',
+     dict(num=18, title='Lucía', subtitle='Joan Manuel Serrat',
+          tonalidad='La menor', dificultad=3)),
+    ('19_poema_de_amor', 'Dilan_19_Poema_De_Amor.pdf',
+     dict(num=19, title='Poema de Amor', subtitle='Joan Manuel Serrat',
+          tonalidad='Sol menor', dificultad=3)),
+    ('20_when_we_were_young', 'Dilan_20_When_We_Were_Young.pdf',
+     dict(num=20, title='When We Were Young', subtitle='Adele',
+          tonalidad='Re menor', dificultad=3)),
 ]
 
 MONTHS = [
@@ -75,6 +90,7 @@ MONTHS = [
     ('Febrero', [SONGS[9][2]]),
     ('Marzo', [SONGS[10][2]]),
     ('Abril', [SONGS[11][2], SONGS[12][2], SONGS[13][2], SONGS[14][2]]),
+    ('Mayo', [SONGS[15][2], SONGS[16][2], SONGS[17][2], SONGS[18][2], SONGS[19][2]]),
 ]
 
 

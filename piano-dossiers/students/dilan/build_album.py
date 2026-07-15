@@ -52,6 +52,9 @@ SONGS = [
     ('11_adagio_sol_menor', 'Dilan_11_Adagio_En_Sol_Menor.pdf',
      dict(num=11, title='Adagio en Sol menor', subtitle='Tomaso Albinoni',
           tonalidad='Sol menor', dificultad=3)),
+    ('12_al_calor_del_amor_en_un_bar', 'Dilan_12_Al_Calor_Del_Amor_En_Un_Bar.pdf',
+     dict(num=12, title='Al Calor del Amor en un Bar', subtitle='Gabinete Caligari',
+          tonalidad='Mi menor', dificultad=2)),
 ]
 
 MONTHS = [
@@ -62,6 +65,7 @@ MONTHS = [
     ('Enero', [SONGS[8][2]]),
     ('Febrero', [SONGS[9][2]]),
     ('Marzo', [SONGS[10][2]]),
+    ('Abril', [SONGS[11][2]]),
 ]
 
 

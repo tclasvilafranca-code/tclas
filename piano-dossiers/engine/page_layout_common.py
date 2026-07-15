@@ -27,12 +27,19 @@ def stars(level, total=4):
 
 
 def exercises_header(c, kicker, subtitle_right):
+    from reportlab.pdfbase.pdfmetrics import stringWidth
     c.setFillColor(DARKGREEN)
     c.rect(0, H - 5, W, 5, fill=1, stroke=0)
     y = H - 32
-    c.setFont('DejaVuSans-Bold', 8.8)
+    subtitle_w = stringWidth(subtitle_right, 'DejaVuSans', 8.8)
+    kicker_avail_w = (W - MARGIN - subtitle_w - 14) - MARGIN
+    kicker_text = kicker.upper()
+    size = 8.8
+    while size > 6.5 and stringWidth(kicker_text, 'DejaVuSans-Bold', size) > kicker_avail_w:
+        size -= 0.2
+    c.setFont('DejaVuSans-Bold', size)
     c.setFillColor(DARKGREEN)
-    c.drawString(MARGIN, y, kicker.upper())
+    c.drawString(MARGIN, y, kicker_text)
     c.setFont('DejaVuSans', 8.8)
     c.setFillColor(GRAY)
     c.drawRightString(W - MARGIN, y, subtitle_right)

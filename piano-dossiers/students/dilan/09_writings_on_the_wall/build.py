@@ -12,7 +12,7 @@ SOURCE_PDF = os.path.join(HERE, '..', 'source', 'DILAN', 'WRITING_S ON THE WALL 
 OUT_DIR = os.path.join(HERE, '..', '..', '..', 'output')
 
 song6 = dict(
-  num=6, title="Writing's on the Wall", subtitle='Sam Smith · de la película "Spectre" (James Bond)',
+  num=9, title="Writing's on the Wall", subtitle='Sam Smith · de la película "Spectre" (James Bond)',
   tonalidad='Fa mayor', compas='4/4', tempo='Lento expresivo ♩≈68', forma='Estrofa-estribillo',
   dificultad='Un reto expresivo', manos='Melodía + acordes',
   la_cancion='Balada dramática de la banda sonora de James Bond. Aquí el reto no son las notas: es tocar con matices reales de volumen.',
@@ -35,7 +35,7 @@ song6 = dict(
   checklist_items=['Encuentro FA y pongo bien los dedos.', 'Sé tocar la misma frase en piano y en forte.',
                     'Toco el paso cromático (Do-Do#-Re) sin dudar.', 'Junto las dos manos con los matices.'],
   nivel_kicker='DILAN · NIVEL MEDIO-ALTO · ENERO',
-  total_songs=8,
+  total_songs=24,
 )
 
 cfg6 = dict(
@@ -80,7 +80,7 @@ def main():
         for p in PdfReader(path).pages:
             writer.add_page(p)
 
-    out_path = os.path.join(OUT_DIR, 'Dilan_06_Writings_On_The_Wall.pdf')
+    out_path = os.path.join(OUT_DIR, 'Dilan_09_Writings_On_The_Wall.pdf')
     with open(out_path, 'wb') as f:
         writer.write(f)
 

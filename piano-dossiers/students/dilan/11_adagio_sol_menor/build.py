@@ -12,7 +12,7 @@ SOURCE_PDF = os.path.join(HERE, '..', 'source', 'DILAN', 'Adagio en sol menor. A
 OUT_DIR = os.path.join(HERE, '..', '..', '..', 'output')
 
 song8 = dict(
-  num=8, title='Adagio en Sol menor', subtitle='Tomaso Albinoni · adaptación para piano',
+  num=11, title='Adagio en Sol menor', subtitle='Tomaso Albinoni · adaptación para piano',
   tonalidad='Sol menor', compas='3/4', tempo='Adagio ♩≈54', forma='Frase libre (estilo barroco)',
   dificultad='Un reto de fraseo', manos='Melodía + acordes',
   la_cancion='Una pieza barroca lenta y expresiva, en Sol menor. Aquí no hay ritmo difícil: el reto es tocar con fraseo, como si cantaras cada frase.',
@@ -35,7 +35,7 @@ song8 = dict(
   checklist_items=['Encuentro SOL y pongo bien los dedos.', 'Toco la frase ligada, sin cortes entre notas.',
                     'Sé los acordes Solm, Dom y Rem de memoria.', 'Junto las dos manos con calma, sin prisa.'],
   nivel_kicker='DILAN · NIVEL MEDIO-ALTO · MARZO',
-  total_songs=8,
+  total_songs=24,
 )
 
 cfg8 = dict(
@@ -80,7 +80,7 @@ def main():
         for p in PdfReader(path).pages:
             writer.add_page(p)
 
-    out_path = os.path.join(OUT_DIR, 'Dilan_08_Adagio_En_Sol_Menor.pdf')
+    out_path = os.path.join(OUT_DIR, 'Dilan_11_Adagio_En_Sol_Menor.pdf')
     with open(out_path, 'wb') as f:
         writer.write(f)
 

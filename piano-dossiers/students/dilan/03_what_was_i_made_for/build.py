@@ -24,7 +24,7 @@ song3 = dict(
                       [('C4', 1), ('D4', 2), ('E4', 3), ('F4', 4), ('G4', 5), ('F4', 4)]] +
                      [{'pitch': 'C4', 'dur': 'h', 'number': 1}],
   nivel_kicker='DILAN · NIVEL MEDIO-ALTO · OCTUBRE',
-  total_songs=5,
+  total_songs=24,
 )
 
 cfg3 = dict(

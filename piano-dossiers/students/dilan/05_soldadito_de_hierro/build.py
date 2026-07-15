@@ -35,7 +35,7 @@ song5 = dict(
   checklist_items=['Encuentro LA y pongo bien los dedos.', 'Los grupos de tres suenan ligeros, no atropellados.',
                     'Toco el Mi7 con el Sol sostenido, sin fallar.', 'Junto las dos manos con precisión.'],
   nivel_kicker='DILAN · NIVEL MEDIO-ALTO · NOVIEMBRE',
-  total_songs=5,
+  total_songs=24,
 )
 
 cfg5 = dict(

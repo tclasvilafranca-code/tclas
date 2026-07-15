@@ -34,14 +34,14 @@ SONGS = [
     ('05_soldadito_de_hierro', 'Dilan_05_Soldadito_De_Hierro.pdf',
      dict(num=5, title='Soldadito de Hierro', subtitle='Nil Moliner',
           tonalidad='La menor', dificultad=2)),
-    ('06_writings_on_the_wall', 'Dilan_06_Writings_On_The_Wall.pdf',
-     dict(num=6, title="Writing's on the Wall", subtitle='Sam Smith · James Bond',
+    ('09_writings_on_the_wall', 'Dilan_09_Writings_On_The_Wall.pdf',
+     dict(num=9, title="Writing's on the Wall", subtitle='Sam Smith · James Bond',
           tonalidad='Fa mayor', dificultad=2)),
-    ('07_arabesque', 'Dilan_07_Arabesque.pdf',
-     dict(num=7, title='Arabesque', subtitle='Burgmüller · a 4 manos',
+    ('10_arabesque', 'Dilan_10_Arabesque.pdf',
+     dict(num=10, title='Arabesque', subtitle='Burgmüller · a 4 manos',
           tonalidad='Do mayor', dificultad=3)),
-    ('08_adagio_sol_menor', 'Dilan_08_Adagio_En_Sol_Menor.pdf',
-     dict(num=8, title='Adagio en Sol menor', subtitle='Tomaso Albinoni',
+    ('11_adagio_sol_menor', 'Dilan_11_Adagio_En_Sol_Menor.pdf',
+     dict(num=11, title='Adagio en Sol menor', subtitle='Tomaso Albinoni',
           tonalidad='Sol menor', dificultad=3)),
 ]
 
@@ -53,6 +53,11 @@ MONTHS = [
     ('Febrero', [SONGS[6][2]]),
     ('Marzo', [SONGS[7][2]]),
 ]
+
+# NOTA: reindexado 06/07/08 -> 09/10/11 para dejar hueco a los 3 villancicos de
+# Diciembre (num 6,7,8), que se añadirán como SONGS[5:8] cuando esten listos.
+# El orden de visualización en MONTHS ya sigue el calendario real (Dic entre
+# Nov y Ene), independientemente de en que orden aparezcan en la lista SONGS.
 
 
 def _run_song_build(folder):

@@ -35,7 +35,7 @@ song4 = dict(
   checklist_items=['Encuentro FA y pongo bien los dedos.', 'El pulso largo-corto suena firme.',
                     'Toco el Sib con el dedo 4 sin fallar.', 'Las dos manos golpean juntas, a la vez.'],
   nivel_kicker='DILAN · NIVEL MEDIO-ALTO · OCTUBRE',
-  total_songs=5,
+  total_songs=24,
 )
 
 cfg4 = dict(

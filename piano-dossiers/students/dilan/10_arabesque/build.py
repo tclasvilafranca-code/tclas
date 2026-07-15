@@ -12,7 +12,7 @@ SOURCE_PDF = os.path.join(HERE, '..', 'source', 'DILAN', ' arabesque-burgmuller-
 OUT_DIR = os.path.join(HERE, '..', '..', '..', 'output')
 
 song7 = dict(
-  num=7, title='Arabesque', subtitle='J. F. Burgmüller, Op. 100 nº 2 · arreglo a 4 manos',
+  num=10, title='Arabesque', subtitle='J. F. Burgmüller, Op. 100 nº 2 · arreglo a 4 manos',
   tonalidad='Do mayor', compas='2/4', tempo='Allegro scherzando ♩≈132', forma='Rondó (A-B-A)',
   dificultad='Un reto de conjunto', manos='Piano 1 + Piano 2 (a dúo)',
   la_cancion='Un estudio clásico muy famoso, escrito para tocarse a cuatro manos: tú en una parte, tu profe (o un compañero) en la otra.',
@@ -24,7 +24,7 @@ song7 = dict(
                       [('C4', 1), ('D4', 2), ('E4', 3), ('F4', 4), ('E4', 3), ('D4', 2)]] +
                      [{'pitch': 'C4', 'dur': 'h', 'number': 1}],
   nivel_kicker='DILAN · NIVEL MEDIO-ALTO · FEBRERO',
-  total_songs=8,
+  total_songs=24,
 )
 
 cfg7 = dict(
@@ -70,7 +70,7 @@ def main():
         for p in PdfReader(path).pages:
             writer.add_page(p)
 
-    out_path = os.path.join(OUT_DIR, 'Dilan_07_Arabesque.pdf')
+    out_path = os.path.join(OUT_DIR, 'Dilan_10_Arabesque.pdf')
     with open(out_path, 'wb') as f:
         writer.write(f)
 

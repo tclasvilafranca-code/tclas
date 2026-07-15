@@ -34,12 +34,16 @@ SONGS = [
     ('05_soldadito_de_hierro', 'Dilan_05_Soldadito_De_Hierro.pdf',
      dict(num=5, title='Soldadito de Hierro', subtitle='Nil Moliner',
           tonalidad='La menor', dificultad=2)),
+    ('06_writings_on_the_wall', 'Dilan_06_Writings_On_The_Wall.pdf',
+     dict(num=6, title="Writing's on the Wall", subtitle='Sam Smith · James Bond',
+          tonalidad='Fa mayor', dificultad=2)),
 ]
 
 MONTHS = [
     ('Septiembre', [SONGS[0][2], SONGS[1][2]]),
     ('Octubre', [SONGS[2][2], SONGS[3][2]]),
     ('Noviembre', [SONGS[4][2]]),
+    ('Enero', [SONGS[5][2]]),
 ]
 
 

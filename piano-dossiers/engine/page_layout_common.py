@@ -51,17 +51,23 @@ def exercises_footer(c, page_num):
 
 
 def exercise_heading(c, y, num, title, level, desc):
+    from reportlab.pdfbase.pdfmetrics import stringWidth
     c.setFillColor(DARKGREEN)
     c.roundRect(MARGIN, y - 17, 20, 20, 3, fill=1, stroke=0)
     c.setFont('DejaVuSans-Bold', 10.5)
     c.setFillColor(white)
     c.drawCentredString(MARGIN + 10, y - 12.5, str(num))
-    c.setFont('DejaVuSans-Bold', 11.8)
-    c.setFillColor(INK)
-    c.drawString(MARGIN + 28, y - 12, title)
     c.setFont('DejaVuSans', 12.5)
     c.setFillColor(GOLD)
+    stars_w = stringWidth(stars(level), 'DejaVuSans', 12.5)
     c.drawRightString(W - MARGIN, y - 11.5, stars(level))
+    title_avail_w = (W - MARGIN - stars_w - 10) - (MARGIN + 28)
+    size = 11.8
+    while size > 9.5 and stringWidth(title, 'DejaVuSans-Bold', size) > title_avail_w:
+        size -= 0.3
+    c.setFont('DejaVuSans-Bold', size)
+    c.setFillColor(INK)
+    c.drawString(MARGIN + 28, y - 12, title)
     yy = wrap_text_common(c, desc, MARGIN + 28, y - 25, 'DejaVuSans', 8.9, CONTENT_W - 28, 11.8, color=GRAY)
     return yy
 

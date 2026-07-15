@@ -278,3 +278,14 @@ export function Download({ className = "h-5 w-5" }: IconProps) {
     </svg>
   );
 }
+
+export function Calendar({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <rect x="3.5" y="5" width="17" height="15" rx="2.5" />
+      <path d="M3.5 9.5h17" />
+      <path d="M8 3v3.5M16 3v3.5" />
+      <path d="M8 13.2h1.2M12 13.2h1.2M16 13.2h1.2M8 16.6h1.2M12 16.6h1.2" />
+    </svg>
+  );
+}

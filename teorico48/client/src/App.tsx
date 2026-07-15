@@ -11,6 +11,7 @@ import { ResetPassword } from "./pages/ResetPassword";
 import { VerifyEmail } from "./pages/VerifyEmail";
 import { Dashboard } from "./pages/Dashboard";
 import { CategoryStats } from "./pages/CategoryStats";
+import { PedirExamen } from "./pages/PedirExamen";
 import { TeoriaExpress } from "./pages/TeoriaExpress";
 import { TestRunner } from "./pages/TestRunner";
 import { Results } from "./pages/Results";
@@ -65,6 +66,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <CategoryStats />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/pedir-examen"
+            element={
+              <ProtectedRoute>
+                <PedirExamen />
               </ProtectedRoute>
             }
           />

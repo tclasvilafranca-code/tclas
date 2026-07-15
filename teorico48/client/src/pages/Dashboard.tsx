@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { api, ApiError } from "../lib/api";
 import type { Attempt, Stats } from "../lib/api";
 import { badgeIcon } from "../lib/badgeIcons";
-import { BarChart, BookOpen, CheckCircle, Flame, Repeat, Star, Target } from "../components/Icons";
+import { BarChart, BookOpen, Calendar, CheckCircle, Flame, Repeat, Star, Target } from "../components/Icons";
 import { AnimatedNumber } from "../components/AnimatedNumber";
 import { PlanCard } from "../components/PlanCard";
 import { InstallAppPrompt } from "../components/InstallAppPrompt";
@@ -146,6 +146,16 @@ export function Dashboard() {
           </button>
         </form>
       </div>
+
+      <Link to="/pedir-examen" className="card-lift group mt-4 flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 hover:border-t48-blue">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-t48-blue/10 text-t48-blue transition-transform duration-200 group-hover:scale-105">
+          <Calendar className="h-5 w-5" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <h2 className="font-bold text-t48-ink">Pide tu cita para el examen real</h2>
+          <p className="mt-0.5 text-sm text-slate-500">Cuando te sientas listo, así se pide de verdad en la DGT.</p>
+        </div>
+      </Link>
 
       <Link to="/teoria" className="card-lift group mt-4 flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 hover:border-t48-blue">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-t48-blue/10 text-t48-blue transition-transform duration-200 group-hover:scale-105">

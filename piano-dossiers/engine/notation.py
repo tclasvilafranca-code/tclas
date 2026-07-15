@@ -111,10 +111,10 @@ def draw_notehead(c, cx, cy, gap, filled=True):
 
 def draw_accidental(c, cx, cy, gap, accidental):
     sym = '\u266F' if accidental == '#' else '\u266D'
-    c.setFont('DejaVuSans', gap * 1.35)
+    c.setFont('DejaVuSans', gap * 1.85)
     c.setFillColor(INK)
-    dy = gap * 0.42 if accidental == '#' else gap * 0.55
-    c.drawRightString(cx - gap * 0.85, cy - dy, sym)
+    dy = gap * 0.68 if accidental == '#' else gap * 0.6
+    c.drawRightString(cx - gap * 0.95, cy - dy, sym)
 
 def draw_ledger(c, cx, cy, gap):
     c.setStrokeColor(GRAY)
@@ -184,13 +184,24 @@ def draw_note(c, cx, staff_bottom_y, staff_top_y, gap, pitch, dur='q', stem_dir=
             stem_top = stem_end_y if stem_end_y is not None else cy - stem_len
             c.line(sx, cy, sx, stem_top)
         if dur in ('e', 'e.') and beam_to is None:
-            # simple flag
+            # curved flag (filled bezier, not a straight wedge)
             fx, fy = sx, stem_top
-            c.setLineWidth(1.3)
+            c.setFillColor(INK)
+            p = c.beginPath()
             if stem_dir == 'up':
-                c.line(fx, fy, fx + gap * 0.9, fy - gap * 0.9)
+                p.moveTo(fx, fy)
+                p.curveTo(fx + gap * 0.15, fy - gap * 0.25, fx + gap * 0.95, fy - gap * 0.05,
+                          fx + gap * 0.68, fy - gap * 1.25)
+                p.curveTo(fx + gap * 0.62, fy - gap * 0.85, fx + gap * 0.22, fy - gap * 0.55,
+                          fx, fy - gap * 0.35)
             else:
-                c.line(fx, fy, fx + gap * 0.9, fy + gap * 0.9)
+                p.moveTo(fx, fy)
+                p.curveTo(fx + gap * 0.15, fy + gap * 0.25, fx + gap * 0.95, fy + gap * 0.05,
+                          fx + gap * 0.68, fy + gap * 1.25)
+                p.curveTo(fx + gap * 0.62, fy + gap * 0.85, fx + gap * 0.22, fy + gap * 0.55,
+                          fx, fy + gap * 0.35)
+            p.close()
+            c.drawPath(p, fill=1, stroke=0)
     if number is not None:
         c.setFont('DejaVuSans-Bold', gap * 0.85)
         c.setFillColor(DARKGREEN)

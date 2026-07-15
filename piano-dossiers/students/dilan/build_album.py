@@ -33,7 +33,7 @@ SONGS = [
           tonalidad='Fa mayor', dificultad=2)),
     ('05_soldadito_de_hierro', 'Dilan_05_Soldadito_De_Hierro.pdf',
      dict(num=5, title='Soldadito de Hierro', subtitle='Nil Moliner',
-          tonalidad='Do mayor', dificultad=2)),
+          tonalidad='La menor', dificultad=2)),
 ]
 
 MONTHS = [

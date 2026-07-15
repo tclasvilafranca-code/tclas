@@ -18,6 +18,20 @@ def badge(c, x, y, text, w=17, h=17, bg=DARKGREEN, fg=white, fsize=9.2):
     c.drawCentredString(x + w / 2, y - h + (h - fsize) / 2 + 1.5, text)
 
 
+def _count_wrapped_lines(text, font, size, max_w):
+    words = text.split(' ')
+    line = ''
+    n = 1
+    for w in words:
+        test = (line + ' ' + w).strip()
+        if stringWidth(test, font, size) <= max_w:
+            line = test
+        else:
+            n += 1
+            line = w
+    return n
+
+
 def wrap_text(c, text, x, y, font, size, max_w, leading, color=GRAY):
     c.setFont(font, size)
     c.setFillColor(color)
@@ -95,22 +109,34 @@ def build_theory_page(c, qr_path, song):
 
     y -= 40
     y -= 12
-    cols = [('TONALIDAD', song['tonalidad']), ('COMPÁS', song['compas']), ('TEMPO', song['tempo']),
-            ('FORMA', song['forma']), ('DIFICULTAD', song['dificultad']), ('MANOS', song['manos'])]
+    cols = [('TONALIDAD', song['tonalidad'], 1.05), ('COMPÁS', song['compas'], 0.55),
+            ('TEMPO', song['tempo'], 1.3), ('FORMA', song['forma'], 1.15),
+            ('DIFICULTAD', song['dificultad'], 1.35), ('MANOS', song['manos'], 1.35)]
     table_w = CONTENT_W - (qr_size + 14)
-    col_w = table_w / len(cols)
+    weight_total = sum(w for _, _, w in cols)
+    col_ws = [table_w * w / weight_total for _, _, w in cols]
     c.setStrokeColor(LIGHTLINE)
     c.setLineWidth(0.7)
     c.line(MARGIN, y, MARGIN + table_w, y)
     cy = y - 12
-    for i, (lab, val) in enumerate(cols):
-        cx = MARGIN + i * col_w
+    cx = MARGIN
+    for (lab, val, _w), col_w in zip(cols, col_ws):
+        avail_w = col_w - 6
         c.setFont('DejaVuSans-Bold', 6.1)
         c.setFillColor(DARKGREEN)
         c.drawString(cx, cy, lab)
-        c.setFont('DejaVuSans-Bold', 7.5)
+        size = 7.5
+        while size > 5.2 and stringWidth(val, 'DejaVuSans-Bold', size) > avail_w:
+            size -= 0.3
+        shown = val
+        while stringWidth(shown, 'DejaVuSans-Bold', size) > avail_w and len(shown) > 3:
+            shown = shown[:-2]
+        if shown != val:
+            shown = shown.rstrip() + '…'
+        c.setFont('DejaVuSans-Bold', size)
         c.setFillColor(INK)
-        c.drawString(cx, cy - 11, val)
+        c.drawString(cx, cy - 11, shown)
+        cx += col_w
     y = cy - 22
     c.setStrokeColor(LIGHTLINE)
     c.line(MARGIN, y, MARGIN + CONTENT_W, y)
@@ -231,7 +257,9 @@ def build_theory_page(c, qr_path, song):
     c.setFillColor(INK)
     c.drawString(right_x + 26, ry - 13, 'La parte difícil')
     ry -= 28
-    box_h = 74
+    reto_lines = _count_wrapped_lines('El reto: ' + song['reto'], 'DejaVuSans', 8.4, col_w2 - 20)
+    truco_lines = _count_wrapped_lines('El truco: ' + song['truco'], 'DejaVuSans', 8.4, col_w2 - 20)
+    box_h = 29 + (reto_lines + truco_lines) * 11.6 + 6
     c.setFillColor(HexColor('#F6ECEC'))
     c.setStrokeColor(MAROON)
     c.setLineWidth(0.8)

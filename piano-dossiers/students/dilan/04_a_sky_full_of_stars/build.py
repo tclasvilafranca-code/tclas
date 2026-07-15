@@ -14,7 +14,7 @@ OUT_DIR = os.path.join(HERE, '..', '..', '..', 'output')
 song4 = dict(
   num=4, title='A Sky Full of Stars', subtitle='Coldplay · con Avicii',
   tonalidad='Fa mayor', compas='4/4', tempo='Enérgico ♩≈100', forma='Estribillo repetido',
-  dificultad='Un reto rítmico', manos='Acordes rítmicos, manos juntas',
+  dificultad='Un reto rítmico', manos='Acordes a dos manos',
   la_cancion='Un himno pop-electrónico de Coldplay. Las dos manos golpean el mismo pulso "largo-corto" a la vez, como un solo instrumento.',
   difficult_cc='cc. 1–4', difficult_title='El pulso largo-corto firme',
   reto='mantener el pulso largo-corto exacto en las dos manos a la vez, sin acelerar.',

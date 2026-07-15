@@ -243,7 +243,11 @@ def draw_chord(c, cx, staff_bottom_y, staff_top_y, gap, pitches, dur='h', clef='
             c.line(sx, min(cys), sx, max(cys) + gap * 3.4)
         else:
             sx = cx - gap * 0.6
-            c.line(sx, max(cys), sx, min(cys) - gap * 3.4)
+            # a down stem normally reaches min(cys) - gap*3.4, but that path
+            # runs straight through the label drawn just below the chord --
+            # stop it short of the label instead of slicing through the text
+            stem_bottom = min(cys) - gap * 1.05 if label else min(cys) - gap * 3.4
+            c.line(sx, max(cys), sx, stem_bottom)
     if label:
         c.setFont('DejaVuSans-Bold', gap * 0.85)
         c.setFillColor(DARKGREEN)

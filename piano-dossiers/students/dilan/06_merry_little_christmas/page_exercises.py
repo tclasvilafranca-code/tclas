@@ -24,16 +24,15 @@ def page1(c):
     gap = 7.6
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 1, 'Posición de 5 dedos en Do mayor', 1,
-                          'Un dedo por tecla: Do(1) Re(2) Mi(3) Fa(4) Sol(5). Todo teclas blancas.')
+    y = exercise_heading(c, y, 1, 'Campanas: nota repetida, cambiando de dedo', 1,
+                          'Como un carillón de Navidad: la misma nota suena varias veces seguidas, pero cambia el dedo cada vez (1-3-1-3) para que no se canse la mano.')
     y -= 12
-    ev1a = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('C4', 1), ('E4', 3), ('D4', 2), ('F4', 4), ('E4', 3), ('G4', 5)] * 2]
-    y = system_block(c, x0, w0, y, gap, 'a) A saltos, como campanitas', ev1a, clef='treble', time_sig=TS)
+    ev1a = [{'pitch': 'G4', 'dur': 'q', 'number': n} for n in [1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3]]
+    y = system_block(c, x0, w0, y, gap, 'a) Campanita fija: Sol, alternando dedos 1 y 3', ev1a, clef='treble', time_sig=TS)
 
     ev1b = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('C4', 1), ('G4', 5), ('E4', 3), ('G4', 5)] * 3]
-    y = system_block(c, x0, w0, y, gap, 'b) El acorde de Do, desgranado', ev1b, clef='treble', time_sig=TS)
+            [('C4', 1), ('G4', 3), ('C4', 1), ('G4', 3)] * 3]
+    y = system_block(c, x0, w0, y, gap, 'b) Carillón a dos voces: Do y Sol, cada vez más seguro', ev1b, clef='treble', time_sig=TS)
     y -= 6
 
     y = exercise_heading(c, y, 2, 'Melodía en acordes: así se tocan los villancicos', 2,

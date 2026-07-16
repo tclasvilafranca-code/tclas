@@ -23,16 +23,14 @@ def page1(c):
     gap = 7.6
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 1, 'Posición de 5 dedos en La menor', 1,
-                          'Un dedo por tecla: La(1) Si(2) Do(3) Re(4) Mi(5). Misma armadura que Do mayor, centro tonal en La.')
+    y = exercise_heading(c, y, 1, 'La ola de la izquierda: preparando el bajo de Alberti', 1,
+                          'Antes de acompañar la canción, aprende el dibujo de ola solo, en la mano izquierda: raíz-quinta-tercera-quinta, una y otra vez, sin pararte.')
     y -= 12
-    ev1a = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('C5', 3), ('D5', 4), ('B4', 2), ('E5', 5), ('D5', 4), ('A4', 1)] * 2]
-    y = system_block(c, x0, w0, y, gap, 'a) A saltos por la posición', ev1a, clef='treble', time_sig=TS)
+    ev1a = [{'pitch': p, 'dur': 'q'} for p in ['A2', 'E3', 'C3', 'E3'] * 3]
+    y = system_block(c, x0, w0, y, gap, 'a) Ola pequeña en La menor: raíz-quinta-tercera-quinta', ev1a, clef='bass', time_sig=TS)
 
-    ev1b = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('C5', 3), ('A4', 1), ('E5', 5), ('A4', 1)] * 3]
-    y = system_block(c, x0, w0, y, gap, 'b) El acorde de La menor, desde el Do', ev1b, clef='treble', time_sig=TS)
+    ev1b = [{'pitch': p, 'dur': 'q'} for p in ['A2', 'E3', 'C3', 'A3', 'E3', 'C3', 'E3', 'A2'] * 1 + ['A2', 'E3', 'C3', 'E3']]
+    y = system_block(c, x0, w0, y, gap, 'b) Ola más amplia: la misma idea, abarcando una octava entera', ev1b, clef='bass', time_sig=TS)
     y -= 6
 
     y = exercise_heading(c, y, 2, 'El acompañamiento en olas', 2,

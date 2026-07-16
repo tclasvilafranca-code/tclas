@@ -24,16 +24,14 @@ def page1(c):
     gap = 7.6
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 1, 'Posición de 5 dedos en Mi menor', 1,
-                          'Un dedo por tecla: Mi(1) Fa#(2) Sol(3) La(4) Si(5). El dedo 2 toca la tecla negra Fa#.')
+    y = exercise_heading(c, y, 1, 'El vals ligero: bajo-acorde-acorde, muy suave', 1,
+                          'Antes de la melodía, prepara el acompañamiento de vals de la izquierda: bajo grave, acorde, acorde — ligero, casi susurrado, nunca golpeado.')
     y -= 12
-    ev1a = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('B4', 5), ('G4', 3), ('A4', 4), ('F#4', 2), ('G4', 3), ('E4', 1)] * 2]
-    y = system_block(c, x0, w0, y, gap, 'a) Baja a saltos desde el Si', ev1a, clef='treble', time_sig=TS)
+    ev1a = ([{'pitch': 'E2', 'dur': 'q'}, {'pitches': ['G3', 'B3'], 'dur': 'q'}, {'pitches': ['G3', 'B3'], 'dur': 'q'}] * 4)
+    y = system_block(c, x0, w0, y, gap, 'a) Mi menor: bajo-acorde-acorde, cuatro compases', ev1a, clef='bass', time_sig=TS)
 
-    ev1b = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('G4', 3), ('E4', 1), ('B4', 5), ('E4', 1)] * 3]
-    y = system_block(c, x0, w0, y, gap, 'b) El acorde de Mi menor, desde el Sol', ev1b, clef='treble', time_sig=TS)
+    ev1b = ([{'pitch': 'D2', 'dur': 'q'}, {'pitches': ['F#3', 'A3'], 'dur': 'q'}, {'pitches': ['F#3', 'A3'], 'dur': 'q'}] * 4)
+    y = system_block(c, x0, w0, y, gap, 'b) Re mayor: el mismo dibujo, otro acorde', ev1b, clef='bass', time_sig=TS)
     y -= 6
 
     y = exercise_heading(c, y, 2, 'El método: empezar despacio, subir poco a poco', 2,

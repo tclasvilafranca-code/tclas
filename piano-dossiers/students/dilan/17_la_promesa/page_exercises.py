@@ -23,16 +23,15 @@ def page1(c):
     gap = 7.6
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 1, 'Posición de 5 dedos en Sol mayor', 1,
-                          'Un dedo por tecla: Sol(1) La(2) Si(3) Do(4) Re(5). Todas teclas blancas.')
+    y = exercise_heading(c, y, 1, 'Calentamiento de entradas: aparecer después del silencio', 1,
+                          'Antes de leer la canción, entrena solo el gesto de entrar: cuenta el silencio por dentro y aparece exactamente donde toca, ni antes ni después.')
     y -= 12
-    ev1a = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('D5', 5), ('B4', 3), ('C5', 4), ('A4', 2), ('B4', 3), ('G4', 1)] * 2]
-    y = system_block(c, x0, w0, y, gap, 'a) Baja a saltos desde el Re', ev1a, clef='treble', time_sig=TS)
+    ev1a = ([{'rest': True, 'dur': 'q'}, {'pitch': 'G4', 'dur': 'q'}, {'pitch': 'G4', 'dur': 'q'}, {'pitch': 'G4', 'dur': 'q'}] * 2)
+    y = system_block(c, x0, w0, y, gap, 'a) Silencio de una negra, y entra en el segundo tiempo', ev1a, clef='treble', time_sig=TS)
 
-    ev1b = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('B4', 3), ('G4', 1), ('D5', 5), ('G4', 1)] * 3]
-    y = system_block(c, x0, w0, y, gap, 'b) El acorde de Sol, desde el Si', ev1b, clef='treble', time_sig=TS)
+    ev1b = ([{'rest': True, 'dur': 'e'}, {'pitch': 'G4', 'dur': 'e'}, {'rest': True, 'dur': 'e'}, {'pitch': 'G4', 'dur': 'e'},
+             {'rest': True, 'dur': 'e'}, {'pitch': 'G4', 'dur': 'e'}, {'rest': True, 'dur': 'e'}, {'pitch': 'G4', 'dur': 'e'}] * 2)
+    y = system_block(c, x0, w0, y, gap, 'b) Ahora a contratiempo: entra en el "y" de cada tiempo', ev1b, clef='treble', time_sig=TS)
     y -= 6
 
     y = exercise_heading(c, y, 2, 'La entrada a contratiempo: después del silencio', 2,

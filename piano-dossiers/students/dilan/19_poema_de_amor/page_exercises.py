@@ -24,16 +24,14 @@ def page1(c):
     gap = 7.6
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 1, 'Posición de 5 dedos en Sol menor', 1,
-                          'Un dedo por tecla: Sol(1) La(2) Sib(3) Do(4) Re(5). El dedo 3 toca la tecla negra Sib.')
+    y = exercise_heading(c, y, 1, 'Medido contra libre: siente la diferencia en el cuerpo', 1,
+                          'Toca esta frase dos veces con la misma nota. Primero medida, contando estrictamente por dentro; luego libre, sin contar nada, alargando lo que te pida el oído.')
     y -= 12
-    ev1a = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('Bb4', 3), ('G4', 1), ('A4', 2), ('C5', 4), ('Bb4', 3), ('D5', 5)] * 2]
-    y = system_block(c, x0, w0, y, gap, 'a) Mezcla de saltos por la posición', ev1a, clef='treble', time_sig=TS)
+    ev1a = [{'pitch': 'G4', 'dur': 'q'}] * 8
+    y = system_block(c, x0, w0, y, gap, 'a) Medida: ocho negras exactamente iguales, con metrónomo interior', ev1a, clef='treble', time_sig=TS)
 
-    ev1b = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('D5', 5), ('Bb4', 3), ('G4', 1), ('Bb4', 3)] * 3]
-    y = system_block(c, x0, w0, y, gap, 'b) El acorde de Sol menor, desde el Re', ev1b, clef='treble', time_sig=TS)
+    ev1b = [{'pitch': 'G4', 'dur': v} for v in ['h.', 'e', 'e', 'h', 'q', 'e', 'e']]
+    y = system_block(c, x0, w0, y, gap, 'b) Libre: la misma nota, pero tú decides cuánto dura cada una', ev1b, clef='treble', time_sig=TS)
     y -= 6
 
     y = exercise_heading(c, y, 2, 'Recitado: tocar sin pulso fijo, como si hablaras', 2,

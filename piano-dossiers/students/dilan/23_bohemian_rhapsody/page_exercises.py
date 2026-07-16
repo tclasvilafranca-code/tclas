@@ -26,16 +26,16 @@ def page1(c):
     gap = 7.6
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 1, 'Posición de 5 dedos en Sib mayor', 1,
-                          'Un dedo por tecla: Sib(1) Do(2) Re(3) Mib(4) Fa(5). El dedo 1 y el 4 tocan teclas negras.')
+    y = exercise_heading(c, y, 1, 'Los seis acordes del año, uno detrás de otro', 1,
+                          'La pieza de cierre del curso junta todo lo aprendido: reconoce cada forma de acorde y encadénalas sin parar, como pasando las páginas de un álbum entero.')
     y -= 12
-    ev1a = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('Bb4', 1), ('C5', 2), ('D5', 3), ('Eb5', 4), ('D5', 3), ('C5', 2)] * 2]
-    y = system_block(c, x0, w0, y, gap, 'a) Sube y baja, sintiendo los dos bemoles', ev1a, clef='treble', time_sig=TS)
+    ev1a = [{'pitches': p, 'dur': 'h', 'label': l} for p, l in
+            [(BbM, 'Sib'), (C7, 'Do7'), (FM, 'Fa'), (Gm, 'Solm'), (EbM, 'Mib'), (Cm, 'Dom')]]
+    y = system_block(c, x0, w0, y, gap, 'a) Los seis, con calma, sintiendo cada forma', ev1a, clef='bass', time_sig=TS)
 
-    ev1b = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('Bb4', 1), ('D5', 3), ('F5', 5), ('D5', 3)] * 3]
-    y = system_block(c, x0, w0, y, gap, 'b) El acorde de Sib, desgranado', ev1b, clef='treble', time_sig=TS)
+    ev1b = [{'pitches': p, 'dur': 'q', 'label': l} for p, l in
+            [(BbM, 'Sib'), (C7, 'Do7'), (FM, 'Fa'), (Gm, 'Solm'), (EbM, 'Mib'), (Cm, 'Dom'), (BbM, 'Sib'), (FM, 'Fa')]]
+    y = system_block(c, x0, w0, y, gap, 'b) Ahora el doble de rápido, sin dudar entre uno y otro', ev1b, clef='bass', time_sig=TS)
     y -= 6
 
     y = exercise_heading(c, y, 2, 'Leer con fluidez: acordes con séptima', 2,

@@ -70,8 +70,8 @@ def page2(c):
     gap = 7.3
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 4, 'Manos juntas · melodía sobre acordes', 2,
-                          'La izquierda sostiene el acorde; la derecha entra después del silencio.')
+    y = exercise_heading(c, y, 4, 'Manos juntas · la entrada, ahora con acorde debajo', 2,
+                          'La izquierda sostiene el acorde; la derecha entra después del silencio, exactamente donde lo has entrenado en el ejercicio 1.')
     y -= 11
     cell = ([{'rest': True, 'dur': 'e'}] + [{'pitch': p, 'dur': 'e'} for p in ['B4', 'A4', 'G4']] + [{'pitch': 'D5', 'dur': 'h'}])
     treb4 = cell * 2

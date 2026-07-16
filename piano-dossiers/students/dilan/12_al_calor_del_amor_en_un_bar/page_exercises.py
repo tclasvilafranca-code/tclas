@@ -68,13 +68,12 @@ def page2(c):
     gap = 7.3
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 4, 'Manos juntas · melodía sobre acordes', 2,
-                          'La izquierda sostiene los acordes de la familia; la derecha se mueve por la posición.')
+    y = exercise_heading(c, y, 4, 'Manos juntas · movimiento contrario', 2,
+                          'Mientras una mano sube por la posición, la otra baja al mismo tiempo — dos líneas independientes que se cruzan sin chocar.')
     y -= 11
-    treb4 = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-             [('E4', 1), ('G4', 3), ('F#4', 2), ('A4', 4), ('G4', 3), ('B4', 5), ('A4', 4), ('G4', 3)]]
-    bass4 = [{'pitches': p, 'dur': 'h', 'label': l} for p, l in [(MIm, 'Mim'), (SIm, 'Sim'), (LAm, 'Lam'), (MIm, 'Mim')]]
-    y = grand_staff_block(c, x0, w0, y, gap, treb4, bass4, 'a) La posición sobre los acordes', grand_gap_mult=7.3, time_sig=TS)
+    treb4 = [{'pitch': p, 'dur': 'q'} for p in ['E4', 'F#4', 'G4', 'A4', 'B4', 'A4', 'G4', 'F#4']]
+    bass4 = [{'pitch': p, 'dur': 'q'} for p in ['B3', 'A3', 'G3', 'F#3', 'E3', 'F#3', 'G3', 'A3']]
+    y = grand_staff_block(c, x0, w0, y, gap, treb4, bass4, 'a) Una mano sube, la otra baja, a la vez', grand_gap_mult=7.3, time_sig=TS)
     y -= 4
 
     y = exercise_heading(c, y, 5, 'Independencia rítmica · el pulso firme, la melodía en corcheas', 3,

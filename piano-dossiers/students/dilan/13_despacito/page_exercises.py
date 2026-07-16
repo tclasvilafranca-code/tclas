@@ -70,8 +70,8 @@ def page2(c):
     gap = 7.3
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 4, 'Manos juntas · melodía sobre acordes', 2,
-                          'La izquierda sostiene los acordes; la derecha canta la melodía por encima.')
+    y = exercise_heading(c, y, 4, 'Manos juntas · la melodía entra sobre el reggaetón', 2,
+                          'La izquierda sostiene los acordes del ostinato; la derecha canta la melodía por encima, sin perder el balanceo de abajo.')
     y -= 11
     treb4 = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
              [('E4', 5), ('D4', 4), ('C4', 3), ('B3', 2), ('C4', 3), ('D4', 4), ('E4', 5), ('D4', 4)]]

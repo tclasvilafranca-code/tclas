@@ -204,14 +204,14 @@ def build_theory_page(c, qr_path, song):
     items = song.get('checklist_items', [
              f'Encuentro {tonic.upper()} y pongo bien los dedos.', 'Toco la melodía con la mano derecha.',
              'Hago los acordes con la izquierda.', 'Junto las dos manos despacio.'])
+    checklist_w = col_w2 - 17
     for it in items:
         c.setStrokeColor(DARKGREEN)
         c.setLineWidth(1.0)
         c.rect(left_x + 2, ly - 8, 9, 9, fill=0, stroke=1)
-        c.setFont('DejaVuSans', 9.7)
-        c.setFillColor(INK)
-        c.drawString(left_x + 17, ly - 7, it)
-        ly -= 19
+        n_lines = _count_wrapped_lines(it, 'DejaVuSans', 9.7, checklist_w)
+        wrap_text(c, it, left_x + 17, ly - 7, 'DejaVuSans', 9.7, checklist_w, 12.6, color=INK)
+        ly -= 19 if n_lines <= 1 else 19 + (n_lines - 1) * 12.6
     ly -= 4
     c.setFont('DejaVuSans-Bold', 9.2)
     c.setFillColor(MAROON)
@@ -228,7 +228,7 @@ def build_theory_page(c, qr_path, song):
     gap = 8.4
     top_y, bot_y = draw_system(c, right_x, ry, col_w2, gap, song['mini_staff_events'],
                                 clef='treble', time_sig=song.get('time_sig', (4, 4)))
-    ry = bot_y - gap * 3.15
+    ry = bot_y - gap * 3.9  # extra clearance: a low note's fingering number can reach well below the staff
     ry = wrap_text(c, song.get('posicion_texto',
                       f'Mano derecha en posición de {tonic.upper()} (un dedo por tecla); izquierda: acordes {tonic.upper()}, FA y SOL.'),
                    right_x, ry, 'DejaVuSans', 9.8, col_w2 - 6, 13.6)

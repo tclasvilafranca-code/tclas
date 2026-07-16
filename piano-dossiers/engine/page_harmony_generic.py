@@ -7,6 +7,7 @@
 from reportlab.lib.colors import HexColor, white
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from notation import *
+from notation import _parse_pitch, _abs_idx, _TREBLE_REF, _BASS_REF, _ALTO_REF
 
 W, H = 595.276, 841.89
 MARGIN = 46
@@ -97,7 +98,20 @@ def _interval_chord_row(c, x0, w0, y, gap, clef, groups, tag):
         px = start_x + i * step
         draw_chord(c, px, bot, top, gap, pitches, dur='w', clef=clef)
         _answer_line(c, px - gap * 2.3, bot - gap * 2.6, gap * 4.6)
-    return bot - gap * 3.6
+    # A low note carrying a sharp/flat can draw its accidental well below the
+    # staff -- if it's lower than the usual clearance, push the next section
+    # down further so its heading doesn't collide with the accidental glyph.
+    clearance = gap * 3.6
+    ref = {'treble': _TREBLE_REF, 'bass': _BASS_REF}.get(clef, _ALTO_REF)
+    for pitches in groups:
+        for p in pitches:
+            _letter, acc, _oct = _parse_pitch(p)
+            if not acc:
+                continue
+            cy = bot + (_abs_idx(p) - ref) * (gap / 2.0)
+            if cy < bot:
+                clearance = max(clearance, (bot - cy) + gap * 1.3)
+    return bot - clearance
 
 
 def _progression_row(c, x0, w0, y, chords, mode):

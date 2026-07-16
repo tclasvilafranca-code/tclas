@@ -4,6 +4,7 @@
    cada cancion solo aporta su propio contenido musical importando este modulo."""
 from reportlab.lib.colors import HexColor, white
 from notation import *
+from notation import _parse_pitch
 
 W, H = 595.276, 841.89
 MARGIN = 46
@@ -17,9 +18,27 @@ def after_system(gap):
     return gap * 3.5
 
 
-def before_staff(gap):
-    """Vertical drop from a caption's baseline to the next staff's top line."""
-    return gap * 1.5
+def before_staff(gap, events=None, clef='treble'):
+    """Vertical drop from a caption's baseline to the next staff's top line.
+       If a note in `events` sits high enough to need ledger lines above the
+       staff, the default clearance isn't enough -- the note (and its
+       accidental, if any) would reach up into the caption above it."""
+    base = gap * 1.5
+    if not events:
+        return base
+    top_line = 4 * gap  # staff top relative to a staff_bottom_y of 0
+    max_over, over_has_acc = 0.0, False
+    for e in events:
+        pitches = e.get('pitches') or ([e['pitch']] if 'pitch' in e else [])
+        for p in pitches:
+            cy = note_y(0, gap, p, clef=clef)
+            over = cy - top_line
+            if over > max_over:
+                max_over, over_has_acc = over, bool(_parse_pitch(p)[1])
+    if max_over <= 0:
+        return base
+    extra = max_over + (gap * 1.3 if over_has_acc else gap * 0.4)
+    return max(base, extra)
 
 
 def stars(level, total=4):
@@ -109,7 +128,7 @@ def system_block(c, x0, w0, y, gap, caption, events, clef='treble', time_sig=(4,
     """Draws a captioned staff system and returns the y just below it,
     already positioned for the *next* caption (safe, non-overlapping)."""
     system_caption(c, x0, y, caption)
-    y -= before_staff(gap)
+    y -= before_staff(gap, events, clef)
     top, bot = draw_system(c, x0, y, w0, gap, events, clef=clef, time_sig=time_sig)
     return bot - after_system(gap)
 
@@ -118,7 +137,7 @@ def grand_staff_block(c, x0, w0, y_top, gap, treble_events, bass_events, caption
     """Draws a captioned two-stave (treble+bass) system, with the vertical gap
        between the staves verified wide enough to clear fingering numbers."""
     system_caption(c, x0, y_top, caption)
-    yy = y_top - before_staff(gap)
+    yy = y_top - before_staff(gap, treble_events, 'treble')
     t_top, t_bot = draw_system(c, x0, yy, w0, gap, treble_events, clef='treble', time_sig=time_sig)
     yy2 = t_bot - gap * grand_gap_mult
     b_top, b_bot = draw_system(c, x0, yy2, w0, gap, bass_events, clef='bass', time_sig=time_sig)

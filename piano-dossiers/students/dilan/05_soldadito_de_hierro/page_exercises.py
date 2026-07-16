@@ -19,13 +19,13 @@ def page1(c):
     c.setFont('DejaVuSans', 9.2)
     c.setFillColor(GRAY)
     c.drawString(MARGIN, y, 'Una canción en La menor con la derecha muy viva. El reto: grupos de tres notas ligeros y rápidos.')
-    y -= 20
-    gap = 7.6
+    y -= 15
+    gap = 7.35
     x0, w0 = MARGIN, CONTENT_W
 
     y = exercise_heading(c, y, 1, 'Posición de 5 dedos en La menor', 1,
                           'Un dedo por tecla: La(1) Si(2) Do(3) Re(4) Mi(5). Misma armadura que Do mayor, pero el centro tonal es La.')
-    y -= 12
+    y -= 9
     ev1a = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
             [('A4', 1), ('B4', 2), ('C5', 3), ('D5', 4), ('C5', 3), ('B4', 2)] * 2]
     y = system_block(c, x0, w0, y, gap, 'a) Sube y baja, con soltura', ev1a, clef='treble', time_sig=TS)
@@ -41,7 +41,7 @@ def page1(c):
 
     y = exercise_heading(c, y, 2, 'Grupos de tres, ligeros y rápidos', 2,
                           'La dificultad exacta de esta canción. Practica cada grupo de tres muy despacio, como un giro pequeño de la muñeca, y ve acelerando poco a poco.')
-    y -= 12
+    y -= 9
     ev2a = [{'pitch': p, 'dur': 'e', 'beam': i // 3} for i, p in enumerate(['B4', 'C5', 'D5'] * 8)]
     y = system_block(c, x0, w0, y, gap, 'a) Grupos de tres subiendo: Si-Do-Re', ev2a, clef='treble', time_sig=TS)
 
@@ -56,7 +56,7 @@ def page1(c):
 
     y = exercise_heading(c, y, 3, 'Acordes i–iv–V7 en La menor', 2,
                           'Lam–Rem–Mi7: los acordes de esta tonalidad menor. El Mi7 lleva el Sol sostenido, la nota sensible que "tira" hacia el La.')
-    y -= 12
+    y -= 9
     pattern_a = [(AM, 'Lam'), (DM, 'Rem'), (E7, 'Mi7'), (AM, 'Lam')] * 4
     eva = [{'pitches': p, 'dur': 'q', 'label': l} for p, l in pattern_a]
     y = system_block(c, x0, w0, y, gap, 'a) Lam-Rem-Mi7-Lam, un acorde por tiempo', eva, clef='bass', time_sig=TS)
@@ -77,13 +77,13 @@ def page2(c):
     c.setFont('DejaVuSans', 9.2)
     c.setFillColor(GRAY)
     c.drawString(MARGIN, y, 'Ahora junta las manos: la derecha vuela en grupos de tres, la izquierda se queda tranquila.')
-    y -= 20
-    gap = 7.3
+    y -= 15
+    gap = 7.05
     x0, w0 = MARGIN, CONTENT_W
 
     y = exercise_heading(c, y, 4, 'Manos juntas · la derecha vuela, la izquierda descansa', 2,
                           'La izquierda sostiene el acorde largo; la derecha se mueve ligera en grupos de tres, sin prisa ni atropello.')
-    y -= 11
+    y -= 8
     treb1 = [{'pitch': p, 'dur': 'e', 'beam': i // 3} for i, p in enumerate(['B4', 'C5', 'D5'] * 8)]
     bass1 = [{'pitches': p, 'dur': 'w', 'label': l} for p, l in [(AM, 'Lam'), (DM, 'Rem'), (E7, 'Mi7')]]
     y = grand_staff_block(c, x0, w0, y, gap, treb1, bass1, 'a) La derecha vuela en grupos de tres; la izquierda se queda tranquila', grand_gap_mult=7.3, time_sig=TS)
@@ -95,7 +95,7 @@ def page2(c):
 
     y = exercise_heading(c, y, 5, 'Independencia rítmica · el acorde no se mueve', 3,
                           'La izquierda sostiene el acorde entero, sin tocarlo de nuevo; la derecha no para de moverse en grupos de tres.')
-    y -= 11
+    y -= 8
     treb3 = [{'pitch': p, 'dur': 'e', 'beam': i // 3} for i, p in enumerate(['B4', 'D5', 'C5'] * 8)]
     bass3 = [{'pitches': p, 'dur': 'h.', 'label': l} for p, l in
              [(AM, 'Lam'), (DM, 'Rem'), (E7, 'Mi7'), (AM, 'Lam')]]
@@ -109,7 +109,7 @@ def page2(c):
 
     y = exercise_heading(c, y, 6, 'Reto final · Soldadito de Hierro casi entero', 3,
                           'Con la partitura al lado: ligero y rápido en la derecha, tranquilo y firme en la izquierda.')
-    y -= 11
+    y -= 8
     treb5 = [{'pitch': p, 'dur': 'e', 'beam': i // 3} for i, p in enumerate(
              (['B4', 'C5', 'D5'] * 4 + ['C5', 'D5', 'E5'] * 4) * 2)]
     bass5 = [{'pitches': p, 'dur': 'w', 'label': l} for p, l in

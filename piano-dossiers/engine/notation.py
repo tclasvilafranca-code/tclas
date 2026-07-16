@@ -225,10 +225,25 @@ def draw_chord(c, cx, staff_bottom_y, staff_top_y, gap, pitches, dur='h', clef='
     for cy in cys:
         for ly in ledger_lines_needed(staff_bottom_y, staff_top_y, cy, gap):
             draw_ledger(c, cx, ly, gap)
-    for p, cy in zip(pitches, cys):
+    # Two accidentals stacked close together (e.g. a 3rd or 4th apart) would
+    # otherwise be drawn at the same x and their glyphs collide -- stagger
+    # the lower one(s) further left, same as engraved notation does.
+    acc_idx = [i for i, p in enumerate(pitches) if _parse_pitch(p)[1]]
+    acc_idx.sort(key=lambda i: -cys[i])  # top to bottom
+    stagger = {}
+    last_cy = None
+    level = 0
+    for i in acc_idx:
+        if last_cy is not None and (last_cy - cys[i]) < gap * 1.7:
+            level += 1
+        else:
+            level = 0
+        stagger[i] = level
+        last_cy = cys[i]
+    for i, (p, cy) in enumerate(zip(pitches, cys)):
         _letter, _acc, _oct = _parse_pitch(p)
         if _acc:
-            draw_accidental(c, cx, cy, gap, _acc)
+            draw_accidental(c, cx - stagger.get(i, 0) * gap * 1.05, cy, gap, _acc)
     filled = dur in ('q', 'q.')
     for cy in cys:
         draw_notehead(c, cx, cy, gap, filled=filled)
@@ -283,6 +298,19 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
     if show_time:
         draw_time_sig(c, cursor_x, bot, gap, top=str(time_sig[0]), bottom=str(time_sig[1]))
         cursor_x += gap * 3.0
+    # If the very first event is a chord with several close-together
+    # accidentals, draw_chord staggers them leftward (see draw_chord) so they
+    # don't collide with each other -- make sure that leftmost column still
+    # clears the time signature / clef instead of running into it.
+    if events:
+        first_pitches = events[0].get('pitches') or ([events[0]['pitch']] if 'pitch' in events[0] else [])
+        acc_cys = sorted((note_y(bot, gap, p, clef=clef) for p in first_pitches if _parse_pitch(p)[1]), reverse=True)
+        max_level, level, last_cy = 0, 0, None
+        for cy in acc_cys:
+            level = level + 1 if (last_cy is not None and last_cy - cy < gap * 1.7) else 0
+            max_level = max(max_level, level)
+            last_cy = cy
+        cursor_x += max_level * gap * 1.05
     draw_barline(c, x, top, bot)
 
     dur_beats = {'w': 4.0, 'h': 2.0, 'q': 1.0, 'e': 0.5, 'q.': 1.5, 'h.': 3.0, 'e.': 0.75}
@@ -314,6 +342,24 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
     for e in events:
         positions.append(x_for_beat(beat_pos))
         beat_pos += dur_beats[e['dur']]
+
+    # A fingering number sits right under/over its note; if the very next
+    # note carries an accidental and the two are packed close together (short
+    # systems, e.g. the theory page's mini-staff), the accidental's glyph can
+    # reach back and collide with that number. Nudge this note (and every
+    # later one, so spacing stays monotonic) a little to the right.
+    MIN_ACC_GAP = gap * 2.3
+    for i in range(1, len(events)):
+        if events[i - 1].get('number') is None:
+            continue
+        curr_pitches = events[i].get('pitches') or ([events[i]['pitch']] if 'pitch' in events[i] else [])
+        if not any(_parse_pitch(p)[1] for p in curr_pitches):
+            continue
+        gap_here = positions[i] - positions[i - 1]
+        if gap_here < MIN_ACC_GAP:
+            delta = MIN_ACC_GAP - gap_here
+            for k in range(i, len(positions)):
+                positions[k] += delta
 
     # bar lines, centred in their own reserved slot (clear of the note after them)
     for bbeat in bar_beats:

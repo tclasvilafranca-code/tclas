@@ -38,20 +38,14 @@ def page1(c):
     gap = 7.6
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 1, 'Posición de 5 dedos en Fa mayor', 1,
-                          'Un dedo por tecla: Fa(1) Sol(2) La(3) Sib(4) Do(5). El dedo 4 toca la tecla negra Sib.')
+    y = exercise_heading(c, y, 1, 'Calentamiento rítmico: siente el "largo-corto" sin melodía', 1,
+                          'Antes de leer ninguna nota, entrena el pulso exacto de la canción: cuenta "larga-y-corta" en voz alta, con una sola nota, hasta que salga solo.')
     y -= 12
-    ev1a = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('F4', 1), ('G4', 2), ('A4', 3), ('Bb4', 4), ('A4', 3), ('G4', 2)] * 2]
-    y = system_block(c, x0, w0, y, gap, 'a) Sube y baja, sintiendo el Sib', ev1a, clef='treble', time_sig=TS)
+    ev1a = [{'pitch': 'F4', 'dur': v} for v in ['q.', 'e'] * 4]
+    y = system_block(c, x0, w0, y, gap, 'a) Larga-corta, larga-corta, muy regular', ev1a, clef='treble', time_sig=TS)
 
-    ev1b = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('F4', 1), ('A4', 3), ('C5', 5), ('A4', 3)] * 4]
-    y = system_block(c, x0, w0, y, gap, 'b) El acorde de Fa, desgranado', ev1b, clef='treble', time_sig=TS)
-
-    ev1c = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('F4', 1), ('F4', 2), ('G4', 2), ('G4', 3), ('A4', 3), ('A4', 4), ('Bb4', 4), ('Bb4', 5)]]
-    y = system_block(c, x0, w0, y, gap, 'c) Repetida, cambiando de dedo', ev1c, clef='treble', time_sig=TS)
+    ev1b = ([{'pitch': 'F4', 'dur': 'q.'}, {'rest': True, 'dur': 'e'}] * 4)
+    y = system_block(c, x0, w0, y, gap, 'b) Ahora sin la corta: solo la larga y el silencio donde iba', ev1b, clef='treble', time_sig=TS)
     y -= 6
 
     y = exercise_heading(c, y, 2, 'El pulso largo-corto, firme y exacto', 2,

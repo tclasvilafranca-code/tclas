@@ -24,16 +24,14 @@ def page1(c):
     gap = 7.6
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 1, 'Posición de 5 dedos en Mi menor', 1,
-                          'Un dedo por tecla: Mi(1) Fa#(2) Sol(3) La(4) Si(5). El dedo 2 toca la tecla negra Fa#.')
+    y = exercise_heading(c, y, 1, 'El semitono que sorprende: entrena el oído', 1,
+                          'Antes de tocar el acorde sorpresa, entrena la mano y el oído en el semitono que lo hace especial: La natural contra La sostenido, una y otra vez.')
     y -= 12
-    ev1a = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('E4', 1), ('G4', 3), ('F#4', 2), ('A4', 4), ('G4', 3), ('B4', 5)] * 2]
-    y = system_block(c, x0, w0, y, gap, 'a) A saltos por la posición', ev1a, clef='treble', time_sig=TS)
+    ev1a = [{'pitch': p, 'dur': 'q'} for p in ['A4', 'A#4', 'A4', 'A#4', 'A4', 'A#4', 'A4', 'A#4', 'A4', 'A#4', 'A4', 'A#4']]
+    y = system_block(c, x0, w0, y, gap, 'a) La-La sostenido, sin dejar de sentir el cambio de color', ev1a, clef='treble', time_sig=TS)
 
-    ev1b = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('E4', 1), ('B4', 5), ('G4', 3), ('B4', 5)] * 3]
-    y = system_block(c, x0, w0, y, gap, 'b) El acorde de Mi menor, desgranado', ev1b, clef='treble', time_sig=TS)
+    ev1b = [{'pitch': p, 'dur': 'q'} for p in ['F#4', 'A#4', 'C#5', 'A#4'] * 3]
+    y = system_block(c, x0, w0, y, gap, 'b) Ahora en contexto: Fa#-Lasost-Dosost, el color entero del acorde', ev1b, clef='treble', time_sig=TS)
     y -= 6
 
     y = exercise_heading(c, y, 2, 'El acorde sorpresa: Fa# mayor no es de la familia', 2,

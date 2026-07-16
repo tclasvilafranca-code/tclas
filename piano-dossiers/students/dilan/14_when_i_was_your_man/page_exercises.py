@@ -23,16 +23,14 @@ def page1(c):
     gap = 7.6
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 1, 'Posición de 5 dedos en Do mayor', 1,
-                          'Un dedo por tecla: Do(1) Re(2) Mi(3) Fa(4) Sol(5). Todo teclas blancas.')
+    y = exercise_heading(c, y, 1, 'Salto de octava en el bajo, sin mirar', 1,
+                          'La mano izquierda de una balada de piano solo salta mucho: entrena la distancia de una octava en el bajo hasta que la mano la encuentre sola, sin mirar.')
     y -= 12
-    ev1a = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('G4', 5), ('E4', 3), ('F4', 4), ('D4', 2), ('E4', 3), ('C4', 1)] * 2]
-    y = system_block(c, x0, w0, y, gap, 'a) Baja a saltos hasta Do', ev1a, clef='treble', time_sig=TS)
+    ev1a = [{'pitch': p, 'dur': 'q'} for p in ['C2', 'C3', 'C2', 'C3'] * 3]
+    y = system_block(c, x0, w0, y, gap, 'a) Do grave-Do agudo, ida y vuelta', ev1a, clef='bass', time_sig=TS)
 
-    ev1b = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('E4', 3), ('C4', 1), ('G4', 5), ('C4', 1)] * 3]
-    y = system_block(c, x0, w0, y, gap, 'b) El acorde de Do, desde el Mi', ev1b, clef='treble', time_sig=TS)
+    ev1b = [{'pitch': p, 'dur': 'q'} for p in ['F2', 'F3', 'G2', 'G3'] * 3]
+    y = system_block(c, x0, w0, y, gap, 'b) Ahora Fa y Sol, los otros dos saltos de la canción', ev1b, clef='bass', time_sig=TS)
     y -= 6
 
     y = exercise_heading(c, y, 2, 'Tocar de memoria: la forma del acorde en la mano', 2,

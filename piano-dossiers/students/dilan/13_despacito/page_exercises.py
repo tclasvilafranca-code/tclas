@@ -24,16 +24,16 @@ def page1(c):
     gap = 7.6
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 1, 'Posición de 5 dedos en La menor', 1,
-                          'Un dedo por tecla: La(1) Si(2) Do(3) Re(4) Mi(5). Misma armadura que Do mayor, centro tonal en La.')
+    y = exercise_heading(c, y, 1, 'Calentamiento rítmico: siente el 3+3+2 sin tocar melodía', 1,
+                          'Antes de tocar ninguna nota de la canción, interioriza el dibujo del ostinato: aplaude solo el primer golpe de cada grupo, contando "1-2-3, 1-2-3, 1-2" en voz alta.')
     y -= 12
-    ev1a = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('E4', 5), ('D4', 4), ('C4', 3), ('B3', 2), ('C4', 3), ('D4', 4)] * 2]
-    y = system_block(c, x0, w0, y, gap, 'a) Baja y sube desde el Mi', ev1a, clef='treble', time_sig=TS)
+    ev1a = ([{'pitch': 'A4', 'dur': 'e'}, {'rest': True, 'dur': 'e'}, {'rest': True, 'dur': 'e'},
+             {'pitch': 'A4', 'dur': 'e'}, {'rest': True, 'dur': 'e'}, {'rest': True, 'dur': 'e'},
+             {'pitch': 'A4', 'dur': 'e'}, {'rest': True, 'dur': 'e'}] * 2)
+    y = system_block(c, x0, w0, y, gap, 'a) Aplaude solo el inicio de cada grupo: 3+3+2', ev1a, clef='treble', time_sig=TS)
 
-    ev1b = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('A4', 1), ('E4', 5), ('C4', 3), ('E4', 5)] * 3]
-    y = system_block(c, x0, w0, y, gap, 'b) El acorde de La menor, desgranado', ev1b, clef='treble', time_sig=TS)
+    ev1b = [{'pitch': 'A4', 'dur': 'e', 'beam': g} for g in GROUPS_332] * 2
+    y = system_block(c, x0, w0, y, gap, 'b) Ahora aplaude las ocho corcheas, pero acentúa el inicio de cada grupo', ev1b, clef='treble', time_sig=TS)
     y -= 6
 
     y = exercise_heading(c, y, 2, 'El ostinato con síncopa: 3+3+2', 2,

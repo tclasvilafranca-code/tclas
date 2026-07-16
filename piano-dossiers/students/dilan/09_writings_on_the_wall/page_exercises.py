@@ -22,16 +22,16 @@ def page1(c):
     gap = 7.6
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 1, 'Posición de 5 dedos en Fa mayor', 1,
-                          'Un dedo por tecla: Fa(1) Sol(2) La(3) Sib(4) Do(5). El dedo 4 toca la tecla negra Sib.')
+    y = exercise_heading(c, y, 1, 'Movimiento cromático corto: medio tono a medio tono', 1,
+                          'Esta canción tiene un toque cromático real más adelante — prepáralo aquí: mueve el dedo medio tono a medio tono, muy despacio, sintiendo cada tecla negra.')
     y -= 12
-    ev1a = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('C5', 5), ('Bb4', 4), ('A4', 3), ('G4', 2), ('F4', 1), ('G4', 2)] * 2]
-    y = system_block(c, x0, w0, y, gap, 'a) Baja desde Do, sintiendo el Sib', ev1a, clef='treble', time_sig=TS)
+    ev1a = [{'pitch': p, 'dur': 'q'} for p in
+            ['F4', 'F#4', 'G4', 'G#4', 'A4', 'G#4', 'G4', 'F#4', 'F4', 'F#4', 'G4', 'G#4']]
+    y = system_block(c, x0, w0, y, gap, 'a) Cromático desde Fa hasta La y vuelta', ev1a, clef='treble', time_sig=TS)
 
     ev1b = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('F4', 1), ('A4', 3), ('C5', 5), ('A4', 3)] * 3]
-    y = system_block(c, x0, w0, y, gap, 'b) El acorde de Fa, desgranado', ev1b, clef='treble', time_sig=TS)
+            [('F4', 1), ('F5', 5), ('F4', 1), ('A4', 3)] * 3]
+    y = system_block(c, x0, w0, y, gap, 'b) Salto de octava: siente la distancia sin mirar', ev1b, clef='treble', time_sig=TS)
     y -= 6
 
     y = exercise_heading(c, y, 2, 'Matices: la misma frase, piano y forte', 2,

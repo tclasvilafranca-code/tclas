@@ -23,17 +23,16 @@ def page1(c):
     gap = 7.6
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 1, 'Posición de 5 dedos en Mi menor', 1,
-                          'Un dedo por tecla: Mi(1) Fa#(2) Sol(3) La(4) Si(5). El dedo 2 toca la tecla negra Fa#.')
+    y = exercise_heading(c, y, 1, 'Calentamiento de coordinación: eco entre las dos manos', 1,
+                          'Antes de cruzar manos hace falta confiar en que una espera mientras la otra actúa. Una mano toca la frase; la otra se queda en silencio y luego responde con el mismo eco.')
     y -= 12
-    ev1a = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('E4', 1), ('F#4', 2), ('G4', 3), ('A4', 4), ('G4', 3), ('F#4', 2)] * 2]
-    y = system_block(c, x0, w0, y, gap, 'a) Sube y baja, sintiendo el Fa#', ev1a, clef='treble', time_sig=TS)
-
-    ev1b = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('E4', 1), ('G4', 3), ('B4', 5), ('G4', 3)] * 3]
-    y = system_block(c, x0, w0, y, gap, 'b) El acorde de Mi menor, desgranado', ev1b, clef='treble', time_sig=TS)
-    y -= 6
+    treb1 = ([{'pitch': p, 'dur': 'q'} for p in ['E4', 'F#4', 'G4', 'A4']] + [{'rest': True, 'dur': 'q'}] * 4 +
+             [{'rest': True, 'dur': 'q'}] * 4 + [{'pitch': p, 'dur': 'q'} for p in ['E4', 'G4', 'B4', 'G4']])
+    bass1 = ([{'rest': True, 'dur': 'q'}] * 4 + [{'pitch': p, 'dur': 'q'} for p in ['E3', 'F#3', 'G3', 'A3']] +
+             [{'pitch': p, 'dur': 'q'} for p in ['E3', 'G3', 'B3', 'G3']] + [{'rest': True, 'dur': 'q'}] * 4)
+    y = grand_staff_block(c, x0, w0, y, gap, treb1, bass1,
+                           'La derecha canta y la izquierda hace de eco; luego cambian los papeles', grand_gap_mult=7.3, time_sig=TS)
+    y -= 4
 
     y = exercise_heading(c, y, 2, 'Cruce de manos: la izquierda salta por encima', 2,
                           'En la partitura real pone "LH over RH": tu mano izquierda deja su sitio y salta por encima de la derecha para tocar notas agudas. La derecha no se mueve — solo la izquierda vuela.')

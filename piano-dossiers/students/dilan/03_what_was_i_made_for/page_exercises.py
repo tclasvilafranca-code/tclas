@@ -17,20 +17,19 @@ def page1(c):
     gap = 7.6
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 1, 'Posición de 5 dedos en Do mayor', 1,
-                          'Un dedo por tecla: Do(1) Re(2) Mi(3) Fa(4) Sol(5). Todo teclas blancas, sonido claro y desnudo.')
+    y = exercise_heading(c, y, 1, 'Calentamiento rítmico: cuenta y aplaude el silencio', 1,
+                          'Antes de tocar ninguna nota, entrena el reloj interno: cuenta en voz alta y aplaude solo en las negras marcadas, dejando los silencios completamente vacíos.')
     y -= 12
-    ev1a = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('C4', 1), ('D4', 2), ('E4', 3), ('F4', 4), ('E4', 3), ('D4', 2)] * 2]
-    y = system_block(c, x0, w0, y, gap, 'a) Sube y baja, sin prisa', ev1a, clef='treble', time_sig=TS)
+    ev1a = ([{'pitch': 'C4', 'dur': 'q'}, {'pitch': 'C4', 'dur': 'q'},
+              {'rest': True, 'dur': 'q'}, {'rest': True, 'dur': 'q'}] * 4)
+    y = system_block(c, x0, w0, y, gap, 'a) Aplaude-aplaude-silencio-silencio, cuatro veces seguidas', ev1a, clef='treble', time_sig=TS)
 
-    ev1b = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('C4', 1), ('E4', 3), ('G4', 5), ('E4', 3)] * 4]
-    y = system_block(c, x0, w0, y, gap, 'b) El acorde de Do, desgranado', ev1b, clef='treble', time_sig=TS)
+    ev1b = ([{'rest': True, 'dur': 'w'}] +
+            [{'pitch': 'C4', 'dur': 'q'}] * 4) * 2
+    y = system_block(c, x0, w0, y, gap, 'b) Un compás entero de silencio, luego entra seguro', ev1b, clef='treble', time_sig=TS)
 
-    ev1c = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('C4', 1), ('C4', 2), ('D4', 2), ('D4', 3), ('E4', 3), ('E4', 4), ('F4', 4), ('F4', 5)]]
-    y = system_block(c, x0, w0, y, gap, 'c) Repetida, cambiando de dedo', ev1c, clef='treble', time_sig=TS)
+    ev1c = ([{'pitch': 'C4', 'dur': 'q'}, {'rest': True, 'dur': 'q'}] * 8)
+    y = system_block(c, x0, w0, y, gap, 'c) Entradas cortas y rápidas: aplaude-silencio, sin perder el pulso', ev1c, clef='treble', time_sig=TS)
     y -= 6
 
     y = exercise_heading(c, y, 2, 'Contar el silencio y entrar en su sitio', 2,

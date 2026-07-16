@@ -17,20 +17,20 @@ def page1(c):
     gap = 7.6
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 1, 'Posición de 5 dedos en Sol mayor', 1,
-                          'Un dedo por tecla: Sol(1) La(2) Si(3) Do(4) Re(5). Todas teclas blancas, pero suena elegante.')
+    y = exercise_heading(c, y, 1, 'Escala ligada: cada nota nace de la anterior', 1,
+                          'Nada de calentamiento por bloques hoy: practica la escala de Sol como una sola frase continua, sin ningún corte de sonido entre una nota y la siguiente.')
     y -= 12
     ev1a = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('G4', 1), ('A4', 2), ('B4', 3), ('C5', 4), ('B4', 3), ('A4', 2)] * 2]
-    y = system_block(c, x0, w0, y, gap, 'a) Sube y baja, con elegancia', ev1a, clef='treble', time_sig=TS)
+            [('G4', 1), ('A4', 2), ('B4', 3), ('C5', 4), ('D5', 5), ('C5', 4), ('B4', 3), ('A4', 2), ('G4', 1), ('A4', 2), ('B4', 3), ('C5', 4)]]
+    y = system_block(c, x0, w0, y, gap, 'a) Subiendo ligado, sin parar el sonido', ev1a, clef='treble', time_sig=TS)
 
     ev1b = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('G4', 1), ('B4', 3), ('D5', 5), ('B4', 3)] * 3]
-    y = system_block(c, x0, w0, y, gap, 'b) El acorde de Sol, desgranado', ev1b, clef='treble', time_sig=TS)
+            [('D5', 5), ('C5', 4), ('B4', 3), ('A4', 2), ('G4', 1), ('A4', 2), ('B4', 3), ('C5', 4), ('D5', 5), ('C5', 4), ('B4', 3), ('A4', 2)]]
+    y = system_block(c, x0, w0, y, gap, 'b) Bajando ligado, sin parar el sonido', ev1b, clef='treble', time_sig=TS)
 
-    ev1c = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
-            [('G4', 1), ('G4', 2), ('A4', 2), ('A4', 3), ('B4', 3), ('B4', 4)] * 2]
-    y = system_block(c, x0, w0, y, gap, 'c) Repetida, cambiando de dedo', ev1c, clef='treble', time_sig=TS)
+    ev1c = [{'pitch': p, 'dur': 'q'} for p in
+            ['G4', 'A4', 'B4', 'C5', 'D5', 'C5', 'B4', 'A4', 'G4', 'A4', 'B4', 'C5']]
+    y = system_block(c, x0, w0, y, gap, 'c) La escala completa, subiendo y bajando de un tirón', ev1c, clef='treble', time_sig=TS)
     y -= 6
 
     y = exercise_heading(c, y, 2, 'El legato de verdad: sin cortes entre notas', 2,

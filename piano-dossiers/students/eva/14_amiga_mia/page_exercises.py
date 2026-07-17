@@ -38,7 +38,7 @@ def page1(c):
     y = exercise_heading(c, y, 2, 'Legato de dedos: unir sin pedal', 2,
                           'La dificultad exacta de esta canción, pero sin usar el pie. Sustituye el dedo en la nota común entre un acorde y el siguiente, para que no se note el cambio.')
     y -= 9
-    ev2a = [{'pitches': RE, 'dur': 'h'}, {'pitches': SOL, 'dur': 'h'}, {'pitches': LA, 'dur': 'h'}, {'pitches': RE, 'dur': 'h'}]
+    ev2a = [{'pitches': RE, 'dur': 'h'}, {'pitches': LA, 'dur': 'h'}, {'pitches': SOL, 'dur': 'h'}, {'pitches': RE, 'dur': 'h'}]
     y = system_block(c, x0, w0, y, gap, 'a) Los acordes, buscando la nota común entre cada dos', ev2a, clef='bass', time_sig=TS)
 
     ev2b = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
@@ -56,7 +56,7 @@ def page1(c):
     eva = [{'pitches': p, 'dur': 'q', 'label': l} for p, l in pattern_a]
     y = system_block(c, x0, w0, y, gap, 'a) Re-La-Sol-La, un acorde por tiempo', eva, clef='bass', time_sig=TS)
 
-    pattern_b = [{'pitches': p, 'dur': 'h', 'label': l} for p, l in [(RE, 'Re'), (SOL, 'Sol'), (LA, 'La'), (RE, 'Re')]]
+    pattern_b = [{'pitches': p, 'dur': 'h', 'label': l} for p, l in [(SOL, 'Sol'), (LA, 'La'), (RE, 'Re'), (SOL, 'Sol')]]
     y = system_block(c, x0, w0, y, gap, 'b) Los mismos acordes, en blancas tranquilas', pattern_b, clef='bass', time_sig=TS)
 
     exercises_footer(c, 3)
@@ -76,7 +76,7 @@ def page2(c):
                           'La izquierda cambia de acorde sustituyendo dedos, sin cortar el sonido; la derecha canta encima.')
     y -= 7
     treb1 = [{'pitch': p, 'dur': 'q'} for p in ['F#4', 'G4', 'A4', 'F#4', 'D4', 'F#4', 'A4', 'F#4']]
-    bass1 = [{'pitches': p, 'dur': 'h'} for p in [RE, LA, RE, LA]]
+    bass1 = [{'pitches': p, 'dur': 'h'} for p in [LA, RE, LA, RE]]
     y = grand_staff_block(c, x0, w0, y, gap, treb1, bass1, 'a) El acorde se une con los dedos, sin pedal', grand_gap_mult=7.3, time_sig=TS)
 
     treb2 = [{'pitch': p, 'dur': 'q'} for p in ['D4', 'F#4', 'A4', 'F#4', 'G4', 'A4', 'F#4', 'D4']]

@@ -47,8 +47,8 @@ def page1(c):
                           'Do–Fa–Sol: los tres acordes, ahora en el ritmo de vaivén del 6/8.')
     y -= 9
     pattern_a = [{'pitches': p, 'dur': 'q.', 'label': l} for p, l in
-                 [(DO, 'Do'), (FA, 'Fa'), (SOL, 'Sol'), (DO, 'Do')]]
-    y = system_block(c, x0, w0, y, gap, 'a) Do-Fa-Sol-Do, un acorde por pulso grande', pattern_a, clef='bass', time_sig=TS)
+                 [(FA, 'Fa'), (DO, 'Do'), (SOL, 'Sol'), (DO, 'Do')]]
+    y = system_block(c, x0, w0, y, gap, 'a) Fa-Do-Sol-Do, un acorde por pulso grande', pattern_a, clef='bass', time_sig=TS)
 
     pattern_b = [{'pitch': p, 'dur': 'e', 'label': l} for p, l in
                  [('C2', 'Do'), ('E3', None), ('G3', None), ('F2', 'Fa'), ('A3', None), ('C4', None)]] * 2
@@ -71,7 +71,7 @@ def page2(c):
                           'Imagina a tu compañera tocando la otra parte: mantén tu pulso firme, sin acelerar ni frenar, para que encajéis siempre.')
     y -= 7
     treb1 = [{'pitch': p, 'dur': 'e'} for p in ['C4', 'D4', 'E4', 'F4', 'G4', 'F4']] * 2
-    bass1 = [{'pitches': p, 'dur': 'q.'} for p in [DO, FA, SOL, DO]]
+    bass1 = [{'pitches': p, 'dur': 'q.'} for p in [SOL, FA, DO, FA]]
     y = grand_staff_block(c, x0, w0, y, gap, treb1, bass1, 'a) La melodía y el acorde, en el mismo vaivén', grand_gap_mult=7.3, time_sig=TS)
 
     treb2 = [{'pitch': p, 'dur': 'e'} for p in ['E4', 'F4', 'G4', 'A4', 'G4', 'F4']] * 2
@@ -94,7 +94,7 @@ def page2(c):
     y -= 7
     treb5 = [{'pitch': p, 'dur': 'e'} for p in
              ['C4', 'D4', 'E4', 'F4', 'G4', 'F4', 'E4', 'F4', 'G4', 'A4', 'G4', 'F4']]
-    bass5 = [{'pitches': p, 'dur': 'q.'} for p in [DO, FA, SOL, DO]]
+    bass5 = [{'pitches': p, 'dur': 'q.'} for p in [FA, SOL, DO, SOL]]
     y = grand_staff_block(c, x0, w0, y, gap, treb5, bass5, 'La ronda casi completa · Vals ♩.≈60, con soltura', grand_gap_mult=7.3, time_sig=TS)
 
     exercises_footer(c, 4)

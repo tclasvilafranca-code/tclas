@@ -52,7 +52,7 @@ def page1(c):
     eva = [{'pitches': p, 'dur': 'q', 'label': l} for p, l in pattern_a]
     y = system_block(c, x0, w0, y, gap, 'a) Do-Fa-Sol-Fa, un acorde por tiempo', eva, clef='bass', time_sig=TS)
 
-    pattern_b = [{'pitches': p, 'dur': 'h', 'label': l} for p, l in [(DO, 'Do'), (SOL, 'Sol'), (FA, 'Fa'), (DO, 'Do')]]
+    pattern_b = [{'pitches': p, 'dur': 'h', 'label': l} for p, l in [(SOL, 'Sol'), (FA, 'Fa'), (DO, 'Do'), (SOL, 'Sol')]]
     y = system_block(c, x0, w0, y, gap, 'b) Los mismos acordes, en blancas tranquilas', pattern_b, clef='bass', time_sig=TS)
 
     exercises_footer(c, 3)

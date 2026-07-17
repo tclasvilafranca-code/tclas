@@ -91,7 +91,7 @@ def page2(c):
              {'pitches': E7, 'dur': 'q'}, {'pitches': E7, 'dur': 'q'}, {'pitches': AM, 'dur': 'q'}, {'pitches': AM, 'dur': 'q'}]
     y = grand_staff_block(c, x0, w0, y, gap, treb3, bass3, 'a) Forte total: las dos manos a plena potencia', grand_gap_mult=7.3, time_sig=TS)
 
-    treb4 = [{'pitch': p, 'dur': 'q'} for p in ['A4', 'B4', 'C5', 'A4', 'B4', 'C5', 'A4', 'B4', 'C5', 'A4', 'B4', 'C5']]
+    treb4 = [{'pitch': p, 'dur': 'q'} for p in ['C5', 'B4', 'A4', 'C5', 'B4', 'A4', 'C5', 'B4', 'A4', 'C5', 'B4', 'A4']]
     y = system_block(c, x0, w0, y, gap, 'b) Variación: las mismas notas, tranquilas', treb4, clef='treble', time_sig=TS)
     y -= 3
 

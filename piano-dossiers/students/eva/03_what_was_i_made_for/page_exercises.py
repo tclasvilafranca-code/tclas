@@ -40,8 +40,8 @@ def page1(c):
     ev2b = [{'pitch': p, 'dur': 'h'} for p in ['C4', 'D4', 'E4', 'C4']]
     y = system_block(c, x0, w0, y, gap, 'b) Notas largas: aguanta el pianissimo sin que se apague de golpe', ev2b, clef='treble', time_sig=TS)
 
-    pattern_c = [(['C3', 'E3', 'G3'], 'Do'), (['E2', 'G2', 'B2'], 'Mim'),
-                 (['F2', 'A2', 'C3'], 'Fa'), (['C3', 'E3', 'G3'], 'Do')]
+    pattern_c = [(['C3', 'E3', 'G3'], 'Do'), (['F2', 'A2', 'C3'], 'Fa'),
+                 (['E2', 'G2', 'B2'], 'Mim'), (['C3', 'E3', 'G3'], 'Do')]
     ev2c = [{'pitches': p, 'dur': 'w', 'label': l} for p, l in pattern_c]
     y = system_block(c, x0, w0, y, gap, 'c) El acompañamiento: acordes largos, casi un susurro', ev2c, clef='bass', time_sig=TS)
     y -= 3
@@ -49,14 +49,14 @@ def page1(c):
     y = exercise_heading(c, y, 3, 'Acordes I–IV–V en Do mayor', 2,
                           'Do–Fa–Sol: los tres acordes básicos, aquí más movidos que en la canción real.')
     y -= 9
-    pattern_a = [(['C3', 'E3', 'G3'], 'Do'), (['F2', 'A2', 'C3'], 'Fa'),
-                 (['G2', 'B2', 'D3'], 'Sol'), (['C3', 'E3', 'G3'], 'Do')] * 4
+    pattern_a = [(['C3', 'E3', 'G3'], 'Do'), (['G2', 'B2', 'D3'], 'Sol'),
+                 (['F2', 'A2', 'C3'], 'Fa'), (['C3', 'E3', 'G3'], 'Do')] * 4
     eva = [{'pitches': p, 'dur': 'q', 'label': l} for p, l in pattern_a]
-    y = system_block(c, x0, w0, y, gap, 'a) Do-Fa-Sol-Do, un acorde por tiempo', eva, clef='bass', time_sig=TS)
+    y = system_block(c, x0, w0, y, gap, 'a) Do-Sol-Fa-Do, un acorde por tiempo', eva, clef='bass', time_sig=TS)
 
     pattern_b = []
-    for root, up, lab in [('C2', ['E3', 'G3'], 'Do'), ('F2', ['A2', 'C3'], 'Fa'),
-                            ('G2', ['B2', 'D3'], 'Sol'), ('C2', ['E3', 'G3'], 'Do')]:
+    for root, up, lab in [('C2', ['E3', 'G3'], 'Do'), ('G2', ['B2', 'D3'], 'Sol'),
+                            ('F2', ['A2', 'C3'], 'Fa'), ('C2', ['E3', 'G3'], 'Do')]:
         pattern_b.append({'pitch': root, 'dur': 'q', 'label': lab})
         pattern_b.append({'pitches': up, 'dur': 'q'})
         pattern_b.append({'pitches': up, 'dur': 'q'})
@@ -85,7 +85,7 @@ def page2(c):
     y = grand_staff_block(c, x0, w0, y, gap, treb1, bass1, 'a) La frase con su acorde, en equilibrio suave', grand_gap_mult=7.3, time_sig=TS)
 
     treb2 = [{'pitch': p, 'dur': 'q'} for p in
-             ['E4', 'E4', 'D4', 'C4', 'C4', 'C4', 'D4', 'E4', 'F4', 'E4', 'D4', 'C4', 'D4', 'C4', 'C4', 'C4']]
+             ['C4', 'C4', 'C4', 'D4', 'C4', 'D4', 'E4', 'F4', 'E4', 'D4', 'C4', 'C4', 'E4', 'D4', 'E4', 'E4']]
     y = system_block(c, x0, w0, y, gap, 'b) Solo la melodía, memorizando el volumen exacto', treb2, clef='treble', time_sig=TS)
     y -= 3
 

@@ -83,7 +83,7 @@ def page2(c):
                           'Ahora el acorde real acompaña cada tipo de articulación — la izquierda no cambia, pero la derecha sí cambia de carácter.')
     y -= 7
     treb3 = [{'pitch': p, 'dur': 'q'} for p in ['G4', 'A4', 'Bb4', 'C5', 'D5', 'C5', 'Bb4', 'A4']]
-    bass3 = [{'pitches': p, 'dur': 'h'} for p in [SOLm, RE7, SOLm, RE7]]
+    bass3 = [{'pitches': p, 'dur': 'h'} for p in [RE7, SOLm, RE7, SOLm]]
     y = grand_staff_block(c, x0, w0, y, gap, treb3, bass3, 'a) Marcado: cada nota separada, con acorde real debajo', grand_gap_mult=7.3, time_sig=TS)
 
     treb4 = [{'pitch': p, 'dur': 'e', 'beam': i // 2} for i, p in enumerate(['G4', 'Bb4', 'A4', 'C5'] * 4)]

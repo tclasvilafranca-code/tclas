@@ -92,7 +92,7 @@ def page2(c):
     bass5 = [{'pitches': p, 'dur': 'w', 'label': l} for p, l in [(EbM, 'Mib'), (Cm, 'Dom')]]
     y = grand_staff_block(c, x0, w0, y, gap, treb5, bass5, 'a) La derecha vuela; la izquierda sostiene el color entero', grand_gap_mult=7.05, time_sig=TS)
 
-    treb5b = [{'pitch': p, 'dur': 'q'} for p in ['Eb5', 'D5', 'C5', 'D5', 'Eb5', 'D5', 'C5', 'Bb4']]
+    treb5b = [{'pitch': p, 'dur': 'q'} for p in ['C5', 'D5', 'Eb5', 'D5', 'C5', 'Bb4', 'C5', 'D5']]
     y = system_block(c, x0, w0, y, gap, 'b) Variación: la frase un poco más alta', treb5b, clef='treble', time_sig=TS)
     y -= 1
 

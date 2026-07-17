@@ -75,7 +75,7 @@ def page2(c):
                           'La izquierda cambia de acorde sin saltos bruscos, buscando siempre la nota más cercana; la derecha canta encima.')
     y -= 7
     treb1 = [{'pitch': p, 'dur': 'q'} for p in ['B4', 'C5', 'D5', 'B4', 'G4', 'B4', 'D5', 'B4']]
-    bass1 = [{'pitches': p, 'dur': 'h'} for p in [SOL, RE, DO, SOL]]
+    bass1 = [{'pitches': p, 'dur': 'h'} for p in [SOL, DO, RE, SOL]]
     y = grand_staff_block(c, x0, w0, y, gap, treb1, bass1, 'a) El acorde se mueve suave, la melodía canta encima', grand_gap_mult=7.3, time_sig=TS)
 
     treb2 = [{'pitch': p, 'dur': 'q'} for p in ['G4', 'B4', 'D5', 'B4', 'C5', 'D5', 'B4', 'G4']]

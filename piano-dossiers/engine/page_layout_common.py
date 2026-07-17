@@ -12,10 +12,30 @@ CONTENT_W = W - 2 * MARGIN
 STAR_FULL, STAR_EMPTY = '\u2605', '\u2606'
 
 
-def after_system(gap):
+def after_system(gap, events=None, clef='treble'):
     """Vertical drop from a staff's bottom line to the next caption's baseline.
-       (Verified safe clearance for numbers/labels below any staff content.)"""
-    return gap * 3.5
+       A chord label is drawn below the chord's lowest note (see draw_chord);
+       if that note also needs ledger lines below the staff, the default
+       clearance isn't enough and the label collides with the next caption."""
+    base = gap * 3.5
+    if not events:
+        return base
+    max_under = 0.0
+    for e in events:
+        if not e.get('label'):
+            continue
+        pitches = e.get('pitches') or ([e['pitch']] if 'pitch' in e else [])
+        if not pitches:
+            continue
+        lowest_cy = min(note_y(0, gap, p, clef=clef) for p in pitches)
+        label_y = min(lowest_cy, 0) - gap * 1.6
+        label_bottom = label_y - gap * 0.85 * 0.22
+        under = -label_bottom
+        if under > max_under:
+            max_under = under
+    if max_under <= 0:
+        return base
+    return max(base, max_under + gap * 0.6)
 
 
 def before_staff(gap, events=None, clef='treble'):
@@ -130,7 +150,7 @@ def system_block(c, x0, w0, y, gap, caption, events, clef='treble', time_sig=(4,
     system_caption(c, x0, y, caption)
     y -= before_staff(gap, events, clef)
     top, bot = draw_system(c, x0, y, w0, gap, events, clef=clef, time_sig=time_sig)
-    return bot - after_system(gap)
+    return bot - after_system(gap, events, clef)
 
 
 def grand_staff_block(c, x0, w0, y_top, gap, treble_events, bass_events, caption, grand_gap_mult=7.3, time_sig=(4, 4)):
@@ -141,4 +161,4 @@ def grand_staff_block(c, x0, w0, y_top, gap, treble_events, bass_events, caption
     t_top, t_bot = draw_system(c, x0, yy, w0, gap, treble_events, clef='treble', time_sig=time_sig)
     yy2 = t_bot - gap * grand_gap_mult
     b_top, b_bot = draw_system(c, x0, yy2, w0, gap, bass_events, clef='bass', time_sig=time_sig)
-    return b_bot - after_system(gap)
+    return b_bot - after_system(gap, bass_events, 'bass')

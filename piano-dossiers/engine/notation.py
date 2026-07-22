@@ -296,6 +296,11 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
         draw_clef(c, cursor_x, bot, gap, clef=clef)
         cursor_x += gap * (5.4 if clef == 'treble' else 4.6)
     if show_time:
+        # drawCentredString centers the numeral on cursor_x, so a two-digit
+        # numerator/denominator (e.g. '12') extends further left than a
+        # single digit and can collide with the clef glyph -- nudge right.
+        extra_digits = max(len(str(time_sig[0])), len(str(time_sig[1]))) - 1
+        cursor_x += gap * 0.85 * extra_digits
         draw_time_sig(c, cursor_x, bot, gap, top=str(time_sig[0]), bottom=str(time_sig[1]))
         cursor_x += gap * 3.0
     # If the very first event is a chord with several close-together

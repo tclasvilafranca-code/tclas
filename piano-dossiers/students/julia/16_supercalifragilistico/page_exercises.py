@@ -37,10 +37,10 @@ def page1(c):
     y = exercise_heading(c, y, 2, 'El cambio de casa: la tonalidad se muda', 2,
                           'La dificultad de esta canción. Empieza en Do mayor y, a mitad de camino, se muda a Fa mayor — ¡una casa nueva, con un Sib nuevo!')
     y -= 9
-    ev2a = [{'pitch': p, 'dur': 'q'} for p in ['C4', 'D4', 'E4', 'G4', 'E4', 'D4', 'C4', 'D4']]
+    ev2a = [{'pitch': p, 'dur': 'q'} for p in ['C4', 'D4', 'E4', 'G4', 'F4', 'D4', 'C4', 'D4']]
     y = system_block(c, x0, w0, y, gap, 'a) La frase, en la casa de Do', ev2a, clef='treble', time_sig=TS)
 
-    ev2b = [{'pitch': p, 'dur': 'q'} for p in ['F4', 'G4', 'A4', 'C5', 'A4', 'G4', 'F4', 'G4']]
+    ev2b = [{'pitch': p, 'dur': 'q'} for p in ['F4', 'G4', 'A4', 'C5', 'Bb4', 'G4', 'F4', 'G4']]
     y = system_block(c, x0, w0, y, gap, 'b) La misma frase, en la casa nueva de Fa', ev2b, clef='treble', time_sig=TS)
 
     treb2c = [{'pitch': p, 'dur': 'q'} for p in ['F4', 'G4', 'A4', 'C5', 'A4', 'G4', 'F4', 'G4']]
@@ -93,8 +93,8 @@ def page2(c):
     y = exercise_heading(c, y, 6, 'Reto extra · el momento del cambio de casa', 3,
                           'Con la partitura al lado: ¡siente cómo la música se muda de Do mayor a Fa mayor!')
     y -= 7
-    treb5 = ([{'pitch': p, 'dur': 'q'} for p in ['C4', 'D4', 'E4', 'G4', 'E4', 'D4', 'C4', 'D4']] +
-             [{'pitch': p, 'dur': 'q'} for p in ['F4', 'G4', 'A4', 'C5', 'A4', 'G4', 'F4', 'G4']])
+    treb5 = ([{'pitch': p, 'dur': 'q'} for p in ['C4', 'D4', 'E4', 'G4', 'F4', 'D4', 'C4', 'D4']] +
+             [{'pitch': p, 'dur': 'q'} for p in ['F4', 'G4', 'A4', 'C5', 'Bb4', 'G4', 'F4', 'G4']])
     bass5 = [{'pitches': p, 'dur': 'w'} for p in [DO, DO, FA, FA]]
     y = grand_staff_block(c, x0, w0, y, gap, treb5, bass5, 'La canción casi completa · con el cambio de casa', grand_gap_mult=7.3, time_sig=TS)
 

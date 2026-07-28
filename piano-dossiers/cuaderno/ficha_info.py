@@ -77,6 +77,67 @@ def draw_keyboard(c, x, y_top, n_white, kw, kh, marks=None, start_idx=0):
     return y_top - kh
 
 
+def keyboard_row(c, y, pasos, legend=None, kh=46, n_white=8, start_idx=0):
+    """Fila de mini-teclados que muestran cómo evoluciona la posición de las
+       manos a lo largo de la pieza. Cada paso: (titulo, {idx: color}).
+       Es el bloque que explica de un vistazo el juego real de la pieza."""
+    n = len(pasos)
+    gapx = 20
+    kbw = (CONTENT_W - gapx * (n - 1)) / n
+    kw = kbw / n_white
+    lowest = y
+    for i, (titulo, keys) in enumerate(pasos):
+        bx = MARGIN + i * (kbw + gapx)
+        c.setFont('DejaVuSans-Bold', 8.2)
+        c.setFillColor(NAVY)
+        c.drawString(bx, y, titulo)
+        marks = {gi: (col, None) for gi, col in keys.items()}
+        bot = draw_keyboard(c, bx, y - 12, n_white, kw, kh,
+                            marks=marks, start_idx=start_idx)
+        lowest = min(lowest, bot)
+        if i < n - 1:
+            c.setFillColor(MUTED)
+            c.setFont('DejaVuSans-Bold', 12)
+            c.drawCentredString(bx + kbw + gapx / 2, y - 12 - kh / 2 - 4, '›')
+
+    if legend:
+        ly = lowest - 14
+        lx = MARGIN
+        for col, txt in legend:
+            c.setFillColor(col)
+            c.roundRect(lx, ly - 6.5, 9, 9, 1.5, fill=1, stroke=0)
+            c.setFont('DejaVuSans-Bold', 7.6)
+            c.setFillColor(col)
+            c.drawString(lx + 13, ly - 4.5, txt)
+            lx += 13 + stringWidth(txt, 'DejaVuSans-Bold', 7.6) + 22
+        lowest = ly - 10
+    return lowest
+
+
+def _qr_block(c, x, y, w, png_path, titulo, texto, h=78):
+    """Cuadro con el QR de audio. El título va arriba a todo el ancho del
+       cuadro (si se pone al lado del QR no cabe y se sale del margen)."""
+    c.setFillColor(PANEL)
+    c.roundRect(x, y - h, w, h, 4, fill=1, stroke=0)
+    c.setFillColor(NAVY)
+    c.rect(x, y - h, 3, h, fill=1, stroke=0)
+
+    tsize = _fit(titulo.upper(), 'DejaVuSans-Bold', 7.4, w - 24, floor=6.0)
+    c.setFont('DejaVuSans-Bold', tsize)
+    c.setFillColor(NAVY)
+    c.drawString(x + 12, y - 15, titulo.upper())
+
+    qs = min(h - 34, 52)
+    qy = y - 24 - qs
+    try:
+        c.drawImage(png_path, x + 12, qy, qs, qs, mask='auto')
+    except Exception:
+        pass
+    tx = x + 12 + qs + 10
+    _wrap(c, texto, tx, y - 32, 'DejaVuSans', 8, w - (tx - x) - 12, 10.6, INK)
+    return y - h
+
+
 def _section_title(c, x, y, text, w=None):
     c.setFont('DejaVuSans-Bold', 8.2)
     c.setFillColor(NAVY)
@@ -143,26 +204,21 @@ def _bullets(c, x, y, w, items, dot=NAVY, size=8.6, leading=11.6):
     return y
 
 
-def _rhythm_pair(c, y, bloques, time_sig):
-    """Muestra, con notación real, el patrón de cada sección de la pieza,
-       uno al lado del otro. Son un compás cada uno: ilustran el dibujo
-       rítmico, no son un ejercicio."""
-    col_w = (CONTENT_W - 26) / 2
-    gap = 6.8
-    ytop = y
-    lowest = y
-    for i, (etq, desc, events, color) in enumerate(bloques):
-        bx = MARGIN + i * (col_w + 26)
+def _rhythm_stack(c, x, y, w, bloques, time_sig):
+    """El patrón rítmico de cada sección, uno debajo del otro, con notación
+       real. Es un compás por sección: ilustra el dibujo, no es un ejercicio."""
+    gap = 6.4
+    for (etq, desc, events, color) in bloques:
         c.setFont('DejaVuSans-Bold', 8.4)
         c.setFillColor(color)
-        c.drawString(bx, ytop, etq)
-        c.setFont('DejaVuSans', 8.2)
+        c.drawString(x, y, etq)
+        c.setFont('DejaVuSans', 8)
         c.setFillColor(MUTED)
-        c.drawString(bx + 16, ytop, desc)
-        top, bot = draw_system(c, bx, ytop - 30, col_w, gap, events,
+        c.drawString(x + 14, y, desc)
+        top, bot = draw_system(c, x, y - 22, w, gap, events,
                                clef='treble', time_sig=time_sig)
-        lowest = min(lowest, bot)
-    return lowest - 24
+        y = bot - 30
+    return y + 8
 
 
 def _note_box(c, x, y, w, titulo, texto, color, h=None):
@@ -218,37 +274,44 @@ def build_ficha(c, cfg):
     y = _map_bar(c, y, cfg['secciones'], cfg['total_compases'])
     y -= 4
 
-    # --- dos columnas ---
     col_w = (CONTENT_W - 22) / 2
     right_x = MARGIN + col_w + 22
-    y_col = y
 
-    yl = _section_title(c, MARGIN, y_col, 'Dónde van las manos')
-    kb = cfg['teclado']
-    kw = col_w / kb['n_white']
-    yl -= 24
-    yl = draw_keyboard(c, MARGIN, yl, kb['n_white'], kw, 78,
-                       marks=kb['marks'], start_idx=kb['start_idx'])
-    yl -= 16
+    # --- cómo se abren las manos (el juego real de la pieza) ---
+    ap = cfg['apertura']
+    y = _section_title(c, MARGIN, y, ap['titulo'])
+    y = keyboard_row(c, y, ap['pasos'], legend=ap['leyenda'])
+    y -= 6
     c.setFont('DejaVuSans', 8.2)
-    c.setFillColor(MUTED)
-    yl = _wrap(c, kb['pie'], MARGIN, yl, 'DejaVuSans', 8.2, col_w, 11.2, MUTED)
+    y = _wrap(c, ap['pie'], MARGIN, y, 'DejaVuSans', 8.2, CONTENT_W, 11.2, MUTED)
+    y -= 18
 
-    yr = _section_title(c, right_x, y_col, 'Lo especial de esta partitura')
-    yr = _bullets(c, right_x, yr, col_w, cfg['especial'])
+    # --- dos columnas: lo especial / el dibujo de cada parte ---
+    y_col = y
+    yl = _section_title(c, MARGIN, y_col, 'Lo especial de esta partitura')
+    yl = _bullets(c, MARGIN, yl, col_w, cfg['especial'])
 
-    y = min(yl, yr) - 20
+    yr = _section_title(c, right_x, y_col, 'El dibujo de cada parte')
+    yr = _rhythm_stack(c, right_x, yr, col_w, cfg['ritmos'], cfg['time_sig'])
 
-    if cfg.get('ritmos'):
-        y = _section_title(c, MARGIN, y, 'El dibujo de cada parte')
-        y = _rhythm_pair(c, y, cfg['ritmos'], cfg['time_sig'])
+    y = min(yl, yr) - 18
 
     # --- reto / truco ---
     yb = _note_box(c, MARGIN, y, col_w, 'El reto', cfg['reto'], ACCENT)
     yb2 = _note_box(c, right_x, y, col_w, 'El truco', cfg['truco'], BLUE)
-    y = min(yb, yb2) - 16
+    y = min(yb, yb2) - 14
 
-    y = _note_box(c, MARGIN, y, CONTENT_W, '¿Sabías que…?', cfg['sabias'], NAVY_SOFT)
+    # --- sabías que + QR de audio ---
+    sab_w = CONTENT_W * 0.63
+    qr_x = MARGIN + sab_w + 14
+    qr_w = CONTENT_W - sab_w - 14
+    ysab = _note_box(c, MARGIN, y, sab_w, '¿Sabías que…?', cfg['sabias'], NAVY_SOFT)
+    yqr = y
+    if cfg.get('qr'):
+        yqr = _qr_block(c, qr_x, y, qr_w, cfg['qr']['png'],
+                        cfg['qr']['titulo'], cfg['qr']['texto'],
+                        h=max(78, y - ysab))
+    y = min(ysab, yqr)
 
     c.setFont('DejaVuSans', 7.4)
     c.setFillColor(MUTED)

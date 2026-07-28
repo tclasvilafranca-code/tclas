@@ -14,7 +14,7 @@ def audit_music(build_fn, page_w=595.276, page_h=841.89):
     orig = nt.draw_system
 
     def patched(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
-                show_clef=True, show_time=True):
+                show_clef=True, show_time=True, key_sig=None):
         dur_beats = {'w': 4.0, 'h': 2.0, 'q': 1.0, 'e': 0.5, 'q.': 1.5, 'h.': 3.0, 'e.': 0.75}
         total_beats = sum(dur_beats[e['dur']] for e in events)
         beats_per_bar = time_sig[0] * (4.0 / time_sig[1])
@@ -29,7 +29,8 @@ def audit_music(build_fn, page_w=595.276, page_h=841.89):
             'n_events': n_events,
             'px_per_event': px_per_event,
         })
-        return orig(c, x, top_y, width, gap, events, clef, time_sig, show_clef, show_time)
+        return orig(c, x, top_y, width, gap, events, clef=clef, time_sig=time_sig,
+                    show_clef=show_clef, show_time=show_time, key_sig=key_sig)
 
     nt.draw_system = patched
     import page_layout_common as plc

@@ -89,10 +89,80 @@ def draw_clef(c, x, staff_bottom_y, gap, clef='treble'):
         c.drawString(x, baseline, '\U0001D121')
 
 def draw_time_sig(c, x, staff_bottom_y, gap, top='4', bottom='4'):
+    """Numeros centrados cada uno en su mitad del pentagrama: el de arriba
+       entre la linea central y la linea superior, el de abajo entre la
+       linea inferior y la central (offset ~0.3*gap para compensar que la
+       altura visual de un digito es ~0.7x el tamano de fuente)."""
     c.setFont('DejaVuSans-Bold', gap * 2.0)
     c.setFillColor(INK)
-    c.drawCentredString(x, staff_bottom_y + gap * 1.6, top)
-    c.drawCentredString(x, staff_bottom_y - gap * 0.15, bottom)
+    c.drawCentredString(x, staff_bottom_y + gap * 2.3, top)
+    c.drawCentredString(x, staff_bottom_y + gap * 0.3, bottom)
+
+# --- Armadura (key signature): sostenidos/bemoles dibujados UNA vez tras
+#     la clave, en vez de repetir la alteracion en cada nota. -----------
+SHARP_ORDER = ['F', 'C', 'G', 'D', 'A', 'E', 'B']
+FLAT_ORDER = ['B', 'E', 'A', 'D', 'G', 'C', 'F']
+
+# Posicion (letra+octava) de cada alteracion de la armadura, en el orden de
+# SHARP_ORDER/FLAT_ORDER, para cada clave -- calculada para que caiga cerca
+# del pentagrama (misma logica de note_y que ya usa el resto del motor: la
+# octava no afecta la posicion salvo por el propio calculo de note_y).
+_TREBLE_SHARP_POS = ['F5', 'C5', 'G5', 'D5', 'A4', 'E5', 'B4']
+_TREBLE_FLAT_POS = ['B4', 'E5', 'A4', 'D5', 'G4', 'C5', 'F4']
+_BASS_SHARP_POS = ['F3', 'C3', 'G3', 'D3', 'A2', 'E3', 'B2']
+_BASS_FLAT_POS = ['B2', 'E3', 'A2', 'D3', 'G2', 'C3', 'F2']
+
+# Armaduras usadas en el proyecto (tonalidad -> (tipo, nº de alteraciones)).
+# Las tonalidades menores comparten armadura con su relativa mayor.
+_KEY_SIGNATURES = {
+    'Do mayor': ('', 0), 'La menor': ('', 0),
+    'Sol mayor': ('#', 1), 'Mi menor': ('#', 1),
+    'Re mayor': ('#', 2), 'Si menor': ('#', 2),
+    'La mayor': ('#', 3), 'Fa# menor': ('#', 3), 'Fa sostenido menor': ('#', 3),
+    'Mi mayor': ('#', 4), 'Do# menor': ('#', 4), 'Do sostenido menor': ('#', 4),
+    'Fa mayor': ('b', 1), 'Re menor': ('b', 1),
+    'Sib mayor': ('b', 2), 'Sol menor': ('b', 2),
+    'Mib mayor': ('b', 3), 'Do menor': ('b', 3),
+    'Lab mayor': ('b', 4), 'Fa menor': ('b', 4),
+    'Re dórico': ('b', 1),  # armadura de Fa mayor (Re dorico es un modo relativo)
+}
+
+
+def get_key_signature(tonalidad):
+    """tonalidad: string como 'Re mayor'. Devuelve (tipo, [letras en orden
+       de impresion]) o ('', []) si no hay armadura o no se reconoce."""
+    acc_type, n = _KEY_SIGNATURES.get(tonalidad, ('', 0))
+    if not n:
+        return '', []
+    order = SHARP_ORDER if acc_type == '#' else FLAT_ORDER
+    return acc_type, order[:n]
+
+
+def draw_key_signature(c, x, staff_bottom_y, gap, clef, tonalidad):
+    """Dibuja la armadura justo despues de la clave. Devuelve el cursor_x
+       avanzado (igual a x si la tonalidad no tiene alteraciones)."""
+    acc_type, letters = get_key_signature(tonalidad)
+    if not letters:
+        return x
+    pos_table = {
+        ('treble', '#'): _TREBLE_SHARP_POS, ('treble', 'b'): _TREBLE_FLAT_POS,
+        ('bass', '#'): _BASS_SHARP_POS, ('bass', 'b'): _BASS_FLAT_POS,
+    }.get((clef, acc_type))
+    if pos_table is None:
+        return x
+    order = SHARP_ORDER if acc_type == '#' else FLAT_ORDER
+    sym = '♯' if acc_type == '#' else '♭'
+    dy = gap * 0.68 if acc_type == '#' else gap * 0.6
+    c.setFont('DejaVuSans', gap * 1.85)
+    c.setFillColor(INK)
+    cx = x
+    for letter in letters:
+        pos_pitch = pos_table[order.index(letter)]
+        cy = note_y(staff_bottom_y, gap, pos_pitch, clef=clef)
+        c.drawString(cx, cy - dy, sym)
+        cx += gap * 1.05
+    return cx + gap * 0.55
+
 
 def draw_notehead(c, cx, cy, gap, filled=True):
     c.saveState()
@@ -281,20 +351,39 @@ def draw_beam(c, x1, y1, x2, y2, stem_dir='up', gap=9):
     c.line(x1, y1, x2, y2)
 
 def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
-                 show_clef=True, show_time=True):
+                 show_clef=True, show_time=True, key_sig=None):
     """events: list of dicts with keys:
          pitch (str) OR pitches (list, for a chord)
          dur: 'w','h','q','e'
          number (fingering, optional), label (optional)
          beam (optional group id -- consecutive same-id eighth notes get a beam)
+       key_sig: nombre de tonalidad (ej. 'Re mayor') -- si se da, dibuja la
+         armadura tras la clave y las notas cuya alteracion coincide con la
+         armadura se dibujan SIN el simbolo repetido (ya esta implicito).
        Draws one full-width staff system with proportionally spaced bar lines
        and returns (top_y, bottom_y) of the staff so systems can be stacked."""
+    key_acc, key_letters_list = get_key_signature(key_sig) if key_sig else ('', [])
+    key_letters = set(key_letters_list)
+
+    def _disp(p):
+        """Pitch a usar SOLO para decidir que dibujar (alteracion suprimida
+           si ya la implica la armadura) -- la posicion en el pentagrama no
+           depende de la alteracion, asi que esto no afecta el note_y."""
+        if not key_acc:
+            return p
+        letter, acc, octv = _parse_pitch(p)
+        if letter in key_letters and acc == key_acc:
+            return f'{letter}{octv}'
+        return p
+
     ys = draw_staff(c, x, top_y, width, gap=gap)
     top, bot = ys[0], ys[-1]
     cursor_x = x + 4
     if show_clef:
         draw_clef(c, cursor_x, bot, gap, clef=clef)
         cursor_x += gap * (5.4 if clef == 'treble' else 4.6)
+    if key_sig:
+        cursor_x = draw_key_signature(c, cursor_x, bot, gap, clef, key_sig)
     if show_time:
         # drawCentredString centers the numeral on cursor_x, so a two-digit
         # numerator/denominator (e.g. '12') extends further left than a
@@ -309,7 +398,7 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
     # clears the time signature / clef instead of running into it.
     if events:
         first_pitches = events[0].get('pitches') or ([events[0]['pitch']] if 'pitch' in events[0] else [])
-        acc_cys = sorted((note_y(bot, gap, p, clef=clef) for p in first_pitches if _parse_pitch(p)[1]), reverse=True)
+        acc_cys = sorted((note_y(bot, gap, p, clef=clef) for p in first_pitches if _parse_pitch(_disp(p))[1]), reverse=True)
         max_level, level, last_cy = 0, 0, None
         for cy in acc_cys:
             level = level + 1 if (last_cy is not None and last_cy - cy < gap * 1.7) else 0
@@ -358,7 +447,7 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
         if events[i - 1].get('number') is None:
             continue
         curr_pitches = events[i].get('pitches') or ([events[i]['pitch']] if 'pitch' in events[i] else [])
-        if not any(_parse_pitch(p)[1] for p in curr_pitches):
+        if not any(_parse_pitch(_disp(p))[1] for p in curr_pitches):
             continue
         gap_here = positions[i] - positions[i - 1]
         if gap_here < MIN_ACC_GAP:
@@ -397,13 +486,13 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
         if e.get('rest'):
             draw_rest(c, px, bot, top, gap, dur=e['dur'])
         elif 'pitches' in e:
-            draw_chord(c, px, bot, top, gap, e['pitches'], dur=e['dur'], clef=clef, label=e.get('label'))
+            draw_chord(c, px, bot, top, gap, [_disp(p) for p in e['pitches']], dur=e['dur'], clef=clef, label=e.get('label'))
         else:
             beam_id = e.get('beam')
             suppress_flag = beam_id is not None
             forced_dir = group_stem_dir.get(beam_id) if beam_id is not None else None
             stem_end = group_beam_y.get(beam_id) if beam_id is not None else None
-            cx, cy, sd = draw_note(c, px, bot, top, gap, e['pitch'], dur=e['dur'],
+            cx, cy, sd = draw_note(c, px, bot, top, gap, _disp(e['pitch']), dur=e['dur'],
                                     number=e.get('number'), label=e.get('label'),
                                     beam_to=True if suppress_flag else None, clef=clef,
                                     stem_dir=forced_dir, stem_end_y=stem_end)

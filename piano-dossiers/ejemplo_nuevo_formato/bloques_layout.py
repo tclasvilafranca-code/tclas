@@ -9,7 +9,8 @@ import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'engine'))
 from notation import *
 from page_layout_common import (W, H, MARGIN, CONTENT_W, system_block, grand_staff_block,
-                                 wrap_text_common, exercise_heading, before_staff, after_system)
+                                 multi_system_block, wrap_text_common, exercise_heading,
+                                 before_staff, after_system)
 from reportlab.lib.colors import white
 from reportlab.pdfbase.pdfmetrics import stringWidth
 

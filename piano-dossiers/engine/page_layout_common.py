@@ -144,21 +144,57 @@ def system_caption(c, x, y, text):
     c.drawString(x, y, text)
 
 
-def system_block(c, x0, w0, y, gap, caption, events, clef='treble', time_sig=(4, 4)):
+def system_block(c, x0, w0, y, gap, caption, events, clef='treble', time_sig=(4, 4), key_sig=None,
+                  show_time=True):
     """Draws a captioned staff system and returns the y just below it,
-    already positioned for the *next* caption (safe, non-overlapping)."""
+    already positioned for the *next* caption (safe, non-overlapping).
+    key_sig: nombre de tonalidad (ej. 'Re mayor') para dibujar la armadura
+    real en vez de repetir la alteracion en cada nota."""
     system_caption(c, x0, y, caption)
     y -= before_staff(gap, events, clef)
-    top, bot = draw_system(c, x0, y, w0, gap, events, clef=clef, time_sig=time_sig)
+    top, bot = draw_system(c, x0, y, w0, gap, events, clef=clef, time_sig=time_sig,
+                            key_sig=key_sig, show_time=show_time)
     return bot - after_system(gap, events, clef)
 
 
-def grand_staff_block(c, x0, w0, y_top, gap, treble_events, bass_events, caption, grand_gap_mult=7.3, time_sig=(4, 4)):
+def multi_system_block(c, x0, w0, y, gap, caption, events, clef='treble', time_sig=(4, 4),
+                        key_sig=None, bars_per_line=4, line_gap_mult=1.9):
+    """Como system_block, pero reparte una frase larga en VARIAS lineas de
+       pentagrama (como una partitura real) en vez de un unico sistema muy
+       denso. Una sola clave/armadura+compas al inicio de cada linea (el
+       compas solo se repite en la primera, como en una partitura real).
+       bars_per_line: cuantos compases caben en cada linea."""
+    dur_beats = {'w': 4.0, 'h': 2.0, 'q': 1.0, 'e': 0.5, 'q.': 1.5, 'h.': 3.0, 'e.': 0.75}
+    beats_per_bar = time_sig[0] * (4.0 / time_sig[1])
+    line_beats = beats_per_bar * bars_per_line
+
+    lines, current, current_beats = [], [], 0.0
+    for e in events:
+        current.append(e)
+        current_beats += dur_beats[e['dur']]
+        if current_beats >= line_beats - 1e-6:
+            lines.append(current)
+            current, current_beats = [], 0.0
+    if current:
+        lines.append(current)
+
+    system_caption(c, x0, y, caption)
+    y -= before_staff(gap, lines[0], clef)
+    for i, line_events in enumerate(lines):
+        top, bot = draw_system(c, x0, y, w0, gap, line_events, clef=clef, time_sig=time_sig,
+                                key_sig=key_sig, show_time=(i == 0))
+        last = i == len(lines) - 1
+        y = bot - (after_system(gap, line_events, clef) if last else gap * line_gap_mult)
+    return y
+
+
+def grand_staff_block(c, x0, w0, y_top, gap, treble_events, bass_events, caption, grand_gap_mult=7.3,
+                       time_sig=(4, 4), key_sig=None):
     """Draws a captioned two-stave (treble+bass) system, with the vertical gap
        between the staves verified wide enough to clear fingering numbers."""
     system_caption(c, x0, y_top, caption)
     yy = y_top - before_staff(gap, treble_events, 'treble')
-    t_top, t_bot = draw_system(c, x0, yy, w0, gap, treble_events, clef='treble', time_sig=time_sig)
+    t_top, t_bot = draw_system(c, x0, yy, w0, gap, treble_events, clef='treble', time_sig=time_sig, key_sig=key_sig)
     yy2 = t_bot - gap * grand_gap_mult
-    b_top, b_bot = draw_system(c, x0, yy2, w0, gap, bass_events, clef='bass', time_sig=time_sig)
+    b_top, b_bot = draw_system(c, x0, yy2, w0, gap, bass_events, clef='bass', time_sig=time_sig, key_sig=key_sig)
     return b_bot - after_system(gap, bass_events, 'bass')

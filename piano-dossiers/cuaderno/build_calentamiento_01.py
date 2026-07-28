@@ -39,11 +39,11 @@ CFG = dict(
     intro='Cinco minutos antes de abrir la partitura. Todo lo de esta hoja está sacado de '
           'Chopsticks: el mismo compás, la misma clave y los mismos intervalos que la pieza abre.',
     reglas=['SOLO EL DEDO 2 DE CADA MANO',
-            'LAS DOS MANOS EN CLAVE DE SOL',
+            'EMPIEZA A ♩=60',
             'CUENTA “UN-DOS-TRES” EN VOZ ALTA'],
     ejercicios=[
         dict(num=1, titulo='El dedo 2 camina',
-             pista='una sola mano · tres golpes por tecla, y te mueves a la siguiente',
+             pista='primero la mano derecha, después la izquierda · tres golpes por tecla',
              events=seq(['C4', 'D4', 'E4', 'F4', 'G4', 'F4']) +
                     seq(['E4', 'D4', 'C4', 'D4', 'E4', 'C4'])),
         dict(num=2, titulo='Las dos manos pegadas · 2ª',

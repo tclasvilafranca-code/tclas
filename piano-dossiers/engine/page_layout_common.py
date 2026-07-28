@@ -255,7 +255,7 @@ def system_block(c, x0, w0, y, gap, caption, events, clef='treble', time_sig=(4,
 
 
 def multi_system_block(c, x0, w0, y, gap, caption, events, clef='treble', time_sig=(4, 4),
-                        key_sig=None, bars_per_line=4, line_gap_mult=1.9):
+                        key_sig=None, bars_per_line=4, line_gap_mult=1.9, spacing='linear'):
     """Como system_block, pero reparte una frase larga en VARIAS lineas de
        pentagrama (como una partitura real) en vez de un unico sistema muy
        denso. Una sola clave/armadura+compas al inicio de cada linea (el
@@ -279,7 +279,7 @@ def multi_system_block(c, x0, w0, y, gap, caption, events, clef='treble', time_s
     y -= before_staff(gap, lines[0], clef)
     for i, line_events in enumerate(lines):
         top, bot = draw_system(c, x0, y, w0, gap, line_events, clef=clef, time_sig=time_sig,
-                                key_sig=key_sig, show_time=(i == 0))
+                                key_sig=key_sig, show_time=(i == 0), spacing=spacing)
         last = i == len(lines) - 1
         y = bot - (after_system(gap, line_events, clef) if last else gap * line_gap_mult)
     return y

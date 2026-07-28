@@ -351,7 +351,7 @@ def draw_beam(c, x1, y1, x2, y2, stem_dir='up', gap=9):
     c.line(x1, y1, x2, y2)
 
 def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
-                 show_clef=True, show_time=True, key_sig=None):
+                 show_clef=True, show_time=True, key_sig=None, spacing='linear'):
     """events: list of dicts with keys:
          pitch (str) OR pitches (list, for a chord)
          dur: 'w','h','q','e'
@@ -426,10 +426,35 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
     if avail_w < raw_avail_w * 0.4:  # safety floor for very short/busy systems
         avail_w = raw_avail_w * 0.4
 
+    # Espaciado horizontal. 'linear' (por defecto) reparte el ancho en
+    # proporcion directa a la duracion -- es lo que ha usado todo el material
+    # anterior, y se conserva para no alterarlo. 'engraved' usa la convencion
+    # real de grabado musical: el ancho crece con la RAIZ de la duracion
+    # (duracion^0.6), de modo que una redonda ocupa ~2.3x una negra en vez de
+    # 4x. Sin esto, los pasajes de notas largas quedan vacios y los de notas
+    # cortas apelmazados.
+    if spacing == 'engraved' and events:
+        ws = [dur_beats[e['dur']] ** 0.6 for e in events]
+        tw = sum(ws) or 1.0
+        cum_beat, cum_w = [0.0], [0.0]
+        for e, w in zip(events, ws):
+            cum_beat.append(cum_beat[-1] + dur_beats[e['dur']])
+            cum_w.append(cum_w[-1] + w)
+
+        def _frac(beat_pos):
+            for i in range(len(cum_beat) - 1):
+                if cum_beat[i] - 1e-9 <= beat_pos <= cum_beat[i + 1] + 1e-9:
+                    span = cum_beat[i + 1] - cum_beat[i]
+                    t = 0.0 if span <= 0 else (beat_pos - cum_beat[i]) / span
+                    return (cum_w[i] + t * (cum_w[i + 1] - cum_w[i])) / tw
+            return beat_pos / total_beats if total_beats else 0.0
+    else:
+        def _frac(beat_pos):
+            return beat_pos / total_beats if total_beats else 0.0
+
     def x_for_beat(beat_pos):
-        frac = beat_pos / total_beats if total_beats else 0
         n_bars_passed = sum(1 for bbeat in bar_beats if bbeat <= beat_pos + 1e-9)
-        return cursor_x + frac * avail_w + n_bars_passed * BAR_SLOT
+        return cursor_x + _frac(beat_pos) * avail_w + n_bars_passed * BAR_SLOT
 
     positions = []
     beat_pos = 0.0

@@ -95,12 +95,13 @@ def build_portada(c, logo_path, alumno, subtitle, months):
             c.showPage()
             y = _draw_header_continuation(c, alumno)
 
-        c.setFillColor(DARKGREEN)
-        c.roundRect(MARGIN, y - 15, CONTENT_W, 15, 3, fill=1, stroke=0)
-        c.setFont('DejaVuSans-Bold', 8.4)
-        c.setFillColor(white)
-        c.drawString(MARGIN + 8, y - 11, month_label.upper())
-        y -= month_h
+        if month_label:
+            c.setFillColor(DARKGREEN)
+            c.roundRect(MARGIN, y - 15, CONTENT_W, 15, 3, fill=1, stroke=0)
+            c.setFont('DejaVuSans-Bold', 8.4)
+            c.setFillColor(white)
+            c.drawString(MARGIN + 8, y - 11, month_label.upper())
+            y -= month_h
 
         for row in rows:
             if y - row_h < FOOTER_Y:

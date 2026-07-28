@@ -285,6 +285,50 @@ def multi_system_block(c, x0, w0, y, gap, caption, events, clef='treble', time_s
     return y
 
 
+def multi_grand_staff_block(c, x0, w0, y, gap, treble_events, bass_events, caption, grand_gap_mult=6.6,
+                             time_sig=(4, 4), key_sig=None, bars_per_line=4, line_gap_mult=2.0):
+    """Como multi_system_block, pero para un pentagrama DOBLE (sol+fa juntos,
+       como una pagina de partitura de piano real): reparte una pieza larga
+       en varias lineas, cada linea con su propio sol+fa. Una sola
+       clave/armadura+compas al inicio de cada linea (el compas solo se
+       repite en la primera). treble_events y bass_events deben sumar el
+       mismo numero total de tiempos, y bars_per_line debe repartirlos en
+       el mismo numero de compases por linea en ambas claves."""
+    dur_beats = {'w': 4.0, 'h': 2.0, 'q': 1.0, 'e': 0.5, 'q.': 1.5, 'h.': 3.0, 'e.': 0.75}
+    beats_per_bar = time_sig[0] * (4.0 / time_sig[1])
+    line_beats = beats_per_bar * bars_per_line
+
+    def _split(events):
+        lines, current, current_beats = [], [], 0.0
+        for e in events:
+            current.append(e)
+            current_beats += dur_beats[e['dur']]
+            if current_beats >= line_beats - 1e-6:
+                lines.append(current)
+                current, current_beats = [], 0.0
+        if current:
+            lines.append(current)
+        return lines
+
+    treble_lines = _split(treble_events)
+    bass_lines = _split(bass_events)
+    n_lines = max(len(treble_lines), len(bass_lines))
+
+    system_caption(c, x0, y, caption)
+    y -= before_staff(gap, treble_lines[0] if treble_lines else None, 'treble')
+    for i in range(n_lines):
+        t_events = treble_lines[i] if i < len(treble_lines) else []
+        b_events = bass_lines[i] if i < len(bass_lines) else []
+        t_top, t_bot = draw_system(c, x0, y, w0, gap, t_events, clef='treble', time_sig=time_sig,
+                                    key_sig=key_sig, show_time=(i == 0))
+        yy2 = t_bot - gap * grand_gap_mult
+        b_top, b_bot = draw_system(c, x0, yy2, w0, gap, b_events, clef='bass', time_sig=time_sig,
+                                    key_sig=key_sig, show_time=(i == 0))
+        last = i == n_lines - 1
+        y = b_bot - (after_system(gap, b_events, 'bass') if last else gap * line_gap_mult)
+    return y
+
+
 def grand_staff_block(c, x0, w0, y_top, gap, treble_events, bass_events, caption, grand_gap_mult=7.3,
                        time_sig=(4, 4), key_sig=None):
     """Draws a captioned two-stave (treble+bass) system, with the vertical gap

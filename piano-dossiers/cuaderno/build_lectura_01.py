@@ -30,7 +30,7 @@ def q(*names):
 
 CFG = dict(
     kicker='Arnau · canción 1 · Chopsticks',
-    page_num=4,
+    page_num=6,
     time_sig=(3, 4),
     intro='No se toca el piano en esta hoja: solo se lee. Di el nombre de cada nota en voz alta, '
           'seguido y sin parar. Son las mismas notas y las mismas figuras que vas a encontrar en '

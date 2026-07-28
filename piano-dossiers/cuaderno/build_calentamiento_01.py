@@ -5,8 +5,10 @@
      - mismo compás (3/4) y misma escritura (las dos manos en clave de Sol
        sobre UN pentagrama, como la edición de DeBenedetti)
      - mismo dedo (2 en cada mano, según la indicación impresa)
-     - los mismos intervalos que la pieza abre: 2ª -> 3ª -> 5ª
-     - el ritmo de la parte B (blanca + negra) y los silencios de los cc. 13-16
+     - los mismos intervalos que la pieza abre: 2ª -> 3ª -> 6ª -> 8ª
+       (medidos sobre la partitura; ver TRANSCRIPCION_01_CHOPSTICKS.md)
+     - el ritmo de la parte B (blanca + negra, en terceras paralelas) y los
+       silencios de los cc. 15-16
    Cada ejercicio es una CÉLULA transportada grado a grado (principio de
    secuencia), no notas sueltas: 6 compases por línea, 18 notas por línea.
 """
@@ -34,7 +36,7 @@ def seq(cells, n=3):
 
 CFG = dict(
     kicker='Arnau · canción 1 · Chopsticks',
-    page_num=3,
+    page_num=5,
     time_sig=(3, 4),
     intro='Cinco minutos antes de abrir la partitura. Todo lo de esta hoja está sacado de '
           'Chopsticks: el mismo compás, la misma clave y los mismos intervalos que la pieza abre.',
@@ -54,25 +56,25 @@ CFG = dict(
              pista='una tecla en medio · así suenan los cc. 3–4',
              events=seq([('C4', 'E4'), ('D4', 'F4'), ('E4', 'G4'),
                          ('F4', 'A4'), ('G4', 'B4'), ('E4', 'G4')])),
-        dict(num=4, titulo='Se abren más · 5ª',
-             pista='tres teclas en medio · así suenan los cc. 5–8',
-             events=seq([('C4', 'G4'), ('D4', 'A4'), ('E4', 'B4'),
-                         ('F4', 'C5'), ('G4', 'D5'), ('E4', 'B4')])),
+        dict(num=4, titulo='Se abren mucho · 6ª y 8ª',
+             pista='cuatro y seis teclas en medio · así suenan los cc. 5–8',
+             events=seq([('D4', 'B4'), ('C4', 'C5'), ('D4', 'B4'),
+                         ('E4', 'A4'), ('D4', 'B4'), ('C4', 'C5')])),
         dict(num=5, titulo='La apertura de la pieza, seguida',
-             pista='2ª → 3ª → 5ª y vuelta · el juego entero de Chopsticks',
-             events=seq([('F4', 'G4'), ('E4', 'G4'), ('E4', 'B4'),
-                         ('E4', 'B4'), ('E4', 'G4'), ('F4', 'G4')])),
-        dict(num=6, titulo='El vals de la parte B',
+             pista='2ª → 3ª → 6ª → 8ª y vuelta · el viaje entero de Chopsticks',
+             events=seq([('F4', 'G4'), ('E4', 'G4'), ('D4', 'B4'),
+                         ('C4', 'C5'), ('D4', 'B4'), ('E4', 'A4')])),
+        # la parte B son terceras paralelas que bajan por grados: el
+        # calentamiento hace ese mismo gesto antes de tocarlo en la partitura
+        dict(num=6, titulo='El vals de la parte B · terceras que bajan',
              pista='una larga y una corta · así son los cc. 17–32',
-             events=[{'pitches': list(d), 'dur': 'h'} for d in [('F4', 'G4')]] +
-                    [{'pitches': ['F4', 'G4'], 'dur': 'q'}] +
-                    [{'pitches': ['E4', 'G4'], 'dur': 'h'}, {'pitches': ['E4', 'G4'], 'dur': 'q'}] +
-                    [{'pitches': ['E4', 'B4'], 'dur': 'h'}, {'pitches': ['E4', 'B4'], 'dur': 'q'}] +
-                    [{'pitches': ['E4', 'G4'], 'dur': 'h'}, {'pitches': ['E4', 'G4'], 'dur': 'q'}] +
-                    [{'pitches': ['F4', 'G4'], 'dur': 'h'}, {'pitches': ['F4', 'G4'], 'dur': 'q'}] +
-                    [{'pitches': ['F4', 'G4'], 'dur': 'h.'}]),
+             events=[e for d in [('B4', 'D5'), ('A4', 'C5'), ('G4', 'B4'),
+                                 ('F4', 'A4'), ('E4', 'G4')]
+                     for e in ({'pitches': list(d), 'dur': 'h'},
+                               {'pitches': list(d), 'dur': 'q'})] +
+                    [{'pitches': ['E4', 'G4'], 'dur': 'h.'}]),
         dict(num=7, titulo='Contar el silencio',
-             pista='lo más difícil de la pieza (cc. 13–16): el silencio dura igual que la nota',
+             pista='lo más difícil de la pieza (cc. 15–16): el silencio dura igual que la nota',
              events=([{'pitches': ['F4', 'G4'], 'dur': 'q'}, R, R] +
                      [R, {'pitches': ['F4', 'G4'], 'dur': 'q'}, R] +
                      [R, R, {'pitches': ['F4', 'G4'], 'dur': 'q'}] +

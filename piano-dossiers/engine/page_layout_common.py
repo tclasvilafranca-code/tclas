@@ -144,6 +144,103 @@ def system_caption(c, x, y, text):
     c.drawString(x, y, text)
 
 
+# --- Bloques pedagogicos (Dosier Exhaustivo de Ejercicios de Piano por Nivel) ---
+# Bloques 5 (juegos) y 7 (creatividad) se descartaron por decision del cliente.
+BLOQUE_COLOR = {
+    1: HexColor('#6B7A8F'), 2: DARKGREEN, 3: HexColor('#3E6E8F'),
+    4: GOLD, 6: MAROON,
+}
+BLOQUE_NOMBRE = {
+    1: 'Calentamiento físico', 2: 'Técnica al piano', 3: 'Lectura, ritmo e interpretación',
+    4: 'Entrenamiento auditivo', 6: 'Teoría y dictado',
+}
+
+
+def bloque_heading(c, y, num, desc, extra=''):
+    """Cabecera de bloque pedagogico: badge numerado de color propio + nombre
+       fijo del bloque (igual en todos los alumnos/canciones, para que el
+       alumno reconozca siempre el mismo bloque) + descripcion especifica de
+       esta cancion."""
+    from reportlab.pdfbase.pdfmetrics import stringWidth
+    color = BLOQUE_COLOR[num]
+    nombre = BLOQUE_NOMBRE[num]
+    c.setFillColor(color)
+    c.roundRect(MARGIN, y - 19, 23, 23, 4, fill=1, stroke=0)
+    c.setFont('DejaVuSans-Bold', 11.5)
+    c.setFillColor(white)
+    c.drawCentredString(MARGIN + 11.5, y - 14, str(num))
+    c.setFont('DejaVuSans-Bold', 11.3)
+    c.setFillColor(INK)
+    titulo = f'Bloque {num} · {nombre}' + (f' — {extra}' if extra else '')
+    size = 11.3
+    while size > 8.8 and stringWidth(titulo, 'DejaVuSans-Bold', size) > CONTENT_W - 31:
+        size -= 0.3
+    c.setFont('DejaVuSans-Bold', size)
+    c.drawString(MARGIN + 31, y - 13.5, titulo)
+    yy = wrap_text_common(c, desc, MARGIN + 31, y - 26, 'DejaVuSans', 8.5, CONTENT_W - 31, 11.3, color=GRAY)
+    return yy - 3
+
+
+def bullet_list(c, y, items, x0=MARGIN, w=CONTENT_W, font_size=8.7, leading=11.6, color=INK, dot_color=None):
+    for item in items:
+        c.setFillColor(dot_color or INK)
+        c.circle(x0 + 2.3, y - 3.2, 1.5, fill=1, stroke=0)
+        y = wrap_text_common(c, item, x0 + 11, y, 'DejaVuSans', font_size, w - 11, leading, color=color)
+        y -= 2.5
+    return y
+
+
+def bullet_list_2col(c, y, items, x0=MARGIN, w=CONTENT_W, font_size=8.7, leading=11.6, dot_color=None):
+    half = (len(items) + 1) // 2
+    col_w = (w - 22) / 2
+    y_left = bullet_list(c, y, items[:half], x0=x0, w=col_w, font_size=font_size, leading=leading, dot_color=dot_color)
+    y_right = bullet_list(c, y, items[half:], x0=x0 + col_w + 22, w=col_w, font_size=font_size, leading=leading, dot_color=dot_color)
+    return min(y_left, y_right)
+
+
+def nota_estilo(c, y, texto, height=32, label=None):
+    """Caja destacada para una nota transversal (categorias A-H del dosier:
+       ergonomia, estrategia de estudio, estilo historico, etc.)."""
+    c.setFillColor(HexColor('#F4EFE3'))
+    c.roundRect(MARGIN, y - height, CONTENT_W, height, 5, fill=1, stroke=0)
+    c.setFillColor(GOLD)
+    c.rect(MARGIN, y - height, 3, height, fill=1, stroke=0)
+    txt = f'{label}: {texto}' if label else texto
+    wrap_text_common(c, txt, MARGIN + 12, y - 12, 'DejaVuSans', 8.2, CONTENT_W - 24, 11.0, color=HexColor('#5A4A20'))
+    return y - height - 8
+
+
+def answer_box_row(c, x0, y, n_boxes, box_w, box_h=15, gap=6):
+    """Fila de casillas en blanco (p.ej. para digitacion, nombres de nota o
+       grados I/IV/V que el alumno rellena a mano)."""
+    c.setStrokeColor(LIGHTLINE)
+    c.setLineWidth(0.7)
+    x = x0
+    for _ in range(n_boxes):
+        c.roundRect(x, y - box_h, box_w, box_h, 2, fill=0, stroke=1)
+        x += box_w + gap
+    return y - box_h
+
+
+def blank_staff(c, x, top_y, width, gap, clef='treble', time_sig=(4, 4), n_bars=2):
+    """Pentagrama vacio (clave + compas + compases marcados, sin notas) para
+       un dictado ritmico o de notas: el alumno escribe encima lo que
+       escucha."""
+    ys = draw_staff(c, x, top_y, width, gap=gap)
+    top, bot = ys[0], ys[-1]
+    cursor_x = x + 4
+    draw_clef(c, cursor_x, bot, gap, clef=clef)
+    cursor_x += gap * (5.4 if clef == 'treble' else 4.6)
+    draw_time_sig(c, cursor_x, bot, gap, top=str(time_sig[0]), bottom=str(time_sig[1]))
+    cursor_x += gap * 3.0
+    draw_barline(c, x, top, bot)
+    avail_w = (x + width - 8) - cursor_x
+    for i in range(1, n_bars):
+        draw_barline(c, cursor_x + avail_w * i / n_bars, top, bot)
+    draw_barline(c, x + width - 4, top, bot, final=True)
+    return top, bot
+
+
 def system_block(c, x0, w0, y, gap, caption, events, clef='treble', time_sig=(4, 4), key_sig=None,
                   show_time=True):
     """Draws a captioned staff system and returns the y just below it,

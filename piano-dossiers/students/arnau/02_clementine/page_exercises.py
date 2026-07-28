@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Taller de practica - Clementine / Found a Peanut (Arnau, cancion 2,
-   Do mayor, 3/4). Nivel iniciacion: melodia solo con la derecha, y un
-   estiramiento puntual de la izquierda hacia abajo (bloque D, manos
-   pequenas: se avisa de no forzar, solo alcanzar con calma)."""
+   Do mayor, 3/4). Formato por BLOQUES del Dosier Exhaustivo de
+   Ejercicios de Piano (bloques 1,2,3,4,6). Categoria D (ergonomia,
+   manos pequenas) aplicada al estiramiento de la izquierda."""
 from page_layout_common import *
 
 SONG_KICKER = 'ARNAU · NIVEL INICIACIÓN · CLEMENTINE'
@@ -19,34 +19,30 @@ def page1(c):
     c.setFillColor(GRAY)
     c.drawString(MARGIN, y, 'Casi toda la melodía va con la mano derecha; la izquierda solo alcanza una nota grave de vez en cuando.')
     y -= 15
-    gap = 7.6
+    gap = 7.3
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 1, 'Calentamiento: saltos pequeños en posición de 5 dedos', 1,
-                          'Dedos 1-3-5 alternando, sin tensar la muñeca — como si picotearas las teclas.')
-    y -= 9
+    y = bloque_heading(c, y, 1, 'Antes de sentarte al piano. Sin tocar ninguna tecla.')
+    y -= 2
+    y = bullet_list(c, y, [
+        'Frota las manos y abre/cierra los puños con los brazos estirados, 10 veces.',
+        'Estira cada dedo por separado, empujando con suavidad hacia arriba.',
+        'Estira todo el brazo hacia un punto lejano en el aire y vuelve, muy despacio — preparación para el estiramiento de la izquierda de hoy.',
+    ], dot_color=BLOQUE_COLOR[1])
+    y -= 8
+
+    y = bloque_heading(c, y, 2, 'Ya en el piano. Categoría D (ergonomía): la izquierda baja UNA vez, sin forzar, moviendo todo el brazo.')
+    y -= 4
     ev1a = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in
             [('C4', 1), ('E4', 3), ('G4', 5), ('E4', 3), ('C4', 1), ('E4', 3)]]
     y = system_block(c, x0, w0, y, gap, 'a) Do-Mi-Sol, ida y vuelta', ev1a, clef='treble', time_sig=TS)
-    y -= 3
 
-    y = exercise_heading(c, y, 2, 'El estiramiento de la izquierda hacia abajo', 2,
-                          'Ergonomía para manos pequeñas: la izquierda baja UNA vez a buscar una nota grave y vuelve a subir, sin prisa ni fuerza — solo alcanzar.')
-    y -= 9
     ev2a = [{'pitch': p, 'dur': 'q'} for p in ['C3', 'D3', 'E3', 'D3', 'C3', 'D3']]
-    y = system_block(c, x0, w0, y, gap, 'a) Practica el alcance solo, muy despacio', ev2a, clef='bass', time_sig=TS)
+    y = system_block(c, x0, w0, y, gap, 'b) El estiramiento de la izquierda, solo, muy despacio', ev2a, clef='bass', time_sig=TS)
 
-    treb2b = [{'pitch': p, 'dur': 'h.'} for p in ['C4', 'D4', 'E4']]
-    bass2b = [{'rest': True, 'dur': 'h'}, {'pitch': 'C3', 'dur': 'q'}] * 3
-    y = grand_staff_block(c, x0, w0, y, gap, treb2b, bass2b, 'b) La derecha canta, la izquierda solo alcanza al final de cada compás', grand_gap_mult=7.3, time_sig=TS)
-    y -= 4
-
-    y = exercise_heading(c, y, 3, 'Acordes I–IV–V en Do mayor', 1,
-                          'Do–Fa–Sol, para acompañar cuando la izquierda sí que toca.')
-    y -= 11
     pattern_a = [(DO, 'Do'), (FA, 'Fa'), (SOL, 'Sol'), (DO, 'Do')]
     eva = [{'pitches': p, 'dur': 'h.', 'label': l} for p, l in pattern_a]
-    y = system_block(c, x0, w0, y, gap, 'a) Do-Fa-Sol-Do', eva, clef='bass', time_sig=TS)
+    y = system_block(c, x0, w0, y, gap, 'c) Acordes I-IV-V: Do-Fa-Sol-Do', eva, clef='bass', time_sig=TS)
 
     exercises_footer(c, 3)
     c.showPage()
@@ -56,34 +52,38 @@ def page2(c):
     y = exercises_header(c, SONG_KICKER, 'Ejercicios de práctica al piano · 2/2')
     c.setFont('DejaVuSans', 9.2)
     c.setFillColor(GRAY)
-    c.drawString(MARGIN, y, 'Canta la letra mientras tocas: "Oh, my darling, Clementine" — te ayuda a no perder el pulso.')
+    c.drawString(MARGIN, y, 'Categoría E: canta la letra mientras tocas — "Oh, my darling, Clementine" — para no perder el pulso.')
     y -= 15
-    gap = 7.1
+    gap = 6.9
     x0, w0 = MARGIN, CONTENT_W
 
-    y = exercise_heading(c, y, 4, 'La frase de "Oh, my darling"', 2,
-                          'El salto de corcheas hacia arriba: Sol-La-Sol, ligero, sin golpear.')
-    y -= 7
-    ev4a = [{'pitch': p, 'dur': 'e', 'beam': i // 6} for i, p in
-            enumerate(['G4', 'A4'] * 6)]
-    y = system_block(c, x0, w0, y, gap, 'a) El saltito repetido', ev4a, clef='treble', time_sig=TS)
-    y -= 3
+    y = bloque_heading(c, y, 3, 'Con la partitura al lado. La derecha canta tranquila; la izquierda baja una sola vez y sube.')
+    y -= 4
+    treb1 = [{'pitch': p, 'dur': 'h.'} for p in ['C4', 'D4', 'E4']]
+    bass1 = [{'rest': True, 'dur': 'h'}, {'pitch': 'C3', 'dur': 'q'}] * 3
+    y = grand_staff_block(c, x0, w0, y, gap, treb1, bass1, 'a) Manos juntas: el estiramiento dentro de la frase', grand_gap_mult=6.8, time_sig=TS)
 
-    y = exercise_heading(c, y, 5, 'Manos juntas · solo en el compás del estiramiento', 2,
-                          'La derecha sigue su melodía tranquila; la izquierda baja una sola vez, con calma, y sube.')
-    y -= 7
-    treb5 = [{'pitch': p, 'dur': 'h.'} for p in ['E4', 'D4', 'C4']]
-    bass5 = [{'rest': True, 'dur': 'h'}, {'pitch': 'C3', 'dur': 'q'}] * 3
-    y = grand_staff_block(c, x0, w0, y, gap, treb5, bass5, 'a) El estiramiento dentro de la frase', grand_gap_mult=7.3, time_sig=TS)
-    y -= 3
-
-    y = exercise_heading(c, y, 6, 'Reto extra · el final de la canción', 2,
-                          'Con la partitura al lado: la frase que termina en "Clementine", cantando bajito.')
-    y -= 7
     treb6 = [{'pitch': p, 'dur': 'q'} for p in ['E4', 'D4', 'C4', 'D4', 'C4', 'D4']] + [{'pitch': 'C4', 'dur': 'h.'}]
     bass6 = [{'pitches': DO, 'dur': 'h.'}] * 2 + [{'pitches': SOL, 'dur': 'h.'}]
-    # dur beats: treble 6*1 + 3 = 9 (3 bars 3/4); bass 3+3+3=9 -> ok
-    y = grand_staff_block(c, x0, w0, y, gap, treb6, bass6, 'El final casi completo · con acordes sencillos debajo', grand_gap_mult=7.3, time_sig=TS)
+    y = grand_staff_block(c, x0, w0, y, gap, treb6, bass6, 'b) Reto extra: el final de Clementine, casi completo', grand_gap_mult=6.8, time_sig=TS)
+    y -= 6
+
+    y = bloque_heading(c, y, 4, 'De oído. El profesor toca, Arnau responde en voz alta (no se escribe).')
+    y -= 2
+    y = bullet_list(c, y, [
+        'Toca Mi y luego el Do grave de la izquierda: ¿sube o baja?',
+        'Toca los acordes Do-Fa-Sol-Do: ¿cuál suena como si "terminara la frase"?',
+        'Canta "Oh, my darling" antes de tocarlo: ¿coincide con las notas reales?',
+    ], dot_color=BLOQUE_COLOR[4])
+    y -= 6
+
+    y = bloque_heading(c, y, 6, 'Aquí sí se escribe: sobre el papel, con la partitura delante.')
+    y -= 4
+    c.setFont('DejaVuSans-Bold', 8.4)
+    c.setFillColor(INK)
+    c.drawString(MARGIN, y, 'Escribe el grado (I, IV, V) de cada acorde: Do__  Fa__  Sol__  Do__')
+    y -= 6
+    y = answer_box_row(c, MARGIN, y - 4, 4, (CONTENT_W - 3 * 6) / 4, gap=6)
 
     exercises_footer(c, 4)
     c.showPage()

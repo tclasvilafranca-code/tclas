@@ -1,6 +1,69 @@
 # El Cuaderno del Pianista — Motor de Dosieres · guía para Claude Code
 
-Este proyecto genera **dosieres de piano de 5 páginas** (partitura + teoría + 2 páginas
+> ## ⚠️ FORMATO VIGENTE: el cuaderno de 6 páginas (`cuaderno/`)
+>
+> El formato **actual y definitivo** son **6 páginas por canción**, generadas por
+> `cuaderno/build_cancion_<n>.py`:
+>
+> | Pág. | Hoja | Módulo |
+> |---|---|---|
+> | 1 | La partitura original | (PDF fuente, sin tocar) |
+> | 2 | Ficha de la partitura | `ficha_info.py` |
+> | 3 | Calentamiento | `hoja_calentamiento.py` |
+> | 4 | Agudeza visual y auditiva | `hoja_lectura.py` |
+> | 5 | Al piano · por partes | `hoja_piano.py` |
+> | 6 | Al piano · montarla | `hoja_piano.py` |
+>
+> Más `cuaderno/portada.py` para portada + índice del álbum de cada alumno.
+>
+> ### Las tres reglas que sostienen el formato
+>
+> 1. **Todo sale de la partitura.** Ningún ejercicio se inventa: cada uno indica
+>    de qué compases procede. Antes de escribir nada hay que **transcribir la
+>    pieza midiendo el PDF fuente** (render a 150 dpi, detectar las 5 líneas de
+>    cada pentagrama, medir la posición vertical de cada cabeza de nota, y
+>    comprobar visualmente a zoom todo lo dudoso). El resultado se guarda en
+>    `cuaderno/TRANSCRIPCION_<nn>_<TITULO>.md`. Ver ese archivo como plantilla.
+>    **Nunca afirmes en papel un dato musical que no hayas medido** — pasó una
+>    vez (se dio por buena una 5ª que no existía en la pieza) y hubo que
+>    corregir material ya entregado.
+> 2. **Cada hoja tiene una lógica propia, y son opuestas entre sí.**
+>    El calentamiento usa **secuencias** (una célula transportada grado a grado)
+>    porque busca memoria muscular. La hoja de lectura usa **anti-secuencia**
+>    (orden deliberadamente irregular) porque un patrón deja que el alumno
+>    adivine en vez de leer. Las hojas al piano usan **aislar → reducir →
+>    reinsertar**: la última siempre devuelve el material a la partitura, o el
+>    alumno acaba tocando ejercicios bien y la pieza mal.
+> 3. **Densidad real de partitura publicada:** 12–32 pt por tiempo, 4–8 compases
+>    por línea. Usa `spacing='engraved'` en `draw_system`. Ver
+>    `ANALISIS_ESCRITURA_MUSICAL.md`.
+>
+> ### Correspondencia con el dosier de ejercicios por niveles del cliente
+>
+> | Bloque del documento | Dónde vive |
+> |---|---|
+> | 2. Técnica al piano | Calentamiento + hojas al piano |
+> | 3. Lectura, ritmo e interpretación | Agudeza visual (parte 1) |
+> | 4. Entrenamiento auditivo | Agudeza auditiva (parte 2) |
+> | 6. Teoría escrita | Ficha de la partitura |
+> | E. Estrategias de estudio | Hojas al piano (es su núcleo) |
+>
+> Los bloques 1 (calentamiento físico), 5 (juegos) y 7 (creatividad) quedan
+> **fuera del cuaderno por decisión del cliente**: mejor menos y mejor.
+>
+> ### Verificación obligatoria antes de entregar
+> `run_full_audit` (compases) + `audit_text_bounds` (margen derecho) +
+> comprobación de píxeles del borde inferior. Las tres, en las 5 hojas.
+> Los avisos de *sparse* son aceptables solo en sistemas de blancas/silencios.
+>
+> Lo que sigue documenta el **formato antiguo de 5 páginas** (`engine/`,
+> `examples/`), que ya no se usa para material nuevo pero sigue en producción
+> para los álbumes ya entregados. El motor de notación (`notation.py`,
+> `audit_suite.py`) es común a los dos y sí se sigue usando.
+
+---
+
+Este proyecto generaba **dosieres de piano de 5 páginas** (partitura + teoría + 2 páginas
 de ejercicios + ficha de lenguaje musical sin piano) para alumnos de piano infantil,
 en PDF, con calidad profesional de imprenta.
 

@@ -1,20 +1,22 @@
 # -*- coding: utf-8 -*-
-"""Hoja de AGUDEZA VISUAL: leer las notas en voz alta, sin tocar.
+"""Hoja de AGUDEZA VISUAL Y AUDITIVA. Dos mitades, ninguna toca el piano.
 
-   Finalidad distinta a la del calentamiento, y eso cambia las reglas de
-   diseño:
+   PARTE 1 · LEER — el ojo.
+   Principio de ANTI-SECUENCIA: el calentamiento usa secuencias (una célula
+   transportada) porque busca memoria muscular, pero leer necesita justo lo
+   contrario. Si las notas siguen un patrón, el alumno lo adivina y deja de
+   leer. Aquí el orden es deliberadamente irregular y ninguna célula se
+   repite.
 
-   - El calentamiento usa SECUENCIAS (una célula transportada) porque busca
-     memoria muscular: la repetición es lo que entrena la mano.
-   - La lectura necesita justo lo contrario: ANTI-SECUENCIA. Si las notas
-     siguen un patrón, el alumno lo adivina y deja de leer. Aquí el orden es
-     deliberadamente irregular y ninguna célula se repite.
+   PARTE 2 · ESCUCHAR — el oído.
+   La dirige quien acompaña (el profesor en clase, cualquiera en casa): toca,
+   y el alumno responde sin mirar el teclado. Todo lo que se pregunta sale de
+   la pieza, igual que en el resto del cuaderno: si la canción se abre y se
+   cierra en intervalos, la pregunta es "cerca o lejos"; si tiene dos partes
+   con carácter distinto, la pregunta es "A o B".
 
-   - Espaciado más generoso que en el calentamiento (5 compases por línea en
-     vez de 6): leer en voz alta a primera vista pide más aire entre notas
-     que repetir un patrón que ya conoces.
-   - Sin digitaciones y sin acordes: una nota cada vez, para poder nombrarla.
-   - Solo las figuras y el registro que aparecen en la partitura.
+   Las casillas se rodean con lápiz, así que la hoja tiene que dejar sitio
+   físico para el trazo: de ahí el tamaño de las celdas.
 """
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'engine'))
@@ -22,14 +24,35 @@ from reportlab.lib.colors import HexColor, white
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from notation import draw_system, draw_staff, draw_clef, note_y, draw_notehead
 from page_layout_common import before_staff, after_system
-from portada import (W, H, MARGIN, CONTENT_W, NAVY, NAVY_SOFT, CREAM,
+from portada import (W, H, MARGIN, CONTENT_W, NAVY, NAVY_SOFT, CREAM, RULE,
                      INK, MUTED, ACCENT, _fit, _wrap)
 
 BLUE = HexColor('#3E6E8F')
 PANEL = HexColor('#F3F1EA')
 
-GAP = 6.3
+GAP = 6.6
 BARS_PER_LINE = 5
+
+
+def seccion(c, y, num, titulo, sub):
+    """Cabecera de media hoja: PARTE 1 · LEER / PARTE 2 · ESCUCHAR."""
+    c.setFillColor(NAVY)
+    c.roundRect(MARGIN, y - 14, 17, 17, 3, fill=1, stroke=0)
+    c.setFont('DejaVuSans-Bold', 9.4)
+    c.setFillColor(white)
+    c.drawCentredString(MARGIN + 8.5, y - 10.4, num)
+    c.setFont('DejaVuSerif-Bold', 13)
+    c.setFillColor(NAVY)
+    c.drawString(MARGIN + 25, y - 11, titulo)
+    tw = stringWidth(titulo, 'DejaVuSerif-Bold', 13)
+    ss = _fit(sub, 'DejaVuSans', 8.2, CONTENT_W - 25 - tw - 12, floor=6.4)
+    c.setFont('DejaVuSans', ss)
+    c.setFillColor(MUTED)
+    c.drawString(MARGIN + 25 + tw + 12, y - 10, sub)
+    c.setStrokeColor(RULE)
+    c.setLineWidth(0.8)
+    c.line(MARGIN, y - 21, W - MARGIN, y - 21)
+    return y - 27
 
 
 def _ej_heading(c, y, num, titulo, pista):
@@ -42,11 +65,11 @@ def _ej_heading(c, y, num, titulo, pista):
     c.setFillColor(INK)
     c.drawString(MARGIN + 23, y - 9, titulo)
     tw = stringWidth(titulo, 'DejaVuSans-Bold', 9.6)
-    psize = _fit(pista, 'DejaVuSans', 8.2, CONTENT_W - 23 - tw - 12, floor=6.4)
+    psize = _fit(pista, 'DejaVuSans', 8.2, CONTENT_W - 23 - tw - 12, floor=6.2)
     c.setFont('DejaVuSans', psize)
     c.setFillColor(MUTED)
     c.drawString(MARGIN + 23 + tw + 12, y - 9, pista)
-    return y - 22
+    return y - 20
 
 
 def chuleta(c, y, pitches, nombres, gap=6.6):
@@ -58,7 +81,7 @@ def chuleta(c, y, pitches, nombres, gap=6.6):
     c.setStrokeColor(NAVY)
     c.setLineWidth(1.3)
     c.line(MARGIN, y - 5, MARGIN + 22, y - 5)
-    y -= 20
+    y -= 19
 
     # la caja se dimensiona a partir de la nota mas grave: si se fija a ojo,
     # los nombres se montan encima de las notas de linea adicional
@@ -117,25 +140,99 @@ def crono(c, y, titulo, intentos=3, w=None):
     """Casillas de tiempo: leer la misma línea varias veces y ver que cada
        vez se tarda menos es lo que de verdad engancha y mide la soltura."""
     w = w or CONTENT_W
-    h = 40
+    h = 24
     c.setFillColor(PANEL)
     c.roundRect(MARGIN, y - h, w, h, 4, fill=1, stroke=0)
     c.setFillColor(ACCENT)
     c.rect(MARGIN, y - h, 3, h, fill=1, stroke=0)
-    c.setFont('DejaVuSans-Bold', 7.6)
+    # el titulo tiene que caber en lo que sobra a la izquierda de las
+    # casillas: si se pone a pelo, se monta encima de la primera raya
+    bx = W - MARGIN - 13 - intentos * 84 + 8
+    tsize = _fit(titulo.upper(), 'DejaVuSans-Bold', 7.6,
+                 bx - (MARGIN + 13) - 10, floor=5.6)
+    c.setFont('DejaVuSans-Bold', tsize)
     c.setFillColor(NAVY)
     c.drawString(MARGIN + 13, y - 15, titulo.upper())
-    bx = MARGIN + 13
     for i in range(1, intentos + 1):
-        c.setFont('DejaVuSans', 7.6)
+        c.setFont('DejaVuSans', 7.4)
         c.setFillColor(MUTED)
-        c.drawString(bx, y - 30, f'{i}ª vez')
-        lw = 46
+        c.drawString(bx, y - 15, f'{i}ª')
         c.setStrokeColor(NAVY_SOFT)
         c.setLineWidth(0.8)
-        c.line(bx + 30, y - 31, bx + 30 + lw, y - 31)
-        bx += 30 + lw + 26
+        c.line(bx + 13, y - 16, bx + 68, y - 16)
+        bx += 84
     return y - h
+
+
+def caja_profe(c, y, lineas):
+    """Lo que toca quien acompaña. Va con borde y en otro color porque NO es
+       para que lo lea el alumno: si lo lee, se acabó el ejercicio."""
+    inner = CONTENT_W - 24
+    alto = []
+    for _, txt in lineas:
+        n, ln = 1, ''
+        for wd in txt.split():
+            t = (ln + ' ' + wd).strip()
+            if stringWidth(t, 'DejaVuSans', 7.3) > inner - 16:
+                n += 1; ln = wd
+            else:
+                ln = t
+        alto.append(n)
+    h = 20 + sum(n * 9.6 for n in alto) + 2.0 * len(lineas)
+
+    c.setFillColor(white)
+    c.setStrokeColor(ACCENT)
+    c.setLineWidth(0.9)
+    c.roundRect(MARGIN, y - h, CONTENT_W, h, 4, fill=1, stroke=1)
+    c.setFont('DejaVuSans-Bold', 6.8)
+    c.setFillColor(ACCENT)
+    c.drawString(MARGIN + 12, y - 12, 'PARA QUIEN TOCA  ·  el alumno no mira esta caja ni el teclado')
+
+    yy = y - 21
+    for (letra, txt), n in zip(lineas, alto):
+        c.setFont('DejaVuSans-Bold', 7.6)
+        c.setFillColor(ACCENT)
+        c.drawString(MARGIN + 12, yy - 7.4, letra)
+        _wrap(c, txt, MARGIN + 28, yy, 'DejaVuSans', 7.3, inner - 16, 9.6, INK)
+        yy -= n * 9.6 + 2.0
+    return y - h - 8
+
+
+def fila_respuestas(c, y, letra, titulo, pista, n, opciones):
+    """Fila de casillas numeradas: el alumno rodea la respuesta con lápiz."""
+    c.setFont('DejaVuSans-Bold', 8.8)
+    c.setFillColor(BLUE)
+    c.drawString(MARGIN, y - 8, letra + ')')
+    lw = stringWidth(letra + ')', 'DejaVuSans-Bold', 8.8)
+    c.setFont('DejaVuSans-Bold', 8.8)
+    c.setFillColor(INK)
+    c.drawString(MARGIN + lw + 6, y - 8, titulo)
+    tw = stringWidth(titulo, 'DejaVuSans-Bold', 8.8)
+    ps = _fit(pista, 'DejaVuSans', 7.8, CONTENT_W - lw - tw - 20, floor=6.2)
+    c.setFont('DejaVuSans', ps)
+    c.setFillColor(MUTED)
+    c.drawString(MARGIN + lw + tw + 12, y - 8, pista)
+    y -= 16
+
+    sep, ch = 5, 18
+    cw = (CONTENT_W - sep * (n - 1)) / n
+    k = len(opciones)
+    largest = max(opciones, key=len)
+    osize = _fit(largest, 'DejaVuSans-Bold', 8.6, cw / k - 3.5, floor=5.4)
+    for i in range(n):
+        bx = MARGIN + i * (cw + sep)
+        c.setFont('DejaVuSans', 6.2)
+        c.setFillColor(MUTED)
+        c.drawString(bx + 1.5, y - 5.5, str(i + 1))
+        c.setFillColor(white)
+        c.setStrokeColor(RULE)
+        c.setLineWidth(0.9)
+        c.roundRect(bx, y - 7 - ch, cw, ch, 2.5, fill=1, stroke=1)
+        for j, op in enumerate(opciones):
+            c.setFont('DejaVuSans-Bold', osize)
+            c.setFillColor(NAVY_SOFT)
+            c.drawCentredString(bx + cw * (j + 0.5) / k, y - 7 - ch + 6.6, op)
+    return y - 7 - ch - 8
 
 
 def build_lectura(c, cfg):
@@ -150,48 +247,35 @@ def build_lectura(c, cfg):
     c.drawString(MARGIN, y, cfg['kicker'].upper())
     c.setFont('DejaVuSans', 8.4)
     c.setFillColor(MUTED)
-    c.drawRightString(W - MARGIN, y, 'Agudeza visual · sin tocar el piano')
+    c.drawRightString(W - MARGIN, y, 'Sin tocar el piano')
     y -= 28
 
     c.setFont('DejaVuSerif-Bold', 24)
     c.setFillColor(NAVY)
-    c.drawString(MARGIN, y, 'Agudeza visual')
-    y -= 16
-    y = _wrap(c, cfg['intro'], MARGIN, y, 'DejaVuSans', 9, CONTENT_W, 11.6, MUTED)
-    y -= 8
+    c.drawString(MARGIN, y, 'Agudeza visual y auditiva')
+    y -= 15
+    y = _wrap(c, cfg['intro'], MARGIN, y, 'DejaVuSans', 9, CONTENT_W, 11.4, MUTED)
+    y -= 10
 
-    bh = 24
-    c.setFillColor(PANEL)
-    c.roundRect(MARGIN, y - bh, CONTENT_W, bh, 4, fill=1, stroke=0)
-    c.setFillColor(BLUE)
-    c.rect(MARGIN, y - bh, 3, bh, fill=1, stroke=0)
-    reglas = cfg['reglas']
-    size = 8.2
-    while size > 6.2 and (sum(stringWidth(r, 'DejaVuSans-Bold', size) for r in reglas)
-                          + 26 * (len(reglas) - 1)) > CONTENT_W - 26:
-        size -= 0.2
-    rx = MARGIN + 13
-    for i, r in enumerate(reglas):
-        c.setFont('DejaVuSans-Bold', size)
-        c.setFillColor(NAVY)
-        c.drawString(rx, y - 15, r)
-        rx += stringWidth(r, 'DejaVuSans-Bold', size)
-        if i < len(reglas) - 1:
-            c.setFillColor(BLUE)
-            c.circle(rx + 13, y - 12, 1.8, fill=1, stroke=0)
-            rx += 26
-    y -= bh + 16
-
+    # ---------------- PARTE 1 · LEER -------------------------------------
+    y = seccion(c, y, '1', 'Leer', cfg['sub_leer'])
     y = chuleta(c, y, cfg['chuleta_pitches'], cfg['chuleta_nombres'])
-
     for ej in cfg['ejercicios']:
         y = _ej_heading(c, y, ej['num'], ej['titulo'], ej['pista'])
         y = _lineas(c, y, ej['events'], cfg['time_sig'],
                     bars_per_line=ej.get('bars_per_line', BARS_PER_LINE))
         y -= ej.get('extra_gap', 2)
-
     if cfg.get('crono'):
         y = crono(c, y, cfg['crono'])
+    y -= 12
+
+    # ---------------- PARTE 2 · ESCUCHAR ---------------------------------
+    esc = cfg['escucha']
+    y = seccion(c, y, '2', 'Escuchar', esc['sub'])
+    y = caja_profe(c, y, esc['profe'])
+    for f in esc['filas']:
+        y = fila_respuestas(c, y, f['letra'], f['titulo'], f['pista'],
+                            f['n'], f['opciones'])
 
     c.setFont('DejaVuSans', 7.4)
     c.setFillColor(MUTED)

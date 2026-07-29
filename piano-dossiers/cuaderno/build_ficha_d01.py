@@ -41,16 +41,16 @@ CFG = dict(
     total_compases=55,
     secciones=[
         ('A', 1, 12, 'El tema, sobre pedal de Sol', AZUL),
-        ('B', 13, 42, 'Modula: alteraciones y tensión', OCRE),
-        ("A'", 43, 55, 'Vuelve el tema y se apaga', AZUL),
+        ('B', 13, 34, 'Modula: alteraciones y tensión', OCRE),
+        ("A'", 35, 55, 'Vuelve el tema · clímax en el 43', AZUL),
     ],
     armonia=dict(
         titulo='Qué arpegia la mano izquierda',
         tarjetas=[
             ('cc. 1–4', 'Sol mayor',
              'Sol2 · Re3 · Si3. El acorde de la tonalidad, en estado fundamental.'),
-            ('cc. 5–7', 'La menor /Sol',
-             'Sol2 · Mi3 · La3. El bajo no se mueve: cambian solo las dos notas de arriba.'),
+            ('cc. 5–7', 'La menor 7 /Sol',
+             'Sol2 · Mi3 · La3. Sin la tercera: por eso suena abierto. El bajo no se mueve.'),
             ('c. 8', 'Sol maj7',
              'Sol2 · Re3 · Fa♯3. El Fa♯ viene de la armadura, no está escrito.'),
             ('cc. 9–12', 'Sol mayor',
@@ -75,6 +75,7 @@ CFG = dict(
         'En los cc. 53–54 la mano izquierda se escribe en CLAVE DE SOL, y vuelve a Fa en el 55.',
         'La digitación viene impresa en las dos manos: úsala, está pensada.',
         'Los recuadros de compás de esta edición marcan el ÚLTIMO compás del sistema anterior.',
+        'El tema vuelve entero en el c. 35: los cc. 35–36 son idénticos a los cc. 3–4.',
         'Toda la pieza vive entre pp y mf. El único mf está en el c. 43.',
     ],
     reto='Que las dos manos suenen a distinto volumen a la vez: la izquierda es agua de fondo y '

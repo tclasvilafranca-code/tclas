@@ -69,9 +69,22 @@ que cambia son las dos notas de arriba.
 **Los cc. 7–9 son una escala de Sol mayor completa, de Mi4 a Sol5**, escrita
 dentro de la pieza. No hace falta inventar un ejercicio de escalas: ya está ahí.
 
+## Forma (verificada por comparación nota a nota)
+
+| sección | compases | |
+|---|---|---|
+| A  | 1–12  | el tema sobre pedal de Sol |
+| B  | 13–34 | modula, con alteraciones accidentales |
+| A' | 35–55 | vuelve el tema; clímax (`mf`) en el c. 43 |
+
+**Los cc. 35–36 son idénticos a los cc. 3–4 en las dos manos** (medido: mano
+derecha Sol5·Fa♯5·Si4 / Mi5·Re5·Sol4, mano izquierda el arpegio de Sol). Ahí
+vuelve el tema, no en el c. 43: el 43 es el punto de más volumen dentro de la
+reexposición, no el principio de la sección.
+
 ## Lo que NO está verificado
 
-La sección central (cc. 13–42) lleva muchas alteraciones accidentales (♯ y ♮ en
+La sección central (cc. 13–34) lleva muchas alteraciones accidentales (♯ y ♮ en
 las dos manos, con `poco cresc.` en el c. 31) y modula. Se ha leído el contorno
 general pero **no se ha medido alteración por alteración**, así que en el
 cuaderno no se cita ningún acorde concreto de esa zona: solo se dice lo que se

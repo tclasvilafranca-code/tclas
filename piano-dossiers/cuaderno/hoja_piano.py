@@ -59,7 +59,8 @@ def _ej_heading(c, y, num, titulo, pista):
     return y - 21
 
 
-def _lineas(c, y, events, time_sig, bars_per_line, gap=GAP, show_time=True):
+def _lineas(c, y, events, time_sig, bars_per_line, gap=GAP, show_time=True,
+            clef='treble', key_sig=None):
     bpb = time_sig[0] * (4.0 / time_sig[1])
     line_beats = bpb * bars_per_line
     lines, cur, acc = [], [], 0.0
@@ -71,12 +72,16 @@ def _lineas(c, y, events, time_sig, bars_per_line, gap=GAP, show_time=True):
     if cur:
         lines.append(cur)
     for i, ln in enumerate(lines):
-        y -= before_staff(gap, ln, 'treble')
-        top, bot = draw_system(c, MARGIN, y, CONTENT_W, gap, ln, clef='treble',
+        y -= before_staff(gap, ln, clef)
+        top, bot = draw_system(c, MARGIN, y, CONTENT_W, gap, ln, clef=clef,
                                time_sig=time_sig, show_time=(i == 0 and show_time),
-                               spacing='engraved')
+                               key_sig=key_sig, spacing='engraved')
+        # entre lineas hay que reservar tambien el sitio de las plicas y
+        # barras que cuelgan: con un hueco fijo de 2*gap, un compas de
+        # corcheas con la barra abajo se mete dentro del pentagrama siguiente
         last = i == len(lines) - 1
-        y = bot - (after_system(gap, ln, 'treble') if last else gap * 2.0)
+        y = bot - (after_system(gap, ln, clef) if last
+                   else max(gap * 2.0, after_system(gap, ln, clef) * 0.85))
     return y
 
 
@@ -237,7 +242,9 @@ def build_piano(c, cfg):
                 y = _lineas(c, y, s['events'], cfg['time_sig'],
                             s.get('bars', BARS_PER_LINE),
                             gap=s.get('gap', cfg.get('gap', GAP)),
-                            show_time=s.get('show_time', True))
+                            show_time=s.get('show_time', True),
+                            clef=s.get('clef', 'treble'),
+                            key_sig=s.get('key_sig', cfg.get('key_sig')))
             y -= blq.get('extra_gap', 3)
         elif tipo == 'nota':
             y = nota_clave(c, y, blq['texto'], blq.get('etiqueta', 'LA CLAVE DE TODO'))

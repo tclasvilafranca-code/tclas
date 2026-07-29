@@ -114,6 +114,42 @@ def keyboard_row(c, y, pasos, legend=None, kh=46, n_white=8, start_idx=0):
     return lowest
 
 
+def tarjetas(c, y, items):
+    """Fila de tarjetas para niveles altos: compases / nombre / explicacion.
+       Sustituye a los mini-teclados, que a partir de cierto nivel sobran.
+       La altura se calcula con el texto mas largo: si se fija a ojo, la
+       tarjeta mas cargada se desborda por abajo y pisa lo que venga debajo."""
+    n = len(items)
+    sep = 10
+    bw = (CONTENT_W - sep * (n - 1)) / n
+    nmax = 1
+    for _, _, texto in items:
+        cnt, ln = 1, ''
+        for wd in texto.split():
+            t = (ln + ' ' + wd).strip()
+            if stringWidth(t, 'DejaVuSans', 6.9) > bw - 18:
+                cnt += 1; ln = wd
+            else:
+                ln = t
+        nmax = max(nmax, cnt)
+    h = 40 + nmax * 8.6
+    for i, (cc, nombre, texto) in enumerate(items):
+        bx = MARGIN + i * (bw + sep)
+        c.setFillColor(PANEL)
+        c.roundRect(bx, y - h, bw, h, 4, fill=1, stroke=0)
+        c.setFillColor(BLUE)
+        c.rect(bx, y - h, bw, 2.6, fill=1, stroke=0)
+        c.setFont('DejaVuSans-Bold', 7.0)
+        c.setFillColor(MUTED)
+        c.drawString(bx + 9, y - 13, cc.upper())
+        ns = _fit(nombre, 'DejaVuSerif-Bold', 11.5, bw - 18, floor=8.0)
+        c.setFont('DejaVuSerif-Bold', ns)
+        c.setFillColor(NAVY)
+        c.drawString(bx + 9, y - 28, nombre)
+        _wrap(c, texto, bx + 9, y - 38, 'DejaVuSans', 6.9, bw - 18, 8.6, MUTED)
+    return y - h
+
+
 def _qr_block(c, x, y, w, png_path, titulo, texto, h=78):
     """Cuadro con el QR de audio. El título va arriba a todo el ancho del
        cuadro (si se pone al lado del QR no cabe y se sale del margen)."""
@@ -208,15 +244,22 @@ def _rhythm_stack(c, x, y, w, bloques, time_sig):
     """El patrón rítmico de cada sección, uno debajo del otro, con notación
        real. Es un compás por sección: ilustra el dibujo, no es un ejercicio."""
     gap = 6.4
-    for (etq, desc, events, color) in bloques:
+    for blq in bloques:
+        etq, desc, events, color = blq[0], blq[1], blq[2], blq[3]
+        clef = blq[4] if len(blq) > 4 else 'treble'
+        key_sig = blq[5] if len(blq) > 5 else None
         c.setFont('DejaVuSans-Bold', 8.4)
         c.setFillColor(color)
         c.drawString(x, y, etq)
-        c.setFont('DejaVuSans', 8)
+        # el rotulo se coloca DESPUES de medir la etiqueta: con un hueco fijo
+        # de 14 pt, una etiqueta de dos letras se come la primera palabra
+        ex = x + stringWidth(etq, 'DejaVuSans-Bold', 8.4) + 7
+        ds = _fit(desc, 'DejaVuSans', 8, w - (ex - x), floor=6.2)
+        c.setFont('DejaVuSans', ds)
         c.setFillColor(MUTED)
-        c.drawString(x + 14, y, desc)
-        top, bot = draw_system(c, x, y - 22, w, gap, events,
-                               clef='treble', time_sig=time_sig)
+        c.drawString(ex, y, desc)
+        top, bot = draw_system(c, x, y - 24, w, gap, events,
+                               clef=clef, time_sig=time_sig, key_sig=key_sig)
         y = bot - 30
     return y + 8
 
@@ -277,14 +320,25 @@ def build_ficha(c, cfg):
     col_w = (CONTENT_W - 22) / 2
     right_x = MARGIN + col_w + 22
 
-    # --- cómo se abren las manos (el juego real de la pieza) ---
-    ap = cfg['apertura']
-    y = _section_title(c, MARGIN, y, ap['titulo'])
-    y = keyboard_row(c, y, ap['pasos'], legend=ap['leyenda'])
-    y -= 6
-    c.setFont('DejaVuSans', 8.2)
-    y = _wrap(c, ap['pie'], MARGIN, y, 'DejaVuSans', 8.2, CONTENT_W, 11.2, MUTED)
-    y -= 18
+    # --- el bloque central cambia segun el nivel ---
+    # iniciacion: teclados que muestran como se abren las manos.
+    # avanzado: tarjetas de armonia (que acorde arpegia la izquierda y por que),
+    # porque a ese nivel el dibujo del teclado ya no aporta nada.
+    if cfg.get('apertura'):
+        ap = cfg['apertura']
+        y = _section_title(c, MARGIN, y, ap['titulo'])
+        y = keyboard_row(c, y, ap['pasos'], legend=ap['leyenda'])
+        y -= 6
+        c.setFont('DejaVuSans', 8.2)
+        y = _wrap(c, ap['pie'], MARGIN, y, 'DejaVuSans', 8.2, CONTENT_W, 11.2, MUTED)
+        y -= 18
+    elif cfg.get('armonia'):
+        ar = cfg['armonia']
+        y = _section_title(c, MARGIN, y, ar['titulo'])
+        y = tarjetas(c, y, ar['tarjetas'])
+        y -= 16
+        y = _wrap(c, ar['pie'], MARGIN, y, 'DejaVuSans', 8.2, CONTENT_W, 11.2, MUTED)
+        y -= 18
 
     # --- dos columnas: lo especial / el dibujo de cada parte ---
     y_col = y

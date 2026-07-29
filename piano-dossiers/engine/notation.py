@@ -1,6 +1,7 @@
 """Mini motor de notacion musical para el Cuaderno del Pianista - T-Clas."""
 from reportlab.lib.colors import HexColor
 from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfbase.ttfonts import TTFont
 import math
 
@@ -155,13 +156,17 @@ def draw_key_signature(c, x, staff_bottom_y, gap, clef, tonalidad):
     dy = gap * 0.68 if acc_type == '#' else gap * 0.6
     c.setFont('DejaVuSans', gap * 1.85)
     c.setFillColor(INK)
+    # El avance tiene que salir del ancho REAL del glifo: con un paso fijo de
+    # 1.05*gap el simbolo es mas ancho que su hueco y la armadura se monta
+    # encima del compas que viene detras.
+    step = max(gap * 1.05, stringWidth(sym, 'DejaVuSans', gap * 1.85) * 0.95)
     cx = x
     for letter in letters:
         pos_pitch = pos_table[order.index(letter)]
         cy = note_y(staff_bottom_y, gap, pos_pitch, clef=clef)
         c.drawString(cx, cy - dy, sym)
-        cx += gap * 1.05
-    return cx + gap * 0.55
+        cx += step
+    return cx + gap * 0.9
 
 
 def draw_notehead(c, cx, cy, gap, filled=True):

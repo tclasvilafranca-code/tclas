@@ -72,12 +72,12 @@ def _ej_heading(c, y, num, titulo, pista):
     return y - 20
 
 
-def chuleta(c, y, pitches, nombres, gap=6.6):
+def chuleta(c, y, pitches, nombres, gap=6.6, clef='treble', titulo='LAS NOTAS DE ESTA PARTITURA'):
     """Referencia: cada nota del registro de la pieza, con su nombre debajo.
        Sirve de apoyo las primeras semanas; luego se tapa con la mano."""
     c.setFont('DejaVuSans-Bold', 8.2)
     c.setFillColor(NAVY)
-    c.drawString(MARGIN, y, 'LAS NOTAS DE ESTA PARTITURA')
+    c.drawString(MARGIN, y, titulo)
     c.setStrokeColor(NAVY)
     c.setLineWidth(1.3)
     c.line(MARGIN, y - 5, MARGIN + 22, y - 5)
@@ -88,21 +88,21 @@ def chuleta(c, y, pitches, nombres, gap=6.6):
     staff_top = y - 11
     sx, sw = MARGIN + 16, CONTENT_W - 32
     bot = staff_top - gap * 4
-    low = min(note_y(bot, gap, p, clef='treble') for p in pitches)
+    low = min(note_y(bot, gap, p, clef=clef) for p in pitches)
     label_y = min(low, bot) - gap * 1.9
     box_h = (y - label_y) + 9
 
     c.setFillColor(PANEL)
     c.roundRect(MARGIN, y - box_h, CONTENT_W, box_h, 4, fill=1, stroke=0)
     draw_staff(c, sx, staff_top, sw, gap=gap)
-    draw_clef(c, sx + 3, bot, gap, clef='treble')
+    draw_clef(c, sx + 3, bot, gap, clef=clef)
     # la clave de Sol ocupa mas de lo que parece: si las notas empiezan antes
     # de ~9 espacios, los nombres de debajo se montan encima del dibujo
     x0 = sx + gap * 9.4
     step = (sw - gap * 10.6) / max(len(pitches) - 1, 1)
     for i, (p, nm) in enumerate(zip(pitches, nombres)):
         cx = x0 + i * step
-        cy = note_y(bot, gap, p, clef='treble')
+        cy = note_y(bot, gap, p, clef=clef)
         draw_notehead(c, cx, cy, gap, filled=True)
         if cy < bot:   # nota bajo el pentagrama: linea adicional
             c.setStrokeColor(NAVY)
@@ -114,7 +114,8 @@ def chuleta(c, y, pitches, nombres, gap=6.6):
     return y - box_h - 12
 
 
-def _lineas(c, y, events, time_sig, bars_per_line=BARS_PER_LINE, gap=GAP):
+def _lineas(c, y, events, time_sig, bars_per_line=BARS_PER_LINE, gap=GAP,
+            clef='treble', key_sig=None):
     dur_beats = {'w': 4.0, 'h': 2.0, 'q': 1.0, 'e': 0.5, 'q.': 1.5, 'h.': 3.0}
     bpb = time_sig[0] * (4.0 / time_sig[1])
     line_beats = bpb * bars_per_line
@@ -127,12 +128,16 @@ def _lineas(c, y, events, time_sig, bars_per_line=BARS_PER_LINE, gap=GAP):
     if cur:
         lines.append(cur)
     for i, ln in enumerate(lines):
-        y -= before_staff(gap, ln, 'treble')
-        top, bot = draw_system(c, MARGIN, y, CONTENT_W, gap, ln, clef='treble',
+        y -= before_staff(gap, ln, clef)
+        top, bot = draw_system(c, MARGIN, y, CONTENT_W, gap, ln, clef=clef,
                                time_sig=time_sig, show_time=(i == 0),
-                               spacing='engraved')
+                               key_sig=key_sig, spacing='engraved')
+        # entre lineas hay que reservar tambien el sitio de las plicas y
+        # barras que cuelgan: con un hueco fijo de 2*gap, un compas de
+        # corcheas con la barra abajo se mete dentro del pentagrama siguiente
         last = i == len(lines) - 1
-        y = bot - (after_system(gap, ln, 'treble') if last else gap * 2.0)
+        y = bot - (after_system(gap, ln, clef) if last
+                   else max(gap * 2.0, after_system(gap, ln, clef) * 0.85))
     return y
 
 
@@ -259,11 +264,16 @@ def build_lectura(c, cfg):
 
     # ---------------- PARTE 1 · LEER -------------------------------------
     y = seccion(c, y, '1', 'Leer', cfg['sub_leer'])
-    y = chuleta(c, y, cfg['chuleta_pitches'], cfg['chuleta_nombres'])
+    y = chuleta(c, y, cfg['chuleta_pitches'], cfg['chuleta_nombres'],
+                clef=cfg.get('chuleta_clef', 'treble'),
+                titulo=cfg.get('chuleta_titulo', 'LAS NOTAS DE ESTA PARTITURA'))
     for ej in cfg['ejercicios']:
         y = _ej_heading(c, y, ej['num'], ej['titulo'], ej['pista'])
         y = _lineas(c, y, ej['events'], cfg['time_sig'],
-                    bars_per_line=ej.get('bars_per_line', BARS_PER_LINE))
+                    bars_per_line=ej.get('bars_per_line', BARS_PER_LINE),
+                    gap=ej.get('gap', cfg.get('gap', GAP)),
+                    clef=ej.get('clef', 'treble'),
+                    key_sig=ej.get('key_sig', cfg.get('key_sig')))
         y -= ej.get('extra_gap', 2)
     if cfg.get('crono'):
         y = crono(c, y, cfg['crono'])

@@ -45,7 +45,8 @@ def _ej_heading(c, y, num, titulo, pista):
     return y - 22
 
 
-def _lineas(c, y, events, time_sig, bars_per_line=BARS_PER_LINE, gap=GAP):
+def _lineas(c, y, events, time_sig, bars_per_line=BARS_PER_LINE, gap=GAP,
+            clef='treble', key_sig=None):
     """Reparte los eventos en lineas densas de N compases, como una partitura
        real. Clave y compas al principio de cada linea (el compas solo en la
        primera)."""
@@ -62,12 +63,16 @@ def _lineas(c, y, events, time_sig, bars_per_line=BARS_PER_LINE, gap=GAP):
         lines.append(cur)
 
     for i, ln in enumerate(lines):
-        y -= before_staff(gap, ln, 'treble')
-        top, bot = draw_system(c, MARGIN, y, CONTENT_W, gap, ln, clef='treble',
+        y -= before_staff(gap, ln, clef)
+        top, bot = draw_system(c, MARGIN, y, CONTENT_W, gap, ln, clef=clef,
                                time_sig=time_sig, show_time=(i == 0),
-                               spacing='engraved')
+                               key_sig=key_sig, spacing='engraved')
+        # entre lineas hay que reservar tambien el sitio de las plicas y
+        # barras que cuelgan: con un hueco fijo de 2*gap, un compas de
+        # corcheas con la barra abajo se mete dentro del pentagrama siguiente
         last = i == len(lines) - 1
-        y = bot - (after_system(gap, ln, 'treble') if last else gap * 2.0)
+        y = bot - (after_system(gap, ln, clef) if last
+                   else max(gap * 2.0, after_system(gap, ln, clef) * 0.85))
     return y
 
 
@@ -131,7 +136,10 @@ def build_calentamiento(c, cfg):
     for ej in cfg['ejercicios']:
         y = _ej_heading(c, y, ej['num'], ej['titulo'], ej['pista'])
         y = _lineas(c, y, ej['events'], cfg['time_sig'],
-                    bars_per_line=ej.get('bars_per_line', BARS_PER_LINE))
+                    bars_per_line=ej.get('bars_per_line', BARS_PER_LINE),
+                    gap=ej.get('gap', cfg.get('gap', GAP)),
+                    clef=ej.get('clef', 'treble'),
+                    key_sig=ej.get('key_sig', cfg.get('key_sig')))
         y -= ej.get('extra_gap', 4)
 
     c.setFont('DejaVuSans', 7.4)

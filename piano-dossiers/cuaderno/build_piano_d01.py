@@ -96,10 +96,14 @@ PAG2 = dict(
                    'respiración. La primera frase va del c. 3 al c. 9 y respira al llegar al Sol5. '
                    'Toca la melodía sin piano, solo cantándola, y verás que respiras exactamente '
                    'donde acaba la ligadura. Si al piano respiras en otro sitio, la frase se parte.'),
-        dict(num=6, titulo='Las dos manos, por fin',
-             pista='cc. 1–4 en la partitura de la página 1 · aquí solo va la izquierda, de guía',
-             sistemas=[dict(cap='monta la derecha encima leyendo de la partitura, no de esta hoja',
-                            events=corcheas(CELULA_I, 4), bars=4, clef='bass')]),
+        # Aqui NO se reimprime la izquierda: ya esta en la hoja anterior y en
+        # la propia partitura. Reinsertar significa volver a la obra.
+        dict(tipo='nota',
+             etiqueta='LAS DOS MANOS · CC. 1–4',
+             texto='Este ejercicio no lleva pentagrama a propósito: se hace en la partitura de la '
+                   'página 1. Coloca la izquierda de memoria, sin mirarla, y lee solo la línea de '
+                   'la derecha. Si para leer la melodía tienes que mirarte la mano izquierda, es '
+                   'que todavía no está lista: vuelve al ejercicio 1 de la hoja anterior.'),
         dict(tipo='nota',
              etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
              texto='1 · La izquierda sola, cc. 1–12, hasta que salga sin pensarla. '

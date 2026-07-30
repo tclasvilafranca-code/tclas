@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 """Hoja de calentamiento de la canción 1 (Chopsticks).
 
-   Todo el material sale de la propia pieza:
+   El material DERIVA de la pieza, pero no la copia: se transporta, se invierte
+   o se amplía. Los compases literales viven en las hojas "al piano", con su
+   número de compás. Si las dos hojas usan las mismas notas acaban siendo la
+   misma hoja — paso en la primera versión y esta corregido.
+
+   Lo que se hereda de la partitura:
      - mismo compás (3/4) y misma escritura (las dos manos en clave de Sol
        sobre UN pentagrama, como la edición de DeBenedetti)
      - mismo dedo (2 en cada mano, según la indicación impresa)
@@ -60,28 +65,31 @@ CFG = dict(
              pista='cuatro y seis teclas en medio · así suenan los cc. 5–8',
              events=seq([('D4', 'B4'), ('C4', 'C5'), ('D4', 'B4'),
                          ('E4', 'A4'), ('D4', 'B4'), ('C4', 'C5')])),
-        dict(num=5, titulo='La apertura de la pieza, seguida',
-             pista='2ª → 3ª → 6ª → 8ª y vuelta · el viaje entero de Chopsticks',
-             events=seq([('F4', 'G4'), ('E4', 'G4'), ('D4', 'B4'),
-                         ('C4', 'C5'), ('D4', 'B4'), ('E4', 'A4')])),
-        # la parte B son terceras paralelas que bajan por grados: el
-        # calentamiento hace ese mismo gesto antes de tocarlo en la partitura
-        dict(num=6, titulo='El vals de la parte B · terceras que bajan',
-             pista='una larga y una corta · así son los cc. 17–32',
-             events=[e for d in [('B4', 'D5'), ('A4', 'C5'), ('G4', 'B4'),
-                                 ('F4', 'A4'), ('E4', 'G4')]
+        # El viaje de la pieza, pero TRANSPORTADO un grado: el calentamiento
+        # generaliza, la hoja 'al piano' cita los compases tal cual. Si los dos
+        # usan las mismas notas, las dos hojas acaban siendo la misma.
+        dict(num=5, titulo='El viaje entero, empezando más arriba',
+             pista='2ª → 3ª → 6ª → 8ª y vuelta, un grado por encima de la pieza',
+             events=seq([('G4', 'A4'), ('F4', 'A4'), ('E4', 'C5'),
+                         ('D4', 'D5'), ('E4', 'C5'), ('F4', 'B4')])),
+        # la pieza baja en terceras; el calentamiento las SUBE, que es el gesto
+        # contrario y el que no vas a practicar tocando la canción
+        dict(num=6, titulo='El vals, pero subiendo',
+             pista='una larga y una corta · en la pieza las terceras bajan, aquí suben',
+             events=[e for d in [('E4', 'G4'), ('F4', 'A4'), ('G4', 'B4'),
+                                 ('A4', 'C5'), ('B4', 'D5')]
                      for e in ({'pitches': list(d), 'dur': 'h'},
                                {'pitches': list(d), 'dur': 'q'})] +
-                    [{'pitches': ['E4', 'G4'], 'dur': 'h.'}]),
+                    [{'pitches': ['C5', 'E5'], 'dur': 'h.'}]),
         dict(num=7, titulo='Contar el silencio',
              pista='lo más difícil de la pieza (cc. 15–16): el silencio dura igual que la nota',
-             events=([{'pitches': ['F4', 'G4'], 'dur': 'q'}, R, R] +
-                     [R, {'pitches': ['F4', 'G4'], 'dur': 'q'}, R] +
-                     [R, R, {'pitches': ['F4', 'G4'], 'dur': 'q'}] +
-                     [{'pitches': ['E4', 'G4'], 'dur': 'q'}, R,
-                      {'pitches': ['E4', 'G4'], 'dur': 'q'}] +
-                     [R, {'pitches': ['E4', 'G4'], 'dur': 'q'}, R] +
-                     [{'pitches': ['F4', 'G4'], 'dur': 'h.'}])),
+             events=([{'pitches': ['G4', 'A4'], 'dur': 'q'}, R, R] +
+                     [R, {'pitches': ['G4', 'A4'], 'dur': 'q'}, R] +
+                     [R, R, {'pitches': ['G4', 'A4'], 'dur': 'q'}] +
+                     [{'pitches': ['F4', 'A4'], 'dur': 'q'}, R,
+                      {'pitches': ['F4', 'A4'], 'dur': 'q'}] +
+                     [R, {'pitches': ['F4', 'A4'], 'dur': 'q'}, R] +
+                     [{'pitches': ['G4', 'A4'], 'dur': 'h.'}])),
     ],
 )
 

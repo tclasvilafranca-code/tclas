@@ -113,3 +113,72 @@ def run_full_audit(label, build_fn):
     if ok:
         print(f'  OK — {len(calls)} systems, all clean bars, no overflow.')
     return ok
+
+
+def audit_duplicados(hojas, page_w=595.276, page_h=841.89, minimo=8):
+    """Busca material repetido ENTRE las hojas de un mismo cuaderno.
+
+       hojas: [(etiqueta, build_fn), ...]
+
+       El calentamiento debe DERIVAR de la pieza (transportar, invertir,
+       ampliar) y las hojas 'al piano' deben CITARLA literalmente. Cuando las
+       dos copian los mismos compases, el cuaderno acaba teniendo la misma hoja
+       dos veces sin que se note al maquetar — paso de verdad, con 24 notas
+       identicas impresas en tres hojas.
+
+       Devuelve (identicos, parciales). Un solape de 6-7 notas suele ser
+       inevitable (una celula repetida, o la escala de la tonalidad); a partir
+       de `minimo` hay que mirarlo.
+    """
+    import notation as nt
+    orig = nt.draw_system
+    cur = ['?']
+    seqs = []
+
+    def patched(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
+                show_clef=True, show_time=True, key_sig=None, spacing='linear'):
+        key = tuple((e.get('pitch') or tuple(e.get('pitches', [])) or 'R', e['dur'])
+                    for e in events)
+        seqs.append((cur[0], clef, key))
+        return orig(c, x, top_y, width, gap, events, clef=clef, time_sig=time_sig,
+                    show_clef=show_clef, show_time=show_time, key_sig=key_sig,
+                    spacing=spacing)
+
+    import sys
+    nt.draw_system = patched
+    tocados = []
+    for name, mod in list(sys.modules.items()):
+        if mod is None or mod is nt:
+            continue
+        if name.startswith(('page_', 'hoja_', 'ficha_')) and hasattr(mod, 'draw_system'):
+            mod.draw_system = patched
+            tocados.append(mod)
+    try:
+        c = canvas_mod.Canvas('/tmp/_audit_dupes.pdf', pagesize=(page_w, page_h))
+        for etiqueta, fn in hojas:
+            cur[0] = etiqueta
+            fn(c)
+    finally:
+        nt.draw_system = orig
+        for mod in tocados:
+            mod.draw_system = orig
+
+    from collections import defaultdict
+    by = defaultdict(list)
+    for hoja, clef, key in seqs:
+        by[(clef, key)].append(hoja)
+    identicos = [(v, k[1]) for k, v in by.items() if len(set(v)) > 1]
+
+    parciales = []
+    for i in range(len(seqs)):
+        for j in range(i + 1, len(seqs)):
+            ha, ca, ka = seqs[i]
+            hb, cb, kb = seqs[j]
+            if ha == hb or ca != cb or ka == kb:
+                continue
+            for L in range(min(len(ka), len(kb)), minimo - 1, -1):
+                sa = {ka[t:t + L] for t in range(len(ka) - L + 1)}
+                if any(kb[t:t + L] in sa for t in range(len(kb) - L + 1)):
+                    parciales.append((ha, hb, L))
+                    break
+    return identicos, parciales

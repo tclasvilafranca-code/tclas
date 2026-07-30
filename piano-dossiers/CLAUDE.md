@@ -37,6 +37,20 @@
 > 3. **Densidad real de partitura publicada:** 12–32 pt por tiempo, 4–8 compases
 >    por línea. Usa `spacing='engraved'` en `draw_system`. Ver
 >    `ANALISIS_ESCRITURA_MUSICAL.md`.
+> 4. **El calentamiento DERIVA; las hojas "al piano" CITAN.** Regla dura, y la
+>    unica que evita que las dos hojas acaben siendo la misma:
+>
+>    | | Calentamiento | Al piano |
+>    |---|---|---|
+>    | Material | transportado, invertido o ampliado | compases **literales** |
+>    | Referencia | nunca lleva numero de compas | **siempre** lleva "cc. X–Y" |
+>    | Se toca | en frio, sin la partitura delante | con la partitura al lado |
+>
+>    Si un ejercicio lleva numero de compas, va en "al piano". Si no lo lleva,
+>    va en el calentamiento. **Nada puede estar en las dos.** Comprobalo con
+>    `audit_duplicados(hojas)`: 0 identicos y 0 parciales de >=8 notas. Un
+>    solape de 6-7 notas suele ser inevitable (una celula repetida, o la escala
+>    de la tonalidad, que muchas piezas llevan escrita dentro).
 >
 > ### Correspondencia con el dosier de ejercicios por niveles del cliente
 >
@@ -53,7 +67,8 @@
 >
 > ### Verificación obligatoria antes de entregar
 > `run_full_audit` (compases) + `audit_text_bounds` (margen derecho) +
-> comprobación de píxeles del borde inferior. Las tres, en las 5 hojas.
+> `audit_duplicados` (material repetido entre hojas) + comprobación de píxeles
+> del borde inferior. Las cuatro, en las 5 hojas.
 > Los avisos de *sparse* son aceptables solo en sistemas de blancas/silencios.
 >
 > Lo que sigue documenta el **formato antiguo de 5 páginas** (`engine/`,

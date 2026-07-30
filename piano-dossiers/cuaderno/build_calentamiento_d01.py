@@ -2,7 +2,9 @@
 """Calentamiento de El Cisne para Dilan (nivel avanzado).
 
    A este nivel el calentamiento ya no es "mover los dedos": es preparar los
-   dos problemas concretos de la pieza antes de abrirla.
+   problemas concretos de la pieza antes de abrirla — pero SIN copiar sus
+   compases. Los compases literales van en las hojas "al piano", citados con su
+   número. Aqui todo esta transportado, invertido o ampliado.
      1. la escala y el arpegio de Sol mayor, que es la tonalidad
      2. la célula de acompañamiento de la izquierda, transportada por los
         grados que la pieza usa de verdad
@@ -68,21 +70,31 @@ CFG = dict(
              pista='es el acorde que la izquierda arpegia en los cc. 1–4 y 9–12',
              events=esc(ARPEGIO, 30) + esc(ARPEGIO, 40) + [{'pitch': 'G3', 'dur': 'h.'}],
              bars_per_line=5, clef='bass'),
-        dict(num=3, titulo='La célula de la izquierda, tal cual',
-             pista='los tres acordes reales de la primera frase: Sol · La menor/Sol · Sol maj7',
-             events=(corcheas(CELULA_I, 2) + corcheas(CELULA_ii, 2) +
-                     corcheas(CELULA_I7, 1) + corcheas(CELULA_I, 1)),
+        # El calentamiento NO reproduce compases de la pieza: los transporta.
+        # Si se copian tal cual, esta hoja y la de 'al piano' acaban siendo la
+        # misma, que es justo lo que paso en la primera version.
+        dict(num=3, titulo='El dibujo de la izquierda, por grados',
+             pista='sobre Sol, La, Si y vuelta · así vale para toda la pieza, no solo para el c. 1',
+             events=(corcheas(['G2', 'D3', 'B3', 'D3', 'B3', 'D3']) +
+                     corcheas(['A2', 'E3', 'C4', 'E3', 'C4', 'E3']) +
+                     corcheas(['B2', 'F3', 'D4', 'F3', 'D4', 'F3']) +
+                     corcheas(['A2', 'E3', 'C4', 'E3', 'C4', 'E3']) +
+                     corcheas(['G2', 'D3', 'B3', 'D3', 'B3', 'D3']) +
+                     corcheas(['F2', 'C3', 'A3', 'C3', 'A3', 'C3'])),
              bars_per_line=3, clef='bass'),
-        dict(num=4, titulo='La escala que hay dentro de la pieza',
-             pista='cc. 7–9 · de Mi4 a Sol5 sin un solo salto: tócala cantándola',
-             events=esc(['E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5'], 50) +
-                    [{'pitch': 'G5', 'dur': 'h.'}] +
-                    esc(['G5', 'F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4'], 60) +
-                    [{'pitch': 'E4', 'dur': 'h.'}],
-             bars_per_line=5),
-        dict(num=5, titulo='Las dos manos a distinto volumen',
-             pista='la izquierda pp y la derecha p · el ejercicio de toda la pieza',
-             events=corcheas(CELULA_I, 4),
+        # la escala literal de los cc. 7-9 vive en la hoja 'al piano': aqui va
+        # la version que la pieza NO tiene, que es la que entrena de verdad
+        dict(num=4, titulo='La escala en terceras dobles',
+             pista='lo que la pieza no te da · las dos notas tienen que caer exactamente juntas',
+             events=[{'pitches': list(d), 'dur': 'q'} for d in
+                     [('G4', 'B4'), ('A4', 'C5'), ('B4', 'D5'), ('C5', 'E5'),
+                      ('D5', 'F5'), ('E5', 'G5'),
+                      ('D5', 'F5'), ('C5', 'E5'), ('B4', 'D5'), ('A4', 'C5')]] +
+                    [{'pitches': ['G4', 'B4'], 'dur': 'h'}],
+             bars_per_line=4),
+        dict(num=5, titulo='El mismo dibujo, en Re mayor',
+             pista='cambia de tonalidad y el problema sigue igual: que las seis corcheas suenen iguales',
+             events=corcheas(['D3', 'A3', 'F4', 'A3', 'F4', 'A3'], 4),
              bars_per_line=4, clef='bass'),
     ],
 )

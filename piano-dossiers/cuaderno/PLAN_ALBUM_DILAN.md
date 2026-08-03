@@ -67,23 +67,28 @@ decidido el orden definitivo del álbum.
 | 15 | My Favourite Things | `dilan_15_favourite.py` | ✅ |
 | 16 | Adagio en Sol menor (Albinoni) | `dilan_16_adagio.py` | ✅ |
 | 17 | Arabesque (Burgmüller, 4 manos) | `dilan_17_arabesque.py` | ✅ |
-| 18 | Have Yourself a Merry Little Christmas | | |
-| 19 | Santa Tell Me | | |
-| 20 | It's Beginning to Look a Lot Like Christmas (4 manos) | | |
+| 18 | Have Yourself a Merry Little Christmas | `dilan_18_merry.py` | ✅ |
+| 19 | Santa Tell Me | `dilan_19_santa.py` | ✅ |
+| 20 | It's Beginning to Look a Lot Like Christmas (4 manos) | `dilan_20_beginning.py` | ✅ |
 
 Las dos primeras se montaron con los `build_*_d0N.py` antes de que existiera
 `cancion.py`; se auditan igual, pasándole las cinco hojas a
 `cancion.auditar_hojas()`.
 
-Al terminar: renumerar los kickers, generar portada + índice con
-`cuaderno/portada.py` y unir el álbum completo.
+`cuaderno/auditar_dilan.py` pasa las cuatro comprobaciones a las veinte de
+una vez. Tiene que salir TODO OK antes de tocar nada más.
+
+Al terminar: generar portada + índice con `cuaderno/portada.py` y unir el
+álbum completo.
 
 ## Avisos por partitura
 
 - Las de **4 manos** (17, 20) llevan cuatro pentagramas por sistema: el
   emparejado por defecto de `sistemas()` no vale. Se leen con
   `engine/lector_4manos.py`, que agrupa de cuatro en cuatro (0-1 = Primo,
-  2-3 = Secondo). El dosier se escribe para el **Primo**, que es la parte
+  2-3 = Secondo). **Y las claves cambian de una a otra**: en la Arabesque
+  el Secondo lleva sol y fa, y en It's Beginning lleva fa y fa. Hay que
+  poner `lector_4manos.CLAVES` a mano antes de leer. El dosier se escribe para el **Primo**, que es la parte
   del alumno, y la hoja de montar habla de tocar en pareja.
 - Las cabezas **huecas** (blancas y redondas) se leen con
   `engine/lector_huecas.py`, que rellena huecos antes de abrir. Solo vale

@@ -313,9 +313,13 @@ def build_ficha(c, cfg):
 
     y = _fact_strip(c, y, cfg['datos'])
 
-    y = _section_title(c, MARGIN, y, 'Mapa de la pieza')
-    y = _map_bar(c, y, cfg['secciones'], cfg['total_compases'])
-    y -= 4
+    # El mapa solo se dibuja si el numero de compases esta VERIFICADO. En
+    # ediciones donde la deteccion de barras no es fiable se omite antes que
+    # imprimir un total inventado.
+    if cfg.get('secciones') and cfg.get('total_compases'):
+        y = _section_title(c, MARGIN, y, 'Mapa de la pieza')
+        y = _map_bar(c, y, cfg['secciones'], cfg['total_compases'])
+        y -= 4
 
     col_w = (CONTENT_W - 22) / 2
     right_x = MARGIN + col_w + 22

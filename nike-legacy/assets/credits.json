@@ -1,0 +1,46 @@
+{
+  "cortez-1972": {
+    "src": "assets/img/cortez-1972.webp",
+    "title": "Nike Cortez shoes",
+    "creator": "Ssu",
+    "creator_url": "https://commons.wikimedia.org/w/index.php?title=User:Ssu",
+    "license": "by-sa",
+    "license_version": "4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "foreign_landing_url": "https://commons.wikimedia.org/w/index.php?curid=80215670",
+    "source": "wikimedia"
+  },
+  "air-jordan-1-1985": {
+    "src": "assets/img/air-jordan-1-1985.webp",
+    "title": "Original 1985 Air Jordan 1's",
+    "creator": "DJ Quietstorm",
+    "creator_url": "https://www.flickr.com/photos/38551002@N08",
+    "license": "by",
+    "license_version": "2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/38551002@N08/15083264856",
+    "source": "flickr"
+  },
+  "air-max-1-1987": {
+    "src": "assets/img/air-max-1-1987.webp",
+    "title": "WDYWT 03-27-10 (Air Max 1 Atmos Elephant)",
+    "creator": "Kid_SBTG",
+    "creator_url": "https://www.flickr.com/photos/14977223@N04",
+    "license": "by",
+    "license_version": "2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/14977223@N04/4468646947",
+    "source": "flickr"
+  },
+  "flyknit-2012": {
+    "src": "assets/img/flyknit-2012.webp",
+    "title": "Nike Flyknit One+",
+    "creator": "Yanki01",
+    "creator_url": "https://www.flickr.com/photos/29621165@N03",
+    "license": "by",
+    "license_version": "2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/29621165@N03/8483993132",
+    "source": "flickr"
+  }
+}

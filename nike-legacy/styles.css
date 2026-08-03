@@ -650,90 +650,20 @@ ul, ol { list-style: none; padding: 0; }
 }
 .icon-card.is-glowing::after { opacity: 1; }
 
-.icon-card-featured {
-  justify-content: flex-end;
-}
-@media (min-width: 720px) {
-  .icon-card-featured { grid-column: span 2; min-height: 420px; }
+.icon-card-photo-wrap {
+  margin: -2rem -1.8rem 1.6rem;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
 }
 .icon-card-photo {
-  position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
-  object-position: center 35%;
-  z-index: 0;
+  filter: saturate(1.05) contrast(1.02);
+  transition: transform .6s var(--ease-out);
 }
-.icon-card-scrim {
-  position: absolute; inset: 0;
-  background: linear-gradient(0deg, rgba(10,10,13,.94) 0%, rgba(10,10,13,.55) 55%, rgba(10,10,13,.15) 100%);
-  z-index: 0;
-}
-.icon-card-featured .icon-year,
-.icon-card-featured .icon-name,
-.icon-card-featured .icon-text {
-  position: relative;
-  z-index: 1;
-}
-.icon-card-featured .icon-text { color: var(--cream-2); max-width: 46ch; }
-
-.icon-card-motif {
-  position: relative;
-  height: 140px;
-  margin-bottom: 1.6rem;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 1.4rem;
-}
-.icon-card-motif::before,
-.icon-card-motif::after { content: ""; position: absolute; }
-
-/* wave — Cortez */
-.icon-card[data-motif="wave"] .icon-card-motif::before {
-  inset: auto 0 20px 0;
-  height: 40px;
-  background: none;
-  border-top: 2px solid var(--volt);
-  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-  opacity: .8;
-}
-/* dot — Air Force 1 */
-.icon-card[data-motif="dot"] .icon-card-motif::before {
-  left: 50%; top: 30%;
-  width: 64px; height: 64px;
-  transform: translate(-50%, -50%);
-  border: 2px solid var(--volt);
-  border-radius: 50%;
-}
-.icon-card[data-motif="dot"] .icon-card-motif::after {
-  left: 50%; top: 30%;
-  width: 26px; height: 26px;
-  transform: translate(-50%, -50%);
-  border: 1px solid var(--cream-3);
-  border-radius: 50%;
-}
-/* bolt — Air Jordan 1 */
-.icon-card[data-motif="bolt"] .icon-card-motif::before {
-  left: 50%; top: 8px;
-  width: 3px; height: 100px;
-  background: var(--volt);
-  transform: translateX(-50%) skewX(-18deg);
-  opacity: .85;
-}
-/* window — Air Max */
-.icon-card[data-motif="window"] .icon-card-motif::before {
-  left: 50%; top: 30%;
-  width: 90px; height: 46px;
-  transform: translate(-50%, -50%);
-  border: 2px solid var(--volt);
-  border-radius: 50px;
-}
-/* grid — Flyknit */
-.icon-card[data-motif="grid"] .icon-card-motif::before {
-  inset: 20px 30% auto 30%;
-  height: 90px;
-  background-image:
-    repeating-linear-gradient(0deg, var(--line) 0 1px, transparent 1px 12px),
-    repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 12px);
-}
+.icon-card:hover .icon-card-photo,
+.icon-card.is-glowing .icon-card-photo { transform: scale(1.06); }
 
 .icon-year {
   font-family: var(--mono);
@@ -824,6 +754,13 @@ ul, ol { list-style: none; padding: 0; }
   color: var(--cream-3);
   max-width: 40ch;
 }
+.footer-credits-link {
+  margin-top: .6rem;
+  font-family: var(--mono);
+  font-size: .72rem;
+}
+.footer-credits-link a { color: var(--cream-3); text-decoration: underline; text-underline-offset: 2px; }
+.footer-credits-link a:hover { color: var(--volt); }
 .footer-credit {
   font-family: var(--mono);
   font-size: .75rem;

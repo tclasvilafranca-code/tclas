@@ -33,7 +33,7 @@ Nivel: **avanzado**. Estructura fija de 6 páginas por canción
 |---|---|---|
 | 1 | Can't Help Falling in Love | ✅ hecha |
 | 2 | Your Song | ✅ hecha |
-| 3 | Thinking Out Loud | |
+| 3 | Thinking Out Loud | ✅ hecha |
 | 4 | When I Was Your Man | |
 | 5 | Lucía | |
 | 6 | Poema de Amor | |

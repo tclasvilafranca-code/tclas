@@ -621,13 +621,16 @@ ul, ol { list-style: none; padding: 0; }
 .icons-section { padding-block: clamp(4.5rem, 10vw, 7rem); }
 .icons-head { margin-bottom: 3rem; }
 .icons-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 1.5rem;
 }
 
 .icon-card {
   position: relative;
+  flex: 1 1 300px;
+  max-width: 350px;
   min-height: 360px;
   padding: 2rem 1.8rem;
   border: 1px solid var(--line);

@@ -64,9 +64,9 @@ decidido el orden definitivo del álbum.
 | 12 | A Sky Full of Stars | `dilan_12_sky.py` | ✅ |
 | 13 | What Was I Made For | `dilan_13_what.py` | ✅ |
 | 14 | Writing's on the Wall | `dilan_14_writings.py` | ✅ |
-| 15 | My Favourite Things | | |
-| 16 | Adagio en Sol menor (Albinoni) | | |
-| 17 | Arabesque (Burgmüller, 4 manos) | | |
+| 15 | My Favourite Things | `dilan_15_favourite.py` | ✅ |
+| 16 | Adagio en Sol menor (Albinoni) | `dilan_16_adagio.py` | ✅ |
+| 17 | Arabesque (Burgmüller, 4 manos) | `dilan_17_arabesque.py` | ✅ |
 | 18 | Have Yourself a Merry Little Christmas | | |
 | 19 | Santa Tell Me | | |
 | 20 | It's Beginning to Look a Lot Like Christmas (4 manos) | | |
@@ -81,7 +81,14 @@ Al terminar: renumerar los kickers, generar portada + índice con
 ## Avisos por partitura
 
 - Las de **4 manos** (17, 20) llevan cuatro pentagramas por sistema: el
-  emparejado por defecto de `sistemas()` no vale, hay que tratarlas aparte.
+  emparejado por defecto de `sistemas()` no vale. Se leen con
+  `engine/lector_4manos.py`, que agrupa de cuatro en cuatro (0-1 = Primo,
+  2-3 = Secondo). El dosier se escribe para el **Primo**, que es la parte
+  del alumno, y la hoja de montar habla de tocar en pareja.
+- Las cabezas **huecas** (blancas y redondas) se leen con
+  `engine/lector_huecas.py`, que rellena huecos antes de abrir. Solo vale
+  en manos izquierdas sin ligaduras, y hay que mirar que las posiciones
+  caigan cerca de un entero antes de fiarse.
 - Las ediciones de MuseScore con letra traen **cifrados impresos**: son
   armonía dada por el editor y valen más que cualquier análisis propio.
 - Las cabezas huecas no las ve el lector: en piezas de melodía en notas

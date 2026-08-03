@@ -117,7 +117,7 @@ def auditar(cfg):
             if 'not a whole number of bars' in p:
                 fallos.append('%s: %s' % (nombre, p))
         y = _altura(fn)
-        if y < 44:
+        if y is not None and y < 44:
             fallos.append('%s: la pagina se pasa por abajo (y=%.1f)' % (nombre, y))
     ident, parc = audit_duplicados(hojas)
     if ident:
@@ -137,6 +137,8 @@ def _music(fn):
 
 
 def _altura(fn):
-    """La y en la que acaba la hoja: por debajo de ~44 pisa el pie de pagina."""
+    """La y en la que acaba la hoja: por debajo de ~44 pisa el pie de pagina.
+       build_ficha no devuelve y (su layout es en dos columnas), asi que ahi
+       la comprobacion la hace el chequeo de pixeles."""
     c = canvas.Canvas(os.devnull, pagesize=(W, H))
     return fn(c)

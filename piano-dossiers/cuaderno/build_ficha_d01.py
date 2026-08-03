@@ -47,13 +47,13 @@ CFG = dict(
     armonia=dict(
         titulo='Qué arpegia la mano izquierda',
         tarjetas=[
-            ('cc. 1–4', 'Sol mayor',
+            ('CC. 1–4', 'Sol mayor',
              'Sol2 · Re3 · Si3. El acorde de la tonalidad, en estado fundamental.'),
-            ('cc. 5–7', 'La menor 7 /Sol',
+            ('CC. 5–7', 'La menor 7 /Sol',
              'Sol2 · Mi3 · La3. Sin la tercera: por eso suena abierto. El bajo no se mueve.'),
-            ('c. 8', 'Sol maj7',
+            ('C. 8', 'Sol maj7',
              'Sol2 · Re3 · Fa♯3. El Fa♯ viene de la armadura, no está escrito.'),
-            ('cc. 9–12', 'Sol mayor',
+            ('CC. 9–12', 'Sol mayor',
              'Vuelve el acorde del principio y cierra la primera frase.'),
         ],
         pie='Durante los doce primeros compases el bajo está clavado en Sol2: es un pedal. Todo el '

@@ -22,11 +22,15 @@ INK = HexColor('#1A1A1A')
 _LETTER_VAL = {'C':0,'D':1,'E':2,'F':3,'G':4,'A':5,'B':6}
 
 def _parse_pitch(pitch):
-    """Splits 'Bb4' / 'F#4' / 'C4' into (letter, accidental_or_None, octave)."""
+    """Parte 'Bb4' / 'F#4' / 'An4' / 'C4' en (letra, alteracion, octava).
+
+       'n' es el BECUADRO. Hace falta en cualquier pieza con alteraciones
+       contra la armadura (el La natural de un Cm/A en Mi bemol mayor, por
+       ejemplo): sin el, esa nota se escribe mal y suena mal."""
     letter = pitch[0]
     rest = pitch[1:]
     accidental = None
-    if rest and rest[0] in ('#', 'b'):
+    if rest and rest[0] in ('#', 'b', 'n'):
         accidental = rest[0]
         rest = rest[1:]
     octv = int(rest)
@@ -185,10 +189,10 @@ def draw_notehead(c, cx, cy, gap, filled=True):
     c.restoreState()
 
 def draw_accidental(c, cx, cy, gap, accidental):
-    sym = '\u266F' if accidental == '#' else '\u266D'
+    sym = {'#': '\u266F', 'b': '\u266D', 'n': '\u266E'}[accidental]
     c.setFont('DejaVuSans', gap * 1.85)
     c.setFillColor(INK)
-    dy = gap * 0.68 if accidental == '#' else gap * 0.6
+    dy = gap * 0.68 if accidental in ('#', 'n') else gap * 0.6
     c.drawRightString(cx - gap * 0.95, cy - dy, sym)
 
 def draw_ledger(c, cx, cy, gap):
@@ -377,6 +381,8 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
         if not key_acc:
             return p
         letter, acc, octv = _parse_pitch(p)
+        if acc == 'n':          # el becuadro contradice la armadura: se dibuja siempre
+            return p
         if letter in key_letters and acc == key_acc:
             return f'{letter}{octv}'
         return p

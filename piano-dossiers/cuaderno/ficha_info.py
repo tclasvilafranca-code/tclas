@@ -141,7 +141,9 @@ def tarjetas(c, y, items):
         c.rect(bx, y - h, bw, 2.6, fill=1, stroke=0)
         c.setFont('DejaVuSans-Bold', 7.0)
         c.setFillColor(MUTED)
-        c.drawString(bx + 9, y - 13, cc.upper())
+        # NO se pone en mayusculas: 'Cm' pasaria a 'CM', que en cifrado
+        # americano es Do MAYOR. Un error musical de verdad.
+        c.drawString(bx + 9, y - 13, cc)
         ns = _fit(nombre, 'DejaVuSerif-Bold', 11.5, bw - 18, floor=8.0)
         c.setFont('DejaVuSerif-Bold', ns)
         c.setFillColor(NAVY)

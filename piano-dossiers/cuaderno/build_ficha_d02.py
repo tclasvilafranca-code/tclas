@@ -29,13 +29,13 @@ CFG = dict(
     armonia=dict(
         titulo='El acorde roto de la mano izquierda',
         tarjetas=[
-            ('c. 1  ·  cifrado D', 'Re mayor',
+            ('C. 1  ·  CIFRADO D', 'Re mayor',
              'Re3 · Fa♯3 · La3 · Re4 · La3 · Fa♯3. Sube y baja el acorde entero.'),
-            ('c. 2  ·  cifrado F♯m', 'Fa♯ menor',
+            ('C. 2  ·  CIFRADO F♯m', 'Fa♯ menor',
              'Fa♯3 · La3 · Do♯4 · Mi4 · Do♯4 · La3. Mismo gesto, otro acorde.'),
-            ('c. 3  ·  cifrado Bm', 'Si menor',
+            ('C. 3  ·  CIFRADO Bm', 'Si menor',
              'Si2 · Re3 · Fa♯3 · Si3 · Fa♯3 · Re3. Baja de registro, no de dibujo.'),
-            ('cc. 5–6', 'La mayor',
+            ('CC. 5–6', 'La mayor',
              'La2 · Do♯3 · Mi3 · La3 · Mi3 · Do♯3. La dominante de la tonalidad.'),
         ],
         pie='El dibujo NUNCA cambia: fundamental, tercera, quinta, octava, y de vuelta. Lo único que '

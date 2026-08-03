@@ -61,9 +61,9 @@ decidido el orden definitivo del álbum.
 | 9 | When I Was Your Man | `dilan_09_bruno.py` | ✅ |
 | 10 | Al Calor del Amor en un Bar | `dilan_10_calor.py` | ✅ |
 | 11 | Soldadito de Hierro | `dilan_11_soldadito.py` | ✅ |
-| 12 | A Sky Full of Stars | | |
-| 13 | What Was I Made For | | |
-| 14 | Writing's on the Wall | | |
+| 12 | A Sky Full of Stars | `dilan_12_sky.py` | ✅ |
+| 13 | What Was I Made For | `dilan_13_what.py` | ✅ |
+| 14 | Writing's on the Wall | `dilan_14_writings.py` | ✅ |
 | 15 | My Favourite Things | | |
 | 16 | Adagio en Sol menor (Albinoni) | | |
 | 17 | Arabesque (Burgmüller, 4 manos) | | |

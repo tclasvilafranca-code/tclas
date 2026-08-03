@@ -35,7 +35,7 @@ Nivel: **avanzado**. Estructura fija de 6 páginas por canción
 | 2 | Your Song | ✅ hecha |
 | 3 | Thinking Out Loud | ✅ hecha |
 | 4 | When I Was Your Man | |
-| 5 | Lucía | |
+| 5 | Lucía | ✅ hecha |
 | 6 | Poema de Amor | |
 | 7 | Amiga Mía | |
 | 8 | La Promesa | |

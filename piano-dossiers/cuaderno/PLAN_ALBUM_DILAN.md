@@ -58,9 +58,9 @@ decidido el orden definitivo del álbum.
 | 6 | Poema de Amor | `dilan_06_poema.py` | ✅ |
 | 7 | Amiga Mía | `dilan_07_amiga.py` | ✅ |
 | 8 | La Promesa | `dilan_08_promesa.py` | ✅ |
-| 9 | When I Was Your Man | | |
-| 10 | Al Calor del Amor en un Bar | | |
-| 11 | Soldadito de Hierro | | |
+| 9 | When I Was Your Man | `dilan_09_bruno.py` | ✅ |
+| 10 | Al Calor del Amor en un Bar | `dilan_10_calor.py` | ✅ |
+| 11 | Soldadito de Hierro | `dilan_11_soldadito.py` | ✅ |
 | 12 | A Sky Full of Stars | | |
 | 13 | What Was I Made For | | |
 | 14 | Writing's on the Wall | | |

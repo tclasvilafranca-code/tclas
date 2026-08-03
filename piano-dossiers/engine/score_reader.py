@@ -43,12 +43,16 @@ except ImportError:                                     # pragma: no cover
     raise SystemExit('score_reader necesita scipy: pip install scipy '
                      '--break-system-packages')
 
-# Nombres por posicion, empezando UNA posicion por encima de la linea superior.
-# En clave de Sol la linea superior es Fa5; en clave de Fa, La3.
-TREBLE = ['G5', 'F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4',
-          'D4', 'C4', 'B3', 'A3', 'G3', 'F3', 'E3']
-BASS = ['B3', 'A3', 'G3', 'F3', 'E3', 'D3', 'C3', 'B2', 'A2', 'G2',
-        'F2', 'E2', 'D2', 'C2', 'B1', 'A1', 'G1']
+# Nombres por posicion. El indice OFFSET corresponde a la linea superior del
+# pentagrama (Fa5 en clave de Sol, La3 en clave de Fa) y las cuatro primeras
+# entradas son las lineas adicionales de ARRIBA.
+# Ojo: si la lista empieza justo una posicion por encima de la linea superior,
+# toda nota mas aguda se aplasta contra el primer nombre y sale mal. Paso.
+OFFSET = 4
+TREBLE = ['C6', 'B5', 'A5', 'G5', 'F5', 'E5', 'D5', 'C5', 'B4', 'A4',
+          'G4', 'F4', 'E4', 'D4', 'C4', 'B3', 'A3', 'G3', 'F3', 'E3', 'D3']
+BASS = ['E4', 'D4', 'C4', 'B3', 'A3', 'G3', 'F3', 'E3', 'D3', 'C3',
+        'B2', 'A2', 'G2', 'F2', 'E2', 'D2', 'C2', 'B1', 'A1', 'G1', 'F1']
 
 
 def render(pdf_path, out_dir, dpi=200, prefix='pg'):
@@ -211,7 +215,7 @@ def cabezas(a, top, bot, clef, x0, x1, pad=None):
         # es lo unico que distingue una negra de una blanca.
         tinta = banda[ys.min():ys.max() + 1, xs.min():xs.max() + 1].sum()
         cy = ys.mean() + y0
-        p = (cy - top) / step + 1
+        p = (cy - top) / step + OFFSET
         idx = max(0, min(len(names) - 1, int(round(p))))
         out.append((int(xs.mean()) + x0, names[idx], round(p, 2),
                     tinta / float(h * w) > 0.66))

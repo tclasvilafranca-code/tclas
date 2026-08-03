@@ -59,6 +59,13 @@ PAG1 = dict(
              pista='cc. 1–3 · una nota por compás, y una sílaba para cada una',
              sistemas=[dict(cap='“Wise — men — say” y otra vez “Shall — I — stay”: misma melodía, dos letras',
                             events=MELODIA_1_3 + [dict(e) for e in MELODIA_1_3], bars=6)]),
+        dict(num=5, titulo='El bajo de toda la primera página',
+             pista='de los cifrados: D · F♯m · Bm · G · D · A · A7 · G · A · Bm · G · D',
+             sistemas=[dict(cap='una nota por compás, sin arpegio · esto es el mapa entero de la canción',
+                            events=[{'pitch': p, 'dur': 'h.'} for p in
+                                    ('D3', 'F3', 'B2', 'G2', 'D3', 'A2',
+                                     'A2', 'G2', 'A2', 'B2', 'G2', 'D3')],
+                            bars=6, clef='bass')]),
     ],
 )
 
@@ -93,6 +100,18 @@ PAG2 = dict(
                    '3 · Las dos manos solo los cc. 1–3, con la izquierda más floja de lo que te '
                    'parece necesario. '
                    '4 · Empieza alguna vez por el estribillo, no siempre por el principio.'),
+        dict(num=6, titulo='Los dos acordes del estribillo',
+             pista='cifrados G y A · el gesto es el mismo, pero la mano se coloca en otro sitio',
+             sistemas=[dict(cap='dos compases sobre Sol y dos sobre La · cambia sin mirarte la mano',
+                            events=arpegio('G2', 'B2', 'D3', 'G3', n=2) +
+                                   arpegio('A2', 'C3', 'E3', 'A3', n=2),
+                            bars=4, clef='bass')]),
+        dict(tipo='nota',
+             etiqueta='EL FINAL SE VA DE LA TONALIDAD',
+             texto='En la última sección aparecen F♯m y C♯7, y ese Do♯7 no pertenece a Re mayor: trae '
+                   'un Mi♯ que no está en la armadura y que la edición escribe a mano. No lo estudies '
+                   'con la primera página: móntalo aparte, despacio, y marca con lápiz cada alteración '
+                   'antes de tocar. Es el único sitio de la canción donde hace falta leer de verdad.'),
         dict(tipo='escalera', valores=[50, 60, 69, 76, 84, 92],
              regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
         dict(tipo='tracker', titulo='La prueba de la semana',

@@ -16,7 +16,23 @@ Nivel: **avanzado**. Estructura fija de 6 páginas por canción
 5. Escribir `dilan_<nn>_<slug>.py` con el diccionario `CANCION` y llamar a
    `cancion.construir()`.
 6. `cancion.auditar()` tiene que salir OK: compases, margen derecho,
-   duplicados entre hojas y altura de página.
+   duplicados entre hojas y altura de página (por abajo **y por arriba**).
+7. Chequeo de píxeles con `pdftoppm`, que es lo único que ve la ficha
+   completa y las páginas de la partitura.
+
+## Cuánto material lleva una hoja
+
+Una hoja que acaba a media página está a medio hacer. El listón es el álbum
+de Arnau, que llena el 97-99 % de las cinco hojas. `auditar()` lo comprueba:
+la `y` final de cada hoja tiene que quedar **entre 44 y 132**.
+
+- por debajo de 44 la hoja pisa el pie de página;
+- por encima de 132 sobra papel y falta trabajo.
+
+En la práctica eso son **6-7 ejercicios en el calentamiento** y **4-6 bloques
+en cada hoja al piano**, contando las cajas de texto. Cuando no se puede
+citar más música porque no está medida, el hueco se llena con cajas de texto
+que expliquen algo real de la pieza, nunca con relleno.
 
 ## Reglas que no se negocian
 
@@ -29,28 +45,35 @@ Nivel: **avanzado**. Estructura fija de 6 páginas por canción
 
 ## Orden del álbum
 
-| nº | canción | estado |
-|---|---|---|
-| 1 | Can't Help Falling in Love | ✅ hecha |
-| 2 | Your Song | ✅ hecha |
-| 3 | Thinking Out Loud | ✅ hecha |
-| 4 | When I Was Your Man | |
-| 5 | Lucía | ✅ hecha |
-| 6 | Poema de Amor | |
-| 7 | Amiga Mía | |
-| 8 | La Promesa | |
-| 9 | Al Calor del Amor en un Bar | |
-| 10 | Soldadito de Hierro | |
-| 11 | A Sky Full of Stars | |
-| 12 | What Was I Made For | |
-| 13 | Writing's on the Wall | |
-| 14 | My Favourite Things | |
-| 15 | El Cisne | ✅ hecha |
-| 16 | Adagio en Sol menor (Albinoni) | |
-| 17 | Arabesque (Burgmüller, 4 manos) | |
-| 18 | Have Yourself a Merry Little Christmas | |
-| 19 | Santa Tell Me | |
-| 20 | It's Beginning to Look a Lot Like Christmas (4 manos) | |
+Se construyen en este orden y se **renumeran al final**, cuando esté
+decidido el orden definitivo del álbum.
+
+| nº | canción | archivo | estado |
+|---|---|---|---|
+| 1 | El Cisne (Saint-Saëns) | `build_*_d01.py` | ✅ |
+| 2 | Can't Help Falling in Love | `build_*_d02.py` | ✅ |
+| 3 | Your Song | `dilan_03_your_song.py` | ✅ |
+| 4 | Thinking Out Loud | `dilan_04_thinking.py` | ✅ |
+| 5 | Lucía | `dilan_05_lucia.py` | ✅ |
+| 6 | Poema de Amor | `dilan_06_poema.py` | ✅ |
+| 7 | Amiga Mía | `dilan_07_amiga.py` | ✅ |
+| 8 | La Promesa | `dilan_08_promesa.py` | ✅ |
+| 9 | When I Was Your Man | | |
+| 10 | Al Calor del Amor en un Bar | | |
+| 11 | Soldadito de Hierro | | |
+| 12 | A Sky Full of Stars | | |
+| 13 | What Was I Made For | | |
+| 14 | Writing's on the Wall | | |
+| 15 | My Favourite Things | | |
+| 16 | Adagio en Sol menor (Albinoni) | | |
+| 17 | Arabesque (Burgmüller, 4 manos) | | |
+| 18 | Have Yourself a Merry Little Christmas | | |
+| 19 | Santa Tell Me | | |
+| 20 | It's Beginning to Look a Lot Like Christmas (4 manos) | | |
+
+Las dos primeras se montaron con los `build_*_d0N.py` antes de que existiera
+`cancion.py`; se auditan igual, pasándole las cinco hojas a
+`cancion.auditar_hojas()`.
 
 Al terminar: renumerar los kickers, generar portada + índice con
 `cuaderno/portada.py` y unir el álbum completo.

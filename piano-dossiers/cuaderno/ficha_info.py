@@ -16,7 +16,7 @@ from reportlab.lib.colors import HexColor, white
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from notation import draw_system
 from portada import (W, H, MARGIN, CONTENT_W, NAVY, NAVY_SOFT, CREAM, RULE,
-                     INK, MUTED, ACCENT, _fit, _wrap)
+                     INK, MUTED, ACCENT, _fit, _wrap, _clip)
 
 BLUE = HexColor('#3E6E8F')
 WARM = HexColor('#F4EFE3')
@@ -219,10 +219,14 @@ def _map_bar(c, y, secciones, total_compases):
         c.roundRect(x, y - bh, sw, bh, 3, fill=1, stroke=0)
         c.setFont('DejaVuSans-Bold', 10)
         c.setFillColor(white)
-        c.drawString(x + 9, y - 15, etq)
-        dsize = _fit(desc, 'DejaVuSans', 7.4, sw - 18, floor=5.6)
+        # Un tramo de un solo compas sobre un total de 32 mide 15 pt: ahi no
+        # cabe nada. Se recorta a lo que quepa antes que dejarlo salir del
+        # bloque, que es lo que hacia (y lo pillo el auditor de margenes).
+        aw = sw - 14
+        c.drawString(x + 9, y - 15, _clip(etq, 'DejaVuSans-Bold', 10, aw))
+        dsize = _fit(desc, 'DejaVuSans', 7.4, aw, floor=5.6)
         c.setFont('DejaVuSans', dsize)
-        c.drawString(x + 9, y - 27, desc)
+        c.drawString(x + 9, y - 27, _clip(desc, 'DejaVuSans', dsize, aw))
         c.setFont('DejaVuSans', 6.8)
         c.setFillColor(MUTED)
         c.drawString(x, y - bh - 10, f'c. {desde}')
@@ -236,7 +240,10 @@ def _map_bar(c, y, secciones, total_compases):
 def _bullets(c, x, y, w, items, dot=NAVY, size=8.6, leading=11.6):
     for it in items:
         c.setFillColor(dot)
-        c.circle(x + 2.4, y - 3.2, 1.7, fill=1, stroke=0)
+        # el punto va sobre la PRIMERA linea del item: _wrap dibuja esa linea
+        # con la base en y, asi que hay que subirlo, no bajarlo. Puesto debajo
+        # de la base se colaba entre la primera y la segunda linea.
+        c.circle(x + 2.4, y + size * 0.30, 1.7, fill=1, stroke=0)
         y = _wrap(c, it, x + 11, y, 'DejaVuSans', size, w - 11, leading, INK)
         y -= 3.5
     return y
@@ -378,3 +385,6 @@ def build_ficha(c, cfg):
     c.drawCentredString(W / 2, 26, 'El Cuaderno del Pianista  ·  T-Clas')
     c.drawRightString(W - MARGIN, 26, str(cfg.get('page_num', '')))
     c.showPage()
+    # devuelve la y final como las demas hojas: asi el auditor comprueba
+    # tambien la ficha, que antes se quedaba fuera por ir en dos columnas.
+    return y

@@ -42,6 +42,21 @@ def _fit(text, font, size, max_w, floor=7.0):
     return size
 
 
+def _clip(text, font, size, max_w):
+    """Recorta el texto a lo que quepa en max_w, con puntos suspensivos.
+       Para sitios donde el ancho no depende del texto (un tramo de la barra
+       de forma) y encoger la fuente ya no basta."""
+    if max_w <= 0:
+        return ''
+    if stringWidth(text, font, size) <= max_w:
+        return text
+    for k in range(len(text) - 1, 0, -1):
+        recorte = text[:k].rstrip() + '…'
+        if stringWidth(recorte, font, size) <= max_w:
+            return recorte
+    return ''
+
+
 def _wrap(c, text, x, y, font, size, max_w, leading, color):
     c.setFont(font, size)
     c.setFillColor(color)

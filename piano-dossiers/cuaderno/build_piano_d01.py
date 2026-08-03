@@ -62,15 +62,18 @@ PAG1 = dict(
                             events=ENLACES, bars=4, clef='bass')]),
         dict(tipo='nota',
              etiqueta='POR QUÉ ESTA PIEZA NO ES DE DEDOS',
-             texto='Técnicamente la izquierda no tiene nada raro: es un arpegio de tres notas que '
-                   'se repite. Lo difícil es que suene igual 55 compases seguidos y por debajo de '
-                   'la melodía. Eso no se arregla tocando más veces, se arregla escuchando: toca '
-                   'la izquierda mirando a otro lado y pregúntate si alguna de las seis corcheas '
-                   'suena más fuerte que las demás. Casi siempre es la primera.'),
+             texto='La izquierda no tiene nada raro: un arpegio de tres notas que se repite. Lo '
+                   'difícil es que suene igual 55 compases seguidos y por debajo de la melodía. Eso '
+                   'no se arregla tocando más veces: toca la izquierda mirando a otro lado y '
+                   'pregúntate si alguna corchea suena más fuerte. Casi siempre es la primera.'),
         dict(num=4, titulo='La melodía sola',
              pista='cc. 3–4 · notas largas, y una digitación impresa que ya está pensada',
              sistemas=[dict(cap='cántala mientras la tocas · si no puedes cantarla, vas demasiado rápido',
                             events=MD_3_4, bars=2)]),
+        dict(num=5, titulo='El c. 8, el acorde que avisa',
+             pista='c. 8 · Sol maj7 · es el único compás de los ocho primeros con un Fa en medio',
+             sistemas=[dict(cap='cuatro veces seguidas: el dedo que cambia es uno solo, y hay que oírlo',
+                            events=corcheas(CELULA_I7, 4), bars=4, clef='bass')]),
     ],
 )
 
@@ -112,6 +115,21 @@ PAG2 = dict(
                    'floja de lo que te parece necesario. '
                    '4 · Empieza por el c. 7, no por el 1: si siempre arrancas del principio, '
                    'acabarás tocando bien solo el principio.'),
+        dict(tipo='nota',
+             etiqueta='LA FORMA, MEDIDA COMPÁS A COMPÁS',
+             texto='A · cc. 1–12: el tema, sobre un Sol que no se mueve. B · cc. 13–34: modula, se '
+                   'llena de alteraciones y es la parte difícil. A\' · cc. 35–55: vuelve el tema. Y '
+                   'esto no es una impresión: los cc. 35 y 36 son idénticos a los cc. 3 y 4 en las dos '
+                   'manos, comprobado nota por nota. Así que cuando llegues al 35 no estás aprendiendo '
+                   'nada nuevo: estás volviendo a lo que ya te sabes.'),
+        dict(tipo='nota',
+             etiqueta='QUÉ HACER CON LA PARTE DE EN MEDIO',
+             texto='Los cc. 13 al 34 son otra cosa: ahí la pieza se va de Sol mayor y aparecen '
+                   'alteraciones que no están en la armadura. Esa sección no se cita en este cuaderno '
+                   'porque no la he medido nota por nota, y prefiero no escribirte algo que no he '
+                   'comprobado. Se trabaja directamente en la partitura, y con una regla: marca con '
+                   'lápiz cada alteración accidental ANTES de tocar, y toca la izquierda sola hasta '
+                   'que las tengas todas.'),
         dict(tipo='escalera',
              valores=[48, 60, 72, 84, 92, 96],
              regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),

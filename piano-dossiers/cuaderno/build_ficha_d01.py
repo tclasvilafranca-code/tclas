@@ -74,7 +74,6 @@ CFG = dict(
         'Los cc. 7–9 son una escala de Sol mayor entera, de Mi4 a Sol5, escrita en la pieza.',
         'En los cc. 53–54 la mano izquierda se escribe en CLAVE DE SOL, y vuelve a Fa en el 55.',
         'La digitación viene impresa en las dos manos: úsala, está pensada.',
-        'Los recuadros de compás de esta edición marcan el ÚLTIMO compás del sistema anterior.',
         'El tema vuelve entero en el c. 35: los cc. 35–36 son idénticos a los cc. 3–4.',
         'Toda la pieza vive entre pp y mf. El único mf está en el c. 43.',
     ],

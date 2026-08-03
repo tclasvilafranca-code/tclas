@@ -79,6 +79,8 @@ CANCION = dict(
              ac(AmE, veces=4), OCRE, 'bass', None),
             ('BAJO', 'y debajo, solo dos notas: Mi y Fa',
              [n('E3', 'h'), n('F3', 'h')], AZUL, 'bass', None),
+            ('MD', 'la melodía no entra en el uno: entra antes (andamio)',
+             [R, R, R, n('A4'), n('C5', 'h'), n('B4', 'h')], AZUL, 'treble', None),
         ],
         especial=[
             'No hay armadura: ni sostenidos ni bemoles de salida. Es La menor.',
@@ -87,6 +89,8 @@ CANCION = dict(
             'La melodía empieza en ANACRUSA, antes del primer tiempo del compás.',
             'Hay TRESILLOS marcados con un 3 en la mano derecha.',
             'El E7 lleva Sol♯: es la alteración que hace que quiera volver a La menor.',
+            'Los acordes se repiten sin cambiar de posición: la mano se queda colocada y solo '
+            'vuelve a apretar. No hay que buscar teclas cuatro veces.',
         ],
         reto='Cuatro acordes por compás durante treinta y seis compases. El problema no es tocarlos: '
              'es que no suenen a máquina. Si los cuatro pesan igual, la canción se convierte en un '
@@ -104,15 +108,17 @@ CANCION = dict(
     calentamiento=dict(
         intro='Cinco minutos antes de abrir la partitura. La tonalidad es La menor y el gesto de la '
               'canción es un acorde repetido cuatro veces sobre un bajo que apenas se mueve. Aquí se '
-              'trabaja ese gesto por toda la tonalidad, no solo donde la pieza lo usa.',
+              'trabaja ese gesto por toda la tonalidad, no solo donde la pieza lo usa, y se acaba con '
+              'las dos únicas notas que sostienen la canción entera.',
         reglas=['SIN ARMADURA · LA MENOR', 'EL PRIMER ACORDE PESA MÁS', 'MANOS SEPARADAS'],
         ejercicios=[
             dict(num=1, titulo='Escala de La menor · dos octavas', clef='bass',
                  pista='manos separadas · sin alteraciones, pero el pulgar tiene que pasar limpio',
                  events=corch(['A2', 'B2', 'C3', 'D3', 'E3', 'F3', 'G3', 'A3']) +
-                        corch(['B3', 'C4', 'D4', 'E4', 'D4', 'C4', 'B3', 'A3']) +
+                        corch(['B3', 'C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'A4']) +
+                        corch(['A4', 'G4', 'F4', 'E4', 'D4', 'C4', 'B3', 'A3']) +
                         corch(['G3', 'F3', 'E3', 'D3', 'C3', 'B2', 'A2', 'A2']),
-                 bars_per_line=3),
+                 bars_per_line=4),
             dict(num=2, titulo='Cuatro veces el mismo acorde', clef='bass',
                  pista='el gesto de la izquierda · el primero pesa, los otros tres acompañan',
                  events=ac(('A2', 'C3', 'E3'), veces=4) + ac(('B2', 'D3', 'F3'), veces=4) +
@@ -130,6 +136,17 @@ CANCION = dict(
                          n('D5'), n('B4'), n('G#4'), n('E4'),
                          n('A4', 'w')],
                  bars_per_line=2),
+            dict(num=5, titulo='Solo Mi y Fa, en negras', clef='bass',
+                 pista='sin acorde encima · el esqueleto de la canción entera son estas dos teclas',
+                 events=[n('E3'), n('E3'), n('F3'), n('F3'),
+                         n('E3'), n('F3'), n('E3'), n('F3'),
+                         n('E3', 'h'), n('F3', 'h'),
+                         n('E3'), n('F3'), n('F3'), n('E3'),
+                         n('F3'), n('F3'), n('E3'), n('E3'),
+                         n('F3'), n('E3'), n('F3'), n('E3'),
+                         n('E3', 'h'), n('F3', 'h'),
+                         n('E3', 'w')],
+                 bars_per_line=4),
         ],
     ),
 
@@ -212,6 +229,17 @@ CANCION = dict(
                  sistemas=[dict(cap='toca el E7 y para un segundo: vas a notar tú solo hacia dónde tira',
                                 events=ac(('E3', 'G#3', 'D4'), veces=4) + ac(('E3', 'A3', 'C4'), veces=4),
                                 bars=2, clef='bass')]),
+            dict(tipo='nota',
+                 etiqueta='QUÉ SIGNIFICA LA BARRA DEL CIFRADO',
+                 texto='Am/E quiere decir: acorde de La menor, pero con un Mi como nota más grave. Lo de '
+                       'antes de la barra es el acorde; lo de después, lo que toca el meñique. Aquí casi '
+                       'todos los cifrados llevan barra, y ahí está el color de la pieza.'),
+            dict(num=5, titulo='Do sobre Mi, que se parece muchísimo a La menor',
+                 pista='cifrados C/E y Am/E · entre los dos solo cambia UNA nota',
+                 sistemas=[dict(cap='Mi·Sol·Do y Mi·La·Do · toca los dos seguidos hasta que oigas cuál '
+                                    'es la que se mueve',
+                                events=ac(('E3', 'G3', 'C4'), veces=4) + ac(('E3', 'A3', 'C4'), veces=4),
+                                bars=2, clef='bass')]),
         ],
     ),
 
@@ -220,7 +248,14 @@ CANCION = dict(
               'suene mecánico, y sin perder de vista dónde está el bajo.',
         reglas=['NO SUENE A METRÓNOMO', 'LA ANACRUSA VA ANTES DEL 1', 'DESPACIO Y SIN PARAR'],
         bloques=[
-            dict(num=5, titulo='Aguantar sin endurecerse',
+            dict(num=6, titulo='Los nueve bajos de la primera página', clef='bass',
+                 pista='de los cifrados impresos · Mi · Fa · Mi · Mi · Fa · Fa · Mi · Fa · Mi',
+                 sistemas=[dict(cap='una nota por compás, sin acordes: si te aprendes esto, ya no te '
+                                    'pierdes nunca en la página',
+                                events=[n(p, 'w') for p in ('E3', 'F3', 'E3', 'E3', 'F3',
+                                                            'F3', 'E3', 'F3', 'E3')],
+                                bars=9, clef='bass')]),
+            dict(num=7, titulo='Aguantar sin endurecerse',
                  pista='ocho compases seguidos de cuatro golpes · aquí se ve si el brazo está suelto',
                  sistemas=[dict(cap='si a mitad de camino empiezas a golpear, para y empieza otra vez más flojo',
                                 events=(ac(('A2', 'C3', 'E3'), veces=4) + ac(('F2', 'A2', 'C3'), veces=4) +
@@ -241,6 +276,13 @@ CANCION = dict(
                        '3 · La melodía sola, contando la anacrusa en voz alta. '
                        '4 · Las dos manos hasta la barra de repetición del c. 6, y ahí paras. '
                        '5 · Cada día, un minuto tocando solo Mi–Fa–Mi–Fa con el pulso: es el esqueleto.'),
+            dict(tipo='nota',
+                 etiqueta='DÓNDE PARAR ESTA SEMANA',
+                 texto='La primera página llega hasta la barra de repetición del c. 6. Ahí es donde se '
+                       'para. Montar seis compases bien es más trabajo del que parece cuando cada uno '
+                       'lleva cuatro acordes, y es lo que hace que la semana que viene los treinta '
+                       'restantes vayan solos, porque la izquierda ya no cambia de gesto en toda la '
+                       'canción: solo cambia de acorde.'),
             dict(tipo='escalera', valores=[45, 52, 58, 64, 70, 75],
                  regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
             dict(tipo='tracker', titulo='La prueba de la semana',

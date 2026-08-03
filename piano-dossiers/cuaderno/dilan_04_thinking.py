@@ -81,6 +81,10 @@ CANCION = dict(
              [n('D2', 'w'), n('D2', 'w')], OCRE, 'bass', RE),
             ('MD', 'silencio primero, y la melodía entra después',
              [Rh, n('D4', 'e'), n('E4', 'e'), n('F4', 'q')], AZUL, 'treble', RE),
+            ('EL ACENTO', 'ocho corcheas, pero agrupadas de tres en tres',
+             [{'pitch': p, 'dur': 'e', 'beam': b} for p, b in
+              [('B4', 71), ('B4', 71), ('B4', 71),
+               ('A4', 72), ('A4', 72), ('A4', 72), ('B4', 73), ('B4', 73)]], AZUL, 'treble', RE),
         ],
         especial=[
             'Armadura de dos sostenidos: todos los Fa y los Do son ♯.',
@@ -89,6 +93,8 @@ CANCION = dict(
             'Hay TRESILLOS marcados con un 3: tres notas donde caben dos.',
             'Pone ♩=145, pero la armonía cambia cada dos compases: la sensación es la mitad de rápida.',
             'Seis compases de la pieza son exactamente iguales entre sí (cc. 4, 7, 10, 17, 38, 41).',
+            'Casi todo lo que suena lleno lo hace el pedal, no la mano: la izquierda ataca una nota y '
+            'se queda quieta compases enteros.',
         ],
         reto='Que la mano derecha entre tarde a propósito y no por despiste. Toda la gracia de esta '
              'canción está en que la melodía llega un poco después de donde la esperas, y eso solo sale '
@@ -144,6 +150,14 @@ CANCION = dict(
                           ('G2', 'D3', 'G3'), ('A2', 'E3', 'A3'), ('B2', 'F3', 'B3'),
                           ('A2', 'E3', 'A3'), ('D2', 'A2', 'D3')]],
                  bars_per_line=8),
+            dict(num=6, titulo='La misma nota, entrando cada vez más tarde',
+                 pista='en el uno, en el dos, en el tres, en el cuatro · el pie no se para',
+                 events=[n('A4'), n('A4', 'h.'),
+                         R, n('A4'), n('A4', 'h'),
+                         Rh, n('A4'), n('A4'),
+                         {'rest': True, 'dur': 'h.'}, n('A4'),
+                         n('A4', 'w')],
+                 bars_per_line=5),
         ],
     ),
 
@@ -222,6 +236,27 @@ CANCION = dict(
                            dict(cap='b)  ahora la derecha sola, encima de ese mismo silencio mental',
                                 events=[Rh, n('D4', 'e'), n('E4', 'e'), n('F4', 'q'),
                                         n('G4', 'h.'), n('E4', 'q')], bars=2)]),
+            dict(tipo='nota',
+                 etiqueta='EL PEDAL ES LA TERCERA MANO',
+                 texto='Escucha la grabación con auriculares y fíjate en el piano: suena lleno todo el '
+                       'rato y sin embargo casi no se mueve nada. Eso no lo hace la mano, lo hace el pie. '
+                       'La izquierda ataca una nota grave y la deja; el pedal se encarga de que siga '
+                       'sonando mientras la derecha canta por encima. Si tocas esta canción sin pedal vas '
+                       'a pensar que la partitura está mal, porque suena vacía. No está mal: falta el pie.'),
+            dict(num=4, titulo='El acento que se corre de sitio',
+                 pista='ocho corcheas iguales, pero agrupadas 3+3+2 · aprieta un poco la primera de cada grupo',
+                 sistemas=[dict(cap='dilo en voz alta: UN-o-o DOS-o-o TRES-o · y que el pie siga marcando '
+                                    'cuatro',
+                                events=[{'pitch': p, 'dur': 'e', 'beam': b} for p, b in
+                                        [('A4', 81), ('A4', 81), ('A4', 81),
+                                         ('A4', 82), ('A4', 82), ('A4', 82),
+                                         ('A4', 83), ('A4', 83)]] +
+                                       [{'pitch': p, 'dur': 'e', 'beam': b} for p, b in
+                                        [('B4', 84), ('B4', 84), ('B4', 84),
+                                         ('B4', 85), ('B4', 85), ('B4', 85),
+                                         ('B4', 86), ('B4', 86)]] +
+                                       [n('A4', 'w')],
+                                bars=3)]),
         ],
     ),
 
@@ -237,11 +272,19 @@ CANCION = dict(
                        'construida sobre una célula de cuatro compases que vuelve todo el rato. Antes de '
                        'estudiar nada, marca con lápiz en tu partitura los compases que se repiten: vas a '
                        'ver que lo nuevo de verdad es muy poco.'),
-            dict(num=4, titulo='El cambio de pedal',
+            dict(num=5, titulo='El cambio de pedal',
                  pista='el pedal se cambia cuando cambia la nota grave, no cuando cambia la melodía',
                  sistemas=[dict(cap='pisa al atacar, suelta y vuelve a pisar justo al cambiar de nota grave',
-                                events=[n('D2', 'w'), n('A2', 'w'), n('B2', 'w'), n('G2', 'w')],
+                                events=[n('D2', 'w'), n('A2', 'w'), n('B2', 'w'), n('G2', 'w'),
+                                        n('D2', 'w'), n('A2', 'w'), n('G2', 'w'), n('D2', 'w')],
                                 bars=4, clef='bass')]),
+            dict(tipo='nota',
+                 etiqueta='LA CÉLULA DE CUATRO COMPASES',
+                 texto='La canción entera está montada sobre un ciclo de cuatro compases de armonía que '
+                       'da vueltas: cambia la letra, cambia la melodía, pero la izquierda vuelve al mismo '
+                       'sitio cada cuatro. Cuando lo sepas, deja de leer la izquierda y tócala de memoria: '
+                       'vas a poder mirar solo la mano derecha, que es donde de verdad pasan cosas, y la '
+                       'canción se vuelve la mitad de difícil de un día para otro.'),
             dict(tipo='nota',
                  etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
                  texto='1 · Marca en la partitura los compases repetidos. '
@@ -251,6 +294,16 @@ CANCION = dict(
                        '4 · Las dos manos solo de esos cuatro compases. '
                        '5 · Y una vez al día, tócalos con los ojos cerrados: si el ritmo está por dentro, '
                        'no necesitas mirar.'),
+            dict(num=6, titulo='Cuatro entradas seguidas, sin parar',
+                 pista='andamio · cuatro frases que empiezan tarde, encadenadas · no pares entre medias',
+                 sistemas=[dict(cap='el compás que callas también se cuenta: si paras a pensar, ya has '
+                                    'perdido el sitio',
+                                events=[Rh, n('A4'), n('B4'),
+                                        Rh, n('D5'), n('B4'),
+                                        R, n('A4'), n('G4', 'h'),
+                                        n('F4', 'h'), n('E4', 'h'),
+                                        n('D4', 'w')],
+                                bars=5)]),
             dict(tipo='escalera', valores=[80, 96, 110, 122, 134, 145],
                  regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
             dict(tipo='tracker', titulo='La prueba de la semana',

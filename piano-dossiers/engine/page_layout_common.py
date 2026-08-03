@@ -33,32 +33,79 @@ def after_system(gap, events=None, clef='treble'):
         under = -label_bottom
         if under > max_under:
             max_under = under
-    if max_under <= 0:
-        return base
-    return max(base, max_under + gap * 0.6)
+    # y lo mismo por abajo: una plica hacia abajo desde un acorde agudo baja
+    # 3.4 gaps y se planta encima del rotulo del sistema siguiente.
+    max_plica = 0.0
+    for e in events:
+        alc = _alcance(gap, e, clef)
+        if alc is None:
+            continue
+        max_under = max(max_under, -alc[1])
+        max_plica = max(max_plica, -alc[3])
+    salida = base
+    if max_under > 0:
+        salida = max(salida, max_under + gap * 0.6)
+    if max_plica > 0:
+        salida = max(salida, max_plica + gap * 0.15)
+    return salida
+
+
+STEM_LEN = 3.4          # el mismo valor que usan draw_note y draw_chord
+
+
+def _alcance(gap, e, clef):
+    """Hasta donde llega un evento, distinguiendo CABEZAS de PLICAS.
+       Coordenadas relativas a staff_bottom_y = 0.
+
+       Hay que mirar las dos cosas por separado porque piden holguras
+       distintas: una cabeza fuera del pentagrama arrastra lineas adicionales
+       y a veces una alteracion delante, y necesita aire; una plica es una
+       raya de 1.3 pt y con que no toque basta.
+
+       La plica no se puede ignorar: un acorde cuya nota mas grave esta muy
+       por debajo del pentagrama lleva la plica hacia ARRIBA desde esa nota y
+       acaba 3.4 gaps por encima de la mas aguda. Midiendo solo las cabezas,
+       ese acorde parecia caber y la plica subia a atravesar el rotulo."""
+    pitches = e.get('pitches') or ([e['pitch']] if 'pitch' in e else [])
+    if not pitches:
+        return None
+    cys = [note_y(0, gap, p, clef=clef) for p in pitches]
+    alto = plica_alto = max(cys)
+    bajo = plica_bajo = min(cys)
+    if e.get('dur') != 'w':
+        if sum(cys) / len(cys) <= 2 * gap:           # misma regla que el motor
+            plica_alto = max(cys) + gap * STEM_LEN
+        else:
+            plica_bajo = min(cys) - gap * STEM_LEN
+    acc = any(_parse_pitch(p)[1] for p in pitches)
+    return alto, bajo, plica_alto, plica_bajo, acc
 
 
 def before_staff(gap, events=None, clef='treble'):
     """Vertical drop from a caption's baseline to the next staff's top line.
        If a note in `events` sits high enough to need ledger lines above the
-       staff, the default clearance isn't enough -- the note (and its
-       accidental, if any) would reach up into the caption above it."""
+       staff -- o si su plica sube por encima -- the default clearance isn't
+       enough: the note (and its accidental, if any) would reach up into the
+       caption above it."""
     base = gap * 1.5
     if not events:
         return base
     top_line = 4 * gap  # staff top relative to a staff_bottom_y of 0
-    max_over, over_has_acc = 0.0, False
+    max_over, over_has_acc, max_plica = 0.0, False, 0.0
     for e in events:
-        pitches = e.get('pitches') or ([e['pitch']] if 'pitch' in e else [])
-        for p in pitches:
-            cy = note_y(0, gap, p, clef=clef)
-            over = cy - top_line
-            if over > max_over:
-                max_over, over_has_acc = over, bool(_parse_pitch(p)[1])
-    if max_over <= 0:
-        return base
-    extra = max_over + (gap * 1.3 if over_has_acc else gap * 0.4)
-    return max(base, extra)
+        alc = _alcance(gap, e, clef)
+        if alc is None:
+            continue
+        over = alc[0] - top_line
+        if over > max_over:
+            max_over, over_has_acc = over, alc[4]
+        max_plica = max(max_plica, alc[2] - top_line)
+    extra = base
+    if max_over > 0:
+        extra = max(extra, max_over + (gap * 1.3 if over_has_acc else gap * 0.4))
+    if max_plica > 0:
+        extra = max(extra, max_plica + gap * 0.15)
+    return extra
 
 
 def stars(level, total=4):

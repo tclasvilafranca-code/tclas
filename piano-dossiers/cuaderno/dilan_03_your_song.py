@@ -122,8 +122,10 @@ CANCION = dict(
         ejercicios=[
             dict(num=1, titulo='Escala de Mi♭ mayor · dos octavas', clef='bass',
                  pista='manos separadas · tres bemoles, y el pulgar por debajo sin bache',
-                 events=corch(['E3', 'F3', 'G3', 'A3', 'B3', 'C4', 'D4', 'E4']) +
-                        corch(['D4', 'C4', 'B3', 'A3', 'G3', 'F3', 'E3', 'E3']),
+                 events=corch(['E2', 'F2', 'G2', 'A2', 'B2', 'C3', 'D3', 'E3']) +
+                        corch(['F3', 'G3', 'A3', 'B3', 'C4', 'D4', 'E4', 'E4']) +
+                        corch(['E4', 'D4', 'C4', 'B3', 'A3', 'G3', 'F3', 'E3']) +
+                        corch(['D3', 'C3', 'B2', 'A2', 'G2', 'F2', 'E2', 'E2']),
                  bars_per_line=4),
             dict(num=2, titulo='Los acordes de la canción, en bloque', clef='bass',
                  pista='Mi♭ · La♭ · Si♭ · Sol m · Do m · Fa m · las seis casas que visita la pieza',
@@ -142,6 +144,16 @@ CANCION = dict(
                           ('B4', 'D5'), ('C5', 'E5'), ('B4', 'D5'), ('A4', 'C5'),
                           ('G4', 'B4'), ('F4', 'A4'), ('E4', 'G4'), ('E4', 'G4')]],
                  bars_per_line=3),
+            dict(num=5, titulo='Arpegio de Mi♭ mayor · dos octavas', clef='bass',
+                 pista='fundamental · 3ª · 5ª · 8ª · el acorde de la tonalidad, estirado',
+                 events=corch(['E2', 'G2', 'B2', 'E3', 'G3', 'B3', 'E4', 'E4']) +
+                        corch(['E4', 'B3', 'G3', 'E3', 'B2', 'G2', 'E2', 'E2']),
+                 bars_per_line=4),
+            dict(num=6, titulo='Y ahora el bajo que sube', clef='bass',
+                 pista='al revés que la canción · sube por grados mientras la mano de arriba no se mueve',
+                 events=neg('E2', 'F2', 'G2', 'A2') + neg('B2', 'C3', 'D3', 'E3') +
+                        neg('E3', 'D3', 'C3', 'B2') + neg('A2', 'G2', 'F2', 'E2'),
+                 bars_per_line=4),
         ],
     ),
 
@@ -182,8 +194,7 @@ CANCION = dict(
                 ('B', 'Toca una tríada suelta. Que diga si es MAYOR o MENOR: la canción alterna las dos.'),
                 ('C', 'Toca cuatro tiempos. Unas veces en 4/4 y otras en 2/4. Que diga cuál era: '
                       'esta partitura cambia de compás en medio y hay que notarlo.'),
-                ('+', 'Y sin escribir: toca solo los bajos Do–Si♭–La♮–La♭ seguidos y que te diga de qué '
-                      'canción son. Si los reconoce, ya ha entendido dónde está la pieza.'),
+                ('+', 'Y sin escribir: toca los bajos Do–Si♭–La♮–La♭ y que diga de qué canción son.'),
             ],
             filas=[
                 dict(letra='A', titulo='¿El bajo sube o baja?', pista='el acorde casi no se mueve · fíjate solo en la nota de abajo',
@@ -227,6 +238,13 @@ CANCION = dict(
                                 events=bloque(('C3', 'E3', 'G3')) + bloque(('B2', 'E3', 'G3')) +
                                        bloque(('An2', 'E3', 'G3')) + bloque(('A2', 'C3', 'E3')),
                                 bars=2, clef='bass')]),
+            dict(tipo='nota',
+                 etiqueta='EL LA NATURAL, QUE NO ES UNA ERRATA',
+                 texto='La armadura de Mi♭ dice que todos los La son bemoles. Y sin embargo en el acorde '
+                       'Cm/A hay un La con becuadro delante. No está mal escrito: es una alteración '
+                       'accidental puesta a propósito, y es la nota que hace que ese tramo suene a Elton '
+                       'John y no a un acompañamiento cualquiera. Dura hasta la barra de compás y ni un '
+                       'golpe más: en el compás siguiente el La vuelve a ser bemol.'),
         ],
     ),
 
@@ -257,8 +275,28 @@ CANCION = dict(
                        '4 · La derecha sola, despacio, contando los tresillos. '
                        '5 · Las dos manos, pero solo desde el segno hasta la casilla 1ª. El resto, la '
                        'semana que viene.'),
+            dict(num=5, titulo='El esqueleto de la estrofa', clef='bass',
+                 pista='de los cifrados impresos · un solo golpe por compás, para oír la forma entera',
+                 sistemas=[dict(cap='a)  solo el bajo del primer acorde de cada compás: ocho notas y ahí '
+                                    'está la estrofa',
+                                events=[{'pitch': p, 'dur': 'w'} for p in
+                                        ('E3', 'B2', 'C3', 'An2', 'B2', 'Bn2', 'E3', 'A2')],
+                                bars=8, clef='bass'),
+                           dict(cap='b)  y ahora con el acorde encima, todavía un golpe por compás',
+                                events=[{'pitches': list(t), 'dur': 'w'} for t in
+                                        [('E3', 'G3', 'B3'), ('B2', 'D3', 'F3'), ('C3', 'E3', 'G3'),
+                                         ('An2', 'E3', 'G3'), ('B2', 'E3', 'G3'), ('Bn2', 'D3', 'G3'),
+                                         ('E3', 'G3', 'B3'), ('A2', 'C3', 'E3')]],
+                                bars=8, clef='bass')]),
             dict(tipo='escalera', valores=[40, 46, 52, 58, 62, 66],
                  regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
+            dict(tipo='nota',
+                 etiqueta='POR QUÉ SE MONTA CON UN GOLPE POR COMPÁS',
+                 texto='El ejercicio 5 quita todo menos el primer golpe de cada compás. Suena pobre, y '
+                       'esa es la idea: si tocando ocho notas ya reconoces la estrofa entera, es que la '
+                       'tienes. Si te pierdes, es que estabas leyendo compás a compás sin saber por dónde '
+                       'ibas. Cuando el esqueleto esté, vuelve a poner los dos acordes por compás y luego '
+                       'la derecha encima: verás que ya no hay nada que aprender, solo que rellenar.'),
             dict(tipo='tracker', titulo='La prueba de la semana',
                  pie='Marca el día en que hayas hecho el recorrido entero sin equivocarte de casilla.'),
         ],

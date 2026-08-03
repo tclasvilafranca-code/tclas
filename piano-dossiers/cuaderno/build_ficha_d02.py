@@ -46,6 +46,8 @@ CFG = dict(
     ritmos=[
         ('MI', 'seis corcheas: el acorde roto',
          arpegio(*RE), OCRE, 'bass', 'Re mayor'),
+        ('MI · otro acorde', 'el mismo dibujo, movido a Fa♯ menor',
+         arpegio(*FAm), OCRE, 'bass', 'Re mayor'),
         ('MD', 'una blanca con puntillo, con su sílaba',
          [{'pitch': 'D4', 'dur': 'h.'}], AZUL, 'treble', 'Re mayor'),
     ],
@@ -56,6 +58,8 @@ CFG = dict(
         'Armadura de dos sostenidos: todos los Fa y todos los Do son ♯.',
         'Hay barra de repetición: la primera parte se toca dos veces, con letra distinta.',
         'La sección F♯m – C♯7 del final es la única que sale de la tonalidad.',
+        'Las seis corcheas van bajo una sola barra: la edición las escribe como un solo gesto, '
+        'no como seis notas sueltas, y así hay que tocarlas.',
     ],
     reto='Que la izquierda suene igual de floja en las seis corcheas. El acorde roto tiende a marcar '
          'de más la primera nota de cada compás, y entonces la canción se convierte en un vals.',

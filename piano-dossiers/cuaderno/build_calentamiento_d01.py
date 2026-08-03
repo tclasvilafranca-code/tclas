@@ -30,9 +30,13 @@ def neg(*p):
     return [{'pitch': n, 'dur': 'q'} for n in p]
 
 
-# escala de Sol mayor, dos octavas, en corcheas con barra de tres en tres
-ESCALA = ['G3', 'A3', 'B3', 'C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5',
-          'E5', 'F5', 'G5']
+# Escala de Sol mayor, dos octavas, en corcheas con barra de tres en tres.
+# Va en el REGISTRO DE LA IZQUIERDA, una octava por debajo de la melodia: los
+# cc. 7-9 de la pieza son literalmente esta escala, y si el calentamiento la
+# pone en el mismo sitio, la hoja acaba siendo la misma que la de 'al piano'
+# (lo canta el auditor de duplicados con ocho notas seguidas identicas).
+ESCALA = ['G2', 'A2', 'B2', 'C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3', 'C4', 'D4',
+          'E4', 'F4', 'G4']
 ESCALA_BAJA = list(reversed(ESCALA))[1:]
 
 
@@ -64,8 +68,8 @@ CFG = dict(
              # impar (2n-1), asi que nunca cuadra sola en 3/4: la nota final
              # tiene que valer una negra para cerrar el compas.
              events=esc(ESCALA, 10) + esc(ESCALA_BAJA[:13], 20) +
-                    [{'pitch': 'G3', 'dur': 'q'}],
-             bars_per_line=5),
+                    [{'pitch': 'G2', 'dur': 'q'}],
+             bars_per_line=5, clef='bass'),
         dict(num=2, titulo='Arpegio de Sol mayor',
              pista='es el acorde que la izquierda arpegia en los cc. 1–4 y 9–12',
              events=esc(ARPEGIO, 30) + esc(ARPEGIO, 40) + [{'pitch': 'G3', 'dur': 'h.'}],

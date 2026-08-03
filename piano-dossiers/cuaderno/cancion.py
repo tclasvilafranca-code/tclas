@@ -107,6 +107,18 @@ def auditar(cfg):
     segno.make(cfg['yt'], error='m').save(qr, scale=10, border=2,
                                           dark='#1A2332', light='#F3F1EA')
     hojas = _hojas(cfg, qr)
+    fallos = _revisar(hojas, cfg['slug'])
+    os.remove(qr)
+    return fallos
+
+
+def auditar_hojas(hojas, etiqueta):
+    """La misma revision para cuadernos montados a mano (los que no pasan por
+       construir(), como las dos primeras canciones de Dilan)."""
+    return _revisar(hojas, etiqueta)
+
+
+def _revisar(hojas, etiqueta):
     fallos = []
     for nombre, fn in hojas:
         ov = audit_text_bounds(fn, 595.276, 841.89, 549.28)
@@ -119,14 +131,19 @@ def auditar(cfg):
         y = _altura(fn)
         if y is not None and y < 44:
             fallos.append('%s: la pagina se pasa por abajo (y=%.1f)' % (nombre, y))
+        # Una hoja que acaba a media pagina esta a medio hacer. El auditor de
+        # margenes la daba por buena y salian calentamientos con un tercio de
+        # hoja en blanco: el listón es el de Arnau, que llena el 97-99%.
+        if y is not None and y > 132:
+            fallos.append('%s: la hoja se queda corta, sobran %.0f pt de hoja '
+                          '(y=%.1f) -> falta material' % (nombre, y - 60, y))
     ident, parc = audit_duplicados(hojas)
     if ident:
         fallos.append('material IDENTICO entre hojas: %s' % (ident[:2],))
     if parc:
         fallos.append('solape >=8 notas entre hojas: %s' % (parc[:3],))
-    os.remove(qr)
-    print(('  %s: OK' % cfg['slug']) if not fallos else
-          ('  %s: %d FALLOS\n    %s' % (cfg['slug'], len(fallos),
+    print(('  %s: OK' % etiqueta) if not fallos else
+          ('  %s: %d FALLOS\n    %s' % (etiqueta, len(fallos),
                                         '\n    '.join(fallos))))
     return fallos
 

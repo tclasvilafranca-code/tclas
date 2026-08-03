@@ -61,6 +61,11 @@ CFG = dict(
                               ('F4', 'A4'), ('E4', 'G4')]) +
                     [{'pitches': ['D4', 'F4'], 'dur': 'h'}],
              bars_per_line=4),
+        dict(num=5, titulo='El mismo acorde roto, con la mano derecha',
+             pista='la mano que aquí solo pone una nota por compás · ahora le toca trabajar',
+             events=(arpegio('D4', 'F4', 'A4', 'D5') + arpegio('B3', 'D4', 'F4', 'B4') +
+                     arpegio('G3', 'B3', 'D4', 'G4') + arpegio('A3', 'C5', 'E5', 'A5')),
+             bars_per_line=4),
     ],
 )
 

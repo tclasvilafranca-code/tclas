@@ -3,9 +3,11 @@
 
   var data = window.__BRAND__ || {};
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   var $ = function (sel, scope) { return (scope || document).querySelector(sel); };
   var $$ = function (sel, scope) { return Array.prototype.slice.call((scope || document).querySelectorAll(sel)); };
+  var clamp = function (v, min, max) { return Math.max(min, Math.min(max, v)); };
   var escHTML = function (s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
@@ -52,7 +54,7 @@
     setTimeout(hide, 2200);
   }
 
-  /* ---------- Nav ---------- */
+  /* ---------- Nav background on scroll ---------- */
 
   function initNav() {
     var nav = $("[data-nav]");
@@ -81,22 +83,40 @@
       if (!el) return;
       e.preventDefault();
       var navOffset = 76;
-      window.scrollTo({
-        top: el.getBoundingClientRect().top + window.scrollY - navOffset,
-        behavior: reduced ? "auto" : "smooth"
-      });
+      var target;
+      // #iconos is a pinned ScrollTrigger section: its layout position and
+      // the scroll distance needed to reach it are two different things
+      // once pinning is active, so ask the trigger directly instead of
+      // measuring getBoundingClientRect (which only reflects pre-pin layout).
+      if (id === "#iconos" && window.__showcaseST) {
+        target = window.__showcaseST.start;
+      } else {
+        target = el.getBoundingClientRect().top + window.scrollY - navOffset;
+      }
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      target = clamp(target, 0, Math.max(max, 0));
+      window.scrollTo({ top: target, behavior: reduced ? "auto" : "smooth" });
     });
   }
 
   /* ---------- Split text (preserves <br> and <em>) ---------- */
 
-  function splitWords(el) {
+  function splitInline(el, mode) {
     el.setAttribute("aria-label", el.textContent.trim().replace(/\s+/g, " "));
-    var wrap = function (text) {
+    var cls = mode === "chars" ? "split-char" : "split-word";
+
+    var wrapWords = function (text) {
       return text.split(/(\s+)/).map(function (w) {
-        return /^\s+$/.test(w) || w === "" ? w : '<span class="split-word">' + escHTML(w) + "</span>";
+        return /^\s+$/.test(w) || w === "" ? w : '<span class="' + cls + '">' + escHTML(w) + "</span>";
       }).join("");
     };
+    var wrapChars = function (text) {
+      return text.split("").map(function (ch) {
+        return ch === " " ? " " : '<span class="' + cls + '">' + escHTML(ch) + "</span>";
+      }).join("");
+    };
+    var wrap = mode === "chars" ? wrapChars : wrapWords;
+
     var html = Array.prototype.map.call(el.childNodes, function (node) {
       if (node.nodeType === 3) return wrap(node.textContent);
       if (node.nodeName === "BR") return "<br>";
@@ -107,16 +127,18 @@
       return "";
     }).join("");
     el.innerHTML = html;
-    return el.querySelectorAll(".split-word");
+    return el.querySelectorAll("." + cls);
   }
 
   function initSplitText() {
     $$("[data-split]").forEach(function (el) {
-      var words = splitWords(el);
+      var mode = el.getAttribute("data-split");
+      var units = splitInline(el, mode);
       var delay = 0;
-      words.forEach(function (w) {
+      var step = mode === "chars" ? 18 : 35;
+      units.forEach(function (w) {
         w.style.transitionDelay = delay + "ms";
-        delay += 35;
+        delay += step;
       });
     });
   }
@@ -177,36 +199,275 @@
     // the count from 0 once the element scrolls into view.
   }
 
-  /* ---------- Pinned horizontal showcase ---------- */
-
-  function initShowcase() {
-    var showcase = $("[data-showcase]");
-    var track = $("[data-showcase-track]");
-    if (!showcase || !track || !window.gsap || !window.ScrollTrigger) return;
-    if (matchMedia("(max-width: 719px)").matches) return; // let mobile scroll natively
-
-    var distance = function () { return track.scrollWidth - showcase.clientWidth; };
-
-    gsap.to(track, {
-      x: function () { return -distance(); },
-      ease: "none",
-      scrollTrigger: {
-        trigger: showcase,
-        start: "top top",
-        end: function () { return "+=" + (distance() + window.innerHeight); },
-        pin: true,
-        scrub: 0.6,
-        invalidateOnRefresh: true
-      }
-    });
-  }
-
   /* ---------- Footer year ---------- */
 
   function setFooterYear() {
     var el = $("[data-year]");
     if (!el) return;
     el.textContent = String(new Date().getFullYear());
+  }
+
+  /* ================================================================
+     Premium interaction layer — cursor, magnetism, tilt, progress,
+     section spy, hero parallax, showcase controls.
+     All gated to fine-pointer devices where relevant; none of this
+     is required content, so a failure here never hides anything.
+     ================================================================ */
+
+  /* ---------- Custom cursor (dot + trailing swoosh) ---------- */
+
+  function initCursor() {
+    if (!fine) return;
+    var cursor = $("[data-cursor]");
+    var dot = $(".cursor-dot", cursor);
+    var swoosh = $(".cursor-swoosh", cursor);
+    if (!cursor || !dot || !swoosh) return;
+
+    document.documentElement.classList.add("cursor-ready");
+
+    var mx = 0, my = 0;      // raw target position
+    var sx = 0, sy = 0;      // eased swoosh position
+    var ready = false;
+
+    window.addEventListener("mousemove", function (e) {
+      mx = e.clientX; my = e.clientY;
+      dot.style.transform = "translate3d(" + mx + "px," + my + "px,0)";
+      if (!ready) {
+        ready = true;
+        sx = mx; sy = my;
+        swoosh.style.transform = "translate3d(" + sx + "px," + sy + "px,0)";
+        cursor.classList.add("is-ready");
+      }
+    });
+
+    function loop() {
+      sx += (mx - sx) * 0.18;
+      sy += (my - sy) * 0.18;
+      swoosh.style.transform = "translate3d(" + sx + "px," + sy + "px,0)";
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+
+    var hoverSelector = 'a, button, .icon-card, [data-tilt], [data-magnetic]';
+    document.addEventListener("mouseover", function (e) {
+      if (e.target.closest && e.target.closest(hoverSelector)) cursor.classList.add("is-hovering");
+    });
+    document.addEventListener("mouseout", function (e) {
+      var stillInside = e.target.closest && e.target.closest(hoverSelector);
+      if (stillInside && (!e.relatedTarget || !stillInside.contains(e.relatedTarget))) {
+        cursor.classList.remove("is-hovering");
+      }
+    });
+  }
+
+  /* ---------- Scroll progress bar ---------- */
+
+  function initScrollProgress() {
+    var bar = $("[data-scroll-progress]");
+    if (!bar) return;
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var ratio = max > 0 ? clamp(window.scrollY / max, 0, 1) : 0;
+      bar.style.transform = "scaleX(" + ratio + ")";
+    }
+    window.addEventListener("scroll", function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+  }
+
+  /* ---------- Section spy: nav links + dot nav ---------- */
+
+  function initSectionSpy() {
+    var sections = $$("main [id], .hero[id]");
+    var navLinks = $$("[data-nav-link]");
+    var dots = $$("[data-dot]");
+    if (!sections.length) return;
+
+    function setActive(id) {
+      navLinks.forEach(function (a) {
+        a.classList.toggle("is-active", a.getAttribute("data-nav-link") === id);
+      });
+      dots.forEach(function (a) {
+        a.classList.toggle("is-active", a.getAttribute("data-dot") === id);
+      });
+    }
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: "-45% 0px -45% 0px", threshold: 0 });
+
+    sections.forEach(function (s) { io.observe(s); });
+    setActive("top");
+  }
+
+  /* ---------- Magnetic elements ---------- */
+
+  function initMagnetic() {
+    if (!fine) return;
+    $$("[data-magnetic]").forEach(function (el) {
+      var strength = parseFloat(el.getAttribute("data-magnetic-strength")) || 0.3;
+      el.addEventListener("mousemove", function (e) {
+        var rect = el.getBoundingClientRect();
+        var x = (e.clientX - rect.left - rect.width / 2) * strength;
+        var y = (e.clientY - rect.top - rect.height / 2) * strength;
+        el.style.transform = "translate3d(" + x + "px," + y + "px,0)";
+      });
+      el.addEventListener("mouseout", function (e) {
+        if (!el.contains(e.relatedTarget)) el.style.transform = "";
+      });
+    });
+  }
+
+  /* ---------- 3D tilt with cursor-tracked glow ---------- */
+
+  function initTilt() {
+    if (!fine) return;
+    $$("[data-tilt]").forEach(function (el) {
+      var strength = parseFloat(el.getAttribute("data-tilt-strength")) || 10;
+      el.addEventListener("mousemove", function (e) {
+        var rect = el.getBoundingClientRect();
+        var px = (e.clientX - rect.left) / rect.width;
+        var py = (e.clientY - rect.top) / rect.height;
+        var rx = (0.5 - py) * strength;
+        var ry = (px - 0.5) * strength;
+        el.style.transform =
+          "perspective(900px) rotateX(" + rx + "deg) rotateY(" + ry + "deg) translateY(-6px)";
+        el.style.setProperty("--gx", (px * 100) + "%");
+        el.style.setProperty("--gy", (py * 100) + "%");
+        el.classList.add("is-glowing");
+      });
+      el.addEventListener("mouseout", function (e) {
+        if (el.contains(e.relatedTarget)) return;
+        el.style.transform = "";
+        el.classList.remove("is-glowing");
+      });
+    });
+  }
+
+  /* ---------- Hero mouse parallax ---------- */
+
+  function initHeroParallax() {
+    if (!fine || reduced) return;
+    var hero = $(".hero");
+    var inner = $(".hero-inner");
+    var streaks = $(".hero-streaks");
+    if (!hero || !inner) return;
+    hero.addEventListener("mousemove", function (e) {
+      var rect = hero.getBoundingClientRect();
+      var px = (e.clientX - rect.left) / rect.width - 0.5;
+      var py = (e.clientY - rect.top) / rect.height - 0.5;
+      inner.style.transform = "translate3d(" + (px * -14) + "px," + (py * -10) + "px,0)";
+      if (streaks) streaks.style.transform = "translate3d(" + (px * 20) + "px," + (py * 14) + "px,0)";
+    });
+    hero.addEventListener("mouseleave", function () {
+      inner.style.transform = "";
+      if (streaks) streaks.style.transform = "";
+    });
+  }
+
+  /* ---------- Icons showcase: pinned horizontal scroll + controls ---------- */
+
+  function initShowcase() {
+    var section = $("#iconos");
+    var showcase = $("[data-showcase]");
+    var track = $("[data-showcase-track]");
+    var cards = $$("[data-icon-card]");
+    var countEl = $("[data-showcase-count]");
+    var totalEl = $("[data-showcase-total]");
+    var fillEl = $("[data-showcase-fill]");
+    var prevBtn = $("[data-showcase-prev]");
+    var nextBtn = $("[data-showcase-next]");
+    var hint = $("[data-showcase-hint]");
+    var fade = $("[data-showcase-fade]");
+    if (!section || !showcase || !track || !cards.length) return;
+
+    var total = cards.length;
+    if (totalEl) totalEl.textContent = total < 10 ? "0" + total : String(total);
+
+    var currentIndex = 0;
+    var dismissHint = function () { if (hint) hint.classList.add("is-done"); };
+
+    function renderProgress(ratio, index) {
+      ratio = clamp(ratio, 0, 1);
+      if (fillEl) fillEl.style.width = (10 + ratio * 90) + "%";
+      if (countEl) countEl.textContent = (index + 1) < 10 ? "0" + (index + 1) : String(index + 1);
+      if (fade) fade.classList.toggle("is-hidden", ratio > 0.96);
+      if (prevBtn) prevBtn.disabled = index <= 0;
+      if (nextBtn) nextBtn.disabled = index >= total - 1;
+      currentIndex = index;
+    }
+
+    var usePin = window.gsap && window.ScrollTrigger && !matchMedia("(max-width: 719px)").matches;
+
+    if (usePin) {
+      var distance = function () { return track.scrollWidth - showcase.clientWidth; };
+      var st;
+      var tween = gsap.to(track, {
+        x: function () { return -distance(); },
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: function () { return "+=" + (distance() + window.innerHeight); },
+          pin: true,
+          scrub: 0.6,
+          invalidateOnRefresh: true,
+          onUpdate: function (self) {
+            var d = distance();
+            var ratio = d > 0 ? clamp((-gsap.getProperty(track, "x")) / d, 0, 1) : 0;
+            var index = Math.round(ratio * (total - 1));
+            renderProgress(ratio, index);
+            if (self.progress > 0.02) dismissHint();
+          }
+        }
+      });
+      st = tween.scrollTrigger;
+      window.__showcaseST = st;
+
+      function goTo(index) {
+        index = clamp(index, 0, total - 1);
+        if (!st) return;
+        var ratio = total > 1 ? index / (total - 1) : 0;
+        var target = st.start + ratio * (st.end - st.start);
+        window.scrollTo({ top: target, behavior: reduced ? "auto" : "smooth" });
+        dismissHint();
+      }
+
+      if (prevBtn) prevBtn.addEventListener("click", function () { goTo(currentIndex - 1); });
+      if (nextBtn) nextBtn.addEventListener("click", function () { goTo(currentIndex + 1); });
+      renderProgress(0, 0);
+    } else {
+      // Mobile / no-GSAP fallback: native horizontal scroll drives the same UI.
+      var cardStep = function () {
+        var second = cards[1];
+        return second ? (second.offsetLeft - cards[0].offsetLeft) : showcase.clientWidth;
+      };
+      function updateFromScroll() {
+        var max = track.scrollWidth - showcase.clientWidth;
+        var ratio = max > 0 ? clamp(showcase.scrollLeft / max, 0, 1) : 0;
+        var index = Math.round(ratio * (total - 1));
+        renderProgress(ratio, index);
+        if (showcase.scrollLeft > 8) dismissHint();
+      }
+      showcase.addEventListener("scroll", function () {
+        requestAnimationFrame(updateFromScroll);
+      }, { passive: true });
+      showcase.addEventListener("touchstart", dismissHint, { passive: true });
+
+      function goTo(index) {
+        index = clamp(index, 0, total - 1);
+        showcase.scrollTo({ left: cardStep() * index, behavior: reduced ? "auto" : "smooth" });
+        dismissHint();
+      }
+      if (prevBtn) prevBtn.addEventListener("click", function () { goTo(currentIndex - 1); });
+      if (nextBtn) nextBtn.addEventListener("click", function () { goTo(currentIndex + 1); });
+      renderProgress(0, 0);
+    }
   }
 
   /* ---------- Boot ---------- */
@@ -223,9 +484,25 @@
     safe(initCountUp, "initCountUp");
     safe(setFooterYear, "setFooterYear");
 
+    safe(initCursor, "initCursor");
+    safe(initScrollProgress, "initScrollProgress");
+    safe(initSectionSpy, "initSectionSpy");
+    safe(initMagnetic, "initMagnetic");
+    safe(initTilt, "initTilt");
+    safe(initHeroParallax, "initHeroParallax");
+
     if (window.gsap && window.ScrollTrigger) {
       try { gsap.registerPlugin(ScrollTrigger); } catch (_) {}
-      safe(initShowcase, "initShowcase");
+    }
+    safe(initShowcase, "initShowcase");
+
+    // Webfonts and late image/layout settling can change section heights
+    // after ScrollTrigger's first measurement — resync once things settle
+    // so pinned sections and anchor links stay in sync.
+    if (window.ScrollTrigger) {
+      var refresh = function () { try { ScrollTrigger.refresh(); } catch (_) {} };
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(refresh);
+      window.addEventListener("load", function () { setTimeout(refresh, 300); });
     }
 
     document.documentElement.classList.add("is-ready");

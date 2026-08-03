@@ -317,14 +317,29 @@ ul, ol { list-style: none; padding: 0; }
   align-items: center;
   overflow: hidden;
 }
+.hero-bg {
+  position: absolute; inset: 0;
+  overflow: hidden;
+}
+.hero-bg img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  filter: saturate(1.05) contrast(1.05);
+}
+.hero-bg-tint {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, rgba(10,10,13,.55) 0%, rgba(10,10,13,.72) 55%, rgba(10,10,13,.94) 100%),
+    radial-gradient(70% 60% at 50% 45%, transparent 30%, rgba(10,10,13,.55) 100%);
+}
 .hero-mesh {
   position: absolute; inset: -10%;
   background:
-    radial-gradient(38% 32% at 22% 28%, rgba(205,240,66,.14), transparent 65%),
-    radial-gradient(46% 40% at 78% 66%, rgba(201,162,39,.10), transparent 70%),
-    radial-gradient(60% 50% at 50% 100%, rgba(255,255,255,.05), transparent 70%),
-    var(--bg);
+    radial-gradient(38% 32% at 22% 28%, rgba(205,240,66,.22), transparent 65%),
+    radial-gradient(46% 40% at 78% 66%, rgba(201,162,39,.16), transparent 70%);
   filter: blur(50px);
+  mix-blend-mode: screen;
   animation: meshDrift 26s ease-in-out infinite;
 }
 @keyframes meshDrift {
@@ -438,16 +453,44 @@ ul, ol { list-style: none; padding: 0; }
    ============================================================= */
 .origin-grid {
   display: grid;
-  gap: 2rem;
-  max-width: 880px;
+  gap: 3rem;
+  align-items: center;
 }
-.origin-head .section-title { max-width: 14ch; }
+@media (min-width: 960px) {
+  .origin-grid { grid-template-columns: 1.1fr 0.9fr; gap: 4rem; }
+}
+.origin-text .section-title { max-width: 14ch; margin-top: .3rem; margin-bottom: 1.4rem; }
 .lead {
   font-family: var(--serif);
   font-style: italic;
   font-weight: 500;
-  font-size: clamp(1.3rem, 2.6vw, 1.9rem);
-  line-height: 1.45;
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  line-height: 1.5;
+  color: var(--cream-2);
+}
+.origin-figure {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition: transform .4s var(--ease-out);
+  will-change: transform;
+}
+.origin-figure img {
+  width: 100%; height: 100%;
+  aspect-ratio: 894 / 587;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.05);
+}
+.origin-figure figcaption {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(0deg, rgba(10,10,13,.85), transparent);
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .06em;
   color: var(--cream-2);
 }
 
@@ -484,15 +527,15 @@ ul, ol { list-style: none; padding: 0; }
 .portrait-frame::before {
   content: "";
   position: absolute; inset: 0;
+  z-index: 1;
   background: repeating-linear-gradient(135deg, rgba(243,242,238,.03) 0 2px, transparent 2px 14px);
+  pointer-events: none;
 }
-.portrait-initials {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 600;
-  font-size: 4.4rem;
-  color: var(--cream-2);
-  position: relative;
+.portrait-photo {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+  filter: grayscale(1) contrast(1.08);
 }
 .portrait-caption {
   font-family: var(--mono);
@@ -606,6 +649,33 @@ ul, ol { list-style: none; padding: 0; }
   pointer-events: none;
 }
 .icon-card.is-glowing::after { opacity: 1; }
+
+.icon-card-featured {
+  justify-content: flex-end;
+}
+@media (min-width: 720px) {
+  .icon-card-featured { grid-column: span 2; min-height: 420px; }
+}
+.icon-card-photo {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  z-index: 0;
+}
+.icon-card-scrim {
+  position: absolute; inset: 0;
+  background: linear-gradient(0deg, rgba(10,10,13,.94) 0%, rgba(10,10,13,.55) 55%, rgba(10,10,13,.15) 100%);
+  z-index: 0;
+}
+.icon-card-featured .icon-year,
+.icon-card-featured .icon-name,
+.icon-card-featured .icon-text {
+  position: relative;
+  z-index: 1;
+}
+.icon-card-featured .icon-text { color: var(--cream-2); max-width: 46ch; }
+
 .icon-card-motif {
   position: relative;
   height: 140px;

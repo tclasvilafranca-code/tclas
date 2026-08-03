@@ -83,18 +83,8 @@
       if (!el) return;
       e.preventDefault();
       var navOffset = 76;
-      var target;
-      // #iconos is a pinned ScrollTrigger section: its layout position and
-      // the scroll distance needed to reach it are two different things
-      // once pinning is active, so ask the trigger directly instead of
-      // measuring getBoundingClientRect (which only reflects pre-pin layout).
-      if (id === "#iconos" && window.__showcaseST) {
-        target = window.__showcaseST.start;
-      } else {
-        target = el.getBoundingClientRect().top + window.scrollY - navOffset;
-      }
       var max = document.documentElement.scrollHeight - window.innerHeight;
-      target = clamp(target, 0, Math.max(max, 0));
+      var target = clamp(el.getBoundingClientRect().top + window.scrollY - navOffset, 0, Math.max(max, 0));
       window.scrollTo({ top: target, behavior: reduced ? "auto" : "smooth" });
     });
   }
@@ -209,7 +199,7 @@
 
   /* ================================================================
      Premium interaction layer — cursor, magnetism, tilt, progress,
-     section spy, hero parallax, showcase controls.
+     section spy, hero parallax.
      All gated to fine-pointer devices where relevant; none of this
      is required content, so a failure here never hides anything.
      ================================================================ */
@@ -370,106 +360,6 @@
     });
   }
 
-  /* ---------- Icons showcase: pinned horizontal scroll + controls ---------- */
-
-  function initShowcase() {
-    var section = $("#iconos");
-    var showcase = $("[data-showcase]");
-    var track = $("[data-showcase-track]");
-    var cards = $$("[data-icon-card]");
-    var countEl = $("[data-showcase-count]");
-    var totalEl = $("[data-showcase-total]");
-    var fillEl = $("[data-showcase-fill]");
-    var prevBtn = $("[data-showcase-prev]");
-    var nextBtn = $("[data-showcase-next]");
-    var hint = $("[data-showcase-hint]");
-    var fade = $("[data-showcase-fade]");
-    if (!section || !showcase || !track || !cards.length) return;
-
-    var total = cards.length;
-    if (totalEl) totalEl.textContent = total < 10 ? "0" + total : String(total);
-
-    var currentIndex = 0;
-    var dismissHint = function () { if (hint) hint.classList.add("is-done"); };
-
-    function renderProgress(ratio, index) {
-      ratio = clamp(ratio, 0, 1);
-      if (fillEl) fillEl.style.width = (10 + ratio * 90) + "%";
-      if (countEl) countEl.textContent = (index + 1) < 10 ? "0" + (index + 1) : String(index + 1);
-      if (fade) fade.classList.toggle("is-hidden", ratio > 0.96);
-      if (prevBtn) prevBtn.disabled = index <= 0;
-      if (nextBtn) nextBtn.disabled = index >= total - 1;
-      currentIndex = index;
-    }
-
-    var usePin = window.gsap && window.ScrollTrigger && !matchMedia("(max-width: 719px)").matches;
-
-    if (usePin) {
-      var distance = function () { return track.scrollWidth - showcase.clientWidth; };
-      var st;
-      var tween = gsap.to(track, {
-        x: function () { return -distance(); },
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: function () { return "+=" + (distance() + window.innerHeight); },
-          pin: true,
-          scrub: 0.6,
-          invalidateOnRefresh: true,
-          onUpdate: function (self) {
-            var d = distance();
-            var ratio = d > 0 ? clamp((-gsap.getProperty(track, "x")) / d, 0, 1) : 0;
-            var index = Math.round(ratio * (total - 1));
-            renderProgress(ratio, index);
-            if (self.progress > 0.02) dismissHint();
-          }
-        }
-      });
-      st = tween.scrollTrigger;
-      window.__showcaseST = st;
-
-      function goTo(index) {
-        index = clamp(index, 0, total - 1);
-        if (!st) return;
-        var ratio = total > 1 ? index / (total - 1) : 0;
-        var target = st.start + ratio * (st.end - st.start);
-        window.scrollTo({ top: target, behavior: reduced ? "auto" : "smooth" });
-        dismissHint();
-      }
-
-      if (prevBtn) prevBtn.addEventListener("click", function () { goTo(currentIndex - 1); });
-      if (nextBtn) nextBtn.addEventListener("click", function () { goTo(currentIndex + 1); });
-      renderProgress(0, 0);
-    } else {
-      // Mobile / no-GSAP fallback: native horizontal scroll drives the same UI.
-      var cardStep = function () {
-        var second = cards[1];
-        return second ? (second.offsetLeft - cards[0].offsetLeft) : showcase.clientWidth;
-      };
-      function updateFromScroll() {
-        var max = track.scrollWidth - showcase.clientWidth;
-        var ratio = max > 0 ? clamp(showcase.scrollLeft / max, 0, 1) : 0;
-        var index = Math.round(ratio * (total - 1));
-        renderProgress(ratio, index);
-        if (showcase.scrollLeft > 8) dismissHint();
-      }
-      showcase.addEventListener("scroll", function () {
-        requestAnimationFrame(updateFromScroll);
-      }, { passive: true });
-      showcase.addEventListener("touchstart", dismissHint, { passive: true });
-
-      function goTo(index) {
-        index = clamp(index, 0, total - 1);
-        showcase.scrollTo({ left: cardStep() * index, behavior: reduced ? "auto" : "smooth" });
-        dismissHint();
-      }
-      if (prevBtn) prevBtn.addEventListener("click", function () { goTo(currentIndex - 1); });
-      if (nextBtn) nextBtn.addEventListener("click", function () { goTo(currentIndex + 1); });
-      renderProgress(0, 0);
-    }
-  }
-
   /* ---------- Boot ---------- */
 
   function boot() {
@@ -490,20 +380,6 @@
     safe(initMagnetic, "initMagnetic");
     safe(initTilt, "initTilt");
     safe(initHeroParallax, "initHeroParallax");
-
-    if (window.gsap && window.ScrollTrigger) {
-      try { gsap.registerPlugin(ScrollTrigger); } catch (_) {}
-    }
-    safe(initShowcase, "initShowcase");
-
-    // Webfonts and late image/layout settling can change section heights
-    // after ScrollTrigger's first measurement — resync once things settle
-    // so pinned sections and anchor links stay in sync.
-    if (window.ScrollTrigger) {
-      var refresh = function () { try { ScrollTrigger.refresh(); } catch (_) {} };
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(refresh);
-      window.addEventListener("load", function () { setTimeout(refresh, 300); });
-    }
 
     document.documentElement.classList.add("is-ready");
   }

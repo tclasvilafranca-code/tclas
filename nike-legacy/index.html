@@ -82,7 +82,10 @@
   <section class="section origin" id="origen">
     <div class="section-halo" aria-hidden="true"></div>
     <div class="container origin-grid">
-      <p class="num reveal">01</p>
+      <div class="origin-head">
+        <p class="kicker reveal">01 — Origen</p>
+        <h2 class="section-title reveal" data-split="words">Antes de ser Nike, fue una apuesta.</h2>
+      </div>
       <p class="lead reveal">
         En 1964, un contable de Oregón y su antiguo entrenador de atletismo apostaron 500 dólares cada uno por una idea sencilla: importar zapatillas japonesas y venderlas desde el maletero de un coche, en las pistas de atletismo universitario. Aquella apuesta se llamó Blue Ribbon Sports. Siete años después tomó el nombre de la diosa griega de la victoria, y un símbolo dibujado por una estudiante de diseño por 35 dólares. Medio siglo más tarde, ese símbolo se convirtió en el lenguaje visual del deporte.
       </p>
@@ -207,67 +210,45 @@
     </div>
   </section>
 
-  <!-- ===================== ICONOS (pinned showcase) ===================== -->
+  <!-- ===================== ICONOS ===================== -->
   <section class="section icons-section" id="iconos">
     <div class="icons-head container">
-      <div class="icons-head-top">
-        <div>
-          <p class="kicker reveal">04 — Iconos de producto</p>
-          <h2 class="section-title reveal" data-split="words">Objetos que se volvieron cultura.</h2>
-        </div>
-        <div class="showcase-controls reveal">
-          <button type="button" class="showcase-arrow" data-showcase-prev aria-label="Icono anterior">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="showcase-progress" aria-hidden="true">
-            <span class="showcase-count" data-showcase-count>01</span>
-            <span class="showcase-bar"><span class="showcase-bar-fill" data-showcase-fill></span></span>
-            <span class="showcase-total" data-showcase-total>05</span>
-          </div>
-          <button type="button" class="showcase-arrow" data-showcase-next aria-label="Icono siguiente">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-        </div>
-      </div>
-      <p class="showcase-hint reveal" data-showcase-hint>
-        <span>Desliza o usa las flechas para ver los cinco iconos</span>
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </p>
+      <p class="kicker reveal">04 — Iconos de producto</p>
+      <h2 class="section-title reveal" data-split="words">Objetos que se volvieron cultura.</h2>
     </div>
-    <div class="showcase" data-showcase>
-      <div class="showcase-track" data-showcase-track>
-        <article class="icon-card" data-motif="wave" data-icon-card data-tilt>
+    <div class="container">
+      <div class="icons-grid">
+        <article class="icon-card reveal" data-motif="wave" data-icon-card data-tilt>
           <div class="icon-card-motif" aria-hidden="true"></div>
           <p class="icon-year">1972</p>
           <h3 class="icon-name">Cortez</h3>
           <p class="icon-text">El primer modelo diseñado íntegramente por Bowerman marcó el salto de distribuidora a fabricante.</p>
         </article>
-        <article class="icon-card" data-motif="dot" data-icon-card data-tilt>
+        <article class="icon-card reveal" data-motif="dot" data-icon-card data-tilt>
           <div class="icon-card-motif" aria-hidden="true"></div>
           <p class="icon-year">1982</p>
           <h3 class="icon-name">Air Force 1</h3>
           <p class="icon-text">La primera zapatilla de baloncesto con cámara de aire visible, hoy un básico atemporal fuera de la cancha.</p>
         </article>
-        <article class="icon-card" data-motif="bolt" data-icon-card data-tilt>
+        <article class="icon-card reveal" data-motif="bolt" data-icon-card data-tilt>
           <div class="icon-card-motif" aria-hidden="true"></div>
           <p class="icon-year">1985</p>
           <h3 class="icon-name">Air Jordan 1</h3>
           <p class="icon-text">Nacida de un fichaje que la NBA llegó a multar, dio origen a la línea de calzado más rentable del sector.</p>
         </article>
-        <article class="icon-card" data-motif="window" data-icon-card data-tilt>
+        <article class="icon-card reveal" data-motif="window" data-icon-card data-tilt>
           <div class="icon-card-motif" aria-hidden="true"></div>
           <p class="icon-year">1987</p>
           <h3 class="icon-name">Air Max 1</h3>
           <p class="icon-text">La ventana de aire en la suela convirtió un componente técnico en un argumento estético propio.</p>
         </article>
-        <article class="icon-card" data-motif="grid" data-icon-card data-tilt>
+        <article class="icon-card reveal" data-motif="grid" data-icon-card data-tilt>
           <div class="icon-card-motif" aria-hidden="true"></div>
           <p class="icon-year">2012</p>
           <h3 class="icon-name">Flyknit</h3>
           <p class="icon-text">Una sola pieza de tejido sustituye a decenas de piezas cosidas, con menos residuo en la producción.</p>
         </article>
       </div>
-      <div class="showcase-fade" data-showcase-fade aria-hidden="true"></div>
     </div>
   </section>
 
@@ -317,8 +298,6 @@
   </div>
 </footer>
 
-<script defer src="lib/gsap.min.js"></script>
-<script defer src="lib/ScrollTrigger.min.js"></script>
 <script defer src="lib/manifest.js"></script>
 <script defer src="main.js?v=20260731"></script>
 </body>

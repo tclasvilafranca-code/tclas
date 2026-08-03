@@ -151,12 +151,20 @@ def cabezas(a, top, bot, clef, x0, x1, pad=None):
     if banda.size == 0:
         return []
     # NO se borran las lineas: partirian las cabezas que estan sobre ellas.
+    # LIMITACION CONOCIDA: solo se detectan con fiabilidad las cabezas
+    # LLENAS (negras y corcheas). Las huecas (blancas, redondas) quedan en un
+    # anillo fino que la apertura destruye. Se probo rellenar huecos antes de
+    # abrir y es peor: rellena tambien las zonas cerradas por ligaduras,
+    # plicas y barras, y ensucia el resultado hasta romper una partitura que
+    # ya estaba verificada nota a nota. En una pieza cuya melodia va en notas
+    # largas (casi toda balada), la linea de la derecha hay que leerla a zoom.
+    origen = banda
     # OJO: `step` es media distancia entre lineas (una posicion diatonica).
     # Una cabeza de nota mide ~UN espacio, o sea ~2*step de alto. Filtrar con
     # step en vez de 2*step rechaza todas las cabezas reales y deja pasar ruido.
     ev = max(3, int(round(step * 0.93)))       # alto del elemento estructurante
     eh = max(5, int(round(step * 1.67)))       # ancho
-    abierta = ndimage.binary_opening(banda, structure=np.ones((ev, eh)))
+    abierta = ndimage.binary_opening(origen, structure=np.ones((ev, eh)))
     lab, k = ndimage.label(abierta)
     out = []
     for i in range(1, k + 1):
@@ -168,11 +176,14 @@ def cabezas(a, top, bot, clef, x0, x1, pad=None):
         densidad = len(ys) / float(h * w)
         if densidad < 0.42:
             continue
+        # 'llena' se mide sobre la imagen ORIGINAL, no sobre la rellenada:
+        # es lo unico que distingue una negra de una blanca.
+        tinta = banda[ys.min():ys.max() + 1, xs.min():xs.max() + 1].sum()
         cy = ys.mean() + y0
         p = (cy - top) / step + 1
         idx = max(0, min(len(names) - 1, int(round(p))))
         out.append((int(xs.mean()) + x0, names[idx], round(p, 2),
-                    densidad > 0.72))
+                    tinta / float(h * w) > 0.66))
     out.sort()
     return out
 

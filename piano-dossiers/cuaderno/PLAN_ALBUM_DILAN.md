@@ -78,8 +78,11 @@ Las dos primeras se montaron con los `build_*_d0N.py` antes de que existiera
 `cuaderno/auditar_dilan.py` pasa las cuatro comprobaciones a las veinte de
 una vez. Tiene que salir TODO OK antes de tocar nada más.
 
-Al terminar: generar portada + índice con `cuaderno/portada.py` y unir el
-álbum completo.
+`cuaderno/build_dilan.py` genera la portada y el índice y une el álbum
+entero: **148 páginas**, en `output/Dilan_Cuaderno_del_Pianista_2026.pdf`.
+
+El índice agrupa las veinte en cinco etapas, y la columna de la derecha dice
+qué entra con cada pieza. No es decorativo: es el plan del curso.
 
 ## Avisos por partitura
 

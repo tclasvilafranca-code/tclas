@@ -140,6 +140,37 @@ def barras(a, y_top, y_bot, x0=None, x1=None, tol=4):
     return fus
 
 
+def _mas_regular(*listas):
+    """De varias listas de barras candidatas, la que da compases mas parejos.
+       En un sistema los compases tienen anchos parecidos, asi que la lista
+       con menos dispersion relativa es casi siempre la correcta."""
+    mejor, mejor_cv = [], None
+    for xs in listas:
+        if len(xs) < 3:
+            continue
+        gaps = [b - a for a, b in zip(xs[:-1], xs[1:])]
+        med = sum(gaps) / len(gaps)
+        if med <= 0:
+            continue
+        var = sum((g - med) ** 2 for g in gaps) / len(gaps)
+        cv = (var ** 0.5) / med
+        if mejor_cv is None or cv < mejor_cv - 1e-9 or (
+                abs(cv - mejor_cv) < 1e-9 and len(xs) > len(mejor)):
+            mejor, mejor_cv = xs, cv
+    if mejor:
+        return mejor
+    return max(listas, key=len) if listas else []
+
+
+def _interseca(xa, xb, tol=5):
+    """x que aparecen en las dos listas (misma barra en los dos pentagramas)."""
+    out = []
+    for v in xa:
+        if any(abs(v - w) <= tol for w in xb):
+            out.append(v)
+    return out
+
+
 def cabezas(a, top, bot, clef, x0, x1, pad=None):
     """Cabezas de nota entre x0 y x1 en el pentagrama dado.
        Devuelve [(x, nombre, posicion_decimal, llena)] ordenado por x."""
@@ -197,8 +228,19 @@ def leer(pdf_path, out_dir, doble=True, dpi=200, prefix='pg'):
     for pi, path in enumerate(paginas, 1):
         a = load(path)
         for si, (tt, tb, bt, bb) in enumerate(sistemas(a, doble=doble), 1):
-            y_top, y_bot = tt, (bb if bb is not None else tb)
-            bs = barras(a, y_top, y_bot)
+            # Buscar la barra de arriba abajo del sistema falla en partituras
+            # con letra: la banda entre pentagramas esta vacia y la barra no
+            # la cruza. Buscarla en un solo pentagrama tambien falla: una
+            # plica larga cruza el pentagrama igual que una barra.
+            # Lo que si distingue: una barra de verdad esta en LOS DOS
+            # pentagramas a la misma x; una plica, casi nunca.
+            if bt is None:
+                bs = barras(a, tt, tb)
+            else:
+                entero = barras(a, tt, bb)           # exacto si no hay letra
+                cruce = _interseca(barras(a, tt, tb),
+                                   barras(a, bt, bb), tol=5)
+                bs = _mas_regular(entero, cruce)
             if len(bs) < 2:
                 continue
             for k in range(len(bs) - 1):

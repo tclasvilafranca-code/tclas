@@ -86,7 +86,13 @@ Lo último no es técnica: es orientarse y coordinarse.
 | 8 | La Promesa | heredada | ✔ | OK |
 | 9 | Amiga Mía | heredada (todo andamio) | ✔ | OK |
 | 10 | **When We Were Young** | **nueva** · `TRANSCRIPCION_E10_WWWY.md` | ✔ | OK |
-| 11–17 | Soldadito · Favourite Things · Merry Little Christmas · Santa Tell Me · It's Beginning · Arabesque · **Bohemian Rhapsody** | 6 heredadas + 1 nueva por medir | pendientes | — |
+| 11 | Soldadito de Hierro | heredada | ✔ | OK |
+| 12 | My Favourite Things | heredada | ✔ | OK |
+| 13 | Have Yourself a Merry Little Christmas | heredada | ✔ | OK |
+| 14 | Santa Tell Me | heredada | ✔ | OK |
+| 15 | It's Beginning to Look a Lot Like Christmas | heredada (4 manos) | ✔ | OK |
+| 16 | Arabesque | heredada (4 manos) | pendiente | — |
+| 17 | **Bohemian Rhapsody** | **nueva**, por medir | pendiente | — |
 
 Portada, índice y plan de curso de Eva: pendientes, al final.
 
@@ -103,4 +109,4 @@ Quince piezas comparten edición con Dilan. Para que las hojas sean propias:
    coincidir es la CITA LITERAL de un compás medido —eso es lo correcto, la
    partitura es la misma—; lo que no puede coincidir es un ejercicio de
    ANDAMIO, porque ese me lo he inventado yo y debe ser distinto para cada
-   alumna. A 16/08 no queda ningún andamio compartido.
+   alumna. A 16/08, con las quince primeras escritas, no queda ningún andamio compartido: todo lo que coincide es cita literal de compases medidos.

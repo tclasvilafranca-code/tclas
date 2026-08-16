@@ -10,7 +10,8 @@ from cancion import auditar
 MODULOS = ['eva_01_canthelp', 'eva_02_sky', 'eva_03_poema',
            'eva_04_what', 'eva_05_thinking', 'eva_06_cisne',
            'eva_07_bruno', 'eva_08_promesa', 'eva_09_amiga',
-           'eva_10_young']
+           'eva_10_young', 'eva_11_soldadito', 'eva_12_favourite',
+           'eva_13_merry', 'eva_14_santa', 'eva_15_beginning']
 
 
 def main():

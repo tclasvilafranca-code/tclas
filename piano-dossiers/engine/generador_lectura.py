@@ -87,11 +87,16 @@ PATRONES = {
 }
 
 # Registro comodo por clave: de la mas grave a la mas aguda, en grados de la
-# escala. Se amplia con el nivel.
+# escala. Se amplia con el nivel, pero poco: esto se toca y se lee de un
+# vistazo, y a partir de dos lineas adicionales deja de leerse y se descifra.
 REGISTRO = {
-    'treble': (('C4', 'C6'), ('G3', 'A6')),
-    'bass':   (('C2', 'C4'), ('F1', 'E4')),
+    'treble': (('C4', 'G5'), ('A3', 'C6')),
+    'bass':   (('G2', 'C4'), ('D2', 'E4')),
 }
+
+# Cuantos compases entran comodos en una linea, por compas. Cinco compases de
+# 4/4 con corcheas no caben: salen apretados y el alumno pierde el sitio.
+COMPASES_LINEA = {(4, 4): 4, (3, 4): 5, (2, 4): 6, (6, 8): 4}
 
 _LETRAS = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
 
@@ -128,24 +133,45 @@ def linea(rng, tonalidad, clef, time_sig, compases, nivel=1, salto_max=None):
     grados = escala_grados(tonalidad, clef, nivel)
     if salto_max is None:
         salto_max = 2 + nivel
+    ultimo = len(grados) - 1
+    centro = ultimo / 2.0
     pos = rng.randrange(len(grados) // 4, 3 * len(grados) // 4)
+    # En compas de subdivision ternaria las corcheas van de tres en tres; en
+    # los demas, de dos en dos, una barra por tiempo.
+    por_barra = 3 if tuple(time_sig) == (6, 8) else 2
     eventos = []
     for _ in range(compases):
+        compas = []
         for fig in _elige_patron(rng, time_sig, nivel):
             if fig.startswith('R'):
-                eventos.append({'rest': True, 'dur': fig[1:]})
+                compas.append({'rest': True, 'dur': fig[1:]})
                 continue
             paso = rng.randint(-salto_max, salto_max)
             if paso == 0:
                 paso = rng.choice((-1, 1))
-            pos = max(0, min(len(grados) - 1, pos + paso))
-            eventos.append({'pitch': _nombre(grados[pos]), 'dur': fig})
-    return _barrar(eventos)
+            # Vuelta al centro. Un paseo al azar sin esto acaba pegado a un
+            # extremo del registro y se queda ahi: media hoja colgando de
+            # cuatro lineas adicionales, que ya no se lee, se descifra.
+            fuera = abs(pos - centro) / centro if centro else 0
+            if fuera > 0.5 and rng.random() < fuera:
+                paso = -abs(paso) if pos > centro else abs(paso)
+            nueva = pos + paso
+            if nueva < 0 or nueva > ultimo:
+                nueva = pos - paso          # rebota, no se pega al tope
+            pos = max(0, min(ultimo, nueva))
+            compas.append({'pitch': _nombre(grados[pos]), 'dur': fig})
+        eventos.extend(_barrar(compas, por_barra))
+    return eventos
 
 
-def _barrar(eventos, _contador=[7000]):
+def _barrar(eventos, por_barra=2, _contador=[7000]):
     """Une las corcheas seguidas bajo una barra. Sin esto cada corchea sale
-       con su corchete y la hoja parece un ejercicio de solfeo, no musica."""
+       con su corchete y la hoja parece un ejercicio de solfeo, no musica.
+
+       Se llama COMPAS A COMPAS y agrupa de `por_barra` en `por_barra`: una
+       barra no puede cruzar la linea divisoria ni juntar dos tiempos. Antes
+       se llamaba sobre la linea entera y salian barras de ocho corcheas
+       pasando por encima del compas siguiente."""
     i = 0
     while i < len(eventos):
         if eventos[i].get('dur') == 'e' and 'pitch' in eventos[i]:
@@ -153,10 +179,12 @@ def _barrar(eventos, _contador=[7000]):
             while (j < len(eventos) and eventos[j].get('dur') == 'e'
                    and 'pitch' in eventos[j]):
                 j += 1
-            if j - i >= 2:
-                _contador[0] += 1
-                for k in range(i, j):
-                    eventos[k]['beam'] = _contador[0]
+            for ini in range(i, j, por_barra):
+                fin = min(ini + por_barra, j)
+                if fin - ini >= 2:
+                    _contador[0] += 1
+                    for k in range(ini, fin):
+                        eventos[k]['beam'] = _contador[0]
             i = j
         else:
             i += 1
@@ -178,8 +206,7 @@ def hoja(tonalidad, semilla, n_lineas=12, nivel=1, compases=4,
         ts = base
         if compases_extra and i >= 2:
             ts = compases_extra[i % len(compases_extra)]
-        # cuantos compases caben depende de la figura mas corta que se use
-        bars = compases if ts != (2, 4) else compases + 2
+        bars = COMPASES_LINEA.get(ts, compases)
         for _ in range(6):                      # anti-secuencia: no repetir
             ev = linea(rng, tonalidad, clef, ts, bars, nivel, salto_max)
             firma = tuple(e.get('pitch', 'R') for e in ev[:6])

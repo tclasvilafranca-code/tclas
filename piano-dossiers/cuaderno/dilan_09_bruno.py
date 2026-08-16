@@ -76,7 +76,10 @@ CANCION = dict(
     ficha=dict(
         titulo='When I Was Your Man',
         autor='Bruno Mars (2012) · arr. musicaparadisfrutar.com',
-        datos=[('Tonalidad', 'Do mayor'), ('Compás', '4/4'), ('Tempo', 'Balada'),
+        # La edición NO imprime ninguna indicación de tempo: la casilla dice
+        # "Carácter", no "Tempo", para no atribuirle a la partitura algo que
+        # no pone. El metrónomo lo decide la profesora.
+        datos=[('Tonalidad', 'Do mayor'), ('Compás', '4/4'), ('Carácter', 'Balada'),
                ('Mano izq.', 'Arpegios'), ('Mano dcha.', 'Semicorcheas')],
         armonia=dict(
             titulo='Qué arpegia la mano izquierda',

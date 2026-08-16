@@ -16,6 +16,48 @@
 >   no ejecutando el auditor.
 > - Antes de entregar nada: `auditar_dilan.py` (o su equivalente por alumno)
 >   tiene que decir TODO OK, y la revisión de píxeles, 0 desbordes.
+>
+> ### La partitura de Drive es la fuente, y se mide ANTES de escribir nada
+>
+> Decisión del cliente tras el álbum de Dilan. El orden es este y no otro:
+>
+> 1. **Primero se descarga la carpeta de Drive del alumno.** Nada se escribe
+>    de memoria, ni de un ZIP viejo, ni de una sesión anterior.
+> 2. **Después se mide sobre ESE PDF**, el que se acaba de bajar, y la
+>    transcripción (`TRANSCRIPCION_*.md`) se hace contra él.
+> 3. **Y solo entonces** se escriben las hojas.
+>
+> Motivo: en Dilan se midió sobre un ZIP y las partituras se perdieron al
+> reiniciarse el contenedor; hubo que rebajarlas del Drive y volver a
+> comprobar que eran las mismas ediciones. Fue trabajo repetido y evitable.
+>
+> **Cómo se baja** (el enlace lo comparte el cliente como "Cualquiera con el
+> enlace"; recordarle cerrarlo al terminar, porque son partituras con
+> copyright):
+>
+> ```bash
+> pip install --break-system-packages -q gdown
+> gdown --folder "<url de la carpeta>" -O /tmp/.../src
+> ```
+>
+> Los nombres de Drive no coinciden exactamente con los que espera el código
+> (espacios al principio, `'` por `_`, extensiones perdidas): se emparejan
+> normalizando el nombre y con `difflib.get_close_matches`, y **se comprueba
+> que el emparejamiento es 1 a 1, sin archivos sueltos ni repetidos**.
+>
+> **Y se verifica que cada PDF es la obra que dice ser, no solo que el nombre
+> se parezca.** Dos comprobaciones baratas que hay que pasar siempre:
+>
+> - `pdftotext -f 1 -l 1` y leer el **título impreso** dentro del PDF (ojo:
+>   las descargas de Musescore llevan una marca de agua en la primera línea,
+>   hay que saltarla);
+> - contrastar el **metrónomo declarado en la ficha** con el que aparece
+>   impreso (`= 66`, `= 145`…). Si la partitura no imprime tempo, la casilla
+>   de la ficha se llama **"Carácter"**, no "Tempo": no se le atribuye a la
+>   edición algo que no pone.
+>
+> Las partituras **no se versionan nunca** (`piano-dossiers/.gitignore` ya
+> excluye `students/*/source/`).
 
 > ## ⚠️ FORMATO VIGENTE: el cuaderno rediseñado (`cuaderno/`)
 >

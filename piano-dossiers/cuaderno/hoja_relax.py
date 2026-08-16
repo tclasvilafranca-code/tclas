@@ -9,14 +9,18 @@
    El esquema de relajacion no es un adorno del texto, esta metido en las
    notas y es lo unico que hace que esta hoja no sea otro calentamiento:
 
-     1. FIGURAS LARGAS. Redondas, blancas y negras, nada mas corto. En cuanto
-        aparecen corcheas la mano se pone a correr y se agarrota.
-     2. UN SILENCIO EN CASI TODOS LOS COMPASES. Ese hueco es el ejercicio:
-        es donde se suelta la mano encima de las teclas.
-     3. SALTOS MINIMOS (segundas y terceras). Un salto grande obliga a estirar
-        la mano, y estirar es justo lo contrario de soltar.
-     4. LA LINEA BAJA MAS QUE SUBE. Bajar es dejar caer el brazo; subir pide
-        fuerza precisamente cuando se busca lo contrario.
+     1. LO QUE LA HACE LENTA ES EL TEMPO, NO LA FALTA DE NOTAS. Va escrito
+        arriba (Muy lento, ♩=50) y el pentagrama va lleno. Una hoja medio
+        vacia no relaja: aburre, y el alumno la pasa.
+     2. ESTO SUENA. Las notas no son aleatorias: cada compas tiene su acorde
+        (I - vi - IV - V, o i - VI - iv - v en menor), las notas salen de ese
+        acorde, entre medias cae alguna nota de paso y cada linea cierra en
+        la tonica. Tocar algo que suena mal tensa; tocar algo que suena bien
+        es la mitad del ejercicio.
+     3. NADA MAS CORTO QUE LA NEGRA. En cuanto aparecen corcheas la mano se
+        pone a correr y se agarrota.
+     4. SALTOS PEQUENOS. Un salto grande obliga a estirar la mano, y estirar
+        es justo lo contrario de soltar.
      5. UNA MANO POR LINEA, ALTERNANDO. Mientras una toca, la otra se queda
         muerta encima del teclado, que es donde de verdad descansa.
 
@@ -71,14 +75,26 @@ def build_relax(c, cfg):
     ton = cfg.get('key_sig')
     nombre_ton = ton if ton else 'Do mayor'
     intro = ('Lo último de la clase, con el brazo ya cansado. No es un ejercicio: es dejar de hacer '
-             'fuerza. Todo son figuras largas y silencios, y en cada silencio hay que soltar la mano '
-             'encima de las teclas hasta notarla pesada. Una línea cada mano, alternando: mientras una '
-             'toca, la otra descansa. Está en %s, como la pieza.' % nombre_ton)
+             'fuerza. Lo que lo hace lento es el tempo de aquí abajo, no las notas — esto es música de '
+             'verdad, sobre los acordes de %s, y cada línea acaba en su nota de casa. Una línea cada '
+             'mano, alternando: mientras una toca, la otra descansa encima de las teclas.' % nombre_ton)
     reglas = cfg.get('reglas_relax') or ['EL BRAZO CAE, NO EMPUJA',
                                          'EN CADA SILENCIO, SUELTA LA MANO',
                                          'SI SUENA FUERTE, ES QUE APRIETAS']
 
     y = cabecera(c, cfg, 'Soltando dedos', 'Relajación · para terminar', intro, reglas)
+
+    # El tempo escrito, como en cualquier partitura. Es la pieza clave de esta
+    # hoja: lo que la hace lenta es esto, no tener el pentagrama medio vacio.
+    tempo = cfg.get('tempo_relax', 'Muy lento   ♩ = 50')
+    c.setFont('DejaVuSans-Bold', 11)
+    c.setFillColor(NAVY)
+    c.drawString(MARGIN, y - 9, tempo)
+    c.setFont('DejaVuSans', 7.8)
+    c.setFillColor(MUTED)
+    c.drawString(MARGIN + stringWidth(tempo, 'DejaVuSans-Bold', 11) + 12, y - 9,
+                 'con el metrónomo puesto · si no llegas a soltar la mano entre nota y nota, bájalo más')
+    y -= 20
 
     lineas = generar_hoja(nombre_ton, semilla=2000 + cfg.get('semilla', 1),
                           n_lineas=20, nivel=0, relax=True,

@@ -87,33 +87,51 @@ PATRONES = {
 }
 
 # Patrones de RELAJACION. Aqui no se entrena nada: se toca para soltar el
-# brazo cuando ya esta cansado, asi que todo esta pensado para que la mano
-# tenga tiempo de caer y de quedarse muerta.
+# brazo cuando ya esta cansado. Lo que hace lenta a esta hoja NO es tener
+# pocas notas — es el tempo, que va escrito arriba. El pentagrama va lleno.
 #
-#   - figuras largas: da tiempo a soltar el peso despues de cada nota;
-#   - un silencio en casi todos los compases: es el hueco para soltar;
-#   - nada mas corto que la negra: en cuanto hay corcheas, se aprieta.
+#   - nada mas corto que la negra: en cuanto hay corcheas, la mano corre;
+#   - un silencio de vez en cuando, no en todos los compases: es el hueco
+#     para soltar la mano encima de las teclas;
+#   - el compas se llena, para que haya musica de verdad que tocar.
 #
 # El motor no dibuja silencios con puntillo, asi que aqui no aparecen.
 PATRONES_RELAX = {
     (4, 4): [
-        (0, ['w']),
-        (0, ['h', 'Rh']),
-        (0, ['h', 'h']),
-        (0, ['q', 'q', 'Rh']),
-        (0, ['Rh', 'h']),
-        (0, ['h', 'q', 'Rq']),
-        (0, ['q', 'Rq', 'h']),
-        (0, ['h.', 'Rq']),
+        ['h', 'h'],
+        ['q', 'q', 'h'],
+        ['h', 'q', 'q'],
+        ['q', 'q', 'q', 'q'],
+        ['h.', 'q'],
+        ['q', 'h', 'q'],
+        ['w'],
+        ['h', 'q', 'Rq'],
+        ['q', 'q', 'Rh'],
     ],
     (3, 4): [
-        (0, ['h.']),
-        (0, ['h', 'Rq']),
-        (0, ['Rq', 'h']),
-        (0, ['q', 'q', 'Rq']),
-        (0, ['q', 'h']),
-        (0, ['h', 'q']),
+        ['h', 'q'],
+        ['q', 'q', 'q'],
+        ['q', 'h'],
+        ['h.'],
+        ['q', 'q', 'Rq'],
     ],
+}
+
+# La progresion sobre la que se escribe la hoja de relajacion. Es lo que hace
+# que unas notas al azar suenen a musica y no a ejercicio: cada compas tiene
+# su acorde, las notas salen de ese acorde y la linea acaba siempre en la
+# tonica. En grados de la escala (0 = tonica), asi vale igual en mayor y en
+# menor: I - vi - IV - V - I - IV - V - I, que en menor es i - VI - iv - v - i.
+PROGRESION = [0, 5, 3, 4, 0, 3, 4, 0]
+
+# Tonica de cada tonalidad. Hace falta para saber que grado es cada nota y
+# poder construir los acordes; la armadura ya pone los bemoles y sostenidos.
+TONICA = {
+    'Do mayor': 'C', 'La menor': 'A', 'Sol mayor': 'G', 'Mi menor': 'E',
+    'Re mayor': 'D', 'Si menor': 'B', 'La mayor': 'A', 'Fa# menor': 'F',
+    'Fa mayor': 'F', 'Re menor': 'D', 'Sib mayor': 'B', 'Si♭ mayor': 'B',
+    'Mib mayor': 'E', 'Mi♭ mayor': 'E', 'Sol menor': 'G', 'Do menor': 'C',
+    'Mi mayor': 'E', 'Do# menor': 'C', 'La♭ mayor': 'A', 'Lab mayor': 'A',
 }
 
 # Registro comodo por clave: de la mas grave a la mas aguda, en grados de la
@@ -150,9 +168,72 @@ def escala_grados(tonalidad, clef, nivel):
 
 
 def _elige_patron(rng, time_sig, nivel, relax=False):
-    tabla = PATRONES_RELAX if relax else PATRONES
-    ops = [p for lvl, p in tabla[tuple(time_sig)] if lvl <= nivel]
+    if relax:
+        return list(rng.choice(PATRONES_RELAX[tuple(time_sig)]))
+    ops = [p for lvl, p in PATRONES[tuple(time_sig)] if lvl <= nivel]
     return list(rng.choice(ops))
+
+
+def _elige_altura(rng, grados, grado_de, pos, permitidos, bajar=True, salto=4):
+    """La siguiente nota: de las que valen (las del acorde, o cualquiera si es
+       nota de paso), la que esta cerca — y, en igualdad, la de abajo."""
+    cand = [i for i in range(len(grados))
+            if grado_de(grados[i]) in permitidos and 0 < abs(i - pos) <= salto]
+    if not cand:
+        cand = [i for i in range(len(grados)) if grado_de(grados[i]) in permitidos]
+    if not cand:
+        return pos
+
+    def peso(i):
+        w = 1.0 / (abs(i - pos) + 0.5)
+        return w * 1.7 if (bajar and i < pos) else w
+
+    total = sum(peso(i) for i in cand)
+    r, acc = rng.random() * total, 0.0
+    for i in cand:
+        acc += peso(i)
+        if acc >= r:
+            return i
+    return cand[-1]
+
+
+def linea_relax(rng, tonalidad, clef, time_sig, compases):
+    """Una linea de relajacion: llena de figuras, pero sobre una progresion.
+
+       Cada compas tiene su acorde y las notas salen de el; entre dos notas
+       del acorde cae de vez en cuando una nota de paso, que es lo que hace
+       que la linea suene a melodia y no a arpegio de estudio. Y la ultima
+       nota es siempre la tonica: una linea que se queda colgada no relaja a
+       nadie, aunque las notas sean largas."""
+    grados = escala_grados(tonalidad, clef, 0)
+    raiz = _LETRAS.index(TONICA.get(tonalidad or 'Do mayor', 'C'))
+
+    def grado_de(p):
+        return (p - raiz) % 7
+
+    pos = len(grados) // 2
+    eventos = []
+    for compas in range(compases):
+        fund = PROGRESION[compas % len(PROGRESION)]
+        acorde = {fund % 7, (fund + 2) % 7, (fund + 4) % 7}
+        patron = _elige_patron(rng, time_sig, 0, relax=True)
+        ultimo_compas = compas == compases - 1
+        for k, fig in enumerate(patron):
+            if fig.startswith('R'):
+                eventos.append({'rest': True, 'dur': fig[1:]})
+                continue
+            # la ultima nota de la linea cierra en la tonica
+            resto = [f for f in patron[k + 1:] if not f.startswith('R')]
+            if ultimo_compas and not resto:
+                permitidos = {0}
+            elif k == 0 or rng.random() < 0.72:
+                permitidos = acorde
+            else:
+                permitidos = set(range(7))      # nota de paso
+            pos = _elige_altura(rng, grados, grado_de, pos, permitidos,
+                                bajar=rng.random() < 0.6)
+            eventos.append({'pitch': _nombre(grados[pos]), 'dur': fig})
+    return eventos
 
 
 def linea(rng, tonalidad, clef, time_sig, compases, nivel=1, salto_max=None,
@@ -255,11 +336,12 @@ def hoja(tonalidad, semilla, n_lineas=12, nivel=1, compases=4,
             ts = base
         bars = COMPASES_LINEA.get(ts, compases)
         if relax:
-            # menos compases por linea: las figuras son largas y con cuatro
-            # compases de blancas la linea ya queda llena y muy aireada
-            bars = 3 if ts == (3, 4) else 3
+            # cuatro compases por linea: con las figuras largas de relajacion
+            # es lo que llena el pentagrama sin apretarlo
+            bars = 4
         for _ in range(6):                      # anti-secuencia: no repetir
-            ev = linea(rng, tonalidad, clef, ts, bars, nivel, salto_max, relax)
+            ev = (linea_relax(rng, tonalidad, clef, ts, bars) if relax else
+                  linea(rng, tonalidad, clef, ts, bars, nivel, salto_max))
             firma = tuple(e.get('pitch', 'R') for e in ev[:6])
             if firma != anterior:
                 break

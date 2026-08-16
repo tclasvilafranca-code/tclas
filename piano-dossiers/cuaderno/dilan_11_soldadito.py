@@ -223,92 +223,103 @@ CANCION = dict(
     ),
 
     piano1=dict(
-        intro='La partitura, abierta en trozos. Aquí se cita todo lo que está medido, que en esta '
-              'canción es casi todo: la izquierda entera y la melodía de la primera frase. Lo único '
-              'que no se escribe es el ritmo de la derecha, porque va en tresillos.',
+        titulo='Cómo se estudia',
+        esquina='Al piano · pasos 1 y 2 de 5',
+        intro='En esta canción está medido casi todo: la izquierda entera y la melodía de la primera '
+              'frase. Lo único que no se escribe aquí es el ritmo de la derecha, porque va en tresillos '
+              'y con estas figuras no se puede poner sin mentirte. Se empieza por la izquierda, que no '
+              'cambia de gesto ni una vez en toda la pieza.',
         reglas=['LAS DOS NOTAS DE LA IZQUIERDA, A LA VEZ', 'LA DERECHA, EN TRESILLOS', 'LENTO'],
         bloques=[
-            dict(num=1, titulo='La izquierda de los cc. 1–7, tal cual', clef='bass',
-                 pista='cc. 1–7 medidos · Do · Rem · Sol · Do · Fa · Sol · Fa',
-                 sistemas=[dict(cap='una redonda doble por compás · ataca, suelta el brazo y no vuelvas '
-                                    'a tocar hasta el compás siguiente',
-                                events=QUINTAS, bars=7, clef='bass')]),
+            dict(num=1, titulo='La izquierda, que solo sostiene', clef='bass',
+                 pista='cc. 1–7 medidos · ataca, suelta el brazo y no vuelvas a tocar hasta el compás siguiente',
+                 sistemas=[
+                     dict(cap='a) cc. 1–7 · Do · Rem · Sol · Do · Fa · Sol · Fa, una redonda doble por compás',
+                          events=QUINTAS, bars=7, clef='bass'),
+                     dict(cap='b) y la izquierda entera, doce compases sin parar · es lo que vas a '
+                              'tocar treinta veces: que salga sin mirarte la mano',
+                          events=[ac(('C3', 'G3')), ac(('D3', 'A3')), ac(('G2', 'D3')),
+                                  ac(('C3', 'G3')), ac(('F2', 'C3')), ac(('G2', 'D3')),
+                                  ac(('F2', 'C3')), ac(('C3', 'G3')), ac(('G2', 'D3')),
+                                  ac(('A2', 'E3')), ac(('F2', 'C3')), ac(('C3', 'G3'))],
+                          bars=6, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='POR QUÉ SUENA HUECO',
                  texto='Las dos notas de la izquierda están siempre a distancia de quinta, y eso quiere '
-                       'decir que falta la tercera: la nota que decide si un acorde es mayor o menor. '
-                       'Sin ella el acorde no dice nada, solo sostiene. Es una decisión del arreglo, no '
-                       'una simplificación: si le pones la tercera, la canción se vuelve dulce y deja de '
+                       'decir que falta la tercera: la nota que decide si un acorde es mayor o menor. Sin '
+                       'ella el acorde no dice nada, solo sostiene. Es una decisión del arreglo, no una '
+                       'simplificación: si le pones la tercera, la canción se vuelve dulce y deja de '
                        'sonar a lo que suena. Pruébalo una vez y luego déjalo como está.'),
-            dict(num=2, titulo='La melodía de los cc. 1–2 · alturas medidas',
-                 pista='cc. 1–2 · las notas son las de la partitura; el ritmo, simplificado',
-                 sistemas=[dict(cap='en la partitura esto va en tresillos · aquí en corcheas, para leerlo',
-                                events=MEL_1 + MEL_2, bars=2)]),
+            dict(num=2, titulo='La melodía de la primera frase',
+                 pista='cc. 1–3 · las notas son las de la partitura; el ritmo, simplificado a corcheas',
+                 sistemas=[
+                     dict(cap='a) cc. 1–2 · en la partitura esto va en tresillos, aquí en corcheas solo '
+                              'para leerlo',
+                          events=MEL_1 + MEL_2, bars=2),
+                     dict(cap='b) el c. 3, que cierra la frase · no acaba en la tónica, y por eso sigue',
+                          events=MEL_3 + [n('D4', 'w')], bars=2, show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='POR QUÉ AQUÍ NO ESTÁ EL RITMO DE VERDAD',
-                 texto='Las notas de este ejercicio son exactamente las de tu partitura, pero el ritmo '
-                       'no: en la pieza van casi todas en tresillos, y eso no se puede escribir con las '
-                       'figuras que uso aquí sin mentirte. Así que léelas de aquí, tócalas de aquí, y '
-                       'para el ritmo mira la página 1 y cuenta.'),
-            dict(num=3, titulo='Y el c. 3, que es el que cierra la frase',
-                 pista='c. 3 medido · baja de Mi a Do y se queda esperando en Re',
-                 sistemas=[dict(cap='fíjate en que no acaba en la tónica: por eso la frase sigue',
-                                events=MEL_3 + [n('D4', 'w')], bars=2)]),
-            dict(num=4, titulo='Las dos manos, sin melodía todavía', clef='bass',
-                 pista='cc. 4–7 · la izquierda sola, contando en voz alta los cuatro tiempos de cada redonda',
-                 sistemas=[dict(cap='si te aburres es buena señal: esta mano tiene que salir sin pensarla',
-                                events=QUINTAS[3:] + [ac(('C3', 'G3'))], bars=5, clef='bass')]),
+                 texto='Las notas de este paso son exactamente las de tu partitura, pero el ritmo no: en '
+                       'la pieza van casi todas en tresillos. Léelas de aquí, tócalas de aquí, y para el '
+                       'ritmo mira la página 1 y cuenta.'),
         ],
     ),
 
     piano2=dict(
-        intro='Montarla es darse cuenta de que hay mucho menos que aprender de lo que parece: diez '
-              'compases de la canción están escritos dos veces, y la izquierda no cambia de gesto ni '
-              'una sola vez en toda la pieza.',
+        titulo='Cómo se estudia (sigue)',
+        esquina='Al piano · pasos 3, 4 y 5',
+        intro='Hay mucho menos que aprender de lo que parece: diez compases de la canción están escritos '
+              'dos veces. Lo que queda es el tresillo, que se resuelve cantando la letra, no contando.',
         reglas=['LOS CC. 15–24 SON LOS CC. 4–13', 'CANTA LA LETRA MIENTRAS TOCAS', 'DESPACIO Y SIN PARAR'],
         bloques=[
+            dict(num=3, titulo='El tresillo, y colocar la primera frase',
+                 pista='andamio rítmico · tres notas por tiempo, sin cambiar de velocidad al pasar de compás',
+                 sistemas=[
+                     dict(cap='a) cuenta “un-dos-tres” por cada golpe del pie y no aceleres en la barra',
+                          events=corch(['E4', 'F4', 'G4', 'F4', 'E4', 'D4', 'C4', 'D4']) +
+                                 corch(['E4', 'D4', 'C4', 'D4', 'E4', 'F4', 'G4', 'G4']) +
+                                 [n('E4', 'w')],
+                          bars=3),
+                     dict(cap='b) y lo mismo en notas largas, para colocar la mano antes de meterle '
+                              'los tresillos',
+                          events=[n('E4', 'h'), n('G4', 'h'), n('E4', 'h'), n('C4', 'h'),
+                                  n('E4', 'h'), n('C4', 'h'), n('E4', 'h'), n('G4', 'h'),
+                                  n('E4', 'w')],
+                          bars=5, show_time=False),
+                     dict(cap='c) y la izquierda de esos mismos compases, para tenerla colocada antes '
+                              'de juntar las dos manos',
+                          events=QUINTAS[:3], bars=3, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='DIEZ COMPASES REGALADOS',
                  texto='Los cc. 15 al 24 son, nota por nota, los cc. 4 al 13. No es una impresión: está '
                        'comprobado compás a compás, siete parejas seguidas idénticas. Coge un lápiz, '
-                       'busca el c. 15 en tu partitura y escribe al lado "= c. 4". Cuando llegues ahí '
+                       'busca el c. 15 en tu partitura y escribe al lado “= c. 4”. Cuando llegues ahí '
                        'tocando, no leas: ya te lo sabes.'),
-            dict(num=5, titulo='El tresillo, con la melodía de la canción',
-                 pista='andamio rítmico · tres notas por tiempo, sobre las notas que la pieza repite',
-                 sistemas=[dict(cap='cuenta "un-dos-tres" por cada golpe del pie y no cambies de '
-                                    'velocidad al pasar de compás',
-                                events=corch(['E4', 'F4', 'G4', 'F4', 'E4', 'D4', 'C4', 'D4']) +
-                                       corch(['E4', 'D4', 'C4', 'D4', 'E4', 'F4', 'G4', 'G4']) +
-                                       [n('E4', 'w')],
-                                bars=3)]),
+            dict(num=4, titulo='La letra, que manda sobre el ritmo',
+                 pista='sin pentagrama y sin piano: cantando, que es como se aprende un tresillo',
+                 sistemas=[]),
             dict(tipo='nota',
-                 etiqueta='LA LETRA MANDA',
+                 etiqueta='CÓMO SE HACE EL PASO 4',
                  texto='Esta edición trae la letra debajo del pentagrama, y en esta canción es la mejor '
                        'ayuda que tienes: los tresillos están puestos donde la frase cantada los pide, no '
-                       'por capricho. Canta "Me mue-ro al pen-sar que al-gún dí-a…" en voz alta, sin '
+                       'por capricho. Canta “Me mue-ro al pen-sar que al-gún dí-a…” en voz alta, sin '
                        'tocar, hasta que te salga natural. Después toca exactamente lo que has cantado y '
                        'verás que el ritmo ya no hay que contarlo.'),
-            dict(num=6, titulo='La izquierda entera, de un tirón', clef='bass',
-                 pista='andamio sobre los acordes medidos · doce compases sin parar, con el pie marcando',
-                 sistemas=[dict(cap='es lo que vas a tocar treinta veces: que salga sin mirarte la mano',
-                                events=[ac(('C3', 'G3')), ac(('D3', 'A3')), ac(('G2', 'D3')),
-                                        ac(('C3', 'G3')), ac(('F2', 'C3')), ac(('G2', 'D3')),
-                                        ac(('F2', 'C3')), ac(('C3', 'G3')), ac(('G2', 'D3')),
-                                        ac(('A2', 'E3')), ac(('F2', 'C3')), ac(('C3', 'G3'))],
-                                bars=6, clef='bass')]),
-            dict(tipo='nota',
-                 etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
-                 texto='1 · La izquierda de toda la primera página, sin la derecha. '
-                       '2 · Marca en la partitura que los cc. 15–24 son los cc. 4–13. '
-                       '3 · La letra cantada, sin piano, contando los tresillos. '
-                       '4 · La derecha sola de los cc. 1–3, muy lento. '
-                       '5 · Las dos manos de los cc. 1–7 y ahí paras.'),
             dict(tipo='escalera', valores=[52, 60, 66, 72, 78, 84],
-                 regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
-            dict(tipo='tracker', titulo='La prueba de la semana',
-                 pie='Marca el día en que hayas tocado la izquierda entera sin mirarte la mano.'),
+                 regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
+            dict(tipo='nota', etiqueta='LOS CINCO PASOS, PARA NO PERDERSE',
+                 texto='1 · La izquierda entera, sin mirarte la mano.   '
+                       '2 · La melodía de los cc. 1–3, alturas medidas.   '
+                       '3 · El tresillo, contado y después en notas largas.   '
+                       '4 · La letra cantada, sin piano.   '
+                       '5 · La escalera, y las dos manos de los cc. 1–7.'),
         ],
     ),
+
 )
 
 if __name__ == '__main__':

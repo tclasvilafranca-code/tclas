@@ -204,108 +204,116 @@ CANCION = dict(
     ),
 
     piano1=dict(
-        intro='La partitura, abierta en trozos. La armonía viene de los cifrados impresos y los acordes '
-              'de la izquierda están medidos. Los números de compás no se citan: los impresos y el '
-              'recuento del lector no coinciden.',
+        titulo='Cómo se estudia',
+        esquina='Al piano · pasos 1 y 2 de 5',
+        intro='En un vals la izquierda hace dos cosas en el mismo compás: una nota grave en el uno y un '
+              'acorde en el dos y el tres, con un salto entre medias. A ♩=160 ese salto dura menos de '
+              'medio segundo, y la única forma de que salga es prepararlo con antelación. Todo el paso 1 '
+              'va de eso. Los números de compás no se citan: los impresos y el recuento no coinciden.',
         reglas=['SE CITA POR CIFRADO', 'PREPARA EL ACORDE EN EL AIRE', 'EMPIEZA MUY POR DEBAJO DE 160'],
         bloques=[
-            dict(num=1, titulo='El vals sobre Mi menor', clef='bass',
-                 pista='cifrado Em medido · Mi · Sol · Si · el acorde con el que empieza la pieza',
-                 sistemas=[dict(cap='cuatro compases seguidos · el bajo con peso y los dos golpes de '
-                                    'arriba casi sin sonido',
-                                events=MIm * 4, bars=4, clef='bass')]),
-            dict(num=2, titulo='Los cuatro cifrados de la primera página', clef='bass',
-                 pista='Em · C · D · Em · lo único que cambia es dónde pones la mano',
-                 sistemas=[dict(cap='el salto de Do a Re es el que más cuesta: prepáralo mientras suena '
-                                    'el acorde anterior',
-                                events=MIm + DO + RE + MIm + DO + RE, bars=6, clef='bass')]),
-            dict(tipo='nota',
-                 etiqueta='POR QUÉ UN VALS RÁPIDO ES DIFÍCIL',
-                 texto='En un vals la mano izquierda hace dos cosas distintas en el mismo compás: una '
-                       'nota grave en el uno y un acorde en el dos y el tres, y entre las dos hay un '
-                       'salto. A ♩=160 ese salto dura menos de medio segundo. La única forma de que salga '
-                       'es no hacerlo con prisa, sino con antelación: mientras suena el bajo, la mano ya '
-                       'tiene que estar viajando. Se practica lento y mirando al techo.'),
-            dict(num=3, titulo='La misma armonía, sin el vals', clef='bass',
-                 pista='solo la fundamental de cada cifrado · para oír por dónde va la pieza',
-                 sistemas=[dict(cap='Mi · Do · Re · Mi · Do · Re · Sol · Mi · así viaja la mano',
-                                events=[n('E3', 'h.'), n('C3', 'h.'), n('D3', 'h.'), n('E3', 'h.'),
-                                        n('C3', 'h.'), n('D3', 'h.'), n('G2', 'h.'), n('E3', 'h.')],
-                                bars=8, clef='bass')]),
+            dict(num=1, titulo='El vals, y el salto que lo hace difícil', clef='bass',
+                 pista='cifrado Em medido · el bajo con peso y los dos golpes de arriba casi sin sonido',
+                 sistemas=[
+                     dict(cap='a) cuatro compases sobre Mi menor, que es con el que empieza la pieza',
+                          events=MIm * 4, bars=4, clef='bass'),
+                     dict(cap='b) el salto aislado · toca el bajo y, mientras suena, coloca la mano '
+                              'arriba sin tocar; después baja el dedo',
+                          events=[n('E3'), ac(('G3', 'B3'), 'h'),
+                                  n('C3'), ac(('E3', 'G3'), 'h'),
+                                  n('D3'), ac(('F3', 'A3'), 'h'),
+                                  n('E3'), ac(('G3', 'B3'), 'h'),
+                                  n('G2'), ac(('B2', 'D3'), 'h'),
+                                  n('E3'), ac(('G3', 'B3'), 'h')],
+                          bars=6, clef='bass', show_time=False),
+                     dict(cap='c) el mismo acorde con otra nota debajo suena más abierto · la edición lo '
+                              'usa para no repetirse',
+                          events=MIm_G * 2 + MIm * 2, bars=4, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='LOS CIFRADOS SON TU ATAJO',
                  texto='Encima del pentagrama tienes escritos Em, C, Am, D, G y B. Son seis acordes en '
-                       'toda la pieza. Si te aprendes las seis posiciones de la mano, puedes tocar la '
+                       'toda la pieza. Si te aprendes las seis posiciones de la mano puedes tocar la '
                        'izquierda sin leer el pentagrama de abajo ni una vez: miras el cifrado, colocas '
                        'la mano y haces el vals. A ♩=160 eso no es un lujo, es la única manera.'),
-            dict(num=5, titulo='La melodía de los cc. 1–4 · alturas medidas',
-                 pista='cc. 1–4 · las notas son las de la partitura; el ritmo, simplificado a negras',
-                 sistemas=[dict(cap='"Rain-drops on ro-ses" · canta la letra mientras la lees y el '
-                                    'ritmo se coloca solo',
-                                events=[n('F4'), n('E4'), n('E4'),
-                                        n('B3'), n('E4'), n('E4'),
-                                        n('F4', 'h.'),
-                                        n('E4'), n('B4'), n('B4')],
-                                bars=4)]),
-            dict(num=4, titulo='El mismo acorde, más grave', clef='bass',
-                 pista='cifrado Em medido en otra posición · Si · Mi · Sol, con el Si abajo',
-                 sistemas=[dict(cap='el mismo acorde con otra nota debajo suena más abierto: la edición '
-                                    'lo usa para no repetirse',
-                                events=MIm_G * 2 + MIm * 2, bars=4, clef='bass')]),
+            dict(num=2, titulo='El molde puesto sobre la página', clef='bass',
+                 pista='Em · C · D · Em · lo único que cambia es dónde pones la mano',
+                 sistemas=[
+                     dict(cap='a) solo la fundamental de cada cifrado · Mi · Do · Re · Mi · Do · Re · '
+                              'Sol · Mi: así viaja la mano',
+                          events=[n('E3', 'h.'), n('C3', 'h.'), n('D3', 'h.'), n('E3', 'h.'),
+                                  n('C3', 'h.'), n('D3', 'h.'), n('G2', 'h.'), n('E3', 'h.')],
+                          bars=8, clef='bass'),
+                     dict(cap='b) y ahora con el vals entero · el salto de Do a Re es el que más cuesta: '
+                              'prepáralo mientras suena el acorde anterior',
+                          events=MIm + DO + RE + MIm + DO + RE, bars=6, clef='bass', show_time=False),
+                     dict(cap='c) los seis acordes de la pieza, uno por compás, en bloque · las seis '
+                              'posiciones que hay que tener de memoria y no volver a leer',
+                          events=[ac(('E3', 'G3', 'B3'), 'h.'), ac(('C3', 'E3', 'G3'), 'h.'),
+                                  ac(('A2', 'C3', 'E3'), 'h.'), ac(('D3', 'F3', 'A3'), 'h.'),
+                                  ac(('G2', 'B2', 'D3'), 'h.'), ac(('B2', 'D3', 'F3'), 'h.')],
+                          bars=6, clef='bass', show_time=False),
+                 ]),
         ],
     ),
 
     piano2=dict(
-        intro='Montarla es dos cosas: automatizar el salto del vals y saber por dónde va la hoja, porque '
+        titulo='Cómo se estudia (sigue)',
+        esquina='Al piano · pasos 3, 4 y 5',
+        intro='El vals ya está. Lo que queda es la melodía y, sobre todo, saber por dónde va la hoja: '
               'hay repetición y dos casillas. Las notas, en esta pieza, son lo de menos.',
         reglas=['EL RECORRIDO, ANTES QUE LAS NOTAS', 'LA IZQUIERDA DE MEMORIA', 'SUBIR DESPACIO A 160'],
         bloques=[
-            dict(tipo='nota',
-                 etiqueta='EL RECORRIDO DE LA HOJA',
-                 texto='Hay una barra de repetición hacia el c. 15 y, más adelante, casillas 1.ª y 2.ª. '
-                       'Eso quiere decir que llegas al final de la primera vuelta, tocas la casilla 1, '
-                       'vuelves atrás, y la segunda vez te saltas esa casilla y entras por la 2. Antes de '
-                       'tocar una sola nota, sigue la partitura con el dedo y di en voz alta por dónde '
-                       'vas. Es cinco minutos de trabajo que te ahorran tres semanas de lío.'),
-            dict(num=5, titulo='El salto, aislado', clef='bass',
-                 pista='solo el bajo y el primer golpe del acorde · lo demás sobra para este ejercicio',
-                 sistemas=[dict(cap='toca el bajo, y mientras suena, coloca la mano arriba sin tocar · '
-                                    'después baja el dedo',
-                                events=[n('E3'), ac(('G3', 'B3'), 'h'),
-                                        n('C3'), ac(('E3', 'G3'), 'h'),
-                                        n('D3'), ac(('F3', 'A3'), 'h'),
-                                        n('E3'), ac(('G3', 'B3'), 'h'),
-                                        n('G2'), ac(('B2', 'D3'), 'h'),
-                                        n('E3'), ac(('G3', 'B3'), 'h')],
-                                bars=6, clef='bass')]),
+            dict(num=3, titulo='La izquierda de la primera vuelta', clef='bass',
+                 pista='los cifrados de la primera página, encadenados · sin parar entre acorde y acorde',
+                 sistemas=[
+                     dict(cap='a) ocho compases seguidos: es lo que vas a repetir toda la semana',
+                          events=(vals('A2', 'C3', 'E3') + vals('D3', 'F3', 'A3') +
+                                  vals('G2', 'B2', 'D3') + vals('C3', 'E3', 'G3') +
+                                  vals('G2', 'B2', 'D3') + vals('C3', 'E3', 'G3') +
+                                  vals('A2', 'C3', 'E3') + MIm),
+                          bars=8, clef='bass'),
+                     dict(cap='b) y los mismos ocho compases sin el vals, solo la nota grave · dilos en '
+                              'voz alta mientras los tocas',
+                          events=[n('A2', 'h.'), n('D3', 'h.'), n('G2', 'h.'), n('C3', 'h.'),
+                                  n('G2', 'h.'), n('C3', 'h.'), n('A2', 'h.'), n('E3', 'h.')],
+                          bars=8, clef='bass', show_time=False),
+                 ]),
+            dict(num=4, titulo='La melodía, cantada',
+                 pista='cc. 1–4 · las notas son las de la partitura; el ritmo, simplificado a negras',
+                 sistemas=[
+                     dict(cap='a) “Rain-drops on ro-ses” · canta la letra mientras la lees y el ritmo se '
+                              'coloca solo',
+                          events=[n('F4'), n('E4'), n('E4'),
+                                  n('B3'), n('E4'), n('E4'),
+                                  n('F4', 'h.'),
+                                  n('E4'), n('B4'), n('B4')],
+                          bars=4),
+                     dict(cap='b) y las mismas notas en blancas con puntillo, una por compás · para oír '
+                              'el dibujo de la frase sin la prisa del vals',
+                          events=[n('F4', 'h.'), n('E4', 'h.'), n('B3', 'h.'), n('E4', 'h.'),
+                                  n('F4', 'h.'), n('E4', 'h.'), n('B4', 'h.')],
+                          bars=7, show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='LA PIEZA ESTÁ EN MI MENOR, NO EN SOL',
                  texto='La armadura dice Sol mayor, pero mira dónde empieza y dónde acaba: en Mi menor. '
-                       'Las dos tonalidades comparten armadura, son relativas, y lo que decide cuál de '
-                       'las dos manda es sobre qué nota descansa la música. Aquí descansa en Mi, y por '
-                       'eso una canción cuya letra habla de gotas de lluvia y bigotes de gato suena '
-                       'seria. Cuando toques, no busques que suene alegre: no lo es.'),
+                       'Las dos tonalidades comparten armadura, son relativas, y lo que decide cuál manda '
+                       'es sobre qué nota descansa la música. Aquí descansa en Mi, y por eso una canción '
+                       'cuya letra habla de gotas de lluvia y bigotes de gato suena seria. Cuando toques, '
+                       'no busques que suene alegre: no lo es.'),
             dict(tipo='nota',
-                 etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
-                 texto='1 · El recorrido, con el dedo y en voz alta, sin piano. '
-                       '2 · El salto del vals, aislado, mirando al techo. '
-                       '3 · La izquierda de la primera página leyendo solo los cifrados. '
-                       '4 · La melodía sola, cantándola. '
-                       '5 · Las dos manos a la mitad de velocidad, y solo hasta la repetición.'),
-            dict(num=6, titulo='La izquierda de la primera vuelta', clef='bass',
-                 pista='los cifrados de la primera página, encadenados · sin parar entre acorde y acorde',
-                 sistemas=[dict(cap='ocho compases seguidos: es lo que vas a repetir toda la semana',
-                                events=(vals('A2', 'C3', 'E3') + vals('D3', 'F3', 'A3') +
-                                        vals('G2', 'B2', 'D3') + vals('C3', 'E3', 'G3') +
-                                        vals('G2', 'B2', 'D3') + vals('C3', 'E3', 'G3') +
-                                        vals('A2', 'C3', 'E3') + MIm),
-                                bars=8, clef='bass')]),
+                 etiqueta='EL RECORRIDO DE LA HOJA',
+                 texto='Hay una barra de repetición hacia el c. 15 y, más adelante, casillas 1.ª y 2.ª. '
+                       'Llegas al final de la primera vuelta, tocas la casilla 1, vuelves atrás, y la '
+                       'segunda vez te saltas esa casilla y entras por la 2. Antes de tocar una sola '
+                       'nota, sigue la partitura con el dedo y di en voz alta por dónde vas: son cinco '
+                       'minutos de trabajo que te ahorran tres semanas de lío.'),
             dict(tipo='escalera', valores=[80, 100, 116, 132, 148, 160],
-                 regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
-            dict(tipo='tracker', titulo='La prueba de la semana',
-                 pie='Marca el día en que hayas hecho el salto del vals sin mirarte la mano izquierda.'),
+                 regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
         ],
     ),
+
 )
 
 if __name__ == '__main__':

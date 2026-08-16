@@ -219,93 +219,101 @@ CANCION = dict(
     ),
 
     piano1=dict(
-        intro='La partitura, abierta en trozos. Todo lo que se cita es del PRIMO, que es tu parte, y '
-              'está medido con el lector de cuatro manos. El ritmo real va en semicorcheas picadas: '
-              'aquí se escribe en corcheas para poder leerlo.',
+        titulo='Cómo se estudia',
+        esquina='Al piano · pasos 1 y 2 de 5',
+        intro='Todo lo que se cita es del PRIMO, que es tu parte. En esta pieza tus dos manos hacen lo '
+              'mismo, así que el problema de siempre —coordinar las manos— no existe; el problema es '
+              'coordinarte con otra persona. Por eso los pasos 1 y 2 son tu parte, que se estudia en '
+              'casa, y los pasos 3 a 5 son lo que solo se puede trabajar en clase.',
         reglas=['ESTO ES SOLO TU PARTE · EL PRIMO', 'LAS DOS MANOS, IGUAL', 'EMPIEZA MUY LENTO'],
         bloques=[
-            dict(num=1, titulo='La célula del c. 3 y la subida del c. 4',
-                 pista='cc. 3–4 medidos · La·Si·Do·Si·La y después Re·Mi·Fa·Sol·La',
-                 sistemas=[dict(cap='tu mano derecha lo toca aquí y tu izquierda una octava más abajo, '
-                                    'exactamente igual',
-                                events=CELULA + SUBIDA + CELULA + SUBIDA, bars=4)]),
+            dict(num=1, titulo='La célula y la subida', clef='treble',
+                 pista='cc. 3–4 medidos · La·Si·Do·Si·La y después Re·Mi·Fa·Sol·La · el ritmo real va '
+                       'en semicorcheas picadas; aquí en corcheas, para leerlo',
+                 sistemas=[
+                     dict(cap='a) tu derecha lo toca aquí y tu izquierda una octava más abajo, '
+                              'exactamente igual',
+                          events=CELULA + SUBIDA + CELULA + SUBIDA, bars=4),
+                     dict(cap='b) y la escala que baja del c. 33, que cierra la pieza · el último La '
+                              'tiene que sonar a punto final',
+                          events=BAJADA + BAJADA, bars=2, show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='TUS DOS MANOS TOCAN LO MISMO',
                  texto='Míralo bien: en tu parte los dos pentagramas están en clave de sol y dicen lo '
                        'mismo. Unas veces la izquierda va una octava más abajo y otras las dos tocan '
-                       'exactamente las mismas notas. Eso quiere decir dos cosas buenas: que solo hay '
-                       'que aprender una línea, y que cualquier desajuste entre tus manos se oye '
-                       'muchísimo. Estudia siempre las dos juntas, nunca por separado.'),
-            dict(num=3, titulo='La escala que baja del c. 33',
-                 pista='c. 33 medido · Mi · Re · Do · Si · La · cierra la pieza',
-                 sistemas=[dict(cap='las dos manos bajan a la vez, en octava · el último La tiene que '
-                                    'sonar a punto final',
-                                events=BAJADA + BAJADA, bars=2)]),
+                       'exactamente las mismas notas. Eso quiere decir dos cosas buenas: que solo hay que '
+                       'aprender una línea, y que cualquier desajuste entre tus manos se oye muchísimo. '
+                       'Estudia siempre las dos juntas, nunca por separado.'),
+            dict(num=2, titulo='El 8va del c. 5, ya en su sitio',
+                 pista='cc. 5–6 · andamio sobre las notas medidas, escrito donde de verdad se toca',
+                 sistemas=[
+                     dict(cap='a) practícala ya en la octava buena · si la lees donde está escrita y '
+                              'luego la subes, se te caerá siempre en el mismo punto',
+                          events=corch(['A5', 'B5', 'C6', 'B5']) + [n('A5', 'h')] +
+                                 corch(['A5', 'B5', 'C6', 'C6']) + [n('C6', 'h')],
+                          bars=4),
+                 ]),
             dict(tipo='nota',
-                 etiqueta='POR QUÉ ESTA PIEZA SE ESTUDIA DISTINTO',
-                 texto='En todas las demás del cuaderno el problema es coordinar tus dos manos. Aquí tus '
-                       'dos manos hacen lo mismo, así que ese problema no existe: el problema es '
-                       'coordinarte con otra persona. Eso significa que la parte que se estudia en casa '
-                       'es la fácil, y que la parte difícil solo se puede trabajar en clase, las dos '
-                       'sentadas al piano. Ven con tu parte sabida y aprovecha la clase para lo otro.'),
-            dict(num=4, titulo='Lo que toca la otra parte', clef='bass',
-                 pista='Secondo medido · La m · Re m · Do · Sol7 · para que sepas qué estás oyendo',
-                 sistemas=[dict(cap='esto NO lo tocas tú · escúchalo y aprende dónde cambia, que es lo '
-                                    'que te va a decir si vas bien',
-                                events=[ac(('A2', 'C3', 'E3')), ac(('A2', 'C3', 'E3')),
-                                        ac(('A2', 'D3', 'F3')), ac(('A2', 'D3', 'F3')),
-                                        ac(('G2', 'C3', 'E3')), ac(('G2', 'C3', 'E3')),
-                                        ac(('G2', 'B2', 'F3')), ac(('G2', 'B2', 'F3'))],
-                                bars=4, clef='bass')]),
+                 etiqueta='QUÉ ES EL 8VA',
+                 texto='Sobre tu parte aparece “8va” con una línea de puntos: todo lo que hay debajo se '
+                       'toca una octava más arriba de lo escrito. No cambia nada del gesto, solo el sitio '
+                       'del teclado. Cuando la línea de puntos se acaba, vuelves a tocar donde pone.'),
         ],
     ),
 
     piano2=dict(
-        intro='Montarla es, en esta pieza, un problema distinto: hay que montarla CON alguien. Tu parte '
-              'puede estar perfecta y la pieza no funcionar. Aquí va lo que hay que trabajar en pareja.',
+        titulo='Cómo se estudia (sigue)',
+        esquina='Al piano · pasos 3, 4 y 5',
+        intro='Tu parte puede estar perfecta y la pieza no funcionar. Lo que viene aquí no se estudia '
+              'solo: se trabaja en clase, las dos sentadas al piano. Ven con los pasos 1 y 2 sabidos y '
+              'aprovecha la clase para esto.',
         reglas=['ENTRÁIS EN EL C. 3, NO EN EL 1', 'CONTAD JUNTOS EN VOZ ALTA', 'NADIE ACELERA POR SU CUENTA'],
         bloques=[
+            dict(num=3, titulo='Los dos compases de espera',
+                 pista='cc. 1–3 · lo que tú haces mientras suena la introducción: contar',
+                 sistemas=[
+                     dict(cap='a) dos compases de silencio y entras · cuéntalos en voz alta, no de memoria',
+                          events=[sil('h'), sil('h')] + CELULA, bars=4),
+                 ]),
             dict(tipo='nota',
                  etiqueta='TÚ NO EMPIEZAS LA PIEZA',
                  texto='Los cc. 1 y 2 los toca la otra parte sola: acordes picados y el bajo. Tú entras '
                        'en el c. 3, y ese es el momento más delicado de toda la pieza. No cuentes por '
-                       'dentro: contad los dos en voz alta "un-dos, un-dos" durante los dos compases de '
+                       'dentro: contad los dos en voz alta “un-dos, un-dos” durante los dos compases de '
                        'introducción, y respira justo antes de entrar. Si respiras, entras a tiempo casi '
                        'sin querer.'),
-            dict(num=5, titulo='Los dos compases de espera',
-                 pista='cc. 1–3 · lo que tú haces mientras suena la introducción: contar',
-                 sistemas=[dict(cap='dos compases de silencio y entras · cuéntalos en voz alta, no de '
-                                    'memoria',
-                                events=[sil('h'), sil('h')] + CELULA,
-                                bars=4)]),
+            dict(num=4, titulo='Lo que toca la otra parte', clef='bass',
+                 pista='Secondo medido · La m · Re m · Do · Sol7 · esto NO lo tocas tú',
+                 sistemas=[
+                     dict(cap='a) escúchalo y aprende dónde cambia: es lo que te va a decir si vas bien',
+                          events=[ac(('A2', 'C3', 'E3')), ac(('A2', 'C3', 'E3')),
+                                  ac(('A2', 'D3', 'F3')), ac(('A2', 'D3', 'F3')),
+                                  ac(('G2', 'C3', 'E3')), ac(('G2', 'C3', 'E3')),
+                                  ac(('G2', 'B2', 'F3')), ac(('G2', 'B2', 'F3'))],
+                          bars=4, clef='bass'),
+                     dict(cap='b) y solo su bajo, una nota por compás · apréndetelo de oído: cuando '
+                              'cambia, tú tienes que estar en el sitio',
+                          events=[n('A2', 'h'), n('A2', 'h'), n('G2', 'h'), n('G2', 'h')],
+                          bars=4, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
-                 etiqueta='EL 8VA DEL C. 5',
-                 texto='Sobre tu parte aparece "8va" con una línea de puntos: todo lo que hay debajo se '
-                       'toca una octava más arriba de lo escrito. No cambia nada del gesto, solo el '
-                       'sitio del teclado. Practica esa frase directamente en la octava buena desde el '
-                       'primer día: si te acostumbras a leerla donde está escrita y luego la subes, se '
-                       'te va a caer siempre en el mismo punto.'),
-            dict(num=6, titulo='La frase del 8va, ya en su sitio',
-                 pista='cc. 5–6 · andamio sobre las notas medidas, escrito ya donde suena',
-                 sistemas=[dict(cap='aquí está escrito una octava más arriba, que es donde de verdad se '
-                                    'toca',
-                                events=corch(['A5', 'B5', 'C6', 'B5']) + [n('A5', 'h')] +
-                                       corch(['A5', 'B5', 'C6', 'C6']) + [n('C6', 'h')],
-                                bars=4)]),
-            dict(tipo='nota',
-                 etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
-                 texto='1 · Tu parte sola, las dos manos juntas desde el primer día, muy lento. '
-                       '2 · La célula y la subida, aisladas, hasta que salgan sin pensarlas. '
-                       '3 · La frase del 8va, directamente en la octava alta. '
-                       '4 · Cuenta los dos compases de espera en voz alta, tú solo, veinte veces. '
-                       '5 · Y en clase: los dos compases de entrada, una y otra vez, hasta que entréis '
-                       'juntos sin mirar.'),
+                 etiqueta='POR QUÉ ESTA PIEZA SE ESTUDIA DISTINTO',
+                 texto='En todas las demás del cuaderno el problema es coordinar tus dos manos. Aquí tus '
+                       'dos manos hacen lo mismo, así que ese problema no existe. La parte que se estudia '
+                       'en casa es la fácil, y la difícil solo se puede trabajar en pareja: entrad juntas '
+                       'en el c. 3 una y otra vez, hasta que no haga falta ninguna señal.'),
             dict(tipo='escalera', valores=[60, 76, 88, 100, 112, 126],
-                 regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
-            dict(tipo='tracker', titulo='La prueba de la semana',
-                 pie='Marca el día en que hayas entrado en el c. 3 sin que nadie te haga una señal.'),
+                 regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
+            dict(tipo='nota', etiqueta='LOS CINCO PASOS, PARA NO PERDERSE',
+                 texto='1 · La célula, la subida y la bajada, las dos manos juntas desde el primer día.   '
+                       '2 · El 8va, directamente en la octava alta.   '
+                       '3 · Los dos compases de espera, contados en voz alta veinte veces.   '
+                       '4 · Escuchar la otra parte y saber dónde cambia.   '
+                       '5 · La escalera, y en clase: entrar juntas en el c. 3.'),
         ],
     ),
+
 )
 
 if __name__ == '__main__':

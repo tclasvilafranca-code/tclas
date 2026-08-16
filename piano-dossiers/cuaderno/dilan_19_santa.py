@@ -201,108 +201,112 @@ CANCION = dict(
     ),
 
     piano1=dict(
-        intro='La partitura, abierta en trozos. Aquí no se citan números de compás: entre el segno, las '
-              'casillas y la coda, el recuento no es fiable. Cada ejercicio dice de qué SECCIÓN sale.',
+        titulo='Cómo se estudia',
+        esquina='Al piano · pasos 1 y 2 de 5',
+        intro='Lo que hace que el estribillo de esta canción suene a estribillo no es la melodía: es tu '
+              'mano izquierda, que pasa de picar notas sueltas a repetir acordes. Por eso los dos '
+              'primeros pasos son las dos izquierdas. No se citan números de compás: entre el segno, '
+              'las casillas y la coda, el recuento no es fiable — se cita por SECCIÓN.',
         reglas=['SE CITA POR SECCIÓN, NO POR COMPÁS', 'PICADO ES CORTO, NO FUERTE', 'MIRA ANTES DE CRUZAR'],
         bloques=[
-            dict(num=1, titulo='La introducción: acordes largos abajo', clef='bass',
-                 pista='intro medida · acordes sostenidos, y con 8vb suenan una octava más grave',
-                 sistemas=[dict(cap='pisa el pedal al atacar y cámbialo justo después de tocar el '
-                                    'acorde nuevo, nunca antes',
-                                events=[ac(SOLac, 'w'), ac(DOac, 'w'), ac(REac, 'w'), ac(SOLac, 'w')],
-                                bars=4, clef='bass')]),
-            dict(tipo='nota',
-                 etiqueta='QUÉ SIGNIFICA "8vb" Y "LH OVER RH"',
-                 texto='El 8vb con línea de puntos debajo del pentagrama quiere decir que eso suena una '
-                       'octava MÁS GRAVE de lo escrito, para no llenar la página de líneas adicionales. '
-                       'Y "LH over RH" es literal: la izquierda pasa por encima de la derecha y toca '
-                       'arriba. Practícalo despacio, mirando dónde pones cada mano.'),
-            dict(num=2, titulo='La izquierda de la estrofa, picada', clef='bass',
-                 pista='estrofa medida · Re2 y La2, picados, con silencios entre medias',
-                 sistemas=[dict(cap='corto no quiere decir fuerte · la mano rebota y se va, no aprieta',
-                                events=([n('D2', 'e'), sil('e'), n('A2', 'e'), sil('e')] * 2 +
-                                        [n('D2', 'e'), sil('e'), n('A2', 'e'), sil('e')] * 2 +
-                                        [n('D2', 'e'), sil('e'), n('A2', 'e'), sil('e')] * 2 +
-                                        [n('D2', 'e'), sil('e'), n('A2', 'e'), sil('e')] * 2),
-                                bars=4, clef='bass')]),
-            dict(num=3, titulo='Y cuando la izquierda pasa a acordes', clef='bass',
-                 pista='medido · Sol · Si · Re, repetido en corcheas · cambia la textura entera',
-                 sistemas=[dict(cap='a partir de aquí la izquierda ya no pica: repite el acorde y '
-                                    'sostiene el pulso',
-                                events=[ac(SOLac, 'e')] * 8 + [ac(SOLac, 'e')] * 8 +
-                                       [ac(SOLac, 'w')],
-                                bars=3, clef='bass')]),
+            dict(num=1, titulo='La izquierda de la estrofa: picada', clef='bass',
+                 pista='estrofa medida · Re2 y La2 picados, con silencios entre medias',
+                 sistemas=[
+                     dict(cap='a) corto no quiere decir fuerte · la mano rebota y se va, no aprieta',
+                          events=([n('D2', 'e'), sil('e'), n('A2', 'e'), sil('e')] * 2 +
+                                  [n('D2', 'e'), sil('e'), n('A2', 'e'), sil('e')] * 2 +
+                                  [n('D2', 'e'), sil('e'), n('A2', 'e'), sil('e')] * 2 +
+                                  [n('D2', 'e'), sil('e'), n('A2', 'e'), sil('e')] * 2),
+                          bars=4, clef='bass'),
+                     dict(cap='b) la introducción, que es lo contrario: acordes largos abajo, con pedal',
+                          events=[ac(SOLac, 'w'), ac(DOac, 'w'), ac(REac, 'w'), ac(SOLac, 'w')],
+                          bars=4, clef='bass', show_time=False),
+                     dict(cap='c) y solo la nota grave de esos acordes, para oír por dónde va la '
+                              'armonía · Sol · Do · Re · Sol',
+                          events=[n('G2', 'w'), n('C3', 'w'), n('D3', 'w'), n('G2', 'w')],
+                          bars=4, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='DOS IZQUIERDAS DISTINTAS EN LA MISMA CANCIÓN',
-                 texto='Fíjate en lo que cambia de la estrofa al estribillo: al principio la izquierda '
-                       'pica notas sueltas con silencios entre medias, y suena hueca, casi nerviosa. '
-                       'Después pasa a acordes repetidos y la canción se llena de golpe. Ese cambio de '
-                       'textura es lo que hace que el estribillo suene a estribillo, y no lo hace la '
-                       'melodía: lo hace tu mano izquierda. Cuando llegues ahí, no toques más fuerte: '
-                       'toca más lleno.'),
-            dict(num=4, titulo='La melodía de la estrofa',
-                 pista='estrofa medida · Re · Sol · Sol · Sol · Fa♯ · Mi · Re · el ritmo, simplificado',
-                 sistemas=[dict(cap='es muy hablada: no la ligues, sepárala igual que la voz',
-                                events=corch(['D4', 'G4', 'G4', 'G4']) + [n('G4'), n('F4')] +
-                                       corch(['E4', 'D4', 'B4', 'A4']) + [n('G4'), n('E4')],
-                                bars=2)]),
-            dict(num=5, titulo='Y la frase que sube', clef='treble',
-                 pista='medido · Si · La · Sol · Sol · Mi · Si · Si · La · Sol · Mi',
-                 sistemas=[dict(cap='es la frase más larga de la estrofa: cántala entera antes de '
-                                    'tocarla, para saber dónde respira',
-                                events=corch(['B4', 'A4', 'G4', 'G4']) + [n('E4'), n('B4')] +
-                                       corch(['B4', 'A4', 'G4', 'E4']) + [n('D4', 'h')],
-                                bars=2)]),
+                 texto='Al principio la izquierda pica notas sueltas con silencios entre medias, y suena '
+                       'hueca, casi nerviosa. Después pasa a acordes repetidos y la canción se llena de '
+                       'golpe. Ese cambio de textura es lo que hace que el estribillo suene a estribillo. '
+                       'Cuando llegues ahí, no toques más fuerte: toca más lleno.'),
+            dict(num=2, titulo='La izquierda del estribillo: acordes', clef='bass',
+                 pista='medido · Sol · Si · Re repetido en corcheas · aquí ya no pica: sostiene el pulso',
+                 sistemas=[
+                     dict(cap='a) ocho corcheas por compás sin acentuar ninguna · si marcas la primera, '
+                              'suena a marcha',
+                          events=[ac(SOLac, 'e')] * 8 + [ac(SOLac, 'e')] * 8 + [ac(SOLac, 'w')],
+                          bars=3, clef='bass'),
+                     dict(cap='b) y el acompañamiento entero del estribillo, cuatro compases seguidos',
+                          events=[ac(DOac, 'e')] * 8 + [ac(REac, 'e')] * 8 +
+                                 [ac(MImac, 'e')] * 8 + [ac(DOac, 'e')] * 8,
+                          bars=4, clef='bass', show_time=False),
+                 ]),
+            dict(tipo='nota',
+                 etiqueta='QUÉ SIGNIFICA “8vb” Y “LH OVER RH”',
+                 texto='El 8vb con línea de puntos debajo del pentagrama quiere decir que eso suena una '
+                       'octava MÁS GRAVE de lo escrito, para no llenar la página de líneas adicionales. Y '
+                       '“LH over RH” es literal: la izquierda pasa por encima de la derecha y toca '
+                       'arriba. Practícalo despacio, mirando dónde pones cada mano.'),
         ],
     ),
 
     piano2=dict(
-        intro='Montarla es, antes que nada, saber por dónde va la hoja. Esta partitura tiene más señales '
-              'de recorrido que ninguna otra del cuaderno, y todas hay que entenderlas antes de tocar.',
+        titulo='Cómo se estudia (sigue)',
+        esquina='Al piano · pasos 3, 4 y 5',
+        intro='Esta partitura tiene más señales de recorrido que ninguna otra del cuaderno, y todas hay '
+              'que entenderlas antes de tocar. Después queda la melodía y el cruce de manos.',
         reglas=['PRIMERO EL RECORRIDO', 'EL CRUCE, DESPACIO Y MIRANDO', 'DESPACIO Y SIN PARAR'],
         bloques=[
+            dict(num=3, titulo='La melodía de la estrofa',
+                 pista='estrofa medida · el ritmo va simplificado · es muy hablada: no la ligues',
+                 sistemas=[
+                     dict(cap='a) Re · Sol · Sol · Sol · Fa♯ · Mi · Re — sepárala igual que la voz',
+                          events=corch(['D4', 'G4', 'G4', 'G4']) + [n('G4'), n('F4')] +
+                                 corch(['E4', 'D4', 'B4', 'A4']) + [n('G4'), n('E4')],
+                          bars=2),
+                     dict(cap='b) y la frase que sube, que es la más larga de la estrofa · cántala '
+                              'entera antes de tocarla, para saber dónde respira',
+                          events=corch(['B4', 'A4', 'G4', 'G4']) + [n('E4'), n('B4')] +
+                                 corch(['B4', 'A4', 'G4', 'E4']) + [n('D4', 'h')],
+                          bars=2, show_time=False),
+                 ]),
+            dict(num=4, titulo='El cruce de manos, aislado',
+                 pista='“LH over RH” · la izquierda salta al registro agudo mientras la derecha sigue',
+                 sistemas=[
+                     dict(cap='a) primero coloca la izquierda arriba sin tocar nada, cinco veces · '
+                              'después ya toca',
+                          events=[n('D6'), n('B5'), n('G5'), n('B5'),
+                                  n('D6'), n('B5'), n('G5'), n('D5'),
+                                  n('G5', 'w')],
+                          bars=3),
+                     dict(cap='b) y lo mismo en notas largas, para colocar el brazo antes de saltar · '
+                              'el salto se prepara mirando, no de memoria',
+                          events=[n('D6', 'h'), n('B5', 'h'), n('G5', 'h'), n('D5', 'h'),
+                                  n('G5', 'w')],
+                          bars=3, show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='EL RECORRIDO, PASO A PASO',
                  texto='1 · Cuatro compases de introducción. 2 · Empieza la estrofa: ahí está el SEGNO, '
                        'la marca a la que vas a volver. 3 · Llegas a la casilla 1.ª, la tocas y repites '
                        'desde el segno. 4 · La segunda vez te saltas la 1.ª y entras por la 2.ª. 5 · '
-                       'Sigues hasta donde pone "To Coda" y desde ahí saltas al final. Y ojo con la nota '
-                       'al pie: "D on the repeat" quiere decir que en la repetición una nota cambia a Re.'),
-            dict(num=5, titulo='El cruce de manos, aislado',
-                 pista='"LH over RH" · la izquierda salta al registro agudo mientras la derecha sigue',
-                 sistemas=[dict(cap='primero coloca la izquierda arriba sin tocar nada, cinco veces · '
-                                    'después ya toca',
-                                events=[n('D6'), n('B5'), n('G5'), n('B5'),
-                                        n('D6'), n('B5'), n('G5'), n('D5'),
-                                        n('G5', 'w')],
-                                bars=3)]),
+                       'Sigues hasta donde pone “To Coda” y desde ahí saltas al final. Y ojo con la nota '
+                       'al pie: “D on the repeat” quiere decir que en la repetición una nota cambia a Re.'),
             dict(tipo='nota',
                  etiqueta='EL PEDAL, QUE AQUÍ VIENE ESCRITO',
                  texto='Es la única partitura del cuaderno donde el arreglista te dice dónde poner el '
                        'pedal. Aprovéchalo: en el resto tienes que decidirlo tú, y aquí puedes aprender '
                        'cómo se hace. La regla que vas a ver aplicada es siempre la misma: se pisa al '
-                       'atacar y se cambia justo DESPUÉS de tocar el acorde nuevo, no antes. Si lo '
-                       'cambias antes, se corta; si lo cambias después de más, se emborrona.'),
-            dict(tipo='nota',
-                 etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
-                 texto='1 · El recorrido, con el dedo y en voz alta, tres veces, sin piano. '
-                       '2 · La introducción con pedal, sola. '
-                       '3 · El cruce de manos, muy despacio, mirando dónde pones cada una. '
-                       '4 · La izquierda picada de la estrofa, sin la derecha. '
-                       '5 · Las dos manos desde el segno hasta la casilla 1.ª, y ahí paras.'),
-            dict(num=6, titulo='El acompañamiento del estribillo, entero', clef='bass',
-                 pista='medido · los acordes repetidos en corcheas, cuatro compases seguidos',
-                 sistemas=[dict(cap='ocho corcheas por compás sin acentuar ninguna: si marcas la '
-                                    'primera, suena a marcha',
-                                events=[ac(DOac, 'e')] * 8 + [ac(REac, 'e')] * 8 +
-                                       [ac(MImac, 'e')] * 8 + [ac(DOac, 'e')] * 8,
-                                bars=4, clef='bass')]),
+                       'atacar y se cambia justo DESPUÉS de tocar el acorde nuevo. Si lo cambias antes, '
+                       'se corta; si tardas de más, se emborrona.'),
             dict(tipo='escalera', valores=[60, 68, 76, 82, 88, 92],
-                 regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
-            dict(tipo='tracker', titulo='La prueba de la semana',
-                 pie='Marca el día en que hayas hecho el recorrido entero sin equivocarte de casilla.'),
+                 regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
         ],
     ),
+
 )
 
 if __name__ == '__main__':

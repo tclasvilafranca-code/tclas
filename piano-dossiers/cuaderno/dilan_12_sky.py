@@ -203,82 +203,94 @@ CANCION = dict(
     ),
 
     piano1=dict(
-        intro='La partitura, abierta en trozos. Todo lo que se cita aquí está medido. Lo único que no '
-              'se escribe es el puntillo del riff: en la partitura va en corchea con puntillo más '
-              'semicorchea, y aquí en corcheas iguales para poder leerlo.',
+        titulo='Cómo se estudia',
+        esquina='Al piano · pasos 1 y 2 de 5',
+        intro='Aquí hay cuatro compases de música y el resto es repetirlos sin que se note. La '
+              'dificultad no está en las notas, está en el aguante. Por eso el paso 1 es el riff y el '
+              'paso 2 es aprenderse el ORDEN antes que el gesto. Lo único que no se escribe es el '
+              'puntillo del riff: en la partitura va con puntillo, aquí en corcheas iguales.',
         reglas=['ARMADURA DE FA', 'EL RITMO REAL LLEVA PUNTILLO', 'EL BRAZO SUELTO'],
         bloques=[
-            dict(num=1, titulo='El riff sobre Si♭ y sobre Fa', clef='bass',
+            dict(num=1, titulo='El riff, y lo que hay debajo', clef='bass',
                  pista='cc. 5–8 medidos · los impares en Si♭ y los pares en Fa · el ritmo, simplificado',
-                 sistemas=[dict(cap='cuatro compases seguidos, sin parar y sin acentuar ninguno · el '
-                                    'brazo tiene que quedarse quieto',
-                                events=riff(*SIb) + riff(*FAq) + riff(*SIb) + riff(*FAq),
-                                bars=4, clef='bass')]),
+                 sistemas=[
+                     dict(cap='a) el riff sobre Si♭ solo, dos compases · sin acentuar ninguna nota, '
+                              'el brazo quieto',
+                          events=riff(*SIb) + riff(*SIb), bars=2, clef='bass'),
+                     dict(cap='b) y sobre Fa, que es la otra mitad de la canción',
+                          events=riff(*FAq) + riff(*FAq), bars=2, clef='bass', show_time=False),
+                     dict(cap='c) los cuatro compases seguidos, alternando · aquí es donde se nota si '
+                              'llegas colocado al cambio',
+                          events=riff(*SIb) + riff(*FAq) + riff(*SIb) + riff(*FAq),
+                          bars=4, clef='bass', show_time=False),
+                     dict(cap='d) quita el picoteo y quédate con la nota de abajo · Si♭ · Fa · Si♭ · Fa: '
+                              'eso es la canción entera',
+                          events=[n('B2', 'w'), n('F2', 'w')] * 4,
+                          bars=8, clef='bass', show_time=False),
+                     dict(cap='e) y las mismas quintas en blancas · di en voz alta “Si bemol, Fa” '
+                              'mientras las tocas, hasta sabértelo de memoria',
+                          events=[ac(SIb, 'h'), ac(SIb, 'h'), ac(FAq, 'h'), ac(FAq, 'h'),
+                                  ac(SIb, 'h'), ac(SIb, 'h'), ac(FAq, 'h'), ac(FAq, 'h'),
+                                  ac(SIb, 'w')],
+                          bars=5, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='POR QUÉ AQUÍ EL RITMO NO ESTÁ ESCRITO',
                  texto='En tu partitura la primera nota de cada pareja dura un poco más que la segunda: '
                        'es una corchea con puntillo seguida de una semicorchea, y eso es lo que le da el '
                        'balanceo. Aquí no lo puedo escribir, así que las verás iguales. Léelas de aquí y '
                        'mira el ritmo en la página 1: si tocas las dos iguales, el riff se queda plano.'),
-            dict(num=2, titulo='Los acordes de la introducción', clef='bass',
-                 pista='cc. 3–4 medidos · aquí sí hay tres notas: La·Mi·Sol y Sol·Re·La',
-                 sistemas=[dict(cap='en la intro las dos manos tocan lo mismo: tócalo primero con una '
-                                    'sola y después júntalas',
-                                events=[ac(LAm7, 'h'), ac(LAm7, 'h'), ac(SOL, 'h'), ac(SOL, 'h'),
-                                        ac(LAm7, 'w')],
-                                bars=3, clef='bass')]),
-            dict(num=3, titulo='La melodía, que son cuatro notas',
-                 pista='cc. 5–8 · notas larguísimas · lo difícil es contarlas, no tocarlas',
-                 sistemas=[dict(cap='cuenta los cuatro tiempos de cada nota en voz alta mientras la '
-                                    'aguantas: no la sueltes antes',
-                                events=[n('C5', 'w'), n('A4', 'h'), n('B4', 'h'),
-                                        n('A4', 'w'), n('G4', 'w')],
-                                bars=4)]),
-            dict(num=4, titulo='Solo la nota grave de cada compás', clef='bass',
-                 pista='quita el picoteo y quédate con la de abajo · para oír el bucle entero',
-                 sistemas=[dict(cap='Si♭ · Fa · Si♭ · Fa · Si♭ · Fa · Si♭ · Fa · eso es la canción entera',
-                                events=[n('B2', 'w'), n('F2', 'w')] * 4,
-                                bars=8, clef='bass')]),
-            dict(num=5, titulo='La melodía sube: cc. 13–16',
-                 pista='cc. 13–16 medidos · aquí la derecha se va arriba y la canción se abre',
-                 sistemas=[dict(cap='son las mismas notas largas de antes, pero una octava más arriba: '
-                                    'no cambies de gesto, solo de sitio',
-                                events=[n('F5', 'h'), n('C5'), n('D5'),
-                                        n('C5', 'h'), n('F5', 'h'),
-                                        n('F5', 'h'), n('G5'), n('E5'),
-                                        n('F5', 'h'), n('A5', 'h')],
-                                bars=4)]),
+            dict(num=2, titulo='La introducción, que sí lleva tres notas', clef='bass',
+                 pista='cc. 3–4 medidos · La·Mi·Sol y Sol·Re·La · en la intro las dos manos tocan lo mismo',
+                 sistemas=[
+                     dict(cap='a) tócalo primero con una sola mano y después júntalas',
+                          events=[ac(LAm7, 'h'), ac(LAm7, 'h'), ac(SOL, 'h'), ac(SOL, 'h'),
+                                  ac(LAm7, 'w')],
+                          bars=3, clef='bass'),
+                 ]),
         ],
     ),
 
     piano2=dict(
-        intro='Montarla es casi todo cabeza: hay cuatro compases de música y el resto es repetirlos sin '
-              'que se note. La dificultad no está en las notas, está en el aguante.',
+        titulo='Cómo se estudia (sigue)',
+        esquina='Al piano · pasos 3, 4 y 5',
+        intro='La melodía de esta canción son cuatro notas larguísimas: lo difícil es contarlas, no '
+              'tocarlas. Y después queda la prueba de verdad, que es aguantar el riff sin que el brazo '
+              'se ponga duro.',
         reglas=['CUATRO COMPASES SON LA CANCIÓN', 'IGUAL DE FLOJO AL FINAL QUE AL PRINCIPIO', 'SIN ACELERAR'],
         bloques=[
+            dict(num=3, titulo='La melodía, que son cuatro notas',
+                 pista='cc. 5–8 y 13–16 medidos · cuenta los cuatro tiempos de cada nota en voz alta',
+                 sistemas=[
+                     dict(cap='a) cc. 5–8 · aguántalas enteras, no las sueltes antes de tiempo',
+                          events=[n('C5', 'w'), n('A4', 'h'), n('B4', 'h'),
+                                  n('A4', 'w'), n('G4', 'w')],
+                          bars=4),
+                     dict(cap='b) cc. 13–16 · las mismas notas largas, una octava arriba: no cambies '
+                              'de gesto, solo de sitio',
+                          events=[n('F5', 'h'), n('C5'), n('D5'),
+                                  n('C5', 'h'), n('F5', 'h'),
+                                  n('F5', 'h'), n('G5'), n('E5'),
+                                  n('F5', 'h'), n('A5', 'h')],
+                          bars=4, show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='HAY CUATRO COMPASES, NO VEINTITRÉS',
-                 texto='Comparando compás a compás salen tres parejas idénticas: los cc. 5, 9 y 17 son '
-                       'el mismo compás; los cc. 7 y 11 también; y los cc. 12 y 20 también. La canción '
-                       'está construida sobre un bucle de cuatro compases que se repite. Antes de '
-                       'estudiar, marca en tu partitura dónde vuelve a empezar el bucle: vas a ver que '
-                       'de veintitrés compases solo hay que aprender cuatro.'),
-            dict(num=5, titulo='El bucle, sin picotear', clef='bass',
-                 pista='las mismas quintas pero en blancas · para aprenderse el ORDEN antes que el gesto',
-                 sistemas=[dict(cap='di en voz alta "Si bemol, Fa, Si bemol, Fa" mientras las tocas: '
-                                    'cuando te lo sepas de memoria, vuelve a picotearlas',
-                                events=[ac(SIb, 'h'), ac(SIb, 'h'), ac(FAq, 'h'), ac(FAq, 'h'),
-                                        ac(SIb, 'h'), ac(SIb, 'h'), ac(FAq, 'h'), ac(FAq, 'h'),
-                                        ac(SIb, 'w')],
-                                bars=5, clef='bass')]),
-            dict(num=6, titulo='Y ahora ocho compases de aguante', clef='bass',
+                 texto='Comparando compás a compás salen tres parejas idénticas: los cc. 5, 9 y 17 son el '
+                       'mismo compás; los cc. 7 y 11 también; y los cc. 12 y 20 también. La canción está '
+                       'construida sobre un bucle de cuatro compases. Antes de estudiar, marca en tu '
+                       'partitura dónde vuelve a empezar el bucle: de veintitrés compases solo hay que '
+                       'aprender cuatro.'),
+            dict(num=4, titulo='Ocho compases de aguante', clef='bass',
                  pista='la prueba de verdad · si el brazo se pone duro, para y empieza otra vez',
-                 sistemas=[dict(cap='que el compás ocho suene exactamente igual de flojo que el primero',
-                                events=[ac(SIb, 'q'), ac(SIb, 'q'), ac(SIb, 'q'), ac(SIb, 'q'),
-                                        ac(FAq, 'q'), ac(FAq, 'q'), ac(FAq, 'q'), ac(FAq, 'q'),
-                                        ac(SIb, 'q'), ac(SIb, 'q'), ac(SIb, 'q'), ac(SIb, 'q'),
-                                        ac(FAq, 'w')],
-                                bars=4, clef='bass')]),
+                 sistemas=[
+                     dict(cap='a) que el compás ocho suene exactamente igual de flojo que el primero',
+                          events=[ac(SIb, 'q'), ac(SIb, 'q'), ac(SIb, 'q'), ac(SIb, 'q'),
+                                  ac(FAq, 'q'), ac(FAq, 'q'), ac(FAq, 'q'), ac(FAq, 'q'),
+                                  ac(SIb, 'q'), ac(SIb, 'q'), ac(SIb, 'q'), ac(SIb, 'q'),
+                                  ac(FAq, 'w')],
+                          bars=4, clef='bass'),
+                 ]),
             dict(tipo='nota',
                  etiqueta='LA DIGITACIÓN VIENE PUESTA',
                  texto='Esta edición trae los números de los dedos escritos encima y debajo de los '
@@ -286,19 +298,17 @@ CANCION = dict(
                        'mismo gesto doscientas veces, usar siempre los mismos dedos es la diferencia '
                        'entre que salga solo a la tercera semana o no salir nunca. Y si un día decides '
                        'cambiar una digitación, escríbela con lápiz y no vuelvas a cambiarla.'),
-            dict(tipo='nota',
-                 etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
-                 texto='1 · El riff sobre Si♭ y sobre Fa, alternando, dos minutos seguidos sin parar. '
-                       '2 · La introducción con una mano, y después con las dos. '
-                       '3 · La melodía sola, contando los tiempos de cada nota larga en voz alta. '
-                       '4 · Las dos manos de los cc. 5 al 8. '
-                       '5 · Y del 5 al 12 seguido, que ya es el bucle dos veces.'),
             dict(tipo='escalera', valores=[60, 72, 84, 96, 108, 118],
-                 regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
-            dict(tipo='tracker', titulo='La prueba de la semana',
-                 pie='Marca el día en que hayas aguantado el riff dos minutos sin que se te ponga duro el brazo.'),
+                 regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
+            dict(tipo='nota', etiqueta='LOS CINCO PASOS, PARA NO PERDERSE',
+                 texto='1 · El riff, y la nota de abajo que lo sostiene.   '
+                       '2 · La introducción, con una mano y luego con las dos.   '
+                       '3 · La melodía, contando cada nota larga en voz alta.   '
+                       '4 · Ocho compases de aguante, sin endurecer el brazo.   '
+                       '5 · La escalera, y del c. 5 al 12 seguido: el bucle dos veces.'),
         ],
     ),
+
 )
 
 if __name__ == '__main__':

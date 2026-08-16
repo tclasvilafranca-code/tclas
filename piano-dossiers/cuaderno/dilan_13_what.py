@@ -206,114 +206,122 @@ CANCION = dict(
     ),
 
     piano1=dict(
-        intro='La partitura, abierta en trozos. La armonía no la he deducido yo: los cifrados vienen '
-              'impresos. Lo que sí está medido nota por nota es el acorde de Fa y la melodía entera.',
+        titulo='Cómo se estudia',
+        esquina='Al piano · pasos 1 y 2 de 5',
+        intro='Seis acordes y se acabó: toda la canción se sostiene sobre tres dando vueltas. Eso quiere '
+              'decir que la izquierda se memoriza, no se lee, y por eso son los dos primeros pasos. La '
+              'armonía no la he deducido yo: los cifrados vienen impresos.',
         reglas=['LOS CIFRADOS VIENEN IMPRESOS', 'LA IZQUIERDA, MUY FLOJA', 'CUENTA LOS SILENCIOS'],
         bloques=[
-            dict(num=1, titulo='El bucle de la estrofa', clef='bass',
-                 pista='cifrados C · Em · F · el bucle que se repite cada dos compases',
-                 sistemas=[dict(cap='dos acordes en el primer compás y uno sostenido en el segundo · '
-                                    'nada más, y así casi toda la canción',
-                                events=[ac(DO), ac(MIm), ac(FA, 'w'),
-                                        ac(DO), ac(MIm), ac(FA, 'w')],
-                                bars=4, clef='bass')]),
-            dict(tipo='nota',
-                 etiqueta='SEIS ACORDES Y SE ACABÓ',
-                 texto='Cuenta los cifrados de tu partitura: C, Em, F, Am, Dm y G. Seis, y cuatro de '
-                       'ellos aparecen solo al final de las estrofas. Toda la canción se sostiene sobre '
-                       'tres acordes dando vueltas. Eso quiere decir que la izquierda hay que '
-                       'memorizarla, no leerla: cuando te sepas las seis posiciones, vas a poder mirar '
-                       'solo la línea de arriba, que es donde de verdad pasan cosas.'),
-            dict(num=2, titulo='Los acordes que rompen el bucle', clef='bass',
-                 pista='cifrados Am · Dm · G · aparecen al final de la estrofa y avisan de que algo cambia',
-                 sistemas=[dict(cap='fíjate en el salto de Fa a La menor: la mano sube entera, no cambia '
-                                    'de forma',
-                                events=[ac(LAm), ac(MIm), ac(FA, 'w'),
-                                        ac(REm), ac(SOL), ac(DO, 'w')],
-                                bars=4, clef='bass')]),
+            dict(num=1, titulo='El bucle, y lo que lo rompe', clef='bass',
+                 pista='cifrados C · Em · F, y después Am · Dm · G · dos acordes en un compás y uno en el otro',
+                 sistemas=[
+                     dict(cap='a) el bucle de la estrofa · nada más que esto, y así casi toda la canción',
+                          events=[ac(DO), ac(MIm), ac(FA, 'w'),
+                                  ac(DO), ac(MIm), ac(FA, 'w')],
+                          bars=4, clef='bass'),
+                     dict(cap='b) los que rompen el bucle, al final de la estrofa · fíjate en el salto de '
+                              'Fa a La menor: la mano sube entera, no cambia de forma',
+                          events=[ac(LAm), ac(MIm), ac(FA, 'w'),
+                                  ac(REm), ac(SOL), ac(DO, 'w')],
+                          bars=4, clef='bass', show_time=False),
+                     dict(cap='c) y las seis posiciones encadenadas, una por compás · mira al techo '
+                              'mientras lo tocas: si tienes que mirarte los dedos, todavía no está',
+                          events=[ac(DO, 'w'), ac(MIm, 'w'), ac(FA, 'w'), ac(LAm, 'w'),
+                                  ac(REm, 'w'), ac(SOL, 'w'), ac(DO, 'w'), ac(DO, 'w')],
+                          bars=8, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='POR QUÉ LA IZQUIERDA SE ESCRIBE ASÍ',
                  texto='Dos acordes en un compás y uno solo en el siguiente. Parece un capricho, pero no '
-                       'lo es: la voz canta encima y el piano se calla justo donde ella respira. Por eso '
-                       'la izquierda alterna. Cuando toques, no rellenes ese segundo compás con nada: el '
-                       'hueco está puesto a propósito y es la mitad del efecto de esta canción.'),
-            dict(num=3, titulo='La melodía de la primera frase',
-                 pista='cc. 4–6 · alturas medidas · el ritmo va simplificado a corcheas',
-                 sistemas=[dict(cap='"I used to float, now I just fall down" · canta la letra mientras la '
-                                    'lees y verás dónde respira',
-                                events=[sil('h'), n('C5'), n('B4'),
-                                        n('C5', 'h'), n('E4'), n('G4'),
-                                        n('G4', 'h'), n('B4'), n('C5'),
-                                        n('E4', 'h'), n('G4', 'h')],
-                                bars=4)]),
-            dict(num=4, titulo='Y la frase que cierra',
-                 pista='cc. 7–9 medidos · baja Sol · Fa · Re · Mi · Fa y se queda ahí',
-                 sistemas=[dict(cap='acaba en Fa, que no es la tónica: por eso la frase se queda '
-                                    'colgando y quiere seguir',
-                                events=[n('G4'), n('F4'), n('D4'), n('E4'),
-                                        n('F4', 'h'), n('F4', 'h'),
-                                        n('F4', 'h'), n('E4', 'h'),
-                                        n('E4', 'w')],
-                                bars=4)]),
-            dict(num=5, titulo='El estribillo, que sube', clef='treble',
-                 pista='cc. 18–19 medidos · aquí la melodía sube hasta el Mi5 y es lo más alto de la pieza',
-                 sistemas=[dict(cap='sube por grados desde el Sol y llega arriba sin forzar: no la '
-                                    'empujes, ya sube sola',
-                                events=[n('B4'), n('G4'), n('G4'), n('A4'),
-                                        n('B4', 'h'), n('C5', 'h'),
-                                        n('B4'), n('E5'), n('B4'), n('A4'),
-                                        n('G4', 'w')],
-                                bars=4)]),
+                       'lo es: la voz canta encima y el piano se calla justo donde ella respira. Cuando '
+                       'toques, no rellenes ese segundo compás con nada: el hueco está puesto a propósito '
+                       'y es la mitad del efecto de esta canción.'),
+            dict(num=2, titulo='La forma entera, en diez notas', clef='bass',
+                 pista='quita el acorde y quédate con la fundamental de cada cifrado',
+                 sistemas=[
+                     dict(cap='a) Do · Mi · Fa · Do · Mi · Fa · La · Re · Sol · Do — esto es la canción',
+                          events=[n('C3', 'w'), n('E3', 'w'), n('F3', 'w'),
+                                  n('C3', 'w'), n('E3', 'w'), n('F3', 'w'),
+                                  n('A3', 'w'), n('D3', 'w'), n('G3', 'w'), n('C3', 'w')],
+                          bars=10, clef='bass'),
+                     dict(cap='b) y lo mismo con el acorde encima, un golpe por compás · así se oye la '
+                              'forma entera sin tocar ni una nota de la melodía',
+                          events=[ac(DO, 'w'), ac(MIm, 'w'), ac(FA, 'w'),
+                                  ac(DO, 'w'), ac(MIm, 'w'), ac(FA, 'w'),
+                                  ac(LAm, 'w'), ac(REm, 'w'), ac(SOL, 'w'), ac(DO, 'w')],
+                          bars=10, clef='bass', show_time=False),
+                 ]),
+            dict(tipo='nota',
+                 etiqueta='LOS CUATRO PRIMEROS COMPASES SON TUYOS',
+                 texto='La voz no entra hasta el c. 4: los tres primeros son piano solo. Ahí no hay nada '
+                       'que te tape, y todo lo que suene mal se va a oír. Son tres acordes: móntalos como '
+                       'si fueran el final de la canción y no el principio, porque es donde más se nota '
+                       'si la mano llega tarde o si un dedo suena más fuerte que los otros.'),
         ],
     ),
 
     piano2=dict(
-        intro='Montarla es aprenderse seis posiciones de mano izquierda y después dedicarle todo el '
-              'tiempo a contar. En esta canción los silencios ocupan más sitio que las notas.',
+        titulo='Cómo se estudia (sigue)',
+        esquina='Al piano · pasos 3, 4 y 5',
+        intro='La izquierda ya está de memoria. Lo que queda es contar: en esta canción los silencios '
+              'ocupan más sitio que las notas, y la letra impresa es la única referencia fiable que '
+              'tienes.',
         reglas=['SEIS POSICIONES DE MEMORIA', 'LA LETRA MANDA', 'EL METRÓNOMO, MUY FLOJO'],
         bloques=[
-            dict(num=5, titulo='Cambiar de acorde sin mirarse la mano', clef='bass',
-                 pista='las seis posiciones encadenadas, una por compás · prepara la mano en el aire',
-                 sistemas=[dict(cap='mira al techo mientras lo tocas: si tienes que mirarte los dedos, '
-                                    'todavía no está',
-                                events=[ac(DO, 'w'), ac(MIm, 'w'), ac(FA, 'w'), ac(LAm, 'w'),
-                                        ac(REm, 'w'), ac(SOL, 'w'), ac(DO, 'w'), ac(DO, 'w')],
-                                bars=8, clef='bass')]),
+            dict(num=3, titulo='La melodía, frase por frase',
+                 pista='cc. 4–9 · alturas medidas · el ritmo va simplificado a corcheas',
+                 sistemas=[
+                     dict(cap='a) “I used to float, now I just fall down” · canta la letra mientras la '
+                              'lees y verás dónde respira',
+                          events=[sil('h'), n('C5'), n('B4'),
+                                  n('C5', 'h'), n('E4'), n('G4'),
+                                  n('G4', 'h'), n('B4'), n('C5'),
+                                  n('E4', 'h'), n('G4', 'h')],
+                          bars=4),
+                     dict(cap='b) y la frase que cierra · acaba en Fa, que no es la tónica: por eso se '
+                              'queda colgando y quiere seguir',
+                          events=[n('G4'), n('F4'), n('D4'), n('E4'),
+                                  n('F4', 'h'), n('F4', 'h'),
+                                  n('F4', 'h'), n('E4', 'h'),
+                                  n('E4', 'w')],
+                          bars=4, show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='LA LETRA ES EL METRÓNOMO',
                  texto='Esta edición trae la letra debajo del pentagrama. En una canción tan lenta y con '
-                       'tantos silencios, es la única referencia fiable que tienes: cada sílaba cae en '
-                       'un sitio exacto del compás. Canta "I used to float, now I just fall down" en voz '
-                       'alta, sin tocar, hasta que te salga sin pensar. Después toca exactamente lo que '
-                       'has cantado y no vas a necesitar contar.'),
-            dict(num=6, titulo='Solo la fundamental de cada cifrado', clef='bass',
-                 pista='quita el acorde y quédate con la nota de abajo · así se oye la forma entera',
-                 sistemas=[dict(cap='Do · Mi · Fa · Do · Mi · Fa · La · Re · Sol · Do · esto es la '
-                                    'canción, en diez notas',
-                                events=[n('C3', 'w'), n('E3', 'w'), n('F3', 'w'),
-                                        n('C3', 'w'), n('E3', 'w'), n('F3', 'w'),
-                                        n('A3', 'w'), n('D3', 'w'), n('G3', 'w'), n('C3', 'w')],
-                                bars=10, clef='bass')]),
-            dict(tipo='nota',
-                 etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
-                 texto='1 · Las seis posiciones, sin partitura, hasta que salgan de memoria. '
-                       '2 · La letra cantada, sin piano, con el pie marcando el uno. '
-                       '3 · La izquierda sola de la primera página, contando en voz alta. '
-                       '4 · La derecha sola, entrando después de cada silencio. '
-                       '5 · Las dos manos de los cc. 1 al 9 y ahí paras.'),
-            dict(tipo='nota',
-                 etiqueta='LOS CUATRO PRIMEROS COMPASES SON TUYOS',
-                 texto='La voz no entra hasta el c. 4: los tres primeros compases son piano solo. Eso '
-                       'quiere decir que ahí no hay nada que te tape ni nada con lo que encajar, y que '
-                       'todo lo que se oiga mal se va a oír. Son tres acordes: móntalos como si fueran '
-                       'el final de la canción y no el principio, porque es donde más se nota si la '
-                       'mano llega tarde o si un dedo suena más fuerte que los otros.'),
+                       'tantos silencios es la única referencia fiable: cada sílaba cae en un sitio exacto '
+                       'del compás. Canta “I used to float, now I just fall down” en voz alta, sin tocar, '
+                       'hasta que te salga sin pensar. Después toca exactamente lo que has cantado y no '
+                       'vas a necesitar contar.'),
+            dict(num=4, titulo='El estribillo, que sube',
+                 pista='cc. 18–19 medidos · aquí la melodía llega al Mi5, lo más alto de la pieza',
+                 sistemas=[
+                     dict(cap='a) sube por grados desde el Sol y llega arriba sin forzar: no la empujes, '
+                              'ya sube sola',
+                          events=[n('B4'), n('G4'), n('G4'), n('A4'),
+                                  n('B4', 'h'), n('C5', 'h'),
+                                  n('B4'), n('E5'), n('B4'), n('A4'),
+                                  n('G4', 'w')],
+                          bars=4),
+                     dict(cap='b) y las mismas notas en blancas, para colocar la mano antes de ponerle '
+                              'el ritmo · el salto al Mi5 se prepara, no se busca',
+                          events=[n('B4', 'h'), n('G4', 'h'), n('G4', 'h'), n('A4', 'h'),
+                                  n('B4', 'h'), n('C5', 'h'), n('B4', 'h'), n('E5', 'h'),
+                                  n('B4', 'h'), n('A4', 'h'), n('G4', 'w')],
+                          bars=6, show_time=False),
+                 ]),
             dict(tipo='escalera', valores=[50, 58, 64, 70, 74, 78],
-                 regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
-            dict(tipo='tracker', titulo='La prueba de la semana',
-                 pie='Marca el día en que hayas tocado los seis acordes de memoria, sin mirar la hoja.'),
+                 regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
+            dict(tipo='nota', etiqueta='LOS CINCO PASOS, PARA NO PERDERSE',
+                 texto='1 · El bucle y las seis posiciones, de memoria.   '
+                       '2 · La forma entera en diez notas.   '
+                       '3 · La melodía de la primera frase, cantando la letra.   '
+                       '4 · El estribillo, hasta el Mi5.   '
+                       '5 · La escalera, y las dos manos de los cc. 1 al 9.'),
         ],
     ),
+
 )
 
 if __name__ == '__main__':

@@ -198,98 +198,121 @@ CANCION = dict(
     ),
 
     piano1=dict(
-        intro='La partitura, abierta en trozos. La melodía de los cuatro primeros compases está medida '
-              'entera y se cita; el acompañamiento también, salvo las alteraciones escritas a mano, que '
-              'el lector no ve y por eso no aparecen aquí.',
+        titulo='Cómo se estudia',
+        esquina='Al piano · pasos 1 y 2 de 5',
+        intro='En esta canción suenan tres cosas a la vez —el bajo abajo, el acorde en medio y la '
+              'melodía arriba— y las tres las tocas tú. Por eso se estudia por capas: primero el '
+              'acompañamiento solo, decidiendo qué se oye y qué no, y solo después la melodía. Las '
+              'alteraciones escritas a mano no aparecen aquí: el lector no las ve.',
         reglas=['EL BAJO SE OYE, EL ACORDE NO', 'MIRA LAS ALTERACIONES EN LA PARTITURA', 'MP'],
         bloques=[
-            dict(num=1, titulo='El acompañamiento de los cc. 1–4', clef='bass',
-                 pista='cc. 1–4 · bajo y acorde, dos veces por compás · sin las alteraciones escritas',
-                 sistemas=[dict(cap='el bajo con peso de brazo y el acorde casi sin dedo · si suenan '
-                                    'igual, la melodía se pierde',
-                                events=oompah('D3', SOL) + oompah('C3', DO) +
-                                       oompah('D3', ('F3', 'A3', 'D4')) + oompah('E3', LAm),
-                                bars=4, clef='bass')]),
-            dict(num=2, titulo='La melodía de los cc. 1–2 · alturas medidas',
-                 pista='cc. 1–2 medidos · "Have your-self a mer-ry lit-tle Christ-mas"',
-                 sistemas=[dict(cap='canta la letra mientras la lees y verás dónde respira la frase',
-                                events=corch(['G4', 'F4', 'E4', 'D4']) + [n('A3'), n('C4')] +
-                                       corch(['C4', 'E4', 'G4', 'C5']) + [n('C5'), n('G4')],
-                                bars=2)]),
+            dict(num=1, titulo='El acompañamiento, y qué se oye de él', clef='bass',
+                 pista='cc. 1–8 · el bajo con peso de brazo y el acorde casi sin dedo',
+                 sistemas=[
+                     dict(cap='a) solo el bajo de cada compás · si esta línea suena bien, la canción va '
+                              'a sonar bien',
+                          events=[n('D3', 'w'), n('C3', 'w'), n('D3', 'w'), n('E3', 'w'),
+                                  n('D3', 'w'), n('C3', 'w'), n('D3', 'w'), n('C3', 'w')],
+                          bars=8, clef='bass'),
+                     dict(cap='b) cc. 1–4 con el acorde encima, dos veces por compás · si los dos suenan '
+                              'igual, la melodía se pierde',
+                          events=oompah('D3', SOL) + oompah('C3', DO) +
+                                 oompah('D3', ('F3', 'A3', 'D4')) + oompah('E3', LAm),
+                          bars=4, clef='bass', show_time=False),
+                     dict(cap='c) y los cc. 5–8, que es la segunda frase · cuando esto salga sin mirarte '
+                              'la mano, pon la derecha encima',
+                          events=oompah('F2', FA) + oompah('E3', LAm) +
+                                 oompah('G2', SOL) + oompah('C3', DO),
+                          bars=4, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='TRES COSAS A LA VEZ, TRES VOLÚMENES',
-                 texto='En esta canción suenan tres cosas al mismo tiempo: el bajo abajo, el acorde en el '
-                       'medio y la melodía arriba. Y las tres las tocas tú. La regla es: la melodía por '
-                       'encima de todo, el bajo se tiene que oír porque sostiene, y el acorde del medio '
-                       'es relleno y casi no debería notarse. Cuando algo suene apelmazado, casi siempre '
-                       'es que el acorde de en medio está sonando demasiado.'),
-            dict(num=3, titulo='Y los cc. 3–4, que cierran la frase',
-                 pista='cc. 3–4 medidos · baja desde el Re5 y se queda en La',
-                 sistemas=[dict(cap='es la respuesta a los dos primeros compases: tiene que sonar más '
-                                    'floja, no más fuerte',
-                                events=corch(['D5', 'C5', 'B4', 'A4']) + [n('G4'), n('F4')] +
-                                       [n('E4'), n('C5'), n('B4'), n('A4')],
-                                bars=2)]),
+                 texto='La regla es: la melodía por encima de todo, el bajo se tiene que oír porque '
+                       'sostiene, y el acorde del medio es relleno y casi no debería notarse. Cuando algo '
+                       'suene apelmazado, casi siempre es que el acorde de en medio está sonando '
+                       'demasiado. Y hay un compás regalado: el c. 6 es el c. 2 en las dos manos, medido. '
+                       'Móntalo una vez y no lo vuelvas a leer.'),
+            dict(num=2, titulo='La melodía, frase por frase',
+                 pista='cc. 1–4 medidos · “Have your-self a mer-ry lit-tle Christ-mas”',
+                 sistemas=[
+                     dict(cap='a) cc. 1–2 · canta la letra mientras la lees y verás dónde respira la frase',
+                          events=corch(['G4', 'F4', 'E4', 'D4']) + [n('A3'), n('C4')] +
+                                 corch(['C4', 'E4', 'G4', 'C5']) + [n('C5'), n('G4')],
+                          bars=2),
+                     dict(cap='b) cc. 3–4 · baja desde el Re5 y se queda en La · es la respuesta a los '
+                              'dos primeros: tiene que sonar más floja, no más fuerte',
+                          events=corch(['D5', 'C5', 'B4', 'A4']) + [n('G4'), n('F4')] +
+                                 [n('E4'), n('C5'), n('B4'), n('A4')],
+                          bars=2, show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='POR QUÉ ESTA CANCIÓN SE PONE TRISTE',
-                 texto='Está en Do mayor, que es la tonalidad más neutra que existe, y sin embargo suena '
+                 texto='Está en Do mayor, la tonalidad más neutra que existe, y sin embargo suena '
                        'melancólica. El truco está en los acordes con alteraciones: el arreglista mete '
                        'notas que no pertenecen a Do mayor y que tiran hacia abajo. Cuando llegues a uno '
                        'de ellos, no lo toques más fuerte: tócalo más lento. Esa clase de acorde pide '
                        'tiempo, no volumen.'),
-            dict(num=4, titulo='El c. 2, que vuelve en el c. 6', clef='bass',
-                 pista='cc. 2 y 6 medidos · son el mismo compás en las dos manos',
-                 sistemas=[dict(cap='móntalo una vez y lo tienes dos veces: no lo vuelvas a leer cuando '
-                                    'llegues al seis',
-                                events=oompah('C3', DO) + oompah('C3', DO),
-                                bars=2, clef='bass')]),
         ],
     ),
 
     piano2=dict(
-        intro='Montarla es sobre todo un problema de oído: hay que oírse tocando tres cosas a la vez y '
-              'decidir cuál suena más. Y las alteraciones escritas a mano hay que marcarlas antes.',
+        titulo='Cómo se estudia (sigue)',
+        esquina='Al piano · pasos 3, 4 y 5',
+        intro='Lo que queda es de oído: oírse tocando tres cosas a la vez y decidir cuál suena más. Y '
+              'antes de nada, el lápiz: las alteraciones de esta canción están escritas una a una.',
         reglas=['MARCA LAS ALTERACIONES CON LÁPIZ', 'CANTA LA LETRA', 'DESPACIO Y SIN PARAR'],
         bloques=[
+            dict(num=3, titulo='La melodía entera, con la letra',
+                 pista='cc. 1–4 · alturas medidas, ritmo simplificado · cántala mientras la tocas',
+                 sistemas=[
+                     dict(cap='a) si no puedes cantarla mientras la tocas, es que vas demasiado rápido',
+                          events=corch(['G4', 'F4', 'E4', 'D4']) + [n('A3'), n('C4')] +
+                                 corch(['D5', 'C5', 'B4', 'A4']) + [n('G4'), n('F4')] +
+                                 [n('E4', 'h'), n('C5', 'h')] + [n('A4', 'w')],
+                          bars=4),
+                     dict(cap='b) y la misma frase en notas largas, una por compás · para oír su dibujo '
+                              'sin la prisa de las corcheas',
+                          events=[n('G4', 'h'), n('D4', 'h'), n('C4', 'h'), n('C5', 'h'),
+                                  n('D5', 'h'), n('A4', 'h'), n('G4', 'h'), n('E4', 'h'),
+                                  n('A4', 'w')],
+                          bars=5, show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='LAS ALTERACIONES ESCRITAS A MANO',
                  texto='Esta canción no tiene armadura, así que cada sostenido y cada bemol que veas está '
                        'puesto uno a uno por el arreglista, y son justo los que le dan el color: sin '
                        'ellos suena a villancico y con ellos suena a jazz. Coge un lápiz y rodéalos todos '
                        'antes de tocar una sola nota. Es el ejercicio más rentable de esta semana.'),
-            dict(num=5, titulo='Solo el bajo de cada compás', clef='bass',
-                 pista='quita el acorde y quédate con la nota de abajo · para oír la forma entera',
-                 sistemas=[dict(cap='una nota por compás · si esta línea suena bien, la canción va a '
-                                    'sonar bien',
-                                events=[n('D3', 'w'), n('C3', 'w'), n('D3', 'w'), n('E3', 'w'),
-                                        n('D3', 'w'), n('C3', 'w'), n('D3', 'w'), n('C3', 'w')],
-                                bars=8, clef='bass')]),
-            dict(num=6, titulo='La melodía sola, con la letra',
-                 pista='cc. 1–4 · alturas medidas, ritmo simplificado · cántala mientras la tocas',
-                 sistemas=[dict(cap='si no puedes cantarla mientras la tocas, es que vas demasiado rápido',
-                                events=corch(['G4', 'F4', 'E4', 'D4']) + [n('A3'), n('C4')] +
-                                       corch(['D5', 'C5', 'B4', 'A4']) + [n('G4'), n('F4')] +
-                                       [n('E4', 'h'), n('C5', 'h')] + [n('A4', 'w')],
-                                bars=4)]),
+            dict(num=4, titulo='Las tres capas juntas', clef='bass',
+                 pista='cc. 1–4 · el acompañamiento reducido a un golpe por compás, para poder escuchar',
+                 sistemas=[
+                     dict(cap='a) un solo acorde por compás: así te queda oreja libre para oír la '
+                              'melodía por encima',
+                          events=[ac(('D3', 'G3', 'B3'), 'w'), ac(('C3', 'E3', 'G3'), 'w'),
+                                  ac(('D3', 'F3', 'A3'), 'w'), ac(('E3', 'A3', 'C4'), 'w')],
+                          bars=4, clef='bass'),
+                     dict(cap='b) y lo mismo de los cc. 5–8',
+                          events=[ac(('F2', 'A2', 'C3'), 'w'), ac(('E3', 'A3', 'C4'), 'w'),
+                                  ac(('G2', 'B2', 'D3'), 'w'), ac(('C3', 'E3', 'G3'), 'w')],
+                          bars=4, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
-                 etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
-                 texto='1 · Rodea con lápiz todas las alteraciones de la primera página. '
-                       '2 · Solo los bajos, sin acordes, de toda la página. '
-                       '3 · Bajo y acorde, con el acorde tan flojo que casi no se oiga. '
-                       '4 · La melodía sola, cantando la letra. '
-                       '5 · Las tres cosas juntas, muy lento, escuchando cuál suena más.'),
-            dict(num=7, titulo='Las dos manos, por partes', clef='bass',
-                 pista='cc. 5–8 · el acompañamiento entero de la segunda frase, sin la melodía',
-                 sistemas=[dict(cap='cuando esto salga sin mirarte la mano, pon la derecha encima',
-                                events=oompah('F2', FA) + oompah('E3', LAm) +
-                                       oompah('G2', SOL) + oompah('C3', DO),
-                                bars=4, clef='bass')]),
+                 etiqueta='CÓMO SE HACE EL PASO 4',
+                 texto='Toca los cc. 1 al 4 muy lento, y en cada pasada escucha UNA sola cosa: primera '
+                       'pasada, ¿se oye la melodía por encima de todo? Segunda, ¿se oye el bajo? Tercera, '
+                       '¿el acorde de en medio está lo bastante flojo? No intentes arreglar las tres a la '
+                       'vez: una por pasada, y anota cuál te falla siempre.'),
             dict(tipo='escalera', valores=[44, 50, 54, 58, 62, 66],
-                 regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
-            dict(tipo='tracker', titulo='La prueba de la semana',
-                 pie='Marca el día en que la melodía se haya oído siempre por encima del acorde de en medio.'),
+                 regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
+            dict(tipo='nota', etiqueta='LOS CINCO PASOS, PARA NO PERDERSE',
+                 texto='1 · El acompañamiento: primero el bajo solo, después con el acorde.   '
+                       '2 · La melodía, frase por frase.   '
+                       '3 · La melodía entera, cantando la letra.   '
+                       '4 · Las tres capas juntas, escuchando una por pasada.   '
+                       '5 · La escalera de tempo.'),
         ],
     ),
+
 )
 
 if __name__ == '__main__':

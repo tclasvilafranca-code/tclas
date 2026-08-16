@@ -213,101 +213,120 @@ CANCION = dict(
     ),
 
     piano1=dict(
-        intro='La partitura, abierta en trozos. Lo que se cita está medido: los pares de corcheas de la '
-              'izquierda dan la armonía, y la forma se ha comparado compás a compás. La nota larga de '
-              'la izquierda va en cabeza hueca y no se lee: la que ves aquí es la octava del par.',
+        titulo='Cómo se estudia',
+        esquina='Al piano · pasos 1 y 2 de 5',
+        intro='La izquierda hace siempre lo mismo: dos corcheas de impulso y una nota larga que sostiene '
+              'toda la armonía. Ahí está el paso 1, y es el que decide si la canción suena a lo que es o '
+              'a un vals. La nota larga va en cabeza hueca y el lector no la ve: la que aparece aquí es '
+              'la octava del par.',
         reglas=['ARMADURA DE RE MENOR', 'LA LARGA PESA MÁS QUE LAS CORTAS', 'CUENTA LOS SILENCIOS'],
         bloques=[
-            dict(num=1, titulo='La izquierda de los cc. 1–4', clef='bass',
-                 pista='cc. 1–4 medidos · Rem · Fa · Rem · Fa · el gesto no cambia nunca',
-                 sistemas=[dict(cap='ataca las dos corcheas casi sin sonido y deja caer el brazo en la '
-                                    'larga',
-                                events=dibujo(*REM) + dibujo(*FA) + dibujo(*REM) + dibujo(*FA),
-                                bars=4, clef='bass')]),
-            dict(num=2, titulo='Y los cc. 5–10, que cierran la estrofa', clef='bass',
-                 pista='cc. 5–10 medidos · Rem · Rem · Fa · Si♭ · Lam · Lam',
-                 sistemas=[dict(cap='el Si♭ es el que avisa de que la frase se acaba: dale un poco más',
-                                events=dibujo(*REM) + dibujo(*REM) + dibujo(*FA) +
-                                       dibujo(*SIb) + dibujo(*LAM) + dibujo(*LAM),
-                                bars=6, clef='bass')]),
+            dict(num=1, titulo='El gesto de la izquierda', clef='bass',
+                 pista='cc. 1–10 medidos · ataca las dos corcheas casi sin sonido y deja caer el brazo en la larga',
+                 sistemas=[
+                     dict(cap='a) cc. 1–4 · Rem · Fa · Rem · Fa: el gesto no cambia nunca',
+                          events=dibujo(*REM) + dibujo(*FA) + dibujo(*REM) + dibujo(*FA),
+                          bars=4, clef='bass'),
+                     dict(cap='b) cc. 5–10 · Rem · Rem · Fa · Si♭ · Lam · Lam — el Si♭ es el que avisa '
+                              'de que la frase se acaba: dale un poco más',
+                          events=dibujo(*REM) + dibujo(*REM) + dibujo(*FA) +
+                                 dibujo(*SIb) + dibujo(*LAM) + dibujo(*LAM),
+                          bars=6, clef='bass', show_time=False),
+                     dict(cap='c) y solo las notas largas, sin el impulso · esto es lo que de verdad '
+                              'sostiene la canción, y lo que hay que oír por encima de todo',
+                          events=[n('D3', 'w'), n('F3', 'w'), n('D3', 'w'), n('F3', 'w'),
+                                  n('D3', 'w'), n('D3', 'w'), n('F3', 'w'), n('B2', 'w'),
+                                  n('A2', 'w'), n('A2', 'w')],
+                          bars=10, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='LA NOTA QUE SE QUEDA SONANDO',
-                 texto='De las tres notas de cada compás, la que importa es la última: la blanca con '
-                       'puntillo, que dura tres tiempos y sostiene toda la armonía mientras la voz canta '
+                 texto='De las tres notas de cada compás la que importa es la última: la blanca con '
+                       'puntillo, que dura tres tiempos y sostiene la armonía mientras la voz canta '
                        'encima. Las dos corcheas de antes son solo el impulso para llegar a ella. El '
                        'error de casi todo el mundo es tocarlas con el mismo peso, y entonces la canción '
                        'suena a acompañamiento de vals en vez de a lo que es.'),
-            dict(num=3, titulo='La melodía de los cc. 1–3',
-                 pista='cc. 1–3 · alturas medidas · el ritmo va simplificado y sin las alteraciones',
-                 sistemas=[dict(cap='entra después del silencio · cuenta el primer tiempo entero antes de '
-                                    'tocar',
-                                events=[sil(), n('E5'), n('D5'), n('A4'),
-                                        n('G4', 'w'),
-                                        sil(), n('E5'), n('D5'), n('C5'),
-                                        n('D5', 'h'), n('A4'), n('G4')],
-                                bars=4)]),
+            dict(num=2, titulo='La derecha, que nunca entra en el uno',
+                 pista='cc. 1–3, 8 y 14 · alturas medidas · el ritmo va simplificado y sin alteraciones',
+                 sistemas=[
+                     dict(cap='a) cc. 1–3 · entra después del silencio: cuenta el primer tiempo entero '
+                              'antes de tocar',
+                          events=[sil(), n('E5'), n('D5'), n('A4'),
+                                  n('G4', 'w'),
+                                  sil(), n('E5'), n('D5'), n('C5'),
+                                  n('D5', 'h'), n('A4'), n('G4')],
+                          bars=4),
+                     dict(cap='b) cc. 8 y 14 · cuatro Si y tres La, la frase que vuelve dos veces '
+                              'exactamente igual',
+                          events=corch(['B4', 'B4', 'B4', 'B4', 'A4', 'A4', 'A4', 'A4']) +
+                                 [n('G4', 'w')],
+                          bars=2, show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='LA MELODÍA NUNCA EMPIEZA EN EL UNO',
-                 texto='Mira los primeros compases: la derecha siempre entra después de un silencio de '
-                       'corchea o de negra. No es un capricho del arreglista, es cómo canta Sam Smith: '
-                       'la voz llega un poco tarde a propósito, y ese retraso es la mitad del carácter '
-                       'de la canción. Cuenta el silencio en voz alta antes de cada entrada; si entras '
-                       'en el uno, la frase pierde toda la gracia.'),
-            dict(num=4, titulo='La frase que más se repite',
-                 pista='cc. 8 y 14 medidos · Si repetido y La repetido, idénticos en los dos sitios',
-                 sistemas=[dict(cap='cuatro Si y tres La · es la frase que vuelve, y aparece dos veces '
-                                    'exactamente igual',
-                                events=corch(['B4', 'B4', 'B4', 'B4', 'A4', 'A4', 'A4', 'A4']) +
-                                       [n('G4', 'w')],
-                                bars=2)]),
+                 texto='La derecha siempre entra después de un silencio de corchea o de negra. No es un '
+                       'capricho del arreglista, es cómo canta Sam Smith: la voz llega un poco tarde a '
+                       'propósito, y ese retraso es la mitad del carácter de la canción. Cuenta el '
+                       'silencio en voz alta antes de cada entrada; si entras en el uno, la frase pierde '
+                       'toda la gracia.'),
         ],
     ),
 
     piano2=dict(
-        intro='Montarla es darse cuenta de que hay muchos compases repetidos y de que la izquierda no '
-              'cambia de gesto ni una vez. Lo que sí cambia, y hay que preparar, es el 8va del c. 24.',
+        titulo='Cómo se estudia (sigue)',
+        esquina='Al piano · pasos 3, 4 y 5',
+        intro='Hay cinco parejas de compases repetidos, así que hay menos que montar de lo que parece. '
+              'Lo que sí cambia, y hay que preparar aparte, es el 8va del c. 24.',
         reglas=['LOS CC. 11–14 SON LOS CC. 5–8', 'OJO AL 8VA DEL C. 24', 'DESPACIO Y SIN PARAR'],
         bloques=[
+            dict(num=3, titulo='El estribillo, con la izquierda quieta', clef='bass',
+                 pista='cc. 21–24 · la izquierda se para y deja que la derecha suba sola',
+                 sistemas=[
+                     dict(cap='a) aquí la izquierda solo pone el acorde y se calla: no la rellenes',
+                          events=[ac(('D3', 'F3', 'A3'), 'w'), ac(('A2', 'E3', 'A3'), 'w'),
+                                  ac(('B2', 'F3', 'B3'), 'w'), ac(('F2', 'C3', 'F3'), 'w')],
+                          bars=4, clef='bass'),
+                 ]),
             dict(tipo='nota',
                  etiqueta='LO QUE YA TE SABES SIN SABERLO',
-                 texto='Comparados compás a compás: el c. 11 es el c. 5, el c. 13 es el c. 6, el c. 14 '
-                       'es el c. 8, el c. 32 es el c. 22 y el c. 34 es el c. 23. Cinco parejas. Coge el '
-                       'lápiz y escríbelo en tu partitura antes de estudiar nada: cuando llegues a esos '
-                       'compases no tendrás que leerlos, y eso son casi tres semanas de trabajo menos.'),
+                 texto='Comparados compás a compás: el c. 11 es el c. 5, el c. 13 es el c. 6, el c. 14 es '
+                       'el c. 8, el c. 32 es el c. 22 y el c. 34 es el c. 23. Cinco parejas. Coge el lápiz '
+                       'y escríbelo en tu partitura antes de estudiar nada: cuando llegues a esos compases '
+                       'no tendrás que leerlos, y eso son casi tres semanas de trabajo menos.'),
+            dict(num=4, titulo='El 8va del c. 24',
+                 pista='las mismas notas de antes, pero una octava más arriba · no cambies el gesto',
+                 sistemas=[
+                     dict(cap='a) del c. 24 en adelante · es la misma frase, solo que más arriba',
+                          events=[n('D6'), n('E6'), n('F6'), n('C6'),
+                                  n('D6', 'h'), n('C6', 'h'),
+                                  n('A5'), n('B5'), n('B5'), n('A5'),
+                                  n('D6', 'w')],
+                          bars=4),
+                     dict(cap='b) y la misma frase escrita donde suena de verdad, para comparar · mira '
+                              'cuántas líneas adicionales se ahorra el editor con el 8va',
+                          events=[n('D5'), n('E5'), n('F5'), n('C5'),
+                                  n('D5', 'h'), n('C5', 'h'),
+                                  n('A4'), n('B4'), n('B4'), n('A4'),
+                                  n('D5', 'w')],
+                          bars=4, show_time=False),
+                 ]),
             dict(tipo='nota',
-                 etiqueta='QUÉ ES EL 8VA DEL C. 24',
-                 texto='A partir de ahí verás escrito "8va" con una línea de puntos encima del '
-                       'pentagrama. Significa que todo lo que hay debajo de esa línea se toca una octava '
-                       'MÁS ARRIBA de donde está escrito. No es un adorno: es que el editor no quería '
-                       'llenar la página de líneas adicionales. Cuando la línea de puntos se acaba, '
-                       'vuelves a tocar donde pone.'),
-            dict(num=5, titulo='El estribillo, con la izquierda quieta', clef='bass',
-                 pista='cc. 21–24 · la izquierda se para y deja que la derecha suba sola',
-                 sistemas=[dict(cap='aquí la izquierda solo pone el acorde y se calla: no la rellenes',
-                                events=[ac(('D3', 'F3', 'A3'), 'w'), ac(('A2', 'E3', 'A3'), 'w'),
-                                        ac(('B2', 'F3', 'B3'), 'w'), ac(('F2', 'C3', 'F3'), 'w')],
-                                bars=4, clef='bass')]),
-            dict(num=6, titulo='Y la derecha, una octava arriba',
-                 pista='c. 24 en adelante · las mismas notas de antes, pero con el 8va puesto',
-                 sistemas=[dict(cap='no cambies nada del gesto: es la misma frase, solo que más arriba',
-                                events=[n('D6'), n('E6'), n('F6'), n('C6'),
-                                        n('D6', 'h'), n('C6', 'h'),
-                                        n('A5'), n('B5'), n('B5'), n('A5'),
-                                        n('D6', 'w')],
-                                bars=4)]),
-            dict(tipo='nota',
-                 etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
-                 texto='1 · Marca en la partitura las cinco parejas de compases repetidos. '
-                       '2 · La izquierda sola de los cc. 1 al 10, exagerando la nota larga. '
-                       '3 · La derecha sola, contando el silencio de cada entrada en voz alta. '
-                       '4 · Las dos manos de los cc. 1 al 10. '
-                       '5 · Y el 8va aparte, leyéndolo en voz alta antes de tocarlo.'),
+                 etiqueta='QUÉ ES EL 8VA',
+                 texto='Verás escrito “8va” con una línea de puntos encima del pentagrama. Significa que '
+                       'todo lo que hay debajo de esa línea se toca una octava MÁS ARRIBA de donde está '
+                       'escrito. No es un adorno: es que el editor no quería llenar la página de líneas '
+                       'adicionales. Cuando la línea de puntos se acaba, vuelves a tocar donde pone.'),
             dict(tipo='escalera', valores=[44, 50, 56, 60, 64, 68],
-                 regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
-            dict(tipo='tracker', titulo='La prueba de la semana',
-                 pie='Marca el día en que la nota larga de la izquierda se haya oído siempre más que las cortas.'),
+                 regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
+            dict(tipo='nota', etiqueta='LOS CINCO PASOS, PARA NO PERDERSE',
+                 texto='1 · El gesto de la izquierda, y las notas largas solas.   '
+                       '2 · La derecha, contando el silencio de cada entrada.   '
+                       '3 · El estribillo, con la izquierda quieta.   '
+                       '4 · El 8va, leído en voz alta antes de tocarlo.   '
+                       '5 · La escalera, y las dos manos de los cc. 1 al 10.'),
         ],
     ),
+
 )
 
 if __name__ == '__main__':

@@ -202,84 +202,103 @@ CANCION = dict(
     ),
 
     piano1=dict(
-        intro='La partitura, abierta en trozos. Todo lo que se cita es del PRIMO, que es tu parte, y '
-              'está medido con el lector de cuatro manos. Recuerda que tu izquierda toca exactamente lo '
-              'mismo, una octava más abajo.',
+        titulo='Cómo se estudia',
+        esquina='Al piano · pasos 1 y 2 de 5',
+        intro='Todo lo que se cita es del PRIMO, que es tu parte. Tus dos manos tocan exactamente lo '
+              'mismo separadas por una octava: solo hay una línea que aprender, pero cualquier desajuste '
+              'entre ellas se oye como un eco. Por eso se estudian juntas desde el primer día.',
         reglas=['ESTO ES SOLO TU PARTE · EL PRIMO', 'LAS DOS MANOS A LA VEZ', 'CUENTA EN DOS'],
         bloques=[
-            dict(num=1, titulo='La melodía de los cc. 1–4',
-                 pista='cc. 1–4 medidos · Mi · Fa · Sol · La · Sol · Fa · Sol · La · Do · Do · Sol',
-                 sistemas=[dict(cap='tu derecha lo toca aquí y tu izquierda una octava más abajo, a la vez',
-                                events=corch(['E5', 'F5', 'G5']) + corch(['A5', 'G5', 'F5']) +
-                                       [n('G5', 'h.')] +
-                                       corch(['A5', 'C6', 'C6']) + corch(['C6', 'B5', 'A5']) +
-                                       [n('G5', 'h.')],
-                                bars=4)]),
-            dict(tipo='nota',
-                 etiqueta='TUS DOS MANOS SON UNA SOLA',
-                 texto='Los dos pentagramas de tu parte dicen lo mismo, separados por una octava. Solo '
-                       'hay una línea que aprender, pero cualquier desajuste entre tus manos se oye como '
-                       'un eco. Estudia siempre las dos juntas: el problema no son las notas, es que '
-                       'caigan a la vez.'),
-            dict(num=2, titulo='Y los cc. 6–7, con la nota repetida',
-                 pista='cc. 6–7 medidos · Do repetido, que es donde la frase se planta',
-                 sistemas=[dict(cap='las dos manos repiten la misma nota: es donde más se oye si una '
-                                    'llega antes que la otra',
-                                events=corch(['C6', 'C6', 'C6']) + corch(['C6', 'C6', 'C6']) +
-                                       corch(['A5', 'B5', 'C6']) + corch(['B5', 'A5', 'G5']) +
-                                       [n('C6', 'h.')],
-                                bars=3)]),
-            dict(num=3, titulo='La frase del c. 12',
-                 pista='c. 12 medido · Si · Do · Si · Sol · Sol · baja y se queda',
-                 sistemas=[dict(cap='es la frase que cierra la primera parte: tiene que sonar a punto y '
-                                    'aparte',
-                                events=corch(['B5', 'C6', 'B5']) + corch(['G5', 'G5', 'G5']) +
-                                       [n('A5', 'h.')],
-                                bars=3)]),
+            dict(num=1, titulo='La melodía, frase por frase',
+                 pista='cc. 1–12 medidos · tu derecha lo toca aquí y tu izquierda una octava más abajo',
+                 sistemas=[
+                     dict(cap='a) cc. 1–4 · Mi · Fa · Sol · La · Sol · Fa · Sol · La · Do · Do · Sol',
+                          events=corch(['E5', 'F5', 'G5']) + corch(['A5', 'G5', 'F5']) +
+                                 [n('G5', 'h.')] +
+                                 corch(['A5', 'C6', 'C6']) + corch(['C6', 'B5', 'A5']) +
+                                 [n('G5', 'h.')],
+                          bars=4),
+                     dict(cap='b) cc. 6–7 · el Do repetido, donde la frase se planta · aquí es donde más '
+                              'se oye si una mano llega antes que la otra',
+                          events=corch(['C6', 'C6', 'C6']) + corch(['C6', 'C6', 'C6']) +
+                                 corch(['A5', 'B5', 'C6']) + corch(['B5', 'A5', 'G5']) +
+                                 [n('C6', 'h.')],
+                          bars=3, show_time=False),
+                     dict(cap='c) c. 12 · la frase que cierra la primera parte: tiene que sonar a punto '
+                              'y aparte',
+                          events=corch(['B5', 'C6', 'B5']) + corch(['G5', 'G5', 'G5']) +
+                                 [n('A5', 'h.')],
+                          bars=3, show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='LA MELODÍA VA ARRIBA DEL TODO',
                  texto='Tu mano derecha toca por encima del Do5 casi siempre, y ahí hay muchas líneas '
                        'adicionales. No cuentes líneas cada vez: aprende de memoria dónde están el Do5, '
                        'el Mi5 y el Sol5, y lee el resto por distancia respecto a ellos. Con tres notas '
                        'de referencia se lee todo el registro agudo sin contar ni una línea.'),
-            dict(num=4, titulo='Lo que toca la otra parte', clef='bass',
-                 pista='Secondo medido · Do · Fa · Do · Fa · Sol · La m · para que sepas qué estás oyendo',
-                 sistemas=[dict(cap='esto NO lo tocas tú · escúchalo: el cambio de acorde te dice si '
-                                    'vais juntas',
-                                events=[ac(DO, 'h.'), ac(FA, 'h.'), ac(DO, 'h.'), ac(FA, 'h.'),
-                                        ac(SOL, 'h.'), ac(LAm, 'h.')],
-                                bars=6, clef='bass')]),
-            dict(num=5, titulo='Lo mismo, pero donde lo toca tu izquierda',
-                 pista='cc. 1–2 · exactamente la misma frase, una octava más abajo',
-                 sistemas=[dict(cap='léela aquí y tócala con la izquierda sola una vez · después junta '
-                                    'las dos y escucha si hay eco',
-                                events=corch(['E4', 'F4', 'G4']) + corch(['A4', 'G4', 'F4']) +
-                                       [n('G4', 'h.')],
-                                bars=2)]),
+            dict(num=2, titulo='La misma frase, donde la toca tu izquierda',
+                 pista='cc. 1–2 · exactamente lo mismo, una octava más abajo',
+                 sistemas=[
+                     dict(cap='a) léela aquí y tócala con la izquierda sola una vez · después junta las '
+                              'dos y escucha si hay eco',
+                          events=corch(['E4', 'F4', 'G4']) + corch(['A4', 'G4', 'F4']) +
+                                 [n('G4', 'h.')],
+                          bars=2),
+                     dict(cap='b) los cc. 6–7 de la izquierda, que es donde la nota repetida delata '
+                              'cualquier desajuste',
+                          events=corch(['C5', 'C5', 'C5']) + corch(['C5', 'C5', 'C5']) +
+                                 corch(['A4', 'B4', 'C5']) + corch(['B4', 'A4', 'G4']) +
+                                 [n('C5', 'h.')],
+                          bars=3, show_time=False),
+                     dict(cap='c) y las mismas notas en figuras largas, una por golpe · para colocar la '
+                              'mano antes de meterle las corcheas',
+                          events=[n('E4', 'q.'), n('A4', 'q.'), n('G4', 'q.'), n('C5', 'q.'),
+                                  n('B4', 'q.'), n('G4', 'q.'), n('A4', 'h.')],
+                          bars=4, show_time=False),
+                 ]),
         ],
     ),
 
     piano2=dict(
-        intro='Montarla es, como en la Arabesque, un problema de dos. Y además hay que resolver el 6/8, '
-              'que es el compás que más se cuenta mal de todo el cuaderno.',
+        titulo='Cómo se estudia (sigue)',
+        esquina='Al piano · pasos 3, 4 y 5',
+        intro='Quedan dos cosas: el 6/8, que es el compás que más se cuenta mal de todo el cuaderno, y '
+              'tocar con otra persona. Lo primero se resuelve en casa; lo segundo, solo en clase.',
         reglas=['CUENTA EN DOS, NO EN SEIS', 'LAS DOS MANOS, UNA SOLA COSA', 'EMPEZAD JUNTAS'],
         bloques=[
+            dict(num=3, titulo='El 6/8, en dos golpes',
+                 pista='andamio · aprieta un poco la primera de cada tres corcheas y no las demás',
+                 sistemas=[
+                     dict(cap='a) el pie marca solo dos veces por compás · si marcas seis, ya lo estás '
+                              'contando mal',
+                          events=corch(['G4', 'A4', 'B4']) + corch(['C5', 'B4', 'A4']) +
+                                 corch(['G4', 'A4', 'B4']) + corch(['C5', 'D5', 'E5']) +
+                                 corch(['D5', 'C5', 'B4']) + corch(['A4', 'G4', 'F4']) +
+                                 [n('G4', 'h.')],
+                          bars=4),
+                     dict(cap='b) y la frase entera sin parar · si te equivocas, no repitas el compás: '
+                              'vuelve al principio de la frase, que es como se toca en pareja',
+                          events=corch(['E5', 'F5', 'G5']) + corch(['A5', 'G5', 'F5']) +
+                                 corch(['G5', 'A5', 'B5']) + [n('C6', 'h.')] +
+                                 corch(['C6', 'B5', 'A5']) + corch(['G5', 'A5', 'B5']) +
+                                 corch(['A5', 'G5', 'F5']) + [n('E5', 'h.')],
+                          bars=4, show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='EL 6/8 NO SE CUENTA EN SEIS',
-                 texto='Hay seis corcheas en cada compás, y la tentación es contar "un-dos-tres-cuatro-'
-                       'cinco-seis". No lo hagas: se cuenta en DOS, "UN-dos-tres DOS-dos-tres", con solo '
+                 texto='Hay seis corcheas en cada compás, y la tentación es contar “un-dos-tres-cuatro-'
+                       'cinco-seis”. No lo hagas: se cuenta en DOS, “UN-dos-tres DOS-dos-tres”, con solo '
                        'dos golpes de pie por compás. Esa es la diferencia entre que la canción suene a '
                        'balanceo, que es lo que es, o a marcha militar. Cuenta así desde el primer día y '
                        'no tendrás que corregirlo después.'),
-            dict(num=5, titulo='El 6/8, en dos golpes',
-                 pista='andamio · aprieta un poco la primera de cada tres corcheas y no las demás',
-                 sistemas=[dict(cap='el pie marca solo dos veces por compás · si marcas seis, ya lo '
-                                    'estás contando mal',
-                                events=corch(['G4', 'A4', 'B4']) + corch(['C5', 'B4', 'A4']) +
-                                       corch(['G4', 'A4', 'B4']) + corch(['C5', 'D5', 'E5']) +
-                                       corch(['D5', 'C5', 'B4']) + corch(['A4', 'G4', 'F4']) +
-                                       [n('G4', 'h.')],
-                                bars=4)]),
+            dict(num=4, titulo='Lo que toca la otra parte', clef='bass',
+                 pista='Secondo medido · Do · Fa · Do · Fa · Sol · La m · esto NO lo tocas tú',
+                 sistemas=[
+                     dict(cap='a) escúchalo: el cambio de acorde es lo que te dice si vais juntas',
+                          events=[ac(DO, 'h.'), ac(FA, 'h.'), ac(DO, 'h.'), ac(FA, 'h.'),
+                                  ac(SOL, 'h.'), ac(LAm, 'h.')],
+                          bars=6, clef='bass'),
+                 ]),
             dict(tipo='nota',
                  etiqueta='CÓMO SE ENSAYA UNA PIEZA A DÚO',
                  texto='Lo que se estudia en casa es tu parte sola, y eso es lo fácil. Lo difícil solo se '
@@ -287,28 +306,11 @@ CANCION = dict(
                        'la vez, respirar juntas al empezar cada frase, y no acelerar por tu cuenta cuando '
                        'te sientas segura. Si te pierdes en medio, no pares: cuenta hasta el principio '
                        'del compás siguiente y engancha ahí.'),
-            dict(num=6, titulo='La frase entera, sin parar',
-                 pista='andamio sobre las notas medidas · ocho compases seguidos, contando en dos',
-                 sistemas=[dict(cap='si te equivocas, no repitas el compás: vuelve al principio de la '
-                                    'frase, que es como se toca en pareja',
-                                events=corch(['E5', 'F5', 'G5']) + corch(['A5', 'G5', 'F5']) +
-                                       corch(['G5', 'A5', 'B5']) + [n('C6', 'h.')] +
-                                       corch(['C6', 'B5', 'A5']) + corch(['G5', 'A5', 'B5']) +
-                                       corch(['A5', 'G5', 'F5']) + [n('E5', 'h.')],
-                                bars=4)]),
-            dict(tipo='nota',
-                 etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
-                 texto='1 · Tu parte, las dos manos juntas desde el primer día, muy lento. '
-                       '2 · Cuenta el 6/8 en dos, en voz alta, sin tocar. '
-                       '3 · La frase de los cc. 1 al 4, hasta que las dos manos caigan exactamente juntas. '
-                       '4 · La misma frase mirando al techo, sin mirarte las manos. '
-                       '5 · Y en clase: los dos primeros compases, una y otra vez, hasta empezar juntas.'),
             dict(tipo='escalera', valores=[54, 63, 72, 80, 88, 96],
-                 regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
-            dict(tipo='tracker', titulo='La prueba de la semana',
-                 pie='Marca el día en que tus dos manos hayan sonado como una sola, sin eco.'),
+                 regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
         ],
     ),
+
 )
 
 if __name__ == '__main__':

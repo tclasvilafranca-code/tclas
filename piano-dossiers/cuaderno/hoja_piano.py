@@ -52,11 +52,21 @@ def _ej_heading(c, y, num, titulo, pista):
     c.setFillColor(INK)
     c.drawString(MARGIN + 23, y - 9, titulo)
     tw = stringWidth(titulo, 'DejaVuSans-Bold', 9.6)
-    psize = _fit(pista, 'DejaVuSans', 8.2, CONTENT_W - 23 - tw - 12, floor=6.2)
-    c.setFont('DejaVuSans', psize)
-    c.setFillColor(MUTED)
-    c.drawString(MARGIN + 23 + tw + 12, y - 9, pista)
-    return y - 21
+    hueco = CONTENT_W - 23 - tw - 12
+    # 6.2 es el suelo de siempre: subirlo hace que pistas que llevaban veinte
+    # canciones cabiendo al lado del titulo se bajen de linea, y ocho hojas se
+    # salen por abajo. Solo se envuelve lo que no cabe ni asi.
+    if stringWidth(pista, 'DejaVuSans', 6.2) <= hueco:
+        psize = _fit(pista, 'DejaVuSans', 8.2, hueco, floor=6.2)
+        c.setFont('DejaVuSans', psize)
+        c.setFillColor(MUTED)
+        c.drawString(MARGIN + 23 + tw + 12, y - 9, pista)
+        return y - 21
+    # No cabe: baja a su propia linea en vez de encogerse hasta ser ilegible o
+    # salirse por la derecha, que es lo que hacia antes.
+    y = _wrap(c, pista, MARGIN + 23, y - 20, 'DejaVuSans', 7.8,
+              CONTENT_W - 23, 9.8, MUTED)
+    return y - 3
 
 
 def _lineas(c, y, events, time_sig, bars_per_line, gap=GAP, show_time=True,

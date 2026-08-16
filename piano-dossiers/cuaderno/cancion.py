@@ -109,17 +109,20 @@ def _hojas(cfg, qr_png):
                compases_extra=cfg.get('compases_extra_leer')
                or _mezcla_compases(cfg['time_sig'], 6000 + num))
 
+    # El titulo y la esquina salen del archivo de la cancion si estan puestos:
+    # el orden de estudio no es el mismo en todas las piezas y ponerle a todas
+    # "por partes / montarla" era justo lo que no se entendia.
     p1 = dict(cfg['piano1'])
     p1.update(kicker=kicker, page_num=p0 + 4, time_sig=cfg['time_sig'],
               key_sig=cfg.get('key_sig'), gap=p1.get('gap', 7.0),
-              esquina='Al piano · el orden para aprenderla',
-              titulo='Al piano · por partes')
+              esquina=p1.get('esquina', 'Al piano · el orden de estudio'),
+              titulo=p1.get('titulo', 'Cómo se estudia'))
 
     p2 = dict(cfg['piano2'])
     p2.update(kicker=kicker, page_num=p0 + 5, time_sig=cfg['time_sig'],
               key_sig=cfg.get('key_sig'), gap=p2.get('gap', 7.0),
-              esquina='Al piano · juntarlo todo',
-              titulo='Al piano · montarla')
+              esquina=p2.get('esquina', 'Al piano · el orden de estudio'),
+              titulo=p2.get('titulo', 'Cómo se estudia (sigue)'))
 
     rlx = dict(cfg.get('relax') or {})
     rlx.update(kicker=kicker, page_num=p0 + 6, key_sig=cfg.get('key_sig'))

@@ -221,12 +221,16 @@ def draw_rest(c, cx, staff_bottom_y, staff_top_y, gap, dur='q'):
     if dur == 'q':
         c.setFont('FreeSerif', gap * 2.6)
         c.drawCentredString(cx, mid - gap * 0.95, '\U0001D13D')
-    elif dur == 'h':
-        c.setFont('FreeSerif', gap * 2.2)
-        c.drawCentredString(cx, mid - gap * 0.3, '\U0001D13C')
-    elif dur == 'w':
-        c.setFont('FreeSerif', gap * 2.2)
-        c.drawCentredString(cx, mid + gap * 0.35, '\U0001D13B')
+    elif dur in ('h', 'w'):
+        # El silencio de blanca SE APOYA sobre la linea del medio y el de
+        # redonda CUELGA de la cuarta linea. Son rectangulos, no glifos: los
+        # de FreeSerif salian de 0.2 espacios de grueso (un guion casi
+        # invisible) y encima colocados un espacio arriba de donde van, o sea
+        # el silencio de blanca en el sitio del de redonda.
+        w = gap * 1.15
+        h = gap * 0.5
+        y0 = mid if dur == 'h' else mid + gap - h
+        c.rect(cx - w / 2.0, y0, w, h, fill=1, stroke=0)
     elif dur == 'e':
         c.setFont('FreeSerif', gap * 2.6)
         c.drawCentredString(cx, mid - gap * 0.6, '\U0001D13E')

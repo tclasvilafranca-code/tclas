@@ -202,98 +202,90 @@ CANCION = dict(
     ),
 
     piano1=dict(
-        intro='La partitura, abierta en trozos. El bajo está medido compás a compás en quince compases '
-              'seguidos, así que se cita entero. La melodía no: lleva fusas y tresillos que el motor no '
-              'escribe, y las alteraciones que le faltan al lector.',
-        reglas=['EL BAJO ESTÁ MEDIDO', 'LA PRIMERA NEGRA PESA MÁS', 'ADAGIO, NO LENTO A MEDIAS'],
+        titulo='Cómo se estudia',
+        esquina='Al piano · pasos 1 y 2 de 5',
+        intro='Esta pieza no se estudia leyendo de arriba abajo: se monta por capas, y la izquierda va '
+              'primero porque en el Adagio la izquierda ES la pieza. Cinco pasos, en este orden, sin '
+              'saltarse ninguno. Cada paso está entero aquí abajo: se toca, no se lee.',
+        reglas=['UN PASO NO SE ABANDONA A MEDIAS', 'LA PRIMERA NEGRA PESA MÁS', 'ADAGIO, NO LENTO A MEDIAS'],
         bloques=[
-            dict(num=1, titulo='El bajo de los cc. 1–7', clef='bass',
-                 pista='cc. 1–7 medidos · Sol · Fa · Mi♭ · Re · Do · Re · Sol',
-                 sistemas=[dict(cap='tres negras por compás · la primera con peso de brazo, las otras '
-                                    'dos casi sin dedo',
-                                events=[e for g, a in BAJO_1 for e in pie(g, a)],
-                                bars=7, clef='bass')]),
+            dict(num=1, titulo='El esqueleto: una nota por compás', clef='bass',
+                 pista='cc. 1–15 medidos · son siete notas y ocho notas, y son toda la pieza',
+                 sistemas=[
+                     dict(cap='a) cc. 1–7 · Sol · Fa · Mi♭ · Re · Do · Re · Sol — baja por grados y vuelve',
+                          events=[n(g, 'h.') for g, _ in BAJO_1], bars=7, clef='bass'),
+                     dict(cap='b) cc. 8–15 · Sol · La · Si♭ · Si♭ · Do · La · Si♭ · La — ahora sube, y la música se abre',
+                          events=[n(g, 'h.') for g, _ in BAJO_2], bars=8, clef='bass', show_time=False),
+                     dict(cap='c) las dos seguidas, sin parar entre el 7 y el 8 · esto se aprende DE MEMORIA antes de pasar al 2',
+                          events=[n(g, 'h.') for g, _ in BAJO_1] + [n(g, 'h.') for g, _ in BAJO_2],
+                          bars=8, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='ESTO ES UN BAJO OBSTINADO',
-                 texto='Fíjate en lo que hace la izquierda: baja por grados, Sol, Fa, Mi bemol, Re, y '
-                       'después vuelve a subir. Esa línea de graves dando vueltas mientras encima cambia '
-                       'la melodía se llama bajo obstinado, y es un recurso del Barroco. En esta pieza '
-                       'es lo que reconoce todo el mundo: puedes tocar solo la izquierda delante de '
-                       'cualquiera y va a saber qué es.'),
-            dict(num=2, titulo='Y el bajo de los cc. 8–15', clef='bass',
-                 pista='cc. 8–15 medidos · Sol · La · Si♭ · Si♭ · Do · La · Si♭ · La',
-                 sistemas=[dict(cap='ahora sube, y por eso la música se abre: es la respuesta a la '
-                                    'primera frase',
-                                events=[e for g, a in BAJO_2 for e in pie(g, a)],
-                                bars=8, clef='bass')]),
-            dict(num=3, titulo='Solo la nota grave, sin la octava', clef='bass',
-                 pista='quita la del medio y quédate con la línea desnuda · es el esqueleto de la pieza',
-                 sistemas=[dict(cap='una nota por compás: Sol · Fa · Mi♭ · Re · Do · Re · Sol',
-                                events=[n(g, 'h.') for g, _ in BAJO_1],
-                                bars=7, clef='bass')]),
-            dict(tipo='nota',
-                 etiqueta='POR QUÉ SE EMPIEZA POR LA MANO IZQUIERDA',
-                 texto='En casi todas las piezas del cuaderno la izquierda acompaña y la derecha canta. '
-                       'Aquí no: aquí la izquierda ES la pieza. Ese bajo que baja se escribió primero y '
-                       'la melodía se puso encima después. Si lo montas y te lo aprendes de memoria, vas '
-                       'a poder leer la mano derecha sin tener que mirar nunca hacia abajo, que es la '
-                       'única forma de sacar adelante una melodía tan llena de figuras cortas.'),
-            dict(num=4, titulo='La octava sola, en el registro de la pieza', clef='bass',
-                 pista='cc. 1–7 · las dos notas juntas, para colocar la mano antes de separarlas',
-                 sistemas=[dict(cap='el 5 abajo y el 1 arriba, sin apretar · si la mano no llega, no '
-                                    'estires: coloca el brazo entero',
-                                events=[{'pitches': [g, a], 'dur': 'h.'} for g, a in BAJO_1],
-                                bars=7, clef='bass')]),
+                 texto='Esa línea de graves dando vueltas mientras encima cambia la melodía se llama bajo '
+                       'obstinado, y es un recurso del Barroco. Puedes tocar solo la izquierda delante de '
+                       'cualquiera y va a saber qué es. Por eso se aprende de memoria: para leer después la '
+                       'derecha sin mirar nunca hacia abajo.'),
+            dict(num=2, titulo='El mismo bajo, como está escrito', clef='bass',
+                 pista='tres negras por compás · la primera con peso de brazo, las otras dos casi sin dedo',
+                 sistemas=[
+                     dict(cap='a) cc. 1–7 · grave · octava · grave: cambia la nota, nunca el gesto',
+                          events=[e for g, a in BAJO_1 for e in pie(g, a)], bars=7, clef='bass'),
+                     dict(cap='b) y los quince compases seguidos · este es el paso 2 terminado',
+                          events=[e for g, a in BAJO_1 for e in pie(g, a)] +
+                                 [e for g, a in BAJO_2 for e in pie(g, a)],
+                          bars=8, clef='bass', show_time=False),
+                 ]),
         ],
     ),
 
     piano2=dict(
-        intro='Montarla es entender que en esta pieza no hay nada rápido, y que todo lo que suena a '
-              'difícil en la mano derecha es cuestión de contar despacio. La izquierda ya la tienes.',
-        reglas=['LA IZQUIERDA, DE MEMORIA', 'LA DERECHA, CONTANDO', 'ADAGIO Y p'],
+        titulo='Cómo se estudia (sigue)',
+        esquina='Al piano · pasos 3, 4 y 5',
+        intro='Los pasos 1 y 2 ya están en los dedos y de memoria. Ahora se coloca la mano, se entra en '
+              'la melodía y se sube de velocidad. El paso 5 se repite todas las semanas hasta fin de curso.',
+        reglas=['LA IZQUIERDA, DE MEMORIA', 'LA DERECHA, CONTANDO EN VOZ ALTA', 'ADAGIO Y p'],
         bloques=[
-            dict(num=4, titulo='El bajo entero, encadenado', clef='bass',
-                 pista='cc. 1–15 · los dos tramos seguidos, que es una frase entera de la pieza',
-                 sistemas=[dict(cap='sin parar entre el compás 7 y el 8: es la misma frase, no dos',
-                                events=[n(g, 'h.') for g, _ in BAJO_1] +
-                                       [n(g, 'h.') for g, _ in BAJO_2],
-                                bars=8, clef='bass')]),
+            dict(num=3, titulo='La octava sola, para colocar la mano', clef='bass',
+                 pista='las dos notas a la vez, el 5 abajo y el 1 arriba · si no llega, no estires: mueve el brazo entero',
+                 sistemas=[
+                     dict(cap='a) cc. 1–7 · se coloca y se suelta, sin apretar',
+                          events=[{'pitches': [g, a], 'dur': 'h.'} for g, a in BAJO_1],
+                          bars=7, clef='bass'),
+                     dict(cap='b) cc. 8–15 · la misma mano, más arriba',
+                          events=[{'pitches': [g, a], 'dur': 'h.'} for g, a in BAJO_2],
+                          bars=8, clef='bass', show_time=False),
+                 ]),
+            dict(num=4, titulo='La derecha: las alturas de los cc. 3 y 6',
+                 pista='las notas son las de la partitura; el ritmo, simplificado a corcheas para poder leerlas',
+                 sistemas=[
+                     dict(cap='a) en la partitura esto lleva puntillos y fusas · aquí solo las alturas, para saber dónde va la mano',
+                          events=corch(['G4', 'A4', 'B4', 'B4']) + [n('G4')] +
+                                 corch(['A4', 'G4', 'A4', 'A4']) + [n('G4')] +
+                                 [n('F4', 'h.')],
+                          bars=3),
+                     dict(cap='b) y ahora solo la primera nota de cada compás, contando los tres tiempos en voz alta',
+                          events=[n('G4', 'h.'), n('A4', 'h.'), n('F4', 'h.')],
+                          bars=3, show_time=False),
+                 ]),
             dict(tipo='nota',
-                 etiqueta='QUÉ HACER CON LA MANO DERECHA',
-                 texto='La derecha de esta pieza lleva puntillos, fusas y algún tresillo, y no la cito '
-                       'aquí porque no la he medido con la seguridad que necesito. Lo que sí puedo '
-                       'decirte es cómo se estudia: coge un compás, cuenta los tres tiempos en voz alta '
-                       'muy despacio y coloca cada nota donde caiga, aunque tengas que parar entre nota '
-                       'y nota. Cuando el compás esté colocado, únelo al siguiente. Nunca leas dos '
-                       'compases seguidos sin haber colocado el primero.'),
-            dict(tipo='nota',
-                 etiqueta='LO QUE MÁS SE FALLA: LOS FA SOSTENIDOS',
-                 texto='La armadura de Sol menor no lleva ningún sostenido, así que cada Fa♯ que veas '
-                       'está escrito a mano. Son la sensible: la nota que hace que la música quiera '
-                       'volver a Sol. Y como no están en la armadura, es facilísimo comérselos. Coge el '
-                       'lápiz, recórrete la página entera y rodea todos los sostenidos ANTES de tocar '
-                       'una sola nota.'),
-            dict(tipo='nota',
-                 etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
-                 texto='1 · El bajo de los cc. 1 al 15, de memoria, sin partitura. '
-                       '2 · El mismo bajo con la octava puesta, cuidando que la primera negra pese. '
-                       '3 · Rodea con lápiz todas las alteraciones de la página. '
-                       '4 · La derecha, compás a compás, contando en voz alta. '
-                       '5 · Las dos manos de los cc. 1 al 7 y ahí paras.'),
-            dict(num=5, titulo='La melodía de los cc. 3 y 6 · alturas medidas',
-                 pista='cc. 3 y 6 · las notas son las de la partitura; el ritmo, simplificado',
-                 sistemas=[dict(cap='en la partitura esto lleva puntillos y fusas · aquí en corcheas, '
-                                    'solo para leer las alturas',
-                                events=corch(['G4', 'A4', 'B4', 'B4']) + [n('G4')] +
-                                       corch(['A4', 'G4', 'A4', 'A4']) + [n('G4')] +
-                                       [n('F4', 'h.')],
-                                bars=3)]),
+                 etiqueta='EL RESTO DE LA DERECHA, Y LOS FA SOSTENIDOS',
+                 texto='La derecha no la cito entera: lleva fusas y tresillos que no he medido con la '
+                       'seguridad que necesito. Se estudia compás a compás, contando los tres tiempos en voz '
+                       'alta y colocando cada nota donde caiga, aunque haya que parar entre nota y nota. '
+                       'Y antes de tocar, coge el lápiz: la armadura de Sol menor no lleva sostenidos, así '
+                       'que cada Fa♯ está escrito a mano y es facilísimo comérselo. Rodéalos todos.'),
             dict(tipo='escalera', valores=[40, 44, 48, 52, 56, 60],
-                 regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
-            dict(tipo='tracker', titulo='La prueba de la semana',
-                 pie='Marca el día en que hayas tocado el bajo entero sin partitura.'),
+                 regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
+            dict(tipo='nota', etiqueta='LOS CINCO PASOS, PARA NO PERDERSE',
+                 texto='1 · El esqueleto de los cc. 1–15, de memoria y sin partitura.   '
+                       '2 · El mismo bajo escrito, tres negras por compás.   '
+                       '3 · La octava puesta, colocando la mano sin apretar.   '
+                       '4 · La derecha, contando en voz alta.   '
+                       '5 · La escalera de tempo.'),
         ],
     ),
+
 )
 
 if __name__ == '__main__':

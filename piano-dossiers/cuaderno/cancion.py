@@ -24,6 +24,7 @@
 import os
 import random
 import sys
+import zlib
 
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'engine'))
@@ -69,6 +70,29 @@ def _nivel_lectura(cfg):
     return min(2, base + (cfg['num'] - 1) // 7)
 
 
+# Alumnos cuyo album YA esta entregado: su sal se congela para que reimprimir
+# una hoja suelta siga dando exactamente la misma hoja que tienen impresa. Un
+# alumno nuevo no entra aqui; se le calcula la sal y ya no se toca.
+SAL_CONGELADA = {'dilan': 0}
+
+
+def _sal_alumno(alumno):
+    """Un desplazamiento fijo por alumno para las hojas generadas.
+
+       Sin esto, dos alumnos que trabajan la misma cancion en el mismo numero
+       reciben EXACTAMENTE la misma hoja de calentamiento y de agudeza — y eso
+       pasa de verdad: Eva comparte quince partituras con Dilan, byte a byte.
+
+       crc32 y no hash(), que en Python va con sal aleatoria por proceso: la
+       hoja tiene que salir igual en cada ejecucion, porque la promesa del
+       cuaderno es que se puede reimprimir una hoja suelta y el alumno se
+       encuentra la misma."""
+    clave = alumno.strip().lower()
+    if clave in SAL_CONGELADA:
+        return SAL_CONGELADA[clave]
+    return zlib.crc32(clave.encode('utf-8')) % 90000
+
+
 def _mezcla_compases(time_sig, semilla):
     """El compas de la pieza manda, pero no es el unico.
 
@@ -89,6 +113,7 @@ def _hojas(cfg, qr_png):
     kicker = '%s · canción %d · %s' % (cfg['alumno'], cfg['num'], cfg['titulo_corto'])
     nivel = '%s · canción %d · nivel %s' % (cfg['alumno'], cfg['num'], cfg['nivel'])
     num = cfg['num']
+    sem = num + _sal_alumno(cfg['alumno'])       # semilla propia de cada alumno
     nl = _nivel_lectura(cfg)
     p0 = _paginas_partitura(cfg)
 
@@ -99,16 +124,16 @@ def _hojas(cfg, qr_png):
     cal = dict(cfg['calentamiento'])
     cal.update(kicker=kicker, page_num=p0 + 2, time_sig=cfg['time_sig'],
                key_sig=cfg.get('key_sig'), gap=cal.get('gap_lectura', 6.6),
-               semilla=num, nivel_lectura=nl,
+               semilla=sem, nivel_lectura=nl,
                compases_extra=cfg.get('compases_extra')
-               or _mezcla_compases(cfg['time_sig'], 5000 + num))
+               or _mezcla_compases(cfg['time_sig'], 5000 + sem))
 
     lec = dict(cfg['agudeza'])
     lec.update(kicker=kicker, page_num=p0 + 3, time_sig=cfg['time_sig'],
                key_sig=cfg.get('key_sig'), gap=lec.get('gap_lectura', 6.6),
-               semilla=num, nivel_lectura=nl,
+               semilla=sem, nivel_lectura=nl,
                compases_extra=cfg.get('compases_extra_leer')
-               or _mezcla_compases(cfg['time_sig'], 6000 + num))
+               or _mezcla_compases(cfg['time_sig'], 6000 + sem))
 
     # El titulo y la esquina salen del archivo de la cancion si estan puestos:
     # el orden de estudio no es el mismo en todas las piezas y ponerle a todas
@@ -127,7 +152,7 @@ def _hojas(cfg, qr_png):
 
     rlx = dict(cfg.get('relax') or {})
     rlx.update(kicker=kicker, page_num=p0 + 6, key_sig=cfg.get('key_sig'),
-               semilla=num)
+               semilla=sem)
 
     pau = dict(cfg.get('pauta') or {})
     pau.update(kicker=kicker, page_num=p0 + 7)

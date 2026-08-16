@@ -94,8 +94,15 @@ Lo último no es técnica: es orientarse y coordinarse.
 | 16 | Arabesque | heredada (4 manos) | ✔ | OK |
 | 17 | **Bohemian Rhapsody** | **nueva** · `TRANSCRIPCION_E17_BOHEMIAN.md` | ✔ | OK |
 
-**Las diecisiete escritas y auditadas.** Falta portada, índice, plan de curso
-de 44 semanas y el montaje del álbum completo.
+**Álbum terminado.** Las diecisiete escritas y auditadas, más portada, índice,
+plan de curso de 44 semanas y montaje:
+
+```
+python3 cuaderno/auditar_eva.py     # tiene que decir TODO OK
+python3 cuaderno/build_eva.py       # portada + índice + plan + los 17 dosieres
+```
+
+Salida: `output/Eva_Cuaderno_del_Pianista_2026.pdf` · **164 páginas**.
 
 ### Cómo se garantiza que no es una fotocopia del álbum de Dilan
 

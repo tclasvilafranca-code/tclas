@@ -40,6 +40,8 @@ from hoja_lectura import build_lectura
 from hoja_piano import build_piano
 from hoja_relax import build_relax
 from hoja_pauta import build_pauta
+from hoja_taller import build_taller
+from hoja_deberes import build_deberes
 from audit_suite import run_full_audit, audit_text_bounds, audit_duplicados
 
 HERE = os.path.dirname(__file__)
@@ -108,8 +110,63 @@ def _mezcla_compases(time_sig, semilla):
     return [ts, ts, otros[0], ts, otros[1], ts, otros[2]]
 
 
+def _hojas_corto(cfg, qr_png):
+    """El dosier CORTO, para clases de media hora (Arnau, 10 anos).
+
+       partitura · ficha · taller (dedos + leer en una hoja) · como se estudia
+       (una hoja, o dos si la pieza lo pide) · deberes + pentagramas
+
+       No es el formato largo recortado: el taller junta en una hoja lo que
+       alli son dos, y la ultima hoja junta los deberes con el papel pautado.
+       Con media hora de clase, ocho hojas por cancion no se miran."""
+    kicker = '%s · canción %d · %s' % (cfg['alumno'], cfg['num'], cfg['titulo_corto'])
+    nivel = '%s · canción %d · %s' % (cfg['alumno'], cfg['num'], cfg['nivel'])
+    sem = cfg['num'] + _sal_alumno(cfg['alumno'])
+    nl = _nivel_lectura(cfg)
+    p0 = _paginas_partitura(cfg)
+
+    ficha = dict(cfg['ficha'])
+    ficha.update(kicker=nivel, page_num=p0 + 1, time_sig=cfg['time_sig'])
+    ficha['qr'] = dict(ficha['qr']); ficha['qr']['png'] = qr_png
+
+    tal = dict(cfg.get('taller') or {})
+    tal.update(kicker=kicker, page_num=p0 + 2, time_sig=cfg['time_sig'],
+               key_sig=cfg.get('key_sig'), gap=tal.get('gap', 6.6),
+               semilla=sem, nivel_lectura=nl,
+               compases_extra=cfg.get('compases_extra')
+               or _mezcla_compases(cfg['time_sig'], 5000 + sem),
+               compases_extra_leer=cfg.get('compases_extra_leer')
+               or _mezcla_compases(cfg['time_sig'], 6000 + sem))
+
+    hojas = [('ficha', lambda c: build_ficha(c, ficha)),
+             ('taller', lambda c: build_taller(c, tal))]
+
+    pag = p0 + 3
+    pianos = [cfg['piano1']] + ([cfg['piano2']] if cfg.get('piano2') else [])
+    for i, bruto in enumerate(pianos):
+        p = dict(bruto)
+        p.update(kicker=kicker, page_num=pag, time_sig=cfg['time_sig'],
+                 key_sig=cfg.get('key_sig'), gap=p.get('gap', 7.0),
+                 esquina=p.get('esquina', 'Cómo se aprende esta canción'),
+                 titulo=p.get('titulo', 'Cómo se estudia'))
+        hojas.append(('piano %d' % (i + 1), (lambda q: lambda c: build_piano(c, q))(p)))
+        pag += 1
+
+    # Los deberes van ESCRITOS y hay una hoja por semana: la pieza se trabaja
+    # dos semanas, asi que salen dos hojas, cada una con sus ejercicios.
+    for i, bruto in enumerate(cfg.get('deberes') or []):
+        deb = dict(bruto)
+        deb.update(kicker=kicker, page_num=pag)
+        hojas.append(('deberes %d' % (i + 1),
+                      (lambda q: lambda c: build_deberes(c, q))(deb)))
+        pag += 1
+    return hojas
+
+
 def _hojas(cfg, qr_png):
     """Las hojas del dosier, ya con el kicker y la numeracion puestos."""
+    if cfg.get('formato') == 'corto':
+        return _hojas_corto(cfg, qr_png)
     kicker = '%s · canción %d · %s' % (cfg['alumno'], cfg['num'], cfg['titulo_corto'])
     nivel = '%s · canción %d · nivel %s' % (cfg['alumno'], cfg['num'], cfg['nivel'])
     num = cfg['num']

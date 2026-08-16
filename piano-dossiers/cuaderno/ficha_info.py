@@ -388,7 +388,7 @@ def build_ficha(c, cfg):
     yl = _section_title(c, MARGIN, y_col, 'Lo especial de esta partitura')
     yl = _bullets(c, MARGIN, yl, col_w, cfg['especial'])
 
-    yr = _section_title(c, right_x, y_col, 'Un compás de cada mano')
+    yr = _section_title(c, right_x, y_col, cfg.get('titulo_ritmos', 'Un compás de cada mano'))
     # El titulo anterior ("el dibujo de cada parte") no se entendia: nadie
     # sabia que estaba mirando. Ahora se dice literalmente lo que es.
     c.setFont('DejaVuSans', 7.6)

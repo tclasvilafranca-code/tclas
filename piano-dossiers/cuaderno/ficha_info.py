@@ -22,6 +22,10 @@ BLUE = HexColor('#3E6E8F')
 WARM = HexColor('#F4EFE3')
 PANEL = HexColor('#F3F1EA')
 
+# El pie de pagina escribe con la base en 26 y sube unos 7 pt: por debajo de
+# esto la ultima caja se le monta encima.
+SUELO_FICHA = 34
+
 WHITE_SEQ = ['Do', 'Re', 'Mi', 'Fa', 'Sol', 'La', 'Si']
 BLACK_AFTER = {0, 1, 3, 4, 5}   # hay tecla negra tras Do, Re, Fa, Sol, La
 
@@ -165,8 +169,11 @@ def _qr_block(c, x, y, w, png_path, titulo, texto, h=78):
     c.setFillColor(NAVY)
     c.drawString(x + 12, y - 15, titulo.upper())
 
-    qs = min(h - 34, 52)
-    qy = y - 24 - qs
+    # el QR se come casi todo el alto del recuadro: cuando la caja tiene que
+    # encoger, lo que no puede encoger con ella es el codigo (si baja de unos
+    # 40 pt el movil ya no lo lee)
+    qs = min(h - 28, 52)
+    qy = y - 21 - qs
     try:
         c.drawImage(png_path, x + 12, qy, qs, qs, mask='auto')
     except Exception:
@@ -273,17 +280,40 @@ def _rhythm_stack(c, x, y, w, bloques, time_sig):
     return y + 8
 
 
-def _note_box(c, x, y, w, titulo, texto, color, h=None):
-    lines = 1
-    tmp, cnt = '', 1
+def _lineas_texto(texto, w, size):
+    cnt, tmp = 1, ''
     for word in texto.split(' '):
         t = (tmp + ' ' + word).strip()
-        if stringWidth(t, 'DejaVuSans', 8.4) <= w - 22:
+        if stringWidth(t, 'DejaVuSans', size) <= w:
             tmp = t
         else:
             cnt += 1
             tmp = word
-    h = h or (24 + cnt * 11.4)
+    return cnt
+
+
+def _alto_note_box(texto, w, size=8.4, leading=11.4):
+    """Lo que va a medir la caja, sin dibujarla. Hace falta para repartir el
+       espacio del pie de la ficha antes de empezar a pintar."""
+    return 24 + _lineas_texto(texto, w - 22, size) * leading
+
+
+def _note_box(c, x, y, w, titulo, texto, color, h=None, suelo=None):
+    """Recuadro de texto. Si se da `suelo`, la letra encoge hasta que la caja
+       quepa por encima de esa altura.
+
+       Sin ese ajuste, un '¿Sabías que...?' un poco mas largo de lo normal
+       bajaba hasta pisar el pie de pagina — y pasaba de verdad en ocho de las
+       veinte canciones, con el texto del pie impreso encima del recuadro."""
+    size, leading = 8.4, 11.4
+    if suelo is not None and h is None:
+        while size > 6.6:
+            alto = 24 + _lineas_texto(texto, w - 22, size) * leading
+            if y - alto >= suelo:
+                break
+            size -= 0.2
+            leading = size * 1.357
+    h = h or (24 + _lineas_texto(texto, w - 22, size) * leading)
     c.setFillColor(PANEL)
     c.roundRect(x, y - h, w, h, 4, fill=1, stroke=0)
     c.setFillColor(color)
@@ -291,7 +321,7 @@ def _note_box(c, x, y, w, titulo, texto, color, h=None):
     c.setFont('DejaVuSans-Bold', 7.4)
     c.setFillColor(color)
     c.drawString(x + 12, y - 14, titulo.upper())
-    _wrap(c, texto, x + 12, y - 26, 'DejaVuSans', 8.4, w - 22, 11.4, INK)
+    _wrap(c, texto, x + 12, y - 26, 'DejaVuSans', size, w - 22, leading, INK)
     return y - h
 
 
@@ -358,26 +388,55 @@ def build_ficha(c, cfg):
     yl = _section_title(c, MARGIN, y_col, 'Lo especial de esta partitura')
     yl = _bullets(c, MARGIN, yl, col_w, cfg['especial'])
 
-    yr = _section_title(c, right_x, y_col, 'El dibujo de cada parte')
+    yr = _section_title(c, right_x, y_col, 'Un compás de cada mano')
+    # El titulo anterior ("el dibujo de cada parte") no se entendia: nadie
+    # sabia que estaba mirando. Ahora se dice literalmente lo que es.
+    c.setFont('DejaVuSans', 7.6)
+    c.setFillColor(MUTED)
+    yr = _wrap(c, cfg.get('pie_ritmos') or
+               'Un solo compás de ejemplo, para ver de un vistazo qué hace cada mano en esta pieza. '
+               'MI = mano izquierda, MD = mano derecha.',
+               right_x, yr - 1, 'DejaVuSans', 7.6, col_w, 9.6, MUTED)
+    yr -= 4
     yr = _rhythm_stack(c, right_x, yr, col_w, cfg['ritmos'], cfg['time_sig'])
 
-    y = min(yl, yr) - 18
+    # --- el pie de la ficha: reto/truco y luego sabías que + QR ------------
+    #
+    # Estas dos filas son las que se salían de la hoja. Se reparte el espacio
+    # ANTES de dibujar nada, y en este orden: primero se aprietan los huecos
+    # entre filas (que no se ven), luego encoge el recuadro del QR y por
+    # último la letra del "¿Sabías que…?". Al revés, lo primero que se perdía
+    # era lo único que hay que poder leer de lejos.
+    y = min(yl, yr)
+    sep1, sep2 = 18.0, 14.0
+    h_qr = 78.0
+    h_reto = max(_alto_note_box(cfg['reto'], col_w),
+                 _alto_note_box(cfg['truco'], col_w))
+    falta = SUELO_FICHA - (y - sep1 - h_reto - sep2 - h_qr)
+    if falta > 0:
+        margen1, margen2 = sep1 - 7.0, sep2 - 6.0
+        recorte = min(falta, margen1 + margen2)
+        sep1 -= recorte * margen1 / (margen1 + margen2)
+        sep2 -= recorte * margen2 / (margen1 + margen2)
+        falta -= recorte
+    if falta > 0:
+        h_qr = max(66.0, h_qr - falta)
+    y -= sep1
 
-    # --- reto / truco ---
     yb = _note_box(c, MARGIN, y, col_w, 'El reto', cfg['reto'], ACCENT)
     yb2 = _note_box(c, right_x, y, col_w, 'El truco', cfg['truco'], BLUE)
-    y = min(yb, yb2) - 14
+    y = min(yb, yb2) - sep2
 
-    # --- sabías que + QR de audio ---
     sab_w = CONTENT_W * 0.63
     qr_x = MARGIN + sab_w + 14
     qr_w = CONTENT_W - sab_w - 14
-    ysab = _note_box(c, MARGIN, y, sab_w, '¿Sabías que…?', cfg['sabias'], NAVY_SOFT)
+    ysab = _note_box(c, MARGIN, y, sab_w, '¿Sabías que…?', cfg['sabias'], NAVY_SOFT,
+                     suelo=SUELO_FICHA)
     yqr = y
     if cfg.get('qr'):
         yqr = _qr_block(c, qr_x, y, qr_w, cfg['qr']['png'],
                         cfg['qr']['titulo'], cfg['qr']['texto'],
-                        h=max(78, y - ysab))
+                        h=max(h_qr, y - ysab))
     y = min(ysab, yqr)
 
     c.setFont('DejaVuSans', 7.4)

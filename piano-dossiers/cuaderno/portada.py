@@ -124,6 +124,128 @@ def build_cover(c, logo_path, alumno, subtitulo, curso):
     c.showPage()
 
 
+BLUE = HexColor('#3E6E8F')
+PANEL = HexColor('#F3F1EA')
+
+# Color de cada tipo de semana. El repaso y el concierto tienen que verse de
+# lejos: son las semanas que se saltan cuando se va con retraso, y justamente
+# son las que no hay que saltarse.
+_COLOR_TIPO = {
+    'obra': NAVY_SOFT,
+    'especial': ACCENT,
+    'repaso': BLUE,
+    'concierto': NAVY,
+}
+
+
+def build_plan_curso(c, alumno, plan, page_num=3, titulo='El curso, semana a semana',
+                     nota=None):
+    """La pagina que reparte las piezas del cuaderno en el curso escolar.
+
+       plan: [(nombre_del_mes, [(n_semana, texto, tipo), ...]), ...]
+
+       Es la unica pagina del cuaderno que mira el curso entero de una vez, y
+       sirve para dos cosas distintas: la profesora ve si va con retraso, y el
+       alumno ve cuanto queda para lo que le apetece tocar. Por eso las
+       semanas especiales (Halloween, Navidad, el concierto) van marcadas: son
+       las fechas que el alumno se sabe de memoria y alrededor de las cuales
+       se ordena todo lo demas.
+
+       El plan es una propuesta, no un horario: si una pieza pide tres semanas
+       se le dan, y se recorta de las de repaso. Eso lo dice la propia hoja."""
+    c.setFillColor(CREAM)
+    c.rect(0, 0, W, H, fill=1, stroke=0)
+    c.setFillColor(NAVY)
+    c.rect(0, H - 6, W, 6, fill=1, stroke=0)
+
+    total = sum(len(s) for _, s in plan)
+    y = H - 44
+    c.setFont('DejaVuSans-Bold', 8.4)
+    c.setFillColor(NAVY_SOFT)
+    c.drawString(MARGIN, y, '%s  ·  PLAN DE CURSO' % alumno.upper())
+    c.setFont('DejaVuSans', 8.4)
+    c.setFillColor(MUTED)
+    c.drawRightString(W - MARGIN, y, '%d semanas · de septiembre a julio' % total)
+    y -= 27
+
+    c.setFont('DejaVuSerif-Bold', 23)
+    c.setFillColor(NAVY)
+    c.drawString(MARGIN, y, titulo)
+    y -= 14
+    y = _wrap(c, nota or
+              ('Las %d semanas del curso, repartidas. Cada pieza tiene dos semanas: la primera para '
+               'leerla y desmontarla, la segunda para montarla entera. Es una propuesta, no un horario: '
+               'si una pieza pide tres semanas se le dan y se recorta de las de repaso.' % total),
+              MARGIN, y, 'DejaVuSans', 8.8, CONTENT_W, 11.0, MUTED)
+    y -= 9
+
+    # leyenda
+    lx = MARGIN
+    for etq, tipo in (('pieza nueva', 'obra'), ('semana señalada', 'especial'),
+                      ('repaso', 'repaso'), ('concierto', 'concierto')):
+        c.setFillColor(_COLOR_TIPO[tipo])
+        c.circle(lx + 3, y - 3, 3, fill=1, stroke=0)
+        c.setFont('DejaVuSans', 7.6)
+        c.setFillColor(MUTED)
+        c.drawString(lx + 10, y - 5.6, etq)
+        lx += 10 + stringWidth(etq, 'DejaVuSans', 7.6) + 20
+    y -= 16
+
+    c.setStrokeColor(RULE)
+    c.setLineWidth(0.9)
+    c.line(MARGIN, y, W - MARGIN, y)
+    y -= 16
+
+    # dos columnas de meses
+    col_w = (CONTENT_W - 22) / 2.0
+    mitad = (len(plan) + 1) // 2
+    columnas = [plan[:mitad], plan[mitad:]]
+    y_top = y
+
+    # La altura de linea se calcula para que la columna mas larga acabe justo
+    # encima del pie. Con un valor fijo sobraba un tercio de hoja en blanco:
+    # aqui no hay nada que anadir, asi que lo que se hace es repartir el aire.
+    ALTO_MES, SEP_MES = 15.0, 9.0
+    n_meses = max(len(col) for col in columnas)
+    n_sem = max(sum(len(s) for _, s in col) for col in columnas)
+    rh = (y_top - 56 - n_meses * (ALTO_MES + SEP_MES)) / n_sem
+    rh = min(max(rh, 13.0), 21.0)
+
+    for ci, meses in enumerate(columnas):
+        x = MARGIN + ci * (col_w + 22)
+        yy = y_top
+        for mes, semanas in meses:
+            c.setFont('DejaVuSans-Bold', 9.2)
+            c.setFillColor(NAVY)
+            c.drawString(x, yy, mes.upper())
+            c.setStrokeColor(NAVY)
+            c.setLineWidth(1.3)
+            c.line(x, yy - 5, x + 20, yy - 5)
+            yy -= ALTO_MES
+
+            for n, texto, tipo in semanas:
+                col = _COLOR_TIPO.get(tipo, NAVY_SOFT)
+                relleno = tipo in ('especial', 'concierto')
+                base = yy - rh / 2.0 - 2.4          # centrado en su fila
+                c.setFillColor(col if relleno else PANEL)
+                c.roundRect(x, base - 3.9, 19, 13, 2.5, fill=1, stroke=0)
+                c.setFont('DejaVuSans-Bold', 6.8)
+                c.setFillColor(white if relleno else col)
+                c.drawCentredString(x + 9.5, base, str(n))
+
+                fuente = 'DejaVuSans' if tipo == 'obra' else 'DejaVuSans-Bold'
+                ts = _fit(texto, fuente, 7.9, col_w - 25, floor=6.0)
+                c.setFont(fuente, ts)
+                c.setFillColor(INK if tipo == 'obra' else col)
+                c.drawString(x + 25, base, _clip(texto, fuente, ts, col_w - 25))
+                yy -= rh
+            yy -= SEP_MES
+
+    _footer(c, page_num)
+    c.showPage()
+    return page_num
+
+
 def _index_header(c, alumno, continuacion=False):
     c.setFillColor(CREAM)
     c.rect(0, 0, W, H, fill=1, stroke=0)

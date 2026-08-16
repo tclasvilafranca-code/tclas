@@ -101,3 +101,57 @@ qué entra con cada pieza. No es decorativo: es el plan del curso.
   armonía dada por el editor y valen más que cualquier análisis propio.
 - Las cabezas huecas no las ve el lector: en piezas de melodía en notas
   largas, la línea de la derecha se lee a zoom.
+
+---
+
+## Rediseño de agosto de 2026 (a petición del cliente)
+
+La estructura del dosier pasa a ser:
+
+| Hoja | Qué es | Módulo |
+|---|---|---|
+| — | La partitura original | (PDF del cliente) |
+| 1 | Ficha de la partitura | `ficha_info.py` |
+| 2 | **Calentamiento de dedos** — hoja entera de pentagramas | `hoja_calentamiento.py` |
+| 3 | **Agudeza visual** — hoja entera + recuadro de escucha al pie | `hoja_lectura.py` |
+| 4 | Al piano · por partes | `hoja_piano.py` |
+| 5 | Al piano · montarla | `hoja_piano.py` |
+| 6 | **Soltar y anotar** — relajación al piano + diario semanal | `hoja_relax.py` |
+
+Y en las tapas del álbum, detrás del índice, **el plan de curso a 44 semanas**
+(`portada.build_plan_curso`, datos en `build_dilan.PLAN`).
+
+### Lo que cambia de fondo
+
+- **Las hojas 2 y 3 ya no se escriben a mano.** Las genera
+  `engine/generador_lectura.py` a partir de la tonalidad de la pieza, con el
+  número de canción como semilla (la hoja de la 7 es siempre la misma, pero no
+  se parece a la de la 6) y con el nivel subiendo a lo largo del curso
+  (`cancion.NIVEL_BASE` + un escalón cada siete canciones). Llevan silencios,
+  puntillos, corcheas, las dos claves y compases distintos del de la pieza.
+- **La regla DERIVA / CITA sigue viva**: lo generado no lleva números de
+  compás; las hojas al piano sí. `audit_duplicados` lo comprueba igual.
+- **Las veinte canciones pasan por `cancion.construir`.** Las dos primeras van
+  envueltas en `dilan_01_cancion.py` / `dilan_02_cancion.py`.
+- **La numeración de página sale del número de páginas de la partitura**, no
+  de un 4 escrito a mano.
+
+### Fallos reales que destapó el rediseño
+
+- El recuadro de "¿Sabías que…?" **se imprimía encima del pie de página en 8
+  de las 20 fichas**. No se veía porque `build_ficha` no devolvía su `y` y el
+  auditor de altura nunca llegaba a mirarla. Arreglado repartiendo el espacio
+  del pie antes de dibujar (`ficha_info`, bloque final de `build_ficha`).
+- Los gestos de relajación bajaban la octava con un `.replace('4','3')`: en
+  Sol, La y Si la quinta se iba a la octava de arriba y salían redondas
+  colgando de cuatro líneas adicionales. Arreglado con `_grado()`.
+- La hoja del diario dejaba en blanco el último tercio de la página y la
+  columna de "¿hecho?" se salía del margen derecho.
+
+### Pendiente
+
+- **Las partituras originales no están en el repositorio** (son PDF del
+  cliente y se perdieron al reiniciarse el contenedor). Todo lo demás se
+  genera y se audita sin ellas; para volver a montar el álbum completo hay que
+  volver a dejarlas en `students/dilan/source/DILAN/` y re-ejecutar
+  `auditar_dilan.py` y `build_dilan.py`.

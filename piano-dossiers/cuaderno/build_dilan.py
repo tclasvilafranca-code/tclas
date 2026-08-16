@@ -12,7 +12,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from reportlab.pdfgen import canvas
 from pypdf import PdfWriter, PdfReader
-from portada import build_cover, build_index, W, H
+from portada import build_cover, build_index, build_plan_curso, W, H
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ASSETS = os.path.join(HERE, '..', 'assets')
@@ -76,6 +76,91 @@ ETAPAS = [
     ]),
 ]
 
+# --- el curso repartido en 44 semanas -------------------------------------
+#
+# Criterio: dos semanas por pieza (una para desmontarla, otra para montarla),
+# el orden del indice como hilo principal, y tres fechas que mandan sobre ese
+# orden porque el alumno las tiene en la cabeza igual:
+#
+#   · Halloween (semana 8, final de octubre) -> las dos piezas en menor que
+#     tiene el cuaderno: Arabesque en La menor y el Adagio en Sol menor. No se
+#     estudian enteras ahi (van en su sitio, semanas 37-40); se leen y se
+#     prueban, que es lo que se puede hacer en una semana con una pieza dura.
+#   · Navidad (semanas 15 y 16) -> las tres piezas de diciembre del cuaderno.
+#     Se adelantan a proposito: en enero ya no sirven.
+#   · Final de curso (semanas 42-44) -> elegir programa, ensayo y concierto.
+#
+# Las cuatro semanas de repaso no son relleno: son las que evitan que en junio
+# solo se sepan tocar las cuatro ultimas.
+PLAN = [
+    ('Septiembre', [
+        (1, '1 · El Cisne — leer la izquierda', 'obra'),
+        (2, '1 · El Cisne — manos juntas', 'obra'),
+        (3, '2 · Can’t Help Falling in Love', 'obra'),
+        (4, '2 · Can’t Help — de memoria', 'obra'),
+    ]),
+    ('Octubre', [
+        (5, '3 · Your Song', 'obra'),
+        (6, '3 · Your Song — el bajo por grados', 'obra'),
+        (7, '4 · Thinking Out Loud', 'obra'),
+        (8, 'HALLOWEEN · 17 Arabesque y 16 Adagio: leer el menor', 'especial'),
+    ]),
+    ('Noviembre', [
+        (9, '4 · Thinking Out Loud — a tempo', 'obra'),
+        (10, '5 · Lucía', 'obra'),
+        (11, '5 · Lucía — el bajo que oscila', 'obra'),
+        (12, 'REPASO · las cinco primeras, seguidas', 'repaso'),
+    ]),
+    ('Diciembre', [
+        (13, '6 · Poema de Amor', 'obra'),
+        (14, '6 · Poema de Amor — el bajo alterno', 'obra'),
+        (15, 'NAVIDAD · 18 Merry Little Christmas', 'especial'),
+        (16, 'NAVIDAD · 19 Santa Tell Me y 20 It’s Beginning', 'especial'),
+    ]),
+    ('Enero', [
+        (17, '7 · Amiga Mía', 'obra'),
+        (18, '7 · Amiga Mía — dos voces con una mano', 'obra'),
+        (19, '8 · La Promesa', 'obra'),
+        (20, '8 · La Promesa — las dos capas con pedal', 'obra'),
+    ]),
+    ('Febrero', [
+        (21, 'REPASO · de la 1 a la 8, media hoja cada una', 'repaso'),
+        (22, '9 · When I Was Your Man', 'obra'),
+        (23, '9 · When I Was Your Man — acordes de memoria', 'obra'),
+        (24, '10 · Al Calor del Amor en un Bar', 'obra'),
+    ]),
+    ('Marzo', [
+        (25, '10 · Al Calor — leer el cifrado', 'obra'),
+        (26, '11 · Soldadito de Hierro', 'obra'),
+        (27, '11 · Soldadito — quintas vacías y tresillos', 'obra'),
+        (28, '12 · A Sky Full of Stars', 'obra'),
+    ]),
+    ('Abril', [
+        (29, '12 · A Sky Full of Stars — el riff, sin endurecerse', 'obra'),
+        (30, 'REPASO · elige tres y tócalas seguidas', 'repaso'),
+        (31, '13 · What Was I Made For?', 'obra'),
+        (32, '13 · What Was I Made For? — contar sin pulso', 'obra'),
+    ]),
+    ('Mayo', [
+        (33, '14 · Writing’s on the Wall', 'obra'),
+        (34, '14 · Writing’s on the Wall — la nota larga y el 8va', 'obra'),
+        (35, '15 · My Favourite Things', 'obra'),
+        (36, '15 · My Favourite Things — el vals a ♩=160', 'obra'),
+    ]),
+    ('Junio', [
+        (37, '16 · Adagio en Sol menor', 'obra'),
+        (38, '16 · Adagio — el bajo obstinado, entero', 'obra'),
+        (39, '17 · Arabesque, a cuatro manos', 'obra'),
+        (40, '17 · Arabesque — con la profesora', 'obra'),
+    ]),
+    ('Julio', [
+        (41, 'REPASO · las tres de Navidad, para no perderlas', 'repaso'),
+        (42, 'Elegir el programa del concierto', 'repaso'),
+        (43, 'ENSAYO GENERAL · el programa entero, sin parar', 'concierto'),
+        (44, 'CONCIERTO DE FIN DE CURSO', 'concierto'),
+    ]),
+]
+
 # los PDF de cada dosier, en orden
 DOSIERES = [
     'Dilan_01_ElCisne_CUADERNO.pdf',
@@ -106,7 +191,8 @@ def main():
     tapas = os.path.join(OUT_DIR, 'Dilan_Portada_Indice.pdf')
     c = canvas.Canvas(tapas, pagesize=(W, H))
     build_cover(c, os.path.join(ASSETS, 'asset_logo_tclas_v2.png'), ALUMNO, SUBTITULO, CURSO)
-    build_index(c, ALUMNO, ETAPAS)
+    pag = build_index(c, ALUMNO, ETAPAS)
+    build_plan_curso(c, ALUMNO, PLAN, page_num=pag + 1)
     c.save()
 
     wr = PdfWriter()

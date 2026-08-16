@@ -1,19 +1,28 @@
 # -*- coding: utf-8 -*-
-"""Constructor generico de UN dosier de cancion: las 6 paginas de una vez.
+"""Constructor generico de UN dosier de cancion: todas las hojas de una vez.
 
    Cada cancion pasa a ser un unico archivo de datos (`dilan_NN_*.py`) con un
    diccionario CANCION; aqui esta todo el fontanero. Asi el trabajo por
    cancion es medir la partitura, verificar a zoom y escribir el contenido,
    que es lo unico que no se puede automatizar.
 
-   Estructura fija (decidida con el cliente):
-       1 partitura · 2 ficha · 3 calentamiento · 4 agudeza · 5-6 al piano
+   Estructura (rediseno pedido por el cliente):
+       partitura · ficha · calentamiento de dedos · agudeza visual ·
+       al piano (por partes) · al piano (montarla) · soltar y anotar
 
-   La regla dura del proyecto: el calentamiento DERIVA (transporta, invierte,
-   amplia) y las hojas al piano CITAN compases literales con su numero. Nada
-   puede estar en las dos. Se comprueba con audit_duplicados().
+   Dos de esas hojas ya no se escriben a mano: el calentamiento de dedos y la
+   agudeza visual son hojas LLENAS de pentagramas generadas
+   (engine/generador_lectura.py) a partir de la tonalidad de la pieza, con el
+   numero de cancion como semilla y con el nivel subiendo a lo largo del
+   curso. La hoja de la cancion 7 es siempre la misma, pero no se parece a la
+   de la 6.
+
+   La regla dura del proyecto sigue en pie: lo generado DERIVA (no lleva
+   numeros de compas) y las hojas al piano CITAN compases literales con su
+   numero. Nada puede estar en las dos. Se comprueba con audit_duplicados().
 """
 import os
+import random
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -28,50 +37,132 @@ from ficha_info import build_ficha
 from hoja_calentamiento import build_calentamiento
 from hoja_lectura import build_lectura
 from hoja_piano import build_piano
+from hoja_relax import build_relax
 from audit_suite import run_full_audit, audit_text_bounds, audit_duplicados
 
 HERE = os.path.dirname(__file__)
 OUT_DIR = os.path.join(HERE, '..', 'output')
 
+# Compases que el generador sabe escribir. Si la pieza va en otro, se usa 4/4
+# de base y se juega con el resto igual.
+COMPASES = [(4, 4), (3, 4), (2, 4), (6, 8)]
+
+# Por donde entra cada alumno en las hojas generadas, segun su nivel. Un
+# alumno avanzado no puede empezar el curso leyendo negras y blancas: se
+# aburre en la primera hoja y no vuelve a mirarlas.
+NIVEL_BASE = {'iniciación': 0, 'iniciacion': 0, 'intermedio': 1, 'avanzado': 1}
+
+
+def _nivel_lectura(cfg):
+    """El nivel de las hojas generadas sube a lo largo del curso.
+
+       0 = negras y blancas · 1 = corcheas, puntillos y silencios ·
+       2 = todo el repertorio y registro ancho, con lineas adicionales.
+       Cada alumno entra por donde le toca (`nivel_base`) y sube cada siete
+       canciones, que es mas o menos un trimestre."""
+    if cfg.get('nivel_lectura') is not None:
+        return cfg['nivel_lectura']
+    base = cfg.get('nivel_base')
+    if base is None:
+        base = NIVEL_BASE.get(str(cfg.get('nivel', '')).lower(), 0)
+    return min(2, base + (cfg['num'] - 1) // 7)
+
+
+def _mezcla_compases(time_sig, semilla):
+    """El compas de la pieza manda, pero no es el unico.
+
+       De cada siete lineas, cuatro van en el compas de la pieza (que es el
+       que hay que interiorizar) y tres en otros, rotando. Asi el alumno no se
+       acostumbra a contar siempre hasta cuatro, que es el motivo por el que
+       un 3/4 se le atraganta en marzo."""
+    ts = tuple(time_sig)
+    if ts not in COMPASES:
+        ts = (4, 4)
+    otros = [t for t in COMPASES if t != ts]
+    random.Random(semilla).shuffle(otros)
+    return [ts, ts, otros[0], ts, otros[1], ts, otros[2]]
+
 
 def _hojas(cfg, qr_png):
-    """Las cinco hojas del dosier, ya con el kicker y la numeracion puestos."""
+    """Las hojas del dosier, ya con el kicker y la numeracion puestos."""
     kicker = '%s · canción %d · %s' % (cfg['alumno'], cfg['num'], cfg['titulo_corto'])
     nivel = '%s · canción %d · nivel %s' % (cfg['alumno'], cfg['num'], cfg['nivel'])
+    num = cfg['num']
+    nl = _nivel_lectura(cfg)
+    p0 = _paginas_partitura(cfg)
 
     ficha = dict(cfg['ficha'])
-    ficha.update(kicker=nivel, page_num=4, time_sig=cfg['time_sig'])
+    ficha.update(kicker=nivel, page_num=p0 + 1, time_sig=cfg['time_sig'])
     ficha['qr'] = dict(ficha['qr']); ficha['qr']['png'] = qr_png
 
     cal = dict(cfg['calentamiento'])
-    cal.update(kicker=kicker, page_num=5, time_sig=cfg['time_sig'],
-               key_sig=cfg.get('key_sig'), gap=cal.get('gap', 7.0))
+    cal.update(kicker=kicker, page_num=p0 + 2, time_sig=cfg['time_sig'],
+               key_sig=cfg.get('key_sig'), gap=cal.get('gap_lectura', 6.6),
+               semilla=num, nivel_lectura=nl,
+               compases_extra=cfg.get('compases_extra')
+               or _mezcla_compases(cfg['time_sig'], 5000 + num))
 
     lec = dict(cfg['agudeza'])
-    lec.update(kicker=kicker, page_num=6, time_sig=cfg['time_sig'],
-               key_sig=cfg.get('key_sig'))
+    lec.update(kicker=kicker, page_num=p0 + 3, time_sig=cfg['time_sig'],
+               key_sig=cfg.get('key_sig'), gap=lec.get('gap_lectura', 6.6),
+               semilla=num, nivel_lectura=nl,
+               compases_extra=cfg.get('compases_extra_leer')
+               or _mezcla_compases(cfg['time_sig'], 6000 + num))
 
     p1 = dict(cfg['piano1'])
-    p1.update(kicker=kicker, page_num=7, time_sig=cfg['time_sig'],
+    p1.update(kicker=kicker, page_num=p0 + 4, time_sig=cfg['time_sig'],
               key_sig=cfg.get('key_sig'), gap=p1.get('gap', 7.0),
-              esquina='Al piano · desmontar la pieza',
+              esquina='Al piano · el orden para aprenderla',
               titulo='Al piano · por partes')
 
     p2 = dict(cfg['piano2'])
-    p2.update(kicker=kicker, page_num=8, time_sig=cfg['time_sig'],
+    p2.update(kicker=kicker, page_num=p0 + 5, time_sig=cfg['time_sig'],
               key_sig=cfg.get('key_sig'), gap=p2.get('gap', 7.0),
-              esquina='Al piano · montar la pieza',
+              esquina='Al piano · juntarlo todo',
               titulo='Al piano · montarla')
+
+    rlx = dict(cfg.get('relax') or {})
+    rlx.update(kicker=kicker, page_num=p0 + 6, key_sig=cfg.get('key_sig'))
 
     return [('ficha', lambda c: build_ficha(c, ficha)),
             ('calentamiento', lambda c: build_calentamiento(c, cal)),
             ('agudeza', lambda c: build_lectura(c, lec)),
             ('piano 1', lambda c: build_piano(c, p1)),
-            ('piano 2', lambda c: build_piano(c, p2))]
+            ('piano 2', lambda c: build_piano(c, p2)),
+            ('relax', lambda c: build_relax(c, rlx))]
+
+
+_CACHE_PAGS = {}
+
+# Dosieres montados sin su partitura original (el PDF del cliente no esta en
+# el repositorio). Se anota para poder avisar al final en vez de fallar.
+SIN_PARTITURA = []
+
+SUELO_AUDIT = {'ficha': 33}
+
+
+def _paginas_partitura(cfg):
+    """Cuantas paginas ocupa la partitura original. La numeracion de las hojas
+       arranca donde acaba ella; antes estaba escrita a mano (siempre 4) y en
+       las piezas de dos paginas el numero no coincidia con la hoja."""
+    if cfg.get('paginas_partitura'):
+        return cfg['paginas_partitura']
+    ruta = cfg.get('partitura')
+    if not ruta:
+        return 2
+    if ruta not in _CACHE_PAGS:
+        try:
+            _CACHE_PAGS[ruta] = len(PdfReader(ruta).pages)
+        except Exception:
+            # Las partituras originales no estan en el repositorio (son del
+            # cliente). Sin ellas se sigue pudiendo generar y auditar todo lo
+            # que escribimos nosotros; solo el numero de pagina es aproximado.
+            _CACHE_PAGS[ruta] = 2
+    return _CACHE_PAGS[ruta]
 
 
 def construir(cfg, verificar=True):
-    """Genera el PDF de 6 paginas y devuelve su ruta."""
+    """Genera el dosier completo (partitura + hojas) y devuelve su ruta."""
     os.makedirs(OUT_DIR, exist_ok=True)
     qr = os.path.join(OUT_DIR, '_qr_%s.png' % cfg['slug'])
     segno.make(cfg['yt'], error='m').save(qr, scale=10, border=2,
@@ -85,8 +176,11 @@ def construir(cfg, verificar=True):
     c.save()
 
     wr = PdfWriter()
-    for p in PdfReader(cfg['partitura']).pages:
-        wr.add_page(p)
+    if os.path.exists(cfg['partitura']):
+        for p in PdfReader(cfg['partitura']).pages:
+            wr.add_page(p)
+    else:
+        SIN_PARTITURA.append(cfg['slug'])
     for p in PdfReader(tmp).pages:
         wr.add_page(p)
     out = os.path.join(OUT_DIR, '%s_%02d_%s_CUADERNO.pdf'
@@ -129,7 +223,13 @@ def _revisar(hojas, etiqueta):
             if 'not a whole number of bars' in p:
                 fallos.append('%s: %s' % (nombre, p))
         y = _altura(fn)
-        if y is not None and y < 44:
+        # El pie de pagina escribe con la base en 26 y sube unos 7 pt, asi que
+        # 34 es el limite real. En las hojas de pentagrama se deja mas aire
+        # (44) porque ahi lo que baja son plicas y lineas adicionales, que el
+        # calculo de altura no siempre ve; en la ficha lo ultimo es un recuadro
+        # con el borde medido, y ahi 34 es exacto.
+        suelo = SUELO_AUDIT.get(nombre, 44)
+        if y is not None and y < suelo:
             fallos.append('%s: la pagina se pasa por abajo (y=%.1f)' % (nombre, y))
         # Una hoja que acaba a media pagina esta a medio hacer. El auditor de
         # margenes la daba por buena y salian calentamientos con un tercio de

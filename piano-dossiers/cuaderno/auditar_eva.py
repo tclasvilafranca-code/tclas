@@ -8,7 +8,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'
 from cancion import auditar
 
 MODULOS = ['eva_01_canthelp', 'eva_02_sky', 'eva_03_poema',
-           'eva_04_what', 'eva_05_thinking']
+           'eva_04_what', 'eva_05_thinking', 'eva_06_cisne',
+           'eva_07_bruno', 'eva_08_promesa', 'eva_09_amiga',
+           'eva_10_young']
 
 
 def main():

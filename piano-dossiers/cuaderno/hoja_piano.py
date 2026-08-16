@@ -249,7 +249,9 @@ def build_piano(c, cfg):
             y = _ej_heading(c, y, blq['num'], blq['titulo'], blq['pista'])
             for s in blq['sistemas']:
                 y = _caption(c, y, s.get('cap'))
-                y = _lineas(c, y, s['events'], cfg['time_sig'],
+                # un sistema puede llevar SU compas: hay piezas que cambian de
+                # compas en un compas suelto (el c. 62 de When We Were Young)
+                y = _lineas(c, y, s['events'], s.get('time_sig', cfg['time_sig']),
                             s.get('bars', BARS_PER_LINE),
                             gap=s.get('gap', cfg.get('gap', GAP)),
                             show_time=s.get('show_time', True),

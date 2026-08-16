@@ -74,6 +74,33 @@ Lo último no es técnica: es orientarse y coordinarse.
 
 ## Estado
 
-| nº | pieza | transcripción | hojas |
-|---|---|---|---|
-| 1–17 | — | 15 heredadas de Dilan (mismas ediciones), 2 nuevas medidas | pendientes |
+| nº | pieza | transcripción | hojas | auditoría |
+|---|---|---|---|---|
+| 1 | Can't Help Falling in Love | heredada de Dilan | ✔ | OK |
+| 2 | A Sky Full of Stars | heredada | ✔ | OK |
+| 3 | Poema de Amor | heredada | ✔ | OK |
+| 4 | What Was I Made For? | heredada | ✔ | OK |
+| 5 | Thinking Out Loud | heredada | ✔ | OK |
+| 6 | El Cisne | heredada | ✔ | OK |
+| 7 | When I Was Your Man | heredada | ✔ | OK |
+| 8 | La Promesa | heredada | ✔ | OK |
+| 9 | Amiga Mía | heredada (todo andamio) | ✔ | OK |
+| 10 | **When We Were Young** | **nueva** · `TRANSCRIPCION_E10_WWWY.md` | ✔ | OK |
+| 11–17 | Soldadito · Favourite Things · Merry Little Christmas · Santa Tell Me · It's Beginning · Arabesque · **Bohemian Rhapsody** | 6 heredadas + 1 nueva por medir | pendientes | — |
+
+Portada, índice y plan de curso de Eva: pendientes, al final.
+
+### Cómo se garantiza que no es una fotocopia del álbum de Dilan
+
+Quince piezas comparten edición con Dilan. Para que las hojas sean propias:
+
+1. **La ruta de estudio es distinta en cada pieza**, y el porqué está escrito
+   en el docstring del módulo (a Dilan se le entra por un sitio, a Eva por
+   otro, y siempre hay una razón musical).
+2. **Las hojas generadas llevan una sal por alumno** (`cancion._sal_alumno`),
+   o el calentamiento, la agudeza y la relajación saldrían idénticos.
+3. **`cruzar.py` compara sistema a sistema los dos cuadernos.** Lo que puede
+   coincidir es la CITA LITERAL de un compás medido —eso es lo correcto, la
+   partitura es la misma—; lo que no puede coincidir es un ejercicio de
+   ANDAMIO, porque ese me lo he inventado yo y debe ser distinto para cada
+   alumna. A 16/08 no queda ningún andamio compartido.

@@ -28,117 +28,108 @@ SOL = 'Sol mayor'
 # solo el bajo de cada compas: quita el arpegio y deja el pedal desnudo
 PEDAL = [{'pitch': 'G2', 'dur': 'h.'} for _ in range(6)]
 
+# los cc. 7-9 con todas las notas iguales de largas: mismas alturas medidas,
+# ritmo aplanado, solo para colocar la mano antes de ponerle la figuracion
+ESCALA_LISA = ([{'pitch': 'E4', 'dur': 'h'}] +
+               [{'pitch': p, 'dur': 'q'} for p in
+                ['F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5']] +
+               [{'pitch': 'G5', 'dur': 'h'}])          # 12 tiempos = 4 compases
+
 # la celula reducida a una sola vuelta por acorde: los enlaces, sin relleno
 ENLACES = (corcheas(CELULA_I, 1) + corcheas(CELULA_ii, 1) +
            corcheas(CELULA_I7, 1) + corcheas(CELULA_I, 1))
 
 PAG1 = dict(
     kicker=KICKER,
-    esquina='Al piano · desmontar la pieza',
-    titulo='Al piano · por partes',
+    esquina='Al piano · pasos 1 y 2 de 5',
+    titulo='Cómo se estudia',
     page_num=7,
     time_sig=(3, 4),
     key_sig=SOL,
     gap=7.0,
-    intro='La partitura, abierta en trozos. Cada ejercicio dice de qué compases sale. Cuando los '
-          'tengas, no hay ejercicio final: vuelves a la partitura de la página 1, que es donde '
-          'de verdad se comprueba.',
+    intro='Esta pieza no es de dedos: la izquierda no tiene nada raro, un arpegio de tres notas que '
+          'se repite. Lo difícil es que suene igual durante 55 compases y por debajo de la melodía. '
+          'Por eso los dos primeros pasos son solo de izquierda, y son el 90 % del trabajo.',
     reglas=['ARMADURA DE SOL', 'LA IZQUIERDA SIEMPRE MÁS FLOJA', 'CUENTA LOS TRES TIEMPOS'],
     bloques=[
-        dict(num=1, titulo='La mano izquierda sola',
-             pista='cc. 1–8 tal cual · es el 90 % del trabajo de esta pieza',
-             sistemas=[dict(cap='a)  ocho compases seguidos, sin parar, muy flojo y muy igual',
-                            events=corcheas(CELULA_I, 4), bars=4, clef='bass'),
-                       dict(cap='b)  cambia el acorde: La menor sobre Sol, y el Sol maj7 del c. 8',
-                            events=corcheas(CELULA_ii, 3) + corcheas(CELULA_I7, 1),
-                            bars=4, clef='bass')]),
-        dict(num=2, titulo='El pedal desnudo',
-             pista='el mismo bajo, sin arpegio · para oír que el Sol NO se mueve en 12 compases',
-             sistemas=[dict(cap='una sola nota por compás: así suena el suelo sobre el que va todo',
-                            events=PEDAL, bars=6, clef='bass')]),
-        dict(num=3, titulo='Los enlaces, sin relleno',
-             pista='la pieza repite cada acorde tres o cuatro compases · aquí cambias cada compás',
-             sistemas=[dict(cap='Sol › La menor/Sol › Sol maj7 › Sol · el cambio es lo único difícil',
-                            events=ENLACES, bars=4, clef='bass')]),
+        dict(num=1, titulo='La izquierda sola, los ocho primeros compases',
+             pista='cc. 1–8 tal cual · muy flojo y muy igual, sin que ninguna corchea pese más',
+             sistemas=[
+                 dict(cap='a) cc. 1–4 · Sol mayor: la célula, cuatro veces sin cambiar nada',
+                      events=corcheas(CELULA_I, 4), bars=4, clef='bass'),
+                 dict(cap='b) cc. 5–8 · La menor sobre Sol, y el Sol maj7 del c. 8',
+                      events=corcheas(CELULA_ii, 3) + corcheas(CELULA_I7, 1),
+                      bars=4, clef='bass', show_time=False),
+                 dict(cap='c) los ocho seguidos, sin parar entre el 4 y el 5 · así es como va',
+                      events=corcheas(CELULA_I, 4) + corcheas(CELULA_ii, 3) + corcheas(CELULA_I7, 1),
+                      bars=4, clef='bass', show_time=False),
+             ]),
         dict(tipo='nota',
              etiqueta='POR QUÉ ESTA PIEZA NO ES DE DEDOS',
-             texto='La izquierda no tiene nada raro: un arpegio de tres notas que se repite. Lo '
-                   'difícil es que suene igual 55 compases seguidos y por debajo de la melodía. Eso '
-                   'no se arregla tocando más veces: toca la izquierda mirando a otro lado y '
-                   'pregúntate si alguna corchea suena más fuerte. Casi siempre es la primera.'),
-        dict(num=4, titulo='La melodía sola',
-             pista='cc. 3–4 · notas largas, y una digitación impresa que ya está pensada',
-             sistemas=[dict(cap='cántala mientras la tocas · si no puedes cantarla, vas demasiado rápido',
-                            events=MD_3_4, bars=2)]),
-        dict(num=5, titulo='El c. 8, el acorde que avisa',
-             pista='c. 8 · Sol maj7 · es el único compás de los ocho primeros con un Fa en medio',
-             sistemas=[dict(cap='cuatro veces seguidas: el dedo que cambia es uno solo, y hay que oírlo',
-                            events=corcheas(CELULA_I7, 4), bars=4, clef='bass')]),
+             texto='Toca la izquierda mirando a otro lado y pregúntate si alguna corchea suena más '
+                   'fuerte que las demás. Casi siempre es la primera, y casi siempre es la que '
+                   'estropea la pieza. Eso no se arregla tocándola más veces: se arregla oyéndola.'),
+        dict(num=2, titulo='Quitarle el relleno: el suelo y los cambios',
+             pista='el mismo material, desnudo · para oír que el Sol NO se mueve en doce compases',
+             sistemas=[
+                 dict(cap='a) una sola nota por compás: el suelo sobre el que va todo lo demás',
+                      events=PEDAL, bars=6, clef='bass'),
+                 dict(cap='b) y ahora un acorde por compás · el cambio es lo único difícil de esta mano',
+                      events=ENLACES, bars=4, clef='bass', show_time=False),
+             ]),
     ],
 )
 
 PAG2 = dict(
     kicker=KICKER,
-    esquina='Al piano · montar la pieza',
-    titulo='Al piano · montarla',
+    esquina='Al piano · pasos 3, 4 y 5',
+    titulo='Cómo se estudia (sigue)',
     page_num=8,
     time_sig=(3, 4),
     key_sig=SOL,
     gap=7.0,
-    intro='La primera frase entera, la escala que la pieza lleva escondida dentro, y la forma de '
-          'subir de velocidad sin ensuciarla. El tempo final es Andante ♩=96, no más.',
+    intro='La izquierda ya está. Ahora la melodía, que en esta pieza son notas largas y una escala '
+          'que sube entera, y después juntar las dos manos. El tempo final es Andante ♩=96, no más.',
     reglas=['ANDANTE ♩=96 ES EL TECHO', 'RESPIRA DONDE ACABA LA LIGADURA', 'PRIMERO LIMPIO, LUEGO RÁPIDO'],
     bloques=[
-        dict(num=5, titulo='La escala que la pieza lleva dentro',
-             pista='cc. 7–9 · de Mi4 a Sol5 sin un solo salto, y termina en la nota más alta',
-             sistemas=[dict(cap='la blanca del principio no es una pausa: es el impulso de la subida',
-                            events=MD_7_9, bars=3)]),
+        dict(num=3, titulo='La melodía sola',
+             pista='cc. 3–4 y cc. 7–9 · cántala mientras la tocas: si no puedes cantarla, vas rápido',
+             sistemas=[
+                 dict(cap='a) cc. 3–4 · notas largas, con la digitación que ya trae la edición',
+                      events=MD_3_4, bars=2),
+                 dict(cap='b) cc. 7–9 · de Mi4 a Sol5 sin un solo salto · la blanca del principio no '
+                          'es una pausa, es el impulso de la subida',
+                      events=MD_7_9, bars=3, show_time=False),
+                 dict(cap='c) las mismas notas de los cc. 7–9, todas iguales de largas · solo para '
+                          'colocar los dedos antes de ponerles el ritmo',
+                      events=ESCALA_LISA, bars=4, show_time=False),
+             ]),
         dict(tipo='nota',
              etiqueta='DÓNDE RESPIRA LA FRASE',
              texto='La edición trae las ligaduras de fraseo dibujadas: úsalas como marcas de '
                    'respiración. La primera frase va del c. 3 al c. 9 y respira al llegar al Sol5. '
-                   'Toca la melodía sin piano, solo cantándola, y verás que respiras exactamente '
-                   'donde acaba la ligadura. Si al piano respiras en otro sitio, la frase se parte.'),
-        # Aqui NO se reimprime la izquierda: ya esta en la hoja anterior y en
-        # la propia partitura. Reinsertar significa volver a la obra.
+                   'Canta la melodía sin piano y verás que respiras exactamente donde acaba la '
+                   'ligadura. Si al piano respiras en otro sitio, la frase se parte.'),
+        dict(num=4, titulo='Las dos manos · cc. 1–4', clef='bass',
+             pista='este paso NO lleva pentagrama a propósito: se hace en la partitura de la página 1',
+             sistemas=[]),
         dict(tipo='nota',
-             etiqueta='LAS DOS MANOS · CC. 1–4',
-             texto='Este ejercicio no lleva pentagrama a propósito: se hace en la partitura de la '
-                   'página 1. Coloca la izquierda de memoria, sin mirarla, y lee solo la línea de '
-                   'la derecha. Si para leer la melodía tienes que mirarte la mano izquierda, es '
-                   'que todavía no está lista: vuelve al ejercicio 1 de la hoja anterior.'),
-        dict(tipo='nota',
-             etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
-             texto='1 · La izquierda sola, cc. 1–12, hasta que salga sin pensarla. '
-                   '2 · La melodía sola, cantándola. '
-                   '3 · Las dos manos solo los cc. 1–4, con la izquierda deliberadamente más '
-                   'floja de lo que te parece necesario. '
-                   '4 · Empieza por el c. 7, no por el 1: si siempre arrancas del principio, '
-                   'acabarás tocando bien solo el principio.'),
+             etiqueta='CÓMO SE HACE EL PASO 4',
+             texto='Coloca la izquierda de memoria, sin mirártela, y lee solo la línea de la derecha. '
+                   'Si para leer la melodía necesitas mirar la mano izquierda, es que todavía no está '
+                   'lista: vuelve al paso 1. Y empieza por el c. 7, no por el 1 — si siempre arrancas '
+                   'del principio, acabarás tocando bien solo el principio.'),
         dict(tipo='nota',
              etiqueta='LA FORMA, MEDIDA COMPÁS A COMPÁS',
-             texto='A · cc. 1–12: el tema, sobre un Sol que no se mueve. B · cc. 13–34: modula, se '
-                   'llena de alteraciones y es la parte difícil. A\' · cc. 35–55: vuelve el tema. Y '
-                   'esto no es una impresión: los cc. 35 y 36 son idénticos a los cc. 3 y 4 en las dos '
-                   'manos, comprobado nota por nota. Así que cuando llegues al 35 no estás aprendiendo '
-                   'nada nuevo: estás volviendo a lo que ya te sabes.'),
-        dict(tipo='nota',
-             etiqueta='QUÉ HACER CON LA PARTE DE EN MEDIO',
-             texto='Los cc. 13 al 34 son otra cosa: ahí la pieza se va de Sol mayor y aparecen '
-                   'alteraciones que no están en la armadura. Esa sección no se cita en este cuaderno '
-                   'porque no la he medido nota por nota, y prefiero no escribirte algo que no he '
-                   'comprobado. Se trabaja directamente en la partitura, y con una regla: marca con '
-                   'lápiz cada alteración accidental ANTES de tocar, y toca la izquierda sola hasta '
-                   'que las tengas todas.'),
+             texto='A · cc. 1–12: el tema, sobre un Sol que no se mueve. B · cc. 13–34: modula y se '
+                   'llena de alteraciones; esa parte no se cita aquí porque no la he medido nota por '
+                   'nota. A\' · cc. 35–55: vuelve el tema, y los cc. 35 y 36 son idénticos a los cc. 3 '
+                   'y 4 en las dos manos, comprobado. Cuando llegues al 35 no aprendes nada nuevo.'),
         dict(tipo='escalera',
              valores=[48, 60, 72, 84, 92, 96],
-             regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
-        dict(tipo='tracker',
-             titulo='La prueba de la semana',
-             pie='Marca el día en que hayas tocado los cc. 1–12 enteros, sin parar y sin acelerar.'),
+             regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
     ],
 )
-
 
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)

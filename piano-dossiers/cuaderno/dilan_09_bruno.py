@@ -211,105 +211,121 @@ CANCION = dict(
     ),
 
     piano1=dict(
-        intro='La partitura, abierta en trozos. Aquí no se citan números de compás: la edición no los '
-              'numera. Cada ejercicio dice de qué ACORDE sale, que es lo que sí está medido.',
+        titulo='Cómo se estudia',
+        esquina='Al piano · pasos 1 y 2 de 5',
+        intro='Esta canción son cinco posiciones de la mano izquierda y nada más. El arpegio en sí no '
+              'tiene dificultad: lo que se estudia es el SALTO de una posición a la siguiente. Por eso '
+              'el paso 1 es el arpegio y el paso 2 es moverlo. Aquí no hay números de compás: la '
+              'edición no los numera, así que se cita por ACORDE, que sí está medido.',
         reglas=['SE CITA POR ACORDE, NO POR COMPÁS', 'LA IZQUIERDA, MÁS FLOJA', 'DESPACIO'],
         bloques=[
-            dict(num=1, titulo='El arpegio de Re menor, tal cual', clef='bass',
-                 pista='acorde medido · Re · Fa · La · el que más veces aparece en la canción',
-                 sistemas=[dict(cap='cuatro compases seguidos, muy flojo y muy igual · sin marcar la '
-                                    'primera corchea de cada compás',
-                                events=arp(*REm) * 4, bars=4, clef='bass')]),
-            dict(num=2, titulo='Los cinco acordes de la canción', clef='bass',
-                 pista='acordes medidos · Rem · Do · Fa · Sol · Si-Re-Fa · el gesto no cambia nunca',
-                 sistemas=[dict(cap='lo único difícil es el salto de una posición a la siguiente: '
-                                    'prepáralo en el aire',
-                                events=arp(*REm) + arp(*DO) + arp(*FA) + arp(*SOL) +
-                                       arp(*DOM7) + arp(*DO),
-                                bars=6, clef='bass')]),
-            dict(tipo='nota',
-                 etiqueta='POR QUÉ NO HAY NÚMEROS DE COMPÁS',
-                 texto='En casi todas las canciones del cuaderno cada ejercicio te dice de qué compases '
-                       'sale. En esta no, y es a propósito: la edición no numera los compases y la '
-                       'partitura no me da un recuento fiable. Prefiero no darte un número que luego no '
-                       'cuadre con lo que tienes delante. Los acordes, en cambio, están medidos uno a '
-                       'uno, y con ellos se puede trabajar igual de bien.'),
+            dict(num=1, titulo='El arpegio, y por dónde viaja', clef='bass',
+                 pista='acordes medidos · muy flojo y muy igual, sin marcar la primera corchea',
+                 sistemas=[
+                     dict(cap='a) Re menor · Re · Fa · La — el acorde que más veces aparece en la canción',
+                          events=arp(*REm) * 4, bars=4, clef='bass'),
+                     dict(cap='b) quita el arpegio y quédate con la primera nota de cada acorde · '
+                              'Re · Do · Fa · Sol · Si · Do: así es como viaja la mano',
+                          events=[n('D3', 'w'), n('C3', 'w'), n('F3', 'w'),
+                                  n('G2', 'w'), n('B2', 'w'), n('C3', 'w')],
+                          bars=6, clef='bass', show_time=False),
+                     dict(cap='c) y los cinco acordes arpegiados, encadenados · el gesto no cambia nunca, '
+                              'lo único difícil es llegar colocado al siguiente',
+                          events=arp(*REm) + arp(*DO) + arp(*FA) + arp(*SOL) +
+                                 arp(*DOM7) + arp(*DO),
+                          bars=6, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='LO QUE SE ESTUDIA AQUÍ NO ES EL ARPEGIO',
-                 texto='El arpegio en sí no tiene dificultad: son tres notas del acorde subiendo y '
-                       'bajando. Lo que hay que estudiar es el SALTO de una posición a la siguiente, '
-                       'que es donde se pierde el tiempo. Prepara la mano en el aire mientras suena la '
-                       'última corchea del compás anterior y llega a la nueva posición ya colocada. Si '
-                       'la mano busca la tecla después de haber empezado el compás, siempre llegarás '
-                       'tarde por mucho que practiques.'),
-            dict(num=3, titulo='Solo el bajo de cada acorde', clef='bass',
-                 pista='quita el arpegio y quédate con la primera nota · para oír por dónde va la armonía',
-                 sistemas=[dict(cap='Re · Do · Fa · Sol · Si · Do · así es como viaja la mano izquierda',
-                                events=[n('D3', 'w'), n('C3', 'w'), n('F3', 'w'),
-                                        n('G2', 'w'), n('B2', 'w'), n('C3', 'w')],
-                                bars=6, clef='bass')]),
-            dict(tipo='nota',
-                 etiqueta='LA MELODÍA NO SE MUEVE TANTO COMO PARECE',
-                 texto='Miras la mano derecha y ves una nube de semicorcheas, y da respeto. Pero mide '
-                       'las alturas y verás que casi todas son la misma nota repetida: la melodía se '
-                       'planta en un Mi o en un Re y lo dice tres, cuatro y cinco veces antes de '
-                       'moverse. Lo difícil no es leer las notas, que son pocas: es el ritmo, y el '
-                       'ritmo se resuelve contando en voz alta, no leyendo más rápido.'),
-            dict(num=4, titulo='La derecha, plantada en una nota',
-                 pista='andamio · el carácter de la melodía: se queda en una nota y la repite',
-                 sistemas=[dict(cap='el ritmo real va en semicorcheas · aquí en corcheas, para leerlo',
-                                events=corch(['E5', 'E5', 'E5', 'D5', 'E5', 'E5', 'D5', 'C5']) +
-                                       corch(['D5', 'D5', 'D5', 'C5', 'D5', 'C5', 'A4', 'C5']) +
-                                       [n('C5', 'w')],
-                                bars=3)]),
+                 texto='Son tres notas del acorde subiendo y bajando: eso no tiene misterio. Lo que hay '
+                       'que estudiar es el SALTO, que es donde se pierde el tiempo. Prepara la mano en el '
+                       'aire mientras suena la última corchea del compás anterior y llega a la posición '
+                       'nueva ya colocada. Si la mano busca la tecla después de haber empezado el compás, '
+                       'llegarás tarde por mucho que practiques.'),
+            dict(num=2, titulo='Las cinco posiciones, sin arpegiar', clef='bass',
+                 pista='en bloque primero · es la forma de aprendérselas de memoria y no volver a leerlas',
+                 sistemas=[
+                     dict(cap='a) un acorde por compás, en bloque: prepara la mano en el aire antes de '
+                              'cada cambio',
+                          events=[ac(REm, 'w'), ac(DO, 'w'), ac(FA, 'w'), ac(SOL, 'w'),
+                                  ac(DOM7, 'w'), ac(DO, 'w')],
+                          bars=6, clef='bass'),
+                     dict(cap='b) y ahora en negras, un acorde por tiempo · es el paso previo a '
+                              'arpegiarlo sin pensar',
+                          events=[ac(DO, 'q'), ac(DO, 'q'), ac(FA, 'q'), ac(FA, 'q'),
+                                  ac(SOL, 'q'), ac(SOL, 'q'), ac(DO, 'q'), ac(DO, 'q'),
+                                  ac(DO, 'w')],
+                          bars=3, clef='bass', show_time=False),
+                     dict(cap='c) y el salto aislado, de dos en dos · esto es lo único que hay que '
+                              'estudiar de verdad en esta mano',
+                          events=[ac(REm, 'h'), ac(DO, 'h'),
+                                  ac(DO, 'h'), ac(FA, 'h'),
+                                  ac(FA, 'h'), ac(SOL, 'h'),
+                                  ac(SOL, 'h'), ac(DOM7, 'h'),
+                                  ac(DOM7, 'h'), ac(DO, 'h')],
+                          bars=5, clef='bass', show_time=False),
+                 ]),
         ],
     ),
 
     piano2=dict(
-        intro='Montarla es aprender cinco posiciones de la mano izquierda y no volver a leerlas nunca '
-              'más. La derecha se lee, la izquierda se recuerda.',
+        titulo='Cómo se estudia (sigue)',
+        esquina='Al piano · pasos 3, 4 y 5',
+        intro='La izquierda ya está y no se vuelve a leer: se recuerda. Lo que queda es la otra cara de '
+              'esa mano —las notas largas que solo se sostienen— y una derecha que se mueve mucho menos '
+              'de lo que parece.',
         reglas=['CINCO POSICIONES Y YA', 'EL PEDAL CAMBIA CON EL ACORDE', 'DESPACIO Y SIN PARAR'],
         bloques=[
-            dict(num=5, titulo='Cambiar de acorde sin mirar', clef='bass',
-                 pista='las cinco posiciones encadenadas, un acorde por compás, en bloque',
-                 sistemas=[dict(cap='a)  en bloque: prepara la mano en el aire antes de cada cambio',
-                                events=[ac(REm, 'w'), ac(DO, 'w'), ac(FA, 'w'), ac(SOL, 'w'),
-                                        ac(DOM7, 'w'), ac(DO, 'w')],
-                                bars=6, clef='bass'),
-                           dict(cap='b)  y ahora en negras, un acorde por tiempo: es el paso previo a '
-                                    'arpegiarlo sin pensar',
-                                events=[ac(DO, 'q'), ac(DO, 'q'), ac(FA, 'q'), ac(FA, 'q'),
-                                        ac(SOL, 'q'), ac(SOL, 'q'), ac(DO, 'q'), ac(DO, 'q'),
-                                        ac(DO, 'w')],
-                                bars=3, clef='bass')]),
-            dict(num=6, titulo='La izquierda que sostiene, sin arpegio', clef='bass',
-                 pista='la otra cara de esta mano · notas largas atacadas una vez y dejadas sonar',
-                 sistemas=[dict(cap='cuando la partitura pone una redonda, no la vuelvas a tocar: '
-                                    'aguántala con el pedal y no hagas nada más',
-                                events=[n('C2', 'w'), n('A2', 'w'), n('F2', 'w'), n('G2', 'w'),
-                                        n('C2', 'w'), n('F2', 'w'), n('G2', 'w'), n('C2', 'w')],
-                                bars=8, clef='bass')]),
+            dict(num=3, titulo='La izquierda que solo sostiene', clef='bass',
+                 pista='la otra cara de esta mano · notas largas, atacadas una vez y dejadas sonar',
+                 sistemas=[
+                     dict(cap='a) cuando la partitura pone una redonda, no la vuelvas a tocar: aguántala '
+                              'con el pedal y no hagas nada más',
+                          events=[n('C2', 'w'), n('A2', 'w'), n('F2', 'w'), n('G2', 'w'),
+                                  n('C2', 'w'), n('F2', 'w'), n('G2', 'w'), n('C2', 'w')],
+                          bars=8, clef='bass'),
+                 ]),
             dict(tipo='nota',
                  etiqueta='EL PEDAL, QUE AQUÍ ES OBLIGATORIO',
                  texto='Un arpegio suena a acorde solo si el pedal aguanta las notas que ya has soltado. '
-                       'Sin pedal, esta canción suena a ejercicio de arpegios; con pedal, suena a piano '
-                       'de balada. La regla es simple: el pedal se cambia cuando cambia el acorde, no '
-                       'cuando cambia la melodía. Pisa al atacar la primera nota del arpegio nuevo, y '
-                       'suelta justo un pelo antes.'),
+                       'Sin pedal, esta canción suena a ejercicio de arpegios; con pedal, suena a piano de '
+                       'balada. La regla es simple: el pedal cambia cuando cambia el acorde, no cuando '
+                       'cambia la melodía. Pisa al atacar la primera nota del arpegio nuevo y suelta justo '
+                       'un pelo antes.'),
+            dict(num=4, titulo='La derecha, plantada en una nota',
+                 pista='andamio · el ritmo real va en semicorcheas; aquí en corcheas, para poder leerlo',
+                 sistemas=[
+                     dict(cap='a) el carácter de la melodía: se queda en una nota y la repite antes de '
+                              'moverse',
+                          events=corch(['E5', 'E5', 'E5', 'D5', 'E5', 'E5', 'D5', 'C5']) +
+                                 corch(['D5', 'D5', 'D5', 'C5', 'D5', 'C5', 'A4', 'C5']) +
+                                 [n('C5', 'w')],
+                          bars=3),
+                     dict(cap='b) y la misma frase quitando las repeticiones: solo las notas que cambian '
+                              '· mira qué poco se mueve en realidad',
+                          events=[n('E5', 'h'), n('D5', 'h'), n('C5', 'w'),
+                                  n('D5', 'h'), n('C5', 'h'), n('A4', 'h'), n('C5', 'h')],
+                          bars=4, show_time=False),
+                 ]),
             dict(tipo='nota',
-                 etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
-                 texto='1 · Las cinco posiciones en bloque, sin partitura, hasta que salgan de memoria. '
-                       '2 · Los mismos cinco acordes arpegiados, encadenados, sin parar. '
-                       '3 · La primera página de la izquierda sola, leyendo. '
-                       '4 · La derecha sola, muy lento, contando las semicorcheas. '
-                       '5 · Las dos manos de la primera página, con la izquierda más floja de lo que te '
-                       'parece necesario.'),
+                 etiqueta='LA MELODÍA NO SE MUEVE TANTO COMO PARECE',
+                 texto='Miras la derecha y ves una nube de semicorcheas, y da respeto. Pero mide las '
+                       'alturas y verás que casi todas son la misma nota repetida: la melodía se planta en '
+                       'un Mi o en un Re y lo dice tres, cuatro y cinco veces antes de moverse. Lo difícil '
+                       'no es leer las notas, que son pocas: es el ritmo, y el ritmo se resuelve contando '
+                       'en voz alta, no leyendo más rápido. Y por eso aquí no hay números de compás: la '
+                       'edición no los numera, y prefiero no darte uno que luego no cuadre.'),
             dict(tipo='escalera', valores=[44, 52, 58, 64, 70, 76],
-                 regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
-            dict(tipo='tracker', titulo='La prueba de la semana',
-                 pie='Marca el día en que hayas tocado los cinco acordes de memoria, sin mirar la hoja.'),
+                 regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
+            dict(tipo='nota', etiqueta='LOS CINCO PASOS, PARA NO PERDERSE',
+                 texto='1 · El arpegio de Re menor, y por dónde viaja la mano.   '
+                       '2 · Las cinco posiciones en bloque, de memoria.   '
+                       '3 · Las notas largas, sostenidas con el pedal.   '
+                       '4 · La derecha, contando el ritmo en voz alta.   '
+                       '5 · La escalera de tempo, y las dos manos de la primera página.'),
         ],
     ),
+
 )
 
 if __name__ == '__main__':

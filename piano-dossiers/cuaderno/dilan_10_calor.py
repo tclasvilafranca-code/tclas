@@ -206,95 +206,105 @@ CANCION = dict(
     ),
 
     piano1=dict(
-        intro='La partitura, abierta en trozos. Aquí no se cita ningún número de compás: la numeración '
-              'del segno y las casillas no cuadra, así que cada ejercicio dice de qué CIFRADO sale, que '
-              'es lo que la edición imprime y no admite duda.',
+        titulo='Cómo se estudia',
+        esquina='Al piano · pasos 1 y 2 de 5',
+        intro='Esta partitura te lo da casi todo hecho: el editor escribe los nombres de las notas '
+              'graves debajo del pentagrama y los cifrados encima. Con eso se toca la izquierda entera '
+              'sin leer una sola nota. Aquí no se cita ningún número de compás —con el segno y las '
+              'casillas, contar da un número distinto según por dónde leas—: se cita por CIFRADO.',
         reglas=['SE CITA POR CIFRADO, NO POR COMPÁS', 'EL PRIMER GOLPE PESA MÁS', 'LEE LOS NOMBRES DEL BAJO'],
         bloques=[
-            dict(num=1, titulo='El molde sobre Mim, tal cual', clef='bass',
+            dict(num=1, titulo='El molde, y por dónde viaja', clef='bass',
                  pista='cifrado Mim · Mi · Mi · Si · Mi, medido y confirmado por los nombres impresos',
-                 sistemas=[dict(cap='cuatro negras · la primera pesa, las otras tres solo acompañan',
-                                events=MIM + MIM, bars=2, clef='bass')]),
-            dict(num=2, titulo='Los cuatro cifrados de la estrofa', clef='bass',
-                 pista='Mim · Fa♯7 · Lam · Sol · el molde no cambia, solo cambia dónde lo pones',
-                 sistemas=[dict(cap='el Do♯ del Fa♯7 va escrito a mano: la armadura no lo lleva',
-                                events=MIM + FAS7 + LAM + SOL, bars=4, clef='bass')]),
+                 sistemas=[
+                     dict(cap='a) cuatro negras sobre Mi menor · la primera pesa, las otras tres solo '
+                              'acompañan',
+                          events=MIM + MIM, bars=2, clef='bass'),
+                     dict(cap='b) solo la fundamental de cada cifrado · Mi · Fa♯ · La · Sol · Mi: una '
+                              'nota por compás y ya suena a la canción',
+                          events=[n('E2', 'w'), n('F2', 'w'), n('A2', 'w'),
+                                  n('G2', 'w'), n('E2', 'w')],
+                          bars=5, clef='bass', show_time=False),
+                     dict(cap='c) el molde sobre los cuatro cifrados: Mim · Fa♯7 · Lam · Sol · el Do♯ '
+                              'del Fa♯7 va escrito a mano',
+                          events=MIM + FAS7 + LAM + SOL, bars=4, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='ESTA PARTITURA TE LO DA TODO HECHO',
                  texto='Debajo del pentagrama de la izquierda el editor ha escrito los nombres de las '
-                       'notas graves: "MI", "FA♯ MI DO♯ FA♯", "MI SOL SI". Y encima están los cifrados. '
-                       'Con eso puedes tocar la izquierda entera sin leer una sola nota: lees el '
-                       'cifrado, colocas el molde y ya está.'),
-            dict(num=3, titulo='La frase que más se repite', clef='treble',
-                 pista='alturas medidas · baja Do · Si · La · Sol · Fa♯ · Mi, y aparece dos veces igual',
-                 sistemas=[dict(cap='es la escala de Mi menor bajando hasta la tónica: no la leas nota a '
-                                    'nota, léela como una bajada',
-                                events=BAJADA + [n('E4', 'h')], bars=2)]),
-            dict(num=4, titulo='Y la célula que sale cinco veces',
-                 pista='alturas medidas · Do · La · La · Si · La · cinco apariciones idénticas',
-                 sistemas=[dict(cap='cinco veces la misma: móntala una vez bien y tienes cinco compases',
-                                events=CELULA + [n('A4', 'h.')], bars=2)]),
-            dict(tipo='nota',
-                 etiqueta='POR QUÉ AQUÍ NO HAY NÚMEROS DE COMPÁS',
-                 texto='En el resto del cuaderno cada ejercicio dice de qué compases sale. Aquí no, y es '
-                       'a propósito: con el segno, las dos casillas y el cambio de armadura, contar '
-                       'compases da un número distinto según por dónde leas. Los cifrados, en cambio, '
-                       'están impresos y no admiten discusión.'),
-            dict(num=5, titulo='El cambio de acorde, sin relleno', clef='bass',
-                 pista='solo la fundamental de cada cifrado · para oír por dónde va la armonía',
-                 sistemas=[dict(cap='Mi · Fa♯ · La · Sol · Mi · una nota por compás y ya suena a la '
-                                    'canción',
-                                events=[n('E2', 'w'), n('F2', 'w'), n('A2', 'w'),
-                                        n('G2', 'w'), n('E2', 'w')],
-                                bars=5, clef='bass')]),
+                       'notas graves: “MI”, “FA♯ MI DO♯ FA♯”, “MI SOL SI”. Y encima están los cifrados. '
+                       'Con eso puedes tocar la izquierda entera sin leer una sola nota: lees el cifrado, '
+                       'colocas el molde y ya está. Los cifrados están impresos y no admiten discusión; '
+                       'los números de compás, con el segno y las casillas, sí.'),
+            dict(num=2, titulo='La derecha, en dos trozos que se repiten',
+                 pista='alturas medidas · una bajada y una célula, y con eso tienes media canción',
+                 sistemas=[
+                     dict(cap='a) la frase que más se repite · Do · Si · La · Sol · Fa♯ · Mi: no la '
+                              'leas nota a nota, léela como una bajada',
+                          events=BAJADA + [n('E4', 'h')], bars=2),
+                     dict(cap='b) la célula que sale cinco veces idéntica · Do · La · La · Si · La',
+                          events=CELULA + [n('A4', 'h.')], bars=2, show_time=False),
+                     dict(cap='c) y las dos seguidas, que es como aparecen en la canción',
+                          events=BAJADA + [n('E4', 'h')] + CELULA + [n('A4', 'h.')],
+                          bars=4, show_time=False),
+                 ]),
         ],
     ),
 
     piano2=dict(
-        intro='Montarla es, sobre todo, saber por dónde va la hoja: hay segno, dos casillas y un cambio '
-              'de armadura. Las notas son lo de menos en esta canción.',
+        titulo='Cómo se estudia (sigue)',
+        esquina='Al piano · pasos 3, 4 y 5',
+        intro='Las notas son lo de menos en esta canción: lo difícil es saber por dónde va la hoja. Hay '
+              'segno, dos casillas y un cambio de armadura a mitad de partitura.',
         reglas=['PRIMERO EL RECORRIDO, LUEGO LAS NOTAS', 'OJO AL CAMBIO DE ARMADURA', 'ALLEGRETTO, NO CARRERA'],
         bloques=[
+            dict(num=3, titulo='El recorrido, y la entrada', clef='treble',
+                 pista='primero con el dedo y en voz alta, sin piano · después la introducción',
+                 sistemas=[
+                     dict(cap='a) los cuatro primeros compases van sobre una sola nota repetida · el '
+                              'dedo cambia (3 · 2 · 1) pero la tecla no, y no se acelera',
+                          events=corch(['E5'] * 8) + corch(['E5'] * 8) +
+                                 corch(['E5'] * 8) + [n('E5', 'w')],
+                          bars=4),
+                     dict(cap='b) el bajo de la estrofa de un tirón · Mim · Fa♯7 · Si7 · Mim y vuelta: '
+                              'así se oye la forma entera sin tocar casi nada',
+                          events=[n('E2', 'w'), n('F2', 'w'), n('B2', 'w'), n('E2', 'w'),
+                                  n('A2', 'w'), n('G2', 'w'), n('B2', 'w'), n('E2', 'w')],
+                          bars=8, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
-                 etiqueta='EL RECORRIDO DE LA HOJA',
+                 etiqueta='CÓMO SE HACE EL PASO 3',
                  texto='1 · Cuatro compases de introducción, con la derecha picoteando la misma nota. '
                        '2 · Empieza la estrofa: ahí está el SEGNO, la marca a la que vas a volver. '
                        '3 · Llegas a la casilla 1.ª, la tocas y vuelves al segno. '
                        '4 · La segunda vez te saltas la 1.ª y entras por la 2.ª. '
                        'Sigue la partitura con el dedo y di en voz alta dónde estás antes de tocar nada.'),
+            dict(num=4, titulo='El cambio de armadura',
+                 pista='la misma bajada, escrita en la armadura nueva · mismas líneas, otras teclas',
+                 sistemas=[
+                     dict(cap='a) con cuatro sostenidos · en blancas, para colocar los dedos antes de '
+                              'ponerle velocidad',
+                          events=[n(e['pitch'], 'h') for e in BAJADA] + [n('E4', 'w')],
+                          bars=4, key_sig='Mi mayor'),
+                 ]),
             dict(tipo='nota',
-                 etiqueta='Y LA ARMADURA CAMBIA',
+                 etiqueta='CÓMO SE HACE EL PASO 4',
                  texto='A mitad de la partitura aparece una armadura nueva, de cuatro sostenidos. Eso '
                        'quiere decir que a partir de ahí los Fa, los Do, los Sol y los Re son todos '
-                       'sostenidos, y que la mano se coloca en otro sitio aunque los cifrados se '
-                       'parezcan. Antes de empezar a estudiar, busca ese cambio en tu hoja y márcalo '
-                       'con lápiz: es el punto donde más gente se cae.'),
-            dict(num=5, titulo='La introducción, con la nota picoteada',
-                 pista='andamio · los cuatro primeros compases van sobre una sola nota repetida',
-                 sistemas=[dict(cap='el dedo cambia (3 · 2 · 1) pero la tecla no · que no se acelere',
-                                events=corch(['E5'] * 8) + corch(['E5'] * 8) +
-                                       corch(['E5'] * 8) + [n('E5', 'w')],
-                                bars=4)]),
-            dict(num=6, titulo='El bajo de la estrofa, de un tirón', clef='bass',
-                 pista='Mim · Fa♯7 · Si7 · Mim · los cifrados de la primera vuelta, un golpe por compás',
-                 sistemas=[dict(cap='una nota por compás, sin molde · así se oye la forma entera sin '
-                                    'tocar casi nada',
-                                events=[n('E2', 'w'), n('F2', 'w'), n('B2', 'w'), n('E2', 'w'),
-                                        n('A2', 'w'), n('G2', 'w'), n('B2', 'w'), n('E2', 'w')],
-                                bars=8, clef='bass')]),
-            dict(tipo='nota',
-                 etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
-                 texto='1 · El recorrido, con el dedo y en voz alta, sin piano. '
-                       '2 · El molde sobre los seis grados de Mi menor, sin partitura. '
-                       '3 · La izquierda de la estrofa leyendo SOLO los cifrados. '
-                       '4 · La derecha sola, contando los tresillos. '
-                       '5 · Las dos manos desde el segno hasta la casilla 1.ª, y ahí paras.'),
+                       'sostenidos, y que la mano se coloca en otro sitio aunque los cifrados se parezcan. '
+                       'Busca ese cambio en tu hoja y márcalo con lápiz antes de estudiar nada: es el '
+                       'punto donde más gente se cae.'),
             dict(tipo='escalera', valores=[70, 84, 96, 108, 116, 124],
-                 regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
-            dict(tipo='tracker', titulo='La prueba de la semana',
-                 pie='Marca el día en que hayas hecho el recorrido entero sin equivocarte de casilla.'),
+                 regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
+            dict(tipo='nota', etiqueta='LOS CINCO PASOS, PARA NO PERDERSE',
+                 texto='1 · El molde, y por dónde viaja: solo cifrados, sin leer el pentagrama.   '
+                       '2 · La derecha: la bajada y la célula.   '
+                       '3 · El recorrido en voz alta, y la introducción.   '
+                       '4 · El cambio de armadura, marcado con lápiz.   '
+                       '5 · La escalera, y las dos manos del segno a la casilla 1.ª.'),
         ],
     ),
+
 )
 
 if __name__ == '__main__':

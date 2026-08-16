@@ -188,89 +188,104 @@ CANCION = dict(
     ),
 
     piano1=dict(
-        intro='La partitura, abierta en trozos. Todo lo que aquí se cita está medido compás a compás: '
-              'el molde de la izquierda, y cómo se mueve de un acorde a otro.',
+        titulo='Cómo se estudia',
+        esquina='Al piano · pasos 1 y 2 de 5',
+        intro='Esta izquierda no se lee: se coloca. Hace siempre lo mismo —fundamental, octava, quinta, '
+              'octava— y lo único que cambia es dónde pones el molde. Por eso el paso 1 es el molde y '
+              'el paso 2 es moverlo por la página.',
         reglas=['ARMADURA DE SOL MENOR', 'PRIMERO EL MOLDE, LUEGO LAS NOTAS', 'DI EL CIFRADO EN VOZ ALTA'],
         bloques=[
-            dict(num=1, titulo='El molde, tal cual',
-                 pista='cc. 1–2 medidos · Re7 → Re · Re · La · Re',
-                 sistemas=[dict(cap='cuatro negras · la primera pesa, las otras tres solo acompañan',
-                                events=RE7 + RE7, bars=2, clef='bass')]),
-            dict(num=2, titulo='Los cuatro acordes de la primera página',
-                 pista='cc. 1–6 medidos · Re7 · Dom · Sol m · Fa7 · Si♭ · y vuelta',
-                 sistemas=[dict(cap='el molde no cambia nunca: lo único que cambia es dónde lo pones',
-                                events=RE7 + DOm + SOL + FA7 + SIb + RE7, bars=3, clef='bass')]),
+            dict(num=1, titulo='El molde, y por dónde viaja', clef='bass',
+                 pista='cc. 1–6 medidos · cuatro negras: la primera pesa, las otras tres solo acompañan',
+                 sistemas=[
+                     dict(cap='a) cc. 1–2 · Re7 → Re · Re · La · Re, dos veces igual',
+                          events=RE7 + RE7, bars=2, clef='bass'),
+                     dict(cap='b) quita el relleno y quédate con la primera nota de cada compás · '
+                              'Re · Do · Sol · Fa · Si♭ · Re: así es como viaja la mano',
+                          events=[n('D2', 'w'), n('C2', 'w'), n('G2', 'w'),
+                                  n('F2', 'w'), n('B2', 'w'), n('D2', 'w')],
+                          bars=6, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='POR QUÉ ESTO NO SE LEE, SE COLOCA',
                  texto='Una vez que ves que la izquierda hace siempre fundamental, octava, quinta y octava, '
                        'deja de haber notas que leer: hay un molde y un cifrado que te dice dónde ponerlo. '
                        'Mira los cifrados de tu partitura y tócalos sin leer el pentagrama de abajo, solo '
-                       'colocando el molde. Vas a ver que te sale casi entero a la primera, y que además '
-                       'te lo aprendes de memoria sin querer.'),
-            dict(num=3, titulo='Los saltos entre acordes',
-                 pista='quita el relleno y quédate solo con la primera nota de cada compás',
-                 sistemas=[dict(cap='Re · Do · Sol · Fa · Si♭ · Re · así es como viaja la mano',
-                                events=[n('D2', 'w'), n('C2', 'w'), n('G2', 'w'),
-                                        n('F2', 'w'), n('B2', 'w'), n('D2', 'w')],
-                                bars=6, clef='bass')]),
-            dict(num=4, titulo='Fa7 y Si♭, los dos que se salen de la mano', clef='bass',
-                 pista='cc. 5–6 medidos · el Si♭ abre la octava desde tecla negra',
-                 sistemas=[dict(cap='cámbialos sin mirar: coloca la mano en el aire y déjala caer ya '
-                                    'abierta',
-                                events=FA7 + SIb + FA7 + SIb, bars=4, clef='bass')]),
+                       'colocando el molde. Te va a salir casi entero a la primera, y encima te lo aprendes '
+                       'de memoria sin querer.'),
+            dict(num=2, titulo='El molde puesto en su sitio', clef='bass',
+                 pista='cc. 1–6 medidos · Re7 · Dom · Sol m · Fa7 · Si♭ · y vuelta',
+                 sistemas=[
+                     dict(cap='a) los dos que se salen de la mano: Fa7 y Si♭ · el Si♭ abre la octava '
+                              'desde tecla negra — colócala en el aire y déjala caer ya abierta',
+                          events=FA7 + SIb + FA7 + SIb, bars=4, clef='bass'),
+                     dict(cap='b) y la primera página entera · el molde no cambia nunca: lo único que '
+                              'cambia es dónde lo pones',
+                          events=RE7 + DOm + SOL + FA7 + SIb + RE7, bars=3, clef='bass',
+                          show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='EL FA♯ DEL RE7',
-                 texto='La armadura de Sol menor no lleva ningún sostenido, así que cada vez que aparece un '
-                       'Fa♯ está escrito a mano delante de la nota. Y aparece siempre en el mismo sitio: en '
-                       'el acorde de Re7. Ese Fa♯ es lo que convierte el Re en dominante y hace que la '
-                       'música tire hacia Sol menor. Si te lo comes, el acorde deja de pedir nada y la '
-                       'frase se queda plana. Búscalo en tu partitura y márcalo con lápiz.'),
+                 texto='La armadura de Sol menor no lleva ningún sostenido, así que cada Fa♯ está escrito '
+                       'a mano delante de la nota. Y aparece siempre en el mismo sitio: en el acorde de '
+                       'Re7. Ese Fa♯ es lo que convierte el Re en dominante y hace que la música tire '
+                       'hacia Sol menor. Si te lo comes, el acorde deja de pedir nada y la frase se queda '
+                       'plana. Búscalo en tu partitura y márcalo con lápiz.'),
         ],
     ),
 
     piano2=dict(
-        intro='Montarla es aguantar el molde veintiocho compases sin que suene a caja de música, y '
-              'entender que la primera frase no se canta: se recita.',
+        titulo='Cómo se estudia (sigue)',
+        esquina='Al piano · pasos 3, 4 y 5',
+        intro='El molde ya está colocado. Lo que queda no son notas nuevas: es aguantarlo veintiocho '
+              'compases sin que suene a caja de música, y entender que la primera frase no se canta, '
+              'se recita.',
         reglas=['EL RECITADO NO LLEVA PRISA', 'NO SUENE A CAJA DE MÚSICA', 'DESPACIO Y SIN PARAR'],
         bloques=[
+            dict(num=3, titulo='Aguantar el molde', clef='bass',
+                 pista='ocho compases seguidos · aquí se ve si el brazo está suelto o si estás golpeando',
+                 sistemas=[
+                     dict(cap='a) cuatro compases sobre Sol menor y cuatro sobre Do menor, sin parar · '
+                              'si a mitad empiezas a golpear, para y vuelve a empezar más flojo',
+                          events=SOL * 4 + DOm * 4, bars=4, clef='bass'),
+                     dict(cap='b) y el mismo molde con un solo golpe por compás · así se oye la forma '
+                              'sin que el relleno la tape',
+                          events=[{'pitches': ['G2', 'G3'], 'dur': 'w'},
+                                  {'pitches': ['C2', 'C3'], 'dur': 'w'},
+                                  {'pitches': ['D2', 'D3'], 'dur': 'w'},
+                                  {'pitches': ['G2', 'G3'], 'dur': 'w'}],
+                          bars=4, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
-                 etiqueta='"RECITADO": QUÉ SIGNIFICA',
+                 etiqueta='“RECITADO”: QUÉ SIGNIFICA',
                  texto='La partitura pone Recitado encima de la primera frase. Quiere decir que ahí la voz '
                        'habla en vez de cantar, y que el tempo es libre: la izquierda espera. Al piano se '
                        'traduce así: toca esos compases sin metrónomo, dejando aire entre frase y frase, y '
                        'no entres en tempo hasta que la melodía empiece a cantar de verdad. Es el único '
                        'sitio de la pieza donde puedes hacer lo que quieras con el tiempo.'),
-            dict(num=5, titulo='Aguantar el molde',
-                 pista='cuatro compases sobre Sol menor y cuatro sobre Do menor, sin parar',
-                 sistemas=[dict(cap='si a mitad empiezas a golpear, para y vuelve a empezar más flojo',
-                                events=SOL * 4 + DOm * 4, bars=4, clef='bass')]),
+            dict(num=4, titulo='El peso, que es lo único que tienes',
+                 pista='sin pentagrama: se hace sobre el paso 3, cambiando solo cuánto pesa cada nota',
+                 sistemas=[]),
             dict(tipo='nota',
-                 etiqueta='LA VUELTA DEL C. 19',
-                 texto='Los cc. 19 y 20 son, nota por nota, los cc. 2 y 3. Está medido. Eso significa dos '
-                       'cosas: que no hay que montar esa parte otra vez, y que ahí la canción vuelve al '
-                       'principio, así que tiene que sonar reconocible. Cuando llegues, no aceleres para '
-                       '"llegar": cuenta un compás entero antes de entrar y colócalo igual que la primera '
-                       'vez.'),
-            dict(tipo='nota',
-                 etiqueta='EL PESO, QUE ES LO ÚNICO QUE TIENES',
+                 etiqueta='CÓMO SE HACE EL PASO 4',
                  texto='Cuatro negras iguales, veintiocho compases. No hay dinámicas escritas, no hay '
-                       'cambios de figura, no hay nada que te ayude: lo único que puedes mover es cuánto '
-                       'pesa cada nota. La primera, la fundamental, lleva el peso del brazo; las otras tres '
-                       'caen solas, casi sin dedo. Si las cuatro pesan igual, esto suena a metrónomo. Si la '
-                       'primera pesa y las otras se apagan, suena a guitarra acompañando a alguien.'),
-            dict(tipo='nota',
-                 etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
-                 texto='1 · El molde solo, sobre los seis grados de Sol menor, sin partitura. '
-                       '2 · Los cifrados de la primera página en voz alta, sin tocar. '
-                       '3 · La izquierda entera leyendo solo los cifrados, sin mirar el pentagrama de abajo. '
-                       '4 · La melodía sola, y la primera frase recitada, sin tempo. '
-                       '5 · Las dos manos desde el c. 3, que es donde la canción arranca de verdad.'),
+                       'cambios de figura: lo único que puedes mover es cuánto pesa cada nota. La primera, '
+                       'la fundamental, lleva el peso del brazo; las otras tres caen solas, casi sin dedo. '
+                       'Si las cuatro pesan igual, esto suena a metrónomo. Si la primera pesa y las otras '
+                       'se apagan, suena a guitarra acompañando a alguien. Y ojo al c. 19: los cc. 19 y 20 '
+                       'son, nota por nota, los cc. 2 y 3 — está medido, así que ahí no hay nada nuevo que '
+                       'montar, solo que suene reconocible.'),
             dict(tipo='escalera', valores=[50, 58, 64, 70, 76, 84],
-                 regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
-            dict(tipo='tracker', titulo='La prueba de la semana',
-                 pie='Marca el día en que hayas tocado la izquierda entera leyendo solo los cifrados.'),
+                 regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
+            dict(tipo='nota', etiqueta='LOS CINCO PASOS, PARA NO PERDERSE',
+                 texto='1 · El molde solo, y por dónde viaja la mano.   '
+                       '2 · El molde puesto sobre los cifrados de la primera página.   '
+                       '3 · Ocho compases seguidos sin endurecer el brazo.   '
+                       '4 · El peso: la primera negra pesa, las otras tres caen solas.   '
+                       '5 · La escalera de tempo, y las dos manos desde el c. 3.'),
         ],
     ),
+
 )
 
 if __name__ == '__main__':

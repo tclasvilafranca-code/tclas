@@ -219,114 +219,125 @@ CANCION = dict(
     ),
 
     piano1=dict(
-        intro='Aviso: aquí solo se citan las notas que he podido medir, que son las de la mano derecha. '
-              'Los acordes de la izquierda van en blancas y no se leen con seguridad, así que sus '
-              'ejercicios son andamio en Sol mayor: el acorde exacto, en la partitura.',
+        titulo='Cómo se estudia',
+        esquina='Al piano · pasos 1 y 2 de 5',
+        intro='Aviso: solo se citan las notas que he podido medir, que son las de la derecha. Los '
+              'acordes de la izquierda van en blancas y no se leen con seguridad, así que sus '
+              'ejercicios son ANDAMIO en Sol mayor: el dibujo es el de la partitura, el acorde exacto '
+              'míralo allí. Se empieza por la izquierda porque es la que sostiene la canción entera.',
         reglas=['ANDAMIO EN LA IZQUIERDA · NOTAS MEDIDAS EN LA DERECHA', 'GOLPE ÚNICO', 'LENTO'],
         bloques=[
-            dict(num=1, titulo='La izquierda de los cc. 2–5, capa por capa', clef='bass',
-                 pista='andamio · el dibujo es el de la partitura; el acorde exacto, míralo allí',
-                 sistemas=[dict(cap='a)  solo la nota grave, en blancas: dos por compás',
-                                events=[n('G2', 'h'), n('G2', 'h'), n('E2', 'h'), n('E2', 'h'),
-                                        n('C2', 'h'), n('C2', 'h'), n('D2', 'h'), n('D2', 'h')],
-                                bars=4, clef='bass'),
-                           dict(cap='b)  y ahora la nota grave con el acorde encima, en el mismo golpe',
-                                events=[ac(['G2', 'B3', 'D4']), ac(['G2', 'B3', 'D4']),
-                                        ac(['E2', 'G3', 'B3']), ac(['E2', 'G3', 'B3']),
-                                        ac(['C2', 'E3', 'G3']), ac(['C2', 'E3', 'G3']),
-                                        ac(['D2', 'F3', 'A3']), ac(['D2', 'F3', 'A3'])],
-                                bars=4, clef='bass')]),
-            dict(tipo='nota',
-                 etiqueta='POR QUÉ SUENA HABLADA',
-                 texto='Mira la derecha de los cc. 6, 7 y 8: la misma nota repetida cuatro y cinco veces, '
-                       'con silencios de semicorchea entre medias. Eso es lo que hace que suene a alguien '
-                       'contándote algo y no a una melodía cantada. No ligues esas notas: sepáralas. Lo '
-                       'que suena largo es la izquierda.'),
-            dict(num=2, titulo='El suspiro del c. 5 · notas medidas',
-                 pista='cc. 5 y 32 · las alturas son las de la partitura; el ritmo, simplificado',
-                 sistemas=[dict(cap='en la partitura esto va en semicorcheas y baja por debajo del '
-                                    'pentagrama: aquí en negras, para leerlo',
-                                events=[n('D4'), n('D4'), n('C4'), n('B3'),
-                                        n('A3'), n('A3', 'h'), {'rest': True, 'dur': 'q'},
-                                        n('A3', 'w')],
-                                bars=3)]),
+            dict(num=1, titulo='La izquierda, capa por capa', clef='bass',
+                 pista='cc. 2–5 · andamio · el bajo y el acorde tienen que entrar SIEMPRE a la vez',
+                 sistemas=[
+                     dict(cap='a) solo la nota grave, en blancas: dos por compás',
+                          events=[n('G2', 'h'), n('G2', 'h'), n('E2', 'h'), n('E2', 'h'),
+                                  n('C2', 'h'), n('C2', 'h'), n('D2', 'h'), n('D2', 'h')],
+                          bars=4, clef='bass'),
+                     dict(cap='b) y ahora la nota grave con el acorde encima, en el mismo golpe',
+                          events=[ac(['G2', 'B3', 'D4']), ac(['G2', 'B3', 'D4']),
+                                  ac(['E2', 'G3', 'B3']), ac(['E2', 'G3', 'B3']),
+                                  ac(['C2', 'E3', 'G3']), ac(['C2', 'E3', 'G3']),
+                                  ac(['D2', 'F3', 'A3']), ac(['D2', 'F3', 'A3'])],
+                          bars=4, clef='bass', show_time=False),
+                     dict(cap='c) y el c. 16, el único de toda la canción en el que la izquierda anda · '
+                              'va en blancas menos aquí: cuenta las cuatro negras en voz alta',
+                          events=[ac(['C2', 'E3', 'G3'], 'q'), ac(['C2', 'E3', 'G3'], 'q'),
+                                  ac(['C2', 'E3', 'G3'], 'q'), ac(['C2', 'E3', 'G3'], 'q'),
+                                  ac(['C2', 'E3', 'G3'], 'w')],
+                          bars=2, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='ESTO NO SE SOSTIENE CON LA MANO',
-                 texto='En la izquierda, la nota grave y el acorde están escritos como blancas: suenan a '
-                       'la vez los dos tiempos. Pero entre los dos hay más de una octava y media, y esa '
-                       'distancia no la aguanta ninguna mano. Se aguanta con el PEDAL. Y el pedal se '
-                       'cambia justo DESPUÉS de tocar el acorde nuevo, nunca antes.'),
-            dict(num=3, titulo='La derecha de los cc. 6, 7 y 8 · notas medidas',
-                 pista='cc. 6–8 · las alturas son las de la partitura; el ritmo, simplificado',
-                 sistemas=[dict(cap='cada compás se planta en una nota y la repite: Si, luego Do, luego '
-                                    'Mi · sepáralas, no las ligues',
-                                events=[n('B4'), n('B4'), n('B4'), n('B4'),
-                                        n('C5'), n('C5'), n('C5'), n('C5'),
-                                        n('E5'), n('E5'), n('E5'), n('E5'),
-                                        n('E5', 'w')],
-                                bars=4)]),
-            dict(num=4, titulo='El c. 16, el único en el que la izquierda anda', clef='bass',
-                 pista='c. 16 · andamio · cuatro negras sobre la misma nota grave, medido',
-                 sistemas=[dict(cap='en toda la canción va en blancas menos aquí: cuenta las cuatro '
-                                    'negras en voz alta',
-                                events=[ac(['C2', 'E3', 'G3'], 'q'), ac(['C2', 'E3', 'G3'], 'q'),
-                                        ac(['C2', 'E3', 'G3'], 'q'), ac(['C2', 'E3', 'G3'], 'q'),
-                                        ac(['C2', 'E3', 'G3'], 'w')],
-                                bars=2, clef='bass')]),
+                 texto='La nota grave y el acorde están escritos como blancas: suenan los dos tiempos. '
+                       'Pero entre ellos hay más de una octava y media, y esa distancia no la aguanta '
+                       'ninguna mano. Se aguanta con el PEDAL, y el pedal se cambia justo DESPUÉS de '
+                       'tocar el acorde nuevo, nunca antes.'),
+            dict(num=2, titulo='La derecha, que no canta: habla',
+                 pista='cc. 5–8 · las alturas son las de la partitura; el ritmo, simplificado para leerlo',
+                 sistemas=[
+                     dict(cap='a) el suspiro del c. 5 · en la partitura va en semicorcheas y baja por '
+                              'debajo del pentagrama; aquí en negras, solo para leerlo',
+                          events=[n('D4'), n('D4'), n('C4'), n('B3'),
+                                  n('A3'), n('A3', 'h'), {'rest': True, 'dur': 'q'},
+                                  n('A3', 'w')],
+                          bars=3),
+                     dict(cap='b) y los cc. 6, 7 y 8 · cada compás se planta en una nota y la repite: '
+                              'Si, luego Do, luego Mi — sepáralas, no las ligues',
+                          events=[n('B4'), n('B4'), n('B4'), n('B4'),
+                                  n('C5'), n('C5'), n('C5'), n('C5'),
+                                  n('E5'), n('E5'), n('E5'), n('E5'),
+                                  n('E5', 'w')],
+                          bars=4, show_time=False),
+                 ]),
+            dict(tipo='nota',
+                 etiqueta='POR QUÉ SUENA HABLADA',
+                 texto='La misma nota repetida cuatro y cinco veces, con silencios de semicorchea entre '
+                       'medias. Eso es lo que hace que suene a alguien contándote algo y no a una melodía '
+                       'cantada. No ligues esas notas: sepáralas. Lo que suena largo es la izquierda.'),
         ],
     ),
 
     piano2=dict(
-        intro='Montarla es darse cuenta de que hay menos canción de la que parece. Son 32 compases, pero '
-              'los cuatro últimos son los cuatro primeros y los dos bloques llevan repetición. Lo que se '
-              'aprende de verdad son los cc. 2 al 28.',
+        titulo='Cómo se estudia (sigue)',
+        esquina='Al piano · pasos 3, 4 y 5',
+        intro='Hay menos canción de la que parece. Son 32 compases, pero los cuatro últimos son los '
+              'cuatro primeros y los dos bloques llevan repetición: lo que se aprende de verdad son '
+              'los cc. 2 al 28.',
         reglas=['LOS CC. 29–32 SON LOS CC. 2–5', 'PRIMERO LA IZQUIERDA SOLA', 'LENTO DE VERDAD'],
         bloques=[
+            dict(num=3, titulo='Solo el primer golpe de cada compás', clef='bass',
+                 pista='andamio · toca únicamente el acorde que cae en el uno y salta al compás siguiente',
+                 sistemas=[
+                     dict(cap='a) ocho compases seguidos, un acorde por compás: así se oye por dónde va '
+                              'la canción sin tocar ni una nota de la melodía',
+                          events=[ac(['G2', 'B2', 'D3'], 'w'), ac(['E2', 'G2', 'B2'], 'w'),
+                                  ac(['C2', 'E2', 'G2'], 'w'), ac(['D2', 'F2', 'A2'], 'w'),
+                                  ac(['G2', 'B2', 'D3'], 'w'), ac(['E2', 'G2', 'B2'], 'w'),
+                                  ac(['A2', 'C3', 'E3'], 'w'), ac(['D2', 'F2', 'A2'], 'w')],
+                          bars=8, clef='bass'),
+                     dict(cap='b) y lo mismo quitando el acorde: solo la nota grave · dilo en voz alta '
+                              'mientras lo tocas — Sol, Mi, Do, Re, Sol, Mi, La, Re',
+                          events=[n(p, 'w') for p in ('G2', 'E2', 'C2', 'D2',
+                                                      'G2', 'E2', 'A2', 'D2')],
+                          bars=8, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='LA FORMA, EN UNA LÍNEA',
                  texto='c. 1 de entrada · ‖: cc. 2–28 :‖ · ‖: cc. 29–32 :‖. Dos bloques, los dos con '
-                       'barra de repetición, y el segundo bloque son las mismas notas que los cc. 2 al 5. '
-                       'Esto no es una interpretación mía: está medido compás a compás, y las notas de '
-                       'los cc. 29, 30, 31 y 32 caen exactamente en los mismos sitios del pentagrama que '
-                       'las de los cc. 2, 3, 4 y 5, con algún sostenido añadido. Cuando te sepas los '
-                       'cuatro primeros compases, tienes el final regalado.'),
-            dict(num=5, titulo='Solo el primer golpe de cada compás', clef='bass',
-                 pista='andamio · toca únicamente el acorde que cae en el uno, y salta al siguiente compás',
-                 sistemas=[dict(cap='a)  ocho compases seguidos, un acorde por compás: así se oye por '
-                                    'dónde va la canción sin tocar ni una nota de la melodía',
-                                events=[ac(['G2', 'B2', 'D3'], 'w'), ac(['E2', 'G2', 'B2'], 'w'),
-                                        ac(['C2', 'E2', 'G2'], 'w'), ac(['D2', 'F2', 'A2'], 'w'),
-                                        ac(['G2', 'B2', 'D3'], 'w'), ac(['E2', 'G2', 'B2'], 'w'),
-                                        ac(['A2', 'C3', 'E3'], 'w'), ac(['D2', 'F2', 'A2'], 'w')],
-                                bars=8, clef='bass')]),
-            dict(num=6, titulo='La costura del c. 28 al c. 29',
+                       'barra de repetición, y el segundo son las mismas notas que los cc. 2 al 5. No es '
+                       'una interpretación mía: está medido compás a compás, y las notas de los cc. 29 a '
+                       '32 caen exactamente en los mismos sitios del pentagrama que las de los cc. 2 a 5, '
+                       'con algún sostenido añadido. Cuando te sepas los cuatro primeros, tienes el final '
+                       'regalado.'),
+            dict(num=4, titulo='La costura del c. 28 al c. 29',
                  pista='andamio · el sitio donde se cierra el bloque grande y vuelve a empezar la frase',
-                 sistemas=[dict(cap='para y respira en la barra: la frase que viene detrás es la del '
-                                    'principio, y tiene que sonar igual de tranquila',
-                                events=[n('B4', 'h'), n('C5', 'h'), n('G4', 'h'), {'rest': True, 'dur': 'h'},
-                                        n('G4'), n('G4'), n('F4'), n('G4'),
-                                        n('G4', 'w')],
-                                bars=4)]),
+                 sistemas=[
+                     dict(cap='a) para y respira en la barra: lo que viene detrás es la frase del '
+                              'principio, y tiene que sonar igual de tranquila',
+                          events=[n('B4', 'h'), n('C5', 'h'), n('G4', 'h'), {'rest': True, 'dur': 'h'},
+                                  n('G4'), n('G4'), n('F4'), n('G4'),
+                                  n('G4', 'w')],
+                          bars=4),
+                 ]),
             dict(tipo='nota',
                  etiqueta='LOS TRESILLOS DE LOS CC. 24 AL 27',
-                 texto='Ahí aparece un 3 encima de algunos grupos: significa que en ese tiempo caben tres '
-                       'notas donde normalmente caben dos. No se toca más rápido, se reparte el mismo '
-                       'tiempo entre tres. Y ojo, porque es el sitio donde la canción se calienta: los '
-                       'tresillos empujan justo antes de que vuelva la frase del principio. Cuéntalos con '
-                       'el pie hasta que salgan sin pensar, y luego olvídate de contar.'),
-            dict(tipo='nota',
-                 etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
-                 texto='1 · La izquierda sola de los cc. 2 al 9, mirándote la mano, sin partitura. '
-                       '2 · La izquierda de los cc. 10 al 28, y para en el c. 16 a contar las negras. '
-                       '3 · La derecha sola, separando las notas repetidas, sin ligarlas. '
-                       '4 · Las dos manos de los cc. 2 al 5, que son también el final. '
-                       '5 · Y del 2 al 28 seguido, lento, con la repetición incluida.'),
+                 texto='Ahí aparece un 3 encima de algunos grupos: en ese tiempo caben tres notas donde '
+                       'normalmente caben dos. No se toca más rápido, se reparte el mismo tiempo entre '
+                       'tres. Y es el sitio donde la canción se calienta: los tresillos empujan justo '
+                       'antes de que vuelva la frase del principio. Cuéntalos con el pie hasta que salgan '
+                       'sin pensar, y luego olvídate de contar.'),
             dict(tipo='escalera', valores=[44, 50, 56, 62, 68, 72],
-                 regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
-            dict(tipo='tracker', titulo='La prueba de la semana',
-                 pie='Marca el día en que el bajo y el acorde hayan entrado siempre a la vez.'),
+                 regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
+            dict(tipo='nota', etiqueta='LOS CINCO PASOS, PARA NO PERDERSE',
+                 texto='1 · La izquierda capa por capa, cc. 2–5, y el c. 16 aparte.   '
+                       '2 · La derecha, separando las notas repetidas.   '
+                       '3 · Un golpe por compás, ocho compases seguidos.   '
+                       '4 · La costura del 28 al 29.   '
+                       '5 · La escalera, y del c. 2 al 28 seguido con la repetición.'),
         ],
     ),
+
 )
 
 if __name__ == '__main__':

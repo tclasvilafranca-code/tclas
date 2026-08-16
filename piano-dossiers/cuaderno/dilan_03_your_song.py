@@ -208,99 +208,109 @@ CANCION = dict(
     ),
 
     piano1=dict(
-        intro='La partitura, abierta en trozos. Aquí no hay melodía: en esta canción la melodía no es '
-              'el problema. El problema es la mano izquierda y el recorrido de la hoja.',
+        titulo='Cómo se estudia',
+        esquina='Al piano · pasos 1 y 2 de 5',
+        intro='En esta canción la melodía no es el problema: el problema es la mano izquierda y el '
+              'recorrido de la hoja. Por eso se empieza por el bajo y no se toca un acorde completo '
+              'hasta el paso 2. Cinco pasos, en este orden.',
         reglas=['ARMADURA DE MI♭', 'TOCA EL BAJO, NO EL ACORDE', 'CUENTA LOS COMPASES DE 2/4'],
         bloques=[
-            dict(num=1, titulo='El bajo de la estrofa entera',
-                 pista='leído de los cifrados: E♭ · A♭ · B♭ · Gm · Cm · Cm/B♭ · Cm/A · A♭ · E♭/B♭…',
-                 sistemas=[dict(cap='una nota por medio compás · esto solo, sin acordes, ya suena a Your Song',
-                                events=BAJO_ESTROFA, bars=4, clef='bass')]),
-            dict(num=2, titulo='El tramo que baja cromático',
-                 pista='cc. de Cm a A♭ · Do · Si♭ · La♮ · La♭ · el La lleva becuadro',
-                 sistemas=[dict(cap='dos veces seguidas, escuchando ese La natural: es la nota del tramo',
-                                events=BAJO_CROM + [dict(e) for e in BAJO_CROM],
-                                bars=4, clef='bass')]),
-            dict(num=3, titulo='La otra bajada',
-                 pista='E♭ · B♭/D · Cm → Mi♭ · Re · Do · sin alteraciones, más fácil de oír',
-                 sistemas=[dict(cap='mismo gesto, otro tramo de la canción',
-                                events=BAJO_MIb, bars=2, clef='bass')]),
+            dict(num=1, titulo='El bajo, que es lo que se oye', clef='bass',
+                 pista='leído de los cifrados impresos · esto solo, sin acordes, ya suena a Your Song',
+                 sistemas=[
+                     dict(cap='a) la estrofa entera · E♭ · A♭ · B♭ · Gm · Cm · Cm/B♭ · Cm/A · A♭ · E♭/B♭…',
+                          events=BAJO_ESTROFA, bars=4, clef='bass'),
+                     dict(cap='b) el tramo que baja cromático, dos veces · Do · Si♭ · La♮ · La♭, '
+                              'escuchando ese La natural: es la nota del tramo',
+                          events=BAJO_CROM + [dict(e) for e in BAJO_CROM],
+                          bars=4, clef='bass', show_time=False),
+                     dict(cap='c) y la otra bajada, sin alteraciones y más fácil de oír · Mi♭ · Re · Do',
+                          events=BAJO_MIb, bars=2, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='POR QUÉ SE EMPIEZA POR EL BAJO',
                  texto='Un cifrado con barra, como Cm/B♭, dice dos cosas: qué acorde suena y qué nota va '
                        'debajo. La de debajo es la que decide si la canción avanza o se queda parada, y '
                        'es la que el oído sigue. Si montas los acordes completos antes de tener esa línea '
-                       'clara, acabas tocando bloques correctos que no van a ninguna parte. Toca solo los '
-                       'bajos hasta que te suenen a melodía, y después les pones el acorde encima.'),
-            dict(num=4, titulo='El acorde encima del bajo',
-                 pista='ahora sí: la tríada completa sobre cada uno de esos bajos',
-                 sistemas=[dict(cap='Do m · Do m/Si♭ · Do m/La♮ · La♭ · el acorde apenas cambia',
-                                events=bloque(('C3', 'E3', 'G3')) + bloque(('B2', 'E3', 'G3')) +
-                                       bloque(('An2', 'E3', 'G3')) + bloque(('A2', 'C3', 'E3')),
-                                bars=2, clef='bass')]),
+                       'clara, acabas tocando bloques correctos que no van a ninguna parte.'),
+            dict(num=2, titulo='Y ahora el acorde encima', clef='bass',
+                 pista='la tríada completa sobre cada uno de esos bajos · fíjate en lo poco que cambia',
+                 sistemas=[
+                     dict(cap='a) Do m · Do m/Si♭ · Do m/La♮ · La♭ · el acorde apenas se mueve: lo que '
+                              'cambia es la nota de abajo',
+                          events=bloque(('C3', 'E3', 'G3')) + bloque(('B2', 'E3', 'G3')) +
+                                 bloque(('An2', 'E3', 'G3')) + bloque(('A2', 'C3', 'E3')),
+                          bars=2, clef='bass'),
+                     dict(cap='b) un solo golpe por compás, con el acorde entero · ocho compases y ahí '
+                              'está la estrofa',
+                          events=[{'pitches': list(t), 'dur': 'w'} for t in
+                                  [('E3', 'G3', 'B3'), ('B2', 'D3', 'F3'), ('C3', 'E3', 'G3'),
+                                   ('An2', 'E3', 'G3'), ('B2', 'E3', 'G3'), ('Bn2', 'D3', 'G3'),
+                                   ('E3', 'G3', 'B3'), ('A2', 'C3', 'E3')]],
+                          bars=8, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='EL LA NATURAL, QUE NO ES UNA ERRATA',
                  texto='La armadura de Mi♭ dice que todos los La son bemoles. Y sin embargo en el acorde '
                        'Cm/A hay un La con becuadro delante. No está mal escrito: es una alteración '
-                       'accidental puesta a propósito, y es la nota que hace que ese tramo suene a Elton '
-                       'John y no a un acompañamiento cualquiera. Dura hasta la barra de compás y ni un '
-                       'golpe más: en el compás siguiente el La vuelve a ser bemol.'),
+                       'puesta a propósito, y es la nota que hace que ese tramo suene a Elton John. Dura '
+                       'hasta la barra de compás y ni un golpe más.'),
         ],
     ),
 
     piano2=dict(
-        intro='Montarla es, en esta canción, saber por dónde va la hoja. El segno, la repetición y las '
-              'dos casillas hacen que se toque en un orden distinto del que está escrito.',
+        titulo='Cómo se estudia (sigue)',
+        esquina='Al piano · pasos 3, 4 y 5',
+        intro='El bajo y los acordes ya están. Lo que queda en esta canción no son notas: es saber por '
+              'dónde va la hoja. El segno, la repetición y las dos casillas hacen que se toque en un '
+              'orden distinto del que está escrito.',
         reglas=['PRIMERO EL RECORRIDO, LUEGO LAS NOTAS', 'EL 2/4 SE CUENTA', 'DESPACIO Y SIN PARAR'],
         bloques=[
+            dict(num=3, titulo='El recorrido de la hoja', clef='bass',
+                 pista='los dos sitios donde uno se pierde: la entrada y las dos casillas',
+                 sistemas=[
+                     dict(cap='a) la introducción, dos compases · E♭ · A♭ · E♭ · A♭, y ahí empieza la '
+                              'estrofa con el segno',
+                          events=[{'pitch': p, 'dur': 'h'} for p in ('E3', 'A2', 'E3', 'A2')],
+                          bars=2, clef='bass'),
+                     dict(cap='b) las dos casillas · la 1ª (A♭ · B♭) te devuelve al segno; la 2ª '
+                              '(A♭ · E♭) sigue hacia el puente',
+                          events=[{'pitch': p, 'dur': 'h'} for p in ('A2', 'B2', 'A2', 'E3')],
+                          bars=2, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
-                 etiqueta='EL RECORRIDO DE LA HOJA',
+                 etiqueta='CÓMO SE HACE EL PASO 3',
                  texto='1 · Los dos compases de introducción. 2 · Empieza la estrofa: ahí está el SEGNO, '
                        'la marca a la que vas a volver. 3 · Llegas a la casilla 1ª, la tocas y vuelves al '
                        'segno. 4 · La segunda vez te saltas la casilla 1ª y entras por la 2ª. 5 · Sigue el '
-                       'puente. Sigue la partitura con el dedo y di en voz alta dónde estás antes de tocar '
-                       'una sola nota.'),
+                       'puente. Recórrelo con el dedo y di en voz alta dónde estás antes de tocar una '
+                       'sola nota.'),
+            dict(num=4, titulo='El esqueleto, un golpe por compás', clef='bass',
+                 pista='ocho notas · si con esto ya reconoces la estrofa entera, es que la tienes',
+                 sistemas=[
+                     dict(cap='a) solo el bajo del primer acorde de cada compás',
+                          events=[{'pitch': p, 'dur': 'w'} for p in
+                                  ('E3', 'B2', 'C3', 'An2', 'B2', 'Bn2', 'E3', 'A2')],
+                          bars=8, clef='bass'),
+                 ]),
             dict(tipo='nota',
                  etiqueta='EL COMPÁS QUE CAMBIA',
                  texto='En medio del 4/4 hay compases sueltos de 2/4: duran la mitad. No están para '
-                       'complicarte la vida, están porque la frase cantada acaba antes y el compás se '
-                       'ajusta a ella. Cuenta en voz alta UN-dos-tres-cuatro, UN-dos, UN-dos-tres-cuatro '
-                       'y verás que no hay nada raro. El error típico es acelerar en el compás corto '
-                       'para llegar al siguiente: dura dos tiempos exactos, ni uno menos.'),
-            dict(tipo='nota',
-                 etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
-                 texto='1 · El recorrido, con el dedo y en voz alta, sin piano. '
-                       '2 · Solo los bajos de toda la estrofa. '
-                       '3 · Los acordes completos, todavía sin la derecha. '
-                       '4 · La derecha sola, despacio, contando los tresillos. '
-                       '5 · Las dos manos, pero solo desde el segno hasta la casilla 1ª. El resto, la '
-                       'semana que viene.'),
-            dict(num=5, titulo='El esqueleto de la estrofa', clef='bass',
-                 pista='de los cifrados impresos · un solo golpe por compás, para oír la forma entera',
-                 sistemas=[dict(cap='a)  solo el bajo del primer acorde de cada compás: ocho notas y ahí '
-                                    'está la estrofa',
-                                events=[{'pitch': p, 'dur': 'w'} for p in
-                                        ('E3', 'B2', 'C3', 'An2', 'B2', 'Bn2', 'E3', 'A2')],
-                                bars=8, clef='bass'),
-                           dict(cap='b)  y ahora con el acorde encima, todavía un golpe por compás',
-                                events=[{'pitches': list(t), 'dur': 'w'} for t in
-                                        [('E3', 'G3', 'B3'), ('B2', 'D3', 'F3'), ('C3', 'E3', 'G3'),
-                                         ('An2', 'E3', 'G3'), ('B2', 'E3', 'G3'), ('Bn2', 'D3', 'G3'),
-                                         ('E3', 'G3', 'B3'), ('A2', 'C3', 'E3')]],
-                                bars=8, clef='bass')]),
+                       'complicarte la vida, están porque la frase cantada acaba antes. Cuenta en voz '
+                       'alta UN-dos-tres-cuatro, UN-dos, UN-dos-tres-cuatro y verás que no hay nada raro. '
+                       'El error típico es acelerar en el compás corto para llegar al siguiente: dura dos '
+                       'tiempos exactos, ni uno menos.'),
             dict(tipo='escalera', valores=[40, 46, 52, 58, 62, 66],
-                 regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
-            dict(tipo='nota',
-                 etiqueta='POR QUÉ SE MONTA CON UN GOLPE POR COMPÁS',
-                 texto='El ejercicio 5 quita todo menos el primer golpe de cada compás. Suena pobre, y '
-                       'esa es la idea: si tocando ocho notas ya reconoces la estrofa entera, es que la '
-                       'tienes. Si te pierdes, es que estabas leyendo compás a compás sin saber por dónde '
-                       'ibas. Cuando el esqueleto esté, vuelve a poner los dos acordes por compás y luego '
-                       'la derecha encima: verás que ya no hay nada que aprender, solo que rellenar.'),
-            dict(tipo='tracker', titulo='La prueba de la semana',
-                 pie='Marca el día en que hayas hecho el recorrido entero sin equivocarte de casilla.'),
+                 regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
+            dict(tipo='nota', etiqueta='LOS CINCO PASOS, PARA NO PERDERSE',
+                 texto='1 · Los bajos solos, hasta que te suenen a melodía.   '
+                       '2 · Los acordes encima, todavía sin la derecha.   '
+                       '3 · El recorrido, con el dedo y en voz alta, sin piano.   '
+                       '4 · El esqueleto, un golpe por compás.   '
+                       '5 · La escalera de tempo, y las dos manos del segno a la casilla 1ª.'),
         ],
     ),
+
 )
 
 if __name__ == '__main__':

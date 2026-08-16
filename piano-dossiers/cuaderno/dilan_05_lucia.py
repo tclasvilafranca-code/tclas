@@ -198,97 +198,108 @@ CANCION = dict(
     ),
 
     piano1=dict(
-        intro='La partitura, abierta en trozos. Lo que aquí se cita está medido: los dos acordes de la '
-              'primera frase y la nota de abajo que los sostiene. La melodía no aparece, porque no está '
-              'medida y no se inventa.',
+        titulo='Cómo se estudia',
+        esquina='Al piano · pasos 1 y 2 de 5',
+        intro='Toda esta canción se sostiene sobre una nota grave que se mueve medio tono y vuelve. '
+              'Por eso el paso 1 es solo esa nota: si la tienes, lo demás es rellenar. La melodía no '
+              'aparece en esta hoja porque no está medida, y no se inventa.',
         reglas=['LA MENOR, SIN ARMADURA', 'EL PRIMER ACORDE PESA MÁS', 'MIRA SIEMPRE LA NOTA DE ABAJO'],
         bloques=[
-            dict(num=1, titulo='Solo el bajo, Mi y Fa',
-                 pista='de los cifrados: Am/E · Dm/F · E7 · Am/E → Mi · Fa · Mi · Mi',
-                 sistemas=[dict(cap='una nota por compás · esto solo, y ya se balancea como la canción',
-                                events=BAJO_MIFA, bars=4, clef='bass')]),
-            dict(num=2, titulo='Los dos acordes de la primera frase',
-                 pista='cc. 4 y 5 medidos · Am/E = Mi·La·Do, Dm/F = Fa·La·Re',
-                 sistemas=[dict(cap='cuatro golpes por compás · el primero manda, los otros tres acompañan',
-                                events=ac(AmE, veces=4) + ac(DmF, veces=4), bars=2, clef='bass')]),
+            dict(num=1, titulo='Solo la nota de abajo', clef='bass',
+                 pista='de los cifrados impresos · una nota por compás, y ya se balancea como la canción',
+                 sistemas=[
+                     dict(cap='a) Am/E · Dm/F · E7 · Am/E → Mi · Fa · Mi · Mi',
+                          events=BAJO_MIFA, bars=4, clef='bass'),
+                     dict(cap='b) los nueve bajos de la primera página · Mi · Fa · Mi · Mi · Fa · Fa · '
+                              'Mi · Fa · Mi — apréndete esto y ya no te pierdes en la hoja',
+                          events=[n(p, 'w') for p in ('E3', 'F3', 'E3', 'E3', 'F3',
+                                                      'F3', 'E3', 'F3', 'E3')],
+                          bars=9, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='POR QUÉ SUENA A SERRAT',
-                 texto='Fíjate en lo que pasa entre esos dos acordes: el La se queda quieto en las dos, y '
-                       'lo único que se mueve de verdad es la nota de abajo, medio tono. Toda la canción '
-                       'está construida así, y por eso se balancea en vez de avanzar. Cuando toques, no '
-                       'pienses "ahora La menor, ahora Re menor": piensa "ahora Mi abajo, ahora Fa abajo". '
-                       'Es más fácil y suena mejor.'),
-            dict(num=3, titulo='El balanceo',
-                 pista='los dos acordes alternando compás a compás · Mi abajo, Fa abajo, Mi, Fa',
-                 sistemas=[dict(cap='baja el volumen del segundo golpe al cuarto · si los cuatro pesan igual, se acabó',
-                                events=ac(AmE, veces=4) + ac(DmF, veces=4) +
-                                       ac(AmE, veces=4) + ac(DmF, veces=4),
-                                bars=4, clef='bass')]),
-            dict(num=4, titulo='El acorde que quiere resolver',
-                 pista='el E7 lleva Sol♯ · después de él, la oreja pide La menor',
-                 sistemas=[dict(cap='toca el E7 y para un segundo: vas a notar tú solo hacia dónde tira',
-                                events=ac(('E3', 'G#3', 'D4'), veces=4) + ac(('E3', 'A3', 'C4'), veces=4),
-                                bars=2, clef='bass')]),
+                 texto='Entre los dos acordes de la primera frase el La se queda quieto, y lo único que '
+                       'se mueve de verdad es la nota de abajo, medio tono. Toda la canción está '
+                       'construida así, y por eso se balancea en vez de avanzar. Cuando toques, no '
+                       'pienses “ahora La menor, ahora Re menor”: piensa “ahora Mi abajo, ahora Fa '
+                       'abajo”. Es más fácil y suena mejor.'),
+            dict(num=2, titulo='El acorde encima de esa nota', clef='bass',
+                 pista='cc. 4 y 5 medidos · Am/E = Mi·La·Do, Dm/F = Fa·La·Re · cuatro golpes por compás',
+                 sistemas=[
+                     dict(cap='a) los dos acordes de la primera frase · el primer golpe manda, los otros '
+                              'tres acompañan',
+                          events=ac(AmE, veces=4) + ac(DmF, veces=4), bars=2, clef='bass'),
+                     dict(cap='b) y alternándolos, que es el balanceo de la canción · baja el volumen del '
+                              'segundo golpe al cuarto; si los cuatro pesan igual, se acabó',
+                          events=ac(AmE, veces=4) + ac(DmF, veces=4) +
+                                 ac(AmE, veces=4) + ac(DmF, veces=4),
+                          bars=4, clef='bass', show_time=False),
+                     dict(cap='c) los nueve compases seguidos · la disposición de los cinco últimos '
+                              'sale del cifrado impreso, no está medida · el paso 2 terminado',
+                          events=(ac(AmE, veces=4) + ac(DmF, veces=4) +
+                                  ac(('E3', 'G#3', 'D4'), veces=4) + ac(AmE, veces=4) +
+                                  ac(('F3', 'A3', 'C4'), veces=4) + ac(('F3', 'G3', 'B3'), veces=4) +
+                                  ac(('E3', 'G3', 'C4'), veces=4) + ac(('F3', 'B3', 'D4'), veces=4) +
+                                  ac(('E3', 'G#3', 'D4'), veces=4)),
+                          bars=5, clef='bass', show_time=False),
+                 ]),
+        ],
+    ),
+
+    piano2=dict(
+        titulo='Cómo se estudia (sigue)',
+        esquina='Al piano · pasos 3, 4 y 5',
+        intro='El balanceo ya está. Quedan los dos acordes que tienen truco, aguantar treinta y seis '
+              'compases sin que suene a máquina, y entrar en el sitio: la melodía empieza antes del '
+              'primer tiempo.',
+        reglas=['NO SUENE A METRÓNOMO', 'LA ANACRUSA VA ANTES DEL 1', 'DESPACIO Y SIN PARAR'],
+        bloques=[
+            dict(num=3, titulo='Los dos acordes que tienen truco', clef='bass',
+                 pista='uno pide resolver y el otro se disfraza de La menor · cambia UNA nota',
+                 sistemas=[
+                     dict(cap='a) el E7 lleva Sol♯ · uno por compás, y para a escuchar: vas a notar tú '
+                              'solo hacia dónde tira',
+                          events=ac(('E3', 'G#3', 'D4'), 'w') + ac(('E3', 'A3', 'C4'), 'w') +
+                                 ac(('E3', 'G#3', 'D4'), 'w') + ac(('E3', 'A3', 'C4'), 'w'),
+                          bars=4, clef='bass'),
+                     dict(cap='b) C/E y Am/E · Mi·Sol·Do y Mi·La·Do: seguidos y sostenidos, hasta que '
+                              'oigas cuál es la nota que se mueve',
+                          events=ac(('E3', 'G3', 'C4'), 'w') + ac(('E3', 'A3', 'C4'), 'w') +
+                                 ac(('E3', 'G3', 'C4'), 'w') + ac(('E3', 'A3', 'C4'), 'w'),
+                          bars=4, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='QUÉ SIGNIFICA LA BARRA DEL CIFRADO',
                  texto='Am/E quiere decir: acorde de La menor, pero con un Mi como nota más grave. Lo de '
                        'antes de la barra es el acorde; lo de después, lo que toca el meñique. Aquí casi '
                        'todos los cifrados llevan barra, y ahí está el color de la pieza.'),
-            dict(num=5, titulo='Do sobre Mi, que se parece muchísimo a La menor',
-                 pista='cifrados C/E y Am/E · entre los dos solo cambia UNA nota',
-                 sistemas=[dict(cap='Mi·Sol·Do y Mi·La·Do · toca los dos seguidos hasta que oigas cuál '
-                                    'es la que se mueve',
-                                events=ac(('E3', 'G3', 'C4'), veces=4) + ac(('E3', 'A3', 'C4'), veces=4),
-                                bars=2, clef='bass')]),
+            dict(num=4, titulo='Aguantar sin endurecerse', clef='bass',
+                 pista='ocho compases seguidos de cuatro golpes · aquí se ve si el brazo está suelto',
+                 sistemas=[
+                     dict(cap='a) si a mitad de camino empiezas a golpear, para y empieza otra vez más flojo',
+                          events=(ac(('A2', 'C3', 'E3'), veces=4) + ac(('F2', 'A2', 'C3'), veces=4) +
+                                  ac(('C3', 'E3', 'G3'), veces=4) + ac(('E3', 'G#3', 'B3'), veces=4)),
+                          bars=4, clef='bass'),
+                 ]),
+            dict(tipo='nota',
+                 etiqueta='LA ANACRUSA, Y DÓNDE PARAR',
+                 texto='La melodía no empieza en el primer tiempo: empieza antes, en el último tiempo del '
+                       'compás anterior. Eso es la anacrusa, y es lo que hace que la frase suene hablada. '
+                       'Cuenta un compás entero en voz alta antes de tocar y entra en el “cuatro”; si '
+                       'entras en el “uno”, la canción se desplaza entera. Y esta semana se para en la '
+                       'barra de repetición del c. 6: seis compases bien montados, con cuatro acordes '
+                       'cada uno, son más trabajo del que parece.'),
+            dict(tipo='escalera', valores=[45, 52, 58, 64, 70, 75],
+                 regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
+            dict(tipo='nota', etiqueta='LOS CINCO PASOS, PARA NO PERDERSE',
+                 texto='1 · Solo los bajos de la primera página: Mi, Fa, Mi, Mi, Fa, Fa, Mi, Fa, Mi.   '
+                       '2 · Los acordes encima, bajando de volumen dentro de cada compás.   '
+                       '3 · El E7 y el C/E, oyendo la nota que se mueve.   '
+                       '4 · Ocho compases seguidos sin endurecer el brazo.   '
+                       '5 · La escalera de tempo, y las dos manos hasta el c. 6.'),
         ],
     ),
 
-    piano2=dict(
-        intro='Montarla es aguantar: cuatro acordes por compás durante treinta y seis compases sin que '
-              'suene mecánico, y sin perder de vista dónde está el bajo.',
-        reglas=['NO SUENE A METRÓNOMO', 'LA ANACRUSA VA ANTES DEL 1', 'DESPACIO Y SIN PARAR'],
-        bloques=[
-            dict(num=6, titulo='Los nueve bajos de la primera página', clef='bass',
-                 pista='de los cifrados impresos · Mi · Fa · Mi · Mi · Fa · Fa · Mi · Fa · Mi',
-                 sistemas=[dict(cap='una nota por compás, sin acordes: si te aprendes esto, ya no te '
-                                    'pierdes nunca en la página',
-                                events=[n(p, 'w') for p in ('E3', 'F3', 'E3', 'E3', 'F3',
-                                                            'F3', 'E3', 'F3', 'E3')],
-                                bars=9, clef='bass')]),
-            dict(num=7, titulo='Aguantar sin endurecerse',
-                 pista='ocho compases seguidos de cuatro golpes · aquí se ve si el brazo está suelto',
-                 sistemas=[dict(cap='si a mitad de camino empiezas a golpear, para y empieza otra vez más flojo',
-                                events=(ac(('A2', 'C3', 'E3'), veces=4) + ac(('F2', 'A2', 'C3'), veces=4) +
-                                        ac(('C3', 'E3', 'G3'), veces=4) + ac(('E3', 'G#3', 'B3'), veces=4)),
-                                bars=4, clef='bass')]),
-            dict(tipo='nota',
-                 etiqueta='LA ANACRUSA',
-                 texto='La melodía no empieza en el primer tiempo del compás: empieza antes, en el último '
-                       'tiempo del compás anterior. Eso se llama anacrusa y es lo que hace que la frase '
-                       'suene hablada y no marcada. Para cogerla, cuenta un compás entero en voz alta '
-                       'antes de tocar y entra en el "cuatro". Si entras en el "uno", la canción se '
-                       'desplaza entera y ya no encaja con la izquierda.'),
-            dict(tipo='nota',
-                 etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
-                 texto='1 · Solo los bajos de toda la primera página: Mi, Fa, Mi, Mi, Fa, Fa, Mi, Fa, Mi. '
-                       '2 · Los acordes completos, con los cuatro golpes, bajando de volumen dentro de cada '
-                       'compás. '
-                       '3 · La melodía sola, contando la anacrusa en voz alta. '
-                       '4 · Las dos manos hasta la barra de repetición del c. 6, y ahí paras. '
-                       '5 · Cada día, un minuto tocando solo Mi–Fa–Mi–Fa con el pulso: es el esqueleto.'),
-            dict(tipo='nota',
-                 etiqueta='DÓNDE PARAR ESTA SEMANA',
-                 texto='La primera página llega hasta la barra de repetición del c. 6. Ahí es donde se '
-                       'para. Montar seis compases bien es más trabajo del que parece cuando cada uno '
-                       'lleva cuatro acordes, y es lo que hace que la semana que viene los treinta '
-                       'restantes vayan solos, porque la izquierda ya no cambia de gesto en toda la '
-                       'canción: solo cambia de acorde.'),
-            dict(tipo='escalera', valores=[45, 52, 58, 64, 70, 75],
-                 regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
-            dict(tipo='tracker', titulo='La prueba de la semana',
-                 pie='Marca el día en que hayas llegado a la repetición del c. 6 sin que suene a máquina.'),
-        ],
-    ),
 )
 
 if __name__ == '__main__':

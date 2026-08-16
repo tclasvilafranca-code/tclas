@@ -193,127 +193,138 @@ CANCION = dict(
     ),
 
     piano1=dict(
-        intro='Aviso: de esta partitura no se citan notas. Su mano izquierda va en redondas y su derecha '
-              'es muy densa, y no he podido medirlas con seguridad. Lo que hay aquí es andamio con los '
-              'grados de Re mayor para trabajar EL GESTO; las notas, en la partitura de la página 1.',
+        titulo='Cómo se estudia',
+        esquina='Al piano · pasos 1 y 2 de 5',
+        intro='Aviso: de esta partitura no se citan notas. Su izquierda va en redondas y su derecha es '
+              'muy densa, y no he podido medirlas con seguridad. Lo de aquí es ANDAMIO con los grados '
+              'de Re mayor para trabajar EL GESTO; las notas están en la partitura de la página 1. El '
+              'gesto es el problema de verdad: una mano haciendo dos cosas a la vez.',
         reglas=['ESTO ES ANDAMIO, NO LA PIEZA', 'LOS DEDOS 1 Y 2 NO SE LEVANTAN', 'LENTO'],
         bloques=[
             dict(num=1, titulo='La mano derecha, voz por voz',
-                 pista='andamio · primero la que se queda quieta, después la que se mueve',
-                 sistemas=[dict(cap='a)  solo la voz de abajo: se ataca y se aguanta los cuatro tiempos',
-                                events=[n('D4', 'w'), n('B3', 'w'), n('E4', 'w'), n('D4', 'w')],
-                                bars=4),
-                           dict(cap='b)  solo la voz de arriba, con la misma mano, sin tocar la de abajo',
-                                events=corch(['A4', 'B4', 'D5', 'B4', 'A4', 'G4', 'F4', 'A4']) +
-                                       corch(['B4', 'D5', 'E5', 'D5', 'B4', 'A4', 'G4', 'A4']),
-                                bars=4)]),
-            dict(num=2, titulo='Y ahora las dos juntas',
-                 pista='andamio · el dedo 1 no se levanta aunque los de arriba corran',
-                 sistemas=[dict(cap='si al mover los de arriba se corta la de abajo, vuelve al ejercicio 1',
-                                events=[{'pitches': ['D4', 'A4'], 'dur': 'q'},
-                                        {'pitches': ['D4', 'B4'], 'dur': 'q'},
-                                        {'pitches': ['D4', 'D5'], 'dur': 'q'},
-                                        {'pitches': ['D4', 'B4'], 'dur': 'q'},
-                                        {'pitches': ['B3', 'A4'], 'dur': 'q'},
-                                        {'pitches': ['B3', 'G4'], 'dur': 'q'},
-                                        {'pitches': ['B3', 'F4'], 'dur': 'q'},
-                                        {'pitches': ['B3', 'A4'], 'dur': 'q'},
-                                        {'pitches': ['D4', 'D5'], 'dur': 'w'}],
-                                bars=3)]),
+                 pista='andamio · primero la que se queda quieta, después la que se mueve, nunca las dos',
+                 sistemas=[
+                     dict(cap='a) solo la voz de abajo: se ataca y se aguanta los cuatro tiempos',
+                          events=[n('D4', 'w'), n('B3', 'w'), n('E4', 'w'), n('D4', 'w')],
+                          bars=4),
+                     dict(cap='b) solo la voz de arriba, con la misma mano, sin tocar la de abajo',
+                          events=corch(['A4', 'B4', 'D5', 'B4', 'A4', 'G4', 'F4', 'A4']) +
+                                 corch(['B4', 'D5', 'E5', 'D5', 'B4', 'A4', 'G4', 'A4']),
+                          bars=4, show_time=False),
+                     dict(cap='c) y ahora las dos juntas · el dedo 1 no se levanta aunque los de arriba '
+                              'corran; si se corta la de abajo, vuelve a la a)',
+                          events=[{'pitches': ['D4', 'A4'], 'dur': 'q'},
+                                  {'pitches': ['D4', 'B4'], 'dur': 'q'},
+                                  {'pitches': ['D4', 'D5'], 'dur': 'q'},
+                                  {'pitches': ['D4', 'B4'], 'dur': 'q'},
+                                  {'pitches': ['B3', 'A4'], 'dur': 'q'},
+                                  {'pitches': ['B3', 'G4'], 'dur': 'q'},
+                                  {'pitches': ['B3', 'F4'], 'dur': 'q'},
+                                  {'pitches': ['B3', 'A4'], 'dur': 'q'},
+                                  {'pitches': ['D4', 'D5'], 'dur': 'w'}],
+                          bars=3, show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='POR QUÉ ESTA CANCIÓN ENGAÑA',
-                 texto='Miras la partitura y la mano izquierda tiene una nota por compás: parece la pieza '
-                       'más fácil del cuaderno. Y lo es, si solo miras la izquierda. Toda la dificultad se '
-                       'ha ido a la mano derecha, que tiene que hacer dos cosas distintas a la vez: unos '
-                       'dedos apretando sin moverse y otros corriendo por encima. Cuando algo te salga '
-                       'sucio, no busques el fallo en la izquierda: casi siempre es que has levantado el '
-                       'pulgar sin darte cuenta.'),
-            dict(num=3, titulo='La izquierda, que solo sostiene', clef='bass',
-                 pista='una redonda por compás · ataca, suelta el brazo, y no vuelvas a tocar',
-                 sistemas=[dict(cap='el brazo tiene que quedarse muerto encima de la tecla, sin apretar',
-                                events=[n(p, 'w') for p in ('D2', 'A2', 'B2', 'G2', 'D2', 'A2')],
-                                bars=6, clef='bass')]),
+                 texto='Miras la partitura y la izquierda tiene una nota por compás: parece la pieza más '
+                       'fácil del cuaderno. Y lo es, si solo miras la izquierda. Toda la dificultad se ha '
+                       'ido a la derecha, que tiene que hacer dos cosas a la vez: unos dedos apretando sin '
+                       'moverse y otros corriendo por encima. Cuando algo suene sucio, no busques el fallo '
+                       'en la izquierda: casi siempre es que has levantado el pulgar sin darte cuenta.'),
+            dict(num=2, titulo='Sostener mientras la de arriba salta',
+                 pista='andamio · lo mismo, pero arriba ya no va por grados: va a saltos',
+                 sistemas=[
+                     dict(cap='a) el dedo 1 clavado en el Re y los de arriba saltando de tercera en tercera',
+                          events=[{'pitches': ['D4', 'F4'], 'dur': 'q'},
+                                  {'pitches': ['D4', 'A4'], 'dur': 'q'},
+                                  {'pitches': ['D4', 'F5'], 'dur': 'q'},
+                                  {'pitches': ['D4', 'A4'], 'dur': 'q'},
+                                  {'pitches': ['D4', 'B4'], 'dur': 'q'},
+                                  {'pitches': ['D4', 'G4'], 'dur': 'q'},
+                                  {'pitches': ['D4', 'E5'], 'dur': 'q'},
+                                  {'pitches': ['D4', 'A4'], 'dur': 'q'},
+                                  {'pitches': ['D4', 'D5'], 'dur': 'w'}],
+                          bars=3),
+                     dict(cap='b) la izquierda, que aquí solo sostiene · ataca, suelta el brazo y no '
+                              'vuelvas a tocar: el brazo se queda muerto encima de la tecla',
+                          events=[n(p, 'w') for p in ('D2', 'A2', 'B2', 'G2', 'D2', 'A2')],
+                          bars=6, clef='bass', show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='LA PRUEBA QUE NO ENGAÑA',
-                 texto='Toca el ejercicio 2 y canta en voz alta la nota de abajo, la que estás '
-                       'sosteniendo. Si dejas de oírla, es que el dedo se te ha levantado. Nadie tiene '
-                       'que decírtelo: lo oyes tú.'),
-            dict(num=4, titulo='Sostener mientras la de arriba salta',
-                 pista='andamio · igual que el 2, pero arriba ya no va por grados: va a saltos',
-                 sistemas=[dict(cap='a)  el dedo 1 en el Re y los de arriba saltando de tercera en tercera',
-                                events=[{'pitches': ['D4', 'F4'], 'dur': 'q'},
-                                        {'pitches': ['D4', 'A4'], 'dur': 'q'},
-                                        {'pitches': ['D4', 'F5'], 'dur': 'q'},
-                                        {'pitches': ['D4', 'A4'], 'dur': 'q'},
-                                        {'pitches': ['D4', 'B4'], 'dur': 'q'},
-                                        {'pitches': ['D4', 'G4'], 'dur': 'q'},
-                                        {'pitches': ['D4', 'E5'], 'dur': 'q'},
-                                        {'pitches': ['D4', 'A4'], 'dur': 'q'},
-                                        {'pitches': ['D4', 'D5'], 'dur': 'w'}],
-                                bars=3)]),
+                 texto='Toca el paso 1c y canta en voz alta la nota de abajo, la que estás sosteniendo. '
+                       'Si dejas de oírla, es que el dedo se te ha levantado. Nadie tiene que decírtelo: '
+                       'lo oyes tú.'),
         ],
     ),
 
     piano2=dict(
-        intro='Montarla es aprender a mirar la mano derecha como si fueran dos manos. Y usar la letra, '
-              'que la edición trae debajo, para colocar el fraseo sin pensarlo.',
+        titulo='Cómo se estudia (sigue)',
+        esquina='Al piano · pasos 3, 4 y 5',
+        intro='El gesto ya está. Ahora se alarga: primero cuatro compases sin que se corte la voz de '
+              'abajo, después los ocho de una frase entera. Y la letra, que la edición trae debajo, '
+              'coloca el fraseo sola.',
         reglas=['CANTA LA LETRA MIENTRAS TOCAS', 'PRIMERO LAS VOCES SUELTAS', 'LENTO DE VERDAD'],
         bloques=[
-            dict(tipo='nota',
-                 etiqueta='EL TRESILLO',
-                 texto='Cuando veas un 3 encima de un grupo, significa que ahí caben tres notas donde '
-                       'normalmente caben dos. No se cuenta más rápido: se reparte el mismo tiempo entre '
-                       'tres. Di "man-za-na" mientras el pie marca dos golpes, y practícalo sin piano '
-                       'hasta que salga solo.'),
-            dict(tipo='nota',
-                 etiqueta='LA LETRA ES LA PARTITURA DE VERDAD',
-                 texto='Esta edición trae la letra debajo del pentagrama. Úsala: cada sílaba te dice dónde '
-                       'cae una nota, y donde respira la voz respira la mano. Canta "A-mi-ga mí-a, lo '
-                       'sé…" y el fraseo se coloca solo.'),
-            dict(num=4, titulo='Sostener y cantar a la vez',
+            dict(num=3, titulo='Sostener y cantar a la vez',
                  pista='andamio · la voz de abajo aguanta mientras la de arriba hace la frase',
-                 sistemas=[dict(cap='cuatro compases seguidos sin que se corte ni una vez la nota de abajo',
-                                events=[{'pitches': ['D4', 'A4'], 'dur': 'h'},
-                                        {'pitches': ['D4', 'B4'], 'dur': 'h'},
-                                        {'pitches': ['D4', 'D5'], 'dur': 'h'},
-                                        {'pitches': ['D4', 'B4'], 'dur': 'h'},
-                                        {'pitches': ['B3', 'G4'], 'dur': 'h'},
-                                        {'pitches': ['B3', 'A4'], 'dur': 'h'},
-                                        {'pitches': ['D4', 'F5'], 'dur': 'h'},
-                                        {'pitches': ['D4', 'D5'], 'dur': 'h'}],
-                                bars=4)]),
+                 sistemas=[
+                     dict(cap='a) cuatro compases seguidos sin que se corte ni una vez la nota de abajo',
+                          events=[{'pitches': ['D4', 'A4'], 'dur': 'h'},
+                                  {'pitches': ['D4', 'B4'], 'dur': 'h'},
+                                  {'pitches': ['D4', 'D5'], 'dur': 'h'},
+                                  {'pitches': ['D4', 'B4'], 'dur': 'h'},
+                                  {'pitches': ['B3', 'G4'], 'dur': 'h'},
+                                  {'pitches': ['B3', 'A4'], 'dur': 'h'},
+                                  {'pitches': ['D4', 'F5'], 'dur': 'h'},
+                                  {'pitches': ['D4', 'D5'], 'dur': 'h'}],
+                          bars=4),
+                 ]),
             dict(tipo='nota',
-                 etiqueta='CÓMO ESTUDIARLA ESTA SEMANA',
-                 texto='1 · La izquierda sola de la primera página: una redonda por compás, nada más. '
-                       '2 · La derecha, SOLO las notas de abajo, sosteniéndolas. '
-                       '3 · La derecha, solo las de arriba. '
-                       '4 · Las dos voces juntas, muy lento, escuchando si la de abajo se corta. '
-                       '5 · Y las dos manos, cantando la letra en voz alta.'),
-            dict(num=5, titulo='La frase entera, sin cortar la de abajo',
-                 pista='andamio · ocho compases seguidos: es lo que dura una frase de la canción',
-                 sistemas=[dict(cap='si te cortas, no repitas el compás: vuelve al principio de los ocho',
-                                events=[{'pitches': ['D4', 'A4'], 'dur': 'h'},
-                                        {'pitches': ['D4', 'B4'], 'dur': 'h'},
-                                        {'pitches': ['D4', 'A4'], 'dur': 'h'},
-                                        {'pitches': ['D4', 'G4'], 'dur': 'h'},
-                                        {'pitches': ['B3', 'G4'], 'dur': 'h'},
-                                        {'pitches': ['B3', 'A4'], 'dur': 'h'},
-                                        {'pitches': ['B3', 'B4'], 'dur': 'h'},
-                                        {'pitches': ['B3', 'A4'], 'dur': 'h'},
-                                        {'pitches': ['E4', 'C5'], 'dur': 'h'},
-                                        {'pitches': ['E4', 'B4'], 'dur': 'h'},
-                                        {'pitches': ['E4', 'A4'], 'dur': 'h'},
-                                        {'pitches': ['E4', 'G4'], 'dur': 'h'},
-                                        {'pitches': ['D4', 'F5'], 'dur': 'h'},
-                                        {'pitches': ['D4', 'D5'], 'dur': 'h'},
-                                        {'pitches': ['D4', 'A4'], 'dur': 'w'}],
-                                bars=4)]),
+                 etiqueta='EL TRESILLO, Y LA LETRA',
+                 texto='Cuando veas un 3 encima de un grupo, ahí caben tres notas donde normalmente caben '
+                       'dos. No se cuenta más rápido: se reparte el mismo tiempo entre tres. Di '
+                       '“man-za-na” mientras el pie marca dos golpes. Y usa la letra que trae la edición: '
+                       'cada sílaba te dice dónde cae una nota, y donde respira la voz respira la mano. '
+                       'Canta “A-mi-ga mí-a, lo sé…” y el fraseo se coloca solo.'),
+            dict(num=4, titulo='La frase entera, sin cortar la de abajo',
+                 pista='andamio · ocho compases seguidos, que es lo que dura una frase de la canción',
+                 sistemas=[
+                     dict(cap='a) si te cortas, no repitas el compás: vuelve al principio de los ocho',
+                          events=[{'pitches': ['D4', 'A4'], 'dur': 'h'},
+                                  {'pitches': ['D4', 'B4'], 'dur': 'h'},
+                                  {'pitches': ['D4', 'A4'], 'dur': 'h'},
+                                  {'pitches': ['D4', 'G4'], 'dur': 'h'},
+                                  {'pitches': ['B3', 'G4'], 'dur': 'h'},
+                                  {'pitches': ['B3', 'A4'], 'dur': 'h'},
+                                  {'pitches': ['B3', 'B4'], 'dur': 'h'},
+                                  {'pitches': ['B3', 'A4'], 'dur': 'h'},
+                                  {'pitches': ['E4', 'C5'], 'dur': 'h'},
+                                  {'pitches': ['E4', 'B4'], 'dur': 'h'},
+                                  {'pitches': ['E4', 'A4'], 'dur': 'h'},
+                                  {'pitches': ['E4', 'G4'], 'dur': 'h'},
+                                  {'pitches': ['D4', 'F5'], 'dur': 'h'},
+                                  {'pitches': ['D4', 'D5'], 'dur': 'h'},
+                                  {'pitches': ['D4', 'A4'], 'dur': 'w'}],
+                          bars=4),
+                     dict(cap='b) y la voz de arriba sola, para oír la frase que estabas tapando · '
+                              'cántala mientras la tocas',
+                          events=[n(p, 'h') for p in ('A4', 'B4', 'A4', 'G4', 'G4', 'A4', 'B4', 'A4',
+                                                      'C5', 'B4', 'A4', 'G4', 'F5', 'D5')] +
+                                 [n('A4', 'w')],
+                          bars=8, show_time=False),
+                 ]),
             dict(tipo='escalera', valores=[40, 46, 52, 58, 64, 70],
-                 regla='SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
-            dict(tipo='tracker', titulo='La prueba de la semana',
-                 pie='Marca el día en que la voz de abajo no se te haya cortado ni una vez.'),
+                 regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
+            dict(tipo='nota', etiqueta='LOS CINCO PASOS, PARA NO PERDERSE',
+                 texto='1 · La derecha voz por voz, y después las dos juntas.   '
+                       '2 · Lo mismo con la de arriba saltando, y la izquierda sosteniendo.   '
+                       '3 · Cuatro compases sin que se corte la voz de abajo.   '
+                       '4 · La frase entera, ocho compases.   '
+                       '5 · La escalera de tempo, y las dos manos cantando la letra.'),
         ],
     ),
+
 )
 
 if __name__ == '__main__':

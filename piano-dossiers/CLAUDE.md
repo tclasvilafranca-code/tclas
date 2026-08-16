@@ -1,5 +1,22 @@
 # El Cuaderno del Pianista — Motor de Dosieres · guía para Claude Code
 
+> ## 🔒 NORMA DEL PROYECTO: la calidad va por delante de la rapidez
+>
+> Decisión del cliente, y manda sobre cualquier otra consideración. Son unos
+> 11 o 12 álbumes y hay tiempo de sobra, así que **nunca** se recorta calidad
+> técnica ni visual para ir más deprisa. En concreto:
+>
+> - Si una hoja se queda a medias, no se entrega: se llena. El estándar de
+>   llenado (y final entre 44 y 132) no se negocia.
+> - Si un dato musical no está medido sobre la partitura, no se escribe. Se
+>   dice en la hoja que no está verificado, o se cambia el ejercicio.
+> - Si algo se ve raro al mirarlo a tamaño real, se mide antes de darlo por
+>   bueno. Los fallos de este proyecto (silencios mal colocados, barras
+>   cruzando el compás, recuadros pisando el pie) salieron todos así, mirando,
+>   no ejecutando el auditor.
+> - Antes de entregar nada: `auditar_dilan.py` (o su equivalente por alumno)
+>   tiene que decir TODO OK, y la revisión de píxeles, 0 desbordes.
+
 > ## ⚠️ FORMATO VIGENTE: el cuaderno rediseñado (`cuaderno/`)
 >
 > Un archivo de datos por canción (`dilan_NN_*.py` con un dict `CANCION`) y

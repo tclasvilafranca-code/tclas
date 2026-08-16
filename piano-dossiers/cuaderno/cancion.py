@@ -8,7 +8,7 @@
 
    Estructura (rediseno pedido por el cliente):
        partitura · ficha · calentamiento de dedos · agudeza visual ·
-       al piano (por partes) · al piano (montarla) · soltar y anotar
+       como se estudia (x2) · soltando dedos · papel pautado
 
    Dos de esas hojas ya no se escriben a mano: el calentamiento de dedos y la
    agudeza visual son hojas LLENAS de pentagramas generadas
@@ -38,6 +38,7 @@ from hoja_calentamiento import build_calentamiento
 from hoja_lectura import build_lectura
 from hoja_piano import build_piano
 from hoja_relax import build_relax
+from hoja_pauta import build_pauta
 from audit_suite import run_full_audit, audit_text_bounds, audit_duplicados
 
 HERE = os.path.dirname(__file__)
@@ -125,14 +126,19 @@ def _hojas(cfg, qr_png):
               titulo=p2.get('titulo', 'Cómo se estudia (sigue)'))
 
     rlx = dict(cfg.get('relax') or {})
-    rlx.update(kicker=kicker, page_num=p0 + 6, key_sig=cfg.get('key_sig'))
+    rlx.update(kicker=kicker, page_num=p0 + 6, key_sig=cfg.get('key_sig'),
+               semilla=num)
+
+    pau = dict(cfg.get('pauta') or {})
+    pau.update(kicker=kicker, page_num=p0 + 7)
 
     return [('ficha', lambda c: build_ficha(c, ficha)),
             ('calentamiento', lambda c: build_calentamiento(c, cal)),
             ('agudeza', lambda c: build_lectura(c, lec)),
             ('piano 1', lambda c: build_piano(c, p1)),
             ('piano 2', lambda c: build_piano(c, p2)),
-            ('relax', lambda c: build_relax(c, rlx))]
+            ('relax', lambda c: build_relax(c, rlx)),
+            ('pauta', lambda c: build_pauta(c, pau))]
 
 
 _CACHE_PAGS = {}

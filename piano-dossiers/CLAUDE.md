@@ -1,20 +1,53 @@
 # El Cuaderno del Pianista — Motor de Dosieres · guía para Claude Code
 
-> ## ⚠️ FORMATO VIGENTE: el cuaderno de 6 páginas (`cuaderno/`)
+> ## ⚠️ FORMATO VIGENTE: el cuaderno rediseñado (`cuaderno/`)
 >
-> El formato **actual y definitivo** son **6 páginas por canción**, generadas por
-> `cuaderno/build_cancion_<n>.py`:
+> Un archivo de datos por canción (`dilan_NN_*.py` con un dict `CANCION`) y
+> `cuaderno/cancion.py` monta las hojas:
 >
-> | Pág. | Hoja | Módulo |
+> | Hoja | Qué es | Módulo |
 > |---|---|---|
-> | 1 | La partitura original | (PDF fuente, sin tocar) |
+> | 1 | La partitura original (puede ocupar varias páginas) | (PDF fuente, sin tocar) |
 > | 2 | Ficha de la partitura | `ficha_info.py` |
-> | 3 | Calentamiento | `hoja_calentamiento.py` |
-> | 4 | Agudeza visual y auditiva | `hoja_lectura.py` |
-> | 5 | Al piano · por partes | `hoja_piano.py` |
-> | 6 | Al piano · montarla | `hoja_piano.py` |
+> | 3 | Calentamiento de dedos — hoja llena, **generada** | `hoja_calentamiento.py` |
+> | 4 | Agudeza visual — hoja llena, **generada** + caja de escucha | `hoja_lectura.py` |
+> | 5 | Cómo se estudia (pasos 1–2) | `hoja_piano.py` |
+> | 6 | Cómo se estudia (pasos 3–5) | `hoja_piano.py` |
+> | 7 | Soltando dedos — relajación, **generada** + deberes | `hoja_relax.py` |
+> | 8 | Para escribir — papel pautado vacío | `hoja_pauta.py` |
 >
-> Más `cuaderno/portada.py` para portada + índice del álbum de cada alumno.
+> Más `cuaderno/portada.py`: portada, índice y **plan de curso de 44 semanas**
+> (`build_plan_curso`), que reparte las piezas de septiembre a julio y marca
+> Halloween, Navidad y el concierto de fin de curso.
+>
+> ### Las tres hojas generadas
+>
+> `engine/generador_lectura.py` escribe pentagramas llenos a partir de la
+> tonalidad de la pieza, con el número de canción como semilla (la hoja de la
+> 7 es siempre la misma, pero no se parece a la de la 6) y con el nivel
+> subiendo a lo largo del curso. Reglas del generador:
+>
+> - **cada línea suma compases enteros**, siempre (los patrones van por compás);
+> - **anti-secuencia**: dos líneas seguidas no empiezan igual;
+> - el registro está **acotado** y el paseo aleatorio **rebota** en los topes en
+>   vez de pegarse a ellos, y tira al centro — si no, media hoja acaba colgando
+>   de cuatro líneas adicionales;
+> - las **barras de corcheas no cruzan la línea divisoria**: se agrupan compás a
+>   compás, de dos en dos, y de tres en tres en 6/8.
+>
+> La de relajación (`relax=True`) cambia el material entero: figuras largas,
+> algún silencio y, sobre todo, **notas sacadas de una progresión de acordes**
+> (I–vi–IV–V–I, o i–VI–iv–v–i en menor) con la línea cerrando en la tónica. Lo
+> que la hace lenta es el **tempo escrito** (Muy lento ♩=50), no tener el
+> pentagrama medio vacío.
+>
+> ### El estándar de llenado
+>
+> La `y` final de cada hoja tiene que quedar **entre 44 y 132** (la ficha llega
+> hasta 33, que ahí el límite real es el pie de página). Por debajo se pisa el
+> pie; por encima, sobra papel y falta material. Lo comprueba `cancion.py` en
+> cada auditoría, y esa comprobación es la que destapó ocho fichas cuyo recuadro
+> de "¿Sabías que…?" estaba impreso encima del pie.
 >
 > ### Las tres reglas que sostienen el formato
 >
@@ -67,8 +100,9 @@
 >
 > ### Verificación obligatoria antes de entregar
 > `run_full_audit` (compases) + `audit_text_bounds` (margen derecho) +
-> `audit_duplicados` (material repetido entre hojas) + comprobación de píxeles
-> del borde inferior. Las cuatro, en las 5 hojas.
+> `audit_duplicados` (material repetido entre hojas) + altura final de cada hoja
+> + comprobación de píxeles del borde inferior. Todo eso lo pasa de una vez
+> `python3 cuaderno/auditar_dilan.py`, que tiene que decir **TODO OK**.
 > Los avisos de *sparse* son aceptables solo en sistemas de blancas/silencios.
 >
 > Lo que sigue documenta el **formato antiguo de 5 páginas** (`engine/`,
@@ -442,8 +476,12 @@ estos problemas:
 2. **Alteraciones**: el símbolo (♭/♯) no cambia la posición en el pentagrama,
    solo se dibuja al lado. `_abs_idx` ya ignora la alteración al calcular la
    línea/espacio — no dupliques esa lógica en otro sitio.
-3. **Silencios**: usa los glifos de `FreeSerif` (`\U0001D13B`-`\U0001D13E`), NO
-   existen en DejaVuSans. Ya están en `draw_rest`.
+3. **Silencios**: los de negra y corchea usan los glifos de `FreeSerif`
+   (`\U0001D13D`, `\U0001D13E`), que NO existen en DejaVuSans. Los de **blanca y
+   redonda se dibujan como rectángulos**, no con glifo: los de FreeSerif salían
+   de 0,2 espacios de grueso (un guión casi invisible) y colocados un espacio
+   por encima de su sitio — el de blanca ocupaba el lugar del de redonda. El de
+   blanca **se apoya** sobre la 3ª línea; el de redonda **cuelga** de la 4ª.
 4. **Negra con puntillo (6/8 etc.)**: añade el `.` a la duración (`'q.'`) y usa
    el diccionario de duraciones extendido — no inventes una duración nueva sin
    añadirla también en `audit_suite.py`, o el auditor contará mal los tiempos.

@@ -83,7 +83,7 @@ CANCION = dict(
             tarjetas=[
                 ('EL DESCENSO', 'Do · Si · Si♭ · La · La♭',
                  'Cm · Cm/B · Cm/Si♭ · F/La · Fm/La♭. Eso es la sección de “Mama”, y es una línea.'),
-                ('VUELVE DOS VECES', 'Mi♭·Re·Do y Fa·Mi♭·Re',
+                ('VUELVE DOS VECES', 'Y dos veces más',
                  'El mismo gesto, más corto. Cuando lo reconozcas, media pieza deja de ser nueva.'),
                 ('LOS CC. 10–11', 'Do♭ · Si♭ · La · Si♭',
                  'Cuatro acordes en un compás, uno por tiempo: vecinos del Si♭ por arriba y por abajo.'),

@@ -53,7 +53,7 @@ CANCION = dict(
         armonia=dict(
             titulo='Toda la canción son seis acordes de Do mayor',
             tarjetas=[
-                ('EL BAJO', 'Re · Do · Fa · Sol · Si · Do',
+                ('EL BAJO', 'Re·Do·Fa·Sol·Si·Do',
                  'Las seis fundamentales, en orden. Tócalas seguidas y ya reconocerás la canción.'),
                 ('LOS DOS DE REPOSO', 'Do y Fa',
                  'Cuando llega uno de ellos la frase respira. Son los sitios donde se puede soltar.'),

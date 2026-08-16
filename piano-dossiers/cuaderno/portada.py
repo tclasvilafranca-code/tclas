@@ -36,9 +36,26 @@ MUTED = HexColor('#7C838F')
 ACCENT = HexColor('#8C6A3F')
 
 
-def _fit(text, font, size, max_w, floor=7.0):
+# Textos que ni encogiendo hasta el minimo caben en su hueco. Se apuntan aqui
+# en vez de fallar: quien los mira es el auditor, que los saca todos de una
+# vez. Sin esto, un texto que se sale de SU CAJA (no del margen de la pagina)
+# no lo ve nadie hasta que el dosier esta impreso -- paso de verdad, con
+# "Ninguna negra ni bemol" pisando la casilla de al lado en una ficha.
+NO_CABEN = []
+
+
+def _fit(text, font, size, max_w, floor=7.0, caja=False):
+    """Encoge el texto hasta que quepa en max_w, sin bajar de `floor`.
+
+       `caja=True` quiere decir que max_w es una CAJA de verdad —una casilla,
+       una tarjeta— y no un hueco holgado: si ni al minimo cabe, el texto se
+       mete en la casilla de al lado y hay que apuntarlo. En los sitios donde
+       max_w lleva margen de sobra (un pie de foto que ocupa el ancho de la
+       hoja) pasarse un pelo no se ve, y marcarlo solo produce ruido."""
     while size > floor and stringWidth(text, font, size) > max_w:
         size -= 0.25
+    if caja and stringWidth(text, font, size) > max_w + 0.5:
+        NO_CABEN.append((text[:60], round(max_w, 1), round(size, 2)))
     return size
 
 

@@ -7,7 +7,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'
 
 from cancion import auditar
 
-MODULOS = ['arnau_01_chopsticks']
+MODULOS = ['arnau_01_chopsticks', 'arnau_02_clementine', 'arnau_03_jolly',
+           'arnau_04_ears', 'arnau_05_wheels']
 
 
 def main():

@@ -85,7 +85,7 @@ CANCION = dict(
         armonia=dict(
             titulo='El dibujo de la mano izquierda',
             tarjetas=[
-                ('EL GESTO', 'Corchea · corchea · larga',
+                ('EL GESTO', 'Corta, corta, larga',
                  'Dos cortas abajo y una blanca con puntillo que se queda sonando. Siempre igual.'),
                 ('RE MENOR Y FA', 'Re–La · Fa–Do',
                  'Los dos acordes que se alternan en casi toda la estrofa. Medidos.'),

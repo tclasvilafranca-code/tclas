@@ -71,7 +71,7 @@ CANCION = dict(
         titulo='Chopsticks',
         autor='Canción popular · arreglo de Gilbert DeBenedetti',
         datos=[('Teclas', 'Solo blancas'), ('Golpes por compás', '3'),
-               ('Dedos', 'Solo el 2, en las dos manos'),
+               ('Dedos', 'Solo el 2'),
                ('Compases', '32'), ('Cómo suena', 'A palillos chinos')],
         titulo_ritmos='Así suena un compás',
         pie_ritmos='Un compás de ejemplo, para ver de un vistazo qué tienes que tocar. La nota de '

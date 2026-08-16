@@ -49,7 +49,7 @@ CANCION = dict(
     ficha=dict(
         titulo='My Favourite Things',
         autor='Richard Rodgers y Oscar Hammerstein II (1959) · de "Sonrisas y lágrimas" · arr. Kaitlin',
-        datos=[('Tonalidad', 'Sol mayor · vive en Mi menor'), ('Compás', '3/4'),
+        datos=[('Tonalidad', 'Sol M / Mi m'), ('Compás', '3/4'),
                ('Tempo', '♩=160'), ('Mano izq.', 'Vals'), ('Extras', 'Cifrados')],
         armonia=dict(
             titulo='Un vals a 160: el reloj manda',
@@ -58,7 +58,7 @@ CANCION = dict(
                  'La fundamental abajo con peso, y los dos golpes de arriba casi sin sonido.'),
                 ('MEDIO SEGUNDO', '♩=160',
                  'Es lo que dura un tiempo. La mano tiene ese rato para viajar de un acorde al otro.'),
-                ('LOS CIFRADOS', 'Em · C · Am · D · G · B',
+                ('LOS CIFRADOS', 'Em·C·Am·D·G·B',
                  'Vienen impresos encima del pentagrama: la armonía te la dan hecha.'),
                 ('DÓNDE DESCANSA', 'Mi menor',
                  'La armadura dice Sol mayor, pero la música empieza y acaba en Mi menor.'),

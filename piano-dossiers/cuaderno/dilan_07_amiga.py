@@ -52,7 +52,7 @@ CANCION = dict(
                  'Redondas: una sola nota por compás, sostenida los cuatro tiempos. Nada más.'),
                 ('LA DERECHA', 'Dos a la vez',
                  'Sostiene un acorde abajo mientras los dedos de arriba mueven la melodía.'),
-                ('POR ESO CUESTA', 'Una mano, dos trabajos',
+                ('POR ESO CUESTA', 'Dos a la vez',
                  'El 1 y el 2 se quedan quietos apretando; el 4 y el 5 tienen que correr.'),
                 ('EL TRESILLO', 'Tres en dos',
                  'Marcado con un 3. Aparece varias veces y descoloca si no lo cuentas.'),

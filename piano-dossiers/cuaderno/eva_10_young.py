@@ -95,7 +95,7 @@ CANCION = dict(
     ficha=dict(
         titulo='When We Were Young',
         autor='Adele (2015) · arr. musicaparadisfrutar.com',
-        datos=[('Tonalidad', 'Re menor'), ('Compás', '4/4 · y 5/4 en el c. 62'),
+        datos=[('Tonalidad', 'Re menor'), ('Compás', '4/4 y 5/4'),
                ('Tempo', '♩ = 72'), ('Compases', '63'), ('Páginas', 'cuatro')],
         total_compases=63,
         secciones=[
@@ -108,9 +108,9 @@ CANCION = dict(
         armonia=dict(
             titulo='El cifrado está impreso: la armonía te la dan hecha',
             tarjetas=[
-                ('EL CICLO', 'Dm · Fmaj7/A · Si♭ · F/A · Gm7 · F',
-                 'Cuatro compases. Se repite cuatro veces seguidas, de los cc. 5 al 20.'),
-                ('EL BAJO BAJA', 'Re · La · Si♭ · La · Sol · Fa',
+                ('EL CICLO', 'Cuatro compases',
+                 'Dm · Fmaj7/A · Si♭ · F/A · Gm7 · F. Se repite cuatro veces, de los cc. 5 al 20.'),
+                ('EL BAJO BAJA', 'Re·La·Si♭·La·Sol·Fa',
                  'Ese ciclo, leído solo por abajo, es una línea que desciende. Ahí está la canción.'),
                 ('EL DO♯', 'A /Do♯ · cc. 32 y 36',
                  'La única nota de fuera de la tonalidad. Es la que hace que duela el estribillo.'),

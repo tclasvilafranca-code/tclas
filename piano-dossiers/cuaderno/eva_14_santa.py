@@ -45,11 +45,11 @@ CANCION = dict(
         titulo='Santa Tell Me',
         autor='Ariana Grande (2014) · arr. Sadie King',
         datos=[('Tonalidad', 'Sol mayor'), ('Compás', '4/4'), ('Extras', 'Segno · coda · 8vb'),
-               ('Mano izq.', 'Dos formas distintas'), ('Especial', 'Cruce de manos')],
+               ('Mano izq.', 'De dos formas'), ('Especial', 'Cruce de manos')],
         armonia=dict(
             titulo='La partitura con más señales de todo el cuaderno',
             tarjetas=[
-                ('EL RECORRIDO', 'Segno · 1.ª · 2.ª · Coda',
+                ('EL RECORRIDO', 'Segno y coda',
                  'No se toca de arriba abajo: se salta. Hay que leerlo antes, con un lápiz.'),
                 ('DOS IZQUIERDAS', 'Picada y sostenida',
                  'En la estrofa pica notas sueltas; en el estribillo sostiene corcheas seguidas.'),

@@ -33,6 +33,7 @@ import segno
 from reportlab.pdfgen import canvas
 from pypdf import PdfWriter, PdfReader
 
+import portada
 from portada import W, H
 from ficha_info import build_ficha
 from hoja_calentamiento import build_calentamiento
@@ -309,6 +310,14 @@ def _revisar(hojas, etiqueta):
         ov = audit_text_bounds(fn, 595.276, 841.89, 549.28)
         if ov:
             fallos.append('%s: texto fuera del margen -> %s' % (nombre, ov[:2]))
+        # Y el otro desbordamiento, el que no ve el auditor de margenes: un
+        # texto que se sale de SU CAJA aunque este dentro de la pagina. Lo
+        # apunta `_fit` cuando ni al tamano minimo cabe.
+        del portada.NO_CABEN[:]
+        fn(_lienzo())
+        if portada.NO_CABEN:
+            fallos.append('%s: texto que no cabe en su hueco -> %s'
+                          % (nombre, portada.NO_CABEN[:3]))
         calls, probs = _music(fn)
         for p in probs:
             if 'not a whole number of bars' in p:
@@ -342,6 +351,12 @@ def _revisar(hojas, etiqueta):
 def _music(fn):
     from audit_suite import audit_music
     return audit_music(fn)
+
+
+def _lienzo():
+    """Un lienzo de usar y tirar, para las comprobaciones que solo necesitan
+       ejecutar el dibujo y mirar lo que quedo apuntado."""
+    return canvas.Canvas(os.devnull, pagesize=(W, H))
 
 
 def _altura(fn):

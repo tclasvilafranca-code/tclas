@@ -148,7 +148,7 @@ def tarjetas(c, y, items):
         # NO se pone en mayusculas: 'Cm' pasaria a 'CM', que en cifrado
         # americano es Do MAYOR. Un error musical de verdad.
         c.drawString(bx + 9, y - 13, cc)
-        ns = _fit(nombre, 'DejaVuSerif-Bold', 11.5, bw - 18, floor=8.0)
+        ns = _fit(nombre, 'DejaVuSerif-Bold', 11.5, bw - 18, floor=8.0, caja=True)
         c.setFont('DejaVuSerif-Bold', ns)
         c.setFillColor(NAVY)
         c.drawString(bx + 9, y - 28, nombre)
@@ -205,10 +205,11 @@ def _fact_strip(c, y, facts):
         c.roundRect(bx, y - bh, bw, bh, 4, fill=1, stroke=0)
         c.setFillColor(NAVY)
         c.rect(bx, y - bh, 2.6, bh, fill=1, stroke=0)
-        c.setFont('DejaVuSans-Bold', 6.6)
+        c.setFont('DejaVuSans-Bold', _fit(label.upper(), 'DejaVuSans-Bold', 6.6,
+                                          bw - 18, floor=5.2, caja=True))
         c.setFillColor(MUTED)
         c.drawString(bx + 10, y - 15, label.upper())
-        size = _fit(value, 'DejaVuSerif-Bold', 13, bw - 18, floor=8)
+        size = _fit(value, 'DejaVuSerif-Bold', 13, bw - 18, floor=6.6, caja=True)
         c.setFont('DejaVuSerif-Bold', size)
         c.setFillColor(NAVY)
         c.drawString(bx + 10, y - 34, value)

@@ -45,7 +45,7 @@ CANCION = dict(
             tarjetas=[
                 ('EL TRESILLO', 'Tres en un tiempo',
                  'Va de principio a fin. Es el motor de la canción y lo único que hay que estudiar.'),
-                ('LA IZQUIERDA', 'Una quinta por compás',
+                ('LA IZQUIERDA', 'Una por compás',
                  'Do · Rem · Sol · Do · Fa · Sol · Fa, en redondas. No cambia de gesto ni una vez.'),
                 ('LAS QUINTAS VACÍAS', 'Sin tercera',
                  'Falta la nota que decide mayor o menor. Por eso suena hueco, y es a propósito.'),

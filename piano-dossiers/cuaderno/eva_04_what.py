@@ -35,7 +35,7 @@ CANCION = dict(
         titulo='What Was I Made For?',
         autor='Billie Eilish y Finneas O’Connell · de «Barbie» (2023)',
         datos=[('Tonalidad', 'Do mayor'), ('Compás', '4/4'), ('Tempo', '♩=78'),
-               ('Mano izq.', '1–2 acordes por compás'), ('Acordes', '6')],
+               ('Mano izq.', '1 o 2 por compás'), ('Acordes', '6')],
         armonia=dict(
             titulo='Seis acordes, y mucho hueco',
             tarjetas=[

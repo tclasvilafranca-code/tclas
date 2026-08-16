@@ -91,10 +91,11 @@ Lo último no es técnica: es orientarse y coordinarse.
 | 13 | Have Yourself a Merry Little Christmas | heredada | ✔ | OK |
 | 14 | Santa Tell Me | heredada | ✔ | OK |
 | 15 | It's Beginning to Look a Lot Like Christmas | heredada (4 manos) | ✔ | OK |
-| 16 | Arabesque | heredada (4 manos) | pendiente | — |
-| 17 | **Bohemian Rhapsody** | **nueva**, por medir | pendiente | — |
+| 16 | Arabesque | heredada (4 manos) | ✔ | OK |
+| 17 | **Bohemian Rhapsody** | **nueva** · `TRANSCRIPCION_E17_BOHEMIAN.md` | ✔ | OK |
 
-Portada, índice y plan de curso de Eva: pendientes, al final.
+**Las diecisiete escritas y auditadas.** Falta portada, índice, plan de curso
+de 44 semanas y el montaje del álbum completo.
 
 ### Cómo se garantiza que no es una fotocopia del álbum de Dilan
 

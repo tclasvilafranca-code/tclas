@@ -28,9 +28,18 @@ ESTRUCTURALES = {'rutina', 'plan'}
 
 
 def revisar_variedad(hojas, etiqueta, max_repes=2, distancia=6, tope=0.60,
-                     min_tipos=12, min_nuevos=2, verbose=True):
+                     min_tipos=12, min_nuevos=2, verbose=True,
+                     estructurales=None):
     """`hojas` es [(nombre, [tipos de bloque]), ...] EN EL ORDEN DEL ÁLBUM.
-       Devuelve la lista de fallos (vacía si todo bien)."""
+       Devuelve la lista de fallos (vacía si todo bien).
+
+       `estructurales` permite ampliar la lista de bloques que se quiere que
+       salgan todas las semanas y que por tanto no cuentan para el tope de
+       frecuencia. Josep lo usa para `escucha`: en su cuaderno el recuadro de
+       "para la próxima clase" va en las 19 hojas, igual que el plan, porque el
+       hilo entre la semana en casa y la clase siguiente no se rompe ninguna
+       semana."""
+    estructurales = ESTRUCTURALES if estructurales is None else set(estructurales)
     fallos = []
     esqueletos = [tuple(t for t in tipos) for _, tipos in hojas]
     nombres = [n for n, _ in hojas]
@@ -67,7 +76,7 @@ def revisar_variedad(hojas, etiqueta, max_repes=2, distancia=6, tope=0.60,
         for t in set(esq):
             veces[t] = veces.get(t, 0) + 1
     for t, v in sorted(veces.items()):
-        if t in ESTRUCTURALES:
+        if t in estructurales:
             continue
         if v > tope * n:
             fallos.append('%s: el tipo "%s" sale en %d de %d hojas (%.0f%%, el '

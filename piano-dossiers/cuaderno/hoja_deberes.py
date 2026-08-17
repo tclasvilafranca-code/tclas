@@ -866,6 +866,144 @@ def ej_objetivo(c, y, b):
     return y - h - 10
 
 
+# --------------------------------------------------------------------------
+# los bloques del formato ADULTO AVANZADO
+#
+# Josep es de la edad y el nivel de Jose Maria, pero lleva mas tiempo en clase
+# y le gustan los retos y las partituras que no son del todo faciles. Estos
+# tres bloques son los que le suben el liston sin cambiarle el formato:
+#
+#   reto      la dificultad concreta de la semana, y con que se gana
+#   cifrado   las letras de acorde que SU partitura lleva impresas encima
+#   escalera  el metronomo por escalones, con una meta escrita
+#
+# Los tres salen de algo medido: el `cifrado` solo se pone en las piezas cuya
+# edicion imprime el cifrado de verdad, y la `escalera` solo llega hasta el
+# tempo que la partitura tiene impreso.
+# --------------------------------------------------------------------------
+def ej_reto(c, y, b):
+    """La dificultad de la semana, dicha en voz alta, y como se gana.
+
+       No es un ejercicio y va sin numero: es el titular de la hoja, igual que
+       `objetivo`. La diferencia es que `objetivo` dice QUE hay que conseguir y
+       este dice QUE se interpone y COMO se quita de en medio. A quien le
+       gustan los retos, nombrarselos le funciona mejor que esconderselos."""
+    reto, como = b['reto'], b['como']
+    lr = _lineas_que_ocupa(reto, 10.0, CONTENT_W - 34)
+    lc = _lineas_que_ocupa(como, 8.8, CONTENT_W - 34)
+    h = 34 + 11.8 * lr + 10.6 * lc
+    c.setFillColor(WARM)
+    c.roundRect(MARGIN, y - h, CONTENT_W, h, 4, fill=1, stroke=0)
+    c.setFillColor(ACCENT)
+    c.rect(MARGIN, y - h, 3.4, h, fill=1, stroke=0)
+
+    c.setFont('DejaVuSans-Bold', 7.8)
+    c.setFillColor(ACCENT)
+    c.drawString(MARGIN + 16, y - 13, b.get('etiqueta', 'EL RETO DE ESTA SEMANA'))
+    yy = _wrap(c, reto, MARGIN + 16, y - 26, 'DejaVuSans-Bold', 10.0,
+               CONTENT_W - 34, 11.8, NAVY)
+    c.setFont('DejaVuSans-Bold', 7.4)
+    c.setFillColor(MUTED)
+    c.drawString(MARGIN + 16, yy - 5, b.get('etiqueta_como', 'CÓMO SE GANA'))
+    _wrap(c, como, MARGIN + 16, yy - 16, 'DejaVuSans', 8.8,
+          CONTENT_W - 34, 10.6, INK)
+    return y - h - 10
+
+
+def ej_cifrado(c, y, b):
+    """Las letras de acorde que la partitura lleva impresas: que notas son.
+
+       Solo se usa en las piezas cuya edicion imprime el cifrado. Es el
+       ejercicio escrito mas util que se le puede pedir a un adulto que ya
+       lleva tiempo: la letra esta delante de sus ojos cada semana y hasta que
+       no la traduce no le dice nada."""
+    y = _titulo_ej(c, y, b['num'], b.get('titulo', 'Los acordes que pone tu partitura'),
+                   b.get('pista', 'escribe las tres notas de cada uno, de grave a agudo'))
+    acordes = b['acordes']
+    n = len(acordes)
+    ancho = CONTENT_W / n
+    caja = min(ancho * 0.72, 52)
+    alto_caja = b.get('alto_caja', 14.0)
+    filas = b.get('filas', 3)
+    for i, nombre in enumerate(acordes):
+        cx = MARGIN + ancho * (i + 0.5)
+        c.setFillColor(BLUE)
+        c.roundRect(cx - caja / 2, y - 15, caja, 15, 3, fill=1, stroke=0)
+        c.setFont('DejaVuSans-Bold', 9.4)
+        c.setFillColor(white)
+        c.drawCentredString(cx, y - 11.4, nombre)
+        for f in range(filas):
+            c.setStrokeColor(RULE)
+            c.setLineWidth(0.8)
+            c.setFillColor(white)
+            c.roundRect(cx - caja / 2, y - 19 - alto_caja * (f + 1),
+                        caja, alto_caja, 2, fill=1, stroke=1)
+    yy = y - 23 - alto_caja * filas
+    for linea in b.get('preguntas', []):
+        size = _fit(linea, 'DejaVuSans', 8.4, CONTENT_W - 24, floor=6.8)
+        c.setFont('DejaVuSans', size)
+        c.setFillColor(INK)
+        c.drawString(MARGIN + 12, yy, '·  ' + linea)
+        yy -= 12
+    return yy - 4
+
+
+def ej_escalera(c, y, b):
+    """El metronomo por escalones, con la meta escrita.
+
+       La tabla de `metronomo` pregunta a que velocidad sale cada dia; esta
+       dice a que velocidad hay que llegar y por donde se pasa. Los escalones
+       no son decoracion: el ultimo es el tempo IMPRESO en su partitura, y los
+       de antes son el camino."""
+    y = _titulo_ej(c, y, b['num'], b.get('titulo', 'La escalera del metrónomo'),
+                   b.get('pista', 'no subas un escalón hasta tocarlo dos veces sin fallo'))
+    # Los escalones van en VERTICAL, uno por linea y de abajo arriba, con una
+    # sangria que crece: se sube por ellos con el ojo igual que con el
+    # metronomo. En horizontal (que es como estaba) cada escalon se quedaba con
+    # un octavo de la hoja de ancho y el texto se metia dentro de la casilla.
+    pasos = b['escalones']            # [(numero, que se consigue ahi), ...]
+    n = len(pasos)
+    alto = 17.0
+    sangria = 16.0
+    base = y - 6 - alto * n
+    x_caja = MARGIN + CONTENT_W - 15
+    for i, (num, texto) in enumerate(pasos):
+        x = MARGIN + sangria * i
+        yy = base + alto * i
+        ancho = x_caja - x - 6
+        c.setFillColor(PANEL)
+        c.roundRect(x, yy, ancho, alto - 3.0, 2, fill=1, stroke=0)
+        c.setFillColor(BLUE)
+        c.roundRect(x + 2, yy + 1.8, 30, alto - 6.6, 2, fill=1, stroke=0)
+        c.setFont('DejaVuSans-Bold', 7.4)
+        c.setFillColor(white)
+        c.drawCentredString(x + 17, yy + 5.2, str(num))
+        size = _fit(texto, 'DejaVuSans', 8.2, ancho - 40, floor=6.4)
+        c.setFont('DejaVuSans', size)
+        c.setFillColor(INK)
+        c.drawString(x + 38, yy + 5.2, texto)
+        c.setStrokeColor(RULE)
+        c.setLineWidth(0.8)
+        c.setFillColor(white)
+        c.rect(x_caja, yy + 1.8, 12, alto - 6.6, fill=1, stroke=1)
+    yy = base - 8
+    meta = b.get('meta')
+    if meta:
+        # La meta puede ser larga ("...tu partitura no trae tempo impreso") y
+        # esta linea NO envuelve: hay que encogerla o se sale por la derecha.
+        texto = 'LA META: ' + meta
+        c.setFillColor(ACCENT)
+        yy = _wrap(c, texto, MARGIN + 4, yy - 4, 'DejaVuSans-Bold', 8.0,
+                   CONTENT_W - 8, 10.0, ACCENT) - 4
+    for linea in b.get('notas', []):
+        size = _fit(linea, 'DejaVuSans', 8.2, CONTENT_W - 24, floor=6.8)
+        c.setFont('DejaVuSans', size)
+        c.setFillColor(INK)
+        c.drawString(MARGIN + 12, yy - 4, '·  ' + linea)
+        yy -= 12
+    return yy - 6
+
+
 TIPOS = {
     'nombres': ej_nombres, 'dibuja': ej_dibuja, 'figuras': ej_figuras,
     'une': ej_une, 'rodea': ej_rodea, 'colorea': ej_colorea,
@@ -876,12 +1014,19 @@ TIPOS = {
     'diferencias': ej_diferencias, 'cuenta': ej_cuenta, 'teclado': ej_teclado,
     'palmas': ej_palmas, 'inventa': ej_inventa,
     'plan': ej_plan, 'metronomo': ej_metronomo, 'objetivo': ej_objetivo,
+    'reto': ej_reto, 'cifrado': ej_cifrado, 'escalera': ej_escalera,
+    # Mismo dibujo que `escucha`, con nombre propio: en el cuaderno de Josep
+    # `escucha` es el recuadro de "para la proxima clase" y sale las 19
+    # semanas, asi que si el bloque de los duetos compartiera tipo con el, la
+    # auditoria de variedad no podria distinguirlos ni contarlos.
+    'cuatro_manos': ej_escucha,
 }
 
 
-# Estos tres no son ejercicios y van sin casilla numerada: la tabla de la
-# semana es un marcador, y el juego y el recuadro de acordarse son texto.
-SIN_NUMERO = {'rutina', 'escucha', 'nota', 'objetivo'}
+# Estos no son ejercicios y van sin casilla numerada: la tabla de la semana es
+# un marcador, y el juego, el recuadro de acordarse, el objetivo y el reto son
+# texto.
+SIN_NUMERO = {'rutina', 'escucha', 'nota', 'objetivo', 'reto', 'cuatro_manos'}
 
 
 def build_deberes(c, cfg):

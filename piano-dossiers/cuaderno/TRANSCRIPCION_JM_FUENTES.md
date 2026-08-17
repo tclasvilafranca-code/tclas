@@ -40,6 +40,25 @@ no se escribe en ninguna hoja.
 | 18 | Interstellar · Hans Zimmer | Campamento Bye Bye Beethoven | sin armadura | 3/4 | ♩ = 96 | 6 |
 | 19 | Flying Theme (*Cómo entrenar a tu dragón*) | Perfect Harmony | Do → Re (2♯) | 4/4 | — | 3 |
 
+## Corrección posterior a la entrega
+
+**Jailhouse Rock, compás 12.** La primera versión de esta ficha decía que la
+mano izquierda **bajaba** con los dedos 5 · 3 · 2 · 1. Es falso: **sube**. Se
+detectó al preparar el cuaderno de Josep, que tiene esta misma partitura, y se
+comprobó midiendo (render a 200 dpi, `cabezas.py`, contra las líneas del
+pentagrama de fa):
+
+```
+c. 12   Fa · La · Do · Re      (cuatro negras, ascendentes)
+        índices medidos: 1,96 · -0,06 · -2,08 · -2,78
+```
+
+En la digitación de la mano izquierda el 5 es el meñique y el 1 el pulgar, así
+que una digitación 5 · 3 · 2 · 1 solo puede ir de grave a agudo. El error
+estaba impreso en la ficha y en la hoja "cómo se estudia" de la pieza 8 de José
+María; las dos están corregidas y el álbum, regenerado. **Si el álbum ya está
+impreso en papel, hay que reimprimir esas dos hojas.**
+
 ## Lo medido nota a nota
 
 Método: render a 150 dpi, detección de las cinco líneas del pentagrama, y

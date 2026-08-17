@@ -194,6 +194,40 @@
 > Nada infantil aquí: sopa de letras, adivinanzas, crucigrama, camino y palmas
 > no se usan. Reparto en `jm_recetas.py` y auditor en `auditar_josemaria.py`.
 >
+> #### La versión EXIGENTE del formato de adulto (Josep)
+>
+> Josep es del nivel de José María pero lleva más tiempo en clase y le gustan
+> los retos. **No es otro formato**: son las mismas seis hojas con cuatro
+> bloques más, y dos de ellos atados a la partitura:
+>
+> | bloque | qué es | dónde puede ir |
+> |---|---|---|
+> | `reto` | la dificultad de la semana **y con qué se gana** | donde sea |
+> | `escalera` | el metrónomo por escalones, con meta escrita | donde sea |
+> | `cifrado` | las letras de acorde impresas: qué notas son | **solo** donde la edición las imprime |
+> | `cuatro_manos` | qué acordar con la otra persona | **solo** en los duetos |
+>
+> `cifrado` y `cuatro_manos` obligan a que el reparto NO sea la rotación simple
+> P1..P10 + P1..P9: las parejas de recetas se eligen para que las dos hojas
+> caigan donde el bloque tiene sentido (ver la cabecera de `jp_recetas.py`).
+> La distancia mínima entre los dos usos de una receta baja de 10 a **8**, y
+> `auditar_josep.py` audita en 8. La `meta` de la `escalera` tiene que decir
+> siempre de dónde sale el número, y cuando la partitura no trae tempo impreso
+> se dice en la propia hoja.
+>
+> `cuatro_manos` es el mismo dibujo que `escucha` pero con **tipo propio**:
+> aquí `escucha` es "para la próxima clase" y sale las 19 semanas, así que si
+> compartieran tipo la auditoría de variedad no podría contarlos por separado.
+> Por eso `auditar_josep` pasa `estructurales={'plan', 'escucha'}`.
+>
+> Y **`cruzar_josep.py`**, que no es opcional: ocho de las diecinueve
+> partituras de Josep son el mismo archivo que las de José María, byte a byte.
+> La sal por alumno separa las hojas generadas; el material escrito a mano no
+> lo separa nadie. En la primera pasada salieron seis coincidencias de ocho
+> eventos y hubo que rehacerlas.
+>
+> Ver `cuaderno/PLAN_ALBUM_JOSEP.md`.
+>
 > ### Las partituras de Drive llegan como llegan (`fuente.py`)
 >
 > Dos casos reales del álbum de José María, y los dos volverán a salir:

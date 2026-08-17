@@ -10,9 +10,13 @@
      - Compás de 4/4. Pone "♩ = 150  Swing", y "mf".
      - EMPIEZA CON SILENCIO Y ENTRADA: silencio de blanca, silencio de negra,
        silencio de corchea y la primera nota. La pieza no arranca en el uno.
-     - La izquierda hace redondas de dos notas los primeros compases, y a
-       partir del c. 12 una figura descendente con la digitación IMPRESA:
-       5 · 3 · 2 · 1, que se repite compás tras compás.
+     - La izquierda hace redondas de dos notas los primeros compases, y en el
+       c. 12 entra una figura ASCENDENTE de cuatro negras con la digitacion
+       IMPRESA debajo: 5 · 3 · 2 · 1.
+     - CORREGIDO tras medirlo (200 dpi, `cabezas.py`, al preparar el cuaderno
+       de Josep, que tiene la misma partitura): esas cuatro notas son
+       **Fa · La · Do · Re** y SUBEN. Esta ficha decia antes que bajaban, y era
+       falso: en la mano izquierda el 5 es el menique, asi que 5·3·2·1 sube.
      - Al final pone "ritardando".
 
    Lo que NO se cita nota a nota: la melodía va en corcheas con alteraciones
@@ -59,9 +63,9 @@ CANCION = dict(
                 ('LA ENTRADA', 'Casi un compás',
                  'Silencio de blanca, de negra y de corchea, y entonces entras. Contar ese compás es '
                  'medio ejercicio de la semana.'),
-                ('DEL C. 12', 'La izquierda anda',
-                 'Aparece una figura que baja con los dedos 5 · 3 · 2 · 1 y se repite. La digitación '
-                 'viene impresa: úsala.'),
+                ('EL C. 12', 'La izquierda sube',
+                 'Cuatro negras que suben —Fa, La, Do, Re— con los dedos 5 · 3 · 2 · 1 impresos '
+                 'debajo. Es el único sitio de la pieza con digitación escrita: úsala.'),
             ],
             pie='Es la primera pieza rápida del cuaderno, pero cabe en una página y la izquierda hace '
                 'poquísimo hasta el compás 12. Lo que hay que trabajar es entrar a tiempo y no '
@@ -80,7 +84,7 @@ CANCION = dict(
             'Pone "♩ = 150 Swing": rápido, y con las corcheas balanceadas.',
             'La pieza empieza con casi un compás de silencio: no se toca en el uno.',
             'La izquierda hace redondas de dos notas los primeros compases.',
-            'Del compás 12 en adelante la izquierda baja con los dedos 5 · 3 · 2 · 1, y viene escrito.',
+            'En el compás 12 la izquierda SUBE con los dedos 5 · 3 · 2 · 1: Fa, La, Do, Re (medido).',
             'Al final pone "ritardando": frenar poco a poco.',
         ],
         reto='La velocidad. ♩=150 es más del doble de rápido que todo lo que has tocado hasta ahora, y '
@@ -136,12 +140,15 @@ CANCION = dict(
                        'dura como dos tercios del golpe y la segunda como uno. Escrito así queda '
                        'complicadísimo, y en realidad es lo que hace cualquiera al decir "PAA-pa, '
                        'PAA-pa". Escucha la grabación dos veces y sale solo. No intentes contarlo.'),
-            dict(num=3, titulo='La izquierda del c. 12: cuatro dedos que bajan', clef='bass',
-                 pista='andamio · la digitación 5 · 3 · 2 · 1 viene impresa en tu partitura',
+            dict(num=3, titulo='La izquierda del c. 12: cuatro dedos que suben', clef='bass',
+                 pista='c. 12 · MEDIDO: Fa, La, Do, Re · la digitación 5 3 2 1 viene impresa',
                  sistemas=[
-                     dict(cap='a) el dibujo, y se repite compás tras compás · sin mirarse la mano',
-                          events=[n('C3'), n('E3'), n('G3'), n('A3'),
-                                  n('C3'), n('E3'), n('G3'), n('A3')],
+                     dict(cap='a) tal cual está escrito, con sus dedos · sin mirarse la mano',
+                          events=[dict(pitch='F3', dur='q', number=5),
+                                  dict(pitch='A3', dur='q', number=3),
+                                  dict(pitch='C4', dur='q', number=2),
+                                  dict(pitch='D4', dur='q', number=1),
+                                  n('F3'), n('A3'), n('C4'), n('D4')],
                           bars=2, clef='bass'),
                      dict(cap='b) y movido de sitio, que es lo que hace la pieza · el dibujo de los '
                               'dedos no cambia, solo dónde empieza',

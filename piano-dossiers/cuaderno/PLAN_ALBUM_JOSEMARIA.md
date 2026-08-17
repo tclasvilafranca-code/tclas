@@ -1,0 +1,115 @@
+# Álbum de José María — adulto que empieza · 19 piezas · formato de seis hojas
+
+José María tiene unos 60 años, empezó hace poco y se ha comprado un teclado
+para casa. El encargo: **material para trabajar de verdad, pero a un nivel que
+no agobie**. Eso decide dos cosas.
+
+1. **Estudia solo casi todos los días.** Lo que más le falla no es tocar: es
+   saber por dónde empezar cuando se sienta al teclado. Por eso su hoja
+   semanal lleva **plan de minutos por día** y **tabla de metrónomo**, que no
+   existen en ningún otro cuaderno del proyecto.
+2. **No es un niño.** Nada de sopas de letras, adivinanzas, crucigramas ni
+   ritmos de palabras: eso es de Arnau. Los ejercicios son los mismos de
+   siempre (nombres, figuras, contar, diferencias, teclado, inventar…) con
+   redacción de adulto.
+
+## Las seis hojas
+
+| hoja | qué es | módulo |
+|---|---|---|
+| — | la partitura original | el PDF de su carpeta, sin tocar |
+| 1 | **Ficha de la partitura** | `ficha_info.py` |
+| 2 | **Dedos** — calentamiento, hoja llena y generada | `hoja_calentamiento.py` |
+| 3 | **Leer** — agudeza visual, hoja llena y generada | `hoja_lectura.py` |
+| 4 | **Cómo se estudia** — el orden de trabajo al piano (dos hojas si la pieza lo pide) | `hoja_piano.py` |
+| 5 | **El trabajo de esta semana** — plan, metrónomo y ejercicios escritos | `hoja_deberes.py` |
+| 6 | **Para escribir** — papel pautado | `hoja_pauta.py` |
+
+Decisión del cliente: **dedos y lectura en hojas separadas**, no fundidas en
+una como en el formato corto de Arnau.
+
+El reparto de las 19 hojas de trabajo está en `jm_recetas.py`: diez recetas,
+cada una usada dos veces y con diez hojas de distancia. Lo comprueban
+`auditar_variedad.py` y `jm_recetas.revisar_reparto`, igual que en Arnau. El
+`plan` es el único bloque que sale las 19 semanas, y cuenta como estructural.
+
+## De dónde salen las partituras
+
+Carpeta de Drive de José María, bajada con `gdown --folder` y verificada una a
+una por el **título impreso dentro del archivo**. La tabla completa —edición,
+armadura, compás, tempo impreso y páginas— está en
+`TRANSCRIPCION_JM_FUENTES.md`, junto con lo medido nota a nota.
+
+Dos avisos que salieron de esa comprobación:
+
+- **`ADAGIO.` no es un PDF, es un JPEG.** Hay que convertirlo antes de montar
+  el álbum.
+- Los dos villancicos que había antes en la carpeta (Jingle Bells y Leise
+  rieselt) **ya no están**; en su lugar hay Adagio y Flying Theme. El álbum se
+  monta con lo que hay hoy.
+
+## El orden: de menos a más difícil
+
+Criterio del cliente. Las cuatro o cinco duras van al final del curso, que es
+lo que se acordó: **las 19, ordenadas**, y las difíciles cuando ya esté listo.
+
+### 1 · La mano quieta
+La mano se coloca una vez y no se mueve. Es donde hay que empezar a los 60 y a
+los 10.
+
+| nº | pieza | ton. · compás | por qué aquí |
+|---|---|---|---|
+| 1 | Romance · Diabelli (Primo, a 4 manos) | Do · ¢ | la edición lo dice: posición fija de cinco dedos, y las dos manos al unísono |
+| 2 | America (My Country, 'Tis of Thee) | Do · 3/4 | Level Two, letra y digitación impresas; melodía de siete notas |
+| 3 | The Star-Spangled Banner | Do · 3/4 | Level 2, letra y digitación; empieza con silencio |
+
+### 2 · La izquierda aguanta, la derecha se mueve
+La izquierda toca redondas y ya está. Todo el trabajo es de la derecha.
+
+| nº | pieza | ton. · compás | por qué aquí |
+|---|---|---|---|
+| 4 | Counting Stars · OneRepublic | Do · 4/4 | *Easy Version*: izquierda en redondas y digitación impresa |
+| 5 | Peaches (Super Mario Bros. Movie) | Do · 4/4 | igual, y la melodía es corta y se repite |
+| 6 | Someone You Loved · Lewis Capaldi | Do · 4/4 | izquierda en redondas, pero la derecha ya va en corcheas seguidas |
+
+### 3 · La primera armadura
+Aparece la primera tecla negra fija, y con ella la costumbre de mirar el
+principio del pentagrama antes de tocar.
+
+| nº | pieza | ton. · compás | por qué aquí |
+|---|---|---|---|
+| 7 | Deck the Halls | Fa (1♭) · 4/4 | un bemol: todos los Si van a la tecla negra |
+| 8 | Jailhouse Rock · Elvis | Do · 4/4 | una página, ♩=150 con swing: la primera pieza rápida |
+| 9 | My Grandfather's Clock | Sol (1♯) · 4/4 | Level Three, un sostenido, y "with precision" |
+| 10 | Shallow · Lady Gaga | Sol (1♯) · 4/4 | la misma armadura, y una melodía que ya conoce |
+
+### 4 · Más tonalidades, y las dos manos de verdad
+
+| nº | pieza | ton. · compás | por qué aquí |
+|---|---|---|---|
+| 11 | Can't Help Falling in Love · Elvis | Re (2♯) · 3/4 | dos sostenidos, y la izquierda en corcheas |
+| 12 | Carol of the Bells | Sol menor (2♭) · 3/4 | la primera en tono menor |
+| 13 | Adagio · Albinoni | 3/4 · Adagio ♩=60 | lento de verdad: aquí lo difícil es el sonido, no las notas |
+| 14 | Rasputin · Boney M | Si menor (2♯) · 4/4 | *easy piano*, pero a ♩=124 |
+| 15 | Toreador, de *Carmen* | Fa (1♭) · 4/4 | Level Four: el salto de nivel de la edición |
+
+### 5 · Los retos del final
+Aquí es donde el cuaderno deja de ser cómodo, y a propósito: llegan en junio y
+julio, no en octubre.
+
+| nº | pieza | ton. · compás | por qué al final |
+|---|---|---|---|
+| 16 | Trouble · Coldplay | Sol (1♯) · 4/4 | cuatro páginas a ♩=138 |
+| 17 | A comme amour · Clayderman | Mi menor (1♯) · 4/4 | semicorcheas seguidas de principio a fin |
+| 18 | Interstellar · Hans Zimmer | 3/4 · ♩=96 | seis páginas: la más larga del cuaderno |
+| 19 | Flying Theme (*Cómo entrenar a tu dragón*) | Do → Re (2♯) · 4/4 | tres páginas, corcheas en las dos manos y cambio de tonalidad a mitad |
+
+## Estado
+
+- Formato de adulto **construido y validado** de punta a punta con la pieza 1
+  (`jm_01_romance.py` → `output/JoseMaria_01_RomanceDiabelli_CUADERNO.pdf`,
+  ocho páginas: dos de partitura y las seis hojas).
+- Las 19 partituras **verificadas y documentadas**.
+- El reparto de variedad de las 19 hojas de trabajo, **decidido y auditado**.
+- Pendiente: escribir las piezas 2 a 19 y montar el álbum (portada, índice,
+  plan de 44 semanas).

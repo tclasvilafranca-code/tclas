@@ -165,10 +165,76 @@ def _hojas_corto(cfg, qr_png):
     return hojas
 
 
+def _hojas_adulto(cfg, qr_png):
+    """El dosier de ADULTO, seis hojas (Jose Maria, unos 60 anos, empezo hace
+       poco y estudia solo en casa con un teclado).
+
+       partitura · ficha · dedos · leer · como se estudia (una hoja, o dos si
+       la pieza lo pide) · el trabajo de la semana · papel pautado
+
+       Decision del cliente: dedos y lectura en hojas SEPARADAS, no fundidas
+       como en el formato corto. Y nada infantil: los ejercicios son los
+       mismos de siempre, pero la hoja de la semana lleva plan de minutos por
+       dia y tabla de metronomo, que es lo que de verdad le hace falta a
+       alguien que estudia solo."""
+    kicker = '%s · pieza %d · %s' % (cfg['alumno'], cfg['num'], cfg['titulo_corto'])
+    nivel = '%s · pieza %d · %s' % (cfg['alumno'], cfg['num'], cfg['nivel'])
+    sem = cfg['num'] + _sal_alumno(cfg['alumno'])
+    nl = _nivel_lectura(cfg)
+    p0 = _paginas_partitura(cfg)
+
+    ficha = dict(cfg['ficha'])
+    ficha.update(kicker=nivel, page_num=p0 + 1, time_sig=cfg['time_sig'])
+    ficha['qr'] = dict(ficha['qr']); ficha['qr']['png'] = qr_png
+
+    cal = dict(cfg.get('calentamiento') or {})
+    cal.update(kicker=kicker, page_num=p0 + 2, time_sig=cfg['time_sig'],
+               key_sig=cfg.get('key_sig'), gap=cal.get('gap_lectura', 6.6),
+               semilla=sem, nivel_lectura=nl,
+               compases_extra=cfg.get('compases_extra')
+               or _mezcla_compases(cfg['time_sig'], 5000 + sem))
+
+    lec = dict(cfg.get('agudeza') or {})
+    lec.update(kicker=kicker, page_num=p0 + 3, time_sig=cfg['time_sig'],
+               key_sig=cfg.get('key_sig'), gap=lec.get('gap_lectura', 6.6),
+               semilla=sem, nivel_lectura=nl,
+               compases_extra=cfg.get('compases_extra_leer')
+               or _mezcla_compases(cfg['time_sig'], 6000 + sem))
+
+    hojas = [('ficha', lambda c: build_ficha(c, ficha)),
+             ('dedos', lambda c: build_calentamiento(c, cal)),
+             ('leer', lambda c: build_lectura(c, lec))]
+
+    pag = p0 + 4
+    pianos = [cfg['piano1']] + ([cfg['piano2']] if cfg.get('piano2') else [])
+    for i, bruto in enumerate(pianos):
+        p = dict(bruto)
+        p.update(kicker=kicker, page_num=pag, time_sig=cfg['time_sig'],
+                 key_sig=cfg.get('key_sig'), gap=p.get('gap', 7.0),
+                 esquina=p.get('esquina', 'Al piano · el orden de estudio'),
+                 titulo=p.get('titulo', 'Cómo se estudia'))
+        hojas.append(('piano %d' % (i + 1), (lambda q: lambda c: build_piano(c, q))(p)))
+        pag += 1
+
+    for i, bruto in enumerate(cfg.get('trabajo') or []):
+        tr = dict(bruto)
+        tr.update(kicker=kicker, page_num=pag)
+        hojas.append(('trabajo %d' % (i + 1),
+                      (lambda q: lambda c: build_deberes(c, q))(tr)))
+        pag += 1
+
+    pau = dict(cfg.get('pauta') or {})
+    pau.update(kicker=kicker, page_num=pag)
+    hojas.append(('pauta', lambda c: build_pauta(c, pau)))
+    return hojas
+
+
 def _hojas(cfg, qr_png):
     """Las hojas del dosier, ya con el kicker y la numeracion puestos."""
     if cfg.get('formato') == 'corto':
         return _hojas_corto(cfg, qr_png)
+    if cfg.get('formato') == 'adulto':
+        return _hojas_adulto(cfg, qr_png)
     kicker = '%s · canción %d · %s' % (cfg['alumno'], cfg['num'], cfg['titulo_corto'])
     nivel = '%s · canción %d · nivel %s' % (cfg['alumno'], cfg['num'], cfg['nivel'])
     num = cfg['num']
@@ -280,8 +346,12 @@ def construir(cfg, verificar=True):
         SIN_PARTITURA.append(cfg['slug'])
     for p in PdfReader(tmp).pages:
         wr.add_page(p)
+    # El nombre del archivo sale del alumno, y hay alumnos con espacios y
+    # acentos ("José María"): se limpia, o el PDF acaba llamandose
+    # "José María_01_...pdf" y no casa con los demas.
+    quien = cfg.get('carpeta') or cfg['alumno']
     out = os.path.join(OUT_DIR, '%s_%02d_%s_CUADERNO.pdf'
-                       % (cfg['alumno'], cfg['num'], cfg['slug']))
+                       % (quien, cfg['num'], cfg['slug']))
     with open(out, 'wb') as f:
         wr.write(f)
     os.remove(tmp)

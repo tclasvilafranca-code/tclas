@@ -761,6 +761,101 @@ def ej_inventa(c, y, b):
     return y - 4
 
 
+# --------------------------------------------------------------------------
+# los bloques del formato ADULTO
+#
+# Jose Maria tiene unos 60 anos, empezo hace poco y estudia solo en casa con
+# un teclado. Lo que mas le sirve no es un ejercicio mas: es saber QUE hacer
+# cada dia y CUANTO, y tener donde apuntar como va. Eso es lo que hacen estos
+# tres bloques, y son los que no existian para ningun otro alumno.
+# --------------------------------------------------------------------------
+def ej_plan(c, y, b):
+    """El plan de la semana: que hacer cada dia y cuantos minutos.
+
+       Un adulto que estudia solo no falla por no saber tocar: falla por no
+       saber por donde empezar cuando se sienta. Aqui lo tiene escrito."""
+    y = _titulo_ej(c, y, b['num'], b.get('titulo', 'El plan de la semana'),
+                   b.get('pista', 'no hace falta hacerlo todo el mismo día'))
+    dias = b.get('dias', ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE'])
+    tramos = b['tramos']              # [(minutos, que hacer), ...]
+    x_tab = MARGIN + CONTENT_W - 21.0 * len(dias) - 4
+    c.setFont('DejaVuSans-Bold', 7.0)
+    c.setFillColor(NAVY_SOFT)
+    for i, d in enumerate(dias):
+        c.drawCentredString(x_tab + 21.0 * (i + 0.5), y - 8, d)
+    yy = y - 20
+    total = 0
+    for minutos, que in tramos:
+        total += minutos
+        c.setFillColor(BLUE)
+        c.roundRect(MARGIN + 2, yy - 14, 30, 14, 3, fill=1, stroke=0)
+        c.setFont('DejaVuSans-Bold', 7.4)
+        c.setFillColor(white)
+        c.drawCentredString(MARGIN + 17, yy - 10.4, "%d'" % minutos)
+        size = _fit(que, 'DejaVuSans', 8.6, x_tab - MARGIN - 44, floor=6.6)
+        c.setFont('DejaVuSans', size)
+        c.setFillColor(INK)
+        c.drawString(MARGIN + 38, yy - 10, que)
+        for i in range(len(dias)):
+            c.setStrokeColor(RULE)
+            c.setLineWidth(0.8)
+            c.setFillColor(white)
+            c.rect(x_tab + 21.0 * i + 4, yy - 13, 13, 13, fill=1, stroke=1)
+        yy -= 19
+    c.setFont('DejaVuSans', 7.6)
+    c.setFillColor(MUTED)
+    c.drawString(MARGIN + 4, yy - 6,
+                 b.get('cierre') or ('Son %d minutos al día. Cinco días valen más que uno '
+                                     'largo.' % total))
+    return yy - 18
+
+
+def ej_metronomo(c, y, b):
+    """Donde apuntar a que velocidad sale la pieza cada dia.
+
+       Es el unico ejercicio del cuaderno que se rellena con numeros propios y
+       que al final de la semana ensena algo que no se ve tocando: que se ha
+       avanzado. Para un adulto que empieza, eso vale mas que un ejercicio."""
+    y = _titulo_ej(c, y, b['num'], b.get('titulo', 'A qué velocidad te sale'),
+                   b.get('pista', 'apunta el número del metrónomo al acabar cada día'))
+    dias = b.get('dias') or ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM']
+    n = len(dias)
+    ancho = CONTENT_W / n
+    for i, d in enumerate(dias):
+        cx = MARGIN + ancho * (i + 0.5)
+        c.setFont('DejaVuSans-Bold', 7.4)
+        c.setFillColor(NAVY_SOFT)
+        c.drawCentredString(cx, y - 8, d)
+        c.setStrokeColor(RULE)
+        c.setLineWidth(0.8)
+        c.setFillColor(white)
+        c.roundRect(cx - ancho * 0.34, y - 34, ancho * 0.68, 22, 3, fill=1, stroke=1)
+    yy = y - 44
+    for linea in b.get('notas', []):
+        c.setFont('DejaVuSans', 8.2)
+        c.setFillColor(INK)
+        c.drawString(MARGIN + 12, yy, '·  ' + linea)
+        yy -= 12
+    return yy - 6
+
+
+def ej_objetivo(c, y, b):
+    """Una sola cosa, grande, para toda la semana. Sin numero de ejercicio:
+       no es un ejercicio, es el titular."""
+    texto = b['texto']
+    h = 26 + 12.0 * _lineas_que_ocupa(texto, 10.4, CONTENT_W - 30)
+    c.setFillColor(PANEL)
+    c.roundRect(MARGIN, y - h, CONTENT_W, h, 4, fill=1, stroke=0)
+    c.setFillColor(NAVY)
+    c.rect(MARGIN, y - h, 3.4, h, fill=1, stroke=0)
+    c.setFont('DejaVuSans-Bold', 7.8)
+    c.setFillColor(MUTED)
+    c.drawString(MARGIN + 16, y - 13, b.get('etiqueta', 'EL OBJETIVO DE LA SEMANA'))
+    _wrap(c, texto, MARGIN + 16, y - 27, 'DejaVuSans-Bold', 10.4,
+          CONTENT_W - 30, 12.0, NAVY)
+    return y - h - 10
+
+
 TIPOS = {
     'nombres': ej_nombres, 'dibuja': ej_dibuja, 'figuras': ej_figuras,
     'une': ej_une, 'rodea': ej_rodea, 'colorea': ej_colorea,
@@ -770,12 +865,13 @@ TIPOS = {
     'camino': ej_camino, 'vf': ej_vf, 'ordena': ej_ordena,
     'diferencias': ej_diferencias, 'cuenta': ej_cuenta, 'teclado': ej_teclado,
     'palmas': ej_palmas, 'inventa': ej_inventa,
+    'plan': ej_plan, 'metronomo': ej_metronomo, 'objetivo': ej_objetivo,
 }
 
 
 # Estos tres no son ejercicios y van sin casilla numerada: la tabla de la
 # semana es un marcador, y el juego y el recuadro de acordarse son texto.
-SIN_NUMERO = {'rutina', 'escucha', 'nota'}
+SIN_NUMERO = {'rutina', 'escucha', 'nota', 'objetivo'}
 
 
 def build_deberes(c, cfg):

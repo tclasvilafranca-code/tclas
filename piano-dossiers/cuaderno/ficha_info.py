@@ -220,9 +220,15 @@ def _map_bar(c, y, secciones, total_compases):
     """Barra segmentada con la forma real de la pieza."""
     bh = 36
     x = MARGIN
+    sep = 3
+    # Entre tramo y tramo hay un hueco de `sep`, asi que el ancho repartible
+    # NO es CONTENT_W entero: si se reparte entero, la barra acaba saliendose
+    # por la derecha tantos puntos como huecos haya (lo pillo la revision de
+    # pixeles en la ficha de When We Were Young, que tiene cinco secciones).
+    util = CONTENT_W - sep * (len(secciones) - 1)
     for (etq, desde, hasta, desc, col) in secciones:
         frac = (hasta - desde + 1) / total_compases
-        sw = CONTENT_W * frac
+        sw = util * frac
         c.setFillColor(col)
         c.roundRect(x, y - bh, sw, bh, 3, fill=1, stroke=0)
         c.setFont('DejaVuSans-Bold', 10)
@@ -238,7 +244,7 @@ def _map_bar(c, y, secciones, total_compases):
         c.setFont('DejaVuSans', 6.8)
         c.setFillColor(MUTED)
         c.drawString(x, y - bh - 10, f'c. {desde}')
-        x += sw + 3
+        x += sw + sep
     c.setFont('DejaVuSans', 6.8)
     c.setFillColor(MUTED)
     c.drawRightString(MARGIN + CONTENT_W, y - bh - 10, f'c. {total_compases}')

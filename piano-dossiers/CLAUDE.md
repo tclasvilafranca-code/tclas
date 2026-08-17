@@ -27,6 +27,25 @@
 >    que todo sale de la partitura medida: un ejercicio divertido con datos
 >    falsos es un ejercicio malo.
 >
+> **Dónde se aplica en cada formato:**
+>
+> - **Formato corto** (Arnau): en las dos hojas de deberes escritos por canción.
+>   El reparto de las 40 hojas está decidido en `cuaderno/arnau_recetas.py` —
+>   20 recetas, cada una usada dos veces y con 10 hojas de distancia como
+>   mínimo — y lo comprueban `auditar_variedad.revisar_variedad` (que el
+>   reparto cumple la norma) y `arnau_recetas.revisar_reparto` (que cada hoja
+>   cumple el reparto). Los números de ejercicio los pone `build_deberes` solo:
+>   con la variedad el orden cambia cada semana y renumerar a mano era una
+>   fuente de fallos.
+> - **Formato largo** (Dilan y Eva): en el recuadro del pie de la hoja de
+>   relajación, que es lo que el alumno se lleva a casa. Antes era el **mismo
+>   recuadro en blanco en los 37 dosieres**; ahora cada pieza trae su tarea
+>   escrita (`cuaderno/tareas_semana.py`, doce tareas que rotan sin repetirse a
+>   menos de seis piezas) y queda una raya libre para la profesora. Las tareas
+>   están escritas para **no necesitar ningún dato sin medir**: apuntan al
+>   alumno a SU partitura ("el compás que peor te sale") en vez de citar
+>   compases que no se han comprobado pieza por pieza.
+>
 > Lo comprueba `cuaderno/auditar_variedad.py`, que entra en el auditor de cada
 > alumno y tiene que decir TODO OK antes de entregar.
 >

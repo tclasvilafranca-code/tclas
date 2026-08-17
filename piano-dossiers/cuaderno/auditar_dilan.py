@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'engine'))
 
 from cancion import auditar
+from tareas_semana import revisar_variedad_tareas
 
 MODULOS = ['dilan_01_cancion', 'dilan_02_cancion',
            'dilan_03_your_song', 'dilan_04_thinking', 'dilan_05_lucia',
@@ -25,6 +26,9 @@ def main():
     fallos = 0
     for nombre in MODULOS:
         fallos += len(auditar(__import__(nombre).CANCION))
+    print()
+    fallos += len(revisar_variedad_tareas(
+        'Dilan', [__import__(m).CANCION['num'] for m in MODULOS]))
     print('\n%s' % ('TODO OK' if not fallos else '%d FALLOS EN TOTAL' % fallos))
     return fallos
 

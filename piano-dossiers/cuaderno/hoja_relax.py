@@ -44,22 +44,42 @@ GAP = 6.8
 ALTO_DEBERES = 74          # lo que se reserva abajo para los deberes
 
 
-def deberes(c, y, titulo='ESTA SEMANA, EN CASA', lineas=3, sub=None):
+def deberes(c, y, titulo='ESTA SEMANA, EN CASA', lineas=3, sub=None, tarea=None):
     """El recuadro de deberes, al pie. Pequeno a proposito: es para UNA
-       semana, no un registro del curso. Sin casillas de hecho / no hecho."""
+       semana, no un registro del curso. Sin casillas de hecho / no hecho.
+
+       Si viene `tarea` (norma de variedad del cliente), el recuadro trae ya
+       escrita la tarea de esa semana y deja UNA raya libre para que la
+       profesora anada lo suyo. Sin `tarea` se comporta como antes: rayas
+       vacias. Antes de esto los 37 dosieres de Dilan y Eva llevaban el mismo
+       recuadro en blanco, que es justo lo que la norma no quiere."""
     h = ALTO_DEBERES
     c.setFillColor(WARM)
     c.roundRect(MARGIN, y - h, CONTENT_W, h, 4, fill=1, stroke=0)
     c.setFillColor(ACCENT)
     c.rect(MARGIN, y - h, 3, h, fill=1, stroke=0)
 
+    cabeza = tarea['etiqueta'] if tarea else titulo
     c.setFont('DejaVuSans-Bold', 8.6)
     c.setFillColor(ACCENT)
-    c.drawString(MARGIN + 14, y - 15, titulo)
-    tw = stringWidth(titulo, 'DejaVuSans-Bold', 8.6)
+    c.drawString(MARGIN + 14, y - 15, cabeza)
+    tw = stringWidth(cabeza, 'DejaVuSans-Bold', 8.6)
     c.setFont('DejaVuSans', 7.6)
     c.setFillColor(MUTED)
-    c.drawString(MARGIN + 14 + tw + 10, y - 15, sub or 'lo escribe la profesora al final de la clase')
+    c.drawString(MARGIN + 14 + tw + 10, y - 15,
+                 sub or ('para esta semana' if tarea
+                         else 'lo escribe la profesora al final de la clase'))
+
+    if tarea:
+        yy = _wrap(c, tarea['texto'], MARGIN + 14, y - 27, 'DejaVuSans', 7.8,
+                   CONTENT_W - 28, 10.4, INK)
+        c.setStrokeColor(RULE)
+        c.setLineWidth(0.8)
+        c.line(MARGIN + 14, y - h + 12, MARGIN + CONTENT_W - 14, y - h + 12)
+        c.setFont('DejaVuSans', 6.6)
+        c.setFillColor(MUTED)
+        c.drawString(MARGIN + 14, y - h + 4, 'y lo que apunte la profesora')
+        return y - h - 8
 
     yy = y - 30
     paso = (h - 34) / lineas
@@ -104,7 +124,7 @@ def build_relax(c, cfg):
                     suelo=y_caja + 12)
 
     deberes(c, y_caja, lineas=cfg.get('lineas_deberes', 3),
-            sub=cfg.get('sub_deberes'))
+            sub=cfg.get('sub_deberes'), tarea=cfg.get('tarea'))
     y = y_caja - ALTO_DEBERES
     pie(c, cfg)
     return y

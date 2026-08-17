@@ -51,11 +51,29 @@ El **taller** es la fusión de dos hojas del formato largo (calentamiento y
 agudeza visual) en una: en media hora no caben las dos, y lo que se pierde al
 juntarlas es menos que lo que se pierde si no se llega a hacer ninguna.
 
-Los **deberes** se componen de bloques (`hoja_deberes.TIPOS`): poner nombre a
-las notas, dibujar cabezas de nota, contar golpes por figura, unir con rayas,
-rodear compases iguales, colorear notas repetidas, la rutina diaria con
-casillas de lunes a viernes, un juego con alguien de casa, y pentagrama vacío
-para copiar el compás que más cueste. Cada hoja lleva seis bloques.
+Los **deberes** se componen de bloques (`hoja_deberes.TIPOS`), y hay **21 tipos
+distintos**:
+
+| grupo | tipos |
+|---|---|
+| leer y escribir notas | `nombres` `dibuja` `figuras` `colorea` `rodea` `cuenta` `diferencias` |
+| jugar | `sopa` `adivina` `crucigrama` `camino` `vf` `ordena` `palmas` |
+| manos y teclado | `teclado` `inventa` `escribe` `une` |
+| de casa | `rutina` `escucha` `nota` |
+
+Cada hoja lleva cinco o seis bloques, y **qué bloques lleva cada semana está
+decidido en `cuaderno/arnau_recetas.py`**: 20 recetas, cada una usada dos veces
+en las 40 hojas y siempre con 10 hojas de distancia como mínimo. Así Arnau no
+se encuentra nunca la misma forma de hoja dos semanas seguidas ni parecido.
+
+Es la **norma de variedad** del cliente, y la comprueban dos auditores
+distintos: `auditar_variedad.py` mira que el reparto cumpla la norma (dos
+semanas seguidas no repiten esqueleto, cada hoja trae al menos dos tipos
+nuevos, ningún tipo pasa del 60 % de las hojas) y `arnau_recetas.revisar_reparto`
+mira que cada hoja cumpla el reparto.
+
+Los números de ejercicio los pone `build_deberes` solo: con la variedad el
+orden cambia cada semana y renumerarlos a mano era una fuente de fallos.
 
 ## El orden: de menos a más difícil
 
@@ -132,7 +150,8 @@ dos. Fechas que mandan sobre el reparto:
 
 - `python3 cuaderno/auditar_arnau.py` → **TODO OK** en las 20 canciones
   (compases, margen derecho, material repetido entre hojas, altura final de
-  cada hoja, y texto que no cabe en su caja).
+  cada hoja, y texto que no cabe en su caja) **más la variedad**: 40 hojas, 20
+  esqueletos distintos, 21 tipos, y el reparto cumplido hoja por hoja.
 - **Altura final de las 100 hojas generadas**: todas entre 44 y 132 (la más
   baja 44, la más alta 127,1).
 - **Portada, índice y plan**: 0 desbordes de texto, 0 cajas desbordadas.

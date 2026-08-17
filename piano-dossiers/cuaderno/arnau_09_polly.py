@@ -16,7 +16,9 @@ import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from arnau_comun import n, ac, sil, corch, rutina, juego, escribir
+from arnau_comun import (n, ac, sil, corch, rutina, juego, escribir,
+                         crucigrama, contar, unir, acuerdate, camino, adivinar,
+                         rodear, teclado)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -134,64 +136,74 @@ CANCION = dict(
         ],
     ),
 
+    # Reparto de `arnau_recetas`: semana 1 la R17 (crucigrama · cuenta · une) y
+    # semana 2 la R18 (camino · adivina · rodea · teclado · escribe).
     deberes=[
-        dict(titulo='Deberes · semana 1', esquina='Polly Put the Kettle On · para hacer en casa',
-             intro='Esta semana toca aprender a contar de dos en dos y a meter dos notas en cada '
-                   'golpe.',
-             bloques=[
-                 dict(tipo='nombres', num=1, titulo='¿Cómo se llama cada nota?',
-                      pista='ojo con los Si: en esta canción son tecla negra',
-                      notas=['G4', 'A4', 'F4', 'Bb4', 'E4', 'C5', 'D4', 'F4']),
-                 dict(tipo='figuras', num=2, titulo='¿Cuántos golpes dura cada una?',
-                      pista='acuérdate: aquí cada compás tiene solo dos golpes',
-                      figuras=[('q', 'negra'), ('h', 'blanca'), ('w', 'redonda'),
-                               ('h.', 'blanca con puntito')]),
-                 dict(tipo='dibuja', num=3, titulo='Dibuja tú las notas',
-                      pista='solo el óvalo, sin el palito',
-                      nombres=['Fa', 'Sol', 'La', 'Si', 'La', 'Sol', 'Fa', 'Do']),
-                 dict(tipo='colorea', num=4, titulo='Rodea todos los Si',
-                      pista='en esta canción todos van en la tecla negra',
-                      eventos=[n('F4'), n('A4'), n('Bb4'), n('A4'),
-                               n('G4'), n('Bb4'), n('A4'), n('F4', 'h')],
-                      leyenda=['El bemol del principio manda en toda la canción.',
-                               'No lo van a repetir delante de cada Si: hay que acordarse.']),
-                 rutina('Contar “un-y-dos-y” dando palmadas, sin piano',
-                        'La melodía del principio, muy despacio',
-                        'Subir un poquito la velocidad, solo si sale sin parar'),
-                 juego('Da dos palmadas por compás mientras quien esté contigo cuenta «un-y-dos-y». '
-                       'Después cambiad: tú cuentas y esa persona da palmadas en las Y, que es lo '
-                       'difícil. Es el mismo trabajo que hacen tus dedos en esta canción.'),
-             ]),
-        dict(titulo='Deberes · semana 2', esquina='Polly Put the Kettle On · para hacer en casa',
-             intro='Esta semana toca mirar la partitura con lápiz y subir la velocidad poco a poco.',
-             bloques=[
-                 dict(tipo='rodea', num=1, titulo='Rodea los dos compases que son iguales',
-                      pista='fíjate en las notas de una en una',
-                      compases=[[n('G4'), n('A4')], [n('G4'), n('F4')],
-                                [n('G4'), n('A4')], [n('E4'), n('C4')]]),
-                 dict(tipo='nombres', num=2, titulo='Otra vez los nombres, a ver si te los sabes',
-                      pista='sin mirar los deberes de la semana pasada',
-                      notas=['A4', 'C5', 'G4', 'Bb4', 'F4', 'D5', 'E4', 'A4']),
-                 dict(tipo='une', num=3, titulo='Une cada cosa con lo que quiere decir',
-                      pista='una raya de un punto al otro',
-                      pares=[('El bemol del principio', 'dos golpes en cada compás'),
-                             ('El 2 y el 4 de la clave', 'el nombre del acorde'),
-                             ('Las letras de encima', 'todos los Si, tecla negra')]),
-                 dict(tipo='colorea', num=4, titulo='Colorea las notas cortas',
-                      pista='las que van unidas de dos en dos por una barra de arriba',
-                      eventos=corch(['G4', 'A4']) + [n('G4'), n('F4')] +
-                              corch(['E4', 'C4']) + [n('C4', 'h')],
-                      leyenda=['Dos notas cortas juntas duran lo mismo que una negra.',
-                               'Por eso hay que decirlas más deprisa, pero iguales entre sí.']),
-                 dict(tipo='nota', etiqueta='ACUÉRDATE',
-                      texto='Subir de velocidad no es tocar más deprisa a ver qué pasa: es tocar un '
-                            'poquito más rápido SIN fallar. Si al subir empiezas a parar, no has '
-                            'subido: has empeorado. Vuelve abajo y sube más despacio.'),
-                 rutina('La canción entera muy despacio, sin parar',
-                        'Un poquito más rápido, solo si la anterior salió tres veces',
-                        'Contar “un-y-dos-y” en voz alta mientras tocas'),
-                 escribir(4),
-             ]),
+        dict(
+            titulo='Deberes · semana 1',
+            esquina='Polly Put the Kettle On · para hacer en casa',
+            intro='Lo nuevo: solo dos golpes por compás, y muchas notas cortas. Hay que decir más '
+                  'notas en menos sitio.',
+            bloques=[
+                crucigrama('CORTAS', [
+                    ('COMPAS', 0, 'El trozo que hay entre dos rayas de arriba abajo.'),
+                    ('SOL', 1, 'La primera nota de la melodía de esta canción.'),
+                    ('NEGRA', 3, 'La figura que dura un golpe entero.'),
+                    ('PUNTILLO', 3, 'El puntito que le añade la mitad a una figura.'),
+                    ('BLANCA', 5, 'La figura hueca que dura dos golpes.'),
+                    ('MANOS', 4, 'Tienes dos, y las dos tocan.'),
+                ], cierre='Las casillas grises dicen cómo son las notas de esta canción.'),
+                contar([n('G4'), n('A4'), n('G4'), n('F4'), n('E4'), n('C4'), n('C4')],
+                       ['¿Cuántos Do hay?', '¿Cuántas veces sale el Sol?',
+                        '¿Cuántas notas hay en total?'],
+                       titulo='Cuenta lo que ves',
+                       pista='es la melodía del principio, medida en tu partitura'),
+                unir([('El bemol del principio', 'dos golpes en cada compás'),
+                      ('El 2/4 de después de la clave', 'la mitad de una negra'),
+                      ('Una corchea', 'todos los Si van en la tecla negra'),
+                      ('Las letras F, B♭, C de arriba', 'el nombre del acorde que suena')],
+                     titulo='Une cada cosa con lo que significa',
+                     pista='están desordenadas · una raya de un punto al otro'),
+                rutina('Sol · La · Sol · Fa, contando un-y-dos-y',
+                       'La melodía entera muy despacio, buscando los Si',
+                       'Las dos manos, cuatro compases'),
+                acuerdate('Las rayas pasan muy seguidas y engañan. Cuenta “un-y-dos-y”.',
+                          etiqueta='DOS GOLPES NO ES IR DEPRISA'),
+            ],
+        ),
+        dict(
+            titulo='Deberes · semana 2',
+            esquina='Polly Put the Kettle On · para hacer en casa',
+            intro='Segunda semana: un camino de notas cortas, adivinanzas y el teclado.',
+            bloques=[
+                camino([['negra', 'corchea', 'negra', 'blanca', 'negra', 'negra'],
+                        ['negra', 'corchea', 'corchea', 'negra', 'blanca', 'negra'],
+                        ['blanca', 'negra', 'corchea', 'negra', 'negra', 'corchea'],
+                        ['negra', 'negra', 'corchea', 'corchea', 'negra', 'blanca'],
+                        ['negra', 'blanca', 'negra', 'corchea', 'negra', 'negra']],
+                       titulo='El camino de las notas cortas',
+                       pista='colorea solo las que valen medio golpe y sale un camino'),
+                adivinar([('Valgo medio golpe y voy casi siempre acompañada.', 'CORCHEA'),
+                          ('Somos solo dos en cada compás de esta canción.', 'GOLPES'),
+                          ('Estoy al principio y mando en todos los Si.', 'BEMOL')],
+                         titulo='Adivina quién soy',
+                         pista='una letra en cada casilla'),
+                rodear([[n('G4'), n('A4')], [n('G4'), n('F4')],
+                        [n('G4'), n('A4')], [n('E4'), n('C4')]],
+                       titulo='Rodea los dos compases que son iguales',
+                       pista='dos notas en cada compás · míralas de una en una'),
+                teclado({0: 1, 2: 2, 4: 3, 6: 4},
+                        ['Escribe el nombre de las cuatro teclas marcadas.',
+                         'La número 4 es un Si: en esta canción se toca en la tecla negra de al lado.'],
+                        titulo='En el teclado',
+                        pista='ojo con la número 4'),
+                escribir(titulo='Copia aquí un compás de tu canción',
+                         pista='el que más te cueste · cópialo tal cual y tócalo cinco veces'),
+                rutina('La melodía entera, contando un-y-dos-y',
+                       'Los compases con notas cortas, un poco más rápido cada día',
+                       'Las dos manos, sin parar aunque haya fallos'),
+            ],
+        ),
     ],
 )
 

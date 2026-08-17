@@ -16,7 +16,9 @@ import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from arnau_comun import n, ac, sil, corch, rutina, juego, escribir
+from arnau_comun import (n, ac, sil, corch, rutina, juego, escribir,
+                         crucigrama, diferencias, adivinar, teclado, palmas,
+                         nombres, camino, acuerdate)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -136,62 +138,70 @@ CANCION = dict(
         ],
     ),
 
+    # Reparto de `arnau_recetas`: semana 1 la R13 (crucigrama · diferencias ·
+    # adivina) y semana 2 la R14 (teclado · palmas · nombres · camino).
     deberes=[
-        dict(titulo='Deberes · semana 1', esquina='We Wish You a Merry Christmas · para casa',
-             intro='Esta semana toca aprender las dos manos por separado. Todo lo de aquí está en tu '
-                   'partitura.',
-             bloques=[
-                 dict(tipo='nombres', num=1, titulo='¿Cómo se llama cada nota?',
-                      pista='escríbelas en la cajita de debajo',
-                      notas=['C4', 'D4', 'E4', 'F4', 'E4', 'D4', 'G4', 'C4']),
-                 dict(tipo='nombres', num=2, titulo='Y estas, que son de la mano izquierda',
-                      pista='ojo: aquí la clave es distinta, las notas no están donde antes',
-                      notas=['C3', 'B2', 'A2', 'G2', 'A2', 'B2', 'C3', 'G2'], clef='bass'),
-                 dict(tipo='figuras', num=3, titulo='¿Cuántos golpes dura cada una?',
-                      pista='acuérdate: aquí cada compás tiene tres golpes',
-                      figuras=[('q', 'negra'), ('h', 'blanca'), ('h.', 'blanca con puntito'),
-                               ('w', 'redonda')]),
-                 dict(tipo='une', num=4, titulo='Une cada dedo con su número',
-                      pista='una raya de un punto al otro',
-                      pares=[('El pulgar', 'el 5'), ('El corazón', 'el 1'), ('El meñique', 'el 3')]),
-                 rutina('La derecha sola, los cuatro primeros compases',
-                        'La izquierda sola, los cuatro primeros compases',
-                        'Decir en voz alta el nombre de las notas sin tocar'),
-                 juego('Toca tres golpes seguidos marcando el primero un poco más fuerte: UN-dos-tres. '
-                       'Quien esté contigo tiene que dar una palmada solo en el fuerte. Después '
-                       'cambiad. Ese golpe fuerte es el que hace que esta canción suene a villancico y '
-                       'no a lista de notas.'),
-             ]),
-        dict(titulo='Deberes · semana 2', esquina='We Wish You a Merry Christmas · para casa',
-             intro='Esta semana toca juntar las manos, un compás cada día, y mirar la partitura con '
-                   'lápiz.',
-             bloques=[
-                 dict(tipo='rodea', num=1, titulo='Rodea los dos compases que son iguales',
-                      pista='fíjate en las notas de una en una',
-                      compases=[[n('C4'), n('C4'), n('D4')],
-                                [n('E4'), n('E4'), n('F4')],
-                                [n('C4'), n('C4'), n('D4')],
-                                [n('D4'), n('C4'), n('B3')]]),
-                 dict(tipo='dibuja', num=2, titulo='Dibuja tú las notas',
-                      pista='solo el óvalo, sin el palito',
-                      nombres=['Do', 'Re', 'Mi', 'Fa', 'Mi', 'Re', 'Do', 'Sol']),
-                 dict(tipo='colorea', num=3, titulo='Colorea el primer golpe de cada compás',
-                      pista='es el que pesa un poquito más que los otros dos',
-                      eventos=[n('C4'), n('C4'), n('D4'), n('E4'), n('E4'), n('F4'),
-                               n('E4'), n('D4'), n('C4')],
-                      leyenda=['En un compás de tres, el primero pesa más.',
-                               'Los otros dos van más flojitos, como de puntillas.']),
-                 dict(tipo='nombres', num=4, titulo='Otra vez los nombres, a ver si te los sabes',
-                      pista='sin mirar los deberes de la semana pasada',
-                      notas=['E4', 'G4', 'F4', 'D4', 'C4', 'A4', 'B4', 'E4']),
-                 dict(tipo='nota', etiqueta='ACUÉRDATE',
-                      texto='Un compás nuevo al día es suficiente. Si intentas cuatro de golpe, al día '
-                            'siguiente no te acuerdas de ninguno; si haces uno bien, la semana que '
-                            'viene tienes siete.'),
-                 rutina('Un compás con las dos manos, veinte veces',
-                        'La canción entera con la derecha sola',
-                        'Contar un-dos-tres en voz alta mientras tocas'),
-             ]),
+        dict(
+            titulo='Deberes · semana 1',
+            esquina='We Wish You a Merry Christmas · para hacer en casa',
+            intro='Villancico, y la primera canción en la que tu partitura te dice qué dedo usar en '
+                  'casi cada nota.',
+            bloques=[
+                crucigrama('DEDOS', [
+                    ('REDONDA', 2, 'La figura más larga: dura cuatro golpes.'),
+                    ('NEGRA', 1, 'La figura que dura un golpe.'),
+                    ('NAVIDAD', 4, 'La fiesta en la que se canta esta canción.'),
+                    ('SOL', 1, 'La clave que lleva tu mano derecha.'),
+                    ('MANOS', 4, 'En esta canción las dos se mueven.'),
+                ], cierre='Las casillas grises dicen lo que tu partitura lleva escrito con números.'),
+                diferencias(
+                    [n('C4'), n('C4'), n('D4'), n('C4'), n('C4'), n('D4')],
+                    [n('C4'), n('D4'), n('D4'), n('C4'), n('C4'), n('E4', 'h')],
+                    cuantas=3,
+                    titulo='Busca las tres diferencias',
+                    pista='el de arriba es el principio de tu canción · el de abajo tiene trampas'),
+                adivinar([('Vengo escrito con números debajo de las notas.', 'DEDOS'),
+                          ('Duro cuatro golpes y soy la figura más larga.', 'REDONDA'),
+                          ('Somos tres en cada compás de esta canción.', 'GOLPES')],
+                         titulo='Adivina quién soy',
+                         pista='una letra en cada casilla'),
+                rutina('Do · Do · Re con la derecha, contando tres',
+                       'La izquierda sola, mirando los números de los dedos',
+                       'Las dos manos, los cuatro primeros compases'),
+                juego('Canta el villancico y quien esté contigo lleva el pulso con palmadas. '
+                      'Después al revés: él canta y tú tocas solo el primer golpe de cada compás.'),
+            ],
+        ),
+        dict(
+            titulo='Deberes · semana 2',
+            esquina='We Wish You a Merry Christmas · para hacer en casa',
+            intro='Esta semana se empieza en el teclado y se acaba con un camino de dedos.',
+            bloques=[
+                teclado({0: 1, 1: 2, 2: 3, 3: 4},
+                        ['Escribe el nombre de las cuatro teclas marcadas.',
+                         'La 1 y la 3 son las dos primeras notas distintas de tu melodía.'],
+                        titulo='En el teclado',
+                        pista='las cuatro marcadas son de esta canción'),
+                palmas([('NA-VI-DAD', 3), ('VI-LLAN-CI-CO', 4), ('TU-RRON', 2)],
+                       titulo='El ritmo de las palabras',
+                       pista='dilo en voz alta y escríbelo con figuras en la caja'),
+                nombres(['C4', 'D4', 'E4', 'F4', 'E4', 'D4', 'G4', 'C4'],
+                        pista='son las notas de tu melodía · escríbelas debajo'),
+                camino([['4', '3', '2', '1', '3', '2'],
+                        ['3', '4', '2', '3', '1', '4'],
+                        ['2', '3', '4', '1', '2', '3'],
+                        ['1', '2', '3', '4', '4', '1']],
+                       titulo='El camino de los dedos gordos',
+                       pista='colorea solo los 1, que es el pulgar, y verás el camino'),
+                acuerdate('Los números de tu partitura no son notas: son dedos. El 1 es el pulgar y '
+                          'el 5 el meñique, en las dos manos. Si los respetas, la mano llega sola a '
+                          'la nota siguiente y no tienes que mirarte los dedos.',
+                          etiqueta='LOS NÚMEROS NO SON NOTAS'),
+                rutina('El villancico entero, muy despacio',
+                       'Las dos manos, con los dedos que dice la partitura',
+                       'Contar un-dos-tres en voz alta mientras tocas'),
+            ],
+        ),
     ],
 )
 

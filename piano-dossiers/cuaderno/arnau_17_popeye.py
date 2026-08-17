@@ -18,7 +18,9 @@ import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from arnau_comun import n, ac, sil, corch, rutina, juego, escribir
+from arnau_comun import (n, ac, sil, corch, rutina, juego, escribir,
+                         diferencias, contar, teclado, acuerdate,
+                         verdadero_falso, palmas, rodear, dibujar)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -139,65 +141,71 @@ CANCION = dict(
         ],
     ),
 
+    # Reparto de `arnau_recetas`: semana 1 la R3 (diferencias · cuenta ·
+    # teclado) y semana 2 la R4 (verdadero o falso · palmas · rodea · dibuja).
     deberes=[
-        dict(titulo='Deberes · semana 1', esquina='Popeye · para hacer en casa',
-             intro='Esta semana toca hacerse amigo del sostenido y contar el silencio del principio.',
-             bloques=[
-                 dict(tipo='nombres', num=1, titulo='¿Cómo se llama cada nota?',
-                      pista='ojo: en esta canción todos los Fa son tecla negra',
-                      notas=['D4', 'E4', 'F#4', 'G4', 'B4', 'A4', 'D5', 'C5']),
-                 dict(tipo='dibuja', num=2, titulo='Dibuja tú las notas',
-                      pista='solo el óvalo, sin el palito',
-                      nombres=['Re', 'Fa', 'Sol', 'Si', 'La', 'Do', 'Re', 'Mi']),
-                 dict(tipo='figuras', num=3, titulo='¿Cuántos golpes dura cada una?',
-                      pista='acuérdate: aquí cada compás tiene tres golpes',
-                      figuras=[('q', 'negra'), ('h', 'blanca'), ('h.', 'blanca con puntito'),
-                               ('w', 'redonda')]),
-                 dict(tipo='colorea', num=4, titulo='Rodea todos los Fa',
-                      pista='en esta canción todos van en la tecla negra',
-                      eventos=[n('D4'), n('F#4'), n('G4'), n('F#4'),
-                               n('E4'), n('F#4'), n('G4'), n('D4', 'h')],
-                      leyenda=['El sostenido del principio manda en toda la canción.',
-                               'La tecla negra del Fa es la que está justo a su derecha.']),
-                 rutina('Tocar todos los Fa en la tecla negra, subiendo y bajando',
-                        'Entrar después de un golpe de silencio, diez veces',
-                        'El vaivén de la izquierda, veinte veces'),
-                 juego('Toca un Fa en la tecla blanca y luego en la negra, y pregunta cuál suena mejor '
-                       'con la canción. Después toca la melodía a propósito con la blanca: se nota '
-                       'muchísimo. Así no se te olvida el sostenido.'),
-             ]),
-        dict(titulo='Deberes · semana 2', esquina='Popeye · para hacer en casa',
-             intro='Esta semana toca darse cuenta de que una canción larga puede tener muy poco que '
-                   'aprender.',
-             bloques=[
-                 dict(tipo='rodea', num=1, titulo='Rodea los dos compases que son iguales',
-                      pista='fíjate en las notas de una en una',
-                      compases=[[n('G3'), n('B3'), n('B3')],
-                                [n('A3'), n('C4'), n('C4')],
-                                [n('G3'), n('B3'), n('B3')],
-                                [n('D3'), n('A3'), n('A3')]], clef='bass'),
-                 dict(tipo='nombres', num=2, titulo='Otra vez los nombres, a ver si te los sabes',
-                      pista='sin mirar los deberes de la semana pasada',
-                      notas=['G4', 'F#4', 'D5', 'B4', 'E4', 'A4', 'C5', 'D4']),
-                 dict(tipo='une', num=3, titulo='Une cada cosa con lo que quiere decir',
-                      pista='una raya de un punto al otro',
-                      pares=[('El sostenido del principio', 'alegre, con marcha'),
-                             ('Allegretto', 'un golpe sin tocar'),
-                             ('Un silencio', 'todos los Fa, tecla negra')]),
-                 dict(tipo='nota', etiqueta='ACUÉRDATE',
-                      texto='Una canción de treinta compases no son treinta cosas que aprender. Busca '
-                            'lo que se repite y márcalo: casi siempre resulta que hay tres o cuatro '
-                            'trozos distintos y todo lo demás ya te lo sabes.'),
-                 dict(tipo='colorea', num=4, titulo='Colorea el primer golpe de cada compás',
-                      pista='es el que pesa más, el que marca el vaivén',
-                      eventos=[n('G3'), n('B3'), n('B3'), n('G3'), n('B3'), n('B3')],
-                      leyenda=['En un compás de tres, el primero pesa y los otros dos van flojos.',
-                               'Si los tres pesan igual, el vaivén desaparece.']),
-                 rutina('Buscar y marcar a lápiz dónde cambia el vaivén de la izquierda',
-                        'Los cuatro primeros compases con las dos manos',
-                        'La primera parte entera con la derecha sola'),
-                 escribir(4),
-             ]),
+        dict(
+            titulo='Deberes · semana 1',
+            esquina='Popeye el marinerito · para hacer en casa',
+            intro='Lo nuevo: un sostenido al principio. Todos los Fa van en la tecla negra.',
+            bloques=[
+                diferencias(
+                    [n('D4'), n('E4'), n('F#4'), n('G4'), n('B4'), n('A4')],
+                    [n('D4'), n('E4'), n('F4'), n('G4'), n('B4'), n('A4', 'h')],
+                    cuantas=2,
+                    titulo='Busca las dos diferencias',
+                    pista='el de arriba es tu canción · en el de abajo hay dos cosas cambiadas'),
+                contar([n('D4'), n('E4'), n('F#4'), n('G4'), n('B4'), n('A4'), n('D5'), n('C5')],
+                       ['¿Cuántas notas hay en total?', '¿Cuántos Fa hay?',
+                        '¿Cuántas notas van en tecla negra?'],
+                       titulo='Cuenta lo que ves',
+                       pista='son las notas de tu melodía, medidas en tu partitura'),
+                teclado({3: 1, 4: 2, 6: 3, 0: 4},
+                        ['Escribe el nombre de las cuatro teclas marcadas.',
+                         'La número 1 es un Fa: en esta canción se toca en la negra de al lado.'],
+                        titulo='En el teclado',
+                        pista='ojo con la número 1'),
+                acuerdate('Un sostenido detrás de la clave manda en toda la canción y en todos los '
+                          'Fa, estén arriba o abajo. No lo repiten en cada nota: se da por sabido. '
+                          'Antes de tocar, busca todos los Fa de tu partitura y márcalos con lápiz.',
+                          etiqueta='EL SOSTENIDO DEL PRINCIPIO'),
+                rutina('Todos los Fa de la canción, en la tecla negra',
+                       'El vaivén de la izquierda, solo, veinte veces',
+                       'Entrar después del silencio del principio'),
+                juego('Quien esté contigo dice nombres de nota y tú las buscas en el piano. Cuando '
+                      'diga Fa, tienes que ir a la tecla negra.'),
+            ],
+        ),
+        dict(
+            titulo='Deberes · semana 2',
+            esquina='Popeye el marinerito · para hacer en casa',
+            intro='Segunda semana: preguntas, ritmo de palabras y notas que dibujar.',
+            bloques=[
+                verdadero_falso([
+                    'Esta canción tiene un sostenido detrás de la clave.',
+                    'Eso quiere decir que todos los Fa van en la tecla negra.',
+                    'La canción empieza en el primer golpe del compás.',
+                    'La mano izquierda repite el mismo vaivén casi todo el rato.',
+                    'Esta canción tiene tres golpes en cada compás.',
+                ], titulo='Verdadero o falso', pista='de tu canción · marca la casilla'),
+                palmas([('PO-PE-YE', 3), ('MA-RI-NE-RO', 4), ('ES-PI-NA-CAS', 4)],
+                       titulo='El ritmo de las palabras',
+                       pista='dilo en voz alta y escríbelo con figuras en la caja'),
+                rodear([[n('G3'), n('B3'), n('B3')], [n('G3'), n('B3'), n('D4')],
+                        [n('G3'), n('B3'), n('B3')], [n('A3'), n('C4'), n('C4')]],
+                       titulo='Rodea los dos compases que son iguales',
+                       pista='es el vaivén de tu mano izquierda · míralo nota a nota'),
+                dibujar(['Sol', 'Fa♯', 'Re', 'Si', 'Mi', 'La', 'Do', 'Re'],
+                        titulo='Dibuja tú las notas',
+                        pista='solo el óvalo · el Fa♯ se dibuja igual que el Fa'),
+                rutina('La canción entera, sin fallar ni un Fa',
+                       'Los 29 compases seguidos, aunque sea muy despacio',
+                       'Contar un-dos-tres en voz alta mientras tocas'),
+                acuerdate('Esta canción empieza con un silencio: la primera nota NO cae en el uno. '
+                          'Cuenta “un” en silencio y entra en el golpe siguiente. Si entras en el '
+                          'uno, la izquierda y la derecha no se juntan nunca.'),
+            ],
+        ),
     ],
 )
 

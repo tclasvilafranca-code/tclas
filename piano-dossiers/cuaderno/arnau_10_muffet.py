@@ -18,7 +18,9 @@ import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from arnau_comun import n, ac, sil, corch, rutina, juego, escribir
+from arnau_comun import (n, ac, sil, corch, rutina, juego, escribir,
+                         palmas, inventa, nombres, verdadero_falso, acuerdate,
+                         sopa, teclado)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -136,64 +138,66 @@ CANCION = dict(
         ],
     ),
 
+    # Reparto de `arnau_recetas`: semana 1 la R19 (palmas · inventa · nombres ·
+    # verdadero o falso) y semana 2 la R20 (sopa · teclado · escribe).
     deberes=[
-        dict(titulo='Deberes · semana 1', esquina='Little Miss Muffet · para hacer en casa',
-             intro='Esta semana toca aprender a contar en dos aunque veas seis notas.',
-             bloques=[
-                 dict(tipo='nombres', num=1, titulo='¿Cómo se llama cada nota?',
-                      pista='ojo con los Si: en esta canción son tecla negra',
-                      notas=['G4', 'A4', 'Bb4', 'F4', 'C5', 'A4', 'G4', 'F4']),
-                 dict(tipo='figuras', num=2, titulo='¿Cuántos golpes dura cada una?',
-                      pista='escribe el número en la caja',
-                      figuras=[('q.', 'negra con puntito'), ('q', 'negra'),
-                               ('h', 'blanca'), ('w', 'redonda')]),
-                 dict(tipo='dibuja', num=3, titulo='Dibuja tú las notas',
-                      pista='solo el óvalo, sin el palito',
-                      nombres=['Sol', 'La', 'Si', 'Do', 'La', 'Sol', 'Fa', 'Do']),
-                 dict(tipo='colorea', num=4, titulo='Colorea la primera nota de cada grupo de tres',
-                      pista='son las que llevan el golpe, las que marca el pie',
-                      eventos=corch(['G4', 'A4', 'G4'], 3) + corch(['Bb4', 'A4', 'G4'], 3),
-                      leyenda=['Cada grupito de tres notas es UN golpe.',
-                               'Como hay dos grupitos, hay dos golpes por compás.']),
-                 rutina('Caminar por casa diciendo “man-za-na” en cada paso',
-                        'Seis notas cortas por compás, marcando la primera de cada tres',
-                        'La izquierda sola: el vaivén, veinte veces'),
-                 juego('Camina por el pasillo mientras quien esté contigo cuenta «man-za-na, man-za-na». '
-                       'Tienes que dar un paso en cada MAN. Después al revés. Cuando lo tengas en los '
-                       'pies, lo tienes en las manos: es exactamente el mismo balanceo.'),
-             ]),
-        dict(titulo='Deberes · semana 2', esquina='Little Miss Muffet · para hacer en casa',
-             intro='Esta semana toca juntar las manos, que en esta canción coinciden solo dos veces '
-                   'por compás.',
-             bloques=[
-                 dict(tipo='rodea', num=1, titulo='Rodea los dos compases que son iguales',
-                      pista='fíjate en las notas de una en una',
-                      compases=[[n('G4', 'q.'), n('Bb4', 'q.')],
-                                [n('A4', 'q.'), n('F4', 'q.')],
-                                [n('G4', 'q.'), n('Bb4', 'q.')],
-                                [n('C5', 'q.'), n('A4', 'q.')]]),
-                 dict(tipo='nombres', num=2, titulo='Otra vez los nombres, a ver si te los sabes',
-                      pista='sin mirar los deberes de la semana pasada',
-                      notas=['F4', 'Bb4', 'D5', 'G4', 'C5', 'E4', 'A4', 'F4']),
-                 dict(tipo='une', num=3, titulo='Une cada cosa con lo que quiere decir',
-                      pista='una raya de un punto al otro',
-                      pares=[('El 6 y el 8 de la clave', 'todos los Si, tecla negra'),
-                             ('Las notas unidas de tres en tres', 'seis notas cortas por compás'),
-                             ('El bemol del principio', 'cada grupito es un golpe')]),
-                 dict(tipo='colorea', num=4, titulo='Colorea las notas que suben',
-                      pista='la melodía sube y baja como una ola, no da saltos',
-                      eventos=corch(['G4', 'A4', 'Bb4'], 3) + corch(['A4', 'G4', 'F4'], 3),
-                      leyenda=['Subir es ir a una nota que está más arriba en el papel.',
-                               'En esta canción casi todo son escalones de uno en uno.']),
-                 dict(tipo='nota', etiqueta='ACUÉRDATE',
-                      texto='Las dos manos solo coinciden dos veces por compás. Todo lo demás lo hace '
-                            'la derecha sola mientras la izquierda espera. Así que junta primero esos '
-                            'dos golpes y rellena después.'),
-                 rutina('Solo los dos golpes de cada compás, con las dos manos',
-                        'La derecha entera, diciendo “man-za-na”',
-                        'Los cuatro primeros compases con las dos manos'),
-                 escribir(4),
-             ]),
+        dict(
+            titulo='Deberes · semana 1',
+            esquina='Little Miss Muffet · para hacer en casa',
+            intro='Lo nuevo: seis notas cortas en cada compás, pero se cuentan DOS, de tres en tres.',
+            bloques=[
+                palmas([('MU-FFET', 2), ('A-RA-ÑA', 3), ('TA-BU-RE-TE', 4)],
+                       titulo='El ritmo de las palabras',
+                       pista='dilo en voz alta y escríbelo con figuras en la caja'),
+                inventa(['Solo Fa, Sol, La y Si♭, que son las de tu melodía.',
+                         'Dos compases, y cada uno con dos golpes largos.',
+                         'Acuérdate: el Si va en la tecla negra.'],
+                        time_sig=(6, 8),
+                        titulo='Inventa dos compases',
+                        pista='tiene que cumplir las tres cosas'),
+                nombres(['G4', 'A4', 'Bb4', 'F4', 'C5', 'A4', 'G4', 'F4'],
+                        pista='son las notas de tu melodía · cuidado con el Si'),
+                verdadero_falso([
+                    'En cada compás de esta canción hay seis notas cortas.',
+                    'Esos seis se cuentan de tres en tres, o sea dos golpes.',
+                    'Las notas cortas van unidas de tres en tres en la partitura.',
+                    'En esta canción los Si se tocan en la tecla blanca.',
+                ], titulo='Verdadero o falso', pista='de tu canción · marca la casilla'),
+                acuerdate('Seis cortas por compás parecen muchas, pero no se cuentan de una en una: '
+                          'se cuentan de tres en tres. Di “UN-dos-tres, DOS-dos-tres” marcando fuerte '
+                          'el uno y el dos. Verás que el compás cabe en dos golpes largos y todo se '
+                          'ordena solo.',
+                          etiqueta='SEIS NOTAS, DOS GOLPES'),
+                rutina('Decir “UN-dos-tres, DOS-dos-tres” dando palmadas',
+                       'La melodía entera muy despacio, buscando los Si',
+                       'El vaivén de la izquierda, solo'),
+            ],
+        ),
+        dict(
+            titulo='Deberes · semana 2',
+            esquina='Little Miss Muffet · para hacer en casa',
+            intro='Segunda semana: sopa de letras, teclado y un compás para copiar.',
+            bloques=[
+                sopa(['ARAÑA', 'VAIVEN', 'CORCHEAS', 'BEMOL', 'DOS', 'SEIS',
+                      'GRUPOS', 'FA', 'SOL', 'LA'], semilla=1010, filas=8,
+                     titulo='Sopa de letras de tu canción',
+                     pista='diez palabras · tumbadas, de pie o en diagonal'),
+                teclado({0: 1, 3: 2, 4: 3, 6: 4},
+                        ['Escribe el nombre de las cuatro teclas blancas marcadas.',
+                         'Pinta también la tecla negra que hay justo al lado de la número 4: '
+                         'ese es el Si de esta canción.'],
+                        titulo='En el teclado',
+                        pista='las cuatro marcadas son de esta canción'),
+                escribir(titulo='Copia aquí un compás de tu canción',
+                         pista='el que más te cueste · con las cortas unidas de tres en tres'),
+                rutina('La melodía entera contando dos golpes largos',
+                       'El vaivén de la izquierda sin mirarse la mano',
+                       'Las dos manos, cuatro compases sin parar'),
+                juego('Quien esté contigo da dos palmadas por compás, lentas, y tú tocas las seis '
+                      'notas cortas entre palmada y palmada. Si te sales, empieza otra vez más '
+                      'despacio.'),
+            ],
+        ),
     ],
 )
 

@@ -20,7 +20,9 @@ import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from arnau_comun import n, ac, sil, corch, rutina, juego, escribir
+from arnau_comun import (n, ac, sil, corch, rutina, juego, escribir,
+                         crucigrama, contar, unir, acuerdate, camino, adivinar,
+                         rodear, teclado)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -143,64 +145,75 @@ CANCION = dict(
         ],
     ),
 
+    # Reparto de `arnau_recetas`: semana 1 la R17 (crucigrama · cuenta · une) y
+    # semana 2 la R18 (camino · adivina · rodea · teclado · escribe).
     deberes=[
-        dict(titulo='Deberes · semana 1', esquina='My Bonnie · para hacer en casa',
-             intro='Esta semana toca practicar el cambio de sitio de la mano, que es lo nuevo.',
-             bloques=[
-                 dict(tipo='nombres', num=1, titulo='¿Cómo se llama cada nota?',
-                      pista='escríbelas en la cajita de debajo',
-                      notas=['E4', 'D4', 'C4', 'F4', 'G4', 'A4', 'B4', 'C5']),
-                 dict(tipo='dibuja', num=2, titulo='Dibuja tú las notas',
-                      pista='solo el óvalo, sin el palito',
-                      nombres=['Mi', 'Re', 'Do', 'Sol', 'La', 'Si', 'Do', 'Fa']),
-                 dict(tipo='figuras', num=3, titulo='¿Cuántos golpes dura cada una?',
-                      pista='acuérdate: aquí cada compás tiene tres golpes',
-                      figuras=[('q', 'negra'), ('h', 'blanca'), ('h.', 'blanca con puntito'),
-                               ('w', 'redonda')]),
-                 dict(tipo='une', num=4, titulo='Une cada palabra con lo que quiere decir',
-                      pista='las dos están escritas en tu partitura',
-                      pares=[('shift', 'la izquierda pasa por encima'),
-                             ('l.h. over', 'despacio y con nostalgia'),
-                             ('slowly', 'la mano cambia de sitio')]),
-                 rutina('El cambio de sitio suelto, diez veces, mirando la tecla nueva',
-                        'La melodía del principio, muy despacio',
-                        'El movimiento del cruce de manos, sin tocar'),
-                 juego('Pon un objeto pequeño en una tecla lejana. Toca una nota cerca, mira el objeto, '
-                       'y lleva la mano hasta esa tecla sin mirar el camino, solo el destino. Quien '
-                       'esté contigo comprueba si has acertado. Diez veces. Eso es lo que hace la mano '
-                       'en un «shift».'),
-             ]),
-        dict(titulo='Deberes · semana 2', esquina='My Bonnie · para hacer en casa',
-             intro='Esta semana toca buscar en la partitura todos los sitios donde la mano se muda.',
-             bloques=[
-                 dict(tipo='rodea', num=1, titulo='Rodea los dos compases que son iguales',
-                      pista='fíjate en las notas de una en una',
-                      compases=[[n('E4'), n('D4'), n('C4')],
-                                [n('D4'), n('C4'), n('D4')],
-                                [n('E4'), n('D4'), n('C4')],
-                                [n('C4'), n('D4'), n('E4')]]),
-                 dict(tipo='nombres', num=2, titulo='Otra vez los nombres, a ver si te los sabes',
-                      pista='sin mirar los deberes de la semana pasada',
-                      notas=['G4', 'C5', 'A4', 'E4', 'B4', 'D4', 'F4', 'C4']),
-                 dict(tipo='colorea', num=3, titulo='Colorea las notas largas',
-                      pista='son los sitios donde la canción respira y donde te da tiempo a mudarte',
-                      eventos=[n('E4'), n('D4'), n('C4'), n('D4'),
-                               n('C4', 'h.'), n('E4'), n('F4'), n('G4', 'h.')],
-                      leyenda=['La blanca con puntito dura tres golpes: el compás entero.',
-                               'Ahí es donde da tiempo a mirar la tecla siguiente.']),
-                 dict(tipo='nota', etiqueta='ACUÉRDATE',
-                      texto='Los cambios de sitio se preparan en las notas largas, que es cuando hay '
-                            'tiempo. Busca en tu partitura la palabra «shift», mira qué nota hay justo '
-                            'antes, y aprovecha ese rato para llevar la mano.'),
-                 rutina('Buscar y rodear a lápiz todos los «shift» de la partitura',
-                        'Los cuatro primeros compases con las dos manos',
-                        'El cruce de manos del final, cinco veces'),
-                 juego('Toca una nota, cierra los ojos, y sin mirar lleva la mano cinco teclas más '
-                       'arriba y toca. Quien esté contigo dice si has acertado. Diez veces. Se puede '
-                       'aprender a medir distancias sin mirar, y es lo que hace que un «shift» salga '
-                       'sin pararse.', 'esta vez con los ojos cerrados'),
-                 escribir(4),
-             ]),
+        dict(
+            titulo='Deberes · semana 1',
+            esquina='My Bonnie Lies Over the Ocean · para hacer en casa',
+            intro='Lo nuevo: la mano cambia de sitio en el teclado, y al final la izquierda pasa por '
+                  'encima de la derecha.',
+            bloques=[
+                crucigrama('CRUCE', [
+                    ('OCEANO', 1, 'El sitio del que habla el título de esta canción.'),
+                    ('ARRIBA', 2, 'Adónde va la mano izquierda al final.'),
+                    ('PULGAR', 1, 'El dedo número 1, el más gordo.'),
+                    ('BLANCA', 4, 'La figura hueca que dura dos golpes.'),
+                    ('MENIQUE', 1, 'El dedo más pequeño, el número 5.'),
+                ], cierre='Las casillas grises dicen lo que hacen las manos al final de la canción.'),
+                contar([n('E4'), n('D4'), n('C4'), n('D4'), n('C4'), n('D4'), n('E4')],
+                       ['¿Cuántos Re hay?', '¿Cuántas veces sale el Do?',
+                        '¿Cuántas notas hay en total?'],
+                       titulo='Cuenta lo que ves',
+                       pista='es el principio de tu melodía, medido en tu partitura'),
+                unir([('“shift” en la partitura', 'la izquierda pasa por encima de la derecha'),
+                      ('“l.h. over” al final', 'muy despacio y con nostalgia'),
+                      ('“Slowly, longingly”', 'la mano se cambia de sitio'),
+                      ('“Level Two”', 'esta pieza es de segundo curso')],
+                     titulo='Une cada cosa escrita con lo que quiere decir',
+                     pista='están desordenadas · una raya de un punto al otro'),
+                rutina('Mi · Re · Do con la derecha, contando tres',
+                       'Los cambios de sitio, mirando antes adónde va la mano',
+                       'El cruce del final, muy despacio'),
+                acuerdate('Cuando la mano cambia de sitio, lo que se mueve es la mano ENTERA, no los '
+                          'dedos estirándose. Mira adónde vas antes de saltar, y aprovecha una nota '
+                          'larga para hacer el viaje sin que se note.',
+                          etiqueta='CAMBIAR DE SITIO'),
+            ],
+        ),
+        dict(
+            titulo='Deberes · semana 2',
+            esquina='My Bonnie Lies Over the Ocean · para hacer en casa',
+            intro='Segunda semana: un camino de manos, adivinanzas y el teclado.',
+            bloques=[
+                camino([['queda', 'cambia', 'queda', 'queda', 'cruza', 'queda'],
+                        ['queda', 'cambia', 'cambia', 'queda', 'queda', 'cruza'],
+                        ['cruza', 'queda', 'cambia', 'cambia', 'queda', 'queda'],
+                        ['queda', 'queda', 'queda', 'cambia', 'cambia', 'queda'],
+                        ['queda', 'cruza', 'queda', 'queda', 'cambia', 'queda']],
+                       titulo='El camino de los cambios de sitio',
+                       pista='colorea solo donde dice “cambia” y sale un camino'),
+                adivinar([('Me muevo entera cuando la canción sube o baja mucho.', 'MANO'),
+                          ('Soy el dedo número 5, el más pequeño.', 'MENIQUE'),
+                          ('Al final de esta canción paso por encima de la otra.', 'IZQUIERDA')],
+                         titulo='Adivina quién soy',
+                         pista='una letra en cada casilla'),
+                rodear([[n('E4'), n('D4'), n('C4')], [n('D4'), n('C4'), n('D4')],
+                        [n('E4'), n('D4'), n('C4')], [n('F4'), n('E4'), n('D4')]],
+                       titulo='Rodea los dos compases que son iguales',
+                       pista='tres notas en cada compás · míralas de una en una'),
+                teclado({0: 1, 4: 2, 7: 3, 11: 4},
+                        ['Escribe el nombre de las cuatro teclas marcadas.',
+                         'De la 1 a la 4 hay un buen viaje: eso es un cambio de sitio.'],
+                        titulo='En el teclado',
+                        pista='fíjate en lo lejos que está la 4 de la 1'),
+                escribir(titulo='Copia aquí el compás donde la mano cambia de sitio',
+                         pista='cópialo tal cual y luego tócalo cinco veces'),
+                rutina('La melodía entera, con los cambios de sitio',
+                       'El cruce del final, diez veces seguidas',
+                       'Las dos manos, sin parar aunque haya fallos'),
+            ],
+        ),
     ],
 )
 

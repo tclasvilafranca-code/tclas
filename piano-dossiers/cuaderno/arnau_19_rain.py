@@ -19,7 +19,9 @@ import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from arnau_comun import n, ac, sil, corch, rutina, juego, escribir
+from arnau_comun import (n, ac, sil, corch, rutina, juego, escribir,
+                         crucigrama, palmas, figuras, acuerdate, teclado,
+                         adivinar, rodear, contar)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -134,60 +136,71 @@ CANCION = dict(
         ],
     ),
 
+    # Reparto de `arnau_recetas`: semana 1 la R7 (crucigrama · palmas ·
+    # figuras) y semana 2 la R8 (teclado · adivina · rodea · cuenta).
     deberes=[
-        dict(titulo='Deberes · semana 1', esquina='Rain Rain Go Away · para hacer en casa',
-             intro='Esta semana toca aprenderse tu parte en casa. La semana que viene se junta con la '
-                   'otra.',
-             bloques=[
-                 dict(tipo='nombres', num=1, titulo='¿Cómo se llama cada nota?',
-                      pista='escríbelas en la cajita de debajo',
-                      notas=['G5', 'E5', 'A5', 'C5', 'D5', 'B4', 'F5', 'G5']),
-                 dict(tipo='dibuja', num=2, titulo='Dibuja tú las notas',
-                      pista='solo el óvalo, sin el palito',
-                      nombres=['Sol', 'Mi', 'La', 'Do', 'Re', 'Si', 'Fa', 'Sol']),
-                 dict(tipo='figuras', num=3, titulo='¿Cuántos golpes dura cada una?',
-                      pista='escribe el número en la caja',
-                      figuras=[('q', 'negra'), ('h', 'blanca'), ('w', 'redonda'),
-                               ('h.', 'blanca con puntito')]),
-                 dict(tipo='colorea', num=4, titulo='Colorea las notas que se repiten',
-                      pista='en esta pieza hay muchas notas iguales seguidas',
-                      eventos=[n('G5'), n('G5'), n('E5'), n('A5'), n('G5'), n('G5'), n('E5', 'h')],
-                      leyenda=['Repetir una tecla es fácil: no hay que buscar nada.',
-                               'Lo difícil de esta pieza es tocarla al mismo tiempo que otra persona.']),
-                 rutina('Tu parte, muy despacio, contando en voz alta',
-                        'Contar un compás y entrar en el golpe siguiente, diez veces',
-                        'Tu parte entera sin parar, aunque haya fallos'),
-                 juego('Quien esté contigo cuenta un compás en voz alta y luego lleva el pulso con '
-                       'palmadas mientras tú tocas tu parte. Si te pierdes, NO pares: sigue contando y '
-                       'vuelve a entrar. Eso es lo que hay que practicar, no las notas.'),
-             ]),
-        dict(titulo='Deberes · semana 2', esquina='Rain Rain Go Away · para hacer en casa',
-             intro='Esta semana ya se toca con otra persona. En casa, prepara lo que se puede preparar '
-                   'solo.',
-             bloques=[
-                 dict(tipo='rodea', num=1, titulo='Rodea los dos compases que son iguales',
-                      pista='fíjate en las notas de una en una',
-                      compases=[[n('G5'), n('G5'), n('E5'), n('A5')], [n('G5'), n('E5'), n('G5'), n('A5')], [n('G5'), n('G5'), n('E5'), n('A5')], [n('C5'), n('D5'), n('E5'), n('E5')]]),
-                 dict(tipo='nombres', num=2, titulo='Otra vez los nombres, a ver si te los sabes',
-                      pista='sin mirar los deberes de la semana pasada',
-                      notas=['E5', 'G5', 'C5', 'A5', 'B4', 'D5', 'G5', 'F5']),
-                 dict(tipo='une', num=3, titulo='Une cada cosa con lo que hay que hacer',
-                      pista='una raya de un punto al otro',
-                      pares=[('Antes de empezar', 'seguir contando y volver a entrar'),
-                             ('Si te pierdes', 'mirar a la otra persona de vez en cuando'),
-                             ('Mientras tocáis', 'contar un compás en voz alta')]),
-                 dict(tipo='nota', etiqueta='ACUÉRDATE',
-                      texto='En una pieza a cuatro manos, acabar juntos es tan importante como empezar '
-                            'juntos. La última nota se levanta a la vez, y eso se decide antes: una de '
-                            'las dos hace un gesto pequeño con la cabeza y las dos sueltan.'),
-                 juego('Tocad los dos a la vez la última nota y levantad la mano en el mismo '
-                       'momento, sin decir nada: solo con un gesto pequeño de la cabeza. Cinco veces. '
-                       'Acabar juntos se nota tanto como empezar juntos.', 'esta vez para acabar'),
-                 rutina('Tu parte entera sin parar, tres veces',
-                        'Contar un compás y entrar, con alguien de casa llevando el pulso',
-                        'La última nota: levantar la mano a la vez que otra persona'),
-                 escribir(4),
-             ]),
+        dict(
+            titulo='Deberes · semana 1',
+            esquina='Rain Rain Go Away · para hacer en casa',
+            intro='Lo nuevo: se toca entre dos personas. Esta semana prepara tu parte en casa.',
+            bloques=[
+                crucigrama('DUETO', [
+                    ('REDONDA', 2, 'La figura que dura cuatro golpes.'),
+                    ('PULSO', 1, 'Los golpes que van pasando siempre igual, como un reloj.'),
+                    ('NEGRA', 1, 'La figura que dura un golpe.'),
+                    ('CUATRO', 3, 'Las manos que hacen falta para tocar esta pieza.'),
+                    ('MANOS', 3, 'Tienes dos, y con las de otra persona son cuatro.'),
+                ], cierre='Las casillas grises dicen cómo se llama una pieza para dos personas.'),
+                palmas([('LLU-VIA', 2), ('PA-RA-GUAS', 3)],
+                       titulo='El ritmo de las palabras',
+                       pista='dilo en voz alta y escríbelo con figuras en la caja'),
+                figuras([('q', 'negra'), ('h', 'blanca'), ('w', 'redonda'),
+                         ('h.', 'blanca con puntito')],
+                        titulo='¿Cuántos golpes dura cada una?',
+                        pista='escribe el número en la caja'),
+                acuerdate('Empezar a la vez no se adivina: se decide. Uno cuenta un compás en voz '
+                          'alta y los dos entran en el golpe siguiente.',
+                          etiqueta='EMPEZAR LOS DOS A LA VEZ'),
+                rutina('Tu parte, muy despacio, contando en voz alta',
+                       'Contar un compás y entrar en el golpe siguiente, diez veces',
+                       'Tu parte entera sin parar, aunque haya fallos'),
+                juego('Quien esté contigo cuenta un compás y luego lleva el pulso con palmadas '
+                      'mientras tocas. Si te pierdes, NO pares: vuelve a entrar.'),
+            ],
+        ),
+        dict(
+            titulo='Deberes · semana 2',
+            esquina='Rain Rain Go Away · para hacer en casa',
+            intro='Esta semana ya se toca con otra persona. En casa, prepara lo que se puede solo.',
+            bloques=[
+                teclado({7: 1, 9: 2, 11: 3, 12: 4},
+                        ['Escribe el nombre de las cuatro teclas marcadas.',
+                         'Tu parte va en esta zona, la de arriba: la otra persona toca a tu izquierda.'],
+                        titulo='En el teclado',
+                        pista='tu parte es la de la derecha del piano'),
+                adivinar([('Nos hacen falta cuatro para tocar esta pieza.', 'MANOS'),
+                          ('Voy pasando siempre igual y nos mantiene juntos.', 'PULSO'),
+                          ('Es lo que NO hay que hacer si te pierdes.', 'PARAR')],
+                         titulo='Adivina quién soy',
+                         pista='una letra en cada casilla'),
+                rodear([[n('G5'), n('G5'), n('E5'), n('A5')],
+                        [n('G5'), n('E5'), n('G5'), n('A5')],
+                        [n('G5'), n('G5'), n('E5'), n('A5')],
+                        [n('C5'), n('D5'), n('E5'), n('E5')]],
+                       titulo='Rodea los dos compases que son iguales',
+                       pista='son de tu parte · míralos nota a nota'),
+                contar([n('G5'), n('G5'), n('E5'), n('A5'), n('G5'), n('G5'), n('E5')],
+                       ['¿Cuántos Sol hay?', '¿Cuántas veces sale el Mi?',
+                        '¿Cuántas notas hay en total?'],
+                       titulo='Cuenta lo que ves',
+                       pista='son las alturas comprobadas de tu parte'),
+                rutina('Tu parte entera sin parar, tres veces',
+                       'Contar un compás y entrar, con alguien de casa',
+                       'Mirar a la otra persona de vez en cuando, sin dejar de tocar'),
+                juego('Tocad los dos a la vez y, sin decir nada, que uno de los dos vaya un poco más '
+                      'despacio a propósito. El otro tiene que seguirle. Eso es tocar en pareja.'),
+            ],
+        ),
     ],
 )
 

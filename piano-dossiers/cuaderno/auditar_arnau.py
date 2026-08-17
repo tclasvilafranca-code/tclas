@@ -6,6 +6,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'engine'))
 
 from cancion import auditar
+from auditar_variedad import revisar_variedad, hojas_de_deberes
+from arnau_recetas import revisar_reparto
 
 MODULOS = ['arnau_01_chopsticks', 'arnau_02_clementine', 'arnau_03_jolly',
            'arnau_04_ears', 'arnau_05_wheels', 'arnau_06_saints',
@@ -20,6 +22,9 @@ def main():
     fallos = 0
     for nombre in MODULOS:
         fallos += len(auditar(__import__(nombre).CANCION))
+    print()
+    fallos += len(revisar_variedad(hojas_de_deberes(MODULOS), 'Arnau'))
+    fallos += len(revisar_reparto(MODULOS))
     print('\n%s' % ('TODO OK' if not fallos else '%d FALLOS EN TOTAL' % fallos))
     return fallos
 

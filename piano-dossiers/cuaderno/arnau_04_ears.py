@@ -20,6 +20,8 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from arnau_comun import (rutina, juego, acuerdate, crucigrama, palmas, figuras,
+                         teclado, adivinar, rodear, contar)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -160,91 +162,72 @@ CANCION = dict(
         ],
     ),
 
+    # Reparto de `arnau_recetas`: semana 1 la R7 (crucigrama · palmas ·
+    # figuras) y semana 2 la R8 (teclado · adivina · rodea · cuenta).
     deberes=[
         dict(
             titulo='Deberes · semana 1',
             esquina='Do Your Ears Hang Low? · para hacer en casa',
-            intro='Esta semana toca aprenderse los silencios y practicar el contar. Todo lo de aquí '
-                  'está en tu partitura.',
+            intro='La novedad son los huecos: ratos en los que no tocas nada y el tiempo sigue.',
             bloques=[
-                dict(tipo='nombres', num=1,
-                     titulo='¿Cómo se llama cada nota?',
-                     pista='escríbelas en la cajita de debajo',
-                     notas=['E4', 'D4', 'C4', 'F4', 'G4', 'E4', 'A4', 'C5']),
-                dict(tipo='figuras', num=2,
-                     titulo='¿Cuántos golpes dura cada una?',
-                     pista='escribe el número en la caja',
-                     figuras=[('q', 'negra'), ('h', 'blanca'), ('w', 'redonda'),
-                              ('h.', 'blanca con puntito')]),
-                dict(tipo='colorea', num=3,
-                     titulo='Rodea los huecos',
-                     pista='busca en tu partitura y rodea todos los silencios que encuentres',
-                     eventos=[n('C4'), n('D4'), n('E4'), n('D4'),
-                              n('C4'), n('E4'), n('G4'), n('E4')],
-                     leyenda=['Un silencio dura lo mismo que una nota, pero no suena.',
-                              'Cuéntalo igual: un-dos-tres-cuatro, sin parar.']),
-                dict(tipo='rutina',
-                     titulo='Lo que hay que tocar cada día',
-                     pista='pon una cruz cuando lo hagas · cinco minutos bastan',
-                     tareas=['La melodía del principio, contando en voz alta',
-                             'Toca-hueco-toca-hueco, ocho veces seguidas',
-                             'La izquierda sola, muy despacio']),
-                dict(tipo='une', num=4,
-                     titulo='Une cada figura con lo que dura',
-                     pista='una raya de un punto al otro',
-                     pares=[('Redonda', 'un golpe'),
-                            ('Blanca', 'cuatro golpes'),
-                            ('Negra', 'dos golpes')]),
-                dict(tipo='escucha',
-                     titulo='UN JUEGO, CON ALGUIEN DE CASA',
-                     pista='no hace falta que sepa música',
-                     texto='Quien esté contigo cuenta en voz alta un-dos-tres-cuatro sin parar, y tú '
-                           'tocas SOLO en el uno y en el tres. Luego al revés: solo en el dos y en el '
-                           'cuatro, que es mucho más difícil. Cinco veces cada uno.'),
+                crucigrama('PAUSA', [
+                    ('COMPAS', 3, 'El trozo que hay entre dos rayas de arriba abajo.'),
+                    ('NEGRA', 4, 'La figura que dura un golpe.'),
+                    ('CUATRO', 1, 'Los golpes que hay en cada compás de esta canción.'),
+                    ('MANOS', 4, 'En esta canción, por fin, se mueven las dos.'),
+                    ('CORTAS', 4, 'Las notas que van de dos en dos, unidas por una barra.'),
+                ], cierre='Las casillas grises dicen lo que hay en los huecos donde no se toca.'),
+                palmas([('SI-LEN-CIO', 3), ('O-RE-JAS', 3)],
+                       titulo='El ritmo de las palabras',
+                       pista='dilo en voz alta y escríbelo con figuras en la caja'),
+                figuras([('q', 'negra'), ('e', 'corchea'), ('h', 'blanca'),
+                         ('w', 'redonda')],
+                        titulo='¿Cuántos golpes dura cada una?',
+                        pista='la corchea es la mitad de una negra'),
+                acuerdate('Cuando no suena nada parece que el tiempo se para, y no se para: sigue '
+                          'corriendo igual. Si te saltas un hueco entras antes de tiempo, y a '
+                          'partir de ahí todo va corrido aunque las notas sean las buenas. Cuenta '
+                          'los huecos en voz alta y más fuerte que las notas.',
+                          etiqueta='POR QUÉ LOS HUECOS SE CUENTAN'),
+                rutina('Mi · Re · Do · Do, contando los cuatro golpes',
+                       'Toca-hueco-toca-hueco, sin acelerar en el hueco',
+                       'Las dos manos, los dos primeros compases'),
+                juego('Quien esté contigo da palmadas y de vez en cuando se salta una a propósito. '
+                      'Tú tienes que decir en qué golpe estaba el hueco. Diez veces.'),
             ],
         ),
         dict(
             titulo='Deberes · semana 2',
             esquina='Do Your Ears Hang Low? · para hacer en casa',
-            intro='Ahora que los huecos ya no te pillan, esta semana toca mirar la partitura con un '
-                  'lápiz y juntar las dos manos.',
+            intro='Esta semana se empieza en el teclado y se acaba contando. Ten la partitura al '
+                  'lado, que hace falta para el ejercicio de rodear.',
             bloques=[
-                dict(tipo='rodea', num=1,
-                     titulo='Rodea los dos compases que son iguales',
-                     pista='fíjate en las notas de una en una',
-                     compases=[[n('E4'), n('D4'), n('C4'), n('C4')],
-                               [n('C4'), n('D4'), n('E4'), n('E4')],
-                               [n('E4'), n('D4'), n('C4'), n('C4')],
-                               [n('G4'), n('E4'), n('C4'), n('C4')]]),
-                dict(tipo='dibuja', num=2,
-                     titulo='Dibuja tú las notas',
-                     pista='solo el óvalo, sin el palito',
-                     nombres=['Mi', 'Re', 'Do', 'Fa', 'Sol', 'Do', 'La', 'Mi']),
-                dict(tipo='nota',
-                     etiqueta='ACUÉRDATE',
-                     texto='Los números que hay encima de las notas no son la nota: son el DEDO con el '
-                           'que hay que tocarla. El 1 es el pulgar y el 5 es el meñique. Si los usas, '
-                           'la mano llega sola a la siguiente nota y no tienes que mirarte los dedos.'),
-                dict(tipo='rutina',
-                     titulo='Lo que hay que tocar cada día',
-                     pista='pon una cruz cuando lo hagas',
-                     tareas=['Los cuatro primeros compases con las dos manos',
-                             'La canción entera con la derecha sola',
-                             'Contar en voz alta mientras tocas, sin parar en los fallos']),
-                dict(tipo='nombres', num=3,
-                     titulo='Otra vez los nombres, a ver si ya te los sabes',
-                     pista='sin mirar los deberes de la semana pasada',
-                     notas=['G4', 'E4', 'C5', 'A4', 'F4', 'D4', 'B4', 'E4']),
-                dict(tipo='escucha',
-                     titulo='UN JUEGO, CON ALGUIEN DE CASA',
-                     pista='esta vez de huecos',
-                     texto='Toca cuatro golpes seguidos, pero deja UNO sin tocar, el que tú quieras. '
-                           'Quien esté contigo tiene que decir cuál faltaba: el uno, el dos, el tres o '
-                           'el cuatro. Cinco veces cada uno.'),
-                dict(tipo='escribe', num=4,
-                     titulo='Copia aquí el compás que más te cueste',
-                     pista='cópialo tal cual y luego tócalo cinco veces',
-                     lineas=1),
+                teclado({0: 1, 1: 2, 2: 3, 4: 4},
+                        ['Escribe el nombre de las cuatro teclas marcadas.',
+                         'La 1, la 2 y la 3 son las tres primeras notas de tu melodía, al revés.'],
+                        titulo='En el teclado',
+                        pista='las cuatro marcadas son de esta canción'),
+                adivinar([('No sueno, pero ocupo mi sitio y hay que contarme.', 'SILENCIO'),
+                          ('Vamos de dos en dos, unidas por una barra de arriba.', 'CORCHEAS'),
+                          ('En esta canción, por primera vez, nos movemos las dos.', 'MANOS')],
+                         titulo='Adivina quién soy',
+                         pista='una letra en cada casilla'),
+                rodear([[n('C4'), n('D4'), n('E4'), n('E4')],
+                        [n('E4'), n('D4'), n('C4'), n('C4')],
+                        [n('C4'), n('D4'), n('E4'), n('E4')],
+                        [n('E4'), n('E4'), n('D4'), n('C4')]],
+                       titulo='Rodea los dos compases que son iguales',
+                       pista='cuatro notas en cada compás · míralas de una en una'),
+                contar([n('E4'), n('D4'), n('C4'), n('C4'), n('C4'), n('D4'), n('E4'), n('E4')],
+                       ['¿Cuántos Do hay?', '¿Cuántos Mi hay?',
+                        '¿Cuántas notas hay en total?'],
+                       titulo='Cuenta lo que ves',
+                       pista='es el principio de tu melodía, medido en tu partitura'),
+                rutina('La melodía entera con la derecha sola',
+                       'Los compases con hueco, contando en voz alta',
+                       'Las dos manos, cuatro compases sin parar'),
+                juego('Tú tocas la melodía y quien esté contigo lleva el pulso con palmadas. Si te '
+                      'saltas un hueco, se nota enseguida: la palmada y tu nota dejan de ir juntas.'),
             ],
         ),
     ],

@@ -17,7 +17,9 @@ import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from arnau_comun import n, ac, sil, corch, rutina, juego, escribir
+from arnau_comun import (n, ac, sil, corch, rutina, juego, escribir,
+                         camino, nombres, inventa, unir, sopa, ordenar,
+                         colorear, acuerdate)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -140,67 +142,71 @@ CANCION = dict(
         ],
     ),
 
+    # Reparto de `arnau_recetas`: semana 1 la R5 (camino · nombres · inventa ·
+    # une) y semana 2 la R6 (sopa · ordena · colorea).
     deberes=[
-        dict(titulo='Deberes · semana 1', esquina='El submarino amarillo · para hacer en casa',
-             intro='Esta semana toca aprender el molde de la izquierda, que es casi toda la canción.',
-             bloques=[
-                 dict(tipo='nombres', num=1, titulo='¿Cómo se llama cada nota?',
-                      pista='ojo: en esta canción todos los Fa son tecla negra',
-                      notas=['G3', 'B3', 'D4', 'A3', 'C4', 'E4', 'F#3', 'G3'], clef='bass'),
-                 dict(tipo='nombres', num=2, titulo='Y estas, que son de la melodía',
-                      pista='aquí la clave es la de arriba',
-                      notas=['B4', 'C5', 'D5', 'A4', 'G4', 'E4', 'F#4', 'B4']),
-                 dict(tipo='figuras', num=3, titulo='¿Cuántos golpes dura cada una?',
-                      pista='escribe el número en la caja',
-                      figuras=[('q', 'negra'), ('h', 'blanca'), ('w', 'redonda'),
-                               ('h.', 'blanca con puntito')]),
-                 dict(tipo='colorea', num=4, titulo='Rodea todos los Fa',
-                      pista='en esta canción todos van en la tecla negra',
-                      eventos=[n('D4'), n('F#4'), n('G4'), n('F#4'),
-                               n('E4'), n('F#4'), n('G4'), n('D4', 'h')],
-                      leyenda=['El sostenido del principio manda en toda la canción.',
-                               'La tecla negra del Fa está justo a su derecha.']),
-                 rutina('El molde de la izquierda, veinte veces',
-                        'El mismo molde movido a los otros sitios',
-                        'Tocar todos los Fa en la tecla negra, subiendo y bajando'),
-                 juego('Toca el molde de la izquierda mientras quien esté contigo lleva el pulso dando '
-                       'palmadas. Que vaya cambiando de velocidad sin avisar: unas veces lento y otras '
-                       'más rápido. Tú tienes que seguirle. Es la manera de aprender a no acelerar por '
-                       'tu cuenta.'),
-             ]),
-        dict(titulo='Deberes · semana 2', esquina='El submarino amarillo · para hacer en casa',
-             intro='Esta semana toca juntar las manos y empezar a subir la velocidad, pero con cabeza.',
-             bloques=[
-                 dict(tipo='rodea', num=1, titulo='Rodea los dos compases que son iguales',
-                      pista='fíjate en las notas de una en una',
-                      compases=[[n('G3'), n('B3'), n('D4'), n('B3')],
-                                [n('A3'), n('C4'), n('E4'), n('C4')],
-                                [n('G3'), n('B3'), n('D4'), n('B3')],
-                                [n('D3'), n('A3'), n('C4'), n('A3')]], clef='bass'),
-                 dict(tipo='dibuja', num=2, titulo='Dibuja tú las notas',
-                      pista='solo el óvalo, sin el palito',
-                      nombres=['Si', 'Do', 'Re', 'La', 'Sol', 'Mi', 'Fa', 'Si']),
-                 dict(tipo='une', num=3, titulo='Une cada cosa con lo que quiere decir',
-                      pista='una raya de un punto al otro',
-                      pares=[('Allegro', 'todos los Fa, tecla negra'),
-                             ('El sostenido del principio', 'el mismo dibujo movido de sitio'),
-                             ('Un molde', 'rápido')]),
-                 dict(tipo='nota', etiqueta='ACUÉRDATE',
-                      texto='Subir de velocidad solo vale si la canción sale ENTERA y sin pararse. Si '
-                            'tienes que parar en un sitio, ese sitio hay que trabajarlo aparte, muy '
-                            'lento, y luego volver a probar. Subir con un agujero dentro no sirve de '
-                            'nada.'),
-                 dict(tipo='colorea', num=4, titulo='Colorea las notas que se repiten',
-                      pista='la melodía dice varias veces la misma nota antes de moverse',
-                      eventos=[n('B4'), n('C5'), n('D5'), n('B4'),
-                               n('E4'), n('E4'), n('E4'), n('B4', 'h')],
-                      leyenda=['Repetir una tecla es lo más fácil que hay para los dedos.',
-                               'Por eso esta canción se puede tocar rápida sin ser difícil.']),
-                 rutina('Los cuatro primeros compases con las dos manos',
-                        'La canción entera muy lenta, sin parar',
-                        'Un poquito más rápido, solo si la anterior salió tres veces'),
-                 escribir(4),
-             ]),
+        dict(
+            titulo='Deberes · semana 1',
+            esquina='El submarino amarillo · para hacer en casa',
+            intro='Lo nuevo: Allegro, o sea rápido. Y la izquierda hace un molde que se repite.',
+            bloques=[
+                camino([['igual', 'molde', 'igual', 'igual', 'nuevo', 'igual'],
+                        ['nuevo', 'molde', 'molde', 'igual', 'igual', 'igual'],
+                        ['igual', 'igual', 'molde', 'nuevo', 'igual', 'nuevo'],
+                        ['igual', 'nuevo', 'molde', 'molde', 'igual', 'igual'],
+                        ['igual', 'igual', 'igual', 'molde', 'nuevo', 'igual']],
+                       titulo='El camino del molde',
+                       pista='colorea solo donde dice “molde” y sale un camino'),
+                nombres(['B4', 'C5', 'D5', 'A4', 'G4', 'E4', 'F#4', 'B4'],
+                        pista='son las notas de tu melodía · cuidado con el Fa'),
+                inventa(['Solo Sol, La, Si y Do.',
+                         'Dos compases de cuatro golpes.',
+                         'Que el segundo compás sea el primero movido de sitio, como el molde.'],
+                        time_sig=(4, 4),
+                        titulo='Inventa tu propio molde',
+                        pista='tiene que cumplir las tres cosas'),
+                unir([('El sostenido del principio', 'el mismo dibujo movido de sitio'),
+                      ('“Allegro”', 'todos los Fa van en la tecla negra'),
+                      ('El molde de la izquierda', 'rápido'),
+                      ('Los cuatro golpes del compás', 'se cuentan igual, aunque vayas deprisa')],
+                     titulo='Une cada cosa con lo que significa',
+                     pista='están desordenadas · una raya de un punto al otro'),
+                rutina('El molde de la izquierda, solo, hasta que salga sin pensar',
+                       'La melodía sola, despacio',
+                       'Las dos manos, cuatro compases'),
+                juego('Canta el estribillo del submarino amarillo mientras tocas solo la izquierda. '
+                      'Quien esté contigo canta contigo. Es más difícil de lo que parece.'),
+            ],
+        ),
+        dict(
+            titulo='Deberes · semana 2',
+            esquina='El submarino amarillo · para hacer en casa',
+            intro='Segunda semana: sopa de letras, los pasos para subir la velocidad, y colores.',
+            bloques=[
+                sopa(['SUBMARINO', 'AMARILLO', 'BEATLES', 'ALLEGRO', 'MOLDE', 'RAPIDO',
+                      'SOSTENIDO', 'SOL', 'SI', 'RE'], semilla=1818, filas=8,
+                     titulo='Sopa de letras de tu canción',
+                     pista='diez palabras · tumbadas, de pie o en diagonal'),
+                ordenar(['Subir un poquito la velocidad.',
+                         'Tocarla tres veces seguidas sin fallos a esa velocidad.',
+                         'Tocarla a la velocidad a la que te sale entera y sin pararte.',
+                         'Si al subir empiezas a fallar, bajar otra vez.'],
+                        titulo='Pon en orden los pasos para tocar rápido',
+                        pista='escribe 1, 2, 3 y 4 en las casillas'),
+                colorear([n('G4'), n('B4'), n('D5', 'h'),
+                          n('A4'), n('C5'), n('E5', 'h'), n('F#4'), n('G4')],
+                         ['Un color para las de un golpe y otro para las de dos.'],
+                         titulo='Colorea según lo que duran',
+                         pista='dos colores'),
+                rutina('La canción entera a la velocidad que te salga sin fallos',
+                       'Subir un poquito solo si te ha salido tres veces seguidas',
+                       'El molde de la izquierda, sin mirarse la mano'),
+                acuerdate('No se llega a tocar rápido tocando rápido: se llega tocando lento sin '
+                          'fallos y subiendo poco a poco. Si al subir empiezas a fallar, has subido '
+                          'demasiado: baja otra vez. Eso es todo el secreto.',
+                          etiqueta='CÓMO SE LLEGA A TOCAR RÁPIDO'),
+            ],
+        ),
     ],
 )
 

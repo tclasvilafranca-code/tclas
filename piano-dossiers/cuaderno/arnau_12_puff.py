@@ -15,7 +15,9 @@ import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from arnau_comun import n, ac, sil, corch, rutina, juego, escribir
+from arnau_comun import (n, ac, sil, corch, rutina, juego, escribir,
+                         crucigrama, diferencias, adivinar, teclado, palmas,
+                         nombres, camino, acuerdate)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -134,65 +136,68 @@ CANCION = dict(
         ],
     ),
 
+    # Reparto de `arnau_recetas`: semana 1 la R13 (crucigrama · diferencias ·
+    # adivina) y semana 2 la R14 (teclado · palmas · nombres · camino).
     deberes=[
-        dict(titulo='Deberes · semana 1', esquina='Puff the Magic Dragon · para hacer en casa',
-             intro='Esta semana toca aprender los acordes de tres notas. Todo lo de aquí está en tu '
-                   'partitura.',
-             bloques=[
-                 dict(tipo='nombres', num=1, titulo='¿Cómo se llama cada nota?',
-                      pista='escríbelas en la cajita de debajo',
-                      notas=['C5', 'A4', 'G4', 'F4', 'E4', 'G4', 'B4', 'C5']),
-                 dict(tipo='figuras', num=2, titulo='¿Cuántos golpes dura cada una?',
-                      pista='los acordes de esta canción son redondas: los más largos',
-                      figuras=[('w', 'redonda'), ('h', 'blanca'), ('q', 'negra'),
-                               ('h.', 'blanca con puntito')]),
-                 dict(tipo='dibuja', num=3, titulo='Dibuja tú las notas',
-                      pista='solo el óvalo, sin el palito',
-                      nombres=['Do', 'La', 'Sol', 'Fa', 'Mi', 'Sol', 'Do', 'Fa']),
-                 dict(tipo='une', num=4, titulo='Une cada dedo con lo que hace en el acorde',
-                      pista='una raya de un punto al otro',
-                      pares=[('El meñique (5)', 'la nota de en medio'),
-                             ('El corazón (3)', 'la nota de arriba'),
-                             ('El pulgar (1)', 'la nota de abajo')]),
-                 rutina('Colocar los tres dedos, mirar, y dejar caer la mano: veinte veces',
-                        'Los cuatro acordes seguidos, uno por compás',
-                        'La melodía sola, los cuatro primeros compases'),
-                 juego('Toca un acorde de tres notas y quien esté contigo dice si ha sonado UNA vez o '
-                       'si ha oído un ruidito antes. Cinco veces. Es el oído de otra persona el que te '
-                       'dice si las tres teclas bajaron juntas: tú desde dentro no lo notas.'),
-             ]),
-        dict(titulo='Deberes · semana 2', esquina='Puff the Magic Dragon · para hacer en casa',
-             intro='Esta semana toca juntar las manos y darse cuenta de que hay pocos acordes '
-                   'distintos.',
-             bloques=[
-                 dict(tipo='rodea', num=1, titulo='Rodea los dos compases que son iguales',
-                      pista='fíjate en las notas de una en una',
-                      compases=[[n('C5'), n('C5'), n('C5'), n('C5')],
-                                [n('F4'), n('F4'), n('G4'), n('F4')],
-                                [n('C5'), n('C5'), n('C5'), n('C5')],
-                                [n('E4'), n('G4'), n('C5'), n('C5')]]),
-                 dict(tipo='nombres', num=2, titulo='Otra vez los nombres, a ver si te los sabes',
-                      pista='sin mirar los deberes de la semana pasada',
-                      notas=['G4', 'C5', 'E4', 'A4', 'F4', 'D5', 'B4', 'C5']),
-                 dict(tipo='colorea', num=3, titulo='Colorea las notas que se repiten',
-                      pista='esta melodía dice cuatro veces la misma nota antes de moverse',
-                      eventos=[n('C5'), n('C5'), n('C5'), n('C5'),
-                               n('A4'), n('G4'), n('F4', 'h')],
-                      leyenda=['Repetir la misma tecla es lo más fácil que hay.',
-                               'Lo que cuesta es que el acorde de abajo llegue a tiempo.']),
-                 dict(tipo='nota', etiqueta='ACUÉRDATE',
-                      texto='El acorde se toca UNA vez por compás. No hay que repetirlo cada vez que '
-                            'la derecha toca una nota: se deja sonar y ya. Si lo repites, la canción '
-                            'suena a martillo.'),
-                 rutina('El primer golpe de cada compás con las dos manos',
-                        'La melodía entera con la derecha sola',
-                        'Los cuatro primeros compases con las dos manos'),
-                 juego('Toca un acorde y déjalo sonar sin volver a tocarlo. Quien esté contigo cuenta '
-                       'en voz alta hasta que deje de oírse. Probad con el acorde muy fuerte y muy '
-                       'flojo: verás que el fuerte dura más. Por eso el primer golpe del compás hay '
-                       'que darlo con ganas.', 'esta vez de aguantar'),
-                 escribir(4),
-             ]),
+        dict(
+            titulo='Deberes · semana 1',
+            esquina='Puff the Magic Dragon · para hacer en casa',
+            intro='Lo nuevo: la izquierda toca tres notas a la vez. Un acorde por compás.',
+            bloques=[
+                crucigrama('LARGO', [
+                    ('BLANCA', 1, 'La figura hueca que dura dos golpes.'),
+                    ('DRAGON', 2, 'El bicho del que habla esta canción.'),
+                    ('TRES', 1, 'Las notas que suenan a la vez en cada acorde.'),
+                    ('GOLPES', 0, 'Hay cuatro en cada compás de esta canción.'),
+                    ('REDONDA', 3, 'La figura que dura cuatro golpes.'),
+                ], cierre='Las casillas grises dicen cómo son los acordes de tu mano izquierda.'),
+                diferencias(
+                    [n('C5'), n('C5'), n('C5'), n('C5'), n('F4'), n('F4'), n('G4')],
+                    [n('C5'), n('C5'), n('B4'), n('C5'), n('F4'), n('G4'), n('G4', 'h')],
+                    cuantas=3,
+                    titulo='Busca las tres diferencias',
+                    pista='el de arriba es el principio de tu melodía · el de abajo tiene trampas'),
+                adivinar([('Somos tres notas y sonamos todas a la vez.', 'ACORDE'),
+                          ('Duro los cuatro golpes del compás enteros.', 'REDONDA'),
+                          ('Yo llevo la melodía en esta canción.', 'DERECHA')],
+                         titulo='Adivina quién soy',
+                         pista='una letra en cada casilla'),
+                rutina('El acorde de tres notas, apretando las tres a la vez',
+                       'La melodía sola, muy despacio',
+                       'Las dos manos, los dos primeros compases'),
+                juego('Toca un acorde y quien esté contigo dice si han sonado las tres a la vez.'),
+            ],
+        ),
+        dict(
+            titulo='Deberes · semana 2',
+            esquina='Puff the Magic Dragon · para hacer en casa',
+            intro='Esta semana se empieza en el teclado y se acaba con un camino de acordes.',
+            bloques=[
+                teclado({0: 1, 2: 2, 4: 3, 7: 4},
+                        ['Escribe el nombre de las cuatro teclas marcadas.',
+                         'La 1, la 2 y la 3 son las tres del primer acorde de tu izquierda.'],
+                        titulo='En el teclado',
+                        pista='las tres primeras suenan a la vez'),
+                palmas([('DRA-GON', 2), ('PU-FF', 2), ('MA-GI-CO', 3)],
+                       titulo='El ritmo de las palabras',
+                       pista='dilo en voz alta y escríbelo con figuras en la caja'),
+                nombres(['C5', 'A4', 'G4', 'F4', 'E4', 'G4', 'B4', 'C5'],
+                        pista='son las notas de tu melodía · escríbelas debajo'),
+                camino([['una', 'tres', 'dos', 'una', 'dos', 'una'],
+                        ['dos', 'tres', 'tres', 'dos', 'una', 'dos'],
+                        ['una', 'dos', 'tres', 'una', 'dos', 'tres'],
+                        ['dos', 'una', 'tres', 'tres', 'una', 'dos']],
+                       titulo='El camino de los acordes',
+                       pista='colorea solo donde dice “tres”, que es cuando suena un acorde'),
+                acuerdate('Un acorde de tres notas no se toca de una en una: se aprieta con los tres '
+                          'dedos a la vez, como cuando coges un vaso. Colócalos encima de las teclas '
+                          'sin apretar, mira que estén bien, y luego baja la mano entera.',
+                          etiqueta='LAS TRES A LA VEZ'),
+                rutina('Los acordes de la izquierda, uno detrás de otro',
+                       'La melodía entera con la derecha sola',
+                       'Las dos manos, cuatro compases sin parar'),
+            ],
+        ),
     ],
 )
 

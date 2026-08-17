@@ -16,7 +16,8 @@ import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from arnau_comun import n, ac, sil, corch, rutina, juego, escribir
+from arnau_comun import (n, ac, sil, corch, rutina, juego, escribir,
+                         sopa, figuras, adivinar, crucigrama, nombres, colorear)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -134,61 +135,61 @@ CANCION = dict(
         ],
     ),
 
+    # Reparto de `arnau_recetas`: semana 1 la R1 (sopa · figuras · adivina) y
+    # semana 2 la R2 (crucigrama · nombres · colorea).
     deberes=[
-        dict(titulo='Deberes · semana 1', esquina='Aloha Oe · para hacer en casa',
-             intro='Esta semana toca practicar los saltos, que es lo nuevo de esta pieza.',
-             bloques=[
-                 dict(tipo='nombres', num=1, titulo='¿Cómo se llama cada nota?',
-                      pista='escríbelas en la cajita de debajo',
-                      notas=['C4', 'G4', 'C5', 'D5', 'B4', 'A4', 'G4', 'E4']),
-                 dict(tipo='dibuja', num=2, titulo='Dibuja tú las notas',
-                      pista='solo el óvalo, sin el palito',
-                      nombres=['Do', 'Sol', 'Do', 'Re', 'Si', 'La', 'Sol', 'Mi']),
-                 dict(tipo='figuras', num=3, titulo='¿Cuántos golpes dura cada una?',
-                      pista='en esta pieza casi todo son notas largas',
-                      figuras=[('h', 'blanca'), ('w', 'redonda'), ('q', 'negra'),
-                               ('h.', 'blanca con puntito')]),
-                 dict(tipo='colorea', num=4, titulo='Colorea las notas que están lejos de la anterior',
-                      pista='cuando la siguiente no está al lado, es un salto',
-                      eventos=[n('C4'), n('G4'), n('C5', 'h'), n('B4'), n('A4'), n('G4', 'h')],
-                      leyenda=['Escalón: la nota siguiente está justo al lado.',
-                               'Salto: hay que viajar, y hay que mirar antes.']),
-                 rutina('El salto Do · Sol · Do, diez veces, mirando antes de mover',
-                        'La melodía del principio, muy despacio',
-                        'Contar “un... dos...” en voz alta, con notas largas'),
-                 juego('Quien esté contigo dice el nombre de una nota y tú la tocas sin mirar el '
-                       'teclado mientras vas. Diez veces. Si fallas, mira y vuelve a intentarlo. Se '
-                       'trata de aprender dónde están las teclas sin buscarlas cada vez.'),
-             ]),
-        dict(titulo='Deberes · semana 2', esquina='Aloha Oe · para hacer en casa',
-             intro='Esta semana toca orientarse en una pieza de dos páginas, que es nuevo también.',
-             bloques=[
-                 dict(tipo='rodea', num=1, titulo='Rodea los dos compases que son iguales',
-                      pista='fíjate en las notas de una en una',
-                      compases=[[n('C4'), n('G4'), n('C5', 'h')],
-                                [n('D5', 'h'), n('C5', 'h')],
-                                [n('C4'), n('G4'), n('C5', 'h')],
-                                [n('B4'), n('A4'), n('G4', 'h')]]),
-                 dict(tipo='nombres', num=2, titulo='Otra vez los nombres, a ver si te los sabes',
-                      pista='sin mirar los deberes de la semana pasada',
-                      notas=['G4', 'C5', 'E4', 'D5', 'A4', 'F4', 'B4', 'C4']),
-                 dict(tipo='une', num=3, titulo='Une cada cosa con lo que quiere decir',
-                      pista='una raya de un punto al otro',
-                      pares=[('Con moto', 'la nota de al lado'),
-                             ('Un salto', 'con movimiento'),
-                             ('Un escalón', 'una tecla que está lejos')]),
-                 dict(tipo='nota', etiqueta='ACUÉRDATE',
-                      texto='En una pieza de dos páginas hay que saber por dónde vas antes de tocar. '
-                            'Marca a lápiz dónde acaba la primera página y ensaya ese sitio aparte: el '
-                            'trozo de pasar la hoja es el que siempre sale mal si no se practica.'),
-                 rutina('Los cuatro primeros compases con las dos manos',
-                        'El sitio donde se pasa de página, cinco veces',
-                        'La primera página entera, muy despacio'),
-                 juego('Toca la melodía y quien esté contigo te avisa cada vez que te paras a buscar '
-                       'una tecla. El objetivo es llegar al final sin ningún aviso, aunque vayas '
-                       'lentísimo. Ir lento no es un problema: pararse, sí.', 'esta vez sin pararse'),
-                 escribir(4),
-             ]),
+        dict(
+            titulo='Deberes · semana 1',
+            esquina='Aloha Oe · para hacer en casa',
+            intro='Lo nuevo: saltos grandes, y por primera vez una pieza de dos páginas.',
+            bloques=[
+                sopa(['HAWAI', 'ALOHA', 'SALTOS', 'VIAJAR', 'DOS', 'PAGINAS',
+                      'LARGAS', 'SOL', 'DO', 'RE'], semilla=1616, filas=8,
+                     titulo='Sopa de letras de tu canción',
+                     pista='diez palabras · tumbadas, de pie o en diagonal'),
+                figuras([('h', 'blanca'), ('w', 'redonda'), ('q', 'negra'),
+                         ('h.', 'blanca con puntito')],
+                        titulo='¿Cuántos golpes dura cada una?',
+                        pista='en esta pieza mandan las largas'),
+                adivinar([('Cuando la mano va de golpe a un sitio lejano.', 'SALTO'),
+                          ('Soy dos y en esta pieza hay que pasarme.', 'PAGINAS'),
+                          ('En hawaiano valgo para saludar y para despedirse.', 'ALOHA')],
+                         titulo='Adivina quién soy',
+                         pista='una letra en cada casilla'),
+                rutina('Do · Sol · Do, mirando antes adónde va la mano',
+                       'La melodía entera muy despacio, sin fallar los saltos',
+                       'Pasar de la primera página a la segunda sin pararse'),
+                juego('Cierra los ojos, toca un Do y salta al Sol de arriba sin mirar. Quien esté '
+                      'contigo te dice si has acertado. Diez veces.'),
+            ],
+        ),
+        dict(
+            titulo='Deberes · semana 2',
+            esquina='Aloha Oe · para hacer en casa',
+            intro='Segunda semana: crucigrama, nombres y colores.',
+            bloques=[
+                crucigrama('SALTOS', [
+                    ('MANOS', 4, 'Tienes dos, y en esta pieza viajan mucho.'),
+                    ('BLANCA', 5, 'La figura hueca que dura dos golpes.'),
+                    ('ALOHA', 1, 'La primera palabra del título: en hawaiano es hola y adiós.'),
+                    ('CUATRO', 3, 'Los golpes que lleva cada compás de esta pieza.'),
+                    ('SOL', 1, 'La segunda nota de tu melodía, después del primer salto.'),
+                    ('COMPAS', 5, 'El trozo que hay entre dos rayas de arriba abajo.'),
+                ], cierre='Las casillas grises dicen lo que hace la mano cuando viaja de golpe.'),
+                nombres(['C4', 'G4', 'C5', 'D5', 'B4', 'A4', 'G4', 'E4'],
+                        pista='son las notas de tu melodía · escríbelas debajo'),
+                colorear([n('C4'), n('G4'), n('C5', 'h'),
+                          n('D5'), n('B4'), n('A4', 'h'), n('G4'), n('E4')],
+                         ['Un color para las de un golpe y otro para las de dos.'],
+                         titulo='Colorea según lo que duran',
+                         pista='dos colores'),
+                rutina('Los tres saltos más grandes, veinte veces cada uno',
+                       'Las dos páginas seguidas, sin pararse en el cambio',
+                       'Contar dos golpes largos por compás'),
+                juego('Quien esté contigo pasa la página mientras tú tocas, para que no tengas que '
+                      'soltar las manos. Ensayadlo cinco veces: eso también se practica.'),
+            ],
+        ),
     ],
 )
 

@@ -19,6 +19,8 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from arnau_comun import (rutina, juego, acuerdate, diferencias, verdadero_falso,
+                         dibujar, escribir, nombres, camino, palmas, unir)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -154,91 +156,72 @@ CANCION = dict(
         ],
     ),
 
+    # Reparto de `arnau_recetas`: semana 1 la R9 (diferencias · verdadero o
+    # falso · dibuja · escribe) y semana 2 la R10 (nombres · camino · palmas ·
+    # une).
     deberes=[
         dict(
             titulo='Deberes · semana 1',
             esquina='The Wheels on the Bus · para hacer en casa',
-            intro='Esta semana toca hacerse amigo del bemol. Todo lo de aquí está en tu partitura.',
+            intro='Primera canción con una tecla negra. Casi todos los deberes de esta semana van '
+                  'de eso: de acordarse de que todos los Si se tocan en la negra de al lado.',
             bloques=[
-                dict(tipo='nombres', num=1,
-                     titulo='¿Cómo se llama cada nota?',
-                     pista='ojo: en esta canción los Si son tecla negra · escríbelos igual',
-                     notas=['F4', 'A4', 'C5', 'Bb4', 'A4', 'G4', 'F4', 'C5']),
-                dict(tipo='dibuja', num=2,
-                     titulo='Dibuja tú las notas',
-                     pista='solo el óvalo, sin el palito',
-                     nombres=['Fa', 'La', 'Do', 'Si', 'La', 'Sol', 'Fa', 'La']),
-                dict(tipo='figuras', num=3,
-                     titulo='¿Cuántos golpes dura cada una?',
-                     pista='acuérdate: aquí cada compás tiene tres golpes',
-                     figuras=[('q', 'negra'), ('h', 'blanca'), ('h.', 'blanca con puntito'),
-                              ('w', 'redonda')]),
-                dict(tipo='rutina',
-                     titulo='Lo que hay que tocar cada día',
-                     pista='pon una cruz cuando lo hagas · cinco minutos bastan',
-                     tareas=['Subir y bajar pasando por el Si de la tecla negra',
-                             'Los cuatro Fa seguidos y la subida al La',
-                             'La izquierda sola: tocar y contar hasta tres']),
-                dict(tipo='colorea', num=4,
-                     titulo='Rodea todos los Si',
-                     pista='en esta canción todos van en la tecla negra · búscalos en tu partitura',
-                     eventos=[n('F4'), n('A4'), n('Bb4'), n('A4'),
-                              n('G4'), n('Bb4'), n('A4'), n('F4', 'h')],
-                     leyenda=['El Si está en la tercera línea del pentagrama, en medio.',
-                              'Aquí siempre se toca en la tecla negra de al lado.']),
-                dict(tipo='escucha',
-                     titulo='UN JUEGO, CON ALGUIEN DE CASA',
-                     pista='no hace falta que sepa música',
-                     texto='Toca el Si blanco y luego el Si negro, uno detrás de otro, y pregunta cuál '
-                           'suena más alegre. No hay respuesta correcta: lo que se entrena es notar que '
-                           'cambia. Después toca la canción con el blanco a propósito y verás que suena '
-                           'mal: eso es lo que pasa si te olvidas del bemol.'),
+                diferencias(
+                    [n('F4'), n('F4'), n('F4'), n('F4'), n('A4'), n('C5')],
+                    [n('F4'), n('F4'), n('G4'), n('F4'), n('Bb4'), n('C5', 'h')],
+                    cuantas=3,
+                    titulo='Busca las tres diferencias',
+                    pista='el de arriba es el principio de tu canción · el de abajo tiene trampas'),
+                verdadero_falso([
+                    'Esta canción tiene un bemol detrás de la clave.',
+                    'Eso quiere decir que todos los Si se tocan en la tecla negra.',
+                    'Esta canción tiene cuatro golpes en cada compás.',
+                    'Las cuatro primeras notas de la melodía son la misma tecla.',
+                    'Las letras que hay encima del pentagrama son notas para tocar.',
+                ], titulo='Verdadero o falso', pista='de tu canción · marca la casilla'),
+                dibujar(['Fa', 'La', 'Do', 'Si♭', 'La', 'Sol', 'Fa', 'Do'],
+                        titulo='Dibuja tú las notas',
+                        pista='solo el óvalo · el Si♭ se dibuja igual que el Si'),
+                escribir(titulo='Copia aquí el primer compás de tu canción',
+                         pista='cópialo tal cual y luego tócalo cinco veces'),
+                rutina('Los cuatro Fa seguidos y el salto al La',
+                       'Toda la melodía muy despacio, buscando los Si',
+                       'La izquierda sola: tocar y dejar sonar'),
+                acuerdate('El bemol se escribe UNA vez, al principio, y vale para toda la canción y '
+                          'para todos los Si, estén arriba o abajo. No hace falta que lo pongan otra '
+                          'vez en cada nota: se da por sabido.',
+                          etiqueta='EL BEMOL DEL PRINCIPIO'),
             ],
         ),
         dict(
             titulo='Deberes · semana 2',
             esquina='The Wheels on the Bus · para hacer en casa',
-            intro='Esta semana toca mirar la partitura con lápiz y descubrir cuánto se repite esta '
-                  'canción, que es casi todo.',
+            intro='Segunda semana: los nombres, un camino de teclas negras y el ritmo de unas '
+                  'palabras. La partitura, al lado.',
             bloques=[
-                dict(tipo='rodea', num=1,
-                     titulo='Rodea los dos compases que son iguales',
-                     pista='fíjate en las notas de una en una',
-                     compases=[[n('F4'), n('F4'), n('F4')],
-                               [n('A4'), n('C5'), n('A4')],
-                               [n('F4'), n('F4'), n('F4')],
-                               [n('G4'), n('E4'), n('C4')]]),
-                dict(tipo='une', num=2,
+                nombres(['F4', 'A4', 'C5', 'Bb4', 'A4', 'G4', 'F4', 'C5'],
+                        pista='son las notas de tu melodía · cuidado con el Si'),
+                camino([['Fa', 'Si', 'Do', 'Sol', 'La', 'Re'],
+                        ['La', 'Si', 'Si', 'Do', 'Fa', 'Sol'],
+                        ['Do', 'Sol', 'Si', 'La', 'Re', 'Do'],
+                        ['Re', 'Fa', 'Si', 'Si', 'Sol', 'La'],
+                        ['Sol', 'La', 'Do', 'Si', 'Fa', 'Re']],
+                       titulo='El camino de la tecla negra',
+                       pista='colorea solo los Si, que son los que van en la negra'),
+                palmas([('AU-TO-BUS', 3), ('RUE-DAS', 2), ('CIU-DAD', 2)],
+                       titulo='El ritmo de las palabras',
+                       pista='dilo en voz alta y escríbelo con figuras en la caja'),
+                unir([('El bemol del principio', 'no son notas: es el nombre del acorde'),
+                      ('Las letras F, C, B♭ de arriba', 'tres golpes en cada compás'),
+                      ('El 3/4 de después de la clave', 'todos los Si van en la tecla negra'),
+                      ('La mano izquierda', 'toca notas largas, una o dos por compás')],
                      titulo='Une cada cosa con lo que significa',
-                     pista='una raya de un punto al otro',
-                     pares=[('El bemol del principio', 'tres golpes en cada compás'),
-                            ('El 3 y el 4 de la clave', 'el nombre del acorde'),
-                            ('Las letras de encima', 'todos los Si, tecla negra')]),
-                dict(tipo='nota',
-                     etiqueta='ACUÉRDATE',
-                     texto='El bemol se escribe UNA vez, al principio, y manda en toda la canción. No '
-                           'es un adorno del primer compás: es una instrucción para las dos páginas. '
-                           'Si algo te suena raro, mira primero si te has dejado un Si sin bemol.'),
-                dict(tipo='rutina',
-                     titulo='Lo que hay que tocar cada día',
-                     pista='pon una cruz cuando lo hagas',
-                     tareas=['Los cuatro primeros compases con las dos manos',
-                             'La canción entera con la derecha sola',
-                             'Contar un-dos-tres en voz alta mientras tocas']),
-                dict(tipo='nombres', num=3,
-                     titulo='Otra vez los nombres, a ver si ya te los sabes',
-                     pista='sin mirar los deberes de la semana pasada',
-                     notas=['A4', 'F4', 'C5', 'Bb4', 'G4', 'E4', 'A4', 'D4']),
-                dict(tipo='escucha',
-                     titulo='UN JUEGO, CON ALGUIEN DE CASA',
-                     pista='esta vez de contar hasta tres',
-                     texto='Quien esté contigo cuenta un-dos-tres sin parar y tú tocas solo en el UNO. '
-                           'Después probad al revés: tú cuentas y toca esa persona. Es el pulso de '
-                           'esta canción, y hay que tenerlo antes de tocar las notas.'),
-                dict(tipo='escribe', num=4,
-                     titulo='Copia aquí el compás que más te cueste',
-                     pista='cópialo tal cual y luego tócalo cinco veces',
-                     lineas=1),
+                     pista='están desordenadas · una raya de un punto al otro'),
+                rutina('La melodía entera, sin fallar ni un Si',
+                       'Las dos manos, los cuatro primeros compases',
+                       'Contar un-dos-tres en voz alta mientras tocas'),
+                juego('Quien esté contigo dice un nombre de nota y tú la buscas en el piano lo más '
+                      'rápido que puedas. Si dice Si, tienes que ir a la tecla negra.'),
             ],
         ),
     ],

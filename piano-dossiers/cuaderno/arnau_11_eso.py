@@ -16,7 +16,9 @@ import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from arnau_comun import n, ac, sil, corch, rutina, juego, escribir
+from arnau_comun import (n, ac, sil, corch, rutina, juego, escribir,
+                         sopa, unir, verdadero_falso, contar, inventa, ordenar,
+                         colorear, acuerdate)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -138,64 +140,74 @@ CANCION = dict(
         ],
     ),
 
+    # Reparto de `arnau_recetas`: semana 1 la R11 (sopa · une · verdadero o
+    # falso) y semana 2 la R12 (cuenta · inventa · ordena · colorea).
     deberes=[
-        dict(titulo='Deberes · semana 1', esquina='Eso que tú me das · para hacer en casa',
-             intro='Esta semana toca aprender a leer una hoja de melodía y acordes, que es distinta '
-                   'de las de antes.',
-             bloques=[
-                 dict(tipo='nombres', num=1, titulo='¿Cómo se llama cada nota?',
-                      pista='escríbelas en la cajita de debajo',
-                      notas=['E4', 'D4', 'C4', 'G4', 'A4', 'E4', 'F4', 'D4']),
-                 dict(tipo='une', num=2, titulo='Une cada cosa con dónde está en la hoja',
-                      pista='una raya de un punto al otro',
-                      pares=[('Las letras C, G, Am', 'debajo del pentagrama'),
-                             ('La letra de la canción', 'en el pentagrama'),
-                             ('Las notas', 'encima del pentagrama')]),
-                 dict(tipo='figuras', num=3, titulo='¿Cuántos golpes dura cada una?',
-                      pista='escribe el número en la caja',
-                      figuras=[('q', 'negra'), ('h', 'blanca'), ('w', 'redonda'),
-                               ('h.', 'blanca con puntito')]),
-                 dict(tipo='dibuja', num=4, titulo='Dibuja tú las notas',
-                      pista='solo el óvalo, sin el palito',
-                      nombres=['Mi', 'Re', 'Do', 'Sol', 'La', 'Mi', 'Fa', 'Re']),
-                 rutina('Cantar la canción entera mirando la hoja, sin tocar',
-                        'La melodía del principio, muy despacio',
-                        'Marcar a lápiz dónde respiras'),
-                 juego('Canta la canción mientras quien esté contigo lleva el pulso dando palmadas '
-                       'flojitas. Tú tienes que parar de cantar exactamente donde respira la letra, y '
-                       'las palmadas siguen igual. Así se ve que el tiempo no se para cuando tú '
-                       'respiras.'),
-             ]),
-        dict(titulo='Deberes · semana 2', esquina='Eso que tú me das · para hacer en casa',
-             intro='Esta semana toca fijarse en cuánto se repite la melodía y tocarla ya entera.',
-             bloques=[
-                 dict(tipo='rodea', num=1, titulo='Rodea los dos compases que son iguales',
-                      pista='fíjate en las notas de una en una',
-                      compases=[[n('E4'), n('E4'), n('E4'), n('D4')],
-                                [n('E4'), n('G4'), n('E4'), n('E4')],
-                                [n('E4'), n('E4'), n('E4'), n('D4')],
-                                [n('C4'), n('D4'), n('E4'), n('E4')]]),
-                 dict(tipo='nombres', num=2, titulo='Otra vez los nombres, a ver si te los sabes',
-                      pista='sin mirar los deberes de la semana pasada',
-                      notas=['G4', 'E4', 'A4', 'C5', 'D4', 'F4', 'B4', 'E4']),
-                 dict(tipo='colorea', num=3, titulo='Colorea las notas que se repiten',
-                      pista='esta melodía dice muchas veces la misma nota antes de moverse',
-                      eventos=[n('E4'), n('E4'), n('E4'), n('D4'),
-                               n('E4'), n('E4'), n('G4'), n('E4', 'h')],
-                      leyenda=['Repetir una nota es fácil para los dedos.',
-                               'Lo que hace bonita la canción es dónde para, no cuántas notas tiene.']),
-                 dict(tipo='nota', etiqueta='ACUÉRDATE',
-                      texto='En una hoja como esta tú solo tocas la línea de música. Las letras de '
-                            'encima son para quien te acompaña. Si algún día tocas con alguien, esa '
-                            'persona mirará las letras y tú la melodía, y sonará entero.'),
-                 rutina('La canción entera con la derecha, parando donde respiras',
-                        'Cantarla una vez sin tocar, siguiendo la letra con el dedo',
-                        'Tocarla mientras alguien canta la letra'),
-                 juego('Tú tocas la melodía y quien esté contigo canta la letra. Después cambiad. Lo '
-                       'que hay que conseguir es que los dos respiréis en el mismo sitio, sin poneros '
-                       'de acuerdo antes.', 'esta vez para hacerlo juntos'),
-                 escribir(4),
-             ]),
+        dict(
+            titulo='Deberes · semana 1',
+            esquina='Eso que tú me das · para hacer en casa',
+            intro='Esta hoja es distinta a todas: solo tiene una línea de música, con la letra '
+                  'debajo y los acordes encima. Los deberes van de aprender a leerla.',
+            bloques=[
+                sopa(['ACORDES', 'LETRA', 'MELODIA', 'CANTAR', 'JARABE', 'RESPIRAR',
+                      'UNA', 'MI', 'RE', 'DO'], semilla=1111, filas=8,
+                     titulo='Sopa de letras de tu canción',
+                     pista='diez palabras · tumbadas, de pie o en diagonal'),
+                unir([('Las letras C, G, Am de arriba', 'la que tocas tú, con la mano derecha'),
+                      ('La letra de debajo', 'el nombre de los acordes que acompañan'),
+                      ('La línea de música', 'sirve para saber dónde respirar'),
+                      ('Los cuatro golpes del compás', 'se cuentan igual aunque no haya dos manos')],
+                     titulo='Une cada cosa con lo que es',
+                     pista='están desordenadas · una raya de un punto al otro'),
+                verdadero_falso([
+                    'Esta hoja tiene dos pentagramas, como las demás.',
+                    'Las letras de arriba son acordes, no notas para tocar.',
+                    'La melodía repite mucho la misma nota.',
+                    'La letra de debajo ayuda a saber cuándo respirar.',
+                ], titulo='Verdadero o falso', pista='de tu hoja · marca la casilla'),
+                rutina('La melodía entera, leyendo la letra a la vez',
+                       'Cantarla mientras la tocas, aunque desafines',
+                       'Marcar con lápiz en la hoja dónde respiras'),
+                juego('Tú tocas la melodía y quien esté contigo canta la letra. Después al revés. '
+                      'Lo importante es acabar los dos a la vez.'),
+            ],
+        ),
+        dict(
+            titulo='Deberes · semana 2',
+            esquina='Eso que tú me das · para hacer en casa',
+            intro='Esta semana toca contar, inventar y ordenar los pasos.',
+            bloques=[
+                contar([n('E4'), n('E4'), n('E4'), n('D4'), n('E4'), n('G4'), n('E4'), n('D4')],
+                       ['¿Cuántos Mi hay?', '¿Cuántas veces sale el Re?',
+                        '¿Cuántas notas hay en total?'],
+                       titulo='Cuenta lo que ves',
+                       pista='es el principio de tu melodía, medido en tu hoja'),
+                inventa(['Solo Do, Re y Mi, que son las que más repite tu canción.',
+                         'Dos compases de cuatro golpes.',
+                         'Que repita una nota tres veces seguidas, como la canción.'],
+                        time_sig=(4, 4),
+                        titulo='Inventa dos compases para cantar',
+                        pista='tiene que cumplir las tres cosas'),
+                ordenar(['Tocar y cantar a la vez.',
+                         'Leer la letra en voz alta, sin tocar.',
+                         'Tocar la melodía sola, muy despacio.',
+                         'Marcar dónde vas a respirar.'],
+                        titulo='Pon los pasos en el orden bueno',
+                        pista='escribe 1, 2, 3 y 4 en las casillas'),
+                colorear([n('E4'), n('E4'), n('E4'), n('D4'),
+                          n('E4', 'h'), n('G4'), n('E4'), n('D4', 'h')],
+                         ['Un color para las de un golpe y otro para las de dos.'],
+                         titulo='Colorea según lo que duran',
+                         pista='dos colores'),
+                acuerdate('En una hoja de melodía y acordes tú solo tocas la línea de notas. Los '
+                          'acordes son para quien te acompañe con una guitarra o con el piano. No '
+                          'te líes intentando tocar las letras: no son notas.',
+                          etiqueta='TÚ TOCAS LA LÍNEA'),
+                rutina('La melodía entera sin pararse',
+                       'Cantarla de memoria, sin mirar la hoja',
+                       'Contar cuatro golpes en voz alta mientras tocas'),
+            ],
+        ),
     ],
 )
 

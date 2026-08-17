@@ -19,7 +19,9 @@ import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from arnau_comun import n, ac, sil, corch, rutina, juego, escribir
+from arnau_comun import (n, ac, sil, corch, rutina, juego, escribir,
+                         palmas, inventa, nombres, verdadero_falso, acuerdate,
+                         sopa, teclado)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -137,65 +139,65 @@ CANCION = dict(
         ],
     ),
 
+    # Reparto de `arnau_recetas`: semana 1 la R19 (palmas · inventa · nombres ·
+    # verdadero o falso) y semana 2 la R20 (sopa · teclado · escribe).
     deberes=[
-        dict(titulo='Deberes · semana 1', esquina='Largo · para hacer en casa',
-             intro='Esta semana toca entender el puntillo, que es lo único nuevo de esta pieza.',
-             bloques=[
-                 dict(tipo='figuras', num=1, titulo='¿Cuántos golpes dura cada una?',
-                      pista='ojo con las que llevan puntito: duran la mitad más',
-                      figuras=[('q', 'negra'), ('q.', 'negra con puntito'),
-                               ('h', 'blanca'), ('h.', 'blanca con puntito')]),
-                 dict(tipo='nombres', num=2, titulo='¿Cómo se llama cada nota?',
-                      pista='escríbelas en la cajita de debajo',
-                      notas=['E4', 'G4', 'D4', 'C4', 'A4', 'F4', 'E4', 'G4']),
-                 dict(tipo='dibuja', num=3, titulo='Dibuja tú las notas',
-                      pista='solo el óvalo, sin el palito',
-                      nombres=['Mi', 'Sol', 'Re', 'Do', 'La', 'Fa', 'Sol', 'Mi']),
-                 dict(tipo='colorea', num=4, titulo='Colorea las notas con puntito',
-                      pista='son las que duran golpe y medio',
-                      eventos=[n('E4', 'q.'), {'pitch': 'G4', 'dur': 'e'}, n('E4', 'h'),
-                               n('E4', 'q.'), {'pitch': 'D4', 'dur': 'e'}, n('D4', 'h')],
-                      leyenda=['El puntito le añade la mitad a lo que ya duraba la nota.',
-                               'La nota corta de detrás cae en la mitad del golpe, en la Y.']),
-                 rutina('Contar “un-y-dos-y-tres-y-cuatro-y” dando palmadas, sin piano',
-                        'Los dos primeros compases, muy lentos',
-                        'La izquierda sola: acorde y contar hasta cuatro'),
-                 juego('Da palmadas contando «un-y-dos-y» y quien esté contigo tiene que dar una '
-                       'palmada justo en la Y del dos, que es donde cae la nota corta de esta melodía. '
-                       'Diez veces. Luego cambiad.'),
-             ]),
-        dict(titulo='Deberes · semana 2', esquina='Largo · para hacer en casa',
-             intro='Esta semana toca buscar las ligaduras en la partitura y juntar las manos.',
-             bloques=[
-                 dict(tipo='rodea', num=1, titulo='Rodea los dos compases que son iguales',
-                      pista='fíjate en las notas de una en una',
-                      compases=[[n('E4', 'q.'), {'pitch': 'G4', 'dur': 'e'}, n('E4', 'h')],
-                                [n('D4'), n('E4'), n('G4'), n('E4')],
-                                [n('E4', 'q.'), {'pitch': 'G4', 'dur': 'e'}, n('E4', 'h')],
-                                [n('C4'), n('D4'), n('E4'), n('D4')]]),
-                 dict(tipo='nombres', num=2, titulo='Otra vez los nombres, a ver si te los sabes',
-                      pista='sin mirar los deberes de la semana pasada',
-                      notas=['G4', 'E4', 'C5', 'D4', 'F4', 'A4', 'B4', 'E4']),
-                 dict(tipo='une', num=3, titulo='Une cada cosa con lo que quiere decir',
-                      pista='una raya de un punto al otro',
-                      pares=[('Un puntito detrás de la nota', 'la segunda nota no se toca'),
-                             ('Una línea curva entre dos notas', 'muy lento'),
-                             ('Largo', 'dura la mitad más')]),
-                 dict(tipo='nota', etiqueta='ACUÉRDATE',
-                      texto='Cuando pone Largo hay que ir lento de verdad, no un poco más despacio. En '
-                            'una pieza lenta se oye todo: cada nota que llega tarde y cada acorde que '
-                            'se corta. Por eso las piezas lentas son buenas para aprender.'),
-                 dict(tipo='colorea', num=4, titulo='Colorea las notas cortas',
-                      pista='son las que caen en medio del golpe, después de la del puntito',
-                      eventos=[n('E4', 'q.'), {'pitch': 'G4', 'dur': 'e'}, n('E4', 'h'),
-                               n('D4'), n('E4'), n('G4'), n('E4')],
-                      leyenda=['La corta va siempre detrás de una con puntito.',
-                               'Cae en la Y, no en un número.']),
-                 rutina('Buscar y rodear a lápiz todas las líneas curvas de la partitura',
-                        'Los cuatro primeros compases con las dos manos, muy lento',
-                        'Contar con las Y en voz alta mientras tocas'),
-                 escribir(4),
-             ]),
+        dict(
+            titulo='Deberes · semana 1',
+            esquina='Largo · Sinfonía del Nuevo Mundo · para hacer en casa',
+            intro='Lo nuevo: el puntito de detrás de la nota, que la hace durar la mitad más.',
+            bloques=[
+                palmas([('LAR-GO', 2), ('DVO-RAK', 2), ('SIN-FO-NI-A', 4)],
+                       titulo='El ritmo de las palabras',
+                       pista='dilo en voz alta y escríbelo con figuras en la caja'),
+                inventa(['Solo Mi, Sol y Re, que son las de tu melodía.',
+                         'Dos compases de cuatro golpes.',
+                         'Que una nota lleve puntito y la de después sea corta.'],
+                        time_sig=(4, 4),
+                        titulo='Inventa dos compases muy lentos',
+                        pista='tiene que cumplir las tres cosas'),
+                nombres(['E4', 'G4', 'D4', 'C4', 'A4', 'F4', 'E4', 'G4'],
+                        pista='son las notas de tu melodía · escríbelas debajo'),
+                verdadero_falso([
+                    'Una negra con puntillo dura golpe y medio.',
+                    '“Largo” quiere decir que hay que tocar deprisa.',
+                    'La mano izquierda toca acordes muy largos.',
+                    'Hay notas que siguen sonando de un compás al siguiente.',
+                ], titulo='Verdadero o falso', pista='de tu canción · marca la casilla'),
+                acuerdate('El puntito de detrás de una nota le añade la mitad de lo que ya duraba. '
+                          'Una negra dura un golpe, así que una negra con puntillo dura golpe y '
+                          'medio. Cuenta “UN-dos” y toca la corta justo en el “dos”: verás que sale '
+                          'el vaivén de esta melodía.',
+                          etiqueta='QUÉ HACE EL PUNTITO'),
+                rutina('Mi · Sol · Mi con la derecha, contando cuatro',
+                       'La negra con puntillo y la corta, veinte veces',
+                       'La izquierda sola, dejando los acordes sonar'),
+            ],
+        ),
+        dict(
+            titulo='Deberes · semana 2',
+            esquina='Largo · Sinfonía del Nuevo Mundo · para hacer en casa',
+            intro='Segunda semana: sopa de letras, teclado y un compás para copiar.',
+            bloques=[
+                sopa(['PUNTILLO', 'LARGO', 'DVORAK', 'ACORDES', 'LENTO', 'LIGADURA',
+                      'ATADAS', 'MI', 'SOL', 'RE'], semilla=1515, filas=8,
+                     titulo='Sopa de letras de tu canción',
+                     pista='diez palabras · tumbadas, de pie o en diagonal'),
+                teclado({2: 1, 4: 2, 1: 3, 0: 4},
+                        ['Escribe el nombre de las cuatro teclas marcadas.',
+                         'La 1 y la 2 son las dos primeras notas de tu melodía.'],
+                        titulo='En el teclado',
+                        pista='las cuatro marcadas son de esta canción'),
+                escribir(titulo='Copia aquí un compás con puntillo',
+                         pista='búscalo en tu partitura, cópialo tal cual y tócalo cinco veces'),
+                rutina('La melodía entera, muy lenta y sin acelerar',
+                       'Los sitios donde la nota sigue sonando en el compás siguiente',
+                       'Las dos manos, cuatro compases sin parar'),
+                juego('Quien esté contigo cuenta “un, dos, tres, cuatro” muy despacio y tú tocas la '
+                      'melodía encima. Lo difícil de esta pieza es no acelerar: si aceleras, se nota '
+                      'enseguida que ya no vas con la cuenta.'),
+            ],
+        ),
     ],
 )
 

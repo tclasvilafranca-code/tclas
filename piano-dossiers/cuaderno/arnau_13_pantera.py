@@ -18,7 +18,9 @@ import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from arnau_comun import n, ac, sil, corch, rutina, juego, escribir
+from arnau_comun import (n, ac, sil, corch, rutina, juego, escribir,
+                         sopa, diferencias, acuerdate, verdadero_falso, ordenar,
+                         figuras, dibujar)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -137,65 +139,70 @@ CANCION = dict(
         ],
     ),
 
+    # Reparto de `arnau_recetas`: semana 1 la R15 (sopa · diferencias) y semana
+    # 2 la R16 (verdadero o falso · ordena · figuras · dibuja).
     deberes=[
-        dict(titulo='Deberes · semana 1', esquina='La Pantera Rosa · para hacer en casa',
-             intro='Esta semana toca contar los huecos y hacerse amigo de las teclas negras.',
-             bloques=[
-                 dict(tipo='nombres', num=1, titulo='¿Cómo se llama cada nota?',
-                      pista='escríbelas en la cajita de debajo',
-                      notas=['C4', 'D4', 'E4', 'G4', 'F4', 'A4', 'B4', 'C5']),
-                 dict(tipo='figuras', num=2, titulo='¿Cuántos golpes dura cada una?',
-                      pista='escribe el número en la caja',
-                      figuras=[('q', 'negra'), ('h', 'blanca'), ('w', 'redonda'),
-                               ('h.', 'blanca con puntito')]),
-                 dict(tipo='dibuja', num=3, titulo='Dibuja tú las notas',
-                      pista='solo el óvalo, sin el palito',
-                      nombres=['Do', 'Re', 'Mi', 'Sol', 'Fa', 'La', 'Do', 'Mi']),
-                 dict(tipo='colorea', num=4, titulo='Rodea los silencios',
-                      pista='búscalos en tu partitura: hay casi tantos como notas',
-                      eventos=[n('C4'), n('D4'), n('E4'), n('D4'),
-                               n('C4'), n('E4'), n('G4'), n('E4')],
-                      leyenda=['Un silencio dura lo mismo que una nota, pero no suena.',
-                               'En esta canción los huecos son la mitad de la gracia.']),
-                 rutina('Contar cuatro golpes en voz alta sin tocar, cuatro compases seguidos',
-                        'Entrar después de un compás de silencio, diez veces',
-                        'Tocar una tecla blanca y la negra de al lado, escuchando la diferencia'),
-                 juego('Quien esté contigo cuenta cuatro golpes en voz alta sin parar, y tú tocas una '
-                       'nota solo cuando esa persona diga un número que hayáis elegido antes (por '
-                       'ejemplo, el tres). Diez veces. Es contar los huecos sin darse cuenta.'),
-             ]),
-        dict(titulo='Deberes · semana 2', esquina='La Pantera Rosa · para hacer en casa',
-             intro='Esta semana toca mirar la partitura con lápiz y buscar todas las teclas negras.',
-             bloques=[
-                 dict(tipo='rodea', num=1, titulo='Rodea los dos compases que son iguales',
-                      pista='fíjate en las notas de una en una',
-                      compases=[[n('C4'), n('D4'), n('E4'), n('D4')],
-                                [n('E4'), n('G4'), n('E4'), n('C4')],
-                                [n('C4'), n('D4'), n('E4'), n('D4')],
-                                [n('G4'), n('E4'), n('C4'), n('C4')]]),
-                 dict(tipo='nombres', num=2, titulo='Otra vez los nombres, a ver si te los sabes',
-                      pista='sin mirar los deberes de la semana pasada',
-                      notas=['E4', 'G4', 'C5', 'A4', 'D4', 'F4', 'B4', 'G4']),
-                 dict(tipo='une', num=3, titulo='Une cada cosa con lo que quiere decir',
-                      pista='una raya de un punto al otro',
-                      pares=[('Un sostenido delante de una nota', 'no toques, pero cuenta'),
-                             ('Un silencio', 'una nota que dura cuatro golpes'),
-                             ('Una redonda', 'esa vez, tecla negra')]),
-                 dict(tipo='colorea', num=4, titulo='Colorea las notas largas',
-                      pista='las de la izquierda duran cuatro golpes: son las más largas de la hoja',
-                      eventos=[n('C4'), n('D4'), n('E4', 'w'), n('D4'),
-                               n('C4'), n('E4', 'w'), n('G4'), n('E4')],
-                      leyenda=['La redonda dura cuatro golpes y no tiene palito.',
-                               'La negra dura uno y tiene el óvalo pintado.']),
-                 dict(tipo='nota', etiqueta='ACUÉRDATE',
-                      texto='Un sostenido escrito delante de una nota vale solo para ese compás. En el '
-                            'compás siguiente, si quieren que vuelvas a tocar la tecla negra, te lo '
-                            'tienen que volver a poner. Por eso hay que mirarlos uno a uno.'),
-                 rutina('Buscar y rodear a lápiz todos los sostenidos de la partitura',
-                        'Los cuatro primeros compases con las dos manos',
-                        'La canción entera con la derecha sola, contando los huecos'),
-                 escribir(4),
-             ]),
+        dict(
+            titulo='Deberes · semana 1',
+            esquina='La Pantera Rosa · para hacer en casa',
+            intro='Esta es la canción misteriosa del cuaderno: empieza con tres compases callada y '
+                  'de repente aparecen teclas negras en medio.',
+            bloques=[
+                sopa(['PANTERA', 'MISTERIO', 'SOSTENIDO', 'NEGRA', 'SILENCIO', 'REDONDA',
+                      'ESPERAR', 'MI', 'RE', 'DO'], semilla=1313, filas=8,
+                     titulo='Sopa de letras de tu canción',
+                     pista='diez palabras · tumbadas, de pie o en diagonal'),
+                diferencias(
+                    [n('C4'), n('D4'), n('E4'), n('D4'), n('C4'), n('D4'), n('E4', 'h')],
+                    [n('C4'), n('D4'), n('D#4'), n('D4'), n('C4'), n('E4'), n('E4')],
+                    cuantas=3,
+                    titulo='Busca las tres diferencias',
+                    pista='el de arriba no tiene teclas negras · el de abajo sí, y hay más trampas'),
+                acuerdate('Hasta ahora las teclas negras venían avisadas al principio de la canción y '
+                          'valían para toda. Aquí no: el sostenido está escrito delante de una nota '
+                          'suelta, en medio, y solo vale para ESE compás. Márcalos con lápiz antes de '
+                          'tocar, que si no se pasan.',
+                          etiqueta='LOS SOSTENIDOS QUE APARECEN DE REPENTE'),
+                rutina('Contar los tres compases del principio sin tocar',
+                       'Las notas con sostenido, una por una, muy despacio',
+                       'La izquierda sola: una nota que dura todo el compás'),
+                juego('Quien esté contigo cuenta tres compases de cuatro golpes en voz alta y tú '
+                      'entras justo después, con la primera nota. Diez veces.'),
+            ],
+        ),
+        dict(
+            titulo='Deberes · semana 2',
+            esquina='La Pantera Rosa · para hacer en casa',
+            intro='Esta semana hay preguntas, pasos que ordenar y notas que dibujar.',
+            bloques=[
+                verdadero_falso([
+                    'Esta canción empieza tocando en el primer compás.',
+                    'Los sostenidos están escritos delante de las notas, en medio.',
+                    'Un sostenido escrito así solo vale para su compás.',
+                    'La mano izquierda toca notas que duran el compás entero.',
+                    'Esta canción tiene cuatro golpes en cada compás.',
+                ], titulo='Verdadero o falso', pista='de tu canción · marca la casilla'),
+                ordenar(['Tocar la melodía entera, con los sostenidos.',
+                         'Marcar con lápiz todos los sostenidos de la partitura.',
+                         'Contar los tres compases del principio.',
+                         'Añadir la izquierda, que aguanta cada nota.'],
+                        titulo='Pon los pasos en el orden bueno',
+                        pista='escribe 1, 2, 3 y 4 en las casillas'),
+                figuras([('q', 'negra'), ('h', 'blanca'), ('w', 'redonda'),
+                         ('q.', 'negra con puntito')],
+                        titulo='¿Cuántos golpes dura cada una?',
+                        pista='el puntito le añade la mitad'),
+                dibujar(['Do', 'Re', 'Mi', 'Sol', 'Fa', 'La', 'Si', 'Do'],
+                        titulo='Dibuja tú las notas',
+                        pista='solo el óvalo · debajo pone cuál va en cada sitio'),
+                rutina('La melodía entera con los sostenidos puestos',
+                       'La izquierda sola, contando cuatro',
+                       'Las dos manos, sin correr'),
+                acuerdate('En esta canción los silencios son casi tan importantes como las notas: es '
+                          'lo que hace que suene misteriosa. Si los acortas, la Pantera Rosa deja de '
+                          'ser la Pantera Rosa.'),
+            ],
+        ),
     ],
 )
 

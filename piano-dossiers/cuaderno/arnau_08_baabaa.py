@@ -21,7 +21,9 @@ import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from arnau_comun import n, ac, sil, corch, rutina, juego, escribir
+from arnau_comun import (n, ac, sil, corch, rutina, juego, escribir,
+                         sopa, diferencias, acuerdate, verdadero_falso, ordenar,
+                         figuras, dibujar)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -145,66 +147,72 @@ CANCION = dict(
         ],
     ),
 
+    # Reparto de `arnau_recetas`: semana 1 la R15 (sopa · diferencias) y semana
+    # 2 la R16 (verdadero o falso · ordena · figuras · dibuja).
     deberes=[
-        dict(titulo='Deberes · semana 1', esquina='Baa Baa Black Sheep · para hacer en casa',
-             intro='Esta semana toca aprender a mirar los palitos de las notas, que son los que te '
-                   'dicen qué se mueve y qué se queda.',
-             bloques=[
-                 dict(tipo='nombres', num=1, titulo='¿Cómo se llama cada nota?',
-                      pista='escríbelas en la cajita de debajo',
-                      notas=['C5', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4', 'G4']),
-                 dict(tipo='colorea', num=2, titulo='Colorea las notas largas',
-                      pista='las que duran cuatro golpes son las que aguanta el pulgar',
-                      eventos=[n('C5'), n('E4', 'w'), n('G4'), n('A4'),
-                               n('F4', 'w'), n('E4'), n('D4'), n('C4', 'w')],
-                      leyenda=['La redonda dura cuatro golpes: se toca y se deja.',
-                               'La negra dura uno: se toca y se levanta.']),
-                 dict(tipo='figuras', num=3, titulo='¿Cuántos golpes dura cada una?',
-                      pista='escribe el número en la caja',
-                      figuras=[('w', 'redonda'), ('h', 'blanca'), ('q', 'negra'),
-                               ('h.', 'blanca con puntito')]),
-                 dict(tipo='dibuja', num=4, titulo='Dibuja tú las notas',
-                      pista='solo el óvalo, sin el palito',
-                      nombres=['Do', 'La', 'Sol', 'Fa', 'Mi', 'Re', 'Do', 'Sol']),
-                 rutina('La melodía sola, los cuatro primeros compases',
-                        'La nota larga sola: tocar y contar cuatro sin levantar el dedo',
-                        'Las dos cosas juntas, un compás, diez veces'),
-                 juego('Aprieta una tecla con el pulgar y no la sueltes. Con los otros dedos toca lo '
-                       'que quieras encima. Quien esté contigo tiene que avisarte en cuanto deje de '
-                       'oírse la nota del pulgar. Aguanta lo máximo que puedas.'),
-             ]),
-        dict(titulo='Deberes · semana 2', esquina='Baa Baa Black Sheep · para hacer en casa',
-             intro='Esta semana toca mirar la partitura con lápiz y descubrir cuánto se repite.',
-             bloques=[
-                 dict(tipo='rodea', num=1, titulo='Rodea los dos compases que son iguales',
-                      pista='fíjate en las notas de una en una',
-                      compases=[[n('C5'), n('C5'), n('G4'), n('G4')],
-                                [n('A4'), n('A4'), n('G4', 'h')],
-                                [n('C5'), n('C5'), n('G4'), n('G4')],
-                                [n('F4'), n('E4'), n('D4'), n('C4')]]),
-                 dict(tipo='une', num=2, titulo='Une cada cosa con lo que quiere decir',
-                      pista='una raya de un punto al otro',
-                      pares=[('Palito para arriba', 'el nombre del acorde'),
-                             ('Palito para abajo', 'la melodía, la que se mueve'),
-                             ('Las letras de encima', 'la nota larga, la que se queda')]),
-                 dict(tipo='nombres', num=3, titulo='Otra vez los nombres, a ver si te los sabes',
-                      pista='sin mirar los deberes de la semana pasada',
-                      notas=['G4', 'C5', 'F4', 'A4', 'E4', 'B4', 'D4', 'C5']),
-                 dict(tipo='colorea', num=4, titulo='Colorea las notas que se repiten',
-                      pista='en esta canción casi todas las notas salen dos veces seguidas',
-                      eventos=[n('C5'), n('C5'), n('G4'), n('G4'),
-                               n('A4'), n('A4'), n('G4', 'h')],
-                      leyenda=['Repetir una nota es más fácil que cambiar de tecla.',
-                               'Por eso esta canción se aprende tan deprisa.']),
-                 dict(tipo='nota', etiqueta='ACUÉRDATE',
-                      texto='La nota que aguanta el pulgar no se vuelve a tocar en todo el compás. Si '
-                            'la repites cada vez que suena una de arriba, ya no son dos cosas: son '
-                            'dieciséis golpes seguidos, y la canción deja de sonar como debe.'),
-                 rutina('Los cuatro primeros compases con las dos manos',
-                        'Cantar la nota de abajo mientras tocas la de arriba',
-                        'La canción entera, aunque sea muy despacio'),
-                 escribir(4),
-             ]),
+        dict(
+            titulo='Deberes · semana 1',
+            esquina='Baa Baa Black Sheep · para hacer en casa',
+            intro='Lo nuevo de esta canción: una sola mano toca dos cosas a la vez. Se ve en la '
+                  'partitura porque hay palitos hacia arriba y palitos hacia abajo.',
+            bloques=[
+                sopa(['OVEJA', 'PALITOS', 'ARRIBA', 'ABAJO', 'LARGAS', 'ACORDE',
+                      'MELODIA', 'SOL', 'FA', 'DO'], semilla=808, filas=8,
+                     titulo='Sopa de letras de tu canción',
+                     pista='diez palabras · tumbadas, de pie o en diagonal'),
+                diferencias(
+                    [n('C5'), n('C5'), n('G4'), n('G4'), n('F4'), n('F4'), n('E4', 'h')],
+                    [n('C5'), n('C5'), n('A4'), n('G4'), n('F4'), n('G4'), n('E4')],
+                    cuantas=3,
+                    titulo='Busca las tres diferencias',
+                    pista='el de arriba es el principio de tu melodía · el de abajo tiene trampas'),
+                acuerdate('Cuando en el mismo pentagrama hay notas con el palito hacia arriba y '
+                          'notas con el palito hacia abajo, quiere decir que suenan a la vez y las '
+                          'toca la misma mano. Las de arriba se mueven (son la melodía) y las de '
+                          'abajo se quedan quietas sonando. El truco es mover unos dedos y dejar '
+                          'los otros apoyados sin levantarlos.',
+                          etiqueta='PALITOS ARRIBA Y PALITOS ABAJO'),
+                rutina('Solo la melodía, con los dedos de arriba',
+                       'Solo las notas largas, dejándolas sonar cuatro golpes',
+                       'Las dos cosas a la vez, dos compases'),
+                juego('Apoya la mano derecha en el piano y aprieta solo el pulgar diez veces sin '
+                      'mover los demás. Luego solo el meñique. Quien esté contigo mira si se te '
+                      'levanta algún otro dedo.'),
+            ],
+        ),
+        dict(
+            titulo='Deberes · semana 2',
+            esquina='Baa Baa Black Sheep · para hacer en casa',
+            intro='Esta semana hay preguntas, pasos que ordenar y notas que dibujar.',
+            bloques=[
+                verdadero_falso([
+                    'En esta canción una mano toca dos cosas a la vez.',
+                    'Las notas con el palito hacia abajo son las que se mueven.',
+                    'Las letras C, F y G de arriba son el nombre del acorde.',
+                    'Esta canción tiene cuatro golpes en cada compás.',
+                    'La mano izquierda toca notas largas.',
+                ], titulo='Verdadero o falso', pista='de tu canción · marca la casilla'),
+                ordenar(['Las dos cosas a la vez, muy despacio.',
+                         'Solo las notas largas, contando cuatro.',
+                         'Solo la melodía, con los dedos de arriba.',
+                         'Añadir la mano izquierda.'],
+                        titulo='Pon los pasos en el orden bueno',
+                        pista='escribe 1, 2, 3 y 4 en las casillas'),
+                figuras([('q', 'negra'), ('h', 'blanca'), ('w', 'redonda'),
+                         ('e', 'corchea')],
+                        titulo='¿Cuántos golpes dura cada una?',
+                        pista='la corchea es la mitad de una negra'),
+                dibujar(['Do', 'Sol', 'Fa', 'Mi', 'Re', 'Do', 'La', 'Sol'],
+                        titulo='Dibuja tú las notas',
+                        pista='solo el óvalo · debajo pone cuál va en cada sitio'),
+                rutina('La melodía entera con la derecha sola',
+                       'Las dos cosas a la vez, cuatro compases',
+                       'Las dos manos, sin parar aunque haya fallos'),
+                acuerdate('Las letras que hay encima del pentagrama (C, F, G, C/G) no son notas '
+                          'para tocar: son el nombre del acorde que suena debajo. Sirven para que '
+                          'alguien pueda acompañarte con una guitarra.'),
+            ],
+        ),
     ],
 )
 

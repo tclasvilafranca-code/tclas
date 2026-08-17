@@ -19,7 +19,9 @@ import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from arnau_comun import n, ac, sil, corch, rutina, juego, escribir
+from arnau_comun import (n, ac, sil, corch, rutina, juego, escribir,
+                         diferencias, verdadero_falso, dibujar, acuerdate,
+                         nombres, camino, palmas, unir)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -134,60 +136,73 @@ CANCION = dict(
         ],
     ),
 
+    # Reparto de `arnau_recetas`: semana 1 la R9 (diferencias · verdadero o
+    # falso · dibuja · escribe) y semana 2 la R10 (nombres · camino · palmas ·
+    # une). Es la ultima cancion del curso.
     deberes=[
-        dict(titulo='Deberes · semana 1', esquina='The Mulberry Bush · para hacer en casa',
-             intro='Esta semana toca aprenderse tu parte en casa. La semana que viene se junta con la '
-                   'otra.',
-             bloques=[
-                 dict(tipo='nombres', num=1, titulo='¿Cómo se llama cada nota?',
-                      pista='escríbelas en la cajita de debajo',
-                      notas=['C5', 'E5', 'G5', 'D5', 'B4', 'A4', 'F5', 'C5']),
-                 dict(tipo='dibuja', num=2, titulo='Dibuja tú las notas',
-                      pista='solo el óvalo, sin el palito',
-                      nombres=['Do', 'Mi', 'Sol', 'Re', 'Si', 'La', 'Fa', 'Do']),
-                 dict(tipo='figuras', num=3, titulo='¿Cuántos golpes dura cada una?',
-                      pista='escribe el número en la caja',
-                      figuras=[('q', 'negra'), ('h', 'blanca'), ('w', 'redonda'),
-                               ('h.', 'blanca con puntito')]),
-                 dict(tipo='colorea', num=4, titulo='Colorea las notas que se repiten',
-                      pista='en esta pieza hay muchas notas iguales seguidas',
-                      eventos=[n('C5'), n('C5'), n('C5'), n('C5'), n('E5'), n('G5'), n('E5', 'h')],
-                      leyenda=['Repetir una tecla es fácil: no hay que buscar nada.',
-                               'Lo difícil de esta pieza es tocarla al mismo tiempo que otra persona.']),
-                 rutina('Tu parte, muy despacio, contando en voz alta',
-                        'Contar un compás y entrar en el golpe siguiente, diez veces',
-                        'Tu parte entera sin parar, aunque haya fallos'),
-                 juego('Quien esté contigo cuenta un compás en voz alta y luego lleva el pulso con '
-                       'palmadas mientras tú tocas tu parte. Si te pierdes, NO pares: sigue contando y '
-                       'vuelve a entrar. Eso es lo que hay que practicar, no las notas.'),
-             ]),
-        dict(titulo='Deberes · semana 2', esquina='The Mulberry Bush · para hacer en casa',
-             intro='Esta semana ya se toca con otra persona. En casa, prepara lo que se puede preparar '
-                   'solo.',
-             bloques=[
-                 dict(tipo='rodea', num=1, titulo='Rodea los dos compases que son iguales',
-                      pista='fíjate en las notas de una en una',
-                      compases=[[n('C5'), n('C5'), n('C5'), n('C5')], [n('D5'), n('D5'), n('D5'), n('D5')], [n('C5'), n('C5'), n('C5'), n('C5')], [n('E5'), n('G5'), n('E5'), n('C5')]]),
-                 dict(tipo='nombres', num=2, titulo='Otra vez los nombres, a ver si te los sabes',
-                      pista='sin mirar los deberes de la semana pasada',
-                      notas=['G5', 'C5', 'D5', 'E5', 'A4', 'F5', 'B4', 'C5']),
-                 dict(tipo='une', num=3, titulo='Une cada cosa con lo que hay que hacer',
-                      pista='una raya de un punto al otro',
-                      pares=[('Antes de empezar', 'seguir contando y volver a entrar'),
-                             ('Si te pierdes', 'mirar a la otra persona de vez en cuando'),
-                             ('Mientras tocáis', 'contar un compás en voz alta')]),
-                 dict(tipo='nota', etiqueta='ACUÉRDATE',
-                      texto='En una pieza a cuatro manos, acabar juntos es tan importante como empezar '
-                            'juntos. La última nota se levanta a la vez, y eso se decide antes: una de '
-                            'las dos hace un gesto pequeño con la cabeza y las dos sueltan.'),
-                 juego('Tocad los dos a la vez la última nota y levantad la mano en el mismo '
-                       'momento, sin decir nada: solo con un gesto pequeño de la cabeza. Cinco veces. '
-                       'Acabar juntos se nota tanto como empezar juntos.', 'esta vez para acabar'),
-                 rutina('Tu parte entera sin parar, tres veces',
-                        'Contar un compás y entrar, con alguien de casa llevando el pulso',
-                        'La última nota: levantar la mano a la vez que otra persona'),
-                 escribir(4),
-             ]),
+        dict(
+            titulo='Deberes · semana 1',
+            esquina='The Mulberry Bush · para hacer en casa',
+            intro='La última del curso, y también a cuatro manos. Esta semana, tu parte en casa.',
+            bloques=[
+                diferencias(
+                    [n('C5'), n('C5'), n('C5'), n('C5'), n('E5'), n('G5'), n('E5')],
+                    [n('C5'), n('C5'), n('D5'), n('C5'), n('E5'), n('G5'), n('C5')],
+                    cuantas=2,
+                    titulo='Busca las dos diferencias',
+                    pista='el de arriba es tu parte · en el de abajo hay dos cosas cambiadas'),
+                verdadero_falso([
+                    'Esta pieza se toca entre dos personas en el mismo piano.',
+                    'Tú tocas la parte de abajo.',
+                    'Si te pierdes, hay que parar y empezar otra vez.',
+                    'Acabar juntos es tan importante como empezar juntos.',
+                    'Esta pieza tiene cuatro golpes en cada compás.',
+                ], titulo='Verdadero o falso', pista='de tu pieza · marca la casilla'),
+                dibujar(['Do', 'Mi', 'Sol', 'Re', 'Si', 'La', 'Fa', 'Do'],
+                        titulo='Dibuja tú las notas',
+                        pista='solo el óvalo · son las de tu parte, en la zona de arriba'),
+                escribir(titulo='Copia aquí el compás que más te cueste',
+                         pista='cópialo tal cual y luego tócalo cinco veces'),
+                rutina('Tu parte, muy despacio, contando en voz alta',
+                       'Tu parte entera sin parar, aunque haya fallos',
+                       'Volver a entrar después de un fallo, sin pararse'),
+                acuerdate('Lo difícil de una pieza a cuatro manos no son las notas: es no pararse. Si '
+                          'te equivocas, sigue contando y vuelve a entrar en el compás siguiente. La '
+                          'otra persona no puede esperarte.',
+                          etiqueta='SI TE PIERDES, NO PARES'),
+            ],
+        ),
+        dict(
+            titulo='Deberes · semana 2',
+            esquina='The Mulberry Bush · para hacer en casa',
+            intro='Última hoja del curso. Esta semana ya se toca con otra persona.',
+            bloques=[
+                nombres(['C5', 'E5', 'G5', 'D5', 'B4', 'A4', 'F5', 'C5'],
+                        pista='son las notas de tu parte · escríbelas debajo'),
+                camino([['sigo', 'paro', 'sigo', 'sigo', 'paro', 'sigo'],
+                        ['paro', 'sigo', 'sigo', 'paro', 'sigo', 'paro'],
+                        ['sigo', 'paro', 'sigo', 'sigo', 'sigo', 'paro'],
+                        ['paro', 'sigo', 'paro', 'paro', 'sigo', 'sigo']],
+                       titulo='El camino de “no pararse”',
+                       pista='colorea solo donde dice “sigo” y verás el camino que hay que hacer'),
+                palmas([('MO-RE-RA', 3), ('JUN-TOS', 2), ('CON-CIER-TO', 3)],
+                       titulo='El ritmo de las palabras',
+                       pista='dilo en voz alta y escríbelo con figuras en la caja'),
+                unir([('Antes de empezar', 'seguir contando y volver a entrar'),
+                      ('Si te pierdes', 'mirar a la otra persona de vez en cuando'),
+                      ('Mientras tocáis', 'levantar la mano a la vez'),
+                      ('La última nota', 'contar un compás en voz alta')],
+                     titulo='Une cada momento con lo que hay que hacer',
+                     pista='están desordenadas · una raya de un punto al otro'),
+                rutina('Tu parte entera sin parar, tres veces',
+                       'Contar un compás y entrar, con alguien de casa',
+                       'La última nota: levantar la mano a la vez que la otra persona'),
+                juego('Tocad los dos a la vez la última nota y levantad la mano en el mismo momento, '
+                      'sin decir nada: solo con un gesto pequeño de la cabeza. Cinco veces. Acabar '
+                      'juntos se nota tanto como empezar juntos.',
+                      pista='esta vez para acabar el curso'),
+            ],
+        ),
     ],
 )
 

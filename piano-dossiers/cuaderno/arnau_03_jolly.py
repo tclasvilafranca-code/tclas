@@ -22,6 +22,8 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from arnau_comun import (rutina, juego, acuerdate, camino, nombres, inventa,
+                         unir, sopa, ordenar, colorear)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -156,93 +158,73 @@ CANCION = dict(
         ],
     ),
 
+    # Reparto de `arnau_recetas`: semana 1 la R5 (camino · nombres · inventa ·
+    # une) y semana 2 la R6 (sopa · ordena · colorea).
     deberes=[
         dict(
             titulo='Deberes · semana 1',
             esquina='Jolly Old Saint Nicholas · para hacer en casa',
-            intro='Esta semana toca aprender la nota más larga de todas y contar hasta cuatro sin '
-                  'perderse. Todo lo de aquí está en tu partitura.',
+            intro='Esta canción trae las notas más largas que has tocado hasta ahora: las que duran '
+                  'cuatro golpes. Los deberes de esta semana van casi todos de eso.',
             bloques=[
-                dict(tipo='figuras', num=1,
-                     titulo='¿Cuántos golpes dura cada una?',
-                     pista='escribe el número en la caja · la redonda es la más larga de todas',
-                     figuras=[('w', 'redonda'), ('h', 'blanca'), ('q', 'negra'),
-                              ('h.', 'blanca con puntito')]),
-                dict(tipo='nombres', num=2,
-                     titulo='¿Cómo se llama cada nota?',
-                     pista='escríbelas en la cajita de debajo',
-                     notas=['E4', 'D4', 'C4', 'E4', 'G4', 'F4', 'E4', 'D4']),
-                dict(tipo='dibuja', num=3,
-                     titulo='Dibuja tú las notas',
-                     pista='solo el óvalo, sin el palito',
-                     nombres=['Do', 'Mi', 'Sol', 'Mi', 'Fa', 'Re', 'Sol', 'Do']),
-                dict(tipo='rutina',
-                     titulo='Lo que hay que tocar cada día',
-                     pista='pon una cruz cuando lo hagas · cinco minutos bastan',
-                     tareas=['Las cuatro notas iguales, contando un-dos-tres-cuatro',
-                             'La izquierda sola: tocar una vez y aguantar cuatro golpes',
-                             'Los dos primeros compases con las dos manos, muy despacio']),
-                dict(tipo='colorea', num=4,
-                     titulo='Colorea las redondas de un color y las negras de otro',
-                     pista='la redonda es hueca y no lleva palito',
-                     eventos=[n('E4'), n('E4'), n('C4', 'w'), n('D4'),
-                              n('G4', 'w'), n('E4'), n('F4'), n('C4', 'w')],
-                     leyenda=['La redonda dura cuatro golpes y no tiene palito.',
-                              'La negra dura un golpe y tiene el óvalo pintado.']),
-                dict(tipo='escucha',
-                     titulo='UN JUEGO, CON ALGUIEN DE CASA',
-                     pista='no hace falta que sepa música',
-                     texto='Toca una nota y déjala sonar mientras contáis los dos en voz alta hasta '
-                           'que deje de oírse. Probad en varias partes del piano: las notas graves '
-                           'duran mucho más que las agudas. Es un juego, pero también es la razón por '
-                           'la que la izquierda de esta canción puede aguantar cuatro golpes.'),
+                camino([['negra', 'redonda', 'negra', 'negra', 'blanca', 'negra'],
+                        ['blanca', 'redonda', 'redonda', 'negra', 'negra', 'negra'],
+                        ['negra', 'negra', 'redonda', 'blanca', 'negra', 'blanca'],
+                        ['negra', 'blanca', 'redonda', 'redonda', 'negra', 'negra'],
+                        ['negra', 'negra', 'negra', 'redonda', 'blanca', 'negra']],
+                       titulo='El camino de las notas largas',
+                       pista='colorea solo las que duran cuatro golpes y sale un camino'),
+                nombres(['E4', 'D4', 'C4', 'E4', 'G4', 'F4', 'E4', 'D4'],
+                        pista='son las notas de tu melodía · escríbelas debajo'),
+                inventa(['Solo Mi, Re y Do, que son las de tu melodía.',
+                         'Dos compases de cuatro golpes cada uno.',
+                         'Que una de las notas sea una redonda.'],
+                        time_sig=(4, 4),
+                        titulo='Inventa dos compases',
+                        pista='tiene que cumplir las tres cosas'),
+                unir([('Negra', 'cuatro golpes'),
+                      ('Blanca', 'un golpe'),
+                      ('Redonda', 'tres golpes'),
+                      ('Blanca con puntito', 'dos golpes')],
+                     titulo='Une cada figura con lo que dura',
+                     pista='ojo, están desordenadas'),
+                rutina('Las cuatro notas iguales del principio, contando cuatro',
+                       'La izquierda sola: tocar y aguantar cuatro golpes',
+                       'Las dos manos, los dos primeros compases'),
+                juego('Tú tocas una nota y la aguantas, y quien esté contigo cuenta en voz alta '
+                      'hasta que deje de sonar. Tiene que llegar a cuatro. Cinco veces.'),
             ],
         ),
         dict(
             titulo='Deberes · semana 2',
             esquina='Jolly Old Saint Nicholas · para hacer en casa',
-            intro='Esta semana toca mirar la partitura con un lápiz en la mano y darse cuenta de que '
-                  'la izquierda repite mucho.',
+            intro='Villancico y sopa de letras. Después, a ordenar los pasos de estudiar, que es lo '
+                  'que hay que hacer con todas las canciones.',
             bloques=[
-                dict(tipo='rodea', num=1,
-                     titulo='Rodea los dos compases que son iguales',
-                     pista='fíjate en las notas de una en una',
-                     compases=[[n('E4'), n('E4'), n('E4'), n('E4')],
-                               [n('D4'), n('D4'), n('C4', 'h')],
-                               [n('E4'), n('E4'), n('E4'), n('E4')],
-                               [n('G4'), n('E4'), n('C4', 'h')]]),
-                dict(tipo='une', num=2,
-                     titulo='Une cada figura con lo que dura',
-                     pista='una raya de un punto al otro',
-                     pares=[('Redonda', 'dos golpes'),
-                            ('Blanca', 'un golpe'),
-                            ('Negra', 'cuatro golpes')]),
-                dict(tipo='nota',
-                     etiqueta='ACUÉRDATE',
-                     texto='Cuando una nota dura cuatro golpes no hay que volver a apretarla: se toca '
-                           'una vez y el piano sigue sonando solo. Apretar más fuerte no hace que dure '
-                           'más; lo único que hace es cansarte la mano.'),
-                dict(tipo='rutina',
-                     titulo='Lo que hay que tocar cada día',
-                     pista='pon una cruz cuando lo hagas',
-                     tareas=['Los cuatro primeros compases con las dos manos',
-                             'La canción entera con la derecha sola',
-                             'Contar hasta cuatro en voz alta mientras tocas']),
-                dict(tipo='nombres', num=3,
-                     titulo='Otra vez los nombres, a ver si ya te los sabes',
-                     pista='sin mirar los deberes de la semana pasada',
-                     notas=['G4', 'F4', 'E4', 'A4', 'C5', 'B4', 'D5', 'G4']),
-                dict(tipo='escucha',
-                     titulo='UN JUEGO, CON ALGUIEN DE CASA',
-                     pista='esta vez de contar',
-                     texto='Toca un acorde de dos notas y cuenta en voz alta hasta cuatro sin volver '
-                           'a tocarlo. Quien esté contigo comprueba que no has vuelto a apretar. Cinco '
-                           'veces. Es exactamente lo que tiene que hacer tu mano izquierda en toda '
-                           'esta canción.'),
-                dict(tipo='escribe', num=4,
-                     titulo='Copia aquí el compás que más te cueste',
-                     pista='cópialo tal cual y luego tócalo cinco veces',
-                     lineas=1),
+                sopa(['REDONDA', 'NAVIDAD', 'CUATRO', 'LARGAS', 'PULGAR', 'MENIQUE',
+                      'IGUALES', 'MI', 'RE', 'DO'], semilla=303, filas=8,
+                     titulo='Sopa de letras de Navidad',
+                     pista='diez palabras · algunas están en diagonal'),
+                ordenar(['Tocarla entera despacio, sin pararse.',
+                         'Mirar la partitura y decir los nombres en voz alta.',
+                         'Tocar solo la mano derecha.',
+                         'Juntar las dos manos, dos compases.'],
+                        titulo='Pon los pasos en el orden bueno',
+                        pista='escribe 1, 2, 3 y 4 en las casillas'),
+                colorear([n('E4'), n('E4'), n('E4'), n('E4'),
+                          n('D4', 'h'), n('C4', 'w'), n('E4'), n('E4')],
+                         ['Un color para las de un golpe, otro para las de dos y otro para la de '
+                          'cuatro.'],
+                         titulo='Colorea según lo que duran',
+                         pista='tres colores, uno por figura'),
+                rutina('El villancico entero, muy despacio',
+                       'La izquierda, sin mirarse la mano',
+                       'Contar cuatro en voz alta mientras tocas'),
+                acuerdate('Los dedos 1 y 5 son el pulgar y el meñique, los de los extremos. En tu '
+                          'partitura vienen escritos debajo de las notas de la izquierda. Colócalos '
+                          'y deja los tres de en medio apoyados sin apretar: así la mano no se '
+                          'cansa y no tienes que buscar nada.',
+                          etiqueta='EL 1 Y EL 5'),
             ],
         ),
     ],

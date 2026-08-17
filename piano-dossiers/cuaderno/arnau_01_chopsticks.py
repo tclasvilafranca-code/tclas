@@ -35,6 +35,8 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from arnau_comun import (rutina, juego, sopa, adivinar, crucigrama, figuras,
+                         nombres, colorear)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -167,89 +169,60 @@ CANCION = dict(
         ],
     ),
 
+    # Los deberes siguen el reparto de `arnau_recetas`: semana 1 la receta R1
+    # (sopa · figuras · adivina) y semana 2 la R2 (crucigrama · nombres ·
+    # colorea). Los numeros de ejercicio los pone `hoja_deberes` solo.
     deberes=[
         dict(
             titulo='Deberes · semana 1',
             esquina='Chopsticks · para hacer en casa',
-            intro='Los de esta semana son de mirar y escribir. Todo lo que sale aquí está en tu '
-                  'partitura, así que puedes mirarla siempre que quieras: no es un examen.',
+            intro='Esta semana toca jugar un poco. Todo lo que sale aquí está en tu partitura, así '
+                  'que puedes mirarla siempre que quieras: no es un examen.',
             bloques=[
-                dict(tipo='nombres', num=1,
-                     titulo='¿Cómo se llama cada nota?',
-                     pista='son las cuatro notas de tu canción · escríbelas en la cajita de debajo',
-                     notas=['F4', 'G4', 'E4', 'G4', 'B4', 'C5', 'A4', 'G4']),
-                dict(tipo='dibuja', num=2,
-                     titulo='Ahora al revés: dibuja tú las notas',
-                     pista='solo el óvalo, sin el palito · debajo pone cuál va en cada sitio',
-                     nombres=['Sol', 'Fa', 'Mi', 'Sol', 'La', 'Si', 'Do', 'Sol']),
-                dict(tipo='figuras', num=3,
-                     titulo='¿Cuántos golpes dura cada una?',
-                     pista='escribe el número en la caja · acuérdate: la negra dura un golpe',
-                     figuras=[('q', 'negra'), ('h', 'blanca'), ('w', 'redonda'), ('h.', 'blanca con puntito')]),
-                dict(tipo='colorea', num=4,
-                     titulo='Colorea las notas',
-                     pista='las cortas (con el palito solo) de un color, y las largas (huecas) de otro',
-                     eventos=[n('G4'), n('F4', 'h'), n('G4'), n('E4'),
-                              n('G4', 'h'), n('F4'), n('G4'), n('E4', 'h')],
-                     leyenda=['Las que tienen el óvalo pintado duran UN golpe.',
-                              'Las que tienen el óvalo hueco duran DOS golpes.']),
-                dict(tipo='rutina',
-                     titulo='Lo que hay que tocar cada día',
-                     pista='pon una cruz cuando lo hagas · cinco minutos bastan',
-                     tareas=['Fa y Sol juntas, veinte veces, contando un-dos-tres',
-                             'Los compases 1 al 4 seguidos, muy despacio',
-                             'Buscar en la partitura dónde se separan las manos']),
-                dict(tipo='escucha',
-                     titulo='UN JUEGO, CON ALGUIEN DE CASA',
-                     pista='no hace falta que sepa música',
-                     texto='Tú tocas dos notas a la vez, como en la canción, y quien esté contigo dice '
-                           'si han sonado A LA VEZ o una detrás de otra. Hazlo cinco veces. Luego '
-                           'cambiad: toca esa persona con un dedo de cada mano y adivinas tú.'),
+                sopa(['PALILLOS', 'SILENCIO', 'BLANCA', 'NEGRA', 'COMPAS', 'DEDO',
+                      'VECINAS', 'SOL', 'FA', 'MI'], semilla=101, filas=8,
+                     titulo='Sopa de letras de tu canción',
+                     pista='diez palabras · tumbadas, de pie o en diagonal'),
+                figuras([('q', 'negra'), ('h', 'blanca'), ('w', 'redonda'),
+                         ('h.', 'blanca con puntito')],
+                        pista='acuérdate: la negra dura un golpe'),
+                adivinar([('Solo se usa uno de los diez, el segundo de cada mano.', 'DEDO'),
+                          ('No suenas cuando me ves, pero hay que contarme igual.', 'SILENCIO'),
+                          ('Somos dos y bajamos siempre a la vez, nunca una detrás.', 'MANOS')]),
+                rutina('Fa y Sol juntas, veinte veces, contando un-dos-tres',
+                       'Los compases 1 al 4 seguidos, muy despacio',
+                       'Buscar en la partitura dónde se separan las manos'),
+                juego('Tú tocas dos notas a la vez y quien esté contigo dice si han sonado A LA '
+                      'VEZ o una detrás de otra. Cinco veces. Luego cambiad: toca esa persona con '
+                      'un dedo de cada mano y adivinas tú.'),
             ],
         ),
         dict(
             titulo='Deberes · semana 2',
             esquina='Chopsticks · para hacer en casa',
-            intro='Esta semana toca mirar la partitura de verdad y escribir en ella. Coge un lápiz '
-                  'blando, que se pueda borrar.',
+            intro='Esta semana hay crucigrama, y después toca mirar la partitura de verdad. Coge un '
+                  'lápiz blando, que se pueda borrar.',
             bloques=[
-                dict(tipo='rodea', num=1,
-                     titulo='Rodea los dos compases que son iguales',
-                     pista='son parejas de dos notas · hay dos compases exactamente iguales',
-                     compases=[[ac(VECINAS)] * 3, [ac(HUECO)] * 3,
-                               [ac(VECINAS)] * 3, [ac(OCTAVA)] * 3]),
-                dict(tipo='une', num=2,
-                     titulo='Une cada pareja con lo lejos que están las manos',
-                     pista='una raya de un punto al otro',
-                     pares=[('Fa y Sol', 'muy separadas'),
-                            ('Mi y Sol', 'juntitas, una al lado de la otra'),
-                            ('Re y Si', 'la misma nota arriba y abajo'),
-                            ('Do y Do', 'separadas, con una nota en medio')]),
-                dict(tipo='nota',
-                     etiqueta='ACUÉRDATE',
-                     texto='Un SILENCIO es un rato en el que no se toca nada, pero el tiempo sigue '
-                           'pasando: hay que contarlo igual que si sonara. En tu partitura los '
-                           'silencios empiezan en el compás 13.'),
-                dict(tipo='rutina',
-                     titulo='Lo que hay que tocar cada día',
-                     pista='pon una cruz cuando lo hagas',
-                     tareas=['Las cuatro parejas de notas, una detrás de otra',
-                             'Los compases 1 al 8 seguidos y sin parar',
-                             'Contar un-dos-tres en voz alta mientras tocas']),
-                dict(tipo='nombres', num=3,
-                     titulo='Otra vez los nombres, a ver si ya te los sabes',
-                     pista='sin mirar los deberes de la semana pasada',
-                     notas=['G4', 'B4', 'F4', 'A4', 'C5', 'E4', 'G4', 'B4']),
-                dict(tipo='escucha',
-                     titulo='UN JUEGO, CON ALGUIEN DE CASA',
-                     pista='esta vez de contar',
-                     texto='Toca tres golpes seguidos y luego dos, sin decir cuántos. Quien esté '
-                           'contigo tiene que adivinar el número. Cinco veces cada uno. Es el mismo '
-                           'trabajo de contar un-dos-tres que necesitas para esta canción.'),
-                dict(tipo='escribe', num=4,
-                     titulo='Copia aquí tu compás favorito',
-                     pista='el que más te guste de la canción · la clave la pones tú',
-                     lineas=1),
+                crucigrama('COMPAS', [
+                    ('SILENCIO', 5, 'Cuando no se toca nada, pero el tiempo sigue pasando.'),
+                    ('SOL', 1, 'La nota que toca tu mano derecha al principio de la canción.'),
+                    ('MANOS', 0, 'Tienes dos, y en esta canción bajan siempre a la vez.'),
+                    ('PIANO', 0, 'El instrumento que estás aprendiendo.'),
+                    ('NEGRA', 4, 'La figura que dura un golpe y tiene el óvalo pintado.'),
+                    ('TRES', 3, 'Los golpes que hay en cada compás de esta canción.'),
+                ], cierre='Las casillas grises dicen cómo se llama el trozo que hay entre dos rayas.'),
+                nombres(['F4', 'G4', 'E4', 'G4', 'B4', 'C5', 'A4', 'G4'],
+                        pista='son las notas de tu canción · escríbelas en la cajita de debajo'),
+                colorear([n('G4'), n('F4', 'h'), n('G4'), n('E4'),
+                          n('G4', 'h'), n('F4'), n('G4'), n('E4', 'h')],
+                         ['Óvalo pintado, un golpe. Óvalo hueco, dos golpes.'],
+                         pista='las cortas de un color y las largas de otro'),
+                rutina('Las cuatro parejas de notas, una detrás de otra',
+                       'Los compases 1 al 8 seguidos y sin parar',
+                       'Contar un-dos-tres en voz alta mientras tocas'),
+                juego('Toca tres golpes seguidos y luego dos, sin decir cuántos, y quien esté '
+                      'contigo adivina el número. Cinco veces cada uno.',
+                      pista='esta vez de contar'),
             ],
         ),
     ],

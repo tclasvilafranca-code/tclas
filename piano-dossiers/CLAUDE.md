@@ -1,5 +1,40 @@
 # El Cuaderno del Pianista — Motor de Dosieres · guía para Claude Code
 
+> ## 🔒 NORMA DEL PROYECTO: la variedad es parte de la calidad
+>
+> Decisión del cliente, y vale para **todos los alumnos**. Un cuaderno no es
+> bueno solo por estar bien medido y bien impreso: si cada semana el alumno abre
+> la hoja y se encuentra **los mismos ejercicios en el mismo orden**, deja de
+> hacerlos. La variedad no es decoración, es lo que hace que el material se use.
+>
+> Lo que la norma exige, en concreto:
+>
+> 1. **Dos semanas seguidas no pueden llevar el mismo esqueleto de ejercicios.**
+>    Ni el mismo orden, ni los mismos tipos. Cada hoja tiene que traer **al
+>    menos dos tipos de ejercicio que no estaban en la hoja anterior**.
+> 2. **Ningún esqueleto se repite más de dos veces en un álbum entero**, y nunca
+>    en semanas próximas.
+> 3. **Ningún tipo de ejercicio aparece en más del 60 % de las hojas.** Si
+>    "escribe el nombre de las notas" sale en las 40 semanas, sobra en 20.
+> 4. **El repertorio de tipos tiene que ser ancho de verdad**, no tres
+>    variaciones de lo mismo. Hay mil cosas que se pueden pedir en papel: sopa
+>    de letras musical, adivinanzas, crucigrama, "el camino correcto",
+>    verdadero o falso, ordenar los pasos, buscar las diferencias entre dos
+>    pentagramas, contar cuántas veces aparece una nota, marcar teclas en un
+>    teclado dibujado, escribir el ritmo de una palabra, inventar dos compases
+>    con condiciones… y todo eso **sacado de la canción de esa semana**.
+> 5. **La variedad no compra permiso para inventar.** Sigue mandando la regla de
+>    que todo sale de la partitura medida: un ejercicio divertido con datos
+>    falsos es un ejercicio malo.
+>
+> Lo comprueba `cuaderno/auditar_variedad.py`, que entra en el auditor de cada
+> alumno y tiene que decir TODO OK antes de entregar.
+>
+> Origen: el cliente lo pidió al ver el primer álbum de Arnau, donde las 40
+> hojas de deberes usaban solo 8 tipos, la semana 1 empezaba **siempre** por
+> "escribe los nombres" y la semana 2 **siempre** por "rodea los compases
+> iguales".
+
 > ## 🔒 NORMA DEL PROYECTO: la calidad va por delante de la rapidez
 >
 > Decisión del cliente, y manda sobre cualquier otra consideración. Son unos

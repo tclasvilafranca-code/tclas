@@ -16,7 +16,8 @@ from auditar_variedad import revisar_variedad
 from jm_recetas import revisar_reparto
 
 MODULOS = ['jm_01_romance', 'jm_02_america', 'jm_03_banner', 'jm_04_counting',
-           'jm_05_peaches']
+           'jm_05_peaches', 'jm_06_someone', 'jm_07_deck', 'jm_08_jailhouse',
+           'jm_09_clock', 'jm_10_shallow']
 
 
 def hojas_de_trabajo(modulos):

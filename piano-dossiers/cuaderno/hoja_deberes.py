@@ -303,9 +303,25 @@ def rutina(c, y, b):
     return yy - 2
 
 
+def _lineas_que_ocupa(texto, size, ancho):
+    """Cuantas lineas va a escribir _wrap con ese ancho. Sirve para que un
+       recuadro mida lo que mide su texto y no una altura fija: con una altura
+       fija, un texto corto deja un hueco vacio que parece un fallo (y uno
+       largo se sale)."""
+    linea, n = '', 1
+    for palabra in texto.split():
+        prueba = (linea + ' ' + palabra).strip()
+        if stringWidth(prueba, 'DejaVuSans', size) > ancho:
+            n += 1
+            linea = palabra
+        else:
+            linea = prueba
+    return n
+
+
 def ej_escucha(c, y, b):
     """El juego con un adulto. No hace falta que sepa musica."""
-    h = b.get('alto', 78)
+    h = b.get('alto') or 27 + 11.0 * _lineas_que_ocupa(b['texto'], 8.4, CONTENT_W - 28)
     c.setFillColor(WARM)
     c.roundRect(MARGIN, y - h, CONTENT_W, h, 4, fill=1, stroke=0)
     c.setFillColor(ACCENT)
@@ -329,14 +345,7 @@ def nota(c, y, b):
     texto = b['texto']
     size = 8.4
     inner = CONTENT_W - 26
-    words, ln, count = texto.split(), '', 1
-    for wd in words:
-        t = (ln + ' ' + wd).strip()
-        if stringWidth(t, 'DejaVuSans', size) > inner:
-            count += 1; ln = wd
-        else:
-            ln = t
-    h = 20 + count * 11.0
+    h = 20 + 11.0 * _lineas_que_ocupa(texto, size, inner)
     c.setFillColor(PANEL)
     c.roundRect(MARGIN, y - h, CONTENT_W, h, 4, fill=1, stroke=0)
     c.setFillColor(BLUE)

@@ -79,6 +79,58 @@
 > (`build_plan_curso`), que reparte las piezas de septiembre a julio y marca
 > Halloween, Navidad y el concierto de fin de curso.
 >
+> ### El formato CORTO, para clases de media hora (`formato='corto'`)
+>
+> Decisión del cliente para Arnau (10 años, media hora de clase). Se activa con
+> `formato='corto'` en el dict `CANCION` y lo monta `cancion._hojas_corto`. Son
+> **cinco hojas** en vez de ocho, y **no es el formato largo recortado**:
+>
+> | Hoja | Qué es | Módulo |
+> |---|---|---|
+> | 1 | Ficha de la partitura | `ficha_info.py` |
+> | 2 | **Taller** — calentamiento + leer en voz alta, fundidos en una hoja | `hoja_taller.py` |
+> | 3 | Cómo se aprende — tres pasos al piano | `hoja_piano.py` |
+> | 4–5 | **Deberes escritos**, una hoja por semana | `hoja_deberes.py` |
+>
+> Reglas propias de este formato:
+>
+> - **Sin tecnicismos, nunca.** No "anacrusa" sino *"entrar antes de que empiece
+>   el compás"*; no "armadura" sino *"la tecla negra que vale para toda la
+>   canción"*. Ojo con las palabras ambiguas para un niño: **"negra" vale por
+>   tecla negra y por figura**, así que en la ficha se escribe *"Solo blancas"*
+>   en la casilla "Teclas" y el nombre de la figura solo aparece dibujada al
+>   lado.
+> - **Los deberes son deberes de verdad**, hechos por el alumno en casa, no un
+>   recuadro en blanco para el profesor. Se componen de bloques
+>   (`hoja_deberes.TIPOS`: `nombres`, `dibuja`, `figuras`, `une`, `rodea`,
+>   `colorea`, `rutina`, `escucha`, `nota`, `escribe`); seis bloques llenan una
+>   hoja. Las fábricas cómodas están en `arnau_comun.py` (`rutina`, `juego`,
+>   `escribir`).
+> - **Las cajas de texto miden lo que mide su texto** (`_lineas_que_ocupa`): una
+>   altura fija deja un hueco vacío que parece un fallo cuando el texto es
+>   corto, y se sale cuando es largo. Pasó con `ej_escucha`, que tenía 78 pt
+>   clavados.
+> - El plan de curso y los deberes van **sincronizados**: la hoja "semana 1" de
+>   cada canción es para la primera de sus dos semanas del plan.
+>
+> Ver `cuaderno/PLAN_ALBUM_ARNAU.md` para el orden de las 20 piezas y la
+> verificación pasada.
+>
+> ### El auditor de texto que no cabe en su caja (`portada.NO_CABEN`)
+>
+> `portada._fit` reduce el cuerpo de letra hasta que el texto entra en su hueco,
+> con un suelo. Si llega al suelo y **aún** no cabe, el texto se sale sin avisar.
+> Ahora `_fit(..., caja=True)` apunta ese caso en `portada.NO_CABEN`, y
+> `cancion._revisar` falla la auditoría si la lista no está vacía.
+>
+> El `caja=True` se pone **solo donde el hueco es una caja de verdad** (tarjeta
+> del nombre y celdas de datos de la ficha). En los pies de foto de
+> `hoja_piano.py` el "hueco" lleva relleno de sobra y marcarlo daba falsos
+> positivos. Al estrenarlo destapó **11 desbordes ya en producción** (8 de Eva,
+> 2 de Dilan, 1 de Arnau), todos en títulos de columna y pies de una sola línea:
+> un pie de foto de `hoja_piano.py` **no envuelve**, así que tiene que quedarse
+> por debajo de ~135 caracteres.
+>
 > ### Las tres hojas generadas
 >
 > `engine/generador_lectura.py` escribe pentagramas llenos a partir de la

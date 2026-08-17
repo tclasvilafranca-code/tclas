@@ -11,7 +11,9 @@ MODULOS = ['arnau_01_chopsticks', 'arnau_02_clementine', 'arnau_03_jolly',
            'arnau_04_ears', 'arnau_05_wheels', 'arnau_06_saints',
            'arnau_07_wewish', 'arnau_08_baabaa', 'arnau_09_polly',
            'arnau_10_muffet', 'arnau_11_eso', 'arnau_12_puff',
-           'arnau_13_pantera', 'arnau_14_bonnie', 'arnau_15_largo']
+           'arnau_13_pantera', 'arnau_14_bonnie', 'arnau_15_largo',
+           'arnau_16_aloha', 'arnau_17_popeye', 'arnau_18_submarino',
+           'arnau_19_rain', 'arnau_20_mulberry']
 
 
 def main():

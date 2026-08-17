@@ -21,9 +21,9 @@
 # Estos dos no son ejercicios, son marcadores de hábito: que salgan todas las
 # semanas es justo lo que se quiere, así que no cuentan para el tope de
 # frecuencia. `rutina` es la tabla de "qué tocar cada día" del formato corto y
-# `plan` es el plan de minutos por día del formato de adulto, que para alguien
-# que estudia solo en casa es la parte más útil de la hoja. Todo lo demás sí
-# cuenta.
+# `plan` es el plan de minutos por día del formato de adulto: es lo que el
+# alumno se lleva de la clase para practicar en casa, y es la parte más útil
+# de la hoja. Todo lo demás sí cuenta.
 ESTRUCTURALES = {'rutina', 'plan'}
 
 

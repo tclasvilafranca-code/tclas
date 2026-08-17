@@ -1,13 +1,15 @@
 # Álbum de José María — adulto que empieza · 19 piezas · formato de seis hojas
 
-José María tiene unos 60 años, empezó hace poco y se ha comprado un teclado
-para casa. El encargo: **material para trabajar de verdad, pero a un nivel que
-no agobie**. Eso decide dos cosas.
+José María tiene unos 60 años, empezó hace poco, **viene a clase** y se ha
+comprado un teclado para practicar en casa. El encargo: **material para
+trabajar de verdad, pero a un nivel que no agobie**. Eso decide dos cosas.
 
-1. **Estudia solo casi todos los días.** Lo que más le falla no es tocar: es
-   saber por dónde empezar cuando se sienta al teclado. Por eso su hoja
-   semanal lleva **plan de minutos por día** y **tabla de metrónomo**, que no
-   existen en ningún otro cuaderno del proyecto.
+1. **Los seis días que hay entre clase y clase se decide la semana.** No es
+   que estudie por su cuenta: tiene profesora. Lo que hay que resolver es qué
+   se lleva de la clase para el resto de la semana, y por eso su hoja semanal
+   lleva **plan de minutos por día**, **tabla de metrónomo** y un recuadro
+   **"para la próxima clase"**, que no existen en ningún otro cuaderno del
+   proyecto.
 2. **No es un niño.** Nada de sopas de letras, adivinanzas, crucigramas ni
    ritmos de palabras: eso es de Arnau. Los ejercicios son los mismos de
    siempre (nombres, figuras, contar, diferencias, teclado, inventar…) con
@@ -32,6 +34,11 @@ El reparto de las 19 hojas de trabajo está en `jm_recetas.py`: diez recetas,
 cada una usada dos veces y con diez hojas de distancia. Lo comprueban
 `auditar_variedad.py` y `jm_recetas.revisar_reparto`, igual que en Arnau. El
 `plan` es el único bloque que sale las 19 semanas, y cuenta como estructural.
+
+El bloque que en el cuaderno de Arnau es *"un juego con alguien de casa"* aquí
+es **"para la próxima clase"** (`jm_comun.para_clase`): a José María no le hace
+falta un juego, le hace falta llegar el día de la clase con el trabajo hecho
+por donde tocaba y sabiendo qué preguntar.
 
 ## De dónde salen las partituras
 

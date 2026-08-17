@@ -167,7 +167,7 @@ def _hojas_corto(cfg, qr_png):
 
 def _hojas_adulto(cfg, qr_png):
     """El dosier de ADULTO, seis hojas (Jose Maria, unos 60 anos, empezo hace
-       poco y estudia solo en casa con un teclado).
+       poco; viene a clase y practica en casa con su teclado).
 
        partitura · ficha · dedos · leer · como se estudia (una hoja, o dos si
        la pieza lo pide) · el trabajo de la semana · papel pautado
@@ -175,8 +175,8 @@ def _hojas_adulto(cfg, qr_png):
        Decision del cliente: dedos y lectura en hojas SEPARADAS, no fundidas
        como en el formato corto. Y nada infantil: los ejercicios son los
        mismos de siempre, pero la hoja de la semana lleva plan de minutos por
-       dia y tabla de metronomo, que es lo que de verdad le hace falta a
-       alguien que estudia solo."""
+       dia y tabla de metronomo: es lo que se lleva de la clase para los dias
+       que hay en medio."""
     kicker = '%s · pieza %d · %s' % (cfg['alumno'], cfg['num'], cfg['titulo_corto'])
     nivel = '%s · pieza %d · %s' % (cfg['alumno'], cfg['num'], cfg['nivel'])
     sem = cfg['num'] + _sal_alumno(cfg['alumno'])

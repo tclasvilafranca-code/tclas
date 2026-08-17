@@ -10,8 +10,10 @@
 
    Lo que NO rota: el `plan` de minutos por día. Está en las 19 hojas a
    propósito, y por eso `auditar_variedad` lo cuenta como estructural. José
-   María estudia solo en casa: lo que más le falla no es tocar, es saber por
-   dónde empezar cuando se sienta al teclado. Eso no se quita ninguna semana.
+   María viene a clase, pero entre clase y clase practica en casa con su
+   teclado, y ahí es donde se decide la semana: lo que más se pierde no es
+   tocar, es saber por dónde empezar cuando se sienta. Eso no se quita
+   ninguna semana.
 
    Y lo que no se usa nunca en este cuaderno: sopa de letras, adivinanzas,
    crucigrama, el camino y el ritmo de las palabras. Son de Arnau, que tiene

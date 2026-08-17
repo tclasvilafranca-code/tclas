@@ -764,16 +764,18 @@ def ej_inventa(c, y, b):
 # --------------------------------------------------------------------------
 # los bloques del formato ADULTO
 #
-# Jose Maria tiene unos 60 anos, empezo hace poco y estudia solo en casa con
-# un teclado. Lo que mas le sirve no es un ejercicio mas: es saber QUE hacer
-# cada dia y CUANTO, y tener donde apuntar como va. Eso es lo que hacen estos
-# tres bloques, y son los que no existian para ningun otro alumno.
+# Jose Maria tiene unos 60 anos, empezo hace poco, viene a clase y entre clase
+# y clase practica en casa con su teclado. Lo que mas le sirve no es un
+# ejercicio mas: es llevarse de la clase QUE hacer cada dia y CUANTO, y tener
+# donde apuntar como va. Eso es lo que hacen estos tres bloques, y son los que
+# no existian para ningun otro alumno.
 # --------------------------------------------------------------------------
 def ej_plan(c, y, b):
     """El plan de la semana: que hacer cada dia y cuantos minutos.
 
-       Un adulto que estudia solo no falla por no saber tocar: falla por no
-       saber por donde empezar cuando se sienta. Aqui lo tiene escrito."""
+       Entre clase y clase lo que se pierde no es saber tocar: es saber por
+       donde empezar cuando uno se sienta al teclado. Aqui se lo lleva
+       escrito de la clase."""
     y = _titulo_ej(c, y, b['num'], b.get('titulo', 'El plan de la semana'),
                    b.get('pista', 'no hace falta hacerlo todo el mismo día'))
     dias = b.get('dias', ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE'])

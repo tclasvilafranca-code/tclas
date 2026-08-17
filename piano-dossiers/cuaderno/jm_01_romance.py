@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """Romance, de Diabelli (pieza 1 de José María). Formato ADULTO, seis hojas.
 
-   José María tiene unos 60 años, empezó hace poco y se ha comprado un teclado
-   para casa. El encargo del cliente: material para trabajar de verdad, pero a
-   un nivel que no agobie. De ahí las seis hojas (partitura · ficha · dedos ·
-   leer · cómo se estudia · el trabajo de la semana · papel pautado) y de ahí
-   que la hoja de la semana lleve un plan de minutos por día: lo que más le
-   falla a quien estudia solo no es tocar, es saber por dónde empezar cuando
-   se sienta al teclado.
+   José María tiene unos 60 años, empezó hace poco, viene a clase y se ha
+   comprado un teclado para practicar en casa. El encargo del cliente:
+   material para trabajar de verdad, pero a un nivel que no agobie. De ahí las
+   seis hojas (partitura · ficha · dedos · leer · cómo se estudia · el trabajo
+   de la semana · papel pautado) y de ahí que la hoja de la semana lleve un
+   plan de minutos por día: es lo que se lleva de la clase para los días que
+   hay en medio.
 
    Lo comprobado sobre el PDF de su carpeta de Drive (free-scores.com,
    "6 Sonatas for Piano 4-hands op. 163, no. 1, Mvmt. 2", 2 páginas):

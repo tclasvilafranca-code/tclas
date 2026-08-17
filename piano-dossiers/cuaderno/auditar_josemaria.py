@@ -18,7 +18,8 @@ from jm_recetas import revisar_reparto
 MODULOS = ['jm_01_romance', 'jm_02_america', 'jm_03_banner', 'jm_04_counting',
            'jm_05_peaches', 'jm_06_someone', 'jm_07_deck', 'jm_08_jailhouse',
            'jm_09_clock', 'jm_10_shallow', 'jm_11_canthelp', 'jm_12_carol',
-           'jm_13_adagio', 'jm_14_rasputin', 'jm_15_toreador']
+           'jm_13_adagio', 'jm_14_rasputin', 'jm_15_toreador', 'jm_16_trouble',
+           'jm_17_acomme', 'jm_18_interstellar', 'jm_19_flying']
 
 
 def hojas_de_trabajo(modulos):
@@ -38,7 +39,7 @@ def main():
     # min_tipos baja mientras el album esta a medias: con cinco piezas todavia
     # no han salido las diez recetas.
     fallos += len(revisar_variedad(hojas_de_trabajo(MODULOS), 'José María',
-                                   min_tipos=min(15, 3 * len(MODULOS))))
+                                   min_tipos=15))
     fallos += len(revisar_reparto(MODULOS))
     print('\n%s' % ('TODO OK' if not fallos else '%d FALLOS EN TOTAL' % fallos))
     return fallos

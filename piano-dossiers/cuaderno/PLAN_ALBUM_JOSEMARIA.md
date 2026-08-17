@@ -111,12 +111,32 @@ julio, no en octubre.
 | 18 | Interstellar · Hans Zimmer | 3/4 · ♩=96 | seis páginas: la más larga del cuaderno |
 | 19 | Flying Theme (*Cómo entrenar a tu dragón*) | Do → Re (2♯) · 4/4 | tres páginas, corcheas en las dos manos y cambio de tonalidad a mitad |
 
-## Estado
+## Dos cosas que había que arreglar en las fuentes
 
-- Formato de adulto **construido y validado** de punta a punta con la pieza 1
-  (`jm_01_romance.py` → `output/JoseMaria_01_RomanceDiabelli_CUADERNO.pdf`,
-  ocho páginas: dos de partitura y las seis hojas).
-- Las 19 partituras **verificadas y documentadas**.
-- El reparto de variedad de las 19 hojas de trabajo, **decidido y auditado**.
-- Pendiente: escribir las piezas 2 a 19 y montar el álbum (portada, índice,
-  plan de 44 semanas).
+Las partituras las sube el cliente a Drive y llegan como llegan. En este álbum
+salieron dos casos que rompían el montaje, y los dos los resuelve ahora
+`cuaderno/fuente.py` al vuelo, sin tocar los originales:
+
+- **El Adagio no era un PDF**, era un JPEG. Se convierte.
+- **Trouble (Coldplay) tiene dentro un objeto mal formado.** `pypdf` lo abre y
+  cuenta bien las páginas, pero al copiarlas revienta con `LimitReachedError`.
+  Se reescribe con `pdftocairo`.
+
+Está hecho así, y no como un apaño a mano, porque las partituras no se
+versionan: el álbum tiene que poder montarse de cero en una máquina limpia
+bajando la carpeta de Drive otra vez.
+
+## Verificación pasada antes de entregar
+
+- `python3 cuaderno/auditar_josemaria.py` → **TODO OK** en las 19 piezas
+  (compases, margen derecho, material repetido entre hojas, altura final de
+  cada hoja y texto que no cabe en su caja) **más la variedad**: 19 hojas de
+  trabajo, 10 esqueletos distintos, 18 tipos, y el reparto cumplido una a una.
+- **Portada, índice y plan**: 0 desbordes de texto, 0 cajas desbordadas.
+- **Píxeles del álbum montado** (157 páginas): de las 116 hojas nuestras,
+  **0 desbordes por abajo y 0 por la derecha**.
+
+## Salida
+
+`output/JoseMaria_Cuaderno_del_Pianista_2026.pdf` · **157 páginas**
+(portada + índice + plan de curso + las 19 piezas).

@@ -44,6 +44,7 @@ from hoja_pauta import build_pauta
 from hoja_taller import build_taller
 from hoja_deberes import build_deberes
 from tareas_semana import tarea as tarea_semana
+from fuente import normalizar as _normalizar_partitura
 from audit_suite import run_full_audit, audit_text_bounds, audit_duplicados
 
 HERE = os.path.dirname(__file__)
@@ -339,8 +340,12 @@ def construir(cfg, verificar=True):
     c.save()
 
     wr = PdfWriter()
-    if os.path.exists(cfg['partitura']):
-        for p in PdfReader(cfg['partitura']).pages:
+    # La partitura viene de Drive y llega como llega: puede ser una imagen, o
+    # un PDF con algo dentro que pypdf no sabe copiar. `fuente.normalizar` deja
+    # un PDF utilizable al lado y devuelve esa ruta.
+    part = _normalizar_partitura(cfg['partitura'])
+    if os.path.exists(part):
+        for p in PdfReader(part).pages:
             wr.add_page(p)
     else:
         SIN_PARTITURA.append(cfg['slug'])

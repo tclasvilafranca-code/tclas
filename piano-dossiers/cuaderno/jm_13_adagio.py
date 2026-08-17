@@ -2,8 +2,8 @@
 """Adagio, de Albinoni — pieza 13 de José María. Formato ADULTO.
 
    OJO CON EL ARCHIVO: en la carpeta de Drive este no es un PDF, es un JPEG
-   (736 × 1041). Aquí se convierte a PDF al vuelo la primera vez, porque el
-   montador del álbum une PDFs. Ver `_partitura()` más abajo.
+   (736 × 1041). Lo convierte `fuente.normalizar` al montar, que es el mismo
+   sitio donde se arreglan los PDF que pypdf no sabe copiar.
 
    Lo comprobado sobre esa imagen (music-scores.com, arr. A. L. Christopherson,
    1 página, 28 compases):
@@ -37,27 +37,11 @@ OCRE = HexColor('#8C6A3F')
 FUENTE = os.path.join(HERE, '..', 'students', 'jose_maria', 'source', 'ADAGIO.')
 
 
-def _partitura():
-    """El original es un JPEG. Se convierte a PDF al lado, una sola vez.
-
-       Se hace aquí y no a mano para que el álbum se pueda montar de cero en
-       una máquina limpia: las partituras no están en el repositorio, se bajan
-       de Drive, y si esta llega otra vez como imagen el montaje no se rompe."""
-    pdf = FUENTE + 'pdf'
-    if not os.path.exists(pdf) and os.path.exists(FUENTE):
-        from PIL import Image
-        im = Image.open(FUENTE)
-        if im.mode != 'RGB':
-            im = im.convert('RGB')
-        im.save(pdf, 'PDF', resolution=96.0)
-    return pdf
-
-
 CANCION = dict(
     alumno='José María', carpeta='JoseMaria', num=13, nivel='iniciación',
     slug='AdagioAlbinoni', formato='adulto',
     titulo_corto='Adagio · Albinoni', time_sig=(3, 4), key_sig=None,
-    partitura=_partitura(),
+    partitura=FUENTE,
     yt='https://www.youtube.com/results?search_query=albinoni+adagio+piano+easy',
 
     ficha=dict(

@@ -170,6 +170,45 @@
 > Ver `cuaderno/PLAN_ALBUM_ARNAU.md` para el orden de las 20 piezas y la
 > verificación pasada.
 >
+> ### El formato ADULTO, seis hojas (`formato='adulto'`)
+>
+> Para José María (unos 60 años, empezó hace poco, viene a clase y practica en
+> casa con su teclado). Lo monta `cancion._hojas_adulto`:
+>
+> | Hoja | Qué es | Módulo |
+> |---|---|---|
+> | 1 | Ficha de la partitura | `ficha_info.py` |
+> | 2 | **Dedos** — calentamiento generado | `hoja_calentamiento.py` |
+> | 3 | **Leer** — agudeza visual generada | `hoja_lectura.py` |
+> | 4 | Cómo se estudia (dos hojas si la pieza lo pide) | `hoja_piano.py` |
+> | 5 | **El trabajo de esta semana** | `hoja_deberes.py` |
+> | 6 | Para escribir — papel pautado | `hoja_pauta.py` |
+>
+> Decisión del cliente: dedos y lectura en hojas **separadas**, no fundidas
+> como en el formato corto. Tres bloques propios en la hoja semanal, que son
+> los que justifican el formato: `plan` (minutos por día, con casilla por día),
+> `metronomo` (a qué velocidad sale cada día) y `objetivo` (una sola cosa para
+> la semana). Y `jm_comun.para_clase`, que ocupa el hueco que en Arnau ocupa el
+> juego con alguien de casa: **con qué se vuelve el día de la clase**.
+>
+> Nada infantil aquí: sopa de letras, adivinanzas, crucigrama, camino y palmas
+> no se usan. Reparto en `jm_recetas.py` y auditor en `auditar_josemaria.py`.
+>
+> ### Las partituras de Drive llegan como llegan (`fuente.py`)
+>
+> Dos casos reales del álbum de José María, y los dos volverán a salir:
+>
+> - **Una partitura que no es un PDF.** El Adagio de Albinoni venía como JPEG.
+> - **Un PDF que pypdf abre pero no sabe copiar.** Trouble (Coldplay) tiene un
+>   objeto mal formado: `PdfReader` cuenta bien las páginas y `add_page`
+>   revienta con `LimitReachedError`. Se reescribe con `pdftocairo`.
+>
+> `fuente.normalizar(ruta)` resuelve los dos y devuelve una ruta utilizable,
+> dejando el arreglo con sufijo `_ok.pdf` **al lado del original y sin tocarlo**.
+> Está llamado desde `cancion.construir`, no en un script suelto, porque las
+> partituras no se versionan: el álbum tiene que poder montarse de cero
+> bajando la carpeta de Drive otra vez.
+>
 > ### El auditor de texto que no cabe en su caja (`portada.NO_CABEN`)
 >
 > `portada._fit` reduce el cuerpo de letra hasta que el texto entra en su hueco,

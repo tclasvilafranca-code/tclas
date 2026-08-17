@@ -52,7 +52,7 @@ from reportlab.lib.colors import HexColor, white
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from notation import (draw_staff, draw_clef, draw_barline, draw_note, draw_chord,
                       draw_notehead, draw_ledger, ledger_lines_needed, note_y,
-                      draw_time_sig)
+                      draw_rest, draw_time_sig)
 from portada import (W, H, MARGIN, CONTENT_W, NAVY, NAVY_SOFT, CREAM, RULE,
                      INK, MUTED, ACCENT, _fit, _wrap)
 from ficha_info import BLACK_AFTER
@@ -140,6 +140,22 @@ def _pauta(c, y, gap, clef=None, key_sig=None, ancho=None):
     if clef:
         draw_clef(c, MARGIN + 4, bot, gap, clef=clef)
     return top, bot
+
+
+def _evento(c, cx, bot, top, gap, ev, clef):
+    """Dibuja un evento suelto: nota, acorde o silencio.
+
+       Los bloques de ejercicios recibian solo notas y se rompian con un
+       silencio (`KeyError: 'pitch'`), justo cuando la pieza de la semana
+       empieza con uno — que es el caso de The Star-Spangled Banner."""
+    if ev.get('rest'):
+        draw_rest(c, cx, bot, top, gap, dur=ev.get('dur', 'q'))
+    elif ev.get('pitches'):
+        draw_chord(c, cx, bot, top, gap, ev['pitches'],
+                   dur=ev.get('dur', 'q'), clef=clef)
+    else:
+        draw_note(c, cx, bot, top, gap, ev['pitch'],
+                  dur=ev.get('dur', 'q'), clef=clef)
 
 
 def _huecos(c, x, bot, gap, n, paso, ancho=None):
@@ -262,12 +278,7 @@ def ej_rodea(c, y, b):
         paso = (ancho - 12) / max(1, len(comp))
         for j, ev in enumerate(comp):
             cx = bx + 8 + j * paso
-            if ev.get('pitches'):
-                draw_chord(c, cx, bot, top, gap, ev['pitches'],
-                           dur=ev.get('dur', 'q'), clef=clef)
-            else:
-                draw_note(c, cx, bot, top, gap, ev['pitch'],
-                          dur=ev.get('dur', 'q'), clef=clef)
+            _evento(c, cx, bot, top, gap, ev, clef)
         # el numero del compas, encima del pentagrama: debajo se choca con las
         # notas que bajan de la primera linea y con sus lineas adicionales
         c.setFont('DejaVuSans-Bold', 7.4)
@@ -288,8 +299,7 @@ def ej_colorea(c, y, b):
     x0 = MARGIN + gap * 7.2
     paso = (CONTENT_W - gap * 9.0) / max(1, len(eventos) - 1)
     for i, ev in enumerate(eventos):
-        draw_note(c, x0 + i * paso, bot, top, gap, ev['pitch'],
-                  dur=ev.get('dur', 'q'), clef=clef)
+        _evento(c, x0 + i * paso, bot, top, gap, ev, clef)
     yy = bot - gap * 3.0
     for etiqueta in b.get('leyenda', []):
         c.setFont('DejaVuSans', 8.2)
@@ -635,8 +645,7 @@ def ej_diferencias(c, y, b):
         x0 = MARGIN + sangria + gap * 6.8
         paso = (CONTENT_W - sangria - gap * 8.2) / max(1, len(eventos) - 1)
         for i, ev in enumerate(eventos):
-            draw_note(c, x0 + i * paso, bot, top, gap, ev['pitch'],
-                      dur=ev.get('dur', 'q'), clef=clef)
+            _evento(c, x0 + i * paso, bot, top, gap, ev, clef)
         y = bot - gap * 2.2
     return y - 6
 
@@ -653,8 +662,7 @@ def ej_cuenta(c, y, b):
     x0 = MARGIN + gap * 6.8
     paso = (CONTENT_W - gap * 8.4) / max(1, len(eventos) - 1)
     for i, ev in enumerate(eventos):
-        draw_note(c, x0 + i * paso, bot, top, gap, ev['pitch'],
-                  dur=ev.get('dur', 'q'), clef=clef)
+        _evento(c, x0 + i * paso, bot, top, gap, ev, clef)
     yy = bot - gap * 2.6
     for pregunta in b['preguntas']:
         size = _fit(pregunta, 'DejaVuSans', 8.6, CONTENT_W - 60, floor=6.8)

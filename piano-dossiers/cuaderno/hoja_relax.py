@@ -41,7 +41,10 @@ PANEL = HexColor('#F3F1EA')
 WARM = HexColor('#F4EFE3')
 
 GAP = 6.8
-ALTO_DEBERES = 74          # lo que se reserva abajo para los deberes
+# Lo que se reserva abajo para los deberes. Subio de 74 a 88 al meter la linea
+# "A LA CLASE": la tarea de la semana no se acaba en casa, vuelve a la clase, y
+# esa linea dice con que hay que volver.
+ALTO_DEBERES = 88
 
 
 def deberes(c, y, titulo='ESTA SEMANA, EN CASA', lineas=3, sub=None, tarea=None):
@@ -73,6 +76,17 @@ def deberes(c, y, titulo='ESTA SEMANA, EN CASA', lineas=3, sub=None, tarea=None)
     if tarea:
         yy = _wrap(c, tarea['texto'], MARGIN + 14, y - 27, 'DejaVuSans', 7.8,
                    CONTENT_W - 28, 10.4, INK)
+        # La tarea no muere en casa: vuelve a la clase. Dilan y Eva vienen a
+        # clase igual que Jose Maria, y esta linea es su equivalente del
+        # recuadro "para la proxima clase" del formato de adulto.
+        if tarea.get('clase'):
+            c.setFont('DejaVuSans-Bold', 6.8)
+            c.setFillColor(ACCENT)
+            c.drawString(MARGIN + 14, yy - 3, 'A LA CLASE:')
+            c.setFont('DejaVuSans', 7.4)
+            c.setFillColor(INK)
+            c.drawString(MARGIN + 14 + stringWidth('A LA CLASE:', 'DejaVuSans-Bold', 6.8) + 6,
+                         yy - 3, tarea['clase'])
         c.setStrokeColor(RULE)
         c.setLineWidth(0.8)
         c.line(MARGIN + 14, y - h + 12, MARGIN + CONTENT_W - 14, y - h + 12)

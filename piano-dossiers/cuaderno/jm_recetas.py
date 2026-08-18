@@ -8,12 +8,19 @@
    hojas de distancia entre sus dos usos. Así no se repite la forma de la hoja
    ni de lejos, que es lo que pide la norma de variedad.
 
-   Lo que NO rota: el `plan` de minutos por día. Está en las 19 hojas a
-   propósito, y por eso `auditar_variedad` lo cuenta como estructural. José
-   María viene a clase, pero entre clase y clase practica en casa con su
-   teclado, y ahí es donde se decide la semana: lo que más se pierde no es
-   tocar, es saber por dónde empezar cuando se sienta. Eso no se quita
-   ninguna semana.
+   Lo que NO rota, y sale las 19 semanas a propósito:
+
+     - el **`plan`** de minutos por día. José María viene a clase, pero entre
+       clase y clase practica en casa con su teclado, y ahí es donde se decide
+       la semana: lo que más se pierde no es tocar, es saber por dónde empezar
+       cuando se sienta.
+     - el **`escucha`**, que aquí es el recuadro de "para la próxima clase".
+       Estaba solo en 11 de las 19 hojas, y era un descuido: el hilo entre lo
+       que hace en casa y lo que pregunta el día de la clase no se corta
+       ninguna semana. Corregido en agosto de 2026 al aplicar la norma de
+       igualdad entre álbumes (`comparar_albumes.py`).
+
+   Los dos van como estructurales en `auditar_josemaria`.
 
    Y lo que no se usa nunca en este cuaderno: sopa de letras, adivinanzas,
    crucigrama, el camino y el ritmo de las palabras. Son de Arnau, que tiene
@@ -29,17 +36,30 @@
 """
 
 RECETAS = {
-    'J1':  ['objetivo', 'plan', 'teclado', 'cuenta', 'figuras', 'nota'],
-    'J2':  ['plan', 'metronomo', 'diferencias', 'nombres', 'escribe', 'nota'],
+    'J1':  ['objetivo', 'plan', 'escalera', 'cuenta', 'figuras', 'escucha'],
+    'J2':  ['plan', 'metronomo', 'diferencias', 'nombres', 'escribe', 'escucha'],
     'J3':  ['objetivo', 'plan', 'rodea', 'une', 'colorea', 'nota', 'escucha'],
-    'J4':  ['plan', 'vf', 'inventa', 'dibuja', 'metronomo'],
-    'J5':  ['objetivo', 'plan', 'ordena', 'cuenta', 'teclado', 'escucha'],
+    'J4':  ['plan', 'metronomo', 'vf', 'inventa', 'dibuja', 'escucha'],
+    'J5':  ['objetivo', 'plan', 'ordena', 'escalera', 'teclado', 'escucha'],
     'J6':  ['plan', 'metronomo', 'nombres', 'colorea', 'escribe', 'escucha'],
-    'J7':  ['objetivo', 'plan', 'diferencias', 'figuras', 'une', 'nota'],
-    'J8':  ['plan', 'teclado', 'inventa', 'rodea', 'metronomo', 'escucha'],
+    'J7':  ['objetivo', 'plan', 'diferencias', 'figuras', 'cifrado', 'escucha'],
+    'J8':  ['plan', 'teclado', 'inventa', 'rodea', 'escalera', 'escucha'],
     'J9':  ['objetivo', 'plan', 'vf', 'dibuja', 'cuenta', 'escucha'],
     'J10': ['plan', 'metronomo', 'ordena', 'colorea', 'nombres', 'escucha'],
 }
+
+# Las piezas cuya edicion imprime el cifrado, comprobado sobre el PDF: Deck the
+# Halls (7), Can't Help Falling (11), Rasputin (14) y A comme amour (17). La
+# rotacion J1..J10 + J1..J9 empareja cada receta con la hoja diez mas adelante,
+# y el unico par en el que las DOS piezas llevan cifrado impreso es (7, 17), asi
+# que ahi va `cifrado` y en ningun otro sitio.
+CON_CIFRADO = {7, 11, 14, 17}
+
+# Y las piezas con tempo impreso: 8 (=150), 10 (=96), 13 (=60), 14 (=124),
+# 16 (=138) y 18 (=96). El unico par con las dos es (8, 18), y por eso la
+# `escalera` con meta numerica va en J8. Las otras dos escaleras (J1 y J5) caen
+# en piezas sin tempo impreso, y ahi la meta lo dice en la propia hoja.
+CON_TEMPO = {8, 10, 13, 14, 16, 18}
 
 # 19 piezas: J1..J10 y luego J1..J9.
 ORDEN = (['J%d' % i for i in range(1, 11)]

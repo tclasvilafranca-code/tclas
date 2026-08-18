@@ -24,7 +24,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
 from jm_comun import (n, ac, sil, objetivo, plan, ordenar, contar, teclado,
-                      para_clase)
+                      para_clase, escalera)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -175,11 +175,12 @@ CANCION = dict(
                          'La melodía con el puntillo puesto.'],
                         titulo='Pon los pasos en el orden bueno',
                         pista='escribe 1, 2, 3 y 4 en las casillas'),
-                contar([n('C5'), n('A4'), n('F4'), n('A4'), n('C5'), n('A4'), n('F4'), n('C4')],
-                       ['¿Cuántos La hay?', '¿Cuántas notas hay en total?',
-                        '¿Cuál es la nota más aguda?'],
-                       titulo='Mira y cuenta',
-                       pista='es el ejercicio 1a de la hoja de al lado'),
+                escalera((60, 'la melodía en negras, colocando las notas'),
+                         (80, 'las dos manos, dos compases seguidos'),
+                         (100, 'a paso de marcha, que es lo que pide'),
+                         meta='que suene a marcha y no a ejercicio · tu partitura pone "March time" '
+                              'pero no trae número de metrónomo',
+                         notas=['Si la negra con puntillo se te aplana al subir, baja un escalón.']),
                 teclado({3: 1, 5: 2, 0: 3, 6: 4},
                         ['Escribe el nombre de las cuatro teclas blancas marcadas.',
                          'Y pinta la negra que hay a la izquierda de la número 4: ese es el Si bemol.'],

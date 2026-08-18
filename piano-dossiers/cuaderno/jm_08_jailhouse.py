@@ -28,7 +28,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
 from jm_comun import (n, ac, sil, corch, plan, teclado, inventa, rodear,
-                      metronomo, para_clase)
+                      metronomo, para_clase, escalera)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -171,7 +171,7 @@ CANCION = dict(
         dict(
             titulo='El trabajo de esta semana',
             esquina='Jailhouse Rock · para casa',
-            intro='Veinte minutos al día. Esta semana la velocidad no importa: importa entrar bien.',
+            intro='Veinte minutos al día. Esta semana importa entrar bien, no ir rápido.',
             bloques=[
                 plan((5, 'Contar el compás de entrada y entrar, diez veces'),
                      (5, 'Si natural y Si bemol, alternando, sin mirar'),
@@ -195,8 +195,11 @@ CANCION = dict(
                         [n('C5'), n('Bb4'), n('G4'), n('E4')]],
                        titulo='Rodea los dos compases iguales',
                        pista='andamio · fíjate en cuáles llevan silencios'),
-                metronomo('Empieza donde te salga entera sin pararte, aunque sea a ♩ = 70.',
-                          'Sube de cinco en cinco. La meta son 150, pero no esta semana.'),
+                escalera((70, 'la entrada y la melodía, sin pararte'),
+                         (110, 'la pieza entera seguida, con el swing puesto'),
+                         (150, 'su velocidad'),
+                         meta='♩ = 150, que es lo que pone tu partitura',
+                         notas=['Tres limpias antes de subir; un fallo y bajas.']),
                 para_clase('La entrada, y a qué velocidad has llegado esta semana. El swing lo '
                            'miramos juntos: es más fácil copiarlo que explicarlo.'),
             ],

@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
 from jm_comun import (n, ac, sil, corch, plan, verdadero_falso, inventa,
-                      dibujar, metronomo)
+                      dibujar, metronomo, para_clase)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -161,6 +161,8 @@ CANCION = dict(
                      (5, 'Contar tres compases callado y entrar en el cuarto'),
                      (5, 'La izquierda ya entrada, una vez por compás'),
                      (5, 'Las dos manos, dos compases con metrónomo')),
+                metronomo('Empieza donde te salga sin pararte, aunque sea a ♩ = 70.',
+                          'La meta son 124. Sube de cinco en cinco y solo tras tres pasadas limpias.'),
                 verdadero_falso([
                     'Si menor y Re mayor tienen la misma armadura.',
                     'Un compás de silencio se puede acortar si te aburres.',
@@ -177,8 +179,7 @@ CANCION = dict(
                 dibujar(['Si', 'Do♯', 'Re', 'Mi', 'Fa♯', 'Sol', 'La', 'Si'],
                         titulo='Dibuja la escala de Si menor',
                         pista='solo el óvalo · el Do♯ y el Fa♯ se dibujan igual que el Do y el Fa'),
-                metronomo('Empieza donde te salga sin pararte, aunque sea a ♩ = 70.',
-                          'La meta son 124. Sube de cinco en cinco y solo tras tres pasadas limpias.'),
+                para_clase('La melodía con los Fa y los Do sostenidos puestos, y el número al que has llegado. Si te pierdes en los compases callados, los contamos juntos y se acaba.'),
             ],
         ),
     ],

@@ -24,7 +24,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
 from jm_comun import (n, ac, sil, corch, plan, teclado, inventa, rodear,
-                      metronomo, para_clase)
+                      metronomo, para_clase, escalera)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -183,9 +183,11 @@ CANCION = dict(
                         [n('C4'), n('E4'), n('G4')], [n('G3'), n('B3'), n('D4')]],
                        titulo='Rodea los dos compases iguales',
                        pista='andamio · en esta pieza esto es el ejercicio principal'),
-                metronomo('Empieza donde los cuatro compases salgan sin pararte.',
-                          'Aquí el metrónomo importa el doble: en las piezas largas se acelera sin '
-                          'notarlo.'),
+                escalera((60, 'la primera página, leyendo el mapa'),
+                         (75, 'dos páginas seguidas'),
+                         (96, 'su velocidad'),
+                         meta='♩ = 96, que es lo que pone tu partitura',
+                         notas=['Con seis páginas, sube por trozos y no la pieza entera de golpe.']),
                 para_clase('El mapa de la pieza hecho con lápiz, y cuatro compases tocados. El mapa '
                            'es lo importante: lo miramos juntos antes de seguir.'),
             ],

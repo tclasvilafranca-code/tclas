@@ -31,7 +31,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
 from jm_comun import (n, ac, plan, metronomo, diferencias, nombres, escribir,
-                      acuerdate)
+                      para_clase)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -197,10 +197,7 @@ CANCION = dict(
                         pista='son las notas que usa la pieza · escríbelos debajo'),
                 escribir(titulo='Copia aquí el compás 2 de tu partitura',
                          pista='con su puntillo y su corchea · cópialo y luego tócalo cinco veces'),
-                acuerdate('Los dedos escritos en la partitura no son una sugerencia: están puestos '
-                          'para que la mano no tenga que moverse de sitio en toda la pieza. Si usas '
-                          'otros, funcionará dos compases y luego te quedarás sin dedos.',
-                          etiqueta='LOS NÚMEROS DE LA PARTITURA'),
+                para_clase('La melodía sola, y el compás donde entra la negra con puntillo. Si hay un sitio donde siempre te tropiezas, tráelo marcado.'),
             ],
         ),
     ],

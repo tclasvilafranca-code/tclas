@@ -25,8 +25,8 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from jm_comun import (n, ac, sil, objetivo, plan, diferencias, figuras, unir,
-                      acuerdate)
+from jm_comun import (n, ac, sil, objetivo, plan, diferencias, figuras,
+                      acuerdate, cifrado, para_clase)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -182,16 +182,14 @@ CANCION = dict(
                          ('w', 'redonda')],
                         titulo='¿Cuántos tiempos vale cada una?',
                         pista='la negra con puntillo y la corchea van juntas en esta pieza'),
-                unir([('El bemol de detrás de la clave', 'no son notas: son para acompañar'),
-                      ('Las letras F, C, Dm7', 'todos los Si van a la tecla negra'),
-                      ('Los compases 5 al 8', 'los dos dedos bajan a la vez'),
-                      ('Un acorde de dos notas', 'son casi iguales que los del 1 al 4')],
-                     titulo='Une cada cosa con lo que significa',
-                     pista='están desordenadas'),
-                acuerdate('Una armadura no es un adorno del principio: es una instrucción que vale '
-                          'para toda la pieza y para todas las octavas. Si el Si de arriba va a la '
-                          'negra, el de abajo también. No hace falta que lo repitan.',
-                          etiqueta='QUÉ ES UNA ARMADURA'),
+                cifrado(['F', 'C', 'Dm7'],
+                        ['Escribe las notas de cada uno, de grave a agudo.',
+                         'Ojo: el Dm7 lleva CUATRO notas, no tres. Tienes una casilla de más.'],
+                        filas=4, alto_caja=12.0,
+                        pista='son los tres que tu partitura lleva impresos encima del pentagrama'),
+                para_clase('Los cuatro primeros compases con las dos manos y los Si marcados en la '
+                           'partitura. Y trae escritas las notas del Dm7: si te ha salido, ya sabes '
+                           'leer cualquier acorde con un 7 detrás.'),
             ],
         ),
     ],

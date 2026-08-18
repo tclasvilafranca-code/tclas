@@ -22,8 +22,8 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from jm_comun import (n, ac, sil, corch, objetivo, plan, teclado, contar,
-                      figuras, acuerdate)
+from jm_comun import (n, ac, sil, corch, objetivo, plan, escalera, contar,
+                      figuras, para_clase)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -168,12 +168,12 @@ CANCION = dict(
                      (4, 'Saltos entre el Fa♯ y el Do♯, sin mirar'),
                      (7, 'La izquierda sola, hasta poder hacerla de memoria'),
                      (5, 'Las dos manos, dos compases muy despacio')),
-                teclado({1: 1, 3: 2, 5: 3, 0: 4},
-                        ['Escribe el nombre de las cuatro teclas blancas marcadas.',
-                         'Y pinta las dos negras de esta pieza: la de la derecha de la número 1 y la '
-                         'de la derecha de la número 4.'],
-                        titulo='En el teclado',
-                        pista='Re mayor tiene dos teclas negras'),
+                escalera((50, 'la izquierda sola, sin mirarse la mano'),
+                         (65, 'la izquierda de memoria, cuatro compases'),
+                         (80, 'las dos manos, dos compases seguidos'),
+                         meta='la izquierda de memoria y sin pararse · tu partitura no trae número '
+                              'de metrónomo, así que la meta la pones tú',
+                         notas=['Apunta cada día dónde te has quedado.']),
                 contar([n('D4'), n('E4'), n('F#4'), n('G4'), n('A4'), n('B4'), n('C#5'), n('D5')],
                        ['¿Cuántas notas hay en total?', '¿Cuántas van en tecla negra?',
                         '¿Cuál es la nota más grave?'],
@@ -183,11 +183,9 @@ CANCION = dict(
                          ('h', 'blanca')],
                         titulo='¿Cuántos tiempos vale cada una?',
                         pista='la blanca con puntillo llena un compás entero de 3/4'),
-                acuerdate('En un compás de tres, el peso va en el primer golpe y los otros dos van '
-                          'detrás, más ligeros. Si los tres suenan iguales, deja de ser un vals y se '
-                          'convierte en un ejercicio. Es lo único que separa esta pieza de sonar bien '
-                          'o sonar a deberes.',
-                          etiqueta='UN-dos-tres, NO un-dos-tres'),
+                para_clase('La izquierda sola de memoria, y a qué número te sale. Y si el vals se '
+                           'te queda plano —los tres golpes igual de fuertes— dilo: se arregla '
+                           'oyéndolo una vez, no explicándolo.'),
             ],
         ),
     ],

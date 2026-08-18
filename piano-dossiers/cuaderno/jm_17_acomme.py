@@ -29,7 +29,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
 from jm_comun import (n, ac, sil, corch, objetivo, plan, diferencias, figuras,
-                      unir, acuerdate)
+                      acuerdate, cifrado, para_clase)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -187,17 +187,14 @@ CANCION = dict(
                 figuras([('e', 'corchea'), ('q', 'negra'), ('h', 'blanca'), ('w', 'redonda')],
                         titulo='¿Cuántos tiempos vale cada una?',
                         pista='la semicorchea, que es la de esta pieza, vale la mitad que la corchea'),
-                unir([('Semicorchea', 'sostiene y no estorba'),
-                      ('♩ = 69', 'cuatro notas en un golpe'),
-                      ('La mano izquierda', 'que las cuatro suenen iguales'),
-                      ('Lo que se juzga esta semana', 'lento de reloj')],
-                     titulo='Une cada cosa con lo que le toca',
-                     pista='están desordenadas'),
-                acuerdate('Con notas rápidas, la velocidad NO es la meta: es la consecuencia. Si las '
-                          'cuatro suenan iguales a velocidad lenta, subir es cuestión de días. Si no '
-                          'suenan iguales, subir solo hace el problema más rápido y más difícil de '
-                          'oír.',
-                          etiqueta='IGUALDAD PRIMERO, VELOCIDAD DESPUÉS'),
+                cifrado(['Em', 'B7', 'E7', 'Am', 'A7', 'Dm'],
+                        ['Escribe las notas de cada uno, de grave a agudo.',
+                         'Tres llevan un 7 y por tanto cuatro notas: tienes una casilla de más.'],
+                        filas=4, alto_caja=12.0,
+                        pista='son los seis que tu partitura lleva impresos encima del pentagrama'),
+                para_clase('Un grupo de cuatro con las cuatro notas iguales, y los acordes '
+                           'escritos. Si al unir dos grupos se te desiguala el segundo, tráelo así: '
+                           'es justo lo que hay que mirar juntos.'),
             ],
         ),
     ],

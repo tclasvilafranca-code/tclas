@@ -24,7 +24,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
 from jm_comun import (n, ac, sil, corch, plan, metronomo, verdadero_falso,
-                      inventa, dibujar)
+                      inventa, dibujar, para_clase)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -167,6 +167,8 @@ CANCION = dict(
                      (5, 'La derecha en negras, los cuatro primeros compases'),
                      (5, 'La derecha en corcheas, de dos en dos'),
                      (5, 'Un compás con las dos manos, cinco veces seguidas')),
+                metronomo('Empieza donde te salga el compás entero sin pararte.',
+                          'Sube de cuatro en cuatro, y solo si ha salido limpio tres veces.'),
                 verdadero_falso([
                     'La mano izquierda toca una vez por compás.',
                     'Una redonda dura cuatro golpes.',
@@ -183,8 +185,7 @@ CANCION = dict(
                 dibujar(['Do', 'Mi', 'Sol', 'Fa', 'Re', 'La', 'Si', 'Do'],
                         titulo='Dibuja tú las notas',
                         pista='solo el óvalo · debajo pone cuál va en cada sitio'),
-                metronomo('Empieza donde te salga el compás entero sin pararte.',
-                          'Sube de cuatro en cuatro, y solo si ha salido limpio tres veces.'),
+                para_clase('Los ocho primeros compases con las dos manos y a qué número de metrónomo te han salido. Si la digitación impresa te falla siempre en el mismo sitio, tráelo marcado.'),
             ],
         ),
     ],

@@ -28,7 +28,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
 from jm_comun import (n, ac, sil, corch, objetivo, plan, ordenar, contar,
-                      teclado, para_clase)
+                      teclado, para_clase, escalera)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -178,11 +178,12 @@ CANCION = dict(
                          'La derecha sola, primero en negras y luego con su ritmo.'],
                         titulo='Pon los pasos en el orden bueno',
                         pista='escribe 1, 2, 3 y 4 en las casillas'),
-                contar([n('E4'), n('G4'), n('A4'), n('G4'), n('E4'), n('D4'), n('C4'), n('E4')],
-                       ['¿Cuántos Mi hay?', '¿Cuántas notas hay en total?',
-                        '¿Cuál es la nota más grave?'],
-                       titulo='Mira y cuenta',
-                       pista='es el ejercicio 2a de la hoja de al lado'),
+                escalera((50, 'la izquierda sola, doce compases sin parar'),
+                         (65, 'las dos manos, de cuatro en cuatro compases'),
+                         (80, 'los doce seguidos'),
+                         meta='los doce primeros compases seguidos · tu partitura no imprime '
+                              'velocidad, así que la eliges tú y la apuntas',
+                         notas=['Elige el número el primer día y no lo muevas en toda la semana.']),
                 teclado({0: 1, 2: 2, 4: 3, 5: 4},
                         ['Escribe el nombre de las cuatro teclas marcadas.',
                          'Y pinta la tecla negra que hay justo después de la número 3: es el '

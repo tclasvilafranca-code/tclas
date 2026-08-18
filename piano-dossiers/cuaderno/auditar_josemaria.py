@@ -15,6 +15,11 @@ from cancion import auditar
 from auditar_variedad import revisar_variedad
 from jm_recetas import revisar_reparto
 
+# `plan` y `escucha` salen las 19 semanas a proposito: son el esqueleto de la
+# semana (que hacer cada dia, y con que se vuelve a clase), no ejercicios. Es
+# la misma lista que en Josep, por la norma de igualdad entre albumes.
+ESTRUCTURALES = {'rutina', 'plan', 'escucha'}
+
 MODULOS = ['jm_01_romance', 'jm_02_america', 'jm_03_banner', 'jm_04_counting',
            'jm_05_peaches', 'jm_06_someone', 'jm_07_deck', 'jm_08_jailhouse',
            'jm_09_clock', 'jm_10_shallow', 'jm_11_canthelp', 'jm_12_carol',
@@ -39,7 +44,8 @@ def main():
     # min_tipos baja mientras el album esta a medias: con cinco piezas todavia
     # no han salido las diez recetas.
     fallos += len(revisar_variedad(hojas_de_trabajo(MODULOS), 'José María',
-                                   min_tipos=15))
+                                   min_tipos=15,
+                                   estructurales=ESTRUCTURALES))
     fallos += len(revisar_reparto(MODULOS))
     print('\n%s' % ('TODO OK' if not fallos else '%d FALLOS EN TOTAL' % fallos))
     return fallos

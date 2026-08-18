@@ -24,7 +24,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
 from jm_comun import (n, ac, sil, corch, plan, metronomo, diferencias, nombres,
-                      escribir, acuerdate)
+                      escribir, para_clase)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -187,11 +187,7 @@ CANCION = dict(
                         pista='ojo: en esta pieza el Si y el Mi van a la tecla negra'),
                 escribir(titulo='Copia aquí el dibujo de cuatro notas',
                          pista='cópialo con su armadura · cuatro compases seguidos'),
-                acuerdate('Cuando una pieza tiene treinta y seis compases y cuatro notas, la dificultad '
-                          'no está en las notas: está en la concentración. Lo que falla a los veinte '
-                          'compases no son los dedos, es la cabeza. Por eso se estudia por trozos y no '
-                          'se toca entera hasta el final.',
-                          etiqueta='LO LARGO NO ES LO DIFÍCIL'),
+                para_clase('El dibujo que se repite, y a qué velocidad te sale seguido. Si la izquierda se te desajusta siempre en el mismo compás, tráelo marcado.'),
             ],
         ),
     ],

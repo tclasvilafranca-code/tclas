@@ -31,8 +31,8 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from jm_comun import (n, ac, sil, plan, objetivo, teclado, contar, figuras,
-                      acuerdate)
+from jm_comun import (n, ac, sil, plan, objetivo, escalera, contar, figuras,
+                      para_clase)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -186,11 +186,12 @@ CANCION = dict(
                      (5, 'La derecha sola, los cuatro primeros compases'),
                      (5, 'La izquierda sola, los mismos cuatro compases'),
                      (5, 'Las dos juntas, contando dos por compás en voz alta')),
-                teclado({0: 1, 1: 2, 2: 3, 3: 4},
-                        ['Escribe el nombre de las cuatro teclas marcadas.',
-                         'Son cuatro de las cinco de tu posición. La quinta la escribes tú al lado.'],
-                        titulo='La posición en el teclado',
-                        pista='esta pieza se toca entera desde aquí'),
+                escalera((40, 'las dos manos, muy lento y sin parar'),
+                         (55, 'los cuatro primeros compases seguidos'),
+                         (70, 'los ocho, en "p dolce" y ligado'),
+                         meta='tocar los ocho primeros compases seguidos y ligados · tu partitura '
+                              'pone "Andantino" pero no trae número de metrónomo',
+                         notas=['Apunta cada día el número al que te has quedado.']),
                 contar([n('C4'), n('E4'), n('D4'), n('F4'), n('E4'), n('G4'), n('F4'), n('E4')],
                        ['¿Cuántos Mi hay?', '¿Cuántas notas hay en total?',
                         '¿Cuál es la nota más aguda?'],
@@ -200,10 +201,9 @@ CANCION = dict(
                          ('h.', 'blanca con puntillo')],
                         titulo='¿Cuántos tiempos vale cada una?',
                         pista='escribe el número en la caja'),
-                acuerdate('En compás partido el pulso va a la blanca: se cuenta "un, dos" por compás '
-                          'y no "un, dos, tres, cuatro". Cuenta en voz alta desde el primer día; '
-                          'cambiarlo después cuesta mucho más.',
-                          etiqueta='CONTAR EN DOS'),
+                para_clase('Los cuatro primeros compases con las dos manos, y a qué número del '
+                           'metrónomo te salen juntos. El Secondo lo toco yo: ven con lo tuyo '
+                           'aprendido a tu velocidad y ya lo ajustamos.'),
             ],
         ),
     ],

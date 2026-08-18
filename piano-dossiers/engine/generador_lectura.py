@@ -28,7 +28,16 @@ import random
 DUR = {'w': 4.0, 'h.': 3.0, 'h': 2.0, 'q.': 1.5, 'q': 1.0, 'e': 0.5}
 
 # Patrones de un compas, por compas y por dificultad. El indice es el nivel
-# minimo en el que aparece: 0 = desde la primera cancion, 2 = solo al final.
+# minimo en el que aparece: 0 = desde la primera cancion, 3 = solo para los
+# alumnos avanzados.
+#
+# El NIVEL 3 se anadio cuando el cliente pidio que el nivel fuera de verdad
+# distinto en cada cuaderno: hasta entonces "intermedio" y "avanzado" recibian
+# exactamente el mismo material, porque el techo estaba en 2 y los dos llegaban
+# igual. Lo que trae el 3 no son figuras nuevas —el motor no escribe
+# semicorcheas ni tresillos— sino lo que de verdad cuesta leer: silencios en
+# mitad del compas, notas largas que empiezan a contratiempo y corcheas que
+# cruzan el golpe.
 PATRONES = {
     (4, 4): [
         (0, ['q', 'q', 'q', 'q']),
@@ -49,6 +58,11 @@ PATRONES = {
         (2, ['Re', 'e', 'q', 'q', 'q']),
         (2, ['e', 'e', 'e', 'e', 'e', 'e', 'q']),
         (2, ['h', 'q.', 'e']),
+        (3, ['e', 'Re', 'e', 'e', 'q', 'q']),
+        (3, ['q', 'e', 'e', 'Rq', 'q']),
+        (3, ['Re', 'e', 'e', 'e', 'q.', 'e']),
+        (3, ['q.', 'e', 'e', 'e', 'e', 'e']),
+        (3, ['e', 'e', 'q.', 'e', 'q']),
     ],
     (3, 4): [
         (0, ['q', 'q', 'q']),
@@ -63,6 +77,9 @@ PATRONES = {
         (2, ['e', 'e', 'e', 'e', 'q']),
         (2, ['q', 'Rq', 'q']),
         (2, ['Re', 'e', 'q', 'q']),
+        (3, ['e', 'Re', 'e', 'e', 'q']),
+        (3, ['q.', 'e', 'e', 'e']),
+        (3, ['e', 'e', 'e', 'e', 'e', 'e']),
     ],
     (2, 4): [
         (0, ['q', 'q']),
@@ -73,6 +90,8 @@ PATRONES = {
         (1, ['q.', 'e']),
         (2, ['e', 'e', 'e', 'e']),
         (2, ['Rq', 'q']),
+        (3, ['e', 'Re', 'e', 'e']),
+        (3, ['e', 'q.']),
     ],
     (6, 8): [
         (0, ['q.', 'q.']),
@@ -83,8 +102,34 @@ PATRONES = {
         (1, ['q', 'e', 'q', 'e']),
         (2, ['q.', 'q', 'e']),
         (2, ['e', 'e', 'e', 'q', 'e']),
+        (3, ['e', 'Re', 'e', 'e', 'e', 'e']),
+        (3, ['q', 'e', 'e', 'e', 'e']),
     ],
 }
+
+def _revisar_patrones():
+    """Ningun patron puede dejar el compas a medias.
+
+       Se comprueba al importar el modulo, y no en el auditor de cada alumno,
+       porque un patron malo no rompe una pieza: rompe TODAS las que caigan en
+       ese nivel y ese compas, y eso se ve tarde. Paso de verdad al estrenar
+       el nivel 3: tres de los patrones nuevos sumaban 4,5 o 5 tiempos."""
+    dur = {'w': 4.0, 'h.': 3.0, 'h': 2.0, 'q.': 1.5, 'q': 1.0, 'e.': 0.75,
+           'e': 0.5}
+    malos = []
+    for ts, lista in PATRONES.items():
+        entero = ts[0] * (4.0 / ts[1])
+        for nivel, pat in lista:
+            total = sum(dur[f[1:] if f.startswith('R') else f] for f in pat)
+            if abs(total - entero) > 1e-6:
+                malos.append('%s nivel %d: %s suma %g y el compas son %g'
+                             % (ts, nivel, ' '.join(pat), total, entero))
+    if malos:
+        raise ValueError('patrones que no llenan el compas:\n  ' + '\n  '.join(malos))
+
+
+_revisar_patrones()
+
 
 # Patrones de RELAJACION. Aqui no se entrena nada: se toca para soltar el
 # brazo cuando ya esta cansado. Lo que hace lenta a esta hoja NO es tener
@@ -142,6 +187,14 @@ REGISTRO = {
     'bass':   (('G2', 'C4'), ('D2', 'E4')),
 }
 
+# El nivel 3 lee mas arriba y mas abajo todavia: dos lineas adicionales por
+# cada lado, que es donde un alumno avanzado deja de reconocer la nota de un
+# vistazo y tiene que leerla de verdad.
+REGISTRO_ANCHO = {
+    'treble': ('F3', 'F6'),
+    'bass':   ('A1', 'A4'),
+}
+
 # Cuantos compases entran comodos en una linea, por compas. Cinco compases de
 # 4/4 con corcheas no caben: salen apretados y el alumno pierde el sitio.
 COMPASES_LINEA = {(4, 4): 4, (3, 4): 5, (2, 4): 6, (6, 8): 4}
@@ -163,7 +216,10 @@ def escala_grados(tonalidad, clef, nivel):
        Devuelve posiciones diatonicas, no nombres: asi los saltos se cuentan
        por grados y nunca sale una nota fuera de la tonalidad."""
     estrecho, ancho = REGISTRO[clef]
-    lo, hi = ancho if nivel >= 2 else estrecho
+    if nivel >= 3:
+        lo, hi = REGISTRO_ANCHO[clef]
+    else:
+        lo, hi = ancho if nivel >= 2 else estrecho
     return list(range(_midi(lo), _midi(hi) + 1))
 
 

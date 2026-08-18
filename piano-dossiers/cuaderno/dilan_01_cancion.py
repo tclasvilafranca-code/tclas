@@ -19,7 +19,6 @@ CANCION = dict(
     alumno='Dilan', num=1, slug='ElCisne',
     titulo_corto='El Cisne', nivel='avanzado',
     time_sig=(3, 4), key_sig='Sol mayor',
-    nivel_base=1,
     partitura=bf.SOURCE_PDF,
     yt=bf.YT_URL,
     ficha=bf.CFG,

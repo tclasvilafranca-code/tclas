@@ -14,7 +14,6 @@ CANCION = dict(
     alumno='Dilan', num=2, slug='CantHelp',
     titulo_corto='Can’t Help Falling in Love', nivel='avanzado',
     time_sig=(3, 4), key_sig='Re mayor',
-    nivel_base=1,
     partitura=bf.SOURCE_PDF,
     yt=bf.YT_URL,
     ficha=bf.CFG,

@@ -53,25 +53,57 @@ OUT_DIR = os.path.join(HERE, '..', 'output')
 # de base y se juega con el resto igual.
 COMPASES = [(4, 4), (3, 4), (2, 4), (6, 8)]
 
-# Por donde entra cada alumno en las hojas generadas, segun su nivel. Un
-# alumno avanzado no puede empezar el curso leyendo negras y blancas: se
-# aburre en la primera hoja y no vuelve a mirarlas.
-NIVEL_BASE = {'iniciación': 0, 'iniciacion': 0, 'intermedio': 1, 'avanzado': 1}
+# La CURVA DE NIVEL de cada alumno, en las tres hojas generadas
+# (calentamiento, agudeza visual y relajacion). Tres numeros:
+#
+#     base  por donde entra en la pieza 1
+#     cada  cada cuantas piezas sube un escalon
+#     tope  hasta donde llega, y no pasa de ahi en todo el curso
+#
+# Los niveles, en lo que de verdad cambian (ver engine/generador_lectura.py):
+#
+#     0  negras, blancas y redondas · registro de una decima · saltos de 2
+#     1  + corcheas, puntillos y algun silencio · saltos de 3
+#     2  + grupos de cuatro y seis corcheas y sincopas · registro ancho
+#     3  + silencios a mitad de compas y corcheas que cruzan el golpe ·
+#        registro de tres octavas, con lineas adicionales por los dos lados
+#
+# Esto lo pidio el cliente al preguntar si el nivel estaba diferenciado de
+# verdad. No lo estaba: "iniciacion" daba la misma curva a Luisa que a Jose
+# Maria, e "intermedio" y "avanzado" eran el mismo numero, asi que Josep y
+# Dilan recibian material identico. Ahora cada alumno tiene la suya.
+CURVA = {
+    # Luisa: mayor, empezo hace nada. Sube despacio y NUNCA llega a las
+    # corcheas seguidas: el encargo fue "poquito pero bien, sencillo".
+    'luisa':      dict(base=0, cada=10, tope=1),
+    # Jose Maria: empezo hace poco pero viene a clase. "Un nivel que no agobie".
+    'josé maría': dict(base=0, cada=8,  tope=2),
+    'jose maria': dict(base=0, cada=8,  tope=2),
+    # Arnau: diez anos, media hora de clase, pero lleva el curso entero.
+    'arnau':      dict(base=0, cada=7,  tope=2),
+    # Josep: la edad de Jose Maria y mas tiempo en clase. Le gustan los retos.
+    'josep':      dict(base=1, cada=6,  tope=3),
+    # Dilan y Eva: los avanzados. Empiezan donde los demas acaban.
+    'dilan':      dict(base=2, cada=6,  tope=3),
+    'eva':        dict(base=2, cada=6,  tope=3),
+}
+
+# Por donde entra un alumno que todavia no tiene curva propia.
+NIVEL_BASE = {'iniciación': 0, 'iniciacion': 0, 'intermedio': 1, 'avanzado': 2}
 
 
 def _nivel_lectura(cfg):
-    """El nivel de las hojas generadas sube a lo largo del curso.
-
-       0 = negras y blancas · 1 = corcheas, puntillos y silencios ·
-       2 = todo el repertorio y registro ancho, con lineas adicionales.
-       Cada alumno entra por donde le toca (`nivel_base`) y sube cada siete
-       canciones, que es mas o menos un trimestre."""
+    """El nivel de las hojas generadas sube a lo largo del curso, y cada
+       alumno tiene su propia curva (ver CURVA)."""
     if cfg.get('nivel_lectura') is not None:
         return cfg['nivel_lectura']
-    base = cfg.get('nivel_base')
+    c = CURVA.get(str(cfg.get('alumno', '')).strip().lower(), {})
+    base = cfg.get('nivel_base', c.get('base'))
     if base is None:
         base = NIVEL_BASE.get(str(cfg.get('nivel', '')).lower(), 0)
-    return min(2, base + (cfg['num'] - 1) // 7)
+    cada = cfg.get('nivel_cada', c.get('cada', 7))
+    tope = cfg.get('nivel_tope', c.get('tope', 2))
+    return min(tope, base + (cfg['num'] - 1) // cada)
 
 
 # Alumnos cuyo album YA esta entregado: su sal se congela para que reimprimir

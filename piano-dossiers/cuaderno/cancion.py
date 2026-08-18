@@ -95,6 +95,10 @@ CURVA = {
     # rapido. Su repertorio es practicamente el mismo que el de Josep, y el
     # cliente pide subirle el nivel: sube igual de rapido que los avanzados.
     'nel':        dict(base=2, cada=6,  tope=3),
+    # Isaac: nivel medio de verdad (no arranca donde los avanzados como Nel),
+    # pero el cliente pide "dale caña": sube mas rapido que Jose Maria/Merce
+    # (cada 5 en vez de cada 7-8) aunque el techo se queda en 2, no en 3.
+    'isaac':      dict(base=0, cada=5,  tope=2),
 }
 
 # Por donde entra un alumno que todavia no tiene curva propia.

@@ -327,7 +327,7 @@ def draw_chord(c, cx, staff_bottom_y, staff_top_y, gap, pitches, dur='h', clef='
         _letter, _acc, _oct = _parse_pitch(p)
         if _acc:
             draw_accidental(c, cx - stagger.get(i, 0) * gap * 1.05, cy, gap, _acc)
-    filled = dur in ('q', 'q.')
+    filled = dur in ('q', 'e', 'q.', 'e.')
     for cy in cys:
         draw_notehead(c, cx, cy, gap, filled=filled)
     if dur.endswith('.'):
@@ -341,14 +341,36 @@ def draw_chord(c, cx, staff_bottom_y, staff_top_y, gap, pitches, dur='h', clef='
         c.setLineWidth(1.3)
         if stem_dir == 'up':
             sx = cx + gap * 0.6
-            c.line(sx, min(cys), sx, max(cys) + gap * 3.4)
+            stem_top = max(cys) + gap * 3.4
+            c.line(sx, min(cys), sx, stem_top)
         else:
             sx = cx - gap * 0.6
             # a down stem normally reaches min(cys) - gap*3.4, but that path
             # runs straight through the label drawn just below the chord --
             # stop it short of the label instead of slicing through the text
-            stem_bottom = min(cys) - gap * 1.05 if label else min(cys) - gap * 3.4
-            c.line(sx, max(cys), sx, stem_bottom)
+            stem_top = min(cys) - gap * 1.05 if label else min(cys) - gap * 3.4
+            c.line(sx, max(cys), sx, stem_top)
+        if dur in ('e', 'e.'):
+            # chords are never beamed (draw_system has no beam support for
+            # 'pitches' events), so an eighth chord always gets its own flag --
+            # same curved-bezier flag as draw_note, anchored at the stem tip.
+            fx, fy = sx, stem_top
+            c.setFillColor(INK)
+            p = c.beginPath()
+            if stem_dir == 'up':
+                p.moveTo(fx, fy)
+                p.curveTo(fx + gap * 0.15, fy - gap * 0.25, fx + gap * 0.95, fy - gap * 0.05,
+                          fx + gap * 0.68, fy - gap * 1.25)
+                p.curveTo(fx + gap * 0.62, fy - gap * 0.85, fx + gap * 0.22, fy - gap * 0.55,
+                          fx, fy - gap * 0.35)
+            else:
+                p.moveTo(fx, fy)
+                p.curveTo(fx + gap * 0.15, fy + gap * 0.25, fx + gap * 0.95, fy + gap * 0.05,
+                          fx + gap * 0.68, fy + gap * 1.25)
+                p.curveTo(fx + gap * 0.62, fy + gap * 0.85, fx + gap * 0.22, fy + gap * 0.55,
+                          fx, fy + gap * 0.35)
+            p.close()
+            c.drawPath(p, fill=1, stroke=0)
     if label:
         c.setFont('DejaVuSans-Bold', gap * 0.85)
         c.setFillColor(DARKGREEN)

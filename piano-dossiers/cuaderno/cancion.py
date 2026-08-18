@@ -225,17 +225,27 @@ def _hojas_adulto(cfg, qr_png):
         hojas.append(('piano %d' % (i + 1), (lambda q: lambda c: build_piano(c, q))(p)))
         pag += 1
 
-    for i, bruto in enumerate(cfg.get('trabajo') or []):
-        tr = dict(bruto)
-        tr.update(kicker=kicker, page_num=pag)
-        hojas.append(('trabajo %d' % (i + 1),
-                      (lambda q: lambda c: build_deberes(c, q))(tr)))
-        pag += 1
+    # RELAJACION, y al pie el recuadro donde la profesora escribe los deberes
+    # de la semana. Es lo que decidio el cliente para TODOS los alumnos
+    # adultos: el esquema es el mismo que el de Dilan y Eva, y los deberes no
+    # son una hoja aparte de ejercicios, son una nota al final de esta.
+    rlx = dict(cfg.get('relax') or {})
+    rlx.update(kicker=kicker, page_num=pag, key_sig=cfg.get('key_sig'),
+               semilla=sem)
+    rlx.setdefault('tarea', tarea_semana(cfg['alumno'], cfg['num']))
+    hojas.append(('relax', lambda c: build_relax(c, rlx)))
+    pag += 1
 
     pau = dict(cfg.get('pauta') or {})
     pau.update(kicker=kicker, page_num=pag)
     hojas.append(('pauta', lambda c: build_pauta(c, pau)))
     return hojas
+
+# Nota sobre el `trabajo` de los archivos de Jose Maria y de Josep: sigue
+# escrito en cada cancion pero YA NO SE IMPRIME. El esquema de adulto que fijo
+# el cliente no lleva hoja de ejercicios escritos; los deberes van en el
+# recuadro del pie de la relajacion. Se deja el dato en su sitio en vez de
+# borrarlo porque volver a sacarlo son dos lineas aqui.
 
 
 def _hojas(cfg, qr_png):

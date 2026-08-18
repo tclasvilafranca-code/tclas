@@ -43,7 +43,6 @@ from hoja_relax import build_relax
 from hoja_pauta import build_pauta
 from hoja_taller import build_taller
 from hoja_deberes import build_deberes
-from tareas_semana import tarea as tarea_semana
 from fuente import normalizar as _normalizar_partitura
 from audit_suite import run_full_audit, audit_text_bounds, audit_duplicados
 
@@ -211,8 +210,8 @@ def _hojas_adulto(cfg, qr_png):
                or _mezcla_compases(cfg['time_sig'], 6000 + sem))
 
     hojas = [('ficha', lambda c: build_ficha(c, ficha)),
-             ('dedos', lambda c: build_calentamiento(c, cal)),
-             ('leer', lambda c: build_lectura(c, lec))]
+             ('calentamiento', lambda c: build_calentamiento(c, cal)),
+             ('agudeza', lambda c: build_lectura(c, lec))]
 
     pag = p0 + 4
     pianos = [cfg['piano1']] + ([cfg['piano2']] if cfg.get('piano2') else [])
@@ -232,7 +231,6 @@ def _hojas_adulto(cfg, qr_png):
     rlx = dict(cfg.get('relax') or {})
     rlx.update(kicker=kicker, page_num=pag, key_sig=cfg.get('key_sig'),
                semilla=sem)
-    rlx.setdefault('tarea', tarea_semana(cfg['alumno'], cfg['num']))
     hojas.append(('relax', lambda c: build_relax(c, rlx)))
     pag += 1
 
@@ -297,10 +295,6 @@ def _hojas(cfg, qr_png):
     rlx = dict(cfg.get('relax') or {})
     rlx.update(kicker=kicker, page_num=p0 + 6, key_sig=cfg.get('key_sig'),
                semilla=sem)
-    # La tarea escrita de la semana (norma de variedad): rota por pieza, asi
-    # que el alumno no se encuentra el mismo recuadro las 20 semanas. Si la
-    # cancion trae la suya escrita a mano, manda la suya.
-    rlx.setdefault('tarea', tarea_semana(cfg['alumno'], cfg['num']))
 
     pau = dict(cfg.get('pauta') or {})
     pau.update(kicker=kicker, page_num=p0 + 7)

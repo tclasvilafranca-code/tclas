@@ -4,8 +4,7 @@ Josep es de la edad y el nivel de José María, **pero lleva más tiempo en
 clase**, le gustan los retos y las partituras que no son del todo fáciles. El
 encargo del cliente fue literal: *"le puedes dar un poco más de caña"*.
 
-El formato no cambia —es el mismo de adulto, seis hojas, con dedos y lectura
-separadas— porque es el que corresponde a su perfil. Lo que cambia es el
+El formato no cambia —es el mismo esquema de adulto que el resto— porque es el que corresponde a su perfil. Lo que cambia es el
 listón, y cambia en cuatro sitios concretos, no en el tono de los textos.
 
 ## Lo que le sube el listón
@@ -36,11 +35,11 @@ donde la partitura no lo justifica.
 |---|---|---|
 | — | la partitura original | el PDF de su carpeta, sin tocar |
 | 1 | **Ficha de la partitura** | `ficha_info.py` |
-| 2 | **Dedos** — calentamiento, hoja llena y generada | `hoja_calentamiento.py` |
-| 3 | **Leer** — agudeza visual, hoja llena y generada | `hoja_lectura.py` |
-| 4 | **Cómo se estudia** — el orden de trabajo al piano | `hoja_piano.py` |
-| 5 | **El trabajo de esta semana** | `hoja_deberes.py` |
-| 6 | **Para escribir** — papel pautado | `hoja_pauta.py` |
+| 2 | **Calentamiento** — hoja llena y generada | `hoja_calentamiento.py` |
+| 3 | **Agudeza visual** — hoja llena y generada | `hoja_lectura.py` |
+| 4 | **Cómo se estudia** — en las hojas que pida la pieza | `hoja_piano.py` |
+| 5 | **Relajación** — y al pie el recuadro de deberes de la profesora | `hoja_relax.py` |
+| 6 | **Papel pautado** | `hoja_pauta.py` |
 
 ## El reparto de las 19 hojas de trabajo
 

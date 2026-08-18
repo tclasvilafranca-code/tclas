@@ -41,59 +41,38 @@ PANEL = HexColor('#F3F1EA')
 WARM = HexColor('#F4EFE3')
 
 GAP = 6.8
-# Lo que se reserva abajo para los deberes. Subio de 74 a 88 al meter la linea
-# "A LA CLASE": la tarea de la semana no se acaba en casa, vuelve a la clase, y
-# esa linea dice con que hay que volver.
+# Lo que se reserva abajo para los deberes: un recuadro pequeno con rayas
+# vacias. Decision del cliente, dicha asi: "la tarea de cada semana solo es un
+# recuadro donde Azucena escribe que tienen que hacer para la proxima semana".
+# Hubo una version con la tarea ya impresa y rotando por semanas; se quito,
+# porque los deberes los pone la profesora en clase y no un generador.
 ALTO_DEBERES = 88
 
 
 def deberes(c, y, titulo='ESTA SEMANA, EN CASA', lineas=3, sub=None, tarea=None):
-    """El recuadro de deberes, al pie. Pequeno a proposito: es para UNA
-       semana, no un registro del curso. Sin casillas de hecho / no hecho.
+    """El recuadro de deberes, al pie: rayas vacias y nada mas.
 
-       Si viene `tarea` (norma de variedad del cliente), el recuadro trae ya
-       escrita la tarea de esa semana y deja UNA raya libre para que la
-       profesora anada lo suyo. Sin `tarea` se comporta como antes: rayas
-       vacias. Antes de esto los 37 dosieres de Dilan y Eva llevaban el mismo
-       recuadro en blanco, que es justo lo que la norma no quiere."""
+       Lo escribe la profesora al final de la clase. Es pequeno a proposito
+       —es para UNA semana, no un registro del curso— y no lleva casillas de
+       hecho / no hecho.
+
+       `tarea` se sigue aceptando por compatibilidad con los archivos de
+       cancion que la traen, pero NO se imprime: el cliente decidio que este
+       recuadro va en blanco."""
     h = ALTO_DEBERES
     c.setFillColor(WARM)
     c.roundRect(MARGIN, y - h, CONTENT_W, h, 4, fill=1, stroke=0)
     c.setFillColor(ACCENT)
     c.rect(MARGIN, y - h, 3, h, fill=1, stroke=0)
 
-    cabeza = tarea['etiqueta'] if tarea else titulo
     c.setFont('DejaVuSans-Bold', 8.6)
     c.setFillColor(ACCENT)
-    c.drawString(MARGIN + 14, y - 15, cabeza)
-    tw = stringWidth(cabeza, 'DejaVuSans-Bold', 8.6)
+    c.drawString(MARGIN + 14, y - 15, titulo)
+    tw = stringWidth(titulo, 'DejaVuSans-Bold', 8.6)
     c.setFont('DejaVuSans', 7.6)
     c.setFillColor(MUTED)
     c.drawString(MARGIN + 14 + tw + 10, y - 15,
-                 sub or ('para esta semana' if tarea
-                         else 'lo escribe la profesora al final de la clase'))
-
-    if tarea:
-        yy = _wrap(c, tarea['texto'], MARGIN + 14, y - 27, 'DejaVuSans', 7.8,
-                   CONTENT_W - 28, 10.4, INK)
-        # La tarea no muere en casa: vuelve a la clase. Dilan y Eva vienen a
-        # clase igual que Jose Maria, y esta linea es su equivalente del
-        # recuadro "para la proxima clase" del formato de adulto.
-        if tarea.get('clase'):
-            c.setFont('DejaVuSans-Bold', 6.8)
-            c.setFillColor(ACCENT)
-            c.drawString(MARGIN + 14, yy - 3, 'A LA CLASE:')
-            c.setFont('DejaVuSans', 7.4)
-            c.setFillColor(INK)
-            c.drawString(MARGIN + 14 + stringWidth('A LA CLASE:', 'DejaVuSans-Bold', 6.8) + 6,
-                         yy - 3, tarea['clase'])
-        c.setStrokeColor(RULE)
-        c.setLineWidth(0.8)
-        c.line(MARGIN + 14, y - h + 12, MARGIN + CONTENT_W - 14, y - h + 12)
-        c.setFont('DejaVuSans', 6.6)
-        c.setFillColor(MUTED)
-        c.drawString(MARGIN + 14, y - h + 4, 'y lo que apunte la profesora')
-        return y - h - 8
+                 sub or 'lo escribe la profesora al final de la clase')
 
     yy = y - 30
     paso = (h - 34) / lineas

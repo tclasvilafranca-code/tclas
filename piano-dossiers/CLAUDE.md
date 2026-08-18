@@ -178,14 +178,15 @@
 > | Hoja | Qué es | Módulo |
 > |---|---|---|
 > | 1 | Ficha de la partitura | `ficha_info.py` |
-> | 2 | **Dedos** — calentamiento generado | `hoja_calentamiento.py` |
-> | 3 | **Leer** — agudeza visual generada | `hoja_lectura.py` |
-> | 4 | Cómo se estudia (dos hojas si la pieza lo pide) | `hoja_piano.py` |
-> | 5 | **El trabajo de esta semana** | `hoja_deberes.py` |
+> | 2 | **Calentamiento** — generado | `hoja_calentamiento.py` |
+> | 3 | **Agudeza visual** — generada | `hoja_lectura.py` |
+> | 4 | Cómo se estudia (las hojas que pida la pieza) | `hoja_piano.py` |
+> | 5 | **Relajación**, con el recuadro de deberes al pie | `hoja_relax.py` |
 > | 6 | Para escribir — papel pautado | `hoja_pauta.py` |
 >
-> Decisión del cliente: dedos y lectura en hojas **separadas**, no fundidas
-> como en el formato corto. Tres bloques propios en la hoja semanal, que son
+> **Las hojas se llaman calentamiento y agudeza visual**, nunca "dedos" ni
+> "leer": decisión del cliente, y vale también para cómo se nombran en el
+> código y en los informes. Tres bloques propios en la hoja semanal, que son
 > los que justifican el formato: `plan` (minutos por día, con casilla por día),
 > `metronomo` (a qué velocidad sale cada día) y `objetivo` (una sola cosa para
 > la semana). Y `jm_comun.para_clase`, que ocupa el hueco que en Arnau ocupa el

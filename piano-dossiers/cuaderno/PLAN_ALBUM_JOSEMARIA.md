@@ -21,14 +21,16 @@ trabajar de verdad, pero a un nivel que no agobie**. Eso decide dos cosas.
 |---|---|---|
 | — | la partitura original | el PDF de su carpeta, sin tocar |
 | 1 | **Ficha de la partitura** | `ficha_info.py` |
-| 2 | **Dedos** — calentamiento, hoja llena y generada | `hoja_calentamiento.py` |
-| 3 | **Leer** — agudeza visual, hoja llena y generada | `hoja_lectura.py` |
-| 4 | **Cómo se estudia** — el orden de trabajo al piano (dos hojas si la pieza lo pide) | `hoja_piano.py` |
-| 5 | **El trabajo de esta semana** — plan, metrónomo y ejercicios escritos | `hoja_deberes.py` |
-| 6 | **Para escribir** — papel pautado | `hoja_pauta.py` |
+| 2 | **Calentamiento** — hoja llena y generada | `hoja_calentamiento.py` |
+| 3 | **Agudeza visual** — hoja llena y generada | `hoja_lectura.py` |
+| 4 | **Cómo se estudia** — en las hojas que pida la pieza | `hoja_piano.py` |
+| 5 | **Relajación** — y al pie el recuadro de deberes de la profesora | `hoja_relax.py` |
+| 6 | **Papel pautado** | `hoja_pauta.py` |
 
-Decisión del cliente: **dedos y lectura en hojas separadas**, no fundidas en
-una como en el formato corto de Arnau.
+Decisión del cliente: el esquema del dosier es **el mismo para todos los
+alumnos adultos** — partitura, ficha, calentamiento, agudeza visual, cómo se
+estudia, relajación y papel pautado. Los deberes no son una hoja de ejercicios:
+son el recuadro del pie de la relajación, que **escribe la profesora**.
 
 El reparto de las 19 hojas de trabajo está en `jm_recetas.py`: diez recetas,
 cada una usada dos veces y con diez hojas de distancia. Lo comprueban

@@ -163,6 +163,14 @@ def _hojas_corto(cfg, qr_png):
         hojas.append(('deberes %d' % (i + 1),
                       (lambda q: lambda c: build_deberes(c, q))(deb)))
         pag += 1
+
+    # El papel pautado va en TODOS los cuadernos, decision del cliente. Estaba
+    # en el formato largo y en el de adulto y faltaba aqui: el formato corto se
+    # diseno con cinco hojas y la pauta se quedo fuera por sitio, que no es
+    # razon suficiente. Un nino de diez anos la usa igual o mas que un adulto.
+    pau = dict(cfg.get('pauta') or {})
+    pau.update(kicker=kicker, page_num=pag)
+    hojas.append(('pauta', lambda c: build_pauta(c, pau)))
     return hojas
 
 

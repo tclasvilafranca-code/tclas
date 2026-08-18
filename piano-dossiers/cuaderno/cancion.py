@@ -91,6 +91,10 @@ CURVA = {
     # Dilan y Eva: los avanzados. Empiezan donde los demas acaban.
     'dilan':      dict(base=2, cada=6,  tope=3),
     'eva':        dict(base=2, cada=6,  tope=3),
+    # Nel: doce anos, muy listo, lleva anos viniendo, pero se desconcentra
+    # rapido. Su repertorio es practicamente el mismo que el de Josep, y el
+    # cliente pide subirle el nivel: sube igual de rapido que los avanzados.
+    'nel':        dict(base=2, cada=6,  tope=3),
 }
 
 # Por donde entra un alumno que todavia no tiene curva propia.

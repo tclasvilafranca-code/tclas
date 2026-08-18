@@ -81,6 +81,11 @@ CURVA = {
     'jose maria': dict(base=0, cada=8,  tope=2),
     # Arnau: diez anos, media hora de clase, pero lleva el curso entero.
     'arnau':      dict(base=0, cada=7,  tope=2),
+    # Merce: no tiene un nivel alto pero bastante mas que Luisa, y su clase de
+    # hora y media es la mas larga del proyecto: sube igual que Jose Maria
+    # pero un poco mas rapido, porque su carpeta (27 piezas) da para mas.
+    'mercè':      dict(base=0, cada=7,  tope=2),
+    'merce':      dict(base=0, cada=7,  tope=2),
     # Josep: la edad de Jose Maria y mas tiempo en clase. Le gustan los retos.
     'josep':      dict(base=1, cada=6,  tope=3),
     # Dilan y Eva: los avanzados. Empiezan donde los demas acaban.

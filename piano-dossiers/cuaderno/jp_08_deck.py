@@ -21,7 +21,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from jp_comun import (n, ac, plan, escalera, cifrado, unir, nombres, para_clase)
+from jp_comun import (n, ac, semi, plan, escalera, cifrado, unir, nombres, para_clase)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -114,11 +114,9 @@ CANCION = dict(
                                   ac(('A4', 'C5'), 'h')],
                           matiz='mp',
                           bars=2, key_sig='Fa mayor'),
-                     dict(cap='b) y ahora sextas, que es lo que de verdad usa el arreglo · la mano '
-                              'se abre y la muñeca no se tuerce',
-                          events=[ac(('A4', 'F5')), ac(('G4', 'E5')), ac(('F4', 'D5')),
-                                  ac(('G4', 'E5')), ac(('A4', 'F5'), 'h'), ac(('F4', 'D5'), 'h')],
-                          bars=2, key_sig='Fa mayor', show_time=False),
+                     dict(cap='b) y AHORA con su figura de verdad, la semicorchea · el mismo dibujo el doble de rápido, tal y como está impreso en tu partitura',
+                          events=semi(['C5', 'F5', 'E5', 'D5']) + semi(['C5', 'D5', 'C5', 'A4']) + [n('C5'), n('F5')],
+                          bars=1, show_time=False, key_sig='Fa mayor'),
                  ]),
             dict(num=2, titulo='La figura larga-corta, sin aplanarla',
                  pista='andamio · negra con puntillo y corchea, que es la que domina la pieza',

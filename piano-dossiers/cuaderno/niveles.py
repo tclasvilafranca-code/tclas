@@ -32,6 +32,16 @@ ORDEN = ['w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's.', 's']
 #   2. cuantas notas cortas seguidas se toleran (la RESISTENCIA, que es donde
 #      se nota de verdad el nivel de un alumno);
 #   3. que recursos de expresion se le piden.
+#
+# OJO con el punto 3: las marcas de expresion (matiz, ligadura, staccato,
+# acento, calderon, reguladores) NO son dificultad de lectura, y las partituras
+# de iniciacion las traen impresas desde el primer dia -- restringirlas por
+# nivel era irreal. Lo que si escala de verdad es la FIGURA (la semicorchea),
+# la DENSIDAD (max_corcheas_seguidas) y, en menor medida, el tresillo y el
+# pedal. El Adagio de Albinoni lleva tresillos y es la pieza 13 de un adulto
+# que empezo hace poco: por eso el tresillo entra ya en el escalon 2. Los
+# reguladores entran en el 1 (The Beginner de Gurlitt los trae impresos) y el
+# pedal en el 3 (Nel tiene doce anos pero lleva anos de clase).
 # `max_corcheas_seguidas` cuenta corcheas Y semicorcheas consecutivas dentro de
 # un mismo sistema: es la comprobacion que captura la norma de Luisa ("nunca
 # corcheas seguidas") y la que impide que a un principiante le caiga un pasaje
@@ -43,7 +53,7 @@ NIVELES = {
         silencios={'w', 'h.', 'h', 'q.', 'q', 'e'},
         max_notas_acorde=3,
         max_corcheas_seguidas=8,
-        recursos=set(),
+        recursos={'lig', 'matiz', 'art', 'cresc', 'dim'},
         desde={},
         nota='Hasta la corchea. Puede haber un compás seguido de corcheas en '
              'UNA mano (sus piezas lo traen), pero nunca más, y nunca en las '
@@ -55,7 +65,7 @@ NIVELES = {
         silencios={'w', 'h.', 'h', 'q.', 'q', 'e'},
         max_notas_acorde=3,
         max_corcheas_seguidas=12,
-        recursos={'lig', 'matiz'},
+        recursos={'lig', 'matiz', 'art', 'cresc', 'dim', 'tresillo'},
         desde={},
         nota='Corcheas seguidas en una mano (hasta un compás entero), corchea '
              'con puntillo, ligaduras y matices. Todavía sin semicorchea.',
@@ -66,7 +76,7 @@ NIVELES = {
         silencios={'w', 'h.', 'h', 'q.', 'q', 'e', 's'},
         max_notas_acorde=4,
         max_corcheas_seguidas=16,
-        recursos={'lig', 'matiz', 'art'},
+        recursos={'lig', 'matiz', 'art', 'cresc', 'dim', 'tresillo', 'pedal'},
         desde={'s': 6},
         nota='Primeras semicorcheas, por parejas y en pasajes cortos, no antes '
              'de la pieza 6. Articulación y acordes de cuatro notas.',
@@ -77,7 +87,7 @@ NIVELES = {
         silencios={'w', 'h.', 'h', 'q.', 'q', 'e', 's'},
         max_notas_acorde=4,
         max_corcheas_seguidas=24,
-        recursos={'lig', 'matiz', 'art', 'tresillo', 'cresc', 'dim'},
+        recursos={'lig', 'matiz', 'art', 'tresillo', 'cresc', 'dim', 'pedal'},
         desde={},
         nota='Grupos de cuatro semicorcheas, tresillos, staccato y matices '
              'impresos. Las dos manos en movimiento a la vez.',

@@ -22,7 +22,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from jp_comun import (n, ac, reto, plan, rodear, unir, colorear, acuerdate,
+from jp_comun import (n, ac, semi, reto, plan, rodear, unir, colorear, acuerdate,
                       para_clase)
 
 HERE = os.path.dirname(__file__)
@@ -111,10 +111,9 @@ CANCION = dict(
                               'cuatro golpes y mira si sigue sonando en el cuarto',
                           events=[ac(('C3', 'G3'), 'w'), ac(('A2', 'E3'), 'w')],
                           bars=2, clef='bass'),
-                     dict(cap='b) cambiando de acorde, que es lo que hace la pieza · el salto se '
-                              'prepara durante la redonda anterior, no cuando toca',
-                          events=[ac(('F2', 'C3'), 'w'), ac(('G2', 'D3'), 'w')],
-                          bars=2, clef='bass', show_time=False),
+                     dict(cap='b) y AHORA con su figura de verdad, la semicorchea · el mismo dibujo el doble de rápido, tal y como está impreso en tu partitura',
+                          events=semi(['E4', 'F4', 'G4', 'F4']) + semi(['A4', 'G4', 'F4', 'E4']) + [n('E4'), n('F4')],
+                          bars=1, show_time=False),
                  ]),
             dict(num=2, titulo='La derecha por encima, sin acelerar',
                  pista='andamio en Do mayor · el dibujo va por notas seguidas',

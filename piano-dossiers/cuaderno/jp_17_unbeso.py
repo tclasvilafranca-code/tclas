@@ -23,7 +23,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from jp_comun import (n, ac, plan, escalera, cifrado, unir, nombres, para_clase)
+from jp_comun import (n, ac, semi, plan, escalera, cifrado, unir, nombres, para_clase)
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -117,12 +117,9 @@ CANCION = dict(
                                   n('C5', 'e'), n('Bb4', 'e'), n('A4', 'e'), n('G4', 'e'),
                                   n('F4', 'h')],
                           bars=2, key_sig='Fa mayor'),
-                     dict(cap='b) y ahora dos grupos seguidos sin parar entre ellos · si el segundo '
-                              'sale peor que el primero, vuelve al a)',
-                          events=[n('F4', 'e'), n('A4', 'e'), n('G4', 'e'), n('Bb4', 'e'),
-                                  n('A4', 'e'), n('C5', 'e'), n('Bb4', 'e'), n('D5', 'e'),
-                                  n('C5', 'h'), n('A4', 'h')],
-                          bars=2, key_sig='Fa mayor', show_time=False),
+                     dict(cap='b) y AHORA con su figura de verdad, la semicorchea · el mismo dibujo el doble de rápido, tal y como está impreso en tu partitura',
+                          events=semi(['F4', 'G4', 'A4', 'Bb4']) + semi(['C5', 'C5', 'Bb4', 'A4']) + [n('F4'), n('G4')],
+                          bars=1, show_time=False, key_sig='Fa mayor'),
                  ]),
             dict(num=2, titulo='Los saltos de la izquierda, a ciegas', clef='bass',
                  pista='andamio en Fa mayor · el brazo aprende la distancia, no la tecla',

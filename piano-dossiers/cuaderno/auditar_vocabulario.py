@@ -25,7 +25,25 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, '..', 'engine'))
 
+from niveles import NIVELES, escalon_de
+
 PREFIJOS = ['arnau', 'lu', 'jm', 'ed', 'me', 'is', 'jp', 'nl', 'dilan', 'eva']
+
+# Que hace falta tener en el escalon para poder dibujar cada recurso. Si el
+# alumno no llega, el hueco NO es un fallo: es su nivel haciendo su trabajo.
+# El texto de esas piezas ya explica que el pasaje se trabaja reducido, que es
+# justo lo correcto para ellas (Luisa leyendo el Titanic, por ejemplo).
+REQUISITO = {
+    'semicorchea': ('figuras', 's'),
+    'tresillo': ('recursos', 'tresillo'),
+    'ligadura': ('recursos', 'lig'),
+    'staccato': ('recursos', 'art'),
+    'acento': ('recursos', 'art'),
+    'calderon': ('recursos', 'art'),
+    'matiz': ('recursos', 'matiz'),
+    'regulador': ('recursos', 'cresc'),
+    'pedal': ('recursos', 'pedal'),
+}
 
 # recurso -> (patron en el texto, como se detecta en los eventos)
 #
@@ -137,12 +155,18 @@ def revisar(modulo):
         return []
     txt = _texto(cfg, mod)
     evs = _eventos(cfg)
+    n = escalon_de(cfg.get('alumno', ''))
+    nivel = NIVELES.get(n) if n else None
     huecos = []
     for nombre, spec in VOCABULARIO.items():
         if not re.search(spec['patron'], txt):
             continue
         if any(spec['evento'](e) for e in evs):
             continue
+        if nivel is not None:
+            campo, clave = REQUISITO.get(nombre, (None, None))
+            if campo and clave not in nivel[campo]:
+                continue     # su escalon no lo admite: el hueco es correcto
         huecos.append((modulo, nombre, spec['arreglo']))
     return huecos
 

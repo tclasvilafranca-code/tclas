@@ -18,7 +18,7 @@
    Los ejercicios se numeran solos en `hoja_deberes.build_deberes`, así que
    aquí no se pone `num` en ningún sitio.
 """
-from arnau_comun import (n, ac, sil, corch, acuerdate, escribir,
+from arnau_comun import (n, ac, sil, corch, semi, acuerdate, escribir,
                          nombres, dibujar, figuras, unir, rodear, colorear,
                          verdadero_falso, ordenar, diferencias, contar,
                          teclado, inventa)

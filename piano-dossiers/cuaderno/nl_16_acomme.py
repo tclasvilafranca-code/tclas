@@ -19,7 +19,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from nl_comun import n, ac, corch
+from nl_comun import n, ac, corch, semi
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -107,10 +107,9 @@ CANCION = dict(
                           events=[n('G4', 'e'), n('B4', 'e'), n('E5', 'e'), n('F#4', 'e'),
                                   n('D4', 'e'), n('G4', 'e'), n('B4', 'e'), n('E5', 'e')],
                           bars=2, key_sig=MIm),
-                     dict(cap='b) y sin él, como del c. 10 en adelante · la misma mano',
-                          events=[n('G4', 'e'), n('C5', 'e'), n('E5', 'e'), n('F4', 'e'),
-                                  n('D4', 'e'), n('G4', 'e'), n('C5', 'e'), n('E5', 'e')],
-                          bars=2, show_time=False),
+                     dict(cap='b) y AHORA con su figura de verdad, la semicorchea · el mismo dibujo el doble de rápido, tal y como está impreso en tu partitura',
+                          events=semi(['G4', 'B4', 'E5', 'F#4']) + semi(['D4', 'G4', 'B4', 'E5']) + [n('G4'), n('B4')],
+                          bars=1, show_time=False, key_sig='Mi menor'),
                  ]),
             dict(num=2, titulo='Los seis acordes del cifrado', clef='bass',
                  pista='son los que trae impresos tu partitura · tres llevan séptima',

@@ -43,8 +43,20 @@ def _sistemas(cfg):
         for b in (cfg.get(k) or {}).get('bloques', []) or []:
             for i, s in enumerate(b.get('sistemas', []) or []):
                 donde = '%s b%s s%d' % (k, b.get('num', '-'), i + 1)
-                out.append((donde, [e for e in (s.get('events', []) or [])
-                                    if isinstance(e, dict)]))
+                evs = [e for e in (s.get('events', []) or []) if isinstance(e, dict)]
+                # Los recursos declarados en el SISTEMA (staccato=True, cresc=4,
+                # pedal=4...) se aplican a las notas al imprimir: si no se miran
+                # aqui, el auditor da por limpio un nivel que en papel si se salta.
+                extra = {}
+                for k in ('staccato', 'acento', 'calderon'):
+                    if s.get(k):
+                        extra['art'] = k
+                for k in ('cresc', 'dim', 'pedal', 'matiz'):
+                    if s.get(k):
+                        extra[k] = s[k]
+                if s.get('ligar'):
+                    extra['lig'] = True
+                out.append((donde, evs + ([extra] if extra else [])))
     for r in (cfg.get('ficha') or {}).get('ritmos', []) or []:
         if len(r) > 2 and isinstance(r[2], list):
             out.append(('ficha.ritmos', [e for e in r[2] if isinstance(e, dict)]))

@@ -22,7 +22,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from jp_comun import (n, ac, reto, plan, cifrado, verdadero_falso, figuras,
+from jp_comun import (n, ac, semi, reto, plan, cifrado, verdadero_falso, figuras,
                       para_clase)
 
 HERE = os.path.dirname(__file__)
@@ -112,11 +112,9 @@ CANCION = dict(
                           events=[n('E4', 'e'), n('G4', 'e'), n('B4', 'e'), n('F#4', 'e'),
                                   n('G4', 'e'), n('B4', 'e'), n('E5', 'e'), n('B4', 'e')],
                           bars=2, key_sig='Mi menor'),
-                     dict(cap='b) y sin él, como del c. 10 en adelante · la misma mano, y el Fa ya '
-                              'no es negra',
-                          events=[n('E4', 'e'), n('A4', 'e'), n('C5', 'e'), n('F4', 'e'),
-                                  n('A4', 'e'), n('C5', 'e'), n('E5', 'e'), n('C5', 'e')],
-                          bars=2, show_time=False),
+                     dict(cap='b) y AHORA con su figura de verdad, la semicorchea · el mismo dibujo el doble de rápido, tal y como está impreso en tu partitura',
+                          events=semi(['E4', 'G4', 'B4', 'F#4']) + semi(['G4', 'B4', 'E5', 'B4']) + [n('E4'), n('G4')],
+                          bars=1, show_time=False, key_sig='Mi menor'),
                  ]),
             dict(num=2, titulo='Los seis acordes del cifrado', clef='bass',
                  pista='son los que trae impresos tu partitura · tres llevan séptima',

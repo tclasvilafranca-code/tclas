@@ -107,6 +107,7 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) una redonda por compás, con otra pareja de acordes',
                           events=[n('Eb2', 'w'), n('C2', 'w')],
+                          matiz='mf',
                           bars=2, clef='bass', key_sig=SIB),
                      dict(cap='b) y con acordes de tres notas, que es lo que hace del c. 13 en '
                               'adelante',

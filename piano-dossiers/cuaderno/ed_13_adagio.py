@@ -116,6 +116,7 @@ CANCION = dict(
                      dict(cap='a) una nota por compás, y se escucha hasta el final · si se apaga antes '
                               'de tiempo, has soltado el dedo',
                           events=[n('E4', 'h.'), n('D4', 'h.'), n('C4', 'h.'), n('B3', 'h.')],
+                          matiz='mp',
                           bars=4),
                      dict(cap='b) y ahora con una nota que se mueve dentro del compás · sin que la '
                               'línea se rompa',

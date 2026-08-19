@@ -54,6 +54,40 @@
 > "escribe los nombres" y la semana 2 **siempre** por "rodea los compases
 > iguales".
 
+> ## 🔒 NORMA DEL PROYECTO: lo que no sabes hacer, se aprende — no se rodea
+>
+> Decisión del cliente, y es la que más caro sale incumplir. Cuando en una
+> partitura aparezca **algo que el motor no sabe dibujar, o que no has visto
+> antes, o que nunca se ha aplicado en este proyecto**, el procedimiento es uno
+> y solo uno:
+>
+> 1. **Se investiga** cómo se escribe de verdad esa figura o esa marca en una
+>    edición publicada (cómo se graba, dónde va, con qué proporciones).
+> 2. **Se implementa en el motor** (`engine/notation.py`), con su duración en
+>    `DUR_BEATS` si es una figura, y se comprueba dibujándola.
+> 3. **Se aplica en la partitura donde apareció** y **en todas las demás piezas
+>    del proyecto donde también salga**, de todos los alumnos.
+> 4. **Se apunta en `niveles.py`** a qué escalón pertenece, para que el auditor
+>    sepa a quién puede llegarle y a quién no.
+>
+> Lo que está PROHIBIDO es la salida fácil que se usó durante meses: escribir en
+> la hoja *"esto no lo puedo dibujar, así que lo verás en corcheas"* y seguir.
+> Eso convirtió el cuaderno en algo donde **los diez alumnos tenían el mismo
+> techo de figura** —la corchea— desde un niño de diez años en su primer curso
+> hasta una alumna avanzada de varios años, porque nadie implementó la
+> semicorchea. El alumno leía una explicación y luego miraba un pentagrama que
+> no se parecía a su partitura.
+>
+> Casos ya resueltos así (sirven de ejemplo de hasta dónde llega la norma):
+> semicorchea y su silencio, silencios con puntillo, ligaduras, staccato,
+> acento, tenuto, calderón, matices, reguladores, pedal, tresillos, barras de
+> repetición, casillas de 1ª/2ª vez y 8va.
+>
+> **Cómo se detecta lo que falta:** `python3 cuaderno/auditar_vocabulario.py`
+> compara lo que los textos de las piezas DICEN que hay en la partitura con lo
+> que los eventos realmente DIBUJAN, y lista las piezas donde se habla de algo
+> que no se está escribiendo. Tiene que decir TODO OK antes de entregar.
+
 > ## 🔒 NORMA DEL PROYECTO: la calidad va por delante de la rapidez
 >
 > Decisión del cliente, y manda sobre cualquier otra consideración. Son unos

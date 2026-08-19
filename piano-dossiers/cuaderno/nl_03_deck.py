@@ -105,6 +105,7 @@ CANCION = dict(
                      dict(cap='a) el salto que más se repite en la pieza',
                           events=[n('D5'), n('Bb4'), n('C5'), n('Bb4'),
                                   n('A4'), n('Bb4'), n('D5'), n('Bb4')],
+                          matiz='mp',
                           bars=2, key_sig=FA),
                      dict(cap='b) y bajando desde arriba, pasando siempre por el Si bemol',
                           events=[n('F5'), n('D5'), n('C5'), n('Bb4'),

@@ -47,6 +47,22 @@ def after_system(gap, events=None, clef='treble'):
         salida = max(salida, max_under + gap * 0.6)
     if max_plica > 0:
         salida = max(salida, max_plica + gap * 0.15)
+
+    # El vocabulario de expresion tambien cuelga por debajo del pentagrama y
+    # hay que reservarle sitio, o se planta encima del rotulo del sistema
+    # siguiente: paso con el primer "sempre legato" que se dibujo.
+    # El matiz (bot - 2.6 gaps) y el regulador (bot - 2.65) ya caben en el
+    # hueco base de 3.5 gaps: no piden nada extra. El pedal y la ligadura si.
+    if any(e.get('pedal') for e in events):
+        salida = max(salida, gap * 6.2)
+    if any(e.get('lig') for e in events):
+        # la ligadura arranca en la cabeza mas grave y se abre hasta 2.8 gaps
+        bajo = 0.0
+        for e in events:
+            alc = _alcance(gap, e, clef)
+            if alc is not None:
+                bajo = min(bajo, alc[1])
+        salida = max(salida, -bajo + gap * 3.4)
     return salida
 
 

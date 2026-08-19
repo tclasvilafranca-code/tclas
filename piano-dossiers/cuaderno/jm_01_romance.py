@@ -126,9 +126,10 @@ CANCION = dict(
                  pista='andamio en Do mayor · los cinco dedos sobre cinco teclas blancas seguidas',
                  sistemas=[
                      dict(cap='a) los cinco dedos, uno detrás de otro, subiendo y bajando · sin '
-                              'levantar la mano y sin mirarla',
-                          events=[n('C4'), n('D4'), n('E4'), n('F4'),
+                              'levantar la mano, y en "p dolce" como pide tu partitura',
+                          events=[dict(n('C4'), matiz='p'), n('D4'), n('E4'), n('F4'),
                                   n('G4'), n('F4'), n('E4'), n('D4')],
+                          ligar=True,
                           bars=2),
                      dict(cap='b) y ahora salteados, que es lo que hace la música de verdad · la '
                               'mano sigue sin moverse de sitio',

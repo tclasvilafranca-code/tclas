@@ -98,6 +98,7 @@ CANCION = dict(
                      dict(cap='a) subiendo por las notas de la tonalidad',
                           events=[n('A4'), n('B4'), n('C#5'), n('D5'),
                                   n('E5'), n('D5'), n('C#5'), n('B4'), n('A4')],
+                          matiz='mp',
                           bars=3),
                      dict(cap='b) y la izquierda, con el mismo sostenido de Do',
                           events=[n('A2'), n('C#3'), n('E3'),

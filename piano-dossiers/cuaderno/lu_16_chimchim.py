@@ -103,6 +103,7 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) baja la mano entera, no los dedos · escucha si suena un golpe o dos',
                           events=[ac(('A4', 'C5'), 'h.'), ac(('B4', 'D5'), 'h.')],
+                          matiz='mp',
                           bars=2),
                      dict(cap='b) y ahora en negras, cambiando de sitio · si suena doble, vuelve a '
                               'las notas largas',

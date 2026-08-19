@@ -105,6 +105,7 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) una nota por compás, aguantada entera',
                           events=[n('E4', 'h.'), n('C4', 'h.'), n('D4', 'h.'), n('B3', 'h.')],
+                          matiz='mp',
                           bars=4),
                      dict(cap='b) y con tres negras detrás, la primera con un poco más de peso',
                           events=[n('G4', 'h.'), n('F4'), n('E4'), n('D4')],

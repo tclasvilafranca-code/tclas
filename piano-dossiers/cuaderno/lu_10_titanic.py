@@ -107,6 +107,7 @@ CANCION = dict(
                      dict(cap='a) la derecha, dos notas por compás · marca el uno un poco más fuerte',
                           events=[n('E4'), n('E4'), n('G4'), n('G4'),
                                   n('F4'), n('E4'), n('D4'), n('D4')],
+                          matiz='mp',
                           bars=4),
                      dict(cap='b) y la izquierda, una sola nota que ocupa el compás entero',
                           events=[n('C3', 'h'), n('G2', 'h'), n('A2', 'h'), n('F2', 'h')],

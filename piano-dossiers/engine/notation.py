@@ -461,10 +461,15 @@ def draw_ligadura(c, x1, y1, x2, y2, gap, arriba=True, tipo='fraseo'):
        grueso en el centro -- que es lo que la distingue de una linea curva a
        secas. `arriba` decide de que lado se curva."""
     d = 1 if arriba else -1
-    xm = (x1 + x2) / 2.0
     ancho = abs(x2 - x1)
-    alto = min(gap * 1.5, max(gap * 0.62, ancho * 0.16)) * d
-    ym = (y1 + y2) / 2.0 + alto
+    # Un arco de fraseo largo tiene que abrirse de verdad o parece una raya. Y
+    # los dos extremos arrancan a la MISMA altura (la mas exterior de las dos
+    # notas), como en cualquier edicion: si cada punta sigue a su nota, un salto
+    # melodico deja la ligadura torcida.
+    base = (max(y1, y2) if arriba else min(y1, y2))
+    y1 = y2 = base
+    alto = min(gap * 2.8, max(gap * 0.7, ancho * 0.085)) * d
+    ym = base + alto
     grosor = gap * 0.17
     c.setFillColor(INK)
     p = c.beginPath()
@@ -817,12 +822,20 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
         for art in ([e['art']] if isinstance(e.get('art'), str) else (e.get('art') or [])):
             draw_articulacion(c, px, cy, gap, art, stem_dir=sd,
                               staff_bottom_y=bot, staff_top_y=top)
-        # 'lig' ata esta nota con la siguiente que suene
+        # 'lig' ata esta nota con la siguiente que suene. Si lleva un numero,
+        # es una ligadura de FRASEO que abarca esas notas: lig=7 arquea sobre
+        # las siete que vienen detras, que es como se marca un "sempre legato".
         if e.get('lig'):
+            salto = 1 if e['lig'] is True else int(e['lig'])
             j = i + 1
-            while j < len(events) and note_anchors[j] is None:
+            saltadas = 0
+            while j < len(events):
+                if note_anchors[j] is not None:
+                    saltadas += 1
+                    if saltadas >= salto:
+                        break
                 j += 1
-            if j < len(events):
+            if j < len(events) and note_anchors[j] is not None:
                 px2, cy2, _sd2 = note_anchors[j]
                 arriba = (sd == 'down')
                 d = gap * (1.0 if arriba else -1.0)

@@ -113,6 +113,7 @@ CANCION = dict(
                      dict(cap='a) la escala de la pieza, bajando · el quinto escalón es el Si bemol',
                           events=[n('C5'), n('Bb4'), n('A4'), n('G4'),
                                   n('F4'), n('G4'), n('A4'), n('Bb4')],
+                          matiz='mp',
                           bars=2, key_sig=FA),
                      dict(cap='b) y saltando de un Si a otro · para que la mano se aprenda el sitio '
                               'por el tacto',

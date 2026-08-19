@@ -213,6 +213,7 @@ CANCION = dict(
                               'a sonar bien',
                           events=[n('D3', 'w'), n('C3', 'w'), n('D3', 'w'), n('E3', 'w'),
                                   n('D3', 'w'), n('C3', 'w'), n('D3', 'w'), n('C3', 'w')],
+                          matiz='mp',
                           bars=8, clef='bass'),
                      dict(cap='b) cc. 1–4 con el acorde encima, dos veces por compás · si los dos suenan '
                               'igual, la melodía se pierde',

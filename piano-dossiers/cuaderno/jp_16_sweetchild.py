@@ -109,6 +109,7 @@ CANCION = dict(
                      dict(cap='a) una redonda por compás, y el pie sube y baja JUSTO DESPUÉS del '
                               'acorde · si suben a la vez, el sonido anterior se queda dentro',
                           events=[n('Bb2', 'w'), n('F2', 'w')],
+                          matiz='mf',
                           bars=2, clef='bass', key_sig='Sib mayor'),
                      dict(cap='b) y con acordes de tres notas, que es lo que hace del c. 13 en '
                               'adelante · el cambio de pedal es el mismo',

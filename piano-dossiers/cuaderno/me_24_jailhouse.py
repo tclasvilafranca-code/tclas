@@ -103,6 +103,7 @@ CANCION = dict(
                      dict(cap='a) tres silencios y entras en la última corchea',
                           events=[sil('h'), sil('q'), sil('e'), n('C4', 'e'),
                                   n('D4'), n('Eb4'), n('D4'), n('C4')],
+                          matiz='mf',
                           bars=2),
                      dict(cap='b) lo mismo, con el color de blues',
                           events=[sil('h'), sil('q'), sil('e'), n('F#4', 'e'),

@@ -112,6 +112,7 @@ CANCION = dict(
                           events=[ac(('F4', 'A4')), ac(('G4', 'Bb4')), ac(('A4', 'C5')),
                                   ac(('Bb4', 'D5')), ac(('C5', 'E5')), ac(('Bb4', 'D5')),
                                   ac(('A4', 'C5'), 'h')],
+                          matiz='mp',
                           bars=2, key_sig='Fa mayor'),
                      dict(cap='b) y ahora sextas, que es lo que de verdad usa el arreglo · la mano '
                               'se abre y la muñeca no se tuerce',

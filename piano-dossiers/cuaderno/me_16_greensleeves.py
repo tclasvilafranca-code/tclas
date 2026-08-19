@@ -102,6 +102,7 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) tres notas iguales, subiendo, sin parar',
                           events=[n('A2'), n('E3'), n('A3'), n('G2'), n('D3'), n('G3')],
+                          matiz='mp',
                           bars=2, clef='bass'),
                      dict(cap='b) cambiando de acorde cada compás',
                           events=[n('F2'), n('C3'), n('F3'), n('E2'), n('B2'), n('E3')],

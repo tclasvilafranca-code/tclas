@@ -105,6 +105,7 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) ida y vuelta entre dos teclas · la mano no se mueve, solo los dedos',
                           events=corch(['E5', 'D#5']) + corch(['E5', 'D#5']) + corch(['E5', 'D#5']),
+                          matiz='mp',
                           bars=1),
                      dict(cap='b) y con el becuadro, que quita el sostenido · la misma nota, tecla '
                               'blanca',

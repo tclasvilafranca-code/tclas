@@ -104,6 +104,7 @@ CANCION = dict(
                      dict(cap='a) los cinco dedos, en zigzag esta vez · sin levantar la mano',
                           events=[n('E4'), n('C4'), n('F4'), n('D4'),
                                   n('G4'), n('E4'), n('F4'), n('D4')],
+                          matiz='p',
                           bars=2),
                      dict(cap='b) y bajando desde arriba · la mano sigue sin moverse de sitio',
                           events=[n('G4'), n('E4'), n('D4'), n('F4'),

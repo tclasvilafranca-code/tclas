@@ -133,6 +133,7 @@ CANCION = dict(
                      dict(cap='a) los tres acordes que hay debajo de toda la primera frase · Sol · '
                               'La menor sobre Sol · Sol maj7 · Sol: escúchalos antes de romperlos',
                           events=[ac(AC_I), ac(AC_ii), ac(AC_I7), ac(AC_I)],
+                          matiz='pp',
                           bars=4, clef='bass'),
                      dict(cap='b) y compás a compás como está escrito · cuatro de Sol, tres de La '
                               'menor sobre Sol y el maj7 del c. 8: ocho compases, tres acordes',

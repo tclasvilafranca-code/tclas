@@ -252,6 +252,22 @@ def build_piano(c, cfg):
             y = _ej_heading(c, y, blq['num'], blq['titulo'], blq['pista'])
             for s in blq['sistemas']:
                 y = _caption(c, y, s.get('cap'))
+                # Un sistema puede declarar `matiz='p'` y se aplica a su primera
+                # nota, que es donde va en cualquier edicion. Asi una pieza no
+                # tiene que tocar su lista de notas solo para poner la dinamica.
+                if s.get('matiz'):
+                    for _e in s['events']:
+                        if not _e.get('rest'):
+                            _e.setdefault('matiz', s['matiz'])
+                            break
+                # `ligar=True` arquea una ligadura de fraseo sobre TODO el
+                # sistema (el "sempre legato" de tantas ediciones); `ligar=n`
+                # la limita a las n primeras notas.
+                if s.get('ligar'):
+                    _notas = [_e for _e in s['events'] if not _e.get('rest')]
+                    if len(_notas) >= 2:
+                        _n = len(_notas) - 1 if s['ligar'] is True else int(s['ligar'])
+                        _notas[0].setdefault('lig', max(1, min(_n, len(_notas) - 1)))
                 # un sistema puede llevar SU compas: hay piezas que cambian de
                 # compas en un compas suelto (el c. 62 de When We Were Young)
                 y = _lineas(c, y, s['events'], s.get('time_sig', cfg['time_sig']),

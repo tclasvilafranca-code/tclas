@@ -120,6 +120,7 @@ CANCION = dict(
                               'compás dura dos segundos, así que hay que contarlo, no sentirlo',
                           events=[sil('h'), sil('q'), {'rest': True, 'dur': 'e'},
                                   {'pitch': 'Bb4', 'dur': 'e'}, n('C5', 'w')],
+                          matiz='mf',
                           bars=2),
                  ]),
             dict(num=2, titulo='El Si bemol, y el Si natural al lado',

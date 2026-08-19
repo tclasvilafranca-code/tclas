@@ -114,6 +114,7 @@ CANCION = dict(
                                   n('F5', 'e'), n('E5', 'e'), n('D5', 'e'),
                                   n('C5', 'e'), n('D5', 'e'), n('E5', 'e'),
                                   n('G5', 'e'), n('F5', 'e'), n('E5', 'e')],
+                          acento=True,
                           bars=2, time_sig=(6, 8)),
                      dict(cap='b) y ahora con una nota larga por pulso · las dos figuras valen lo '
                               'mismo: tres corcheas o una negra con puntillo',

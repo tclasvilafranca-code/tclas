@@ -268,6 +268,25 @@ def build_piano(c, cfg):
                     if len(_notas) >= 2:
                         _n = len(_notas) - 1 if s['ligar'] is True else int(s['ligar'])
                         _notas[0].setdefault('lig', max(1, min(_n, len(_notas) - 1)))
+                # El resto del vocabulario de expresion, tambien declarable en
+                # el sistema para no tener que tocar la lista de notas:
+                #   staccato=True  -> punto en todas las notas
+                #   acento=True    -> acento en la primera
+                #   calderon=True  -> calderon en la ultima
+                #   cresc/dim=n    -> regulador de n eventos desde la primera
+                #   pedal=n        -> marca de pedal de n eventos
+                _notas = [_e for _e in s['events'] if not _e.get('rest')]
+                if _notas:
+                    if s.get('staccato'):
+                        for _e in _notas:
+                            _e.setdefault('art', 'staccato')
+                    if s.get('acento'):
+                        _notas[0].setdefault('art', 'acento')
+                    if s.get('calderon'):
+                        _notas[-1].setdefault('art', 'calderon')
+                    for _k in ('cresc', 'dim', 'pedal'):
+                        if s.get(_k):
+                            _notas[0].setdefault(_k, int(s[_k]))
                 # un sistema puede llevar SU compas: hay piezas que cambian de
                 # compas en un compas suelto (el c. 62 de When We Were Young)
                 y = _lineas(c, y, s['events'], s.get('time_sig', cfg['time_sig']),

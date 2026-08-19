@@ -113,6 +113,15 @@ def _eventos(cfg):
                 evs = [e for e in (s.get('events', []) or []) if isinstance(e, dict)]
                 if s.get('matiz'):
                     evs = evs + [{'matiz': s['matiz']}]
+                if s.get('ligar'):
+                    evs = evs + [{'lig': True}]
+                for _k, _v in (('staccato', {'art': 'staccato'}),
+                               ('acento', {'art': 'acento'}),
+                               ('calderon', {'art': 'calderon'}),
+                               ('cresc', {'cresc': 1}), ('dim', {'dim': 1}),
+                               ('pedal', {'pedal': 1})):
+                    if s.get(_k):
+                        evs = evs + [dict(_v)]
                 out += evs
     for r in (cfg.get('ficha') or {}).get('ritmos', []) or []:
         if len(r) > 2 and isinstance(r[2], list):

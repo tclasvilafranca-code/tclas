@@ -252,6 +252,7 @@ CANCION = dict(
                               'luego la subes, se te caerá siempre en el mismo punto',
                           events=corch(['A5', 'B5', 'C6', 'B5']) + [n('A5', 'h')] +
                                  corch(['A5', 'B5', 'C6', 'C6']) + [n('C6', 'h')],
+                          staccato=True,
                           bars=4),
                  ]),
             dict(tipo='nota',

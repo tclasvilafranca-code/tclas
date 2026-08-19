@@ -108,6 +108,7 @@ CANCION = dict(
                      dict(cap='a) una en el uno y otra en el tres · el acorde va cambiando cada '
                               'compás y la mano casi no se mueve',
                           events=[n('C3', 'h'), n('A2', 'h'), n('F2', 'h'), n('G2', 'h')],
+                          acento=True,
                           bars=2, clef='bass'),
                      dict(cap='b) y la vuelta · cuatro compases seguidos así y ya te sabes toda la '
                               'primera mitad',

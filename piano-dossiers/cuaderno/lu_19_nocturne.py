@@ -107,6 +107,8 @@ CANCION = dict(
                               'una antes de tocar la siguiente',
                           events=[n('G4', 'h.'), n('E4', 'h.'), n('F4', 'h.'), n('D4', 'h.')],
                           matiz='mp',
+                          ligar=True,
+                          acento=True,
                           bars=4),
                      dict(cap='b) y con tres negras detrás · la primera pesa un poco más que las '
                               'otras dos',

@@ -100,6 +100,7 @@ CANCION = dict(
                      dict(cap='a) primero sin puntillo, para comparar · dos notas normales y una larga',
                           events=[n('E4'), n('G4'), n('E4', 'h'),
                                   n('E4'), n('D4'), n('D4', 'h')],
+                          ligar=True,
                           bars=2),
                      dict(cap='b) y ahora con el puntillo, que es como está escrito · di “un-y-dos-y”',
                           events=[n('E4', 'q.'), {'pitch': 'G4', 'dur': 'e'}, n('E4', 'h'),

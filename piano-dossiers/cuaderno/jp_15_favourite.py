@@ -112,11 +112,13 @@ CANCION = dict(
                               'cuáles antes de tocarlos',
                           events=[ac(('E2', 'B2', 'E3'), 'h.'), ac(('C2', 'G2', 'C3'), 'h.'),
                                   ac(('A2', 'E3', 'A3'), 'h.')],
+                          acento=True,
                           bars=3, clef='bass', key_sig='Mi menor', time_sig=(3, 4)),
                      dict(cap='b) D, G y B · el B es mayor en medio de una pieza menor, y por eso '
                               'suena a que algo va a pasar',
                           events=[ac(('D2', 'A2', 'D3'), 'h.'), ac(('G2', 'D3', 'G3'), 'h.'),
                                   ac(('B2', 'D#3', 'F#3'), 'h.')],
+                          calderon=True,
                           bars=3, clef='bass', key_sig='Mi menor', time_sig=(3, 4), show_time=False),
                  ]),
             dict(num=2, titulo='El vals: el primero pesa y los otros dos no',

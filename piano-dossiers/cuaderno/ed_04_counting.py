@@ -100,6 +100,7 @@ CANCION = dict(
                      dict(cap='a) una vez por compás, y aguantar los cuatro golpes',
                           events=[ac(('D3', 'A3'), 'w'), ac(('B2', 'F3'), 'w'),
                                   ac(('G2', 'D3'), 'w'), ac(('A2', 'E3'), 'w')],
+                          ligar=True,
                           bars=4, clef='bass'),
                  ]),
             dict(num=2, titulo='La derecha: notas cortas de dos en dos',

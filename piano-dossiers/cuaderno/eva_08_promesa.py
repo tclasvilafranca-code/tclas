@@ -112,6 +112,7 @@ CANCION = dict(
                                   n('C5'), n('C5'), n('C5'), n('C5'),
                                   n('E5'), n('E5'), n('E5'), n('E5'),
                                   n('E5', 'w')],
+                          pedal=4,
                           bars=4),
                      dict(cap='b) lo mismo, pero entrando después del silencio · el silencio real es de '
                               'semicorchea; aquí se agranda para que lo oigas',

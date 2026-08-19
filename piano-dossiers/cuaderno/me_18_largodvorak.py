@@ -100,6 +100,7 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) una nota que dura dos compases enteros',
                           events=[n('C3', 'w'), n('C3', 'w')],
+                          ligar=True,
                           bars=2, clef='bass'),
                      dict(cap='b) y cambiando de nota, con la misma sujeción',
                           events=[n('F2', 'w'), n('F2', 'w')],

@@ -148,6 +148,7 @@ CANCION = dict(
                           events=[ac(['C3', 'Eb3', 'G3']), ac(['Bn2', 'Eb3', 'G3']),
                                   ac(['Bb2', 'Eb3', 'G3']), ac(['A2', 'C3', 'F3']),
                                   ac(['Ab2', 'C3', 'F3'])],
+                          cresc=4,
                           bars=5, clef='bass', show_time=False),
                      dict(cap='d) y los cc. 10–11, que son el otro cromatismo · Do♭ · Si♭ · La · Si♭, '
                               'cuatro acordes en un compás: los vecinos del Si♭ por arriba y por abajo',

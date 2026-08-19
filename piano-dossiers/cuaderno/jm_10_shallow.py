@@ -111,6 +111,7 @@ CANCION = dict(
                      dict(cap='a) silencio, y entras con dos cortas · di "UN" en voz alta y toca en el '
                               'dos',
                           events=[sil('q')] + corch(['D4', 'E4']) + [n('G4'), n('A4')],
+                          ligar=True,
                           bars=1, key_sig=SOL),
                      dict(cap='b) y ahora dos veces seguidas, para que el gesto se automatice',
                           events=[sil('q')] + corch(['D4', 'E4']) + [n('G4'), n('A4')] +

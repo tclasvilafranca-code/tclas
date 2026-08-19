@@ -113,6 +113,7 @@ CANCION = dict(
                               'no hace crescendo',
                           events=[ac(('C3', 'E3', 'G3'), 'h'), ac(('C3', 'E3', 'G3'), 'h'),
                                   ac(('E3', 'G3', 'B3'), 'h'), ac(('E3', 'G3', 'B3'), 'h')],
+                          cresc=4,
                           bars=2, clef='bass'),
                      dict(cap='b) con el ciclo que trae impreso el cifrado · Fa y La menor, que son '
                               'los dos siguientes',

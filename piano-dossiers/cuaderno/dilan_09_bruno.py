@@ -231,6 +231,8 @@ CANCION = dict(
                               'Re · Do · Fa · Sol · Si · Do: así es como viaja la mano',
                           events=[n('D3', 'w'), n('C3', 'w'), n('F3', 'w'),
                                   n('G2', 'w'), n('B2', 'w'), n('C3', 'w')],
+                          ligar=True,
+                          pedal=4,
                           bars=6, clef='bass', show_time=False),
                      dict(cap='c) y los cinco acordes arpegiados, encadenados · el gesto no cambia nunca, '
                               'lo único difícil es llegar colocado al siguiente',

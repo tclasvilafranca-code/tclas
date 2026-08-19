@@ -102,6 +102,8 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) tres negras que bajan, el primero pesa un poco más',
                           events=[n('C5'), n('C5'), n('C5'), n('A4'), n('B4'), n('C5')],
+                          ligar=True,
+                          cresc=4,
                           bars=2, time_sig=(3, 4)),
                      dict(cap='b) y con la blanca con puntillo que llena el compás entero',
                           events=[n('F4'), n('G4'), n('A4'), n('G4', 'h.')],

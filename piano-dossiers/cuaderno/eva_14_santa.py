@@ -121,10 +121,12 @@ CANCION = dict(
                      dict(cap='b) el estribillo · ocho corcheas por compás sin acentuar ninguna: si '
                               'marcas la primera, esto suena a marcha',
                           events=[ac(SOLac, 'e')] * 8 + [ac(SOLac, 'e')] * 8 + [ac(SOLac, 'w')],
+                          staccato=True,
                           bars=3, clef='bass', show_time=False),
                      dict(cap='c) y la introducción, que es la tercera manera: acordes largos abajo, '
                               'con el pedal que la partitura te escribe',
                           events=[ac(SOLac, 'w'), ac(DOac, 'w'), ac(REac, 'w'), ac(SOLac, 'w')],
+                          pedal=4,
                           bars=4, clef='bass', show_time=False),
                      dict(cap='d) y solo la nota grave de esos acordes · Sol · Do · Re · Sol: por ahí '
                               'va la armonía de la introducción, y son cuatro notas',

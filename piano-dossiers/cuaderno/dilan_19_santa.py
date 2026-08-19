@@ -217,9 +217,11 @@ CANCION = dict(
                                   [n('D2', 'e'), sil('e'), n('A2', 'e'), sil('e')] * 2 +
                                   [n('D2', 'e'), sil('e'), n('A2', 'e'), sil('e')] * 2 +
                                   [n('D2', 'e'), sil('e'), n('A2', 'e'), sil('e')] * 2),
+                          staccato=True,
                           bars=4, clef='bass'),
                      dict(cap='b) la introducción, que es lo contrario: acordes largos abajo, con pedal',
                           events=[ac(SOLac, 'w'), ac(DOac, 'w'), ac(REac, 'w'), ac(SOLac, 'w')],
+                          pedal=4,
                           bars=4, clef='bass', show_time=False),
                      dict(cap='c) y solo la nota grave de esos acordes, para oír por dónde va la '
                               'armonía · Sol · Do · Re · Sol',

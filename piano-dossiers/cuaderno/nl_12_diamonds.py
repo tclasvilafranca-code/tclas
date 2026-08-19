@@ -109,6 +109,7 @@ CANCION = dict(
                      dict(cap='a) silencio, una corchea, y entra el compás',
                           events=[sil('e'), {'pitch': 'A4', 'dur': 'e'},
                                   n('D5'), n('D5'), n('C#5'), n('B4'), n('A4'), n('F#4'), n('D4')],
+                          ligar=True,
                           bars=2),
                      dict(cap='b) el mismo dibujo, una frase más abajo',
                           events=[sil('e'), {'pitch': 'F#4', 'dur': 'e'},

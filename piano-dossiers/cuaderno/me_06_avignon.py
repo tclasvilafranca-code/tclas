@@ -105,6 +105,7 @@ CANCION = dict(
                      dict(cap='a) tres corcheas cortas y un silencio, dos veces',
                           events=corch(['C4', 'D4', 'E4']) + [sil('e')]
                                  + corch(['D4', 'E4', 'F4']) + [sil('e')],
+                          staccato=True,
                           bars=1),
                      dict(cap='b) el mismo dibujo un poco más arriba',
                           events=corch(['E4', 'F4', 'G4']) + [sil('e')]

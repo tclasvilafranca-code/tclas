@@ -101,6 +101,8 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) tres negras iguales · el primero pesa un poco más, nada más',
                           events=[n('E5'), n('E5'), n('E5'), n('G5'), n('F5'), n('E5')],
+                          ligar=True,
+                          cresc=4,
                           bars=2, time_sig=(3, 4)),
                      dict(cap='b) y con la blanca con puntillo, que llena el compás entero · aguanta '
                               'los tres golpes',

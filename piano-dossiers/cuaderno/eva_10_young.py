@@ -174,6 +174,7 @@ CANCION = dict(
                           events=[ac(DM), ac(['A2', 'E3', 'F3']),
                                   ac(SIb), ac(['A2', 'C3', 'F3']),
                                   ac(GM7, 'w'), ac(FA, 'w')],
+                          ligar=True,
                           bars=4, clef='bass', show_time=False),
                      dict(cap='c) y ahora cuatro veces seguidas · eso son los cc. 5 al 20, la estrofa '
                               'entera: dieciséis compases y un solo ciclo',

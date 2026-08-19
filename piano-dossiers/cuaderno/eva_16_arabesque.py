@@ -104,6 +104,7 @@ CANCION = dict(
                      dict(cap='a) primero en negras y SIN picar, con el dedo pegado a la tecla · esto '
                               'es solo para colocar la mano y oír la afinación del gesto',
                           events=[n('A4'), n('B4'), n('C5'), n('B4'), n('A4', 'h')],
+                          staccato=True,
                           bars=3),
                      dict(cap='b) las mismas notas en negras pero PICADAS · la mano rebota y se va; si '
                               'suenan más fuertes que en la a), estás apretando en vez de soltar',

@@ -119,6 +119,7 @@ CANCION = dict(
                           events=[n('G4'), n('F4'), n('E4'), n('D4'),
                                   n('C4'), n('D4'), n('E4'), n('F4')],
                           matiz='p',
+                          pedal=4,
                           bars=2),
                      dict(cap='b) y ahora de dos en dos, saltando · la mano sigue sin moverse',
                           events=[n('G4'), n('E4'), n('F4'), n('D4'),

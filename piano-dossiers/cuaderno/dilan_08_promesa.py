@@ -233,6 +233,7 @@ CANCION = dict(
                      dict(cap='a) solo la nota grave, en blancas: dos por compás',
                           events=[n('G2', 'h'), n('G2', 'h'), n('E2', 'h'), n('E2', 'h'),
                                   n('C2', 'h'), n('C2', 'h'), n('D2', 'h'), n('D2', 'h')],
+                          pedal=4,
                           bars=4, clef='bass'),
                      dict(cap='b) y ahora la nota grave con el acorde encima, en el mismo golpe',
                           events=[ac(['G2', 'B3', 'D4']), ac(['G2', 'B3', 'D4']),

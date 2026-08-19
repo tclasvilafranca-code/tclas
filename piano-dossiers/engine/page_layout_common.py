@@ -54,7 +54,9 @@ def after_system(gap, events=None, clef='treble'):
     # El matiz (bot - 2.6 gaps) y el regulador (bot - 2.65) ya caben en el
     # hueco base de 3.5 gaps: no piden nada extra. El pedal y la ligadura si.
     if any(e.get('pedal') for e in events):
-        salida = max(salida, gap * 6.2)
+        # 'Ped.' apoya su linea base en bot - 4.4 gaps y no tiene descendentes:
+        # con 5.0 va sobrado. Reservar 6.2 sacaba una pieza fuera de pagina.
+        salida = max(salida, gap * 5.0)
     if any(e.get('lig') for e in events):
         # la ligadura arranca en la cabeza mas grave y se abre hasta 2.8 gaps
         bajo = 0.0

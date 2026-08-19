@@ -100,6 +100,7 @@ CANCION = dict(
                               'sea muy despacio: lo que se está probando es si se oye por arriba',
                           events=[ac(('D3', 'G3', 'B3'), 'w'), ac(('C3', 'E3', 'G3'), 'w'),
                                   ac(('D3', 'F3', 'A3'), 'w'), ac(('E3', 'A3', 'C4'), 'w')],
+                          pedal=4,
                           bars=4, clef='bass'),
                      dict(cap='b) cc. 5–8 · lo mismo con la segunda frase',
                           events=[ac(('F2', 'A2', 'C3'), 'w'), ac(('E3', 'A3', 'C4'), 'w'),

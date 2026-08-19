@@ -112,6 +112,7 @@ CANCION = dict(
                      dict(cap='a) primero en negras: la mitad de velocidad y las mismas notas',
                           events=[n('B4'), n('C5'), n('D5'), n('E5'),
                                   n('D5'), n('C5'), n('B4'), n('A4')],
+                          ligar=True,
                           bars=2),
                      dict(cap='b) y ahora en corcheas · que la última suene igual de tranquila que la '
                               'primera',

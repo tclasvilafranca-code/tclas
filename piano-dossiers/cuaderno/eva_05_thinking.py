@@ -109,6 +109,7 @@ CANCION = dict(
                                    ('F5', 95), ('F5', 95), ('F5', 95),
                                    ('F5', 96), ('F5', 96)]] +
                                  [n('D5', 'w')],
+                          acento=True,
                           bars=3),
                      dict(cap='b) y el ritmo de la entrada, también en una sola nota · silencio de '
                               'blanca y entras: cuenta UN-dos-TRES-cuatro',
@@ -119,6 +120,7 @@ CANCION = dict(
                                   for i in range(6)] +
                                  [{'pitch': 'D5', 'dur': 'e', 'beam': 99} for _ in range(2)] +
                                  _en_una_nota(CONTRA[:7]),
+                          pedal=4,
                           bars=3, show_time=False),
                  ]),
             dict(tipo='nota',

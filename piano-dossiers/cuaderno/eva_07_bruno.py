@@ -115,6 +115,8 @@ CANCION = dict(
                      dict(cap='b) ahora la tercera encima · dos voces, y ya se oye si el acorde es '
                               'mayor o menor',
                           events=[ac(par, 'w') for par in TERCERAS],
+                          ligar=True,
+                          pedal=4,
                           bars=6, clef='bass', show_time=False),
                      dict(cap='c) y el acorde entero · esta es la posición que tiene que aprenderse la '
                               'mano, no las notas sueltas',

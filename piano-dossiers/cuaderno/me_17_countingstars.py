@@ -98,6 +98,7 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) dos notas por compás, sostenidas enteras',
                           events=[ac(('C3', 'E3'), 'w'), ac(('F2', 'A2'), 'w')],
+                          ligar=True,
                           bars=2, clef='bass'),
                      dict(cap='b) y una ligada, que no se vuelve a tocar en el compás siguiente',
                           events=[ac(('G2', 'B2'), 'w'), ac(('G2', 'B2'), 'w')],

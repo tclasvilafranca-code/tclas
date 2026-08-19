@@ -115,6 +115,7 @@ CANCION = dict(
                               'alta',
                           events=[ac(('C3', 'G3'), 'w'), ac(('A2', 'E3'), 'w'),
                                   ac(('F2', 'C3'), 'w'), ac(('G2', 'D3'), 'w')],
+                          ligar=True,
                           bars=4, clef='bass'),
                  ]),
             dict(num=2, titulo='La derecha: notas cortas de dos en dos',

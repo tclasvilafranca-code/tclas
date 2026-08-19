@@ -121,6 +121,7 @@ CANCION = dict(
                               'de tiempo, has soltado el dedo',
                           events=[n('A4', 'h.'), n('G4', 'h.'), n('F4', 'h.'), n('E4', 'h.')],
                           matiz='mp',
+                          cresc=4,
                           bars=4),
                      dict(cap='b) y ahora con una nota que se mueve dentro del compás · sin que la '
                               'línea se rompa',

@@ -42,7 +42,7 @@ BARS_PER_LINE = 4
 # Una sola tabla de duraciones en todo el proyecto: la del motor. Esta copia
 # local se quedo sin 'e.' y sin las semicorcheas, y una figura nueva reventaba
 # aqui con un KeyError en vez de dibujarse.
-from notation import DUR_BEATS as DUR
+from notation import DUR_BEATS as DUR, beats_de
 
 
 def _ej_heading(c, y, num, titulo, pista):
@@ -79,7 +79,7 @@ def _lineas(c, y, events, time_sig, bars_per_line, gap=GAP, show_time=True,
     lines, cur, acc = [], [], 0.0
     for e in events:
         cur.append(e)
-        acc += DUR[e['dur']]
+        acc += beats_de(e)
         if acc >= line_beats - 1e-6:
             lines.append(cur); cur, acc = [], 0.0
     if cur:

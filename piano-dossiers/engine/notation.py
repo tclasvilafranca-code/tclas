@@ -419,6 +419,17 @@ DUR_BEATS = {'w': 4.0, 'h.': 3.0, 'h': 2.0, 'q.': 1.5, 'q': 1.0,
 DUR_FLAGS = {'e': 1, 'e.': 1, 's': 2, 's.': 2}
 
 
+def beats_de(e):
+    """Lo que dura UN evento, en tiempos de negra.
+
+       Es el unico sitio donde se aplica el 2/3 del tresillo. Cualquier modulo
+       que sume duraciones tiene que llamar aqui: cuando hoja_piano lo calculaba
+       por su cuenta, un compas con tresillos se partia en lineas por donde no
+       tocaba y el auditor cantaba compases incompletos."""
+    b = DUR_BEATS[e['dur']]
+    return b * (2.0 / 3.0) if e.get('tresillo') else b
+
+
 def draw_articulacion(c, cx, cy, gap, tipo, stem_dir='up', staff_bottom_y=None, staff_top_y=None):
     """Staccato, acento y calderon.
 
@@ -654,10 +665,7 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
 
     # Una sola tabla de duraciones para todo el motor (ver DUR_BEATS). El
     # tresillo ocupa 2/3 de lo que dice su figura: tres notas en el hueco de dos.
-    def _beats(e):
-        b = DUR_BEATS[e['dur']]
-        return b * (2.0 / 3.0) if e.get('tresillo') else b
-
+    _beats = beats_de
     dur_beats = DUR_BEATS
     beats_per_bar = time_sig[0] * (4.0 / time_sig[1])
     total_beats = sum(_beats(e) for e in events)

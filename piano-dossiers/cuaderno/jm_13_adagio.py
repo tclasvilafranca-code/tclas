@@ -137,7 +137,23 @@ CANCION = dict(
                        'seguidas, siempre la misma, dentro de un solo golpe. "Ma-ri-po", "u-ni-dad". '
                        'Lo importante es que las tres duren igual y que quepan justo en el golpe, sin '
                        'que el compás se estire.'),
-            dict(num=2, titulo='La izquierda, que aquí es la fácil', clef='bass',
+            dict(num=2, titulo='El tresillo, contado',
+                 pista='andamio · un tresillo por golpe, tal y como viene marcado con el 3',
+                 sistemas=[
+                     dict(cap='a) TRES notas donde normalmente caben dos · di "u-ni-dad" en cada '
+                              'grupo y que las tres duren igual',
+                          events=[dict(n('A4', 'e'), tresillo=1, beam=901),
+                                  dict(n('G4', 'e'), tresillo=1, beam=901),
+                                  dict(n('F4', 'e'), tresillo=1, beam=901),
+                                  dict(n('G4', 'e'), tresillo=2, beam=902),
+                                  dict(n('A4', 'e'), tresillo=2, beam=902),
+                                  dict(n('B4', 'e'), tresillo=2, beam=902),
+                                  dict(n('A4', 'e'), tresillo=3, beam=903),
+                                  dict(n('G4', 'e'), tresillo=3, beam=903),
+                                  dict(n('F4', 'e'), tresillo=3, beam=903)],
+                          bars=1),
+                 ]),
+            dict(num=3, titulo='La izquierda, que aquí es la fácil', clef='bass',
                  pista='andamio · negras sueltas, una por golpe, sin acentuar ninguna',
                  sistemas=[
                      dict(cap='a) tres negras por compás, todas igual de suaves',
@@ -145,14 +161,8 @@ CANCION = dict(
                                   n('F2'), n('C3'), n('F3'),
                                   n('G2'), n('D3'), n('G3')],
                           bars=3, clef='bass'),
-                     dict(cap='b) y bajando, que es lo que hace la pieza · sin acentuar ninguna, '
-                              'todas del mismo tamaño',
-                          events=[n('A2'), n('G2'), n('F2'),
-                                  n('E2'), n('F2'), n('G2'),
-                                  n('A2'), n('E3'), n('A2')],
-                          bars=3, clef='bass', show_time=False),
                  ]),
-            dict(num=3, titulo='Crecer poco a poco',
+            dict(num=4, titulo='Crecer poco a poco',
                  pista='andamio · el "cresc." de tu partitura dura varios compases, no uno',
                  sistemas=[
                      dict(cap='a) la misma frase cuatro veces, cada una un poquito más · el salto de '

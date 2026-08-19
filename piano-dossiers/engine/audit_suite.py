@@ -20,8 +20,7 @@ def audit_music(build_fn, page_w=595.276, page_h=841.89):
         # duplicada aqui, anadir una figura al motor y olvidarla en el auditor
         # hacia que los compases se contasen mal sin avisar.
         dur_beats = nt.DUR_BEATS
-        total_beats = sum(dur_beats[e['dur']] * (2.0 / 3.0 if e.get('tresillo') else 1.0)
-                          for e in events)
+        total_beats = sum(nt.beats_de(e) for e in events)
         beats_per_bar = time_sig[0] * (4.0 / time_sig[1])
         n_events = len(events)
         avail_w_est = width - gap * 8

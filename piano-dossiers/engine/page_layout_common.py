@@ -123,6 +123,15 @@ def before_staff(gap, events=None, clef='treble'):
         extra = max(extra, max_over + (gap * 1.3 if over_has_acc else gap * 0.4))
     if max_plica > 0:
         extra = max(extra, max_plica + gap * 0.15)
+    # El corchete del tresillo y el 8va van POR ENCIMA del pentagrama y hay que
+    # reservarles sitio, o el numero 3 se dibuja encima del rotulo del sistema.
+    if any(e.get('tresillo') for e in events):
+        alto = 0.0
+        for e in events:
+            alc = _alcance(gap, e, clef)
+            if alc is not None:
+                alto = max(alto, alc[0])
+        extra = max(extra, (alto - top_line) + gap * 5.4)
     return extra
 
 

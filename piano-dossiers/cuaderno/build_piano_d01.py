@@ -56,6 +56,7 @@ PAG1 = dict(
              pista='cc. 1–8 tal cual · muy flojo y muy igual, sin que ninguna corchea pese más',
              sistemas=[
                  dict(cap='a) cc. 1–4 · Sol mayor: la célula, cuatro veces sin cambiar nada',
+                      matiz='pp', ligar=True, pedal=4,
                       events=corcheas(CELULA_I, 4), bars=4, clef='bass'),
                  dict(cap='b) cc. 5–8 · La menor sobre Sol, y el Sol maj7 del c. 8',
                       events=corcheas(CELULA_ii, 3) + corcheas(CELULA_I7, 1),

@@ -300,15 +300,24 @@ CANCION = dict(
                        'busca el c. 15 en tu partitura y escribe al lado “= c. 4”. Cuando llegues ahí '
                        'tocando, no leas: ya te lo sabes.'),
             dict(num=4, titulo='La letra, que manda sobre el ritmo',
-                 pista='sin pentagrama y sin piano: cantando, que es como se aprende un tresillo',
-                 sistemas=[]),
+                 pista='cantando · y con el tresillo escrito, para verle la forma',
+                 sistemas=[
+                     dict(cap='a) así se escribe un tresillo: TRES notas dentro de un solo golpe · '
+                              'di "u-ni-dad" en cada grupo y que las tres duren igual',
+                          events=[{'pitch': 'E4', 'dur': 'e', 'tresillo': 71, 'beam': 7101},
+                                  {'pitch': 'D4', 'dur': 'e', 'tresillo': 71, 'beam': 7101},
+                                  {'pitch': 'D4', 'dur': 'e', 'tresillo': 71, 'beam': 7101},
+                                  {'pitch': 'D4', 'dur': 'e', 'tresillo': 72, 'beam': 7102},
+                                  {'pitch': 'C4', 'dur': 'e', 'tresillo': 72, 'beam': 7102},
+                                  {'pitch': 'C4', 'dur': 'e', 'tresillo': 72, 'beam': 7102},
+                                  {'pitch': 'D4', 'dur': 'q'}, {'pitch': 'D4', 'dur': 'q'}],
+                          bars=1),
+                 ]),
             dict(tipo='nota',
                  etiqueta='CÓMO SE HACE EL PASO 4',
-                 texto='Esta edición trae la letra debajo del pentagrama, y en esta canción es la mejor '
-                       'ayuda que tienes: los tresillos están puestos donde la frase cantada los pide, no '
-                       'por capricho. Canta “Me mue-ro al pen-sar que al-gún dí-a…” en voz alta, sin '
-                       'tocar, hasta que te salga natural. Después toca exactamente lo que has cantado y '
-                       'verás que el ritmo ya no hay que contarlo.'),
+                 texto='La letra va debajo del pentagrama, y aquí es la mejor ayuda que tienes: los '
+                       'tresillos están donde la frase cantada los pide. Canta “Me mue-ro al pen-sar '
+                       'que al-gún dí-a…” en voz alta, sin tocar, y después toca lo que has cantado.'),
             dict(tipo='escalera', valores=[52, 60, 66, 72, 78, 84],
                  regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
             dict(tipo='nota', etiqueta='LOS CINCO PASOS, PARA NO PERDERSE',

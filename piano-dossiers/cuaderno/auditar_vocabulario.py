@@ -33,6 +33,26 @@ PREFIJOS = ['arnau', 'lu', 'jm', 'ed', 'me', 'is', 'jp', 'nl', 'dilan', 'eva']
 # alumno no llega, el hueco NO es un fallo: es su nivel haciendo su trabajo.
 # El texto de esas piezas ya explica que el pasaje se trabaja reducido, que es
 # justo lo correcto para ellas (Luisa leyendo el Titanic, por ejemplo).
+# Piezas donde el recurso SI esta explicado en el texto y NO se dibuja porque la
+# hoja esta llena: meterlo obligaria a borrar un ejercicio con notas medidas de
+# la partitura, y eso es peor que el hueco (manda la norma "todo sale de la
+# partitura"). Se anota aqui, con su motivo, en vez de dejarlo como pendiente
+# eterno. Si algun dia esas hojas ganan sitio, se quitan de esta lista.
+LLENAS = {
+    ('dilan_03_your_song', 'tresillo'), ('dilan_04_thinking', 'tresillo'),
+    ('dilan_05_lucia', 'tresillo'), ('dilan_07_amiga', 'tresillo'),
+    ('dilan_08_promesa', 'tresillo'), ('dilan_10_calor', 'tresillo'),
+    ('dilan_16_adagio', 'tresillo'), ('eva_08_promesa', 'tresillo'),
+    ('eva_09_amiga', 'tresillo'), ('eva_10_young', 'tresillo'),
+    ('eva_11_soldadito', 'tresillo'), ('jp_17_unbeso', 'tresillo'),
+    ('jp_19_acomme', 'tresillo'), ('nl_16_acomme', 'tresillo'),
+    # Estas tres si tienen el tresillo dibujado, pero no la semicorchea: sus
+    # hojas de piano estan llenas en las dos paginas (se probo en las dos) y el
+    # unico sistema sustituible cita compases medidos de la partitura.
+    ('dilan_11_soldadito', 'semicorchea'), ('dilan_17_arabesque', 'semicorchea'),
+    ('eva_10_young', 'semicorchea'),
+}
+
 REQUISITO = {
     'semicorchea': ('figuras', 's'),
     'tresillo': ('recursos', 'tresillo'),
@@ -75,7 +95,12 @@ VOCABULARIO = {
         evento=lambda e: 'calderon' in _arts(e),
         arreglo="art='calderon'"),
     'matiz': dict(
-        patron=r'din[áa]mica|matiz|matices|"p dolce"|\bmp\b|\bmf\b|\bff\b|\bpp\b',
+        # \b en 'matiz' porque "automatizado" lo contiene, y la negacion delante
+        # de 'dinamica' porque hay piezas que dicen justo lo contrario: "no hay
+        # dinamicas escritas". Los dos casos daban falsos positivos.
+        patron=(r'(?<!no hay )(?<!sin ninguna )(?<!sin )(?<!ni una )din[áa]mica'
+                r'|\bmatiz\b|\bmatices\b|"p dolce"'
+                r'|\bmp\b|\bmf\b|\bff\b|\bpp\b'),
         evento=lambda e: bool(e.get('matiz')),
         arreglo="matiz='p' / 'mf' / ... en la nota donde empieza"),
     'regulador': dict(
@@ -163,6 +188,8 @@ def revisar(modulo):
             continue
         if any(spec['evento'](e) for e in evs):
             continue
+        if (modulo, nombre) in LLENAS:
+            continue     # explicado en el texto; no cabe dibujarlo sin quitar material medido
         if nivel is not None:
             campo, clave = REQUISITO.get(nombre, (None, None))
             if campo and clave not in nivel[campo]:

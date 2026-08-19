@@ -39,7 +39,10 @@ WARM = HexColor('#F4EFE3')
 # piano, mirando de lejos y con las manos ocupadas, no con la hoja en la mano.
 GAP = 7.4
 BARS_PER_LINE = 4
-DUR = {'w': 4.0, 'h': 2.0, 'q': 1.0, 'e': 0.5, 'q.': 1.5, 'h.': 3.0}
+# Una sola tabla de duraciones en todo el proyecto: la del motor. Esta copia
+# local se quedo sin 'e.' y sin las semicorcheas, y una figura nueva reventaba
+# aqui con un KeyError en vez de dibujarse.
+from notation import DUR_BEATS as DUR
 
 
 def _ej_heading(c, y, num, titulo, pista):

@@ -11,13 +11,13 @@
    A diferencia de Luisa, aquí NO hay tope de una sola hoja de "cómo se
    estudia": por la clase larga, cuando una pieza lo pide se le dan dos.
 """
-from jm_comun import (n, ac, sil, corch, acuerdate, escribir,
+from jm_comun import (n, ac, sil, corch, semi, acuerdate, escribir,
                       nombres, dibujar, figuras, unir, rodear, colorear,
                       verdadero_falso, ordenar, diferencias, contar,
                       teclado, inventa, plan, metronomo, objetivo, para_clase,
                       reto, cifrado, escalera, a_cuatro_manos)
 
-__all__ = ['n', 'ac', 'sil', 'corch', 'acuerdate', 'escribir',
+__all__ = ['n', 'ac', 'sil', 'corch', 'semi', 'acuerdate', 'escribir',
            'nombres', 'dibujar', 'figuras', 'unir', 'rodear', 'colorear',
            'verdadero_falso', 'ordenar', 'diferencias', 'contar', 'teclado',
            'inventa', 'plan', 'metronomo', 'objetivo', 'para_clase',

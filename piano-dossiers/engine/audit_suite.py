@@ -14,9 +14,14 @@ def audit_music(build_fn, page_w=595.276, page_h=841.89):
     orig = nt.draw_system
 
     def patched(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
-                show_clef=True, show_time=True, key_sig=None, spacing='linear'):
-        dur_beats = {'w': 4.0, 'h': 2.0, 'q': 1.0, 'e': 0.5, 'q.': 1.5, 'h.': 3.0, 'e.': 0.75}
-        total_beats = sum(dur_beats[e['dur']] for e in events)
+                show_clef=True, show_time=True, key_sig=None, spacing='linear',
+                repetir=None, casilla=None, ottava=False):
+        # La tabla de duraciones vive en notation.DUR_BEATS: cuando estaba
+        # duplicada aqui, anadir una figura al motor y olvidarla en el auditor
+        # hacia que los compases se contasen mal sin avisar.
+        dur_beats = nt.DUR_BEATS
+        total_beats = sum(dur_beats[e['dur']] * (2.0 / 3.0 if e.get('tresillo') else 1.0)
+                          for e in events)
         beats_per_bar = time_sig[0] * (4.0 / time_sig[1])
         n_events = len(events)
         avail_w_est = width - gap * 8
@@ -31,7 +36,7 @@ def audit_music(build_fn, page_w=595.276, page_h=841.89):
         })
         return orig(c, x, top_y, width, gap, events, clef=clef, time_sig=time_sig,
                     show_clef=show_clef, show_time=show_time, key_sig=key_sig,
-                    spacing=spacing)
+                    spacing=spacing, repetir=repetir, casilla=casilla, ottava=ottava)
 
     nt.draw_system = patched
     import page_layout_common as plc
@@ -136,13 +141,14 @@ def audit_duplicados(hojas, page_w=595.276, page_h=841.89, minimo=8):
     seqs = []
 
     def patched(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
-                show_clef=True, show_time=True, key_sig=None, spacing='linear'):
+                show_clef=True, show_time=True, key_sig=None, spacing='linear',
+                repetir=None, casilla=None, ottava=False):
         key = tuple((e.get('pitch') or tuple(e.get('pitches', [])) or 'R', e['dur'])
                     for e in events)
         seqs.append((cur[0], clef, key))
         return orig(c, x, top_y, width, gap, events, clef=clef, time_sig=time_sig,
                     show_clef=show_clef, show_time=show_time, key_sig=key_sig,
-                    spacing=spacing)
+                    spacing=spacing, repetir=repetir, casilla=casilla, ottava=ottava)
 
     import sys
     nt.draw_system = patched

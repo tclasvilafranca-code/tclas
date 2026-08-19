@@ -11,12 +11,12 @@
    sube por la curva de lectura y por cómo está escrita cada hoja, no
    añadiendo bloques que no se han pedido.
 """
-from jm_comun import (n, ac, sil, corch, acuerdate, escribir,
+from jm_comun import (n, ac, sil, corch, semi, acuerdate, escribir,
                       nombres, dibujar, figuras, unir, rodear, colorear,
                       verdadero_falso, ordenar, diferencias, contar,
                       teclado, inventa, plan, metronomo, objetivo, para_clase)
 
-__all__ = ['n', 'ac', 'sil', 'corch', 'acuerdate', 'escribir',
+__all__ = ['n', 'ac', 'sil', 'corch', 'semi', 'acuerdate', 'escribir',
            'nombres', 'dibujar', 'figuras', 'unir', 'rodear', 'colorear',
            'verdadero_falso', 'ordenar', 'diferencias', 'contar', 'teclado',
            'inventa', 'plan', 'metronomo', 'objetivo', 'para_clase']

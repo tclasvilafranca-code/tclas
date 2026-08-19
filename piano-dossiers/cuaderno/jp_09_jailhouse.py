@@ -146,12 +146,12 @@ CANCION = dict(
             dict(num=3, titulo='La izquierda del c. 12: cuatro dedos que suben', clef='bass',
                  pista='c. 12 · MEDIDO: Fa, La, Do, Re · la digitación 5 3 2 1 viene impresa',
                  sistemas=[
-                     dict(cap='a) tal cual está escrito, con sus dedos · el 5 es el meñique, así que '
+                     dict(cap='a) escribe tú los dedos encima · el 5 es el meñique, así que '
                               'la mano se abre hacia arriba y no hacia abajo',
-                          events=[dict(pitch='F3', dur='q', number=5),
-                                  dict(pitch='A3', dur='q', number=3),
-                                  dict(pitch='C4', dur='q', number=2),
-                                  dict(pitch='D4', dur='q', number=1),
+                          events=[dict(pitch='F3', dur='q'),
+                                  dict(pitch='A3', dur='q'),
+                                  dict(pitch='C4', dur='q'),
+                                  dict(pitch='D4', dur='q'),
                                   n('D4', 'h'), n('F3', 'h')],
                           bars=2, clef='bass'),
                      dict(cap='b) y bajando por las mismas cuatro notas, para que la mano no aprenda '

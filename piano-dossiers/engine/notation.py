@@ -215,13 +215,21 @@ def ledger_lines_needed(staff_bottom_y, staff_top_y, cy, gap):
     return lines
 
 def draw_rest(c, cx, staff_bottom_y, staff_top_y, gap, dur='q'):
-    """Draws a rest symbol centred vertically in the staff."""
+    """Draws a rest symbol centred vertically in the staff.
+
+       El puntillo va SIEMPRE a la derecha del simbolo y a la altura del tercer
+       espacio, como en cualquier edicion. Antes las duraciones con puntillo
+       ('h.', 'q.', 'e.') no entraban en ninguna rama y la funcion no dibujaba
+       NADA: quedaba un hueco en blanco en el compas y el auditor lo daba por
+       bueno porque si le contaba los tiempos. Salieron 20 casos ya impresos."""
     mid = staff_bottom_y + 2 * gap
+    base = dur.rstrip('.')
+    dotted = dur.endswith('.')
     c.setFillColor(INK)
-    if dur == 'q':
+    if base == 'q':
         c.setFont('FreeSerif', gap * 2.6)
         c.drawCentredString(cx, mid - gap * 0.95, '\U0001D13D')
-    elif dur in ('h', 'w'):
+    elif base in ('h', 'w'):
         # El silencio de blanca SE APOYA sobre la linea del medio y el de
         # redonda CUELGA de la cuarta linea. Son rectangulos, no glifos: los
         # de FreeSerif salian de 0.2 espacios de grueso (un guion casi
@@ -229,11 +237,17 @@ def draw_rest(c, cx, staff_bottom_y, staff_top_y, gap, dur='q'):
         # el silencio de blanca en el sitio del de redonda.
         w = gap * 1.15
         h = gap * 0.5
-        y0 = mid if dur == 'h' else mid + gap - h
+        y0 = mid if base == 'h' else mid + gap - h
         c.rect(cx - w / 2.0, y0, w, h, fill=1, stroke=0)
-    elif dur == 'e':
+    elif base == 'e':
         c.setFont('FreeSerif', gap * 2.6)
         c.drawCentredString(cx, mid - gap * 0.6, '\U0001D13E')
+    elif base == 's':
+        c.setFont('FreeSerif', gap * 2.6)
+        c.drawCentredString(cx, mid - gap * 0.6, '\U0001D13F')
+    if dotted:
+        c.setFillColor(INK)
+        c.circle(cx + gap * 0.85, mid + gap * 0.5, gap * 0.14, fill=1, stroke=0)
 
 def draw_note(c, cx, staff_bottom_y, staff_top_y, gap, pitch, dur='q', stem_dir=None,
               number=None, label=None, beam_to=None, clef='treble', stem_end_y=None):
@@ -246,7 +260,7 @@ def draw_note(c, cx, staff_bottom_y, staff_top_y, gap, pitch, dur='q', stem_dir=
     _letter, _acc, _oct = _parse_pitch(pitch)
     if _acc:
         draw_accidental(c, cx, cy, gap, _acc)
-    filled = dur in ('q', 'e', 'q.', 'e.')
+    filled = dur in ('q', 'e', 'q.', 'e.', 's', 's.')
     draw_notehead(c, cx, cy, gap, filled=filled)
     if dur.endswith('.'):
         c.setFillColor(INK)
@@ -266,25 +280,30 @@ def draw_note(c, cx, staff_bottom_y, staff_top_y, gap, pitch, dur='q', stem_dir=
             sx = cx - stem_x_off
             stem_top = stem_end_y if stem_end_y is not None else cy - stem_len
             c.line(sx, cy, sx, stem_top)
-        if dur in ('e', 'e.') and beam_to is None:
-            # curved flag (filled bezier, not a straight wedge)
-            fx, fy = sx, stem_top
-            c.setFillColor(INK)
-            p = c.beginPath()
-            if stem_dir == 'up':
-                p.moveTo(fx, fy)
-                p.curveTo(fx + gap * 0.15, fy - gap * 0.25, fx + gap * 0.95, fy - gap * 0.05,
-                          fx + gap * 0.68, fy - gap * 1.25)
-                p.curveTo(fx + gap * 0.62, fy - gap * 0.85, fx + gap * 0.22, fy - gap * 0.55,
-                          fx, fy - gap * 0.35)
-            else:
-                p.moveTo(fx, fy)
-                p.curveTo(fx + gap * 0.15, fy + gap * 0.25, fx + gap * 0.95, fy + gap * 0.05,
-                          fx + gap * 0.68, fy + gap * 1.25)
-                p.curveTo(fx + gap * 0.62, fy + gap * 0.85, fx + gap * 0.22, fy + gap * 0.55,
-                          fx, fy + gap * 0.35)
-            p.close()
-            c.drawPath(p, fill=1, stroke=0)
+        if dur in ('e', 'e.', 's', 's.') and beam_to is None:
+            # curved flag (filled bezier, not a straight wedge). La semicorchea
+            # lleva DOS corchetes: el segundo cuelga un espacio mas abajo (o mas
+            # arriba, si la plica va hacia abajo), que es como se graba de verdad.
+            n_flags = 2 if dur in ('s', 's.') else 1
+            for k in range(n_flags):
+                off = k * gap * 0.9 * (-1 if stem_dir == 'up' else 1)
+                fx, fy = sx, stem_top + off
+                c.setFillColor(INK)
+                p = c.beginPath()
+                if stem_dir == 'up':
+                    p.moveTo(fx, fy)
+                    p.curveTo(fx + gap * 0.15, fy - gap * 0.25, fx + gap * 0.95, fy - gap * 0.05,
+                              fx + gap * 0.68, fy - gap * 1.25)
+                    p.curveTo(fx + gap * 0.62, fy - gap * 0.85, fx + gap * 0.22, fy - gap * 0.55,
+                              fx, fy - gap * 0.35)
+                else:
+                    p.moveTo(fx, fy)
+                    p.curveTo(fx + gap * 0.15, fy + gap * 0.25, fx + gap * 0.95, fy + gap * 0.05,
+                              fx + gap * 0.68, fy + gap * 1.25)
+                    p.curveTo(fx + gap * 0.62, fy + gap * 0.85, fx + gap * 0.22, fy + gap * 0.55,
+                              fx, fy + gap * 0.35)
+                p.close()
+                c.drawPath(p, fill=1, stroke=0)
     if number is not None:
         c.setFont('DejaVuSans-Bold', gap * 0.85)
         c.setFillColor(DARKGREEN)
@@ -327,7 +346,7 @@ def draw_chord(c, cx, staff_bottom_y, staff_top_y, gap, pitches, dur='h', clef='
         _letter, _acc, _oct = _parse_pitch(p)
         if _acc:
             draw_accidental(c, cx - stagger.get(i, 0) * gap * 1.05, cy, gap, _acc)
-    filled = dur in ('q', 'e', 'q.', 'e.')
+    filled = dur in ('q', 'e', 'q.', 'e.', 's', 's.')
     for cy in cys:
         draw_notehead(c, cx, cy, gap, filled=filled)
     if dur.endswith('.'):
@@ -350,27 +369,30 @@ def draw_chord(c, cx, staff_bottom_y, staff_top_y, gap, pitches, dur='h', clef='
             # stop it short of the label instead of slicing through the text
             stem_top = min(cys) - gap * 1.05 if label else min(cys) - gap * 3.4
             c.line(sx, max(cys), sx, stem_top)
-        if dur in ('e', 'e.'):
+        if dur in ('e', 'e.', 's', 's.'):
             # chords are never beamed (draw_system has no beam support for
             # 'pitches' events), so an eighth chord always gets its own flag --
             # same curved-bezier flag as draw_note, anchored at the stem tip.
-            fx, fy = sx, stem_top
-            c.setFillColor(INK)
-            p = c.beginPath()
-            if stem_dir == 'up':
-                p.moveTo(fx, fy)
-                p.curveTo(fx + gap * 0.15, fy - gap * 0.25, fx + gap * 0.95, fy - gap * 0.05,
-                          fx + gap * 0.68, fy - gap * 1.25)
-                p.curveTo(fx + gap * 0.62, fy - gap * 0.85, fx + gap * 0.22, fy - gap * 0.55,
-                          fx, fy - gap * 0.35)
-            else:
-                p.moveTo(fx, fy)
-                p.curveTo(fx + gap * 0.15, fy + gap * 0.25, fx + gap * 0.95, fy + gap * 0.05,
-                          fx + gap * 0.68, fy + gap * 1.25)
-                p.curveTo(fx + gap * 0.62, fy + gap * 0.85, fx + gap * 0.22, fy + gap * 0.55,
-                          fx, fy + gap * 0.35)
-            p.close()
-            c.drawPath(p, fill=1, stroke=0)
+            # La semicorchea lleva dos corchetes, igual que en draw_note.
+            for _k in range(2 if dur in ('s', 's.') else 1):
+                _off = _k * gap * 0.9 * (-1 if stem_dir == 'up' else 1)
+                fx, fy = sx, stem_top + _off
+                c.setFillColor(INK)
+                p = c.beginPath()
+                if stem_dir == 'up':
+                    p.moveTo(fx, fy)
+                    p.curveTo(fx + gap * 0.15, fy - gap * 0.25, fx + gap * 0.95, fy - gap * 0.05,
+                              fx + gap * 0.68, fy - gap * 1.25)
+                    p.curveTo(fx + gap * 0.62, fy - gap * 0.85, fx + gap * 0.22, fy - gap * 0.55,
+                              fx, fy - gap * 0.35)
+                else:
+                    p.moveTo(fx, fy)
+                    p.curveTo(fx + gap * 0.15, fy + gap * 0.25, fx + gap * 0.95, fy + gap * 0.05,
+                              fx + gap * 0.68, fy + gap * 1.25)
+                    p.curveTo(fx + gap * 0.62, fy + gap * 0.85, fx + gap * 0.22, fy + gap * 0.55,
+                              fx, fy + gap * 0.35)
+                p.close()
+                c.drawPath(p, fill=1, stroke=0)
     if label:
         c.setFont('DejaVuSans-Bold', gap * 0.85)
         c.setFillColor(DARKGREEN)
@@ -385,13 +407,194 @@ def draw_beam(c, x1, y1, x2, y2, stem_dir='up', gap=9):
     c.setLineWidth(3.2)
     c.line(x1, y1, x2, y2)
 
+
+# Duraciones que entiende el motor, en tiempos de negra. Vive a nivel de modulo
+# para que el auditor use EXACTAMENTE la misma tabla que el dibujante: cuando
+# estaban duplicadas, anadir una figura nueva en un sitio y no en el otro hacia
+# que el auditor contase mal los compases sin avisar.
+DUR_BEATS = {'w': 4.0, 'h.': 3.0, 'h': 2.0, 'q.': 1.5, 'q': 1.0,
+             'e.': 0.75, 'e': 0.5, 's.': 0.375, 's': 0.25}
+
+# Cuantos corchetes/barras lleva cada figura: la corchea una, la semicorchea dos.
+DUR_FLAGS = {'e': 1, 'e.': 1, 's': 2, 's.': 2}
+
+
+def draw_articulacion(c, cx, cy, gap, tipo, stem_dir='up', staff_bottom_y=None, staff_top_y=None):
+    """Staccato, acento y calderon.
+
+       Van al lado CONTRARIO de la plica, que es la convencion de grabado: si la
+       plica sube, la marca va debajo de la cabeza, y al reves. El calderon es la
+       excepcion y va siempre encima del pentagrama."""
+    c.setFillColor(INK)
+    c.setStrokeColor(INK)
+    below = (stem_dir == 'up')
+    d = -1 if below else 1
+    y = cy + d * gap * 1.15
+    if tipo == 'staccato':
+        c.circle(cx, y, gap * 0.16, fill=1, stroke=0)
+    elif tipo == 'acento':
+        c.setLineWidth(1.2)
+        w = gap * 0.55
+        p = c.beginPath()
+        p.moveTo(cx - w, y + gap * 0.28)
+        p.lineTo(cx + w, y)
+        p.lineTo(cx - w, y - gap * 0.28)
+        c.drawPath(p, fill=0, stroke=1)
+    elif tipo == 'tenuto':
+        c.setLineWidth(1.3)
+        c.line(cx - gap * 0.5, y, cx + gap * 0.5, y)
+    elif tipo == 'calderon':
+        top = (staff_top_y if staff_top_y is not None else cy) + gap * 1.6
+        c.setLineWidth(1.2)
+        p = c.beginPath()
+        p.moveTo(cx - gap * 0.9, top)
+        p.curveTo(cx - gap * 0.9, top + gap * 1.15, cx + gap * 0.9, top + gap * 1.15,
+                  cx + gap * 0.9, top)
+        c.drawPath(p, fill=0, stroke=1)
+        c.circle(cx, top + gap * 0.32, gap * 0.15, fill=1, stroke=0)
+
+
+def draw_ligadura(c, x1, y1, x2, y2, gap, arriba=True, tipo='fraseo'):
+    """Ligadura de union (tie) o de fraseo (slur).
+
+       Se dibuja como un arco relleno de grosor variable -- fino en las puntas y
+       grueso en el centro -- que es lo que la distingue de una linea curva a
+       secas. `arriba` decide de que lado se curva."""
+    d = 1 if arriba else -1
+    xm = (x1 + x2) / 2.0
+    ancho = abs(x2 - x1)
+    alto = min(gap * 1.5, max(gap * 0.62, ancho * 0.16)) * d
+    ym = (y1 + y2) / 2.0 + alto
+    grosor = gap * 0.17
+    c.setFillColor(INK)
+    p = c.beginPath()
+    p.moveTo(x1, y1)
+    p.curveTo(x1 + ancho * 0.25, ym, x2 - ancho * 0.25, ym, x2, y2)
+    p.curveTo(x2 - ancho * 0.25, ym - grosor * d, x1 + ancho * 0.25, ym - grosor * d, x1, y1)
+    p.close()
+    c.drawPath(p, fill=1, stroke=0)
+
+
+def draw_matiz(c, cx, y, gap, texto):
+    """Matiz dinamico (p, mp, mf, f, ff, pp, sf...) bajo el pentagrama.
+
+       Va en cursiva-negrita como en cualquier edicion; usamos la serif del
+       proyecto porque DejaVu no trae los glifos de dinamica de SMuFL."""
+    c.setFont('DejaVuSerif-Bold', gap * 1.45)
+    c.setFillColor(INK)
+    c.drawString(cx, y, texto)
+    return stringWidth(texto, 'DejaVuSerif-Bold', gap * 1.45)
+
+
+def draw_regulador(c, x1, x2, y, gap, cerrando=False):
+    """Regulador de crescendo (abre) o diminuendo (cierra)."""
+    c.setStrokeColor(INK)
+    c.setLineWidth(0.9)
+    h = gap * 0.55
+    if not cerrando:
+        c.line(x1, y, x2, y + h)
+        c.line(x1, y, x2, y - h)
+    else:
+        c.line(x1, y + h, x2, y)
+        c.line(x1, y - h, x2, y)
+
+
+def draw_pedal(c, x1, x2, y, gap):
+    """La marca de pedal: 'Ped.' con su linea y el corchete de suelta."""
+    c.setFont('DejaVuSerif-Bold', gap * 1.25)
+    c.setFillColor(INK)
+    c.drawString(x1, y, 'Ped.')
+    w = stringWidth('Ped.', 'DejaVuSerif-Bold', gap * 1.25)
+    c.setStrokeColor(INK)
+    c.setLineWidth(0.9)
+    if x2 > x1 + w + gap * 0.5:
+        yy = y + gap * 0.15
+        c.line(x1 + w + gap * 0.3, yy, x2, yy)
+        c.line(x2, yy, x2, yy + gap * 0.7)
+
+
+def draw_tresillo(c, x1, x2, y, gap, arriba=True):
+    """El 3 del tresillo con su corchete."""
+    xm = (x1 + x2) / 2.0
+    c.setStrokeColor(INK)
+    c.setLineWidth(0.9)
+    d = 1 if arriba else -1
+    gancho = gap * 0.4 * d
+    hueco = gap * 0.55
+    c.line(x1, y, xm - hueco, y)
+    c.line(xm + hueco, y, x2, y)
+    c.line(x1, y, x1, y - gancho)
+    c.line(x2, y, x2, y - gancho)
+    c.setFont('DejaVuSerif-Bold', gap * 1.0)
+    c.setFillColor(INK)
+    c.drawCentredString(xm, y - gap * 0.35, '3')
+
+
+def draw_repeticion(c, x, top_y, bottom_y, gap, abre=True):
+    """Barra de repeticion: doble barra con los dos puntos al lado que toca."""
+    c.setStrokeColor(GRAY)
+    gruesa, fina = 2.6, 1.0
+    if abre:
+        c.setLineWidth(gruesa)
+        c.line(x, top_y, x, bottom_y)
+        c.setLineWidth(fina)
+        c.line(x + 4, top_y, x + 4, bottom_y)
+        px = x + 8
+    else:
+        c.setLineWidth(fina)
+        c.line(x, top_y, x, bottom_y)
+        c.setLineWidth(gruesa)
+        c.line(x + 4, top_y, x + 4, bottom_y)
+        px = x - 4
+    mid = (top_y + bottom_y) / 2.0
+    c.setFillColor(GRAY)
+    c.circle(px, mid + gap * 0.5, gap * 0.16, fill=1, stroke=0)
+    c.circle(px, mid - gap * 0.5, gap * 0.16, fill=1, stroke=0)
+
+
+def draw_casilla(c, x1, x2, y, gap, numero='1'):
+    """Casilla de primera / segunda vez."""
+    c.setStrokeColor(GRAY)
+    c.setLineWidth(0.9)
+    c.line(x1, y, x2, y)
+    c.line(x1, y, x1, y - gap * 0.85)
+    c.setFont('DejaVuSans', gap * 0.85)
+    c.setFillColor(GRAY)
+    c.drawString(x1 + gap * 0.3, y - gap * 0.8, '%s.' % numero)
+
+
+def draw_ottava(c, x1, x2, y, gap):
+    """8va: suena una octava mas alto de lo escrito."""
+    c.setFont('DejaVuSerif-Bold', gap * 1.05)
+    c.setFillColor(INK)
+    c.drawString(x1, y, '8va')
+    w = stringWidth('8va', 'DejaVuSerif-Bold', gap * 1.05)
+    if x2 > x1 + w + gap:
+        c.setStrokeColor(INK)
+        c.setLineWidth(0.7)
+        yy = y + gap * 0.3
+        c.setDash(2, 2)
+        c.line(x1 + w + gap * 0.25, yy, x2, yy)
+        c.setDash()
+        c.line(x2, yy, x2, yy - gap * 0.55)
+
 def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
-                 show_clef=True, show_time=True, key_sig=None, spacing='linear'):
+                 show_clef=True, show_time=True, key_sig=None, spacing='linear',
+                 repetir=None, casilla=None, ottava=False):
     """events: list of dicts with keys:
          pitch (str) OR pitches (list, for a chord)
-         dur: 'w','h','q','e'
+         dur: 'w','h.','h','q.','q','e.','e','s.','s'  (ver DUR_BEATS)
          number (fingering, optional), label (optional)
          beam (optional group id -- consecutive same-id eighth notes get a beam)
+         art: 'staccato' | 'acento' | 'tenuto' | 'calderon' (o lista de varias)
+         lig: True -- liga esta nota con la siguiente que suene
+         tresillo: id de grupo (o True) -- tres notas en el hueco de dos
+         matiz: 'p' | 'mf' | 'f' ... -- se imprime bajo el pentagrama
+         cresc / dim: nº de eventos que abarca el regulador
+         pedal: nº de eventos que abarca la marca de pedal
+       repetir: 'abre' | 'cierra' | 'ambas' -- barras de repeticion
+       casilla: '1' | '2' -- casilla de primera / segunda vez
+       ottava: True -- 8va sobre el sistema
        key_sig: nombre de tonalidad (ej. 'Re mayor') -- si se da, dibuja la
          armadura tras la clave y las notas cuya alteracion coincide con la
          armadura se dibujan SIN el simbolo repetido (ya esta implicito).
@@ -444,9 +647,15 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
         cursor_x += max_level * gap * 1.05
     draw_barline(c, x, top, bot)
 
-    dur_beats = {'w': 4.0, 'h': 2.0, 'q': 1.0, 'e': 0.5, 'q.': 1.5, 'h.': 3.0, 'e.': 0.75}
+    # Una sola tabla de duraciones para todo el motor (ver DUR_BEATS). El
+    # tresillo ocupa 2/3 de lo que dice su figura: tres notas en el hueco de dos.
+    def _beats(e):
+        b = DUR_BEATS[e['dur']]
+        return b * (2.0 / 3.0) if e.get('tresillo') else b
+
+    dur_beats = DUR_BEATS
     beats_per_bar = time_sig[0] * (4.0 / time_sig[1])
-    total_beats = sum(dur_beats[e['dur']] for e in events)
+    total_beats = sum(_beats(e) for e in events)
     raw_avail_w = (x + width - 8) - cursor_x
 
     # Interior bar-line beat positions (strictly before the end of the system)
@@ -471,11 +680,11 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
     # 4x. Sin esto, los pasajes de notas largas quedan vacios y los de notas
     # cortas apelmazados.
     if spacing == 'engraved' and events:
-        ws = [dur_beats[e['dur']] ** 0.6 for e in events]
+        ws = [_beats(e) ** 0.6 for e in events]
         tw = sum(ws) or 1.0
         cum_beat, cum_w = [0.0], [0.0]
         for e, w in zip(events, ws):
-            cum_beat.append(cum_beat[-1] + dur_beats[e['dur']])
+            cum_beat.append(cum_beat[-1] + _beats(e))
             cum_w.append(cum_w[-1] + w)
 
         def _frac(beat_pos):
@@ -497,7 +706,7 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
     beat_pos = 0.0
     for e in events:
         positions.append(x_for_beat(beat_pos))
-        beat_pos += dur_beats[e['dur']]
+        beat_pos += _beats(e)
 
     # A fingering number sits right under/over its note; if the very next
     # note carries an accidental and the two are packed close together (short
@@ -544,11 +753,17 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
 
     # draw notes / chords, collecting beam groups
     beam_groups = {}
+    note_anchors = []   # (x, cy, stem_dir) por evento, para ligaduras y articulaciones
     for i, (px, e) in enumerate(zip(positions, events)):
         if e.get('rest'):
             draw_rest(c, px, bot, top, gap, dur=e['dur'])
+            note_anchors.append(None)
         elif 'pitches' in e:
             draw_chord(c, px, bot, top, gap, [_disp(p) for p in e['pitches']], dur=e['dur'], clef=clef, label=e.get('label'))
+            cys_e = [note_y(bot, gap, p, clef=clef) for p in e['pitches']]
+            avg = sum(cys_e) / len(cys_e)
+            sd_e = 'down' if avg > bot + 2 * gap else 'up'
+            note_anchors.append((px, max(cys_e) if sd_e == 'down' else min(cys_e), sd_e))
         else:
             beam_id = e.get('beam')
             suppress_flag = beam_id is not None
@@ -558,8 +773,9 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
                                     number=e.get('number'), label=e.get('label'),
                                     beam_to=True if suppress_flag else None, clef=clef,
                                     stem_dir=forced_dir, stem_end_y=stem_end)
+            note_anchors.append((px, cy, sd))
             if beam_id is not None:
-                beam_groups.setdefault(beam_id, []).append((px, cy, sd))
+                beam_groups.setdefault(beam_id, []).append((px, cy, sd, e['dur']))
 
     for gid, pts in beam_groups.items():
         if len(pts) >= 2:
@@ -569,6 +785,92 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
             x1 = pts[0][0] + x_off
             x2 = pts[-1][0] + x_off
             draw_beam(c, x1, stem_top, x2, stem_top, gap=gap)
+            # Segunda barra para las semicorcheas del grupo. Si TODO el grupo son
+            # semicorcheas, la barra recorre el grupo entero; si solo lo son
+            # algunas (el clasico negra-con-puntillo + semicorchea), la segunda
+            # barra se dibuja como un trocito colgando de la nota que la lleva.
+            paso = gap * 0.62 * (-1 if sd == 'up' else 1)
+            y2 = stem_top + paso
+            n_flags = [DUR_FLAGS.get(p[3], 1) for p in pts]
+            if min(n_flags) >= 2:
+                draw_beam(c, x1, y2, x2, y2, gap=gap)
+            else:
+                for k, p in enumerate(pts):
+                    if DUR_FLAGS.get(p[3], 1) < 2:
+                        continue
+                    bx = p[0] + x_off
+                    vecino = pts[k - 1] if k > 0 else (pts[k + 1] if k + 1 < len(pts) else None)
+                    if vecino is not None and DUR_FLAGS.get(vecino[3], 1) >= 2:
+                        draw_beam(c, min(bx, vecino[0] + x_off), y2,
+                                  max(bx, vecino[0] + x_off), y2, gap=gap)
+                    else:
+                        # muñón hacia el interior del grupo
+                        d = -1 if k == len(pts) - 1 else 1
+                        draw_beam(c, bx, y2, bx + d * gap * 0.85, y2, gap=gap)
+
+    # --- Ligaduras, articulacion, tresillos y marcas de expresion -----------
+    for i, e in enumerate(events):
+        anc = note_anchors[i]
+        if anc is None:
+            continue
+        px, cy, sd = anc
+        for art in ([e['art']] if isinstance(e.get('art'), str) else (e.get('art') or [])):
+            draw_articulacion(c, px, cy, gap, art, stem_dir=sd,
+                              staff_bottom_y=bot, staff_top_y=top)
+        # 'lig' ata esta nota con la siguiente que suene
+        if e.get('lig'):
+            j = i + 1
+            while j < len(events) and note_anchors[j] is None:
+                j += 1
+            if j < len(events):
+                px2, cy2, _sd2 = note_anchors[j]
+                arriba = (sd == 'down')
+                d = gap * (1.0 if arriba else -1.0)
+                draw_ligadura(c, px + gap * 0.35, cy + d, px2 - gap * 0.35, cy2 + d,
+                              gap, arriba=arriba)
+
+    # tresillos: se agrupan los eventos consecutivos marcados con el mismo id
+    tri = {}
+    for i, e in enumerate(events):
+        t = e.get('tresillo')
+        if t is not None and note_anchors[i] is not None:
+            tri.setdefault(t if t is not True else 'auto', []).append(note_anchors[i])
+    for _tid, ancs in tri.items():
+        if len(ancs) < 2:
+            continue
+        arriba = ancs[0][2] == 'up'
+        ys = [a[1] for a in ancs]
+        ty = (max(ys) + gap * 4.2) if arriba else (min(ys) - gap * 4.2)
+        draw_tresillo(c, ancs[0][0] - gap * 0.4, ancs[-1][0] + gap * 0.4, ty, gap, arriba=arriba)
+
+    # matices y reguladores, bajo el pentagrama
+    y_din = bot - gap * 2.6
+    for i, e in enumerate(events):
+        if note_anchors[i] is None:
+            continue
+        px = note_anchors[i][0]
+        if e.get('matiz'):
+            draw_matiz(c, px - gap * 0.3, y_din, gap, e['matiz'])
+        if e.get('cresc') or e.get('dim'):
+            j = min(i + int(e.get('cresc') or e.get('dim')), len(events) - 1)
+            px2 = positions[j]
+            draw_regulador(c, px + gap * 1.2, px2, y_din + gap * 0.5, gap,
+                           cerrando=bool(e.get('dim')))
+        if e.get('pedal'):
+            j = min(i + int(e['pedal']), len(events) - 1)
+            draw_pedal(c, px, positions[j], bot - gap * 4.4, gap)
+
+    # 8va sobre el sistema
+    if ottava and events:
+        draw_ottava(c, positions[0], positions[-1] + gap, top + gap * 2.2, gap)
+
+    # barras de repeticion y casillas
+    if repetir in ('abre', 'ambas'):
+        draw_repeticion(c, x + 1, top, bot, gap, abre=True)
+    if repetir in ('cierra', 'ambas'):
+        draw_repeticion(c, x + width - 5, top, bot, gap, abre=False)
+    if casilla:
+        draw_casilla(c, x + 6, x + width * 0.45, top + gap * 1.5, gap, numero=str(casilla))
 
     draw_barline(c, x + width, top, bot, final=True)
     return top, bot

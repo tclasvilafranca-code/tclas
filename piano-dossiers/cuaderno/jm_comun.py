@@ -9,12 +9,12 @@
    aquí no se pone `num` en ningún sitio.
 """
 from bloques_comun import reto, cifrado, escalera, a_cuatro_manos
-from arnau_comun import (n, ac, sil, corch, acuerdate, escribir,
+from arnau_comun import (n, ac, sil, corch, semi, acuerdate, escribir,
                          nombres, dibujar, figuras, unir, rodear, colorear,
                          verdadero_falso, ordenar, diferencias, contar,
                          teclado, inventa)
 
-__all__ = ['n', 'ac', 'sil', 'corch', 'acuerdate', 'escribir',
+__all__ = ['n', 'ac', 'sil', 'corch', 'semi', 'acuerdate', 'escribir',
            'nombres', 'dibujar', 'figuras', 'unir', 'rodear', 'colorear',
            'verdadero_falso', 'ordenar', 'diferencias', 'contar', 'teclado',
            'inventa', 'plan', 'metronomo', 'objetivo', 'para_clase',

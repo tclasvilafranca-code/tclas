@@ -7,9 +7,10 @@
    alternan compas a compas, y la forma es un bucle de cuatro compases (los
    cc. 5, 9 y 17 son identicos; los 7 y 11 tambien; los 12 y 20 tambien).
 
-   Lo que NO se escribe: el ritmo. El riff va en corchea con puntillo mas
-   semicorchea y el motor no sabe escribir esas figuras, asi que aqui va en
-   corcheas iguales y se dice en cada bloque que lo cita.
+   El riff va en corchea con puntillo mas semicorchea, y AHORA SE ESCRIBE ASI:
+   el motor ya dibuja la semicorchea. Se da primero en corcheas iguales (para
+   colocar las notas) y despues con su ritmo real, que es lo que le da el
+   balanceo.
 """
 import os
 import sys
@@ -44,6 +45,18 @@ def corch(ps, agrupar=4):
 def riff(baja, alta, veces=1):
     """El riff de la izquierda: la quinta, picoteada. Ritmo simplificado."""
     return corch([baja, alta] * (4 * veces), agrupar=4)
+
+
+def riff_real(baja, alta, veces=1):
+    """El riff CON SU RITMO: corchea con puntillo + semicorchea, que es lo que
+       le da el balanceo. Antes el motor no sabia escribir la semicorchea y este
+       riff iba en corcheas iguales, con un aviso en prosa; ya no hace falta."""
+    out = []
+    for i in range(4 * veces):
+        _B[0] += 1
+        out.append({'pitch': baja, 'dur': 'e.', 'beam': _B[0]})
+        out.append({'pitch': alta, 'dur': 's', 'beam': _B[0]})
+    return out
 
 
 # --- las quintas medidas ---------------------------------------------------
@@ -212,13 +225,15 @@ CANCION = dict(
         reglas=['ARMADURA DE FA', 'EL RITMO REAL LLEVA PUNTILLO', 'EL BRAZO SUELTO'],
         bloques=[
             dict(num=1, titulo='El riff, y lo que hay debajo', clef='bass',
-                 pista='cc. 5–8 medidos · los impares en Si♭ y los pares en Fa · el ritmo, simplificado',
+                 pista='cc. 5–8 medidos · los impares en Si♭ y los pares en Fa · primero liso, luego con su ritmo',
                  sistemas=[
                      dict(cap='a) el riff sobre Si♭ solo, dos compases · sin acentuar ninguna nota, '
                               'el brazo quieto',
                           events=riff(*SIb) + riff(*SIb), bars=2, clef='bass'),
-                     dict(cap='b) y sobre Fa, que es la otra mitad de la canción',
-                          events=riff(*FAq) + riff(*FAq), bars=2, clef='bass', show_time=False),
+                     dict(cap='b) y AHORA con el ritmo de verdad, pasando por Si♭ y por Fa · la '
+                              'primera de cada pareja dura más que la segunda: eso es el balanceo',
+                          events=riff_real(*SIb) + riff_real(*FAq),
+                          bars=2, clef='bass', show_time=False),
                      dict(cap='c) los cuatro compases seguidos, alternando · aquí es donde se nota si '
                               'llegas colocado al cambio',
                           events=riff(*SIb) + riff(*FAq) + riff(*SIb) + riff(*FAq),
@@ -235,11 +250,12 @@ CANCION = dict(
                           bars=5, clef='bass', show_time=False),
                  ]),
             dict(tipo='nota',
-                 etiqueta='POR QUÉ AQUÍ EL RITMO NO ESTÁ ESCRITO',
-                 texto='En tu partitura la primera nota de cada pareja dura un poco más que la segunda: '
-                       'es una corchea con puntillo seguida de una semicorchea, y eso es lo que le da el '
-                       'balanceo. Aquí no lo puedo escribir, así que las verás iguales. Léelas de aquí y '
-                       'mira el ritmo en la página 1: si tocas las dos iguales, el riff se queda plano.'),
+                 etiqueta='EL RITMO DEL RIFF, Y POR QUÉ SE ESTUDIA EN DOS PASOS',
+                 texto='La primera nota de cada pareja dura un poco más que la segunda: es una corchea '
+                       'con puntillo seguida de una semicorchea, y eso es lo que le da el balanceo. En '
+                       'el ejercicio b2 la tienes escrita tal cual. Empieza por el a), con las notas '
+                       'iguales, hasta que la mano vaya sola; y solo entonces pasa al ritmo de verdad. '
+                       'Si tocas las dos iguales todo el rato, el riff se queda plano.'),
             dict(num=2, titulo='La introducción, que sí lleva tres notas', clef='bass',
                  pista='cc. 3–4 medidos · La·Mi·Sol y Sol·Re·La · en la intro las dos manos tocan lo mismo',
                  sistemas=[

@@ -10,13 +10,13 @@
    no hacen falta). Su curva vive en `cancion.CURVA['eduard']`, igual que la
    de Jose Maria.
 """
-from jm_comun import (n, ac, sil, corch, acuerdate, escribir,
+from jm_comun import (n, ac, sil, corch, semi, acuerdate, escribir,
                       nombres, dibujar, figuras, unir, rodear, colorear,
                       verdadero_falso, ordenar, diferencias, contar,
                       teclado, inventa, plan, metronomo, objetivo, para_clase,
                       escalera, cifrado)
 
-__all__ = ['n', 'ac', 'sil', 'corch', 'acuerdate', 'escribir',
+__all__ = ['n', 'ac', 'sil', 'corch', 'semi', 'acuerdate', 'escribir',
            'nombres', 'dibujar', 'figuras', 'unir', 'rodear', 'colorear',
            'verdadero_falso', 'ordenar', 'diferencias', 'contar', 'teclado',
            'inventa', 'plan', 'metronomo', 'objetivo', 'para_clase',

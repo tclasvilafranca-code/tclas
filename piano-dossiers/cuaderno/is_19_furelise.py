@@ -14,17 +14,17 @@
      - La izquierda, cuando entra, toca acordes arpegiados que a veces suben
        por encima de donde está la melodía.
 
-   Nuestro motor de hojas no dibuja semicorcheas, así que aquí no se trabaja
-   la pieza entera: se trabaja SOLO el arranque, reducido a corcheas, para
-   que la mano aprenda el dibujo antes de llevarlo a la velocidad y a la
-   figura real de la partitura, con ayuda de la profesora en clase.
+   El arranque va escrito CON SU FIGURA REAL, la semicorchea: el motor ya la
+   dibuja (antes no, y por eso esta hoja lo reducía todo a corcheas). Se
+   trabaja solo el arranque, primero a la mitad de velocidad en corcheas y
+   después con la figura de verdad, que es como se estudia un pasaje rápido.
 """
 import os
 import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from is_comun import n, ac, sil, corch
+from is_comun import n, ac, sil, corch, semi
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -95,19 +95,23 @@ CANCION = dict(
     piano1=dict(
         titulo='Cómo se estudia',
         esquina='Al piano · el orden de estudio',
-        intro='Solo se trabaja el arranque, y en una versión reducida a corcheas. El objetivo de '
-              'hoy es el dibujo de notas, no la velocidad.',
-        reglas=['SOLO EL DIBUJO, TODAVÍA SIN VELOCIDAD', 'DOS DEDOS QUE SE TURNAN, MANO QUIETA',
-                'ES UN OBJETIVO DE VARIAS SEMANAS'],
+        intro='Solo se trabaja el arranque. Primero a la mitad de velocidad, en corcheas, para '
+              'aprender el dibujo; y después con su figura de verdad, la semicorchea, que es la '
+              'que vas a leer en la partitura.',
+        reglas=['PRIMERO LENTO, DESPUÉS LA FIGURA REAL', 'DOS DEDOS QUE SE TURNAN',
+                'ES DE VARIAS SEMANAS'],
         bloques=[
-            dict(num=1, titulo='El dibujo del arranque, en corcheas',
-                 pista='andamio en La menor · el mismo dibujo, más despacio que en la partitura real',
+            dict(num=1, titulo='El dibujo del arranque: primero lento, luego real',
+                 pista='andamio en La menor · el mismo dibujo escrito en las dos figuras',
                  sistemas=[
-                     dict(cap='a) ida y vuelta entre dos teclas vecinas, una octava más grave',
+                     dict(cap='a) a la mitad de velocidad, en corcheas · ida y vuelta entre dos '
+                              'teclas vecinas',
                           events=corch(['E3', 'D#3', 'E3', 'D#3', 'E3', 'B3']),
                           bars=1),
-                     dict(cap='b) y con el becuadro, que quita el sostenido',
-                          events=corch(['E3', 'Dn3', 'E3', 'Dn3', 'E3', 'B3']),
+                     dict(cap='b) y ahora con SU figura, la semicorchea · el doble de rápidas, '
+                              'como están impresas en tu partitura · ojo al becuadro del segundo Re',
+                          events=semi(['E4', 'D#4', 'E4', 'Dn4']) + semi(['E4', 'B3', 'D4', 'C4'])
+                                 + [n('A3')],
                           bars=1, show_time=False),
                  ]),
             dict(num=2, titulo='La izquierda: el primer acorde arpegiado',
@@ -127,8 +131,9 @@ CANCION = dict(
             dict(num=3, titulo='Las dos juntas, cuando entra la izquierda',
                  pista='andamio · muy despacio, sin buscar la velocidad todavía',
                  sistemas=[
-                     dict(cap='a) el arranque de la derecha, sola',
-                          events=corch(['E4', 'D#4', 'E4', 'D#4', 'E4', 'C5']),
+                     dict(cap='a) el arranque de la derecha, sola, ya en semicorcheas',
+                          events=semi(['E4', 'D#4', 'E4', 'D#4']) + semi(['E4', 'C5', 'B4', 'A4'])
+                                 + [n('G4')],
                           bars=1),
                      dict(cap='b) y con el acorde de la izquierda entrando debajo',
                           events=[ac(('D2', 'A2', 'E4'), 'e'), n('D#4', 'e'), n('E4', 'e'),

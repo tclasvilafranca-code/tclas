@@ -73,8 +73,13 @@ COMPASES = [(4, 4), (3, 4), (2, 4), (6, 8)]
 # Maria, e "intermedio" y "avanzado" eran el mismo numero, asi que Josep y
 # Dilan recibian material identico. Ahora cada alumno tiene la suya.
 CURVA = {
-    # Luisa: mayor, empezo hace nada. Sube despacio y NUNCA llega a las
-    # corcheas seguidas: el encargo fue "poquito pero bien, sencillo".
+    # Luisa: mayor, empezo hace nada; el encargo fue "poquito pero bien,
+    # sencillo". Sube despacio y su techo es la corchea. OJO: la version
+    # anterior de este comentario decia que "NUNCA llega a las corcheas
+    # seguidas" y era falso -- Bela Ciao, Heart and Soul y Fur Elise las traen
+    # impresas en su propia partitura, asi que el material las escribe. Lo que
+    # si se cumple, y es lo que de verdad la separa de un nivel mas alto, es
+    # que nunca corren las DOS manos a la vez (ver niveles.py, escalon 1).
     'luisa':      dict(base=0, cada=10, tope=1),
     # Jose Maria: empezo hace poco pero viene a clase. "Un nivel que no agobie".
     'josé maría': dict(base=0, cada=8,  tope=2),

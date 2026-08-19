@@ -25,7 +25,7 @@ from arnau_comun import (n, ac, sil, corch, acuerdate, escribir,
 from jm_comun import plan, metronomo, objetivo, para_clase
 from bloques_comun import reto, cifrado, escalera, a_cuatro_manos
 
-__all__ = ['n', 'ac', 'sil', 'corch', 'acuerdate', 'escribir',
+__all__ = ['n', 'ac', 'sil', 'corch', 'semi', 'acuerdate', 'escribir',
            'nombres', 'dibujar', 'figuras', 'unir', 'rodear', 'colorear',
            'verdadero_falso', 'ordenar', 'diferencias', 'contar', 'teclado',
            'inventa', 'plan', 'metronomo', 'objetivo', 'para_clase',

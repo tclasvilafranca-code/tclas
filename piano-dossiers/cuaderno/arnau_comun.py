@@ -30,6 +30,23 @@ def corch(ps, agrupar=2):
     return out
 
 
+def semi(ps, agrupar=4, **extra):
+    """Semicorcheas unidas de cuatro en cuatro (un golpe de negra).
+
+       Solo para los escalones 3 y superiores (ver niveles.py): a un alumno de
+       iniciacion no se le escribe una semicorchea, y el auditor de niveles lo
+       comprueba. Se agrupa de cuatro porque es la agrupacion por tiempo en los
+       compases de x/4, que es como se graba de verdad."""
+    out = []
+    for i, p in enumerate(ps):
+        if i % agrupar == 0:
+            _B[0] += 1
+        ev = {'pitch': p, 'dur': 's', 'beam': _B[0]}
+        ev.update(extra)
+        out.append(ev)
+    return out
+
+
 # --------------------------------------------------------------------------
 # Fabricas de bloques de deberes
 #

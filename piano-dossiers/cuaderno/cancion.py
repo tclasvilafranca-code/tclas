@@ -99,6 +99,9 @@ CURVA = {
     # pero el cliente pide "dale caña": sube mas rapido que Jose Maria/Merce
     # (cada 5 en vez de cada 7-8) aunque el techo se queda en 2, no en 3.
     'isaac':      dict(base=0, cada=5,  tope=2),
+    # Eduard: mismo nivel y mismo repertorio que Jose Maria ("un nivel que no
+    # agobie"), asi que la misma curva.
+    'eduard':     dict(base=0, cada=8,  tope=2),
 }
 
 # Por donde entra un alumno que todavia no tiene curva propia.

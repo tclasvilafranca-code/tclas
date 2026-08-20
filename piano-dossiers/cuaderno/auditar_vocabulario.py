@@ -51,7 +51,13 @@ LLENAS = set()
 
 REQUISITO = {
     'semicorchea': ('figuras', 's'),
-    'puntillo_corto': ('figuras', 'e.'),
+    # Pide la SEMICORCHEA, no la corchea con puntillo: el ritmo largo-corto
+    # es 'e.' + 's', y sin la segunda la primera no se puede escribir (0.75
+    # no llena un golpe). Por eso se ata a 's': los escalones 1 y 2, que aun
+    # no la tienen, quedan perdonados —y en sus hojas el mismo gesto va
+    # escrito al doble de lento, que es como se estudia y no se salta su
+    # nivel. Atarlo a 'e.' marcaba como fallo justo lo que estaba bien.
+    'puntillo_corto': ('figuras', 's'),
     'tresillo': ('recursos', 'tresillo'),
     'ligadura': ('recursos', 'lig'),
     'staccato': ('recursos', 'art'),
@@ -272,6 +278,12 @@ def revisar(modulo):
             campo, clave = REQUISITO.get(nombre, (None, None))
             if campo and clave not in nivel[campo]:
                 continue     # su escalon no lo admite: el hueco es correcto
+            # Y ademas: un escalon puede admitir la figura pero no TODAVIA. El
+            # 3 tiene la semicorchea desde la pieza 6, asi que en la 3 el hueco
+            # sigue siendo correcto y la hoja escribe el gesto al doble de lento.
+            desde = (nivel.get('desde') or {}).get(clave)
+            if desde and (cfg.get('num') or 0) < desde:
+                continue
         huecos.append((modulo, nombre, spec['arreglo']))
     huecos += _revisar_dedos(modulo, cfg)
     return huecos

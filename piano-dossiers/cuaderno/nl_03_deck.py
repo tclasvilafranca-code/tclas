@@ -157,7 +157,7 @@ CANCION['piano1']['bloques'] = list(CANCION['piano1']['bloques']) + bloques_extr
     'el Si bemol, antes de que llegue el puntillo',
     desde=5, time_sig=(4, 4)) + [
     bloque_puntillo('Fa mayor', 4, 'F4', 'el puntillo del villancico, en la melodía',
-                    time_sig=(4, 4))]
+                    time_sig=(4, 4), lento=True)]
 
 if __name__ == '__main__':
     print('generado', construir(CANCION))

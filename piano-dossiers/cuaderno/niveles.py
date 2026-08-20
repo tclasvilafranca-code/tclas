@@ -156,8 +156,9 @@ RACHAS_JUSTIFICADAS = {
     'jm_17_acomme': 'la pieza va en semicorcheas continuas; aqui se escriben en '
                     'corcheas al doble de lento, que es como se estudian',
     'ed_17_acomme': 'idem que Jose Maria: misma partitura, mismas semicorcheas',
-    'arnau_09_polly': 'la edicion va en 2/4 y su melodia es de notas cortas casi '
-                      'todo el rato: medido sobre el PDF, no es andamio inventado',
+    'arnau_09_polly': 'su melodia va en corcheas seguidas casi todo el rato: medido '
+                      'sobre el PDF, no es andamio inventado. (Este motivo decia '
+                      '"la edicion va en 2/4" y era falso: esta en 4/4.)',
     'arnau_10_muffet': 'la pieza esta en 6/8 y la corchea ES la unidad del compas: '
                        'seis por compas, agrupadas de tres en tres',
 }

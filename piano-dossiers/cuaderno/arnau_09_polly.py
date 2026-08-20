@@ -6,8 +6,12 @@
 
      - FA MAYOR: un bemol detras de la clave, o sea que todos los Si van en la
        tecla negra. Ya salio en la cancion 5.
-     - LO NUEVO: compas de 2/4, solo DOS golpes por compas, y la melodia va en
-       notas cortas casi todo el rato: hay que decir mas notas en menos sitio.
+     - Compas de **4/4**, cuatro golpes por compas. (Esta ficha dijo durante
+       meses que era 2/4, y era falso: se ha vuelto a mirar el PDF a zoom y
+       detras de la armadura hay un 4 sobre un 4. Un nino contando de dos una
+       cancion que va de cuatro no puede tocarla bien.)
+     - LO NUEVO de verdad: la melodia va en notas cortas casi todo el rato,
+       corcheas seguidas, y hay que decir muchas notas seguidas sin acelerar.
      - La melodia del principio, medida: Sol · La · Sol · Fa · Mi · Do · Do.
      - Encima vienen las letras de los acordes: F, B b, C, C7.
      - La izquierda toca notas sueltas, una o dos por compas.
@@ -28,7 +32,7 @@ FA = 'Fa mayor'
 CANCION = dict(
     alumno='Arnau', num=9, nivel='iniciación', slug='PollyKettle',
     formato='corto', titulo_corto='Polly Put the Kettle On',
-    time_sig=(2, 4), key_sig=FA,
+    time_sig=(4, 4), key_sig=FA,
     partitura=os.path.join(HERE, '..', 'students', 'arnau', 'source', 'ARNAU',
                            'Polly Put the Kettle On.pdf'),
     yt='https://www.youtube.com/results?search_query=polly+put+the+kettle+on+piano',
@@ -40,10 +44,10 @@ CANCION = dict(
                ('Mano dcha.', 'Notas cortas'), ('Mano izq.', 'Notas sueltas'),
                ('Extras', 'Letras encima')],
         armonia=dict(
-            titulo='Compases de dos golpes, y la melodía corriendo',
+            titulo='La melodía corriendo, sin acelerar',
             tarjetas=[
                 ('EL COMPÁS', 'Dos golpes',
-                 'Un-dos, un-dos. Los compases son mucho más cortos que los de antes.'),
+                 'Un-dos-tres-cua. Lo que cambia no es el compás: son las notas, que van seguidas.'),
                 ('LA MELODÍA', 'Notas cortas',
                  'Van de dos en dos, unidas por una barra: caben dos en cada golpe.'),
                 ('EL BEMOL', 'Todos los Si',
@@ -59,13 +63,14 @@ CANCION = dict(
         pie_ritmos='Los dos primeros compases de la melodía, medidos en tu partitura.',
         ritmos=[
             ('LA DERECHA', 'notas cortas de dos en dos, bajando',
-             corch(['G4', 'A4']) + corch(['G4', 'F4']), AZUL, 'treble', FA),
+             corch(['G4', 'A4']) + corch(['G4', 'F4']) + corch(['E4', 'D4']) + corch(['C4', 'D4']),
+             AZUL, 'treble', FA),
             ('Y SE PARA', 'y al final del trozo se queda quieta',
-             [n('E4'), n('C4')], AZUL, 'treble', FA),
+             [n('E4'), n('C4'), n('C4', 'h')], AZUL, 'treble', FA),
         ],
         especial=[
             'Hay UN BEMOL detrás de la clave: todos los Si van en la tecla negra.',
-            'Cada compás lleva solo DOS golpes: un-dos, un-dos.',
+            'Cada compás lleva cuatro golpes: un-dos-tres-cua.',
             'La melodía va casi toda en notas cortas, de dos en dos.',
             'Encima del pentagrama hay letras: son los acordes, no notas.',
             'La izquierda toca notas sueltas, una o dos por compás.',
@@ -81,28 +86,29 @@ CANCION = dict(
                'Inglaterra la cantaban los niños cuando llegaba visita a casa, y hay una segunda parte '
                'que dice «quitadla otra vez, que ya se han ido todos».',
         qr=dict(titulo='Escúchala',
-                texto='Marca solo dos golpes con el pie: un-dos, un-dos. Es más rápido que antes.'),
+                texto='Marca cuatro golpes con el pie: un-dos-tres-cua, sin correr.'),
     ),
 
     taller=dict(),
 
     piano1=dict(
         titulo='Cómo se aprende', esquina='Al piano · tres pasos',
-        intro='Lo nuevo aquí es el compás de dos golpes y que la melodía va en notas cortas. Ninguna '
+        intro='Lo nuevo aquí es que la melodía va en notas cortas seguidas. Ninguna '
               'tecla es nueva. Así que se empieza contando, y las notas vienen detrás.',
-        reglas=['CUENTA UN-Y-DOS-Y', 'LOS SI, EN LA TECLA NEGRA', 'DESPACIO ANTES QUE RÁPIDO'],
+        reglas=['CUENTA UN-Y-DOS-Y-TRES-Y-CUA-Y', 'LOS SI, EN LA TECLA NEGRA',
+                'DESPACIO ANTES QUE RÁPIDO'],
         bloques=[
-            dict(num=1, titulo='Primero, contar de dos en dos',
-                 pista='dos golpes por compás · di “un-y-dos-y” en voz alta mientras tocas',
+            dict(num=1, titulo='Primero, contar los cuatro golpes',
+                 pista='cuatro golpes por compás · di “un-y-dos-y-tres-y-cua-y” mientras tocas',
                  sistemas=[
                      dict(cap='a) una nota en cada golpe · esto es fácil, es solo para coger el paso',
                           events=[n('F4'), n('G4'), n('A4'), n('G4'),
                                   n('F4'), n('E4'), n('F4'), n('F4')],
-                          bars=4),
+                          bars=2),
                      dict(cap='b) y ahora dos notas en cada golpe · la segunda cae en la Y',
                           events=corch(['F4', 'G4']) + corch(['A4', 'G4']) +
-                                 corch(['F4', 'E4']) + corch(['F4', 'G4']) + [n('F4', 'h')],
-                          bars=4, show_time=False),
+                                 corch(['F4', 'E4']) + corch(['F4', 'G4']) + [n('F4', 'w')],
+                          bars=2, show_time=False),
                  ]),
             dict(tipo='nota', etiqueta='QUÉ ES ESO DE LA Y',
                  texto='Cuando en un golpe caben dos notas, la primera va en el número y la segunda '
@@ -114,18 +120,18 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) tal como está escrita, en notas cortas',
                           events=corch(['G4', 'A4']) + corch(['G4', 'F4']) +
-                                 corch(['E4', 'C4']) + corch(['C4', 'E4']) + [n('C4', 'h')],
-                          bars=4),
+                                 corch(['E4', 'C4']) + corch(['C4', 'E4']) + [n('C4', 'w')],
+                          bars=2),
                      dict(cap='b) y las mismas notas en figuras largas, para verlas sin prisa',
                           events=[n('G4'), n('A4'), n('G4'), n('F4'),
                                   n('E4'), n('C4'), n('C4'), n('C4')],
-                          bars=4, show_time=False),
+                          bars=2, show_time=False),
                  ]),
             dict(num=3, titulo='La izquierda, con el bemol', clef='bass',
                  pista='andamio en Fa mayor · notas sueltas, una o dos por compás',
                  sistemas=[
                      dict(cap='a) una nota por compás · las letras de encima te avisan de cuándo cambia',
-                          events=[n('F2', 'h'), n('C3', 'h'), n('F2', 'h'), n('C3', 'h')],
+                          events=[n('F2', 'w'), n('C3', 'w'), n('F2', 'w'), n('C3', 'w')],
                           bars=4, clef='bass'),
                  ]),
             dict(tipo='nota', etiqueta='CÓMO SE SUBE DE VELOCIDAD',
@@ -142,7 +148,7 @@ CANCION = dict(
         dict(
             titulo='Deberes · semana 1',
             esquina='Polly Put the Kettle On · para hacer en casa',
-            intro='Lo nuevo: solo dos golpes por compás, y muchas notas cortas. Hay que decir más '
+            intro='Lo nuevo: muchas notas cortas seguidas. Hay que decir más '
                   'notas en menos sitio.',
             bloques=[
                 crucigrama('CORTAS', [
@@ -158,8 +164,8 @@ CANCION = dict(
                         '¿Cuántas notas hay en total?'],
                        titulo='Cuenta lo que ves',
                        pista='es la melodía del principio, medida en tu partitura'),
-                unir([('El bemol del principio', 'dos golpes en cada compás'),
-                      ('El 2/4 de después de la clave', 'la mitad de una negra'),
+                unir([('El bemol del principio', 'cuatro golpes en cada compás'),
+                      ('El 4/4 de después de la clave', 'la mitad de una negra'),
                       ('Una corchea', 'todos los Si van en la tecla negra'),
                       ('Las letras F, B♭, C de arriba', 'el nombre del acorde que suena')],
                      titulo='Une cada cosa con lo que significa',

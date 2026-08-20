@@ -108,6 +108,62 @@
 > `pista`, `titulo`, `texto`, `cap`); la ficha y las tarjetas describen la
 > edición del alumno y ahí "trae digitación impresa" es un dato medido.
 
+> ## 🔒 NORMA DEL PROYECTO: las dos manos van en su sistema de piano
+>
+> Decisión del cliente. Los bloques de "las dos manos juntas" escribían el
+> acorde de la izquierda dentro del mismo evento que la melodía y lo dibujaban
+> todo en clave de sol: el Do3 colgaba de **seis líneas adicionales** y el Fa2
+> de siete. Eran 144 sistemas, en los diez álbumes. Un pianista no lee eso.
+>
+> Ahora `hoja_piano._partir_manos` corta por el Do central y dibuja sol arriba,
+> fa abajo, unidos por su llave. **Lo que pasa con la duración de la izquierda
+> NO se adivina**: se declara en el sistema con `manos=`.
+>
+> - `manos='dobla'` (lo normal): la izquierda conserva la figura escrita y donde
+>   no toca hay silencio. Es lo correcto cuando las dos manos van a la vez.
+> - `manos='sostiene'`: la izquierda se alarga hasta su siguiente acorde o hasta
+>   el final del compás. Es lo correcto cuando el bajo aguanta bajo una melodía
+>   que corre, y la nota está escrita corta solo porque iba metida en el mismo
+>   acorde que la melodía.
+>
+> Alargar siempre era cómodo y estaba mal: metía blancas con puntillo que no
+> había escrito nadie.
+>
+> **Consecuencia de estructura, y también decisión del cliente:** abrir el
+> pentagrama de fa cuesta ~75 pt por sistema y las hojas ya estaban llenas, así
+> que el bloque de las dos manos se va a una **segunda hoja de "Cómo se
+> estudia"** antes que quitar material medido. La hoja se pagina sola
+> (`hoja_piano._paginar`), se reparte **equilibrando** —no llenando la primera
+> hasta reventar—, el corte puede caer **entre sistemas** con el título repetido
+> y un "(sigue)", y lo que sobra se **justifica** repartiendo el aire entre los
+> ejercicios, con tope de 26–30 pt por hueco. Sin justificar hay que retocar el
+> material pieza a pieza hasta cuadrar el número, que con 88 piezas es un bucle.
+>
+> ### El material de apoyo (`cuaderno/relleno.py`)
+>
+> Escalas, arpegios, giros y cadencias construidos **sobre la tonalidad de la
+> pieza**. No es relleno ni invención: es técnica de toda la vida, y así no se
+> cuela una nota que no pertenece al tono. Reglas que costó aprender:
+>
+> - **La tónica la calcula el tono, no se pasa a mano.** Los rótulos dicen "el
+>   acorde de Do mayor desplegado"; con la nota de partida a mano, basta
+>   equivocarse de grado para que el papel diga una cosa y dibuje otra. Pasó:
+>   un arpegio de Mi menor con el rótulo de Do mayor.
+> - **La variedad viene de otros ejes**: registro, dirección, figura, inversión
+>   del arpegio y disposición de la cadencia (ninguno cambia QUÉ acorde es, así
+>   que el rótulo sigue siendo cierto), más un desplazamiento por alumno.
+> - **Todo lo que sale de ahí va marcado con `tecnica=True`** y los siete
+>   `cruzar_*.py` lo saltan: la escala de Do mayor es la escala de Do mayor, la
+>   tenga un alumno o los siete. Es el mismo caso que una cita literal.
+> - **El número de notas y la figura se calculan por compás** (`cuantas`,
+>   `figura_compas`): una redonda no cabe en un compás de tres y la blanca no
+>   entra un número entero de veces.
+>
+> Y las corcheas seguidas **se barran solas** (`hoja_piano._autobeam`), por
+> golpe y sin cruzar la línea divisoria. Antes solo se barraba lo que llevaba
+> `beam=` a mano: había 74 sistemas imprimiendo dieciséis corcheas seguidas con
+> un corchete cada una.
+
 > ## 🔒 NORMA DEL PROYECTO: la calidad va por delante de la rapidez
 >
 > Decisión del cliente, y manda sobre cualquier otra consideración. Son unos

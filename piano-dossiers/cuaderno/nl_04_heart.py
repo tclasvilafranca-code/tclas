@@ -17,6 +17,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import arpegio, giro, cadencia, escala
 from nl_comun import n, ac, corch
 
 HERE = os.path.dirname(__file__)
@@ -136,7 +137,14 @@ CANCION = dict(
                                   n('G4', 'h'), n('E4', 'h')],
                           bars=2, show_time=False),
                  ]),
-            dict(num=4, titulo='Las dos manos, cuatro compases',
+            dict(num=4, titulo='El acorde de Do, desplegado',
+                 pista='andamio en Do mayor · las mismas notas del bajo, pero una detrás de otra',
+                 sistemas=[
+                     dict(cap='a) sube y baja sin parar en la cima · la mano se abre una vez y se '
+                              'queda abierta',
+                          events=arpegio('Do mayor', 'G3'), bars=2),
+                 ]),
+            dict(num=5, titulo='Las dos manos, cuatro compases',
                  pista='andamio a partir del material medido · despacio, y sin mirarse la izquierda',
                  sistemas=[
                      dict(cap='a) la melodía sobre el bajo con acorde · si la derecha se para cada '
@@ -144,6 +152,25 @@ CANCION = dict(
                           events=[ac(('D3', 'D4')), ac(('F3', 'A3')), n('D4', 'h'),
                                   ac(('B2', 'D4'), 'e'), n('C4', 'e'), ac(('F3', 'A3')), n('B3', 'h')],
                           bars=2),
+                 ]),
+            dict(num=6, titulo='Soltar el dedo que se agarrota',
+                 pista='andamio · el giro de siempre, sin mover la mano de sitio',
+                 sistemas=[
+                     dict(cap='a) alrededor del Mi · si la muñeca se levanta, es que estás '
+                              'empujando en vez de dejar caer',
+                          events=giro('Do mayor', 'E4'), bars=2),
+                     dict(cap='b) y alrededor del Sol, que es el que más trabaja en esta pieza',
+                          events=giro('Do mayor', 'G4'), bars=2, show_time=False),
+                 ]),
+            dict(num=7, titulo='Los cuatro acordes, y la escala que los une',
+                 pista='andamio en Do mayor · la armonía de Heart and Soul es esta y nada más',
+                 sistemas=[
+                     dict(cap='a) I - IV - V - I con la izquierda · apréndetelos de memoria y la '
+                              'pieza se queda en la mitad de trabajo',
+                          events=cadencia('Do mayor', 'C3'), bars=4, clef='bass'),
+                     dict(cap='b) y la escala por encima, para colocar la derecha',
+                          events=escala('Do mayor', 'G4', sentido='baja'),
+                          bars=2, show_time=False),
                  ]),
         ],
     ),

@@ -18,6 +18,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import escala, cadencia, arpegio, giro
 from nl_comun import n, ac, corch
 
 HERE = os.path.dirname(__file__)
@@ -127,7 +128,18 @@ CANCION = dict(
                  texto='La mano se cansa antes de que lo notes, y cuando lo notas ya llevas un rato '
                        'tocando desigual. Lo que se aprende tocando cansado es a tocar cansado: por '
                        'eso el descanso forma parte del ejercicio, no es una pausa fuera de él.'),
-            dict(num=3, titulo='Las dos manos, con la izquierda debajo',
+            dict(num=3, titulo='La escala de Mi menor, para no perder el sostenido',
+                 pista='andamio en Mi menor · un sostenido, el Fa, y vale para toda la pieza',
+                 sistemas=[
+                     dict(cap='a) los siete grados desde Mi · el segundo es Fa sostenido, tecla '
+                              'negra, y va sin dudar',
+                          events=escala('Mi menor', 'E4'), bars=2),
+                     dict(cap='b) y de vuelta · si el Fa te sale natural aquí, es que lo estabas '
+                              'tocando de memoria y no leyendo',
+                          events=escala('Mi menor', 'E5', sentido='baja'),
+                          bars=2, show_time=False),
+                 ]),
+            dict(num=4, titulo='Las dos manos, con la izquierda debajo',
                  pista='andamio en Mi menor · empieza a la mitad de 115 y no subas esta semana',
                  sistemas=[
                      dict(cap='a) el acorde entra en el uno y no se mueve más',
@@ -142,6 +154,23 @@ CANCION = dict(
                                   ac(('D2', 'D4'), 'e'), n('A4', 'e'), n('D5', 'e'), n('A4', 'e'),
                                   n('D4', 'e'), n('A4', 'e'), n('D4', 'e'), n('A4', 'e')],
                           bars=2, key_sig=MIm, show_time=False),
+                 ]),
+            dict(num=5, titulo='Los acordes que aguantan debajo',
+                 pista='andamio en Mi menor · lo que hace la izquierda toda la canción, en cuatro '
+                       'acordes',
+                 sistemas=[
+                     dict(cap='a) i - iv - v - i, una redonda cada uno · el brazo cae una vez y '
+                              'se queda, que es justo lo que pide la pieza',
+                          events=cadencia('Mi menor', 'E2'), bars=4, clef='bass'),
+                 ]),
+            dict(num=6, titulo='El acorde de Mi menor y el giro',
+                 pista='andamio en Mi menor · la mano quieta y los dedos sueltos',
+                 sistemas=[
+                     dict(cap='a) el acorde desplegado, sube y baja',
+                          events=arpegio('Mi menor', 'E4'), bars=2),
+                     dict(cap='b) y el giro alrededor del Si · las cuatro notas del mismo peso, '
+                              'que es el reto entero de esta pieza',
+                          events=giro('Mi menor', 'B4'), bars=2, show_time=False),
                  ]),
         ],
     ),

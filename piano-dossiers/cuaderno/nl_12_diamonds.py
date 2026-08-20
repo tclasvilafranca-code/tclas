@@ -23,6 +23,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import arpegio, giro, escala, cadencia
 from nl_comun import n, ac, sil, corch
 
 HERE = os.path.dirname(__file__)
@@ -133,7 +134,14 @@ CANCION = dict(
                        'hay un segundo golpe. En esta pieza, además, suele caer justo donde termina '
                        'una frase de la letra: cantarla en voz alta ayuda a sentir dónde se sostiene '
                        'y dónde empieza otra vez.'),
-            dict(num=3, titulo='Las dos juntas',
+            dict(num=3, titulo='El acorde de Re, desplegado',
+                 pista='andamio en Re mayor · dos sostenidos, Fa y Do',
+                 sistemas=[
+                     dict(cap='a) sube y baja · el Fa sostenido está dentro del acorde, así que '
+                              'se oye en cuanto fallas',
+                          events=arpegio('Re mayor', 'D4'), bars=2),
+                 ]),
+            dict(num=4, titulo='Las dos juntas',
                  pista='andamio · la izquierda cambia de textura, la derecha sigue con sus ligadas',
                  sistemas=[
                      dict(cap='a) con la redonda sosteniendo bajo la anacrusa',
@@ -146,6 +154,22 @@ CANCION = dict(
                                   ac(('D3', 'F#3', 'A4')), ac(('A2', 'D3', 'C#5')),
                                   ac(('G2', 'B2', 'B4'), 'h')],
                           bars=2, show_time=False),
+                 ]),
+            dict(num=5, titulo='El giro que suelta la mano',
+                 pista='andamio en Re mayor · sin cambiar la mano de sitio',
+                 sistemas=[
+                     dict(cap='a) alrededor del La · las cuatro notas iguales de fuerza, que es lo '
+                              'que aquí no pasa nunca a la primera',
+                          events=giro('Re mayor', 'A4'), bars=2),
+                     dict(cap='b) y alrededor del Fa sostenido · el dedo tiene que ir a la tecla '
+                              'negra sin mirar',
+                          events=giro('Re mayor', 'F#4'), bars=2, show_time=False),
+                 ]),
+            dict(num=6, titulo='La escala de Re y sus acordes',
+                 pista='andamio en Re mayor · dos sostenidos, y los dos aparecen aquí',
+                 sistemas=[
+                     dict(cap='a) la escala entera desde Re · Fa y Do son teclas negras',
+                          events=escala('Re mayor', 'D4'), bars=2),
                  ]),
         ],
     ),

@@ -20,6 +20,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import arpegio, escala, cadencia, giro
 from nl_comun import n, ac, corch
 
 HERE = os.path.dirname(__file__)
@@ -129,7 +130,14 @@ CANCION = dict(
                  texto='Cuando la otra parte lleva el pulso, tú no pones el tuyo: cabes en el suyo. '
                        'Estudiar en casa sin metrónomo enseña una versión propia del tempo que luego '
                        'hay que desaprender. Ponlo desde el primer día.'),
-            dict(num=3, titulo='Las dos manos, con la izquierda sosteniendo',
+            dict(num=3, titulo='El acorde de Sol menor, desplegado',
+                 pista='andamio en Sol menor · las notas del acorde, una detrás de otra',
+                 sistemas=[
+                     dict(cap='a) sube y baja · el tercer grado es Si bemol, y es lo que hace que '
+                              'suene menor',
+                          events=arpegio('Sol menor', 'G3'), bars=2, clef='bass'),
+                 ]),
+            dict(num=4, titulo='Las dos manos, con la izquierda sosteniendo',
                  pista='andamio en Sol menor · tu izquierda no es el motor: el motor es el Piano 2',
                  sistemas=[
                      dict(cap='a) melodía arriba y una nota larga abajo, distinta de la de la clase',
@@ -140,6 +148,22 @@ CANCION = dict(
                           events=[ac(('G2', 'D5')), n('Eb5'), n('D5'), n('C5'),
                                   ac(('D3', 'F#4'), 'h'), n('G4', 'h')],
                           bars=2, key_sig=SOLm, show_time=False),
+                 ]),
+            dict(num=5, titulo='La escala entera, de arriba abajo',
+                 pista='andamio en Sol menor · sin la sensible: esta es la escala natural, la que '
+                       'usa la melodía',
+                 sistemas=[
+                     dict(cap='a) bajando desde el Sol de arriba · dos bemoles, y ninguno se '
+                              'olvida a mitad de camino',
+                          events=escala('Sol menor', 'G5', sentido='baja'), bars=2),
+                     dict(cap='b) y subiendo otra vez · compara: es el mismo camino al revés',
+                          events=escala('Sol menor', 'G4'), bars=2, show_time=False),
+                 ]),
+            dict(num=6, titulo='Los acordes de Sol menor',
+                 pista='andamio en Sol menor · la armonía de la canción, reducida',
+                 sistemas=[
+                     dict(cap='a) i - iv - v - i, una redonda cada uno · los tres llevan Si bemol',
+                          events=cadencia('Sol menor', 'G2'), bars=4, clef='bass'),
                  ]),
         ],
     ),

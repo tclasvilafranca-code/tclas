@@ -19,6 +19,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import escala, cadencia, arpegio, giro
 from nl_comun import n, ac, corch, semi
 
 HERE = os.path.dirname(__file__)
@@ -130,7 +131,17 @@ CANCION = dict(
                  texto='Con cuatro notas por golpe parece que suenan todas igual, y no: la melodía es '
                        'la nota más aguda de cada grupo, y las otras tres son relleno. Toca solo las '
                        'agudas, sin las demás, y verás aparecer la canción.'),
-            dict(num=3, titulo='Las dos manos, con la melodía marcada',
+            dict(num=3, titulo='Las dos escalas, una detrás de otra',
+                 pista='andamio · primero Mi menor y después La menor, que es el cambio del c. 10',
+                 sistemas=[
+                     dict(cap='a) Mi menor, con su Fa sostenido · así suenan los nueve primeros '
+                              'compases',
+                          events=escala('Mi menor', 'B3'), bars=2),
+                     dict(cap='b) y La menor, sin ningún sostenido · el oído tiene que notar el '
+                              'cambio antes de que lo note la mano',
+                          events=escala('La menor', 'A4'), bars=2, show_time=False),
+                 ]),
+            dict(num=4, titulo='Las dos manos, con la melodía marcada',
                  pista='andamio · a la mitad de 69, y con la nota aguda un poco más fuerte',
                  sistemas=[
                      dict(cap='a) el acorde abajo y los grupos arriba, con otro dibujo',
@@ -141,6 +152,21 @@ CANCION = dict(
                           events=[ac(('A2', 'G4'), 'e'), n('C5', 'e'), n('E5', 'e'), n('F4', 'e'),
                                   n('D4', 'e'), n('G4', 'e'), n('C5', 'e'), n('E5', 'e')],
                           bars=2, show_time=False),
+                 ]),
+            dict(num=5, titulo='Los acordes del tono nuevo',
+                 pista='andamio en La menor · la armonía a partir del compás 10',
+                 sistemas=[
+                     dict(cap='a) i - iv - v - i en La menor · ni un sostenido: si te sale el Fa '
+                              'negro, sigues en el tono de antes',
+                          events=cadencia('La menor', 'A2'), bars=4, clef='bass'),
+                 ]),
+            dict(num=6, titulo='Los dos acordes, uno al lado del otro',
+                 pista='andamio · el de antes del compás 10 y el de después, para oír la distancia',
+                 sistemas=[
+                     dict(cap='a) el acorde de Mi menor desplegado · con Fa sostenido dentro',
+                          events=arpegio('Mi menor', 'B3'), bars=2),
+                     dict(cap='b) y el de La menor · sin ningún sostenido, y se nota',
+                          events=arpegio('La menor', 'A4'), bars=2, show_time=False),
                  ]),
         ],
     ),

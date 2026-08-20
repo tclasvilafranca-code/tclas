@@ -16,6 +16,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import escala, cadencia, giro
 from nl_comun import n, ac, corch
 
 HERE = os.path.dirname(__file__)
@@ -121,7 +122,17 @@ CANCION = dict(
                        'hay un segundo golpe. Volver a pulsarla corta el fondo continuo que sostiene '
                        'la melodía por encima. Se toca una vez y se deja vivir hasta que le toque '
                        'cambiar de verdad.'),
-            dict(num=3, titulo='Las dos juntas',
+            dict(num=3, titulo='La escala de Do, para colocar la mano',
+                 pista='andamio en Do mayor · antes de las corcheas, la posición',
+                 sistemas=[
+                     dict(cap='a) los siete grados seguidos y la octava · el pulgar pasa por debajo '
+                              'sin que la muñeca dé un salto',
+                          events=escala('Do mayor', 'C4'), bars=2),
+                     dict(cap='b) y de vuelta abajo · aquí el que pasa por encima es el tercero',
+                          events=escala('Do mayor', 'C5', sentido='baja'),
+                          bars=2, show_time=False),
+                 ]),
+            dict(num=4, titulo='Las dos juntas',
                  pista='andamio · la izquierda no se mueve mientras la derecha corre · despacio',
                  sistemas=[
                      dict(cap='a) la redonda sostiene bajo las corcheas',
@@ -134,6 +145,24 @@ CANCION = dict(
                           events=[ac(('G2', 'B2', 'F4'))] + corch(['G4', 'A4', 'B4', 'A4', 'G4', 'F4'])
                                  + [n('E4')] + corch(['F4', 'G4', 'A4', 'B4', 'A4', 'G4']),
                           bars=2, show_time=False),
+                 ]),
+            dict(num=5, titulo='Los tres acordes que sostienen la canción',
+                 pista='andamio en Do mayor · es la armonía de tu partitura, reducida a lo esencial',
+                 sistemas=[
+                     dict(cap='a) I - IV - V - I, una redonda cada uno · tócalos de memoria antes '
+                              'de mirar la partitura, y luego búscalos en ella',
+                          events=cadencia('Do mayor', 'C3'), bars=4, clef='bass'),
+                 ]),
+            dict(num=6, titulo='Y ahora sin parar entre compás y compás',
+                 pista='andamio en Do mayor · lo que de verdad cuesta en esta pieza es aguantar',
+                 sistemas=[
+                     dict(cap='a) ocho corcheas seguidas, todas del mismo peso · el sitio donde '
+                              'se afloja siempre es la quinta',
+                          events=escala('Do mayor', 'C4', figura='e'), bars=1),
+                     dict(cap='b) y bajando, con el mismo peso · si la última suena más floja, es '
+                              'que has empezado a frenar antes de tiempo',
+                          events=escala('Do mayor', 'C5', sentido='baja', figura='e'),
+                          bars=1, show_time=False),
                  ]),
         ],
     ),

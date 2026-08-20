@@ -534,6 +534,17 @@ def _bloque(c, y, blq, cfg):
 SUELO = 48.0
 
 
+# True mientras se esta MIDIENDO sobre un lienzo de prueba, no dibujando la
+# hoja de verdad. Los escaneres que se enganchan a `draw_system` (los
+# `cruzar_*.py`, que buscan material repetido entre alumnos) tienen que mirarlo
+# y no anotar nada: si no, cada sistema se cuenta dos veces —una al medir y
+# otra al dibujar— y encima con la etiqueta de la hoja anterior, porque al
+# medir todavia no se ha empezado a dibujar esta. De ahi salian doce
+# "coincidencias" del tipo `pieza_anterior/pauta + pieza_actual/piano 1` que no
+# existian en ningun papel.
+MIDIENDO = [False]
+
+
 def _medir(cfg, blq, y):
     """Cuanto baja la y al dibujar este bloque, sin ensuciar nada.
 
@@ -545,7 +556,11 @@ def _medir(cfg, blq, y):
     import copy
     from reportlab.pdfgen.canvas import Canvas
     prueba = Canvas(io.BytesIO(), pagesize=(W, H))
-    return _bloque(prueba, y, copy.deepcopy(blq), cfg)
+    MIDIENDO[0] = True
+    try:
+        return _bloque(prueba, y, copy.deepcopy(blq), cfg)
+    finally:
+        MIDIENDO[0] = False
 
 
 def _combinaciones(seq, k):
@@ -657,10 +672,17 @@ def _paginar(cfg):
             trozos = [alto(limites[k], limites[k + 1]) for k in range(n)]
             if any(t > maximo for t in trozos):
                 continue
-            # todas menos la ultima tienen que llegar al minimo de llenado; la
-            # ultima puede quedarse corta y entonces lo canta el auditor, que
-            # es la senal de que a esa pieza le falta material escrito
-            if any(t < minimo for t in trozos[:-1]):
+            # El minimo no se mide contra el contenido pelado: la hoja se
+            # justifica y puede abrir hasta AIRE_MAX por hueco (ver
+            # `build_piano`). Lo que hay que comprobar es si ESTIRADA llega
+            # abajo. La ultima hoja puede quedarse corta igualmente, y entonces
+            # lo canta el auditor: es la senal de que falta material escrito.
+            corto = False
+            for k in range(n - 1):
+                huecos = limites[k + 1] - limites[k]
+                if trozos[k] + huecos * AIRE_MAX < minimo:
+                    corto = True
+            if corto:
                 continue
             coste = max(trozos) - min(trozos)      # lo mas parejo posible
             if mejor is None or coste < mejor[0]:
@@ -672,7 +694,18 @@ def _paginar(cfg):
         if limites is None:
             continue
         return [rehacer(limites[k], limites[k + 1]) for k in range(n)]
-    return [list(bloques)]
+
+    # Ningun reparto deja TODAS las hojas dentro de la horquilla: a la pieza le
+    # falta material para llenar lo que ocupa. Se reparte llenando sin pasarse
+    # —una hoja corta se puede leer, una desbordada no— y el auditor lo dice con
+    # su "falta material", que es la senal de que hay que escribir mas.
+    limites, acc = [0], 0.0
+    for i in range(N):
+        paso = alto(limites[-1], i + 1)
+        if paso > maximo and i > limites[-1]:
+            limites.append(i)
+    limites.append(N)
+    return [rehacer(limites[k], limites[k + 1]) for k in range(len(limites) - 1)]
 
 
 def _ALTO_CABECERA(cfg):
@@ -743,9 +776,48 @@ def build_piano(c, cfg):
     """Dibuja UNA hoja: los bloques que le tocan a `cfg['bloques']`.
 
        El reparto en hojas lo hace `_paginar` y lo aplica `cancion.py`; aqui se
-       dibuja lo que llegue."""
+       dibuja lo que llegue, JUSTIFICADO: el aire que sobra se reparte entre los
+       ejercicios en vez de quedarse todo junto al final.
+
+       Es lo que hace cualquier metodo impreso y es lo que hacia falta aqui: los
+       bloques miden entre 40 y 310 pt y la horquilla de llenado son 88, asi que
+       casi ninguna pieza cae dentro por si sola. Sin justificar habia que ir
+       retocando el material pieza a pieza hasta cuadrar el numero, que con 88
+       piezas no es trabajo, es un bucle. El tope por hueco existe para que una
+       hoja con poco material no acabe pareciendo un cartel."""
     y = _cabecera(c, cfg)
-    for blq in cfg['bloques']:
-        y = _bloque(c, y, blq, cfg)
+    bloques = cfg['bloques']
+    aire = _aire(cfg, y, bloques)
+    for blq in bloques:
+        y = _bloque(c, y, blq, cfg) - aire
     _pie(c, cfg)
     return y
+
+
+# Donde se quiere que acabe una hoja justificada. El estandar admite de 44 a
+# 132; se apunta al centro para dejar margen a los dos lados.
+OBJETIVO = 88.0
+# Lo mas que se puede abrir un hueco entre ejercicios. Mas que esto ya no
+# parece una hoja llena, parece una hoja con los ejercicios separados a la
+# fuerza, y entonces lo honesto es decir que falta material.
+AIRE_MAX = 26.0
+
+
+def _aire(cfg, y0, bloques):
+    """Cuanto se abre cada hueco para que la hoja acabe donde tiene que acabar."""
+    if not bloques:
+        return 0.0
+    import copy
+    from reportlab.pdfgen.canvas import Canvas
+    prueba = Canvas(io.BytesIO(), pagesize=(W, H))
+    y = y0
+    MIDIENDO[0] = True
+    try:
+        for blq in bloques:
+            y = _bloque(prueba, y, copy.deepcopy(blq), cfg)
+    finally:
+        MIDIENDO[0] = False
+    sobra = y - OBJETIVO
+    if sobra <= 0:
+        return 0.0
+    return min(sobra / len(bloques), AIRE_MAX)

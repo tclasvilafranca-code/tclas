@@ -18,6 +18,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import escala, cadencia, arpegio, giro
 from nl_comun import n, ac, sil, corch
 
 HERE = os.path.dirname(__file__)
@@ -126,7 +127,18 @@ CANCION = dict(
                        'de mirar el principio del pentagrama en cuanto lleva un par de líneas '
                        'leyendo. Marcarlos a lápiz la primera semana no es hacer trampa: es lo que '
                        'hace cualquiera con una tonalidad nueva, y en la tercera semana ya se borra.'),
-            dict(num=3, titulo='La melodía sobre las redondas',
+            dict(num=3, titulo='La escala de Fa, con su Si bemol dentro',
+                 pista='andamio en Fa mayor · el bemol dejará de sorprenderte cuando lo toques '
+                       'veinte veces seguidas',
+                 sistemas=[
+                     dict(cap='a) los siete grados desde Fa · el cuarto es el Si bemol, y va sin '
+                              'pensarlo',
+                          events=escala('Fa mayor', 'F4'), bars=2),
+                     dict(cap='b) y bajando desde arriba · aquí es donde suele escaparse',
+                          events=escala('Fa mayor', 'F5', sentido='baja'),
+                          bars=2, show_time=False),
+                 ]),
+            dict(num=4, titulo='La melodía sobre las redondas',
                  pista='andamio en Fa mayor · cc. 7-19 de tu partitura',
                  sistemas=[
                      dict(cap='a) la izquierda aguanta la redonda entera mientras la derecha se mueve',
@@ -137,6 +149,22 @@ CANCION = dict(
                           events=[n('Bb4'), n('A4'), n('G4'), n('F4'),
                                   n('D4'), n('F4'), n('F4', 'h')],
                           bars=2, key_sig=FA, show_time=False),
+                 ]),
+            dict(num=5, titulo='Los tres acordes de Fa mayor',
+                 pista='andamio en Fa mayor · la armonía de la canción, en lo mínimo',
+                 sistemas=[
+                     dict(cap='a) I - IV - V - I · el de IV lleva el Si bemol: si suena raro, es '
+                              'que has puesto Si natural',
+                          events=cadencia('Fa mayor', 'F2'), bars=4, clef='bass'),
+                 ]),
+            dict(num=6, titulo='El acorde de Fa y el giro sobre el bemol',
+                 pista='andamio en Fa mayor · lo mismo de antes, pero con la mano quieta',
+                 sistemas=[
+                     dict(cap='a) el acorde de Fa desplegado, sube y baja',
+                          events=arpegio('Fa mayor', 'F4'), bars=2),
+                     dict(cap='b) y el giro alrededor del Si bemol · el dedo va a la tecla negra '
+                              'sin mirar, que es de lo que se trata',
+                          events=giro('Fa mayor', 'Bb4'), bars=2, show_time=False),
                  ]),
         ],
     ),

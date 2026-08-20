@@ -62,12 +62,23 @@ seqs, cur = {}, ['?']
 
 
 def patched(c, x, top, w, gap, events, clef='treble', time_sig=(4, 4), show_clef=True,
-            show_time=True, key_sig=None, spacing='linear'):
+            show_time=True, key_sig=None, spacing='linear', **extra):
+    # `**extra` recoge lo que el motor fue ganando despues (repetir, casilla,
+    # ottava...): sin eso, cada marca nueva rompia todos los cruces a la vez.
+    # No anotar las pasadas de MEDICION de `hoja_piano` (la hoja se pagina y se
+    # justifica dibujando antes sobre un lienzo que se tira): contarlas duplica
+    # cada sistema y encima con la etiqueta de la hoja anterior.
+    import hoja_piano
+    if hoja_piano.MIDIENDO[0]:
+        return orig(c, x, top, w, gap, events, clef=clef, time_sig=time_sig,
+                    show_clef=show_clef, show_time=show_time, key_sig=key_sig,
+                    spacing=spacing, **extra)
     k = tuple((e.get('pitch') or tuple(e.get('pitches', [])) or 'R', e['dur']) for e in events)
     if len(k) >= MIN_EVENTOS:
         seqs.setdefault((clef, k), set()).add(cur[0])
     return orig(c, x, top, w, gap, events, clef=clef, time_sig=time_sig,
-                show_clef=show_clef, show_time=show_time, key_sig=key_sig, spacing=spacing)
+                show_clef=show_clef, show_time=show_time, key_sig=key_sig,
+                spacing=spacing, **extra)
 
 
 nt.draw_system = patched

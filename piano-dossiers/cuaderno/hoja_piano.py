@@ -42,7 +42,7 @@ BARS_PER_LINE = 4
 # Una sola tabla de duraciones en todo el proyecto: la del motor. Esta copia
 # local se quedo sin 'e.' y sin las semicorcheas, y una figura nueva reventaba
 # aqui con un KeyError en vez de dibujarse.
-from notation import DUR_BEATS as DUR, beats_de
+from notation import DUR_BEATS as DUR, beats_de, INK
 
 
 def _ej_heading(c, y, num, titulo, pista):
@@ -133,8 +133,134 @@ def _autobeam(events, time_sig):
     return events
 
 
+def _partir_manos(events, time_sig):
+    """Separa un sistema "las dos manos juntas" en sus dos pentagramas.
+
+       El material de estos ejercicios viene escrito en UNA sola lista, con la
+       izquierda metida dentro del mismo acorde que la melodia:
+
+           [ac(('C3','E3','C4'))] + corch(['D4','E4','F4','G4','F4','E4'])
+
+       Dibujado en un solo pentagrama de sol, ese Do3 cuelga de SEIS lineas
+       adicionales. Habia 144 sistemas asi en produccion, uno o dos en cada
+       pieza, siempre en el bloque de las dos manos. Un pianista no lee eso: la
+       izquierda se escribe en clave de fa, en su pentagrama.
+
+       El corte va en el Do central: lo que esta por debajo baja al pentagrama
+       de fa y lo demas se queda arriba. Y la nota de la izquierda se ALARGA
+       hasta el siguiente acorde suyo (o hasta el final del compas), que es lo
+       que dicen los propios rotulos de estos ejercicios ("la redonda sostiene
+       bajo las corcheas") y lo que se toca de verdad: escrita como negra, la
+       izquierda parecia soltar en el segundo golpe."""
+    bpb = time_sig[0] * (4.0 / time_sig[1])
+    arriba, abajo = [], []
+    pos = 0.0
+    pendiente = None          # (evento de fa, en que posicion empezo)
+
+    def cerrar(hasta):
+        if pendiente is None:
+            return
+        ev, ini = pendiente
+        dur = _figura(hasta - ini)
+        if dur:
+            ev['dur'] = dur
+            abajo.append(ev)
+
+    for e in events:
+        b = beats_de(e)
+        ps = e.get('pitches') or ([e['pitch']] if 'pitch' in e else [])
+        graves = [p for p in ps if _es_grave(p)]
+        agudas = [p for p in ps if not _es_grave(p)]
+        if e.get('rest') or not ps:
+            arriba.append(dict(e))
+        else:
+            if agudas:
+                ev = dict(e)
+                ev.pop('pitches', None)
+                if len(agudas) == 1:
+                    ev['pitch'] = agudas[0]
+                else:
+                    ev.pop('pitch', None)
+                    ev['pitches'] = agudas
+                ev.pop('beam', None)
+                arriba.append(ev)
+            else:
+                arriba.append({'rest': True, 'dur': e['dur']})
+            if graves:
+                cerrar(pos)
+                ev = {k: v for k, v in e.items()
+                      if k not in ('pitch', 'pitches', 'beam', 'lig', 'art',
+                                   'matiz', 'cresc', 'dim', 'pedal', 'tresillo')}
+                if len(graves) == 1:
+                    ev['pitch'] = graves[0]
+                else:
+                    ev['pitches'] = graves
+                pendiente = (ev, pos)
+        pos += b
+        if abs(pos % bpb) < 1e-9:       # fin de compas: la izquierda no lo cruza
+            cerrar(pos)
+            pendiente = None
+    cerrar(pos)
+    return arriba, abajo
+
+
+def _es_grave(p):
+    """Por debajo del Do central va al pentagrama de fa."""
+    import re
+    m = re.match(r'^([A-G])([b#]?)(-?\d+)$', str(p))
+    return bool(m) and int(m.group(3)) < 4
+
+
+# Que figura corresponde a un numero de tiempos. Solo las que el motor sabe
+# dibujar: si el hueco no cae en ninguna (un 2.5, por ejemplo) se coge la mayor
+# que quepa, que es preferible a inventar una figura que no existe.
+_FIGURAS = [(4.0, 'w'), (3.0, 'h.'), (2.0, 'h'), (1.5, 'q.'), (1.0, 'q'),
+            (0.75, 'e.'), (0.5, 'e'), (0.375, 's.'), (0.25, 's')]
+
+
+def _figura(beats):
+    for b, d in _FIGURAS:
+        if beats >= b - 1e-9:
+            return d
+    return None
+
+
+# Interruptor del sistema de piano (sol+fa) en los bloques de las dos manos.
+# Ver el comentario de `_pide_dos_pentagramas`.
+DOS_PENTAGRAMAS = [False]
+
+
+def _pide_dos_pentagramas(events, clef):
+    """True si el sistema mete las dos manos en un solo pentagrama de sol.
+
+       Se detecta solo, sin tocar las 144 piezas afectadas: si un acorde lleva
+       a la vez notas por debajo y por encima del Do central, es la izquierda
+       metida dentro del acorde de la derecha y hay que abrir el pentagrama de
+       fa. Un sistema que sea todo grave no entra aqui: ese solo necesita que
+       le cambien la clave, y lo dice el auditor."""
+    # DESACTIVADO a la espera de que el cliente decida la estructura: abrir el
+    # pentagrama de fa anade unos 75 pt por sistema y estas hojas ya estan
+    # llenas (el estandar es acabar entre 44 y 132). Medido sobre el album de
+    # Nel: de 17 piezas, 8 se salen por abajo, la mayoria entre 60 y 80 pt. O
+    # el bloque de las dos manos se va a una segunda hoja de "Como se estudia"
+    # —y entonces cambia el numero de paginas de los diez albumes, que es
+    # decision suya— o hay que quitar material medido, que la norma prohibe.
+    if not DOS_PENTAGRAMAS[0]:
+        return False
+    if clef != 'treble':
+        return False
+    for e in events:
+        ps = e.get('pitches') or []
+        if len(ps) > 1 and any(_es_grave(p) for p in ps) and any(not _es_grave(p) for p in ps):
+            return True
+    return False
+
+
 def _lineas(c, y, events, time_sig, bars_per_line, gap=GAP, show_time=True,
             clef='treble', key_sig=None, ottava=False, repetir=None, casilla=None):
+    if _pide_dos_pentagramas(events, clef):
+        return _lineas_dos_manos(c, y, events, time_sig, bars_per_line, gap,
+                                 show_time, key_sig)
     _autobeam(events, time_sig)
     bpb = time_sig[0] * (4.0 / time_sig[1])
     line_beats = bpb * bars_per_line
@@ -171,6 +297,33 @@ def _lineas(c, y, events, time_sig, bars_per_line, gap=GAP, show_time=True,
         y = bot - (after_system(gap, ln, clef) if last
                    else max(gap * 2.0, after_system(gap, ln, clef) * 0.85))
     return y
+
+
+def _lineas_dos_manos(c, y, events, time_sig, bars_per_line, gap, show_time, key_sig):
+    """Un sistema de piano de verdad: sol arriba, fa abajo, unidos por su llave.
+
+       El material llega en una sola lista con las dos manos mezcladas (ver
+       `_partir_manos`). Se parte, se barra cada mano por su cuenta y se dibujan
+       los dos pentagramas alineados, que es como se lee el piano."""
+    arriba, abajo = _partir_manos(events, time_sig)
+    _autobeam(arriba, time_sig)
+    _autobeam(abajo, time_sig)
+    y -= before_staff(gap, arriba, 'treble')
+    t_top, t_bot = draw_system(c, MARGIN, y, CONTENT_W, gap, arriba, clef='treble',
+                               time_sig=time_sig, show_time=show_time,
+                               key_sig=key_sig, spacing='engraved')
+    # 5.6 gaps entre pentagramas: es lo que necesita la clave de fa mas las
+    # plicas que suben desde el pentagrama de abajo. Con menos se tocan.
+    y2 = t_bot - gap * 5.6
+    b_top, b_bot = draw_system(c, MARGIN, y2, CONTENT_W, gap, abajo, clef='bass',
+                               time_sig=time_sig, show_time=show_time,
+                               key_sig=key_sig, spacing='engraved')
+    # la llave que une las dos manos: sin ella son dos ejercicios sueltos, no
+    # un sistema de piano
+    c.setStrokeColor(INK)
+    c.setLineWidth(1.6)
+    c.line(MARGIN, t_top, MARGIN, b_bot)
+    return b_bot - after_system(gap, abajo, 'bass')
 
 
 def _caption(c, y, texto):

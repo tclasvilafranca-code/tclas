@@ -126,19 +126,19 @@ CANCION = dict(
         ritmos=[
             ('MI', 'dos blancas por compás · el bajo lo dice el cifrado',
              [n('D3', 'h'), n('A2', 'h')], OCRE, 'bass', REm),
-            ('MD', 'corcheas seguidas, casi sin respirar (andamio)',
-             corch(['A4', 'A4', 'Bb4', 'A4', 'G4', 'F4', 'G4', 'A4']), AZUL, 'treble', REm),
+            ('MD', 'semicorcheas: cuatro por golpe (andamio)',
+             [{'rest': True, 'dur': 'q'}, {'pitch': 'A4', 'dur': 's', 'beam': 9700}, {'pitch': 'A4', 'dur': 's', 'beam': 9700}, {'pitch': 'Bb4', 'dur': 's', 'beam': 9700}, {'pitch': 'A4', 'dur': 's', 'beam': 9700}, {'pitch': 'G4', 'dur': 'h'}], AZUL, 'treble', REm),
         ],
         especial=[
             'Armadura de un bemol: todos los Si son ♭. Estamos en Re menor.',
             'El cifrado está impreso encima de cada compás, con el bajo de las inversiones.',
-            'La letra va debajo del pentagrama, sílaba a sílaba: úsala para el fraseo.',
-            'Hay una marca de 8vb sobre la derecha en los cc. 7–8 y en los cc. 15–16.',
-            'Tresillos marcados con un 3 en los cc. 21, 23 y 60.',
+            'La melodía va en SEMICORCHEAS desde el c. 5: cuatro notas dentro de cada golpe.',
+            'La letra va debajo del pentagrama: úsala para el fraseo.',
+            'Marca de 8vb en los cc. 7–8 y 15–16, y tresillos con un 3 en los cc. 21, 23 y 60.',
             'El c. 62 cambia a 5/4 y es el único compás de cinco tiempos de la pieza.',
             'La izquierda va casi siempre en blancas: dos golpes por compás y nada más.',
         ],
-        reto='Aguantar cuatro páginas sin perder el sitio. La derecha lleva corcheas seguidas con letra '
+        reto='Aguantar cuatro páginas sin perder el sitio. La derecha lleva semicorcheas seguidas con letra '
              'y casi sin silencios: es la pieza más larga de tu álbum, y lo que cansa no son las notas, '
              'es no saber por dónde vas.',
         truco='Aprende la canción por el CIFRADO antes de leer una sola nota. Toca el bajo solo, dos '

@@ -99,6 +99,8 @@ CANCION = dict(
              [n('C3', 'w')], OCRE, 'bass', SIb),
             ('MI · página 2', 'la misma armonía, en corcheas (andamio)',
              corch(['Bb2', 'D3', 'F3', 'Bb3']) + corch(['F3', 'D3', 'Bb2', 'D3']), OCRE, 'bass', SIb),
+            ('MD · la melodía', 'donde la letra corre, van SEMICORCHEAS (andamio)',
+             [{'pitch': 'D4', 'dur': 's', 'beam': 9600}, {'pitch': 'Eb4', 'dur': 's', 'beam': 9600}, {'pitch': 'F4', 'dur': 'e', 'beam': 9600}, {'pitch': 'F4', 'dur': 'q.'}, {'pitch': 'D4', 'dur': 'e'}, {'pitch': 'F4', 'dur': 'q'}], AZUL, 'treble', SIb),
         ],
         especial=[
             'Armadura de dos bemoles: Si y Mi son ♭. Estamos en Si♭ mayor.',
@@ -108,6 +110,8 @@ CANCION = dict(
             'Al final pone “D.S. al Fine”: se vuelve al segno y se acaba en el “Fine”.',
             'La izquierda cambia de textura entera al pasar a la página 2.',
             'La letra va debajo del pentagrama, sílaba a sílaba.',
+            'Donde la letra corre ("gun a-gainst his", "trig-ger, now he\u2019s dead") la melodía '
+            'lleva semicorcheas: dos notas dentro de medio golpe.',
         ],
         reto='Hacer varias cosas a la vez y ninguna de oído: contar dos compases irregulares, seguir un '
              'recorrido que salta, leer alteraciones escritas a mano en casi todos los compases y '

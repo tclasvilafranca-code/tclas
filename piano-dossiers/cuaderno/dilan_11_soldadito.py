@@ -21,7 +21,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from relleno import sistemas_extra, bloque_semicorcheas, bloques_extra
+from relleno import sistemas_extra, bloques_extra
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -355,7 +355,24 @@ CANCION['piano1']['bloques'] = list(CANCION['piano1']['bloques']) + bloques_extr
     'Do mayor', 10, 'C4', 'C3',
     'la mano en Do antes de las semicorcheas',
     desde=5, time_sig=(4, 4)) + [
-    bloque_semicorcheas('Do mayor', 4, 'C4', 'las semicorcheas de la melodía', time_sig=(4, 4))]
+    # Antes aqui iba `bloque_semicorcheas`, que escribe una escala generica de
+    # la tonalidad: la figura se veia, pero no sobre SU pieza. La melodia del
+    # Soldadito lleva las semicorcheas donde la letra corre, asi que se cita eso.
+    dict(num=6, titulo='Las semicorcheas de la melodía',
+         pista='andamio en Do mayor sobre el dibujo de la pieza · donde la letra corre, caben '
+               'cuatro notas en un golpe',
+         sistemas=[
+             dict(cap='a) cuatro por golpe, y las cuatro del mismo peso · cuenta “un-do-tres-cua” '
+                      'sin acelerar',
+                  events=[{'pitch': 'C4', 'dur': 's', 'beam': 9800}, {'pitch': 'D4', 'dur': 's', 'beam': 9800}, {'pitch': 'E4', 'dur': 's', 'beam': 9800}, {'pitch': 'F4', 'dur': 's', 'beam': 9800}, {'pitch': 'G4', 'dur': 's', 'beam': 9801}, {'pitch': 'F4', 'dur': 's', 'beam': 9801}, {'pitch': 'E4', 'dur': 's', 'beam': 9801}, {'pitch': 'D4', 'dur': 's', 'beam': 9801}, {'pitch': 'C4', 'dur': 's', 'beam': 9802}, {'pitch': 'D4', 'dur': 's', 'beam': 9802}, {'pitch': 'E4', 'dur': 's', 'beam': 9802}, {'pitch': 'F4', 'dur': 's', 'beam': 9802}, {'pitch': 'G4', 'dur': 's', 'beam': 9803}, {'pitch': 'A4', 'dur': 's', 'beam': 9803}, {'pitch': 'G4', 'dur': 's', 'beam': 9803}, {'pitch': 'F4', 'dur': 's', 'beam': 9803}],
+                  bars=1),
+             dict(cap='b) y con el tresillo justo detrás · aquí es donde se lía: tres en un golpe y '
+                      'cuatro en el siguiente, y el pie no cambia',
+                  events=[{'pitch': q, 'dur': 'e', 'tresillo': 90 + i // 3, 'beam': 7290 + i // 3}
+                          for i, q in enumerate(['E4', 'D4', 'C4', 'D4', 'E4', 'F4'])]
+                         + [{'pitch': 'E4', 'dur': 's', 'beam': 9810}, {'pitch': 'F4', 'dur': 's', 'beam': 9810}, {'pitch': 'G4', 'dur': 's', 'beam': 9810}, {'pitch': 'A4', 'dur': 's', 'beam': 9810}, {'pitch': 'G4', 'dur': 's', 'beam': 9811}, {'pitch': 'F4', 'dur': 's', 'beam': 9811}, {'pitch': 'E4', 'dur': 's', 'beam': 9811}, {'pitch': 'D4', 'dur': 's', 'beam': 9811}],
+                  bars=1, show_time=False),
+         ])]
 
 if __name__ == '__main__':
     print('generado', construir(CANCION))

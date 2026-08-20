@@ -173,12 +173,12 @@ CANCION = dict(
             dict(num=4, titulo='El cruce de manos, aislado',
                  pista='“LH over RH” del c. 4 · las notas del salto son andamio en Sol mayor',
                  sistemas=[
-                     dict(cap='a) primero coloca la izquierda arriba sin tocar nada, cinco veces · '
-                              'después ya toca',
-                          events=[n('G5'), n('D6'), n('B5'), n('G5'),
-                                  n('B5'), n('D6'), n('G5'), n('B5'),
-                                  n('D6', 'w')],
-                          bars=3),
+                     # Igual que en el cuaderno de Dilan: el cruce va en semicorcheas
+                     # y aqui se escribia en negras.
+                     dict(cap='a) la bajada del cruce, con su figura: SEMICORCHEAS · coloca primero la '
+                              'izquierda arriba sin tocar, cinco veces, y después ya toca',
+                          events=[{'pitch': 'G5', 'dur': 's', 'beam': 9520}, {'pitch': 'A5', 'dur': 's', 'beam': 9520}, {'pitch': 'B5', 'dur': 's', 'beam': 9520}, {'pitch': 'D6', 'dur': 's', 'beam': 9520}, {'pitch': 'B5', 'dur': 's', 'beam': 9521}, {'pitch': 'G5', 'dur': 's', 'beam': 9521}, {'pitch': 'D5', 'dur': 's', 'beam': 9521}, {'pitch': 'G5', 'dur': 's', 'beam': 9521}, {'pitch': 'B5', 'dur': 's', 'beam': 9522}, {'pitch': 'D6', 'dur': 's', 'beam': 9522}, {'pitch': 'B5', 'dur': 's', 'beam': 9522}, {'pitch': 'G5', 'dur': 's', 'beam': 9522}, {'pitch': 'D5', 'dur': 's', 'beam': 9523}, {'pitch': 'G5', 'dur': 's', 'beam': 9523}, {'pitch': 'B5', 'dur': 's', 'beam': 9523}, {'pitch': 'D6', 'dur': 's', 'beam': 9523}],
+                          bars=1),
                      dict(cap='b) y lo mismo en notas largas, para colocar el brazo antes de saltar · '
                               'el salto se prepara mirando, no de memoria',
                           events=[n('B5', 'h'), n('G5', 'h'), n('D6', 'h'), n('B5', 'h'),

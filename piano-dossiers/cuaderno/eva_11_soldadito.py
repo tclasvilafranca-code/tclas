@@ -98,12 +98,15 @@ CANCION = dict(
             dict(num=1, titulo='El tresillo, antes que ninguna nota de la pieza',
                  pista='andamio rítmico en Do mayor · tres notas por tiempo, y el pie marcando cuatro',
                  sistemas=[
-                     dict(cap='a) cuenta “un-dos-tres” por cada golpe del pie · lo que no puede pasar '
-                              'es que aceleres al cruzar la barra de compás',
-                          events=corch(['C4', 'D4', 'E4', 'D4', 'C4', 'B3', 'C4', 'D4']) +
-                                 corch(['E4', 'F4', 'G4', 'F4', 'E4', 'D4', 'C4', 'C4']) +
-                                 [n('C4', 'w')],
-                          bars=3),
+                     # Este sistema ENSENABA el tresillo y lo escribia en corcheas.
+                     # El Soldadito lleva los tresillos marcados con un 3 de
+                     # principio a fin —se ven en la primera linea del PDF— y Eva,
+                     # cuyo dosier entra por el tresillo porque es LA dificultad de
+                     # la pieza, no veia ninguno dibujado en todo su cuaderno.
+                     dict(cap='a) así se escribe: TRES notas dentro de un solo golpe, con su 3 encima · '
+                              'di “un-dos-tres” en cada grupo y que las tres duren igual',
+                          events=[{'pitch': 'C4', 'dur': 'e', 'tresillo': 60, 'beam': 7260}, {'pitch': 'D4', 'dur': 'e', 'tresillo': 60, 'beam': 7260}, {'pitch': 'E4', 'dur': 'e', 'tresillo': 60, 'beam': 7260}, {'pitch': 'D4', 'dur': 'e', 'tresillo': 61, 'beam': 7261}, {'pitch': 'C4', 'dur': 'e', 'tresillo': 61, 'beam': 7261}, {'pitch': 'B3', 'dur': 'e', 'tresillo': 61, 'beam': 7261}, {'pitch': 'C4', 'dur': 'e', 'tresillo': 62, 'beam': 7262}, {'pitch': 'D4', 'dur': 'e', 'tresillo': 62, 'beam': 7262}, {'pitch': 'E4', 'dur': 'e', 'tresillo': 62, 'beam': 7262}, {'pitch': 'F4', 'dur': 'e', 'tresillo': 63, 'beam': 7263}, {'pitch': 'E4', 'dur': 'e', 'tresillo': 63, 'beam': 7263}, {'pitch': 'D4', 'dur': 'e', 'tresillo': 63, 'beam': 7263}],
+                          bars=1),
                      dict(cap='b) y ahora lo mismo en notas largas · la mano ya sabe dónde va, así que '
                               'ahora solo escuchas si el pulso se mantiene igual',
                           events=[n('C4', 'h'), n('E4', 'h'), n('G4', 'h'), n('E4', 'h'),
@@ -112,10 +115,8 @@ CANCION = dict(
                           bars=5, show_time=False),
                      dict(cap='c) y con un silencio detrás · el tresillo cuesta el doble cuando hay que '
                               'parar y volver a entrar a tiempo, y en esta canción pasa todo el rato',
-                          events=corch(['C4', 'D4', 'E4', 'F4']) + [{'rest': True, 'dur': 'h'}] +
-                                 corch(['G4', 'F4', 'E4', 'D4']) + [{'rest': True, 'dur': 'h'}] +
-                                 [n('C4', 'w')],
-                          bars=3, show_time=False),
+                          events=[{'pitch': 'C4', 'dur': 'e', 'tresillo': 70, 'beam': 7270}, {'pitch': 'D4', 'dur': 'e', 'tresillo': 70, 'beam': 7270}, {'pitch': 'E4', 'dur': 'e', 'tresillo': 70, 'beam': 7270}, {'rest': True, 'dur': 'q'}, {'pitch': 'G4', 'dur': 'e', 'tresillo': 80, 'beam': 7280}, {'pitch': 'F4', 'dur': 'e', 'tresillo': 80, 'beam': 7280}, {'pitch': 'E4', 'dur': 'e', 'tresillo': 80, 'beam': 7280}, {'rest': True, 'dur': 'q'}],
+                          bars=1, show_time=False),
                  ]),
             dict(tipo='nota',
                  etiqueta='POR QUÉ EL TRESILLO SE APRENDE SIN LA PIEZA',

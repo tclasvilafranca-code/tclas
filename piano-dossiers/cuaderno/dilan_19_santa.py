@@ -278,12 +278,13 @@ CANCION = dict(
             dict(num=4, titulo='El cruce de manos, aislado',
                  pista='“LH over RH” del c. 4 · las notas del salto son andamio en Sol mayor',
                  sistemas=[
-                     dict(cap='a) primero coloca la izquierda arriba sin tocar nada, cinco veces · '
-                              'después ya toca',
-                          events=[n('D6'), n('B5'), n('G5'), n('B5'),
-                                  n('D6'), n('B5'), n('G5'), n('D5'),
-                                  n('G5', 'w')],
-                          bars=3),
+                     # El cruce esta escrito en semicorcheas en su partitura: una
+                     # bajada rapida con la izquierda por encima de la derecha. Antes
+                     # aqui iban negras y el alumno no veia la figura en ningun sitio.
+                     dict(cap='a) la bajada del cruce, con su figura: SEMICORCHEAS · coloca primero la '
+                              'izquierda arriba sin tocar, cinco veces, y después ya toca',
+                          events=[{'pitch': 'D6', 'dur': 's', 'beam': 9500}, {'pitch': 'C6', 'dur': 's', 'beam': 9500}, {'pitch': 'B5', 'dur': 's', 'beam': 9500}, {'pitch': 'A5', 'dur': 's', 'beam': 9500}, {'pitch': 'G5', 'dur': 's', 'beam': 9501}, {'pitch': 'F#5', 'dur': 's', 'beam': 9501}, {'pitch': 'E5', 'dur': 's', 'beam': 9501}, {'pitch': 'D5', 'dur': 's', 'beam': 9501}, {'pitch': 'G5', 'dur': 's', 'beam': 9502}, {'pitch': 'A5', 'dur': 's', 'beam': 9502}, {'pitch': 'B5', 'dur': 's', 'beam': 9502}, {'pitch': 'C6', 'dur': 's', 'beam': 9502}, {'pitch': 'D6', 'dur': 's', 'beam': 9503}, {'pitch': 'B5', 'dur': 's', 'beam': 9503}, {'pitch': 'G5', 'dur': 's', 'beam': 9503}, {'pitch': 'D5', 'dur': 's', 'beam': 9503}],
+                          bars=1),
                      dict(cap='b) y lo mismo en notas largas, para colocar el brazo antes de saltar · '
                               'el salto se prepara mirando, no de memoria',
                           events=[n('D6', 'h'), n('B5', 'h'), n('G5', 'h'), n('D5', 'h'),

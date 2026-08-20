@@ -88,6 +88,49 @@
 > que los eventos realmente DIBUJAN, y lista las piezas donde se habla de algo
 > que no se está escribiendo. Tiene que decir TODO OK antes de entregar.
 >
+> **Y falta la comprobación de al lado, que es la que dejó pasar todo esto
+> durante meses:** el auditor de vocabulario mira que no se HABLE de lo que no
+> se dibuja. No mira que se DIBUJE lo que la partitura trae. Las
+> transcripciones anotan edición, tonalidad, compás, tempo y páginas de cada
+> partitura — **la figura más corta, no**. Sin ese dato nadie podía saber que
+> A comme amour va en semicorcheas de principio a fin y que su dosier, que la
+> pone en el bloque de los retos justo por eso, no dibujaba ninguna.
+>
+> Ahora se mide: `cuaderno/medir_figuras.py` busca sobre el PDF los pares de
+> barras paralelas con que se escribe una semicorchea,
+> `cuaderno/medir_figuras_todas.py` lo pasa por las 86 partituras y deja
+> `figuras_medidas.json`, y **`cuaderno/auditar_figuras.py` cruza lo impreso
+> con lo dibujado en los dos sentidos**. Tiene que decir FIGURAS OK.
+>
+> **Lo que más costó aprender de esa herramienta, y vale para cualquier medida
+> que se haga sobre un PDF:** varias carpetas de Drive traen partituras que no
+> son vectoriales, sino **una foto metida en un PDF**, a veces de 50 o 60 ppi.
+> A esa resolución las dos barras de una semicorchea ocupan menos de dos
+> píxeles, y rasterizar el PDF a 200 dpi no añade información: solo agranda el
+> borrón. La primera versión del detector daba **321 semicorcheas en el Flying
+> Theme**, que va entero en corcheas. Ahora mide la resolución propia del PDF y
+> el espacio de pentagrama en píxeles, y si no llega dice **NO MEDIBLE** en vez
+> de inventarse un número; esas partituras se miran a ojo y lo que se ve se
+> anota en `auditar_figuras.MIRADAS`. **Más vale no saberlo que creer que se
+> sabe.**
+>
+> Otras tres trampas del mismo detector, por si hay que tocarlo: el umbral de
+> tinta **no puede ser fijo** (hay ediciones con el pentagrama en gris claro),
+> las **cabezas de acorde** a distancia de tercera dejan el mismo dibujo que
+> dos barras en una columna de píxeles (se distinguen porque una barra es
+> recta y una cabeza es ovalada), y las **líneas adicionales** son dos rayas
+> paralelas a un espacio exacto (se distinguen por el grosor, que se mide
+> sobre las líneas del propio pentagrama).
+>
+> **Y la regla de oficio que se saca de aplicarlo:** cuando haya que meter una
+> figura que falta, **convertir un sistema que ya existe, no añadir uno**.
+> Añadir un sistema mueve la paginación de la hoja entera y obliga a rellenar
+> con material genérico que no viene a cuento; convertir cuesta cero puntos de
+> hoja y además dice más, porque el alumno ve el mismo gesto que ya conocía con
+> la figura que va a leer. Si hay un bloque de apoyo GENÉRICO sobre esa figura
+> (`relleno.bloque_semicorcheas` y compañía), lo mejor es sustituirlo por la
+> cita de los compases medidos de la propia pieza: mismo coste y mucho mejor.
+>
 > **La digitación es el caso al revés, y también lo audita.** Los números de
 > dedo NO se imprimen nunca (decisión del cliente: los escribe el alumno), así
 > que la ausencia es correcta. Lo que se coló fue la prosa: al quitar los

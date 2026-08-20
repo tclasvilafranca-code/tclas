@@ -14,13 +14,22 @@
        golpe, casi de principio a fin. Es la única pieza del cuaderno que las
        lleva de forma sostenida.
      - El cifrado viene impreso encima: Em, B7…
+
+   LA SEMICORCHEA SE ESCRIBE. Esta hoja decia que "las semicorcheas no se
+   pueden escribir en estas hojas". Eso era verdad antes de que el motor
+   supiera dibujarlas, y dejo de serlo hace tiempo: la pieza esta en el bloque
+   de los retos PRECISAMENTE por las semicorcheas y el alumno no las veia ni
+   una vez. Medido sobre el PDF: 45 pares de barras dobles. El trabajo por
+   grupos de cuatro sigue en corcheas, que es como se estudia un pasaje
+   rapido, y ademas hay un sistema con la figura de verdad.
 """
 import os
 import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from ed_comun import (n, ac, sil, corch, objetivo, plan, diferencias, figuras,
+from relleno import bloques_extra
+from ed_comun import (n, ac, sil, corch, semi, objetivo, plan, diferencias, figuras,
                       acuerdate, cifrado, para_clase)
 
 HERE = os.path.dirname(__file__)
@@ -44,8 +53,8 @@ CANCION = dict(
                ('Empieza', 'Con silencio')],
         titulo_ritmos='Un compás de cada mano',
         pie_ritmos='Andamio en Mi menor: el dibujo es el de tu partitura y las notas exactas están '
-                   'allí. Las semicorcheas no se pueden escribir en estas hojas; aquí van en corcheas '
-                   'y se tocan al doble de lento, que es como hay que estudiarlas.',
+                   'allí. Aquí van escritas en corcheas a propósito, para tocarlas al doble de '
+                   'lento, que es como hay que estudiar un pasaje rápido.',
         armonia=dict(
             titulo='Cuatro notas por golpe: eso es todo el reto',
             tarjetas=[
@@ -102,8 +111,8 @@ CANCION = dict(
         titulo='Cómo se estudia',
         esquina='Al piano · el orden de estudio',
         intro='Todo lo de esta semana va de una sola cosa: que cuatro notas seguidas suenen iguales. '
-              'Los ejercicios de abajo están escritos en corcheas porque estas hojas no llegan a la '
-              'semicorchea, y da igual: al doble de lento es exactamente como hay que trabajarlas.',
+              'Los ejercicios están escritos en corcheas a propósito, al doble de lento, que es como '
+              'se estudia un pasaje rápido. El último los pone con su figura de verdad.',
         reglas=['EN GRUPOS DE CUATRO, Y PARANDO', 'TODAS IGUALES: NI MÁS LARGA NI MÁS FUERTE',
                 'LA IZQUIERDA NO ESTORBA'],
         bloques=[
@@ -136,6 +145,11 @@ CANCION = dict(
                                  corch(['B3', 'C4']) + corch(['D4', 'E4']) +
                                  corch(['B3', 'C4']) + corch(['D4', 'E4']),
                           bars=2, key_sig=MIM),
+                     dict(cap='b) y AHORA con la figura que vas a leer de verdad: la semicorchea · '
+                              'cuatro por golpe, que es como está impresa toda tu partitura',
+                          events=semi(['B3', 'C4', 'D4', 'E4']) + semi(['F#4', 'E4', 'D4', 'C4']) +
+                                 [n('B3'), n('F#4')],
+                          bars=1, key_sig=MIM, show_time=False),
                  ]),
             dict(num=3, titulo='La izquierda, y la entrada del principio', clef='bass',
                  pista='andamio en Mi menor · la izquierda sostiene y no hace nada más',
@@ -155,7 +169,11 @@ CANCION = dict(
                                  corch(['D4', 'C4']) + [n('B3')],
                           bars=2, key_sig=MIM, show_time=False),
                  ]),
-        ],
+            # Al escribir la semicorchea la hoja pasa a dos, y la segunda hay
+            # que llenarla: tecnica de Mi menor, que es la tonalidad de la pieza.
+        ] + bloques_extra('Mi menor', 34, 'E4', 'E2',
+                          'cuatro notas por golpe, y todas del mismo peso',
+                          desde=4, time_sig=(4, 4), mas=True),
     ),
 
     trabajo=[

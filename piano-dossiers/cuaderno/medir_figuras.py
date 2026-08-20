@@ -36,6 +36,12 @@
    5. **La clave, la armadura y el compas** del principio de cada sistema, que
       son trazos gruesos y curvos (la clave de sol sola daba 26 falsos
       positivos en "When the Saints").
+   6. **Las lineas adicionales.** Dos rayas paralelas separadas por un espacio
+      exacto: el mismo dibujo que dos barras, y encima rectas. Se distinguen
+      por el GROSOR — una barra es dos o tres veces mas gruesa que una linea de
+      pentagrama—, asi que el grosor minimo se calcula midiendo las lineas de
+      cada pentagrama en vez de fijarlo a ojo. Sin esto, el estudio de Diabelli
+      salia con veinte semicorcheas y va entero en corcheas.
 
    Contrastado contra las partituras de `medir_figuras_patron.py`, miradas una
    a una a tamano grande.
@@ -121,6 +127,31 @@ def _tramos(col):
     return out
 
 
+def _grosor_linea(a, top, sp):
+    """Grosor tipico de una linea de pentagrama, en pixeles. Se mide sobre las
+       cinco lineas del propio pentagrama: es la referencia contra la que una
+       barra tiene que ser gruesa."""
+    h, w = a.shape
+    medidas = []
+    for k in range(5):
+        y = int(round(top + k * sp))
+        if y < 1 or y >= h - 1:
+            continue
+        for x in range(0, w, max(1, w // 200)):
+            if not a[y, x]:
+                continue
+            i = y
+            while i > 0 and a[i - 1, x]:
+                i -= 1
+            f = y
+            while f < h - 1 and a[f + 1, x]:
+                f += 1
+            g = f - i + 1
+            if g <= 0.35 * sp:          # descartar cabezas, plicas y barras
+                medidas.append(g)
+    return float(np.median(medidas)) if medidas else 1.0
+
+
 def _borde_izquierdo(a, y):
     fila = a[int(y) - 1:int(y) + 2].any(axis=0)
     xs = np.where(fila)[0]
@@ -144,7 +175,10 @@ def en_pagina(a):
             continue
         y0, y1 = int(max(0, top - 4 * sp)), int(min(h, bot + 4 * sp))
         banda = a[y0:y1]
-        gmin, gmax = GROSOR_MIN * sp, GROSOR_MAX * sp
+        # Una barra tiene que ser claramente mas gruesa que una linea de
+        # pentagrama; si no, las lineas adicionales cuelan como barras dobles.
+        gmin = max(GROSOR_MIN * sp, 1.8 * _grosor_linea(a, top, sp))
+        gmax = GROSOR_MAX * sp
         dmin, dmax = SEPARA_MIN * sp, SEPARA_MAX * sp
         x_ini = _borde_izquierdo(a, top) + int(SALTO_CLAVE * sp)
         buenas = np.zeros(w, dtype=bool)

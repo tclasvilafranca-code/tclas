@@ -134,6 +134,12 @@ EXCEPCIONES = {
     # larga-corta. Es su partitura, así que se escribe. Comprobado a zoom sobre
     # el PDF: la última nota de ese grupo lleva una barra más que las otras.
     ('me_26_furelise', 's'): 'el c. 20 de su edición lleva una semicorchea impresa',
+    # A comme amour va en semicorcheas de principio a fin (45 pares de barras
+    # dobles medidos sobre el PDF) y esta en el bloque de los retos justo por
+    # eso. Escribirlas en corcheas "porque el motor no llega" era la excusa
+    # vieja; el motor llega, y la partitura es la suya.
+    ('jm_17_acomme', 's'): 'su partitura va en semicorcheas continuas, medidas sobre el PDF',
+    ('ed_17_acomme', 's'): 'la misma partitura de José María, con las mismas semicorcheas',
 }
 
 # Rachas de notas cortas por encima del tope del escalon que SI se aceptan,

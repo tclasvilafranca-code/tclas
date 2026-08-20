@@ -148,7 +148,7 @@ CANCION = dict(
                                   ac(('G2', 'G4')), n('F4'), n('E4'), n('C4')],
                           bars=2, show_time=False),
                  ]),
-        ] + bloques_extra('Do mayor', 26, 'C4', 'C3',
+        ] + bloques_extra('Do mayor', 51, 'C4', 'C3',
                           'el acorde de la izquierda cae una vez y se queda',
                           desde=4, time_sig=(4, 4)),
     ),

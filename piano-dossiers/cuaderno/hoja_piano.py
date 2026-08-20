@@ -72,8 +72,70 @@ def _ej_heading(c, y, num, titulo, pista):
     return y - 3
 
 
+# Contador de grupos de barrado. Los ids tienen que ser unicos DENTRO de un
+# sistema; se lleva global y creciente para no chocar nunca con los `beam=` que
+# algunas piezas ponen a mano.
+_BEAM_AUTO = [9000]
+
+
+def _autobeam(events, time_sig):
+    """Barra las corcheas (y semicorcheas) seguidas, agrupando por golpe.
+
+       Hasta ahora `draw_system` solo barraba lo que llevaba `beam=` escrito a
+       mano, y el material de las hojas "al piano" casi nunca lo lleva: en
+       produccion habia 74 sistemas imprimiendo corcheas seguidas con UN
+       CORCHETE CADA UNA. Dieciseis seguidas en el Lovely de Josep. Ninguna
+       edicion escribe eso —la corchea suelta lleva corchete, la seguida va
+       barrada—, asi que el alumno miraba un pentagrama que no se parecia al
+       suyo. Es la misma regla que el generador de lectura ya cumplia.
+
+       Se agrupa POR GOLPE y sin cruzar la linea divisoria, que es como se
+       barra de verdad: en 6/8 de tres en tres (la unidad es la negra con
+       puntillo) y en los compases de negra, de dos en dos (o cuatro
+       semicorcheas). Un silencio, una figura larga o el final del compas
+       cierran el grupo.
+
+       No toca lo que ya trae `beam=` a mano ni los acordes (el motor no sabe
+       barrar acordes), y un grupo de uno se queda con su corchete, que es lo
+       correcto."""
+    corta = ('e', 'e.', 's', 's.')
+    unidad = 1.5 if (time_sig[1] == 8 and time_sig[0] % 3 == 0) else 1.0
+    bpb = time_sig[0] * (4.0 / time_sig[1])
+    pos = 0.0            # posicion dentro del compas, en negras
+    grupo = []
+
+    def cerrar():
+        if len(grupo) >= 2:
+            _BEAM_AUTO[0] += 1
+            for ev in grupo:
+                ev['beam'] = _BEAM_AUTO[0]
+        del grupo[:]
+
+    for e in events:
+        dur = e.get('dur')
+        barrable = (dur in corta and not e.get('rest') and 'pitch' in e
+                    and e.get('beam') is None and not e.get('tresillo'))
+        if barrable:
+            # el golpe al que pertenece esta nota; si cambia, el grupo anterior
+            # se cierra aunque las figuras sigan siendo cortas
+            if grupo and int(pos / unidad + 1e-9) != int(grupo[-1]['_golpe'] + 1e-9):
+                cerrar()
+            e['_golpe'] = pos / unidad
+            grupo.append(e)
+        else:
+            cerrar()
+        pos = (pos + beats_de(e)) % bpb
+        if abs(pos) < 1e-9:          # cambio de compas: la barra no lo cruza
+            cerrar()
+    cerrar()
+    for e in events:
+        e.pop('_golpe', None)
+    return events
+
+
 def _lineas(c, y, events, time_sig, bars_per_line, gap=GAP, show_time=True,
-            clef='treble', key_sig=None):
+            clef='treble', key_sig=None, ottava=False, repetir=None, casilla=None):
+    _autobeam(events, time_sig)
     bpb = time_sig[0] * (4.0 / time_sig[1])
     line_beats = bpb * bars_per_line
     lines, cur, acc = [], [], 0.0
@@ -85,10 +147,23 @@ def _lineas(c, y, events, time_sig, bars_per_line, gap=GAP, show_time=True,
     if cur:
         lines.append(cur)
     for i, ln in enumerate(lines):
-        y -= before_staff(gap, ln, clef)
+        # El 8va y la casilla van SOLO en la primera linea del sistema y la
+        # barra que cierra la repeticion SOLO en la ultima: si se repartieran
+        # por todas, un ejercicio de tres lineas saldria con tres 8va abiertos
+        # y tres finales de repeticion, que en una edicion no significa nada.
+        primera, ultima = i == 0, i == len(lines) - 1
+        y -= before_staff(gap, ln, clef, ottava=bool(ottava) and primera,
+                          casilla=casilla if primera else None)
+        rep = None
+        if repetir in ('abre', 'ambas') and primera:
+            rep = 'abre'
+        if repetir in ('cierra', 'ambas') and ultima:
+            rep = 'ambas' if rep == 'abre' else 'cierra'
         top, bot = draw_system(c, MARGIN, y, CONTENT_W, gap, ln, clef=clef,
                                time_sig=time_sig, show_time=(i == 0 and show_time),
-                               key_sig=key_sig, spacing='engraved')
+                               key_sig=key_sig, spacing='engraved',
+                               ottava=bool(ottava) and primera,
+                               repetir=rep, casilla=casilla if primera else None)
         # entre lineas hay que reservar tambien el sitio de las plicas y
         # barras que cuelgan: con un hueco fijo de 2*gap, un compas de
         # corcheas con la barra abajo se mete dentro del pentagrama siguiente
@@ -294,7 +369,10 @@ def build_piano(c, cfg):
                             gap=s.get('gap', cfg.get('gap', GAP)),
                             show_time=s.get('show_time', True),
                             clef=s.get('clef', 'treble'),
-                            key_sig=s.get('key_sig', cfg.get('key_sig')))
+                            key_sig=s.get('key_sig', cfg.get('key_sig')),
+                            ottava=s.get('ottava', False),
+                            repetir=s.get('repetir'),
+                            casilla=s.get('casilla'))
             y -= blq.get('extra_gap', 3)
         elif tipo == 'nota':
             y = nota_clave(c, y, blq['texto'], blq.get('etiqueta', 'LA CLAVE DE TODO'))

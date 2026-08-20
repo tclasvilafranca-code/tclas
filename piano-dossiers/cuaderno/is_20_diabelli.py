@@ -59,8 +59,8 @@ CANCION = dict(
                  'Tu parte entera va en clave de sol, arriba y abajo, con dibujos parecidos en las '
                  'dos manos: no hay una que sostenga y otra que corra.'),
                 ('CORCHEAS Y SILENCIOS', 'Staccato',
-                 'El dibujo se repite: una corchea corta, un hueco, otra corchea. Nada se sostiene '
-                 'ni se liga por defecto.'),
+                 'El dibujo que más se repite: una corchea corta, un hueco, otra corchea. Pero no '
+                 'es lo único: también hay pasajes ligados de dos en dos, y acentos (>).'),
                 ('LA MÁS EXIGENTE', 'De toda tu carpeta',
                  'Cierra el álbum a propósito, igual que otros compañeros cierran el suyo con la '
                  'pieza más difícil que tienen.'),
@@ -102,55 +102,73 @@ CANCION = dict(
     piano1=dict(
         titulo='Cómo se estudia',
         esquina='Al piano · el orden de estudio',
-        intro='El reto final del álbum. El staccato con silencio real es lo nuevo: cada nota se '
-              'suelta antes de que llegue la siguiente, en las dos manos por igual.',
+        intro='El reto final del álbum. Lo nuevo es el staccato con silencio real: cada nota se '
+              'suelta antes de que llegue la siguiente.',
         reglas=['LA CORCHEA Y EL SILENCIO DURAN LO MISMO', 'LAS DOS MANOS EN CLAVE DE SOL',
                 'EL 8va CAMBIA TODO UN COMPÁS ENTERO'],
         bloques=[
             dict(num=1, titulo='El dibujo de corcheas con silencio, aislado',
-                 pista='andamio en Do mayor · el mismo tipo de patrón que trae tu partitura',
+                 pista='andamio en Do mayor · el patrón de tu partitura, con su 8va',
                  sistemas=[
-                     dict(cap='a) subiendo con un hueco detrás de cada nota',
+                     dict(cap='a) un hueco detrás de cada nota · el 8va manda: suena una octava '
+                              'más arriba de lo que lees',
                           events=[n('C5', 'e'), sil('e'), n('D5', 'e'), sil('e'),
                                   n('E5', 'e'), sil('e'), n('F5', 'e'), sil('e')],
-                          ligar=True,
                           staccato=True,
+                          ottava=True,
                           bars=4),
-                     dict(cap='b) y bajando, con el mismo hueco',
+                     dict(cap='b) bajando, con el mismo hueco · el acento (>) es de los tuyos',
                           events=[n('G5', 'e'), sil('e'), n('F5', 'e'), sil('e'),
                                   n('E5', 'e'), sil('e'), n('D5', 'e'), sil('e')],
+                          staccato=True,
                           acento=True,
                           bars=4, show_time=False),
                  ]),
-            dict(num=2, titulo='La izquierda: el mismo dibujo, en su registro',
-                 pista='andamio · las dos manos comparten el mismo tipo de patrón',
+            dict(num=2, titulo='La izquierda, que aquí también va en clave de sol',
+                 pista='andamio · las dos manos comparten patrón, y las dos en clave de sol',
                  sistemas=[
-                     dict(cap='a) subiendo, con el hueco de silencio',
+                     dict(cap='a) subiendo, con el hueco · misma clave, solo que más grave',
                           events=[n('C4', 'e'), sil('e'), n('D4', 'e'), sil('e'),
                                   n('E4', 'e'), sil('e'), n('F4', 'e'), sil('e')],
-                          calderon=True,
-                          bars=4, clef='bass'),
-                     dict(cap='b) y bajando',
-                          events=[n('G4', 'e'), sil('e'), n('F4', 'e'), sil('e'),
-                                  n('E4', 'e'), sil('e'), n('D4', 'e'), sil('e')],
-                          bars=4, clef='bass', show_time=False),
+                          staccato=True,
+                          bars=4),
+                     dict(cap='b) ligadas de dos en dos, el otro dibujo de tu partitura',
+                          # la ligadura va pareja a pareja (lig=1 abarca la nota
+                          # siguiente): con `ligar=2` en el sistema salia UNA
+                          # sola ligadura larga al principio y el rotulo decia
+                          # "de dos en dos", que es justo lo que no puede pasar
+                          # y barradas de dos en dos: en 2/4 el golpe es la
+                          # negra, o sea dos corcheas. Sin `beam` salian ocho
+                          # plicas sueltas con su corchete, que en una edicion
+                          # solo se escribe asi cuando la corchea va sola.
+                          events=[dict(n('G4', 'e'), lig=1, beam=1), dict(n('F4', 'e'), beam=1),
+                                  dict(n('E4', 'e'), lig=1, beam=2), dict(n('D4', 'e'), beam=2),
+                                  dict(n('C4', 'e'), lig=1, beam=3), dict(n('D4', 'e'), beam=3),
+                                  dict(n('E4', 'e'), lig=1, beam=4), dict(n('F4', 'e'), beam=4),
+                                  n('G4', 'h')],
+                          bars=4, show_time=False),
                  ]),
             dict(tipo='nota',
                  etiqueta='QUÉ QUIERE DECIR EL 8va',
                  texto='La raya de puntos que sigue a "8va" marca hasta dónde llega su efecto: todo '
                        'lo que está debajo de esa raya suena una octava más agudo de lo que está '
                        'escrito en el papel. No cambia ninguna nota ni ningún dedo: cambia solo '
-                       'dónde suena, y hay que recordarlo mientras dura la raya.'),
-            dict(num=3, titulo='Las dos manos juntas, en staccato',
+                       'dónde suena, y hay que recordarlo mientras dura la raya. En el ejercicio '
+                       '1a lo tienes dibujado igual que en tu partitura.'),
+            dict(num=3, titulo='Las dos manos juntas, y el final',
                  pista='andamio · las dos sueltan la nota exactamente igual de rápido · despacio',
                  sistemas=[
-                     dict(cap='a) subiendo juntas, con el mismo hueco en las dos manos',
+                     dict(cap='a) juntas · las barras de los extremos son tu repetición del c. 15',
                           events=[ac(('C4', 'C5'), 'e'), sil('e'), ac(('D4', 'D5'), 'e'), sil('e'),
                                   ac(('E4', 'E5'), 'e'), sil('e'), ac(('F4', 'F5'), 'e'), sil('e')],
+                          staccato=True,
+                          repetir='ambas',
                           bars=4),
-                     dict(cap='b) y bajando, con la misma separación',
+                     dict(cap='b) el final: el acorde con calderón, aguantado hasta la señal',
                           events=[ac(('G4', 'G5'), 'e'), sil('e'), ac(('F4', 'F5'), 'e'), sil('e'),
-                                  ac(('E4', 'E5'), 'e'), sil('e'), ac(('D4', 'D5'), 'e'), sil('e')],
+                                  ac(('E4', 'E5'), 'e'), sil('e'), ac(('D4', 'D5'), 'e'), sil('e'),
+                                  ac(('C4', 'E4', 'G4', 'C5'), 'h')],
+                          calderon=True,
                           bars=4, show_time=False),
                  ]),
         ],

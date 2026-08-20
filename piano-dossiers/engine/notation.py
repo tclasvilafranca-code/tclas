@@ -579,6 +579,27 @@ def draw_casilla(c, x1, x2, y, gap, numero='1'):
     c.drawString(x1 + gap * 0.3, y - gap * 0.8, '%s.' % numero)
 
 
+def ottava_y(gap, events, clef='treble'):
+    """A que altura sobre la LINEA SUPERIOR va la base del "8va".
+
+       Vive aqui y no en el layout porque la usan los dos: `draw_system` para
+       dibujarlo y `before_staff` para reservarle el hueco. Si cada uno usara
+       su propio numero, el 8va acabaria pisando el rotulo del sistema (que es
+       justo lo que pasaba)."""
+    top_line = 4 * gap
+    alto = top_line
+    for e in events:
+        ps = e.get('pitches') or ([e['pitch']] if 'pitch' in e else [])
+        if not ps:
+            continue
+        cys = [note_y(0, gap, p, clef=clef) for p in ps]
+        alto = max(alto, max(cys))
+        # la plica sube desde la nota mas aguda cuando el grupo esta bajo
+        if e.get('dur') != 'w' and sum(cys) / len(cys) <= 2 * gap:
+            alto = max(alto, max(cys) + gap * 3.4)
+    return (alto - top_line) + gap * 0.5
+
+
 def draw_ottava(c, x1, x2, y, gap):
     """8va: suena una octava mas alto de lo escrito."""
     c.setFont('DejaVuSerif-Bold', gap * 1.05)
@@ -881,9 +902,17 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
             j = min(i + int(e['pedal']), len(events) - 1)
             draw_pedal(c, px, positions[j], bot - gap * 4.4, gap)
 
-    # 8va sobre el sistema
+    # 8va sobre el sistema. La altura NO es fija: se apoya sobre la tinta que
+    # de verdad hay en este sistema (cabezas fuera del pentagrama, plicas hacia
+    # arriba, barras), con un margen de medio espacio. Con la altura fija de
+    # 2.2 gaps que tenia antes, un sistema de notas graves dejaba un hueco
+    # enorme y otro de notas agudas se le montaba encima; y como el hueco que
+    # reserva `page_layout_common.before_staff` tiene que ser el mismo numero,
+    # la version fija obligaba a reservar siempre el peor caso y una hoja llena
+    # se salia por abajo. `ottava_y` calcula lo mismo en los dos sitios.
     if ottava and events:
-        draw_ottava(c, positions[0], positions[-1] + gap, top + gap * 2.2, gap)
+        draw_ottava(c, positions[0], positions[-1] + gap,
+                    top + ottava_y(gap, events, clef), gap)
 
     # barras de repeticion y casillas
     if repetir in ('abre', 'ambas'):

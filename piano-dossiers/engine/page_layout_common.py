@@ -99,7 +99,7 @@ def _alcance(gap, e, clef):
     return alto, bajo, plica_alto, plica_bajo, acc
 
 
-def before_staff(gap, events=None, clef='treble'):
+def before_staff(gap, events=None, clef='treble', ottava=False, casilla=None):
     """Vertical drop from a caption's baseline to the next staff's top line.
        If a note in `events` sits high enough to need ledger lines above the
        staff -- o si su plica sube por encima -- the default clearance isn't
@@ -132,6 +132,16 @@ def before_staff(gap, events=None, clef='treble'):
             if alc is not None:
                 alto = max(alto, alc[0])
         extra = max(extra, (alto - top_line) + gap * 5.4)
+    # El 8va se apoya sobre la tinta del sistema (`notation.ottava_y`, que es
+    # la misma cuenta que usa el motor al dibujarlo) y su cuerpo de letra mide
+    # 1.05*gap, del que sobresale ~0.8 por encima de la base. Medido
+    # dibujandolo, no estimado: con el hueco base de 1.5*gap el "8va" se
+    # imprimia encima del rotulo del sistema.
+    if ottava:
+        from notation import ottava_y
+        extra = max(extra, ottava_y(gap, events, clef) + gap * 0.85)
+    if casilla:
+        extra = max(extra, gap * 2.4)
     return extra
 
 

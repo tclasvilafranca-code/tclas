@@ -89,9 +89,8 @@ CANCION = dict(
     piano1=dict(
         titulo='Cómo se estudia',
         esquina='Al piano · el orden de estudio',
-        intro='La digitación manda esta semana. Los números están en tu partitura, no en estas '
-              'hojas: cópialos aquí encima y después estudia mano a mano siguiéndolos siempre, '
-              'antes de juntar las dos.',
+        intro='Los números de dedo están en tu partitura, no aquí: cópialos encima y luego '
+              'estudia mano a mano siguiéndolos siempre.',
         reglas=['SIGUE LOS DEDOS DE TU PARTITURA', 'LAS DOS NOTAS DE LA IZQUIERDA, JUNTAS',
                 'LIGADAS: NO SE TOCAN DOS VECES'],
         bloques=[
@@ -107,8 +106,7 @@ CANCION = dict(
                           bars=2, clef='bass', show_time=False),
                  ]),
             dict(num=2, titulo='La derecha: corcheas con dedos fijos',
-                 pista='andamio · escribe encima el dedo que vas a usar, copiándolo de tu '
-                       'partitura, y dilo en voz alta antes de tocar',
+                 pista='andamio · copia el dedo de tu partitura y dilo en voz alta al tocar',
                  sistemas=[
                      dict(cap='a) subiendo y bajando por corcheas',
                           events=corch(['C4', 'D4', 'E4', 'F4']) + corch(['G4', 'F4', 'E4', 'D4']),

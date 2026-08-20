@@ -166,13 +166,37 @@ for (clef, k), refs in seqs.items():
     else:
         dentro.append((len(k), clef, sorted(refs)))
 
+# Las tres que quedan son CITAS LITERALES intencionadas, no andamio: Eduard y
+# José María tienen el mismo archivo de partitura y el pasaje está MEDIDO
+# sobre él. Cambiarle las notas a uno de los dos seria escribir mal a
+# proposito, porque es la misma música.
+#   · America the Beautiful cc. 1-2 (ed_02/jm_02, bloques 1b y 3a): la frase
+#     medida, primero en negras y despues con su ritmo con puntillo. Los dos
+#     archivos la tienen marcada "Cita literal" en su cabecera.
+#   · Jailhouse Rock c. 12 (ed_08/jm_08/nl_06, bloque 3a): la subida de la
+#     izquierda con la digitación 5-3-2-1 impresa, medida sobre la partitura.
+CITAS_LITERALES_OK = {
+    frozenset(['ed_02_america/piano 1', 'jm_02_america/piano 1']),
+    frozenset(['ed_08_jailhouse/piano 1', 'jm_08_jailhouse/piano 1',
+               'nl_06_jailhouse/piano 1']),
+}
+
+inesperados = [(n, clef, refs) for n, clef, refs in entre_alumnos
+               if frozenset(refs) not in CITAS_LITERALES_OK]
+esperados = [(n, clef, refs) for n, clef, refs in entre_alumnos
+             if frozenset(refs) in CITAS_LITERALES_OK]
+
 print('\nEDUARD contra José María, Josep, Luisa, Mercè, Nel e Isaac · sistemas compartidos: %d'
       % len(entre_alumnos))
-for n, clef, refs in sorted(entre_alumnos, reverse=True):
-    print('   %2d eventos · %-7s · %s' % (n, clef, ' + '.join(refs)))
+print('   de los cuales, citas literales esperadas (mismo pasaje medido): %d' % len(esperados))
+for n, clef, refs in sorted(esperados, reverse=True):
+    print('   [cita literal, OK] %2d eventos · %-7s · %s' % (n, clef, ' + '.join(refs)))
+print('   y andamio inventado que coincide sin motivo (esto SÍ es un fallo): %d' % len(inesperados))
+for n, clef, refs in sorted(inesperados, reverse=True):
+    print('   [FALLO] %2d eventos · %-7s · %s' % (n, clef, ' + '.join(refs)))
 
 print('\nDentro de Eduard · sistemas repetidos entre piezas: %d' % len(dentro))
 for n, clef, refs in sorted(dentro, reverse=True):
     print('   %2d eventos · %-7s · %s' % (n, clef, ' + '.join(refs)))
 
-sys.exit(1 if entre_alumnos or dentro else 0)
+sys.exit(1 if inesperados or dentro else 0)

@@ -319,9 +319,15 @@ def build_index(c, alumno, etapas, start_page=2):
         c.setFont('DejaVuSans-Bold', 9.6)
         c.drawString(MARGIN, y, etapa.upper())
         tw = stringWidth(etapa.upper(), 'DejaVuSans-Bold', 9.6)
-        c.setFont('DejaVuSans', 8.4)
+        # El subtitulo va pegado detras del titulo de la etapa, asi que el
+        # ancho que le queda depende de lo largo que sea el titulo: escrito a
+        # pelo se salia del margen derecho (7 pt en el indice de Nel, con
+        # "TONALIDADES NUEVAS, Y UNA MARCHA DE VERDAD").
+        libre = CONTENT_W - tw - 10
+        ssize = _fit(sub, 'DejaVuSans', 8.4, libre)
+        c.setFont('DejaVuSans', ssize)
         c.setFillColor(MUTED)
-        c.drawString(MARGIN + tw + 10, y, sub)
+        c.drawString(MARGIN + tw + 10, y, _clip(sub, 'DejaVuSans', ssize, libre))
         y -= 6
         c.setStrokeColor(NAVY)
         c.setLineWidth(1.4)

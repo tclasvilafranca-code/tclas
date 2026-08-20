@@ -37,7 +37,8 @@ CANCION = dict(
                ('Trae', 'Dedos escritos')],
         titulo_ritmos='Corcheas arriba, redondas ligadas abajo',
         pie_ritmos='Andamio en Do mayor. Lo literal es el reparto: la izquierda sostiene dos notas '
-                   'por compás y la derecha se mueve en corcheas con los dedos impresos.',
+                   'por compás y la derecha se mueve en corcheas. Los números de dedo están en tu '
+                   'partitura, no aquí: cópialos encima de estas notas antes de estudiar.',
         armonia=dict(
             titulo='Lo que trae esta pieza',
             tarjetas=[
@@ -58,7 +59,7 @@ CANCION = dict(
                 'claras sobre un fondo de acordes largos y sostenidos.',
         ),
         ritmos=[
-            ('MANO DERECHA', 'corcheas con dedos impresos · andamio',
+            ('MANO DERECHA', 'corcheas seguidas, sin parar · andamio',
              corch(['E4', 'F4', 'G4', 'F4', 'E4', 'F4', 'G4', 'B4']), OCRE, 'treble', None),
             ('MANO IZQUIERDA', 'dos notas por compás, a veces ligada · literal',
              [ac(('C3', 'E3'), 'w')], AZUL, 'bass', None),
@@ -88,9 +89,10 @@ CANCION = dict(
     piano1=dict(
         titulo='Cómo se estudia',
         esquina='Al piano · el orden de estudio',
-        intro='La digitación manda esta semana. Se estudia mano a mano, siguiendo siempre los '
-              'números escritos, antes de juntar las dos.',
-        reglas=['SIGUE LOS DEDOS ESCRITOS, SIEMPRE', 'LAS DOS NOTAS DE LA IZQUIERDA, JUNTAS',
+        intro='La digitación manda esta semana. Los números están en tu partitura, no en estas '
+              'hojas: cópialos aquí encima y después estudia mano a mano siguiéndolos siempre, '
+              'antes de juntar las dos.',
+        reglas=['SIGUE LOS DEDOS DE TU PARTITURA', 'LAS DOS NOTAS DE LA IZQUIERDA, JUNTAS',
                 'LIGADAS: NO SE TOCAN DOS VECES'],
         bloques=[
             dict(num=1, titulo='La izquierda: redondas dobles, algunas ligadas',
@@ -105,7 +107,8 @@ CANCION = dict(
                           bars=2, clef='bass', show_time=False),
                  ]),
             dict(num=2, titulo='La derecha: corcheas con dedos fijos',
-                 pista='andamio · di el número de dedo antes de tocar, al principio',
+                 pista='andamio · escribe encima el dedo que vas a usar, copiándolo de tu '
+                       'partitura, y dilo en voz alta antes de tocar',
                  sistemas=[
                      dict(cap='a) subiendo y bajando por corcheas',
                           events=corch(['C4', 'D4', 'E4', 'D4']) + corch(['C4', 'D4', 'E4', 'G4']),

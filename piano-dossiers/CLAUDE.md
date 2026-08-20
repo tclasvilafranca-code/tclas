@@ -87,6 +87,26 @@
 > compara lo que los textos de las piezas DICEN que hay en la partitura con lo
 > que los eventos realmente DIBUJAN, y lista las piezas donde se habla de algo
 > que no se está escribiendo. Tiene que decir TODO OK antes de entregar.
+>
+> **La digitación es el caso al revés, y también lo audita.** Los números de
+> dedo NO se imprimen nunca (decisión del cliente: los escribe el alumno), así
+> que la ausencia es correcta. Lo que se coló fue la prosa: al quitar los
+> números se cambiaron los cinco archivos que los dibujaban pero no los textos
+> del resto, y quedaron **31 piezas** diciendo *"la derecha corre en corcheas
+> con los dedos impresos"* o *"sigue los dedos escritos"* encima de un
+> pentagrama sin un solo número. El alumno que estudia solo en casa busca algo
+> que no está y da por hecho que la hoja salió mal impresa.
+>
+> La regla: **se puede hablar de digitación todo lo que haga falta, pero
+> diciendo siempre de dónde sale** ("en tu partitura", "tu edición", "el
+> arreglista") **o pidiendo al alumno que la escriba él**. Lo que no vale es
+> dejarlo colgando, porque en una hoja nuestra "los dedos escritos" solo puede
+> leerse como "los de aquí". Se comprueba **frase a frase**, no por pieza: que
+> el docstring lo aclare no arregla un pie de foto que tres hojas después dice
+> "sigue los dedos escritos". Solo se revisan los rótulos pegados a un
+> pentagrama **nuestro** (`ficha.ritmos`, `pie_ritmos`, `intro`, `reglas`,
+> `pista`, `titulo`, `texto`, `cap`); la ficha y las tarjetas describen la
+> edición del alumno y ahí "trae digitación impresa" es un dato medido.
 
 > ## 🔒 NORMA DEL PROYECTO: la calidad va por delante de la rapidez
 >

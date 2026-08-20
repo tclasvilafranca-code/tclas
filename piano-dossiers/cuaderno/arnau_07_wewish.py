@@ -108,7 +108,8 @@ CANCION = dict(
                           bars=3, show_time=False),
                  ]),
             dict(num=2, titulo='La izquierda, que aquí también anda', clef='bass',
-                 pista='medido · cambia de nota casi en cada golpe, y trae los dedos escritos',
+                 pista='medido · cambia de nota casi en cada golpe · los dedos vienen en tu '
+                       'partitura: cópialos aquí encima antes de empezar',
                  sistemas=[
                      dict(cap='a) tres notas bajando, una por golpe · usa los dedos que pone la partitura',
                           events=[n('C3'), n('B2'), n('A2'), n('G2'), n('A2'), n('B2'),

@@ -116,8 +116,8 @@ CANCION = dict(
                      dict(cap='b) y como está escrita · la blanca del principio no es una pausa: es el '
                               'impulso de la subida',
                           events=MD_7_9, bars=3, show_time=False),
-                     dict(cap='c) cc. 3–4 · la otra frase de la melodía, en notas largas y con la '
-                              'digitación que ya trae la edición',
+                     dict(cap='c) cc. 3–4 · la otra frase de la melodía, en notas largas · copia '
+                              'aquí encima los dedos que trae tu edición',
                           events=MD_3_4, bars=2, show_time=False),
                  ]),
             dict(tipo='nota',

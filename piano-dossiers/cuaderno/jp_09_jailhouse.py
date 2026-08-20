@@ -145,7 +145,8 @@ CANCION = dict(
                        'subir cinco. Si fallas al subir, bajas cinco y ese día se acabó. Parece '
                        'lento y es lo más rápido que hay, porque nunca practicas los fallos.'),
             dict(num=3, titulo='La izquierda del c. 12: cuatro dedos que suben', clef='bass',
-                 pista='c. 12 · MEDIDO: Fa, La, Do, Re · la digitación 5 3 2 1 viene impresa',
+                 pista='c. 12 · MEDIDO: Fa, La, Do, Re · en tu partitura esos cuatro '
+                       'compases llevan impresa la digitación 5 3 2 1',
                  sistemas=[
                      dict(cap='a) escribe tú los dedos encima · el 5 es el meñique, así que '
                               'la mano se abre hacia arriba y no hacia abajo',

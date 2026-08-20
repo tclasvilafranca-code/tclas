@@ -121,6 +121,75 @@ def _arts(e):
     return (a,) if isinstance(a, str) else tuple(a)
 
 
+# ---------------------------------------------------------------- digitacion
+#
+# Caso aparte, y por eso no vive en VOCABULARIO: aqui NO se trata de que falte
+# algo por dibujar, sino justo al reves. El cliente decidio que los numeros de
+# dedo NO se imprimen nunca (los escribe el alumno), asi que la ausencia es
+# correcta y `auditar_niveles` ya falla si alguna nota lleva `number`.
+#
+# Lo que se colo fue lo otro: al quitar los numeros se cambiaron los cinco
+# archivos que los dibujaban, pero no la PROSA del resto. Quedaron 31 piezas
+# diciendo "la derecha corre en corcheas con los dedos impresos" o "sigue los
+# dedos escritos" encima de un pentagrama sin un solo numero. El alumno que
+# estudia solo en casa busca algo que no esta y da por hecho que la hoja salio
+# mal impresa; es el mismo fallo que persigue el resto de este auditor —el
+# texto cuenta una cosa y el papel ensena otra— solo que al reves.
+#
+# La regla, entonces: se puede hablar de digitacion todo lo que haga falta,
+# pero SIEMPRE diciendo de donde sale (tu partitura, tu edicion, el arreglista)
+# o pidiendo al alumno que la escriba el. Lo que no vale es dejarlo colgando,
+# porque en una hoja nuestra "los dedos escritos" solo puede leerse como "los
+# de aqui".
+DEDOS = re.compile(r'digitaci[óo]n|dedos escritos|dedos impresos|dedo escrito|'
+                   r'dedo impreso|n[úu]meros? de dedo|dedos? (?:escrit|impres)')
+
+# Basta con que la MISMA frase diga de donde salen los numeros. Se comprueba
+# frase a frase y no en toda la pieza: que el docstring lo aclare no arregla un
+# pie de foto que tres hojas despues dice "sigue los dedos escritos".
+DEDOS_OK = re.compile(r'tu partitura|tu edici[óo]n|la edici[óo]n|esta edici[óo]n|'
+                      r'la partitura|el arreglista|c[óo]pia|copia|escribe t[úu]|'
+                      r'escribe encima|escribe el|ponles|hayas escrito')
+
+
+def _frases_propias(cfg):
+    """Los textos que describen NUESTRO andamio, no la partitura del alumno.
+
+       La ficha ('especial', las tarjetas de armonia, el docstring) habla de la
+       edicion del alumno y ahi decir "trae digitacion impresa" es un dato
+       medido y correcto. Lo que se revisa aqui son los rotulos que van pegados
+       a un pentagrama dibujado por nosotros."""
+    out = []
+    f = cfg.get('ficha') or {}
+    for r in f.get('ritmos', []) or []:
+        if len(r) > 1:
+            out.append(('ficha.ritmos', str(r[1])))
+    out.append(('ficha.pie_ritmos', str(f.get('pie_ritmos') or '')))
+    for k in ('piano1', 'piano2'):
+        p = cfg.get(k) or {}
+        out.append((k + '.intro', str(p.get('intro') or '')))
+        for x in p.get('reglas', []) or []:
+            out.append((k + '.reglas', str(x)))
+        for b in p.get('bloques', []) or []:
+            for kk in ('titulo', 'pista', 'texto'):
+                out.append(('%s.%s' % (k, kk), str(b.get(kk) or '')))
+            for s in b.get('sistemas', []) or []:
+                out.append((k + '.cap', str(s.get('cap') or '')))
+    return out
+
+
+def _revisar_dedos(modulo, cfg):
+    malas = []
+    for donde, txt in _frases_propias(cfg):
+        t = txt.lower()
+        if DEDOS.search(t) and not DEDOS_OK.search(t):
+            malas.append((modulo, 'digitación',
+                          'decir de dónde salen los dedos ("en tu partitura") o '
+                          'pedir al alumno que los escriba · %s: %s'
+                          % (donde, txt[:70])))
+    return malas
+
+
 def _texto(cfg, mod):
     """Todo el texto en prosa de la pieza, incluido el docstring del modulo."""
     trozos = [mod.__doc__ or '']
@@ -195,6 +264,7 @@ def revisar(modulo):
             if campo and clave not in nivel[campo]:
                 continue     # su escalon no lo admite: el hueco es correcto
         huecos.append((modulo, nombre, spec['arreglo']))
+    huecos += _revisar_dedos(modulo, cfg)
     return huecos
 
 
@@ -212,14 +282,16 @@ def main(prefijos=None):
         return 0
     por_recurso = {}
     for mod, rec, arr in todos:
-        por_recurso.setdefault(rec, []).append(mod)
+        # El arreglo viaja en cada hueco y no se saca de VOCABULARIO: 'digitación'
+        # no vive alli (es la comprobacion inversa) y ademas su mensaje cita la
+        # frase concreta que falla, que es lo unico util para arreglarla.
+        por_recurso.setdefault(rec, []).append((mod, arr))
     print('\nSe habla de esto en el texto y NO se dibuja en el material:\n')
     for rec in sorted(por_recurso, key=lambda r: -len(por_recurso[r])):
-        mods = por_recurso[rec]
-        arr = VOCABULARIO[rec]['arreglo']
-        print('  %-12s %2d piezas  ·  %s' % (rec, len(mods), arr))
-        for m in mods:
-            print('        %s' % m)
+        casos = por_recurso[rec]
+        print('  %-12s %2d piezas  ·  %s' % (rec, len(casos), casos[0][1]))
+        for m, arr in casos:
+            print('        %s' % m if rec in VOCABULARIO else '        %s · %s' % (m, arr))
     print('\n%d HUECOS DE VOCABULARIO' % len(todos))
     return len(todos)
 

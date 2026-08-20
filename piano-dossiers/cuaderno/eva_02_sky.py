@@ -186,7 +186,7 @@ CANCION = dict(
                  texto='Comparando compás a compás salen tres parejas idénticas: los cc. 5, 9 y 17 son '
                        'el mismo compás; los cc. 7 y 11 también; y los cc. 12 y 20 también. Antes de '
                        'estudiar, marca dónde vuelve a empezar el bucle: de veintitrés compases solo '
-                       'hay que aprender cuatro. Y usa la digitación que trae escrita (3-1, 4-1, 5-1): '
+                       'hay que aprender cuatro. Y usa la digitación que trae escrita tu edición (3-1, 4-1, 5-1): '
                        'en una canción que repite el mismo gesto doscientas veces, usar siempre los '
                        'mismos dedos es la diferencia entre que salga o no salga.'),
             dict(tipo='escalera', valores=[60, 72, 84, 96, 108, 118],

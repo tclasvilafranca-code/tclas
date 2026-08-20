@@ -96,7 +96,8 @@ PAG2 = dict(
         dict(num=3, titulo='La melodía sola',
              pista='cc. 3–4 y cc. 7–9 · cántala mientras la tocas: si no puedes cantarla, vas rápido',
              sistemas=[
-                 dict(cap='a) cc. 3–4 · notas largas, con la digitación que ya trae la edición',
+                 dict(cap='a) cc. 3–4 · notas largas · copia aquí encima los dedos que trae tu '
+                          'edición, y no los cambies después',
                       events=MD_3_4, bars=2),
                  dict(cap='b) cc. 7–9 · de Mi4 a Sol5 sin un solo salto · la blanca del principio no '
                           'es una pausa, es el impulso de la subida',

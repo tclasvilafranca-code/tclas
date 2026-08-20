@@ -44,7 +44,8 @@ CANCION = dict(
                ('Páginas', 'Dos')],
         titulo_ritmos='Cómo se reparten las dos manos',
         pie_ritmos='Andamio en Do mayor. Lo literal es el reparto: redondas de dos notas abajo y '
-                   'melodía con digitación escrita arriba. Las notas exactas, en tu partitura.',
+                   'la melodía arriba. Las notas exactas y los números de dedo están en tu '
+                   'partitura: los dedos, cópialos aquí encima antes de estudiar.',
         armonia=dict(
             titulo='La partitura te está diciendo más de lo que parece',
             tarjetas=[
@@ -66,7 +67,7 @@ CANCION = dict(
                 'aburrido y más rápido que inventarse los dedos.',
         ),
         ritmos=[
-            ('MANO DERECHA', 'melodía con los dedos escritos · andamio',
+            ('MANO DERECHA', 'la melodía, por grados conjuntos · andamio',
              [n('C4'), n('D4'), n('E4'), n('D4')], OCRE, 'treble', None),
             ('MANO IZQUIERDA', 'dos notas, una redonda por compás · literal',
              [ac(('C3', 'G3'), 'w')], AZUL, 'bass', None),
@@ -102,11 +103,12 @@ CANCION = dict(
         intro='Esta semana no hay que decidir nada: la partitura trae los dedos escritos. El trabajo '
               'es obedecerlos hasta que salgan solos, y eso se hace despacio y repitiendo, no '
               'tocando la pieza entera.',
-        reglas=['LOS DEDOS ESCRITOS, TODOS', 'LA REDONDA DURA CUATRO GOLPES',
+        reglas=['LOS DEDOS DE TU PARTITURA, TODOS', 'LA REDONDA DURA CUATRO GOLPES',
                 'DESPACIO Y REPITIENDO'],
         bloques=[
             dict(num=1, titulo='Cambiar de dedo sin cambiar de tecla',
-                 pista='andamio en Do mayor · es lo que te va a pedir la digitación impresa',
+                 pista='andamio en Do mayor · es lo que te va a pedir la digitación impresa en tu '
+                       'partitura',
                  sistemas=[
                      dict(cap='a) la misma nota cambiando de dedo · escribe tú cuál, sin mover la mano y '
                               'sin que se oiga el cambio',
@@ -143,7 +145,8 @@ CANCION = dict(
                  ]),
             dict(tipo='nota',
                  etiqueta='POR QUÉ NO TE INVENTES LOS DEDOS',
-                 texto='La digitación impresa no está pensada para la nota que estás tocando: está '
+                 texto='La digitación impresa en tu partitura no está pensada para la nota que '
+                       'estás tocando: está '
                        'pensada para la que viene tres después. Cuando te la saltas, la frase '
                        'empieza bien y se atasca al final, y entonces parece que el problema está '
                        'al final. No lo está: está en el dedo con el que empezaste.'),

@@ -129,7 +129,8 @@ CANCION = dict(
                        'complicado, y en realidad es lo que hace cualquiera al decir "PAA-pa, '
                        'PAA-pa". Escucha la grabación dos veces y sale solo.'),
             dict(num=3, titulo='La izquierda del c. 12: cuatro dedos que suben', clef='bass',
-                 pista='c. 12 · MEDIDO: Fa, La, Do, Re · la digitación 5 3 2 1 viene impresa',
+                 pista='c. 12 · MEDIDO: Fa, La, Do, Re · en tu partitura esos cuatro '
+                       'compases llevan impresa la digitación 5 3 2 1',
                  sistemas=[
                      dict(cap='a) escribe tú el dedo encima de cada nota y tócalo sin mirarte la mano',
                           events=[dict(pitch='F3', dur='q'),

@@ -35,8 +35,9 @@ CANCION = dict(
                ('Compás', '4/4'), ('Carácter', 'With precision'),
                ('Trae', 'Dedos, 2 manos')],
         titulo_ritmos='Precisión en las dos manos',
-        pie_ritmos='Andamio en Sol mayor. Lo literal es la digitación en las dos manos, pensada '
-                   'para que cada dedo caiga siempre en el mismo sitio.',
+        pie_ritmos='Andamio en Sol mayor. Lo literal es que las dos manos van por negras sueltas. '
+                   'Los números de dedo están en tu partitura, no aquí: cópialos encima de estas '
+                   'notas, que es justo lo que hay que mirar esta semana.',
         armonia=dict(
             titulo='Lo que trae esta pieza',
             tarjetas=[
@@ -57,9 +58,9 @@ CANCION = dict(
                 'hizo tan popular en el siglo XIX que dio nombre a un tipo de reloj de pie.',
         ),
         ritmos=[
-            ('MANO DERECHA', 'negras con el dedo escrito · andamio',
+            ('MANO DERECHA', 'negras sueltas, una por golpe · andamio',
              [n('G4'), n('A4'), n('B4'), n('C5')], OCRE, 'treble', None),
-            ('MANO IZQUIERDA', 'negras con el dedo escrito · andamio',
+            ('MANO IZQUIERDA', 'negras sueltas, una por golpe · andamio',
              [n('G3'), n('D3'), n('G3'), n('D3')], AZUL, 'bass', None),
         ],
         especial=[
@@ -89,7 +90,8 @@ CANCION = dict(
         titulo='Cómo se estudia',
         esquina='Al piano · el orden de estudio',
         intro='Esta semana la digitación manda en las dos manos, no solo en la melodía. Se estudia '
-              'mano a mano, siguiendo siempre los dedos escritos.',
+              'mano a mano. Los números están en tu partitura, no en estas hojas: cópialos aquí '
+              'encima y después síguelos siempre.',
         reglas=['LOS DEDOS SE SIGUEN EN LAS DOS MANOS', 'EL FA SIEMPRE ES SOSTENIDO',
                 'WITH PRECISION: NADA APROXIMADO'],
         bloques=[
@@ -100,7 +102,8 @@ CANCION = dict(
                           events=[n('G4'), n('A4'), n('B4'), n('C5'),
                                   n('D5'), n('C5'), n('B4'), n('A4')],
                           bars=2),
-                     dict(cap='b) y la izquierda, con su propia digitación',
+                     dict(cap='b) y la izquierda, que en tu partitura también lleva su digitación '
+                              'escrita · cópiala aquí encima',
                           events=[n('G3'), n('D3'), n('G3'), n('D3'),
                                   n('C3'), n('G3'), n('C3'), n('G3')],
                           bars=2, clef='bass', show_time=False),

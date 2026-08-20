@@ -9,15 +9,20 @@
      - Detrás de la clave NO HAY NADA: La menor, con sostenidos y becuadros
        escritos delante de la nota.
      - 3/4.
-     - El famoso arranque va en semicorcheas (más rápidas que cualquier
-       figura de tu cuaderno), con el dibujo Mi-Re#-Mi-Re#-Mi-Si-Re-Do-La.
+     - El famoso arranque va EN CORCHEAS, con el dibujo
+       Mi-Re#-Mi-Re#-Mi-Si-Re-Do-La. Esta edicion no es la original en 3/8 con
+       semicorcheas: pasa el mismo dibujo a 3/4 y a corcheas.
+     - La UNICA semicorchea de toda la pieza esta en el c. 20, como nota corta
+       de una figura larga-corta.
+     - En el ultimo compas hay notas de adorno (pequenas, sin valor propio).
      - La izquierda, cuando entra, toca acordes arpegiados que a veces suben
        por encima de donde está la melodía.
 
-   El arranque va escrito CON SU FIGURA REAL, la semicorchea: el motor ya la
-   dibuja (antes no, y por eso esta hoja lo reducía todo a corcheas). Se
-   trabaja solo el arranque, primero a la mitad de velocidad en corcheas y
-   después con la figura de verdad, que es como se estudia un pasaje rápido.
+   CORRECCION IMPORTANTE: esta hoja escribia el arranque en semicorcheas y
+   decia que asi estaba impreso. Es FALSO. Se ha vuelto a mirar el PDF entero
+   a zoom, compas a compas: todas las barras del arranque son simples, y la
+   unica barra doble de la pieza esta en el c. 20. Aqui se escribe lo que la
+   partitura trae, y la semicorchea aparece donde de verdad aparece.
 """
 import os
 import sys
@@ -25,7 +30,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
 from relleno import bloques_extra
-from is_comun import n, ac, sil, corch, semi
+from is_comun import n, ac, sil, corch
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -43,20 +48,20 @@ CANCION = dict(
         titulo='Für Elise',
         autor='Ludwig van Beethoven · hacia 1810 · edición real, sin simplificar',
         datos=[('Tonalidad', 'La menor'), ('Compás', '3/4'),
-               ('Figuras', 'Semicorcheas'), ('Izquierda', 'Arpegios'),
+               ('Figuras', 'Corcheas'), ('Izquierda', 'Arpegios'),
                ('Hoy trabajas', 'Solo el arranque')],
-        titulo_ritmos='El arranque, reducido para empezar',
-        pie_ritmos='Andamio en La menor. El dibujo real de la pieza va en semicorcheas; aquí se '
-                   'trabaja el mismo dibujo en corcheas, más despacio, como primer paso.',
+        titulo_ritmos='El arranque, tal como está escrito',
+        pie_ritmos='Andamio en La menor. El dibujo del arranque va en corcheas en tu edición, y '
+                   'así está escrito aquí: es la figura de tu partitura, no una reducción.',
         armonia=dict(
             titulo='Por qué esta es la más exigente antes del Diabelli',
             tarjetas=[
                 ('LA PIEZA REAL', 'No una versión fácil',
                  'A diferencia de casi todo tu cuaderno, esta es la edición íntegra: figuras más '
                  'rápidas, saltos de octava y arpegios en la izquierda.'),
-                ('SEMICORCHEAS', 'Muy rápidas',
-                 'El arranque famoso va en notas cuatro veces más cortas que una negra. Hoy se '
-                 'trabaja el mismo dibujo, pero en corcheas.'),
+                ('TU EDICIÓN, EN CORCHEAS', 'No es la original',
+                 'Beethoven la escribió en 3/8 y con semicorcheas. Tu edición pasa el mismo dibujo '
+                 'a 3/4 y a corcheas: suena igual y se lee mucho mejor.'),
                 ('LA IZQUIERDA SUBE', 'Sobre la melodía',
                  'En algunos compases, los arpegios de la izquierda suben más alto que donde está '
                  'la mano derecha en ese momento.'),
@@ -77,13 +82,15 @@ CANCION = dict(
             'Detrás de la clave no hay nada; los sostenidos y becuadros van escritos dentro.',
             'La tonalidad es La menor.',
             'Compás de 3/4.',
-            'El arranque real va en semicorcheas; hoy se trabaja el mismo dibujo en corcheas.',
+            'El arranque va en corcheas, y así está escrito en tu partitura.',
+            'En el compás 20 hay una semicorchea: es la única de toda la pieza.',
             'La izquierda, cuando entra, toca acordes arpegiados.',
             'Es un objetivo a varias semanas, no una pieza para dominar en una sola.',
         ],
-        reto='Aprender el dibujo de notas del arranque sin la velocidad real todavía.',
-        truco='Toca el dibujo del arranque en corcheas, muy despacio, tantas veces como haga falta '
-              'hasta que la mano lo recuerde sin mirar.',
+        reto='Aprender el dibujo del arranque sin correr. Esta pieza se ha estropeado más veces '
+             'por prisa que por dificultad.',
+        truco='Toca el dibujo del arranque muy despacio, tantas veces como haga falta hasta que la '
+              'mano lo recuerde sin mirar. La velocidad viene después; el dibujo, no.',
         sabias='Nadie sabe con certeza quién era "Elise": una teoría dice que el copista leyó mal '
                'el título y que en realidad decía "Therese", una alumna de Beethoven.',
         qr=dict(titulo='Escúchala',
@@ -96,23 +103,26 @@ CANCION = dict(
     piano1=dict(
         titulo='Cómo se estudia',
         esquina='Al piano · el orden de estudio',
-        intro='Solo se trabaja el arranque. Primero a la mitad de velocidad, en corcheas, para '
-              'aprender el dibujo; y después con su figura de verdad, la semicorchea, que es la '
-              'que vas a leer en la partitura.',
-        reglas=['PRIMERO LENTO, DESPUÉS LA FIGURA REAL', 'DOS DEDOS QUE SE TURNAN',
+        intro='Solo se trabaja el arranque, que en tu edición va en corcheas. Primero muy '
+              'despacio para aprender el dibujo, y solo después buscando el aire de la pieza.',
+        reglas=['PRIMERO EL DIBUJO, DESPUÉS LA VELOCIDAD', 'DOS DEDOS QUE SE TURNAN',
                 'ES DE VARIAS SEMANAS'],
         bloques=[
-            dict(num=1, titulo='El dibujo del arranque: primero lento, luego real',
-                 pista='andamio en La menor · el mismo dibujo escrito en las dos figuras',
+            dict(num=1, titulo='El dibujo del arranque, y su única excepción',
+                 pista='andamio en La menor · la corchea es la figura que trae tu edición',
                  sistemas=[
-                     dict(cap='a) a la mitad de velocidad, en corcheas · ida y vuelta entre dos '
-                              'teclas vecinas',
+                     dict(cap='a) ida y vuelta entre dos teclas vecinas · las seis notas duran '
+                              'exactamente lo mismo',
                           events=corch(['E3', 'D#3', 'E3', 'D#3', 'E3', 'B3']),
                           bars=1),
-                     dict(cap='b) y ahora con SU figura, la semicorchea · el doble de rápidas, '
-                              'como están impresas en tu partitura · ojo al becuadro del segundo Re',
-                          events=semi(['E4', 'D#4', 'E4', 'Dn4']) + semi(['E4', 'B3', 'D4', 'C4'])
-                                 + [n('A3')],
+                     dict(cap='b) el mismo dibujo con el becuadro, que quita el sostenido · el '
+                              'segundo Re NO es el mismo que el primero',
+                          events=corch(['E4', 'D#4', 'E4', 'Dn4', 'E4', 'B3']),
+                          bars=1, show_time=False),
+                     dict(cap='c) c. 20 · el único sitio de la pieza con una nota más corta: la '
+                              'última del grupo lleva una barra más y va pegada a la siguiente',
+                          events=[n('B3', 'e'), n('C4', 'e'), n('D4', 'e.'),
+                                  n('C4', 's'), n('B3', 'e'), n('A3', 'e')],
                           bars=1, show_time=False),
                  ]),
             dict(num=2, titulo='La izquierda: el primer acorde arpegiado',
@@ -132,9 +142,8 @@ CANCION = dict(
             dict(num=3, titulo='Las dos juntas, cuando entra la izquierda',
                  pista='andamio · muy despacio, sin buscar la velocidad todavía',
                  sistemas=[
-                     dict(cap='a) el arranque de la derecha, sola, ya en semicorcheas',
-                          events=semi(['E4', 'D#4', 'E4', 'D#4']) + semi(['E4', 'C5', 'B4', 'A4'])
-                                 + [n('G4')],
+                     dict(cap='a) el arranque de la derecha, sola · en corcheas, que es su figura',
+                          events=corch(['E4', 'D#4', 'E4', 'C5', 'B4', 'A4']),
                           bars=1),
                      dict(cap='b) y con el acorde de la izquierda entrando debajo',
                           events=[ac(('D2', 'A2', 'E4'), 'e'), n('D#4', 'e'), n('E4', 'e'),

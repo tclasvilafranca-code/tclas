@@ -4,27 +4,41 @@
    ESTO ES LO QUE NADIE MIDIO NUNCA. Las transcripciones (`TRANSCRIPCION_*.md`)
    anotan edicion, tonalidad, compas, tempo y paginas de cada partitura, pero
    NO la figura mas corta. Por eso pudo pasar que el dosier de un alumno no
-   escribiera una figura que su partitura lleva impresa de principio a fin, y
-   que no lo detectara ningun auditor: el de vocabulario solo comprueba que no
-   se hable de lo que no se dibuja, no que se dibuje lo que la partitura trae.
+   escribiera una figura que su partitura lleva impresa, y que no lo detectara
+   ningun auditor: el de vocabulario solo comprueba que no se hable de lo que no
+   se dibuja, no que se dibuje lo que la partitura trae.
 
-
-   Una semicorchea se dibuja con dos barras paralelas (o con una barra y un
+   Una semicorchea se dibuja con DOS barras paralelas (o con una barra y un
    rabito corto, que es la figura larga-corta). En una columna de pixeles eso
-   deja DOS tramos oscuros del mismo grosor separados por un hueco claro, y el
-   par se repite a lo largo de varias columnas seguidas.
+   deja dos tramos oscuros del mismo grosor separados por un hueco claro, y el
+   par se mantiene RECTO a lo largo de varias columnas seguidas.
 
-   Lo que hay que descartar para que no mienta:
-     - las lineas del pentagrama y las adicionales: son finas (por eso el
-       grosor minimo va en fraccion de espacio, no en pixeles);
-     - las cabezas de nota: en una columna dejan un tramo de casi un espacio
-       entero, mas grueso que cualquier barra;
-     - los diagramas de guitarra que algunas ediciones imprimen encima del
-       pentagrama: sus lineas tambien van paralelas y a la distancia justa,
-       pero son de un pixel;
-     - la clave, la armadura y el compas del principio de cada sistema, que
-       son trazos gruesos y curvos (la clave de sol sola daba 26 falsos
-       positivos en "When the Saints").
+   ## Lo que hace que esto mienta, y como se evita
+
+   1. **Las partituras que son una foto.** Varias carpetas de Drive traen PDF
+      que no son vectoriales: dentro llevan una imagen escaneada. El Flying
+      Theme de José María es una imagen de 511x655 px a 62 ppi, y ahi las dos
+      barras de una semicorchea ocupan menos de dos pixeles: no se pueden
+      separar. Rasterizar ese PDF a 200 dpi no anade informacion, solo agranda
+      el borron — y el detector daba 321 semicorcheas en una pieza que va
+      entera en corcheas. Por eso ahora se mide el espacio de pentagrama en
+      pixeles y, si no llega a `SP_MINIMO`, la partitura sale como **NO
+      MEDIBLE** y hay que mirarla a ojo. Mas vale no saberlo que creer que se
+      sabe.
+   2. **El umbral de tinta fijo.** Hay ediciones que imprimen el pentagrama en
+      gris claro; con el umbral de siempre no se encontraba ni un pentagrama y
+      Peaches salia "sin semicorcheas" cuando las lleva a partir del c. 13.
+   3. **El JPEG**, que difumina las lineas finas: se rasteriza a PNG.
+   4. **Las cabezas de nota.** Dos cabezas de un acorde a distancia de tercera
+      dejan el mismo dibujo en una columna que dos barras. Se distinguen porque
+      una barra es RECTA: a lo ancho del tramo su grosor y su separacion apenas
+      cambian, y una cabeza es ovalada.
+   5. **La clave, la armadura y el compas** del principio de cada sistema, que
+      son trazos gruesos y curvos (la clave de sol sola daba 26 falsos
+      positivos en "When the Saints").
+
+   Contrastado contra las partituras de `medir_figuras_patron.py`, miradas una
+   a una a tamano grande.
 """
 import os
 import subprocess
@@ -34,10 +48,19 @@ import tempfile
 import numpy as np
 from PIL import Image
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'engine'))
-import score_reader as sr
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, '..', 'engine'))
+import score_reader as sr                                        # noqa: E402
 
 DPI = 200
+
+# Por debajo de este espacio de pentagrama (en pixeles) no se puede distinguir
+# una barra de dos: el hueco entre ellas mide medio espacio.
+SP_MINIMO = 11.0
+
+# Y por debajo de esta resolucion propia, un PDF que solo lleva una imagen
+# dentro no mejora por rasterizarlo mas grande.
+PPI_MINIMO = 110
 
 GROSOR_MIN = 0.20      # de una barra, en espacios de pentagrama
 GROSOR_MAX = 0.75
@@ -47,33 +70,43 @@ IGUALDAD = 0.55        # las dos barras tienen grosor parecido
 SALTO_CLAVE = 6.5      # espacios que se ignoran al principio de cada sistema
 LARGA = 1.10           # ancho a partir del cual es una barra doble entera
 CORTA = 0.45           # y a partir del cual es un rabito de figura larga-corta
+VARIA_MAX = 0.13       # una barra es recta: su grosor y su hueco casi no varian
 
-# Una BARRA es recta: a lo ancho del tramo, el grosor y la separacion entre las
-# dos apenas cambian. Dos cabezas de nota una tercera aparte tambien dejan dos
-# tramos oscuros a la distancia justa, pero son ovaladas y su grosor sube y baja
-# en cada columna. Sin esta comprobacion, un acorde de dos notas con puntillo se
-# contaba como semicorchea (pasaba en el Jailhouse).
-VARIA_MAX = 0.13       # desviacion tipica maxima, en espacios de pentagrama
+UMBRALES = (125, 150, 175, 200)
 
 
-# El umbral de tinta NO puede ser fijo: hay ediciones que imprimen el
-# pentagrama en gris claro (Peaches sale con las lineas por encima de 150) y
-# con el umbral de siempre no se encontraba ni un pentagrama, asi que la
-# partitura salia "sin semicorcheas" cuando las tiene a partir del c. 13.
-# Se prueba de menos a mas y se coge el PRIMERO que encuentra pautas: subir
-# de mas engorda los trazos y acaba pegando las dos barras de una semicorchea.
-UMBRALES = (125, 150, 175, 200, 220)
+class NoMedible(Exception):
+    """La partitura no da resolucion para separar una barra de dos."""
+
+
+def resolucion(pdf):
+    """ppi propio del PDF: el de sus imagenes si solo lleva imagenes, o None
+       si es vectorial (y entonces se puede rasterizar tan grande como haga
+       falta)."""
+    try:
+        out = subprocess.run(['pdfimages', '-list', pdf], check=True,
+                             capture_output=True, text=True).stdout
+    except Exception:                                            # noqa: BLE001
+        return None
+    ppis = []
+    for linea in out.splitlines()[2:]:
+        campos = linea.split()
+        if len(campos) > 13 and campos[2] == 'image':
+            try:
+                ppis.append(int(campos[12]))
+            except ValueError:
+                pass
+    return min(ppis) if ppis else None
 
 
 def cargar(path):
     """(mapa de tinta, umbral) con el umbral mas bajo que encuentra pentagramas."""
-    import numpy as _np
-    gris = _np.array(Image.open(path).convert('L'))
+    gris = np.array(Image.open(path).convert('L'))
     for u in UMBRALES:
         a = gris < u
         if sr.pentagramas(a):
             return a, u
-    return gris < UMBRALES[0], UMBRALES[0]
+    return None, None
 
 
 def _tramos(col):
@@ -95,12 +128,19 @@ def _borde_izquierdo(a, y):
 
 
 def en_pagina(a):
-    """[(x, y, sp, ancho)] de cada par de barras de la pagina."""
+    """[(x, y, sp, ancho)] de cada par de barras. Lanza NoMedible si los
+       pentagramas de la pagina salen demasiado pequenos."""
     h, w = a.shape
+    pautas = sr.pentagramas(a)
+    if not pautas:
+        return []
+    sps = [(b - t) / 4.0 for t, b in pautas]
+    if np.median(sps) < SP_MINIMO:
+        raise NoMedible('el pentagrama mide %.1f px de espacio' % np.median(sps))
     fuera = []
-    for top, bot in sr.pentagramas(a):
+    for top, bot in pautas:
         sp = (bot - top) / 4.0
-        if sp < 6:
+        if sp < SP_MINIMO:
             continue
         y0, y1 = int(max(0, top - 4 * sp)), int(min(h, bot + 4 * sp))
         banda = a[y0:y1]
@@ -108,9 +148,7 @@ def en_pagina(a):
         dmin, dmax = SEPARA_MIN * sp, SEPARA_MAX * sp
         x_ini = _borde_izquierdo(a, top) + int(SALTO_CLAVE * sp)
         buenas = np.zeros(w, dtype=bool)
-        alturas = np.zeros(w)
-        huecos = np.zeros(w)
-        gruesos = np.zeros(w)
+        alturas, huecos, gruesos = np.zeros(w), np.zeros(w), np.zeros(w)
         for x in range(x_ini, w):
             tr = [(i, f) for i, f in _tramos(banda[:, x])
                   if gmin <= (f - i + 1) <= gmax]
@@ -123,9 +161,7 @@ def en_pagina(a):
                 c2 = (tr[k + 1][0] + tr[k + 1][1]) / 2.0
                 if dmin <= c2 - c1 <= dmax:
                     buenas[x] = True
-                    alturas[x] = c1 + y0
-                    huecos[x] = c2 - c1
-                    gruesos[x] = (g1 + g2) / 2.0
+                    alturas[x], huecos[x], gruesos[x] = c1 + y0, c2 - c1, (g1 + g2) / 2.0
                     break
         x = x_ini
         while x < w:
@@ -142,20 +178,16 @@ def en_pagina(a):
 
 
 def paginas(pdf, dpi=DPI):
-    """Rasteriza (PDF o imagen) y devuelve las rutas de las paginas."""
+    """Rasteriza (PDF o imagen) y devuelve (carpeta, rutas)."""
     tmp = tempfile.mkdtemp()
     with open(pdf, 'rb') as fh:
         cabecera = fh.read(5)
     if cabecera[:4] == b'%PDF':
-        # PNG y no JPEG: el JPEG difumina las lineas finas del pentagrama y
-        # deja de encontrarlas la deteccion de pautas.
         subprocess.run(['pdftoppm', '-png', '-r', str(dpi), pdf,
                         os.path.join(tmp, 'pg')], check=True,
                        stderr=subprocess.DEVNULL)
     else:
-        # Alguna partitura de Drive llega como JPEG (el Adagio de Albinoni).
         im = Image.open(pdf).convert('L')
-        # subirla a la escala de un render a `dpi` para que sp sea comparable
         f = max(1.0, (dpi / 72.0) * 595.0 / im.size[0])
         im.resize((int(im.size[0] * f), int(im.size[1] * f))).save(
             os.path.join(tmp, 'pg-1.png'))
@@ -164,21 +196,38 @@ def paginas(pdf, dpi=DPI):
 
 
 def contar(pdf, dpi=DPI):
-    """(barras dobles enteras, rabitos) de toda la partitura."""
+    """(barras dobles enteras, rabitos). Lanza NoMedible si la partitura no
+       tiene resolucion para separarlas."""
+    propia = resolucion(pdf)
+    if propia is not None and propia < PPI_MINIMO:
+        raise NoMedible('el PDF lleva dentro una imagen de %d ppi' % propia)
     tmp, pags = paginas(pdf, dpi)
     largas = cortas = 0
-    for f in pags:
-        a, _u = cargar(f)
-        for _x, _y, sp, ancho in en_pagina(a):
-            if ancho >= LARGA * sp:
-                largas += 1
-            elif ancho >= CORTA * sp:
-                cortas += 1
-        os.remove(f)
-    os.rmdir(tmp)
+    sin_pautas = 0
+    try:
+        for f in pags:
+            a, _u = cargar(f)
+            if a is None:
+                sin_pautas += 1
+                continue
+            for _x, _y, sp, ancho in en_pagina(a):
+                if ancho >= LARGA * sp:
+                    largas += 1
+                elif ancho >= CORTA * sp:
+                    cortas += 1
+    finally:
+        for f in pags:
+            if os.path.exists(f):
+                os.remove(f)
+        os.rmdir(tmp)
+    if sin_pautas == len(pags):
+        raise NoMedible('no se encuentra ningun pentagrama')
     return largas, cortas
 
 
 if __name__ == '__main__':
     for p in sys.argv[1:]:
-        print('%-52s %s' % (os.path.basename(p)[:52], contar(p)))
+        try:
+            print('%-52s %s' % (os.path.basename(p)[:52], contar(p)))
+        except NoMedible as exc:
+            print('%-52s NO MEDIBLE · %s' % (os.path.basename(p)[:52], exc))

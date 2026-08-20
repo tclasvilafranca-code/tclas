@@ -129,6 +129,11 @@ ESCALON = {
 EXCEPCIONES = {
     ('arnau_10_muffet', 'q.'): 'la pieza real está en 6/8 y su unidad es la negra con puntillo',
     ('arnau_15_largo', 'q.'): 'el Largo de Dvorak lleva la figura con puntillo impresa',
+    # Su Für Elise es la edición real: va en corcheas casi entera, pero en el
+    # c. 20 lleva UNA semicorchea impresa, como nota corta de una figura
+    # larga-corta. Es su partitura, así que se escribe. Comprobado a zoom sobre
+    # el PDF: la última nota de ese grupo lleva una barra más que las otras.
+    ('me_26_furelise', 's'): 'el c. 20 de su edición lleva una semicorchea impresa',
 }
 
 # Rachas de notas cortas por encima del tope del escalon que SI se aceptan,

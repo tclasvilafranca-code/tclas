@@ -28,6 +28,7 @@ CON = [
 
 SIN = [
     ('Deck the Halls', S + '/jose_maria/source/Deck the Halls (with Boughs of Holly) NAVIDAD.pdf'),
+    ('Flying Theme', S + '/jose_maria/source/Como entrenar a tu dragon.'),
     ('When the Saints', S + '/isaac/source/OH WHEN THE SAINT.pdf'),
     ('Fur Elise easy', S + '/luisa/source/Para  Elisa easy.pdf'),
     ('Nocturne easy', S + '/luisa/source/nocturne-op9-chopin. easy'),
@@ -46,6 +47,9 @@ def main(modulo):
                 continue
             try:
                 largas, cortas = bd.contar(ruta)
+            except bd.NoMedible as exc:
+                print('%-24s  NO MEDIBLE · %s' % (nombre, exc))
+                continue
             except Exception as exc:                     # noqa: BLE001
                 print('%-24s  ERROR %s' % (nombre, exc))
                 continue

@@ -31,6 +31,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from jm_comun import (n, ac, sil, plan, objetivo, escalera, contar, figuras,
                       para_clase)
 
@@ -172,7 +173,9 @@ CANCION = dict(
                        'compases de verdad: derecha sola, izquierda sola, y las dos juntas. No pases '
                        'de los cuatro compases esta semana aunque te veas capaz. Es mejor tener '
                        'cuatro que suenen bien que dieciséis a medias.'),
-        ],
+        ] + bloques_extra('Do mayor', 28, 'C4', 'C3',
+                          'compás de dos blancas: se cuenta de dos, no de cuatro',
+                          desde=4, time_sig=(2, 2)),
     ),
 
     trabajo=[

@@ -23,6 +23,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from jp_comun import (n, ac, sil, reto, plan, escalera, inventa, teclado,
                       para_clase)
 
@@ -153,7 +154,9 @@ CANCION = dict(
                                   n('F4'), n('A4'), n('F4', 'h')],
                           bars=2, key_sig='Fa mayor', show_time=False),
                  ]),
-        ],
+        ] + bloques_extra('Fa mayor', 21, 'F4', 'F2',
+                          'el Si bemol se olvida justo a mitad de frase',
+                          desde=4, time_sig=(4, 4)),
     ),
 
     trabajo=[

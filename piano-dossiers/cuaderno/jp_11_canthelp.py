@@ -20,6 +20,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from jp_comun import (n, ac, reto, plan, cifrado, verdadero_falso, figuras,
                       para_clase)
 
@@ -158,7 +159,9 @@ CANCION = dict(
                                   n('E3', 'e'), n('A2', 'e'), n('E3', 'e')],
                           bars=2, key_sig='Re mayor', time_sig=(3, 4), show_time=False),
                  ]),
-        ],
+        ] + bloques_extra('Re mayor', 21, 'D4', 'D3',
+                          'compás de tres y dos sostenidos a la vez',
+                          desde=4, time_sig=(3, 4)),
     ),
 
     trabajo=[

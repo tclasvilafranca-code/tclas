@@ -20,6 +20,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from jp_comun import (n, ac, sil, reto, plan, rodear, unir, colorear,
                       acuerdate, para_clase)
 
@@ -155,7 +156,9 @@ CANCION = dict(
                                   n('B3', 'e'), n('E4', 'e'), n('G4', 'e'), n('E4', 'e')],
                           bars=2, key_sig='Mi menor', show_time=False),
                  ]),
-        ],
+        ] + bloques_extra('Mi menor', 21, 'E4', 'E2',
+                          'la última corchea suena igual que la primera',
+                          desde=4, time_sig=(4, 4)),
     ),
 
     trabajo=[

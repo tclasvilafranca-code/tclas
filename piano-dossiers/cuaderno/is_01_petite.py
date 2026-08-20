@@ -16,6 +16,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from is_comun import n, ac, sil, corch
 
 HERE = os.path.dirname(__file__)
@@ -136,7 +137,9 @@ CANCION = dict(
                                   ac(('A3', 'A4')), ac(('B3', 'B4')), n('C5'), n('D5')],
                           bars=2, show_time=False),
                  ]),
-        ],
+        ] + bloques_extra('Do mayor', 14, 'C4', 'C3',
+                          'la anacrusa es un impulso, no un compás entero',
+                          desde=4, time_sig=(4, 4)),
     ),
 )
 

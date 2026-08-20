@@ -25,6 +25,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from jp_comun import (n, ac, sil, plan, metronomo, ordenar, contar, teclado,
                       para_clase)
 
@@ -160,7 +161,9 @@ CANCION = dict(
                                   ac(('A2', 'C4'), 'e'), n('B3', 'e'), ac(('E3', 'G3')), n('A3', 'h')],
                           bars=2),
                  ]),
-        ],
+        ] + bloques_extra('Do mayor', 36, 'C4', 'C3',
+                          'el swing: escritas iguales, tocadas desiguales',
+                          desde=5, time_sig=(4, 4)),
     ),
 
     trabajo=[

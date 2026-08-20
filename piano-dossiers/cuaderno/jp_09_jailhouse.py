@@ -29,6 +29,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from jp_comun import (n, ac, sil, reto, plan, metronomo, escribir, diferencias,
                       acuerdate, para_clase)
 
@@ -172,7 +173,9 @@ CANCION = dict(
                                   n('E4'), n('C4'), ac(('C3', 'C4'), 'h')],
                           bars=2),
                  ]),
-        ],
+        ] + bloques_extra('Do mayor', 41, 'C5', 'C3',
+                          'el blues: la nota de paso no es un error, es el estilo',
+                          desde=5, time_sig=(4, 4)),
     ),
 
     trabajo=[

@@ -23,6 +23,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from jm_comun import (n, ac, sil, objetivo, plan, rodear, unir, colorear,
                       acuerdate, para_clase)
 
@@ -153,7 +154,9 @@ CANCION = dict(
                                   ac(('B2', 'G3'), 'h.'), ac(('C3', 'G3'), 'h.')],
                           bars=4, clef='bass', show_time=False),
                  ]),
-        ],
+        ] + bloques_extra('Do mayor', 33, 'C5', 'C3',
+                          'compás de tres, y la frase empieza antes del primero',
+                          desde=4, mas=True, time_sig=(3, 4)),
     ),
 
     trabajo=[

@@ -23,6 +23,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from jp_comun import (n, ac, semi, plan, escalera, cifrado, unir, nombres, para_clase)
 
 HERE = os.path.dirname(__file__)
@@ -152,7 +153,9 @@ CANCION = dict(
                                   ac(('A3', 'F4'), 'e'), n('G4', 'e'), n('A4', 'e'), n('F4', 'e')],
                           bars=2, key_sig='Fa mayor', show_time=False),
                  ]),
-        ],
+        ] + bloques_extra('Fa mayor', 26, 'F4', 'F2',
+                          'el Si bemol dentro del acorde, que es donde más se nota',
+                          desde=4, time_sig=(4, 4)),
     ),
 
     trabajo=[

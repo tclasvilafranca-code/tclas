@@ -17,6 +17,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from is_comun import n, ac
 
 HERE = os.path.dirname(__file__)
@@ -134,7 +135,9 @@ CANCION = dict(
                                   ac(('C3', 'F3', 'A4')), ac(('F2', 'C3', 'C5'))],
                           bars=1, show_time=False),
                  ]),
-        ],
+        ] + bloques_extra('Fa mayor', 14, 'F4', 'F2',
+                          'el Si bemol cae donde la mano ya va deprisa',
+                          desde=4, time_sig=(4, 4)),
     ),
 )
 

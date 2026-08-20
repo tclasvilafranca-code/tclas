@@ -22,6 +22,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from jp_comun import (n, ac, semi, reto, plan, cifrado, verdadero_falso, figuras,
                       para_clase)
 
@@ -67,9 +68,12 @@ CANCION = dict(
                 'a estas alturas; lo nuevo es tenerlas todas a la vez.',
         ),
         ritmos=[
+            # Notas distintas de las del ejercicio: la ficha ENSEÑA el dibujo y
+            # la hoja al piano lo TRABAJA. Con las mismas ocho notas, el
+            # cuaderno repetía hoja sin que se notara al maquetar.
             ('MANO DERECHA', 'en tu partitura son cuatro por golpe · andamio',
-             [n('B4', 'e'), n('E5', 'e'), n('D5', 'e'), n('B4', 'e'),
-              n('G4', 'e'), n('B4', 'e'), n('E5', 'e'), n('D5', 'e')], OCRE, 'treble', None),
+             [n('E5', 'e'), n('D5', 'e'), n('B4', 'e'), n('G4', 'e'),
+              n('A4', 'e'), n('B4', 'e'), n('D5', 'e'), n('B4', 'e')], OCRE, 'treble', None),
             ('MANO IZQUIERDA', 'un acorde de redonda por compás · andamio',
              [ac(('E2', 'B2', 'E3'), 'w')], AZUL, 'bass', None),
         ],
@@ -150,7 +154,9 @@ CANCION = dict(
                                   n('F4', 'e'), n('A4', 'e'), n('E5', 'e'), n('C5', 'e')],
                           bars=2, show_time=False),
                  ]),
-        ],
+        ] + bloques_extra('Mi menor', 26, 'E4', 'E2',
+                          'el cambio de armadura del compás 10, oído antes que tocado',
+                          desde=4, time_sig=(4, 4)),
     ),
 
     trabajo=[

@@ -21,6 +21,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from jp_comun import (n, ac, plan, metronomo, ordenar, contar, teclado, para_clase)
 
 HERE = os.path.dirname(__file__)
@@ -160,7 +161,9 @@ CANCION = dict(
                                   n('F5', 'e')],
                           bars=2, key_sig='Sib mayor', show_time=False),
                  ]),
-        ],
+        ] + bloques_extra('Sib mayor', 21, 'Bb3', 'Bb2',
+                          'dos bemoles y el pedal escrito: las dos cosas a la vez',
+                          desde=4, time_sig=(4, 4)),
     ),
 
     trabajo=[

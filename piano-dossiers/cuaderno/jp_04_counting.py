@@ -22,6 +22,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from jp_comun import (n, ac, plan, metronomo, verdadero_falso, inventa,
                       dibujar, para_clase)
 
@@ -164,7 +165,9 @@ CANCION = dict(
                                   ac(('G2', 'E4')), n('D4'), n('C4', 'h')],
                           bars=2, show_time=False),
                  ]),
-        ],
+        ] + bloques_extra('Do mayor', 31, 'C5', 'C3',
+                          'lo que cuesta no son las notas, es aguantar sin frenar',
+                          desde=4, time_sig=(4, 4)),
     ),
 
     trabajo=[

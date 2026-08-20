@@ -22,6 +22,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from jp_comun import (n, ac, reto, plan, a_cuatro_manos, ordenar, nombres,
                       figuras, para_clase)
 
@@ -153,7 +154,9 @@ CANCION = dict(
                                   ac(('G2', 'F#4'), 'h'), n('G4', 'h')],
                           bars=2, key_sig='Sol menor', show_time=False),
                  ]),
-        ],
+        ] + bloques_extra('Sol menor', 21, 'G3', 'G2',
+                          'dos bemoles, y ninguno se olvida a mitad de camino',
+                          desde=4, time_sig=(4, 4)),
     ),
 
     trabajo=[

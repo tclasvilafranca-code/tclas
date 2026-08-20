@@ -21,6 +21,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from jp_comun import (n, ac, sil, plan, metronomo, verdadero_falso, inventa,
                       dibujar, para_clase)
 
@@ -147,7 +148,9 @@ CANCION = dict(
                                   ac(('B2', 'F#4'), 'w')],
                           bars=2, key_sig='Si menor', show_time=False),
                  ]),
-        ],
+        ] + bloques_extra('Si menor', 21, 'B3', 'B2',
+                          'la melodía va seguida y la armadura no desaparece',
+                          desde=4, time_sig=(4, 4)),
     ),
 
     trabajo=[

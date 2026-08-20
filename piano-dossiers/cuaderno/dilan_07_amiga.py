@@ -232,6 +232,18 @@ CANCION = dict(
                        'ido a la derecha, que tiene que hacer dos cosas a la vez: unos dedos apretando sin '
                        'moverse y otros corriendo por encima. Cuando algo suene sucio, no busques el fallo '
                        'en la izquierda: casi siempre es que has levantado el pulgar sin darte cuenta.'),
+            dict(num='1b', semis=True, titulo='Y la voz de arriba, con su figura de verdad',
+                 pista='la voz que se mueve va en SEMICORCHEAS en tu partitura · aquí sola, sin la '
+                       'nota de abajo, que es como se estudia',
+                 sistemas=[
+                     dict(cap='a) cuatro por golpe, y las cuatro del mismo peso · si una pesa más '
+                              'que las otras, para y vuelve a empezar',
+                          events=[{'pitch': 'A4', 'dur': 's', 'beam': 9400}, {'pitch': 'B4', 'dur': 's', 'beam': 9400}, {'pitch': 'C#5', 'dur': 's', 'beam': 9400}, {'pitch': 'B4', 'dur': 's', 'beam': 9400}, {'pitch': 'A4', 'dur': 's', 'beam': 9401}, {'pitch': 'G4', 'dur': 's', 'beam': 9401}, {'pitch': 'F#4', 'dur': 's', 'beam': 9401}, {'pitch': 'G4', 'dur': 's', 'beam': 9401}, {'pitch': 'A4', 'dur': 's', 'beam': 9402}, {'pitch': 'B4', 'dur': 's', 'beam': 9402}, {'pitch': 'C#5', 'dur': 's', 'beam': 9402}, {'pitch': 'D5', 'dur': 's', 'beam': 9402}, {'pitch': 'E5', 'dur': 's', 'beam': 9403}, {'pitch': 'D5', 'dur': 's', 'beam': 9403}, {'pitch': 'C#5', 'dur': 's', 'beam': 9403}, {'pitch': 'B4', 'dur': 's', 'beam': 9403}],
+                          bars=1),
+                     dict(cap='b) y bajando · el dedo que va a aguantar el Re no se mete todavía',
+                          events=[{'pitch': 'D5', 'dur': 's', 'beam': 9404}, {'pitch': 'C#5', 'dur': 's', 'beam': 9404}, {'pitch': 'B4', 'dur': 's', 'beam': 9404}, {'pitch': 'A4', 'dur': 's', 'beam': 9404}, {'pitch': 'G4', 'dur': 's', 'beam': 9405}, {'pitch': 'F#4', 'dur': 's', 'beam': 9405}, {'pitch': 'E4', 'dur': 's', 'beam': 9405}, {'pitch': 'F#4', 'dur': 's', 'beam': 9405}, {'pitch': 'G4', 'dur': 's', 'beam': 9406}, {'pitch': 'A4', 'dur': 's', 'beam': 9406}, {'pitch': 'B4', 'dur': 's', 'beam': 9406}, {'pitch': 'C#5', 'dur': 's', 'beam': 9406}, {'pitch': 'D5', 'dur': 's', 'beam': 9407}, {'pitch': 'C#5', 'dur': 's', 'beam': 9407}, {'pitch': 'B4', 'dur': 's', 'beam': 9407}, {'pitch': 'A4', 'dur': 's', 'beam': 9407}],
+                          bars=1, show_time=False),
+                 ]),
             dict(num=2, titulo='Sostener mientras la de arriba salta',
                  pista='andamio · lo mismo, pero arriba ya no va por grados: va a saltos',
                  sistemas=[
@@ -330,10 +342,15 @@ CANCION = dict(
 
 _S1, _S2, _S3 = sistemas_extra('Re mayor', 'D4', 'D3', time_sig=(4, 4),
                                variante=49, letras=('c', 'd', 'c', 'd', 'c'))
-_PASOS = [b for b in CANCION['piano1']['bloques'] if b.get('num')]
+_PASOS = [b for b in CANCION['piano1']['bloques']
+          if b.get('num') and not b.get('semis')]
 _PASOS[0]['sistemas'] = list(_PASOS[0]['sistemas']) + _S1
 if len(_PASOS) > 1:
     _PASOS[1]['sistemas'] = list(_PASOS[1]['sistemas']) + _S2
+# La tercera tanda de `sistemas_extra` estaba escrita y sin colocar; con el
+# bloque nuevo de semicorcheas hace falta para llenar la ultima hoja.
+if len(_PASOS) > 2:
+    _PASOS[2]['sistemas'] = list(_PASOS[2]['sistemas']) + _S3
 
 # La escalera de tempo pasa de la segunda hoja de estudio a la primera: es
 # papel, no pentagrama, así que se mueve sin perder nada, y con ella fuera la

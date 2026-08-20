@@ -19,7 +19,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from relleno import bloque_semicorcheas, bloques_extra
+from relleno import bloques_extra
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -229,8 +229,8 @@ CANCION = dict(
         reglas=['ESTO ES SOLO TU PARTE · EL PRIMO', 'LAS DOS MANOS, IGUAL', 'EMPIEZA MUY LENTO'],
         bloques=[
             dict(num=1, titulo='La célula y la subida', clef='treble',
-                 pista='cc. 3–4 medidos · La·Si·Do·Si·La y después Re·Mi·Fa·Sol·La · el ritmo real va '
-                       'en semicorcheas picadas; aquí en corcheas, para leerlo',
+                 pista='cc. 3–4 medidos · La·Si·Do·Si·La y después Re·Mi·Fa·Sol·La · primero en '
+                       'corcheas para leerlo, y al final con su figura de verdad',
                  sistemas=[
                      dict(cap='a) tu derecha lo toca aquí y tu izquierda una octava más abajo, '
                               'exactamente igual',
@@ -325,7 +325,26 @@ CANCION['piano1']['bloques'] = list(CANCION['piano1']['bloques']) + bloques_extr
     'Do mayor', 20, 'C4', 'C3',
     'la mano en Do antes de la carrera de semicorcheas',
     desde=6, time_sig=(2, 4)) + [
-    bloque_semicorcheas('Do mayor', 5, 'C4', 'las semicorcheas seguidas, que son la pieza entera', time_sig=(2, 4))]
+    # Antes aqui iba `bloque_semicorcheas`, que escribe una escala generica de
+    # la tonalidad. La figura la veia, si, pero no sobre SU pieza. Como la
+    # carrera de semicorcheas es literalmente el material de los cc. 3-4 y del
+    # c. 33, que ya estan medidos, se cita eso: mismo coste de hoja y el alumno
+    # lee en el cuaderno exactamente lo que va a leer en la partitura.
+    dict(num=5, titulo='La carrera de semicorcheas, la de tu partitura',
+         pista='cc. 3–4 y c. 33 medidos · la misma célula que ya has tocado en corcheas, ahora '
+               'con la figura que trae impresa',
+         sistemas=[
+             dict(cap='a) cc. 3–4 · cuatro notas por golpe, y las cuatro del mismo peso',
+                  events=[{'pitch': q, 'dur': 's', 'beam': 9310 + i // 4}
+                          for i, q in enumerate(['A4', 'B4', 'C5', 'B4',
+                                                 'A4', 'D5', 'E5', 'F5'])],
+                  bars=1),
+             dict(cap='b) c. 33 · la bajada que cierra la pieza, también en semicorcheas',
+                  events=[{'pitch': q, 'dur': 's', 'beam': 9312 + i // 4}
+                          for i, q in enumerate(['E5', 'D5', 'C5', 'B4',
+                                                 'A4', 'G4', 'F4', 'E4'])],
+                  bars=1, show_time=False),
+         ])]
 
 if __name__ == '__main__':
     print('generado', construir(CANCION))

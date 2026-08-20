@@ -120,12 +120,15 @@ CANCION = dict(
                                   d('D4', 'A4'), d('C#4', 'A4'), d('B3', 'A4'), d('C#4', 'A4'),
                                   d('D4', 'A4', 'w')],
                           bars=3, show_time=False),
-                     dict(cap='c) otra vez como en la pieza, pero con la de arriba saltando · si se '
-                              'corta la de abajo, vuelve a la a) y no sigas',
-                          events=[d('D4', 'A4'), d('D4', 'D5'), d('D4', 'F#5'), d('D4', 'D5'),
-                                  d('D4', 'B4'), d('D4', 'E5'), d('D4', 'G5'), d('D4', 'E5'),
-                                  d('D4', 'D5', 'w')],
-                          bars=3, show_time=False),
+                     # Antes este sistema repetia el mismo gesto en negras. La voz de
+                     # arriba de esta pieza va en SEMICORCHEAS —106 pares de barras
+                     # dobles medidos sobre el PDF— y Eva no las veia en ninguna
+                     # hoja de su cuaderno. Aqui va sola, sin la nota de abajo, que
+                     # ademas es como se estudia.
+                     dict(cap='c) y ahora la voz de arriba SOLA, con la figura que trae tu partitura: '
+                              'semicorcheas, cuatro por golpe y las cuatro del mismo peso',
+                          events=[{'pitch': 'A4', 'dur': 's', 'beam': 9420}, {'pitch': 'B4', 'dur': 's', 'beam': 9420}, {'pitch': 'C#5', 'dur': 's', 'beam': 9420}, {'pitch': 'B4', 'dur': 's', 'beam': 9420}, {'pitch': 'A4', 'dur': 's', 'beam': 9421}, {'pitch': 'G4', 'dur': 's', 'beam': 9421}, {'pitch': 'F#4', 'dur': 's', 'beam': 9421}, {'pitch': 'G4', 'dur': 's', 'beam': 9421}, {'pitch': 'A4', 'dur': 's', 'beam': 9422}, {'pitch': 'B4', 'dur': 's', 'beam': 9422}, {'pitch': 'C#5', 'dur': 's', 'beam': 9422}, {'pitch': 'D5', 'dur': 's', 'beam': 9422}, {'pitch': 'E5', 'dur': 's', 'beam': 9423}, {'pitch': 'D5', 'dur': 's', 'beam': 9423}, {'pitch': 'C#5', 'dur': 's', 'beam': 9423}, {'pitch': 'B4', 'dur': 's', 'beam': 9423}],
+                          bars=1, show_time=False),
                      dict(cap='d) y alternando sin parar · un compás manda la de arriba y el siguiente '
                               'manda la de abajo: aquí es donde se nota si la mano ha entendido',
                           events=[d('D4', 'A4'), d('D4', 'B4'), d('D4', 'C#5'), d('D4', 'B4'),

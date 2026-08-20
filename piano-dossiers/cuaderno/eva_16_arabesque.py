@@ -113,7 +113,8 @@ CANCION = dict(
                      dict(cap='c) y ya como está escrita, con la subida detrás · cc. 3–4: mismo picado '
                               'de la b), solo que ahora deprisa',
                           events=CELULA + SUBIDA + CELULA + SUBIDA, bars=4, show_time=False),
-                     dict(cap='b) y AHORA con su figura de verdad, la semicorchea · el mismo dibujo el doble de rápido, tal y como está impreso en tu partitura',
+                     dict(cap='d) y AHORA con su figura de verdad, la semicorchea · el mismo dibujo '
+                              'el doble de rápido, tal y como está impreso en tu partitura',
                           events=[{'pitch': 'A4', 'dur': 's', 'beam': 9210},
                                   {'pitch': 'B4', 'dur': 's', 'beam': 9210},
                                   {'pitch': 'C5', 'dur': 's', 'beam': 9210},

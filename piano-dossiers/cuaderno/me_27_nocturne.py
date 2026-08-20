@@ -21,6 +21,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from me_comun import n, ac, sil
 
 HERE = os.path.dirname(__file__)
@@ -139,7 +140,9 @@ CANCION = dict(
                           events=[ac(('F2', 'D4')), n('C4'), n('B3'), ac(('C3', 'B3'), 'h.')],
                           bars=2, show_time=False),
                  ]),
-        ],
+        ] + bloques_extra('Do mayor', 55, 'C4', 'C3',
+                          'el sonido: aquí no se puede esconder ninguna nota',
+                          desde=4, time_sig=(3, 4)),
     ),
 )
 

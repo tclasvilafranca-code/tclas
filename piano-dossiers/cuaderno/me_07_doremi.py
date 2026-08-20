@@ -16,6 +16,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from me_comun import n, ac, corch
 
 HERE = os.path.dirname(__file__)
@@ -136,7 +137,9 @@ CANCION = dict(
                                  + [ac(('C3', 'G4'), 'e'), n('A4', 'e'), ac(('F2', 'B4'), 'e'), n('G4', 'e')],
                           bars=1, show_time=False),
                  ]),
-        ],
+        ] + bloques_extra('Do mayor', 32, 'C5', 'C3',
+                          'la escala es literalmente la canción, así que aquí se estudia doble',
+                          desde=4, time_sig=(4, 4)),
     ),
 )
 

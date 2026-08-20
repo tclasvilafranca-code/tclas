@@ -18,6 +18,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from me_comun import n, ac, sil
 
 HERE = os.path.dirname(__file__)
@@ -138,7 +139,9 @@ CANCION = dict(
                                   n('G4'), n('Bb4'), n('G4'), n('F4')],
                           bars=2, show_time=False),
                  ]),
-        ],
+        ] + bloques_extra('Do mayor', 15, 'C4', 'C3',
+                          'el swing: escritas iguales, tocadas desiguales',
+                          desde=4, mas=True, time_sig=(4, 4)),
     ),
 )
 

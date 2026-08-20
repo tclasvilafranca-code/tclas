@@ -77,6 +77,14 @@ def patched(c, x, top, w, gap, events, clef='treble', time_sig=(4, 4), show_clef
     # justifica dibujando antes sobre un lienzo que se tira): contarlas duplica
     # cada sistema y encima con la etiqueta de la hoja anterior.
     import hoja_piano
+    # La tecnica comun (escalas, arpegios y cadencias de la tonalidad, que salen
+    # de `relleno`) puede coincidir entre alumnos sin que eso sea un fallo: es
+    # el mismo caso que una cita literal del mismo compas. Lo que se persigue
+    # aqui es el andamio INVENTADO repetido sin motivo.
+    if events and all(e.get('tecnica') for e in events):
+        return orig(c, x, top, w, gap, events, clef=clef, time_sig=time_sig,
+                    show_clef=show_clef, show_time=show_time, key_sig=key_sig,
+                    spacing=spacing, **extra)
     if hoja_piano.MIDIENDO[0]:
         return orig(c, x, top, w, gap, events, clef=clef, time_sig=time_sig,
                     show_clef=show_clef, show_time=show_time, key_sig=key_sig,

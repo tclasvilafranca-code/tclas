@@ -146,7 +146,7 @@ CANCION = dict(
     ),
 )
 
-_S1, _S2, _S3 = sistemas_extra('La menor', 'A3', 'A2', time_sig=(3, 4), variante=2,
+_S1, _S2, _S3 = sistemas_extra('La menor', 'A3', 'A2', time_sig=(3, 4), variante=50,
                           letras=('c', 'd', 'c', 'd', 'c'))
 _PASOS = [b for b in CANCION['piano1']['bloques'] if b.get('num')]
 _PASOS[0]['sistemas'] = list(_PASOS[0]['sistemas']) + _S1

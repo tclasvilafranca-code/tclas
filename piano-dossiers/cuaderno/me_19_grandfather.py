@@ -15,6 +15,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from me_comun import n, ac
 
 HERE = os.path.dirname(__file__)
@@ -58,10 +59,13 @@ CANCION = dict(
                 'hizo tan popular en el siglo XIX que dio nombre a un tipo de reloj de pie.',
         ),
         ritmos=[
+            # Notas distintas de las del ejercicio 1: la ficha ENSEÑA el dibujo
+            # y la hoja al piano lo TRABAJA; si son las mismas cuatro notas, el
+            # cuaderno repite hoja sin que se note al maquetar.
             ('MANO DERECHA', 'negras sueltas, una por golpe · andamio',
-             [n('G4'), n('A4'), n('B4'), n('C5')], OCRE, 'treble', None),
+             [n('D5'), n('C5'), n('B4'), n('G4')], OCRE, 'treble', None),
             ('MANO IZQUIERDA', 'negras sueltas, una por golpe · andamio',
-             [n('G3'), n('D3'), n('G3'), n('D3')], AZUL, 'bass', None),
+             [n('B2'), n('D3'), n('B2'), n('G2')], AZUL, 'bass', None),
         ],
         especial=[
             'Detrás de la clave hay un sostenido: todos los Fa son teclas negras.',
@@ -135,7 +139,9 @@ CANCION = dict(
                           events=[ac(('C3', 'D5')), ac(('G3', 'C5')), ac(('C3', 'B4')), ac(('G3', 'A4'))],
                           bars=1, show_time=False),
                  ]),
-        ],
+        ] + bloques_extra('Sol mayor', 17, 'G4', 'G2',
+                          '"with precision": cada nota exactamente donde toca',
+                          desde=4, time_sig=(4, 4)),
     ),
 )
 

@@ -21,6 +21,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from me_comun import n, ac, sil
 
 HERE = os.path.dirname(__file__)
@@ -138,7 +139,9 @@ CANCION = dict(
                                   ac(('D3', 'F#3', 'F#4'), 'h.')],
                           bars=3, show_time=False),
                  ]),
-        ],
+        ] + bloques_extra('Sol mayor', 12, 'G3', 'G2',
+                          'el Fa es negro también cuando la melodía corre',
+                          desde=4, time_sig=(3, 4)),
     ),
 )
 

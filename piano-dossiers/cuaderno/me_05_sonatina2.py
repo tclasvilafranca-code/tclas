@@ -19,6 +19,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from me_comun import n, ac
 
 HERE = os.path.dirname(__file__)
@@ -140,7 +141,9 @@ CANCION = dict(
                                   ac(('G3', 'G4')), ac(('F#3', 'F#4')), ac(('G3', 'G4'), 'h')],
                           bars=2, show_time=False),
                  ]),
-        ],
+        ] + bloques_extra('Sol mayor', 7, 'G3', 'G2',
+                          'el Fa sostenido vale para toda la pieza, no solo al principio',
+                          desde=4, time_sig=(4, 4)),
     ),
 )
 

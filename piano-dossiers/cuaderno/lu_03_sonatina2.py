@@ -16,6 +16,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import sistemas_extra
 from lu_comun import n, ac
 
 HERE = os.path.dirname(__file__)
@@ -141,6 +142,15 @@ CANCION = dict(
         ],
     ),
 )
+
+_S1, _S2, _S3 = sistemas_extra('Sol mayor', 'G3', 'G2', time_sig=(4, 4), variante=7,
+                          letras=('c', 'd', 'c', 'd', 'c'))
+_PASOS = [b for b in CANCION['piano1']['bloques'] if b.get('num')]
+_PASOS[0]['sistemas'] = list(_PASOS[0]['sistemas']) + _S1
+if len(_PASOS) > 1:
+    _PASOS[1]['sistemas'] = list(_PASOS[1]['sistemas']) + _S2
+if len(_PASOS) > 2:
+    _PASOS[2]['sistemas'] = list(_PASOS[2]['sistemas']) + _S3
 
 if __name__ == '__main__':
     print('generado', construir(CANCION))

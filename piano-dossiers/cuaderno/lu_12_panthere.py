@@ -21,6 +21,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import sistemas_extra
 from lu_comun import n, ac, sil
 
 HERE = os.path.dirname(__file__)
@@ -150,6 +151,25 @@ CANCION = dict(
         ],
     ),
 )
+
+_S1, _S2, _S3 = sistemas_extra('Do mayor', 'C4', 'G2', time_sig=(4, 4), variante=16,
+                          letras=('c', 'd', 'c', 'd', 'c'))
+_PASOS = [b for b in CANCION['piano1']['bloques'] if b.get('num')]
+_PASOS[0]['sistemas'] = list(_PASOS[0]['sistemas']) + _S1 + [
+    # Su dificultad medida: doce tiempos callado y entrar justo. Contarlos sobre
+    # el papel, con los silencios dibujados, es distinto de contarlos de memoria.
+    dict(cap='e) los doce tiempos de espera, contados · tres compases callado y '
+             'entrar en el uno, ni antes ni después',
+         events=[{'rest': True, 'dur': 'w'}, {'rest': True, 'dur': 'w'},
+                 {'rest': True, 'dur': 'w'},
+                 {'pitch': 'C4', 'dur': 'q'}, {'pitch': 'E4', 'dur': 'q'},
+                 {'pitch': 'G4', 'dur': 'h'}],
+         bars=4, show_time=False),
+]
+if len(_PASOS) > 1:
+    _PASOS[1]['sistemas'] = list(_PASOS[1]['sistemas']) + _S2
+if len(_PASOS) > 2:
+    _PASOS[2]['sistemas'] = list(_PASOS[2]['sistemas']) + _S3
 
 if __name__ == '__main__':
     print('generado', construir(CANCION))

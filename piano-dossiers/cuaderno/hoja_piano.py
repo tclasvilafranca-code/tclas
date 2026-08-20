@@ -169,29 +169,45 @@ def _partir_manos(events, time_sig, modo='dobla'):
     sostiene = modo == 'sostiene'
     arriba, abajo = [], []
     pos = 0.0
+    cubierto = [0.0]          # hasta donde llega ya el pentagrama de fa
     pendiente = None          # (evento de fa, en que posicion empezo)
 
-    def cerrar(hasta):
-        """Cierra la nota de fa pendiente y rellena el hueco si hace falta."""
-        if pendiente is None:
-            return
-        ev, ini = pendiente
-        if sostiene:
-            dur = _figura(hasta - ini)
-            if dur:
-                ev['dur'] = dur
-                abajo.append(ev)
-            return
-        # modo 'dobla': la figura escrita se respeta y lo que sobra es silencio.
-        # Alargarla seria inventar una duracion que no ha escrito nadie.
-        abajo.append(ev)
-        hueco = (hasta - ini) - beats_de(ev)
+    def silencios(hasta):
+        """Rellena de silencios el pentagrama de fa hasta esa posicion.
+
+           Sin esto, un sistema que empieza con notas solo de la derecha dejaba
+           el pentagrama de fa sin su silencio de entrada y el compas salia
+           corto: siete tiempos en un cuatro por cuatro. Lo canto el auditor de
+           compases, que para eso esta."""
+        hueco = hasta - cubierto[0]
         while hueco > 1e-6:
             d = _figura(hueco)
             if not d:
                 break
             abajo.append({'rest': True, 'dur': d})
             hueco -= DUR[d]
+            cubierto[0] = hasta - hueco
+
+    def cerrar(hasta):
+        """Cierra la nota de fa pendiente y rellena el hueco si hace falta."""
+        if pendiente is None:
+            silencios(hasta)
+            return
+        ev, ini = pendiente
+        silencios(ini)
+        if sostiene:
+            dur = _figura(hasta - ini)
+            if dur:
+                ev['dur'] = dur
+                abajo.append(ev)
+                cubierto[0] = ini + DUR[dur]
+            silencios(hasta)
+            return
+        # modo 'dobla': la figura escrita se respeta y lo que sobra es silencio.
+        # Alargarla seria inventar una duracion que no ha escrito nadie.
+        abajo.append(ev)
+        cubierto[0] = ini + beats_de(ev)
+        silencios(hasta)
 
     for e in events:
         b = beats_de(e)
@@ -800,7 +816,7 @@ OBJETIVO = 88.0
 # Lo mas que se puede abrir un hueco entre ejercicios. Mas que esto ya no
 # parece una hoja llena, parece una hoja con los ejercicios separados a la
 # fuerza, y entonces lo honesto es decir que falta material.
-AIRE_MAX = 26.0
+AIRE_MAX = 30.0
 
 
 def _aire(cfg, y0, bloques):

@@ -115,8 +115,16 @@ CANCION = dict(
                                   ac(('A4', 'C5'), 'h')],
                           matiz='mp',
                           bars=2, key_sig='Fa mayor'),
-                     dict(cap='b) y AHORA con su figura de verdad, la semicorchea · el mismo dibujo el doble de rápido, tal y como está impreso en tu partitura',
-                          events=semi(['C5', 'F5', 'E5', 'D5']) + semi(['C5', 'D5', 'C5', 'A4']) + [n('C5'), n('F5')],
+                     # Esta linea decia "y AHORA con su figura de verdad, la semicorchea,
+                     # tal y como esta impreso en tu partitura". Es FALSO: se ha vuelto a
+                     # mirar el PDF entero (mfiles, Jim Paterson, 16 compases) y no hay ni
+                     # una barra doble. La figura mas corta de esta pieza es la corchea, y
+                     # eso es lo que se escribe.
+                     dict(cap='b) y ahora cuatro corcheas seguidas · es lo más rápido que llega a '
+                              'haber en tu partitura, y las dos manos caen juntas en cada una',
+                          events=[{'pitch': 'C5', 'dur': 'e'}, {'pitch': 'D5', 'dur': 'e'},
+                                  {'pitch': 'C5', 'dur': 'e'}, {'pitch': 'A4', 'dur': 'e'},
+                                  n('Bb4'), n('A4')],
                           bars=1, show_time=False, key_sig='Fa mayor'),
                  ]),
             dict(num=2, titulo='La figura larga-corta, sin aplanarla',

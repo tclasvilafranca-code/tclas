@@ -22,7 +22,7 @@
    bloque de la escalera de tempo, que es papel, no pentagrama, y es lo que
    de verdad se usa en casa entre semana.
 """
-import sys, os
+import sys, os, io
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'engine'))
 from reportlab.lib.colors import HexColor, white
 from reportlab.pdfbase.pdfmetrics import stringWidth
@@ -227,7 +227,7 @@ def _figura(beats):
 
 # Interruptor del sistema de piano (sol+fa) en los bloques de las dos manos.
 # Ver el comentario de `_pide_dos_pentagramas`.
-DOS_PENTAGRAMAS = [False]
+DOS_PENTAGRAMAS = [True]
 
 
 def _pide_dos_pentagramas(events, clef):
@@ -430,7 +430,131 @@ def tracker(c, y, titulo, pie, dias=('L', 'M', 'X', 'J', 'V', 'S', 'D')):
     return y - h - 10
 
 
-def build_piano(c, cfg):
+def _bloque(c, y, blq, cfg):
+    """Dibuja UN bloque y devuelve la y de abajo.
+
+       Sale del bucle de `build_piano` para poder MEDIRLO antes de
+       dibujarlo: la hoja se pagina sola (ver `_paginar`) y para saber si
+       un bloque cabe hay que saber cuanto ocupa, y eso solo se sabe
+       dibujandolo."""
+    tipo = blq.get('tipo', 'ej')
+    if tipo == 'ej':
+        y = _ej_heading(c, y, blq['num'], blq['titulo'], blq['pista'])
+        for s in blq['sistemas']:
+            y = _caption(c, y, s.get('cap'))
+            # Un sistema puede declarar `matiz='p'` y se aplica a su primera
+            # nota, que es donde va en cualquier edicion. Asi una pieza no
+            # tiene que tocar su lista de notas solo para poner la dinamica.
+            if s.get('matiz'):
+                for _e in s['events']:
+                    if not _e.get('rest'):
+                        _e.setdefault('matiz', s['matiz'])
+                        break
+            # `ligar=True` arquea una ligadura de fraseo sobre TODO el
+            # sistema (el "sempre legato" de tantas ediciones); `ligar=n`
+            # la limita a las n primeras notas.
+            if s.get('ligar'):
+                _notas = [_e for _e in s['events'] if not _e.get('rest')]
+                if len(_notas) >= 2:
+                    _n = len(_notas) - 1 if s['ligar'] is True else int(s['ligar'])
+                    _notas[0].setdefault('lig', max(1, min(_n, len(_notas) - 1)))
+            # El resto del vocabulario de expresion, tambien declarable en
+            # el sistema para no tener que tocar la lista de notas:
+            #   staccato=True  -> punto en todas las notas
+            #   acento=True    -> acento en la primera
+            #   calderon=True  -> calderon en la ultima
+            #   cresc/dim=n    -> regulador de n eventos desde la primera
+            #   pedal=n        -> marca de pedal de n eventos
+            _notas = [_e for _e in s['events'] if not _e.get('rest')]
+            if _notas:
+                if s.get('staccato'):
+                    for _e in _notas:
+                        _e.setdefault('art', 'staccato')
+                if s.get('acento'):
+                    _notas[0].setdefault('art', 'acento')
+                if s.get('calderon'):
+                    _notas[-1].setdefault('art', 'calderon')
+                for _k in ('cresc', 'dim', 'pedal'):
+                    if s.get(_k):
+                        _notas[0].setdefault(_k, int(s[_k]))
+            # un sistema puede llevar SU compas: hay piezas que cambian de
+            # compas en un compas suelto (el c. 62 de When We Were Young)
+            y = _lineas(c, y, s['events'], s.get('time_sig', cfg['time_sig']),
+                        s.get('bars', BARS_PER_LINE),
+                        gap=s.get('gap', cfg.get('gap', GAP)),
+                        show_time=s.get('show_time', True),
+                        clef=s.get('clef', 'treble'),
+                        key_sig=s.get('key_sig', cfg.get('key_sig')),
+                        ottava=s.get('ottava', False),
+                        repetir=s.get('repetir'),
+                        casilla=s.get('casilla'))
+        y -= blq.get('extra_gap', 3)
+    elif tipo == 'nota':
+        y = nota_clave(c, y, blq['texto'], blq.get('etiqueta', 'LA CLAVE DE TODO'))
+    elif tipo == 'escalera':
+        y = escalera_tempo(c, y, blq['valores'], blq['regla'])
+    elif tipo == 'tracker':
+        y = tracker(c, y, blq['titulo'], blq['pie'])
+    return y
+
+
+# Hasta donde puede bajar el contenido antes de pisar el pie de pagina. El
+# estandar del proyecto pide acabar entre 44 y 132; se pagina apuntando a la
+# parte alta de esa horquilla para que la hoja siguiente no salga casi vacia.
+SUELO = 48.0
+
+
+def _medir(cfg, blq, y):
+    """Cuanto baja la y al dibujar este bloque, sin ensuciar nada.
+
+       Se dibuja de verdad, sobre un lienzo que se tira: es la unica forma
+       exacta de saber lo que ocupa un bloque, porque su altura depende del
+       texto que envuelve, de las lineas adicionales de cada nota y de si el
+       sistema abre o no el pentagrama de fa. Estimarlo "a ojo" es como se
+       llego a tener hojas que se salian 80 pt por abajo."""
+    import copy
+    from reportlab.pdfgen.canvas import Canvas
+    prueba = Canvas(io.BytesIO(), pagesize=(W, H))
+    return _bloque(prueba, y, copy.deepcopy(blq), cfg)
+
+
+def _paginar(cfg):
+    """Reparte los bloques en las hojas que hagan falta.
+
+       Antes cabia todo en una hoja porque las dos manos se apretaban en un
+       solo pentagrama de sol. Al abrir el pentagrama de fa —que es como se
+       escribe el piano— el bloque de las dos manos ya no entra, y la decision
+       del cliente fue darle su propia hoja en vez de quitar material medido.
+
+       Se parte por bloques enteros: un ejercicio no se corta a la mitad."""
+    hojas, actual = [], []
+    y = _ALTO_CABECERA(cfg)
+    for blq in cfg['bloques']:
+        y2 = _medir(cfg, blq, y)
+        if actual and y2 < SUELO:
+            hojas.append(actual)
+            actual = []
+            y = _ALTO_CABECERA(cfg)
+            y2 = _medir(cfg, blq, y)
+        actual.append(blq)
+        y = y2
+    if actual:
+        hojas.append(actual)
+    return hojas
+
+
+def _ALTO_CABECERA(cfg):
+    """La y a la que empieza el primer bloque, medida igual que en build_piano."""
+    from reportlab.pdfgen.canvas import Canvas
+    return _cabecera(Canvas(io.BytesIO(), pagesize=(W, H)), cfg)
+
+
+def _cabecera(c, cfg):
+    """Fondo, titulo, intro y la banda de reglas. Devuelve la y del primer bloque.
+
+       Esta suelta porque `_paginar` necesita saber a que altura empieza el
+       contenido, y porque la dibujan igual la primera hoja y las siguientes:
+       una segunda hoja de "Como se estudia" sin cabecera no se entiende."""
     c.setFillColor(CREAM)
     c.rect(0, 0, W, H, fill=1, stroke=0)
     c.setFillColor(NAVY)
@@ -472,71 +596,24 @@ def build_piano(c, cfg):
             c.setFillColor(ACCENT)
             c.circle(rx + 12, y - 12, 1.8, fill=1, stroke=0)
             rx += 24
-    y -= bh + 14
+    return y - (bh + 14)
 
-    for blq in cfg['bloques']:
-        tipo = blq.get('tipo', 'ej')
-        if tipo == 'ej':
-            y = _ej_heading(c, y, blq['num'], blq['titulo'], blq['pista'])
-            for s in blq['sistemas']:
-                y = _caption(c, y, s.get('cap'))
-                # Un sistema puede declarar `matiz='p'` y se aplica a su primera
-                # nota, que es donde va en cualquier edicion. Asi una pieza no
-                # tiene que tocar su lista de notas solo para poner la dinamica.
-                if s.get('matiz'):
-                    for _e in s['events']:
-                        if not _e.get('rest'):
-                            _e.setdefault('matiz', s['matiz'])
-                            break
-                # `ligar=True` arquea una ligadura de fraseo sobre TODO el
-                # sistema (el "sempre legato" de tantas ediciones); `ligar=n`
-                # la limita a las n primeras notas.
-                if s.get('ligar'):
-                    _notas = [_e for _e in s['events'] if not _e.get('rest')]
-                    if len(_notas) >= 2:
-                        _n = len(_notas) - 1 if s['ligar'] is True else int(s['ligar'])
-                        _notas[0].setdefault('lig', max(1, min(_n, len(_notas) - 1)))
-                # El resto del vocabulario de expresion, tambien declarable en
-                # el sistema para no tener que tocar la lista de notas:
-                #   staccato=True  -> punto en todas las notas
-                #   acento=True    -> acento en la primera
-                #   calderon=True  -> calderon en la ultima
-                #   cresc/dim=n    -> regulador de n eventos desde la primera
-                #   pedal=n        -> marca de pedal de n eventos
-                _notas = [_e for _e in s['events'] if not _e.get('rest')]
-                if _notas:
-                    if s.get('staccato'):
-                        for _e in _notas:
-                            _e.setdefault('art', 'staccato')
-                    if s.get('acento'):
-                        _notas[0].setdefault('art', 'acento')
-                    if s.get('calderon'):
-                        _notas[-1].setdefault('art', 'calderon')
-                    for _k in ('cresc', 'dim', 'pedal'):
-                        if s.get(_k):
-                            _notas[0].setdefault(_k, int(s[_k]))
-                # un sistema puede llevar SU compas: hay piezas que cambian de
-                # compas en un compas suelto (el c. 62 de When We Were Young)
-                y = _lineas(c, y, s['events'], s.get('time_sig', cfg['time_sig']),
-                            s.get('bars', BARS_PER_LINE),
-                            gap=s.get('gap', cfg.get('gap', GAP)),
-                            show_time=s.get('show_time', True),
-                            clef=s.get('clef', 'treble'),
-                            key_sig=s.get('key_sig', cfg.get('key_sig')),
-                            ottava=s.get('ottava', False),
-                            repetir=s.get('repetir'),
-                            casilla=s.get('casilla'))
-            y -= blq.get('extra_gap', 3)
-        elif tipo == 'nota':
-            y = nota_clave(c, y, blq['texto'], blq.get('etiqueta', 'LA CLAVE DE TODO'))
-        elif tipo == 'escalera':
-            y = escalera_tempo(c, y, blq['valores'], blq['regla'])
-        elif tipo == 'tracker':
-            y = tracker(c, y, blq['titulo'], blq['pie'])
 
+def _pie(c, cfg):
     c.setFont('DejaVuSans', 7.4)
     c.setFillColor(MUTED)
     c.drawCentredString(W / 2, 26, 'El Cuaderno del Pianista  ·  T-Clas')
     c.drawRightString(W - MARGIN, 26, str(cfg.get('page_num', '')))
     c.showPage()
+
+
+def build_piano(c, cfg):
+    """Dibuja UNA hoja: los bloques que le tocan a `cfg['bloques']`.
+
+       El reparto en hojas lo hace `_paginar` y lo aplica `cancion.py`; aqui se
+       dibuja lo que llegue."""
+    y = _cabecera(c, cfg)
+    for blq in cfg['bloques']:
+        y = _bloque(c, y, blq, cfg)
+    _pie(c, cfg)
     return y

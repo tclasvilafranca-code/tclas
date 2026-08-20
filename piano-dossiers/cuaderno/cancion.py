@@ -165,6 +165,42 @@ def _mezcla_compases(time_sig, semilla):
     return [ts, ts, otros[0], ts, otros[1], ts, otros[2]]
 
 
+def _hojas_piano(cfg, kicker, pag, esquina_def):
+    """Las hojas de "Como se estudia", que ya no son siempre una por bloque-set.
+
+       Desde que las dos manos se escriben en su sistema de piano (sol+fa), el
+       bloque de manos juntas no siempre cabe con los demas. `hoja_piano.
+       _paginar` mide bloque a bloque y devuelve el reparto; aqui se convierte
+       cada trozo en una hoja con su cabecera y su numero de pagina. Un
+       ejercicio nunca se parte por la mitad.
+
+       `piano2`, cuando la pieza lo trae escrito a mano, sigue siendo una hoja
+       aparte y se pagina igual que la primera."""
+    from hoja_piano import _paginar
+    hojas = []
+    n = 0
+    for bruto in [cfg['piano1']] + ([cfg['piano2']] if cfg.get('piano2') else []):
+        base = dict(bruto)
+        base.update(kicker=kicker, time_sig=cfg['time_sig'],
+                    key_sig=cfg.get('key_sig'), gap=base.get('gap', 7.0),
+                    esquina=base.get('esquina', esquina_def),
+                    titulo=base.get('titulo', 'Cómo se estudia'))
+        trozos = _paginar(base)
+        for j, trozo in enumerate(trozos):
+            n += 1
+            # La hoja que continua lo dice en su titulo: si no, el alumno ve dos
+            # hojas iguales llamadas "Como se estudia" y no sabe cual va antes.
+            tit = base['titulo'] if (n == 1) else _sigue(base['titulo'])
+            hoja = dict(base, bloques=trozo, page_num=pag, titulo=tit)
+            hojas.append(('piano %d' % n, (lambda q: lambda c: build_piano(c, q))(hoja)))
+            pag += 1
+    return hojas, pag
+
+
+def _sigue(titulo):
+    return titulo if titulo.endswith('(sigue)') else titulo + ' (sigue)'
+
+
 def _hojas_corto(cfg, qr_png):
     """El dosier CORTO, para clases de media hora (Arnau, 10 anos).
 
@@ -197,15 +233,8 @@ def _hojas_corto(cfg, qr_png):
              ('taller', lambda c: build_taller(c, tal))]
 
     pag = p0 + 3
-    pianos = [cfg['piano1']] + ([cfg['piano2']] if cfg.get('piano2') else [])
-    for i, bruto in enumerate(pianos):
-        p = dict(bruto)
-        p.update(kicker=kicker, page_num=pag, time_sig=cfg['time_sig'],
-                 key_sig=cfg.get('key_sig'), gap=p.get('gap', 7.0),
-                 esquina=p.get('esquina', 'Cómo se aprende esta canción'),
-                 titulo=p.get('titulo', 'Cómo se estudia'))
-        hojas.append(('piano %d' % (i + 1), (lambda q: lambda c: build_piano(c, q))(p)))
-        pag += 1
+    _hp, pag = _hojas_piano(cfg, kicker, pag, 'Cómo se aprende esta canción')
+    hojas += _hp
 
     # Los deberes van ESCRITOS y hay una hoja por semana: la pieza se trabaja
     # dos semanas, asi que salen dos hojas, cada una con sus ejercicios.
@@ -267,15 +296,8 @@ def _hojas_adulto(cfg, qr_png):
              ('agudeza', lambda c: build_lectura(c, lec))]
 
     pag = p0 + 4
-    pianos = [cfg['piano1']] + ([cfg['piano2']] if cfg.get('piano2') else [])
-    for i, bruto in enumerate(pianos):
-        p = dict(bruto)
-        p.update(kicker=kicker, page_num=pag, time_sig=cfg['time_sig'],
-                 key_sig=cfg.get('key_sig'), gap=p.get('gap', 7.0),
-                 esquina=p.get('esquina', 'Al piano · el orden de estudio'),
-                 titulo=p.get('titulo', 'Cómo se estudia'))
-        hojas.append(('piano %d' % (i + 1), (lambda q: lambda c: build_piano(c, q))(p)))
-        pag += 1
+    _hp, pag = _hojas_piano(cfg, kicker, pag, 'Al piano · el orden de estudio')
+    hojas += _hp
 
     # RELAJACION, y al pie el recuadro donde la profesora escribe los deberes
     # de la semana. Es lo que decidio el cliente para TODOS los alumnos
@@ -333,32 +355,24 @@ def _hojas(cfg, qr_png):
     # El titulo y la esquina salen del archivo de la cancion si estan puestos:
     # el orden de estudio no es el mismo en todas las piezas y ponerle a todas
     # "por partes / montarla" era justo lo que no se entendia.
-    p1 = dict(cfg['piano1'])
-    p1.update(kicker=kicker, page_num=p0 + 4, time_sig=cfg['time_sig'],
-              key_sig=cfg.get('key_sig'), gap=p1.get('gap', 7.0),
-              esquina=p1.get('esquina', 'Al piano · el orden de estudio'),
-              titulo=p1.get('titulo', 'Cómo se estudia'))
-
-    p2 = dict(cfg['piano2'])
-    p2.update(kicker=kicker, page_num=p0 + 5, time_sig=cfg['time_sig'],
-              key_sig=cfg.get('key_sig'), gap=p2.get('gap', 7.0),
-              esquina=p2.get('esquina', 'Al piano · el orden de estudio'),
-              titulo=p2.get('titulo', 'Cómo se estudia (sigue)'))
+    # Las hojas al piano ya no son fijas dos: se paginan segun lo que ocupen
+    # (ver `_hojas_piano`). El formato largo sigue teniendo su `piano2` escrito
+    # a mano, con su propio titulo.
+    hp, pag = _hojas_piano(cfg, kicker, p0 + 4, 'Al piano · el orden de estudio')
 
     rlx = dict(cfg.get('relax') or {})
-    rlx.update(kicker=kicker, page_num=p0 + 6, key_sig=cfg.get('key_sig'),
+    rlx.update(kicker=kicker, page_num=pag, key_sig=cfg.get('key_sig'),
                semilla=sem)
 
     pau = dict(cfg.get('pauta') or {})
-    pau.update(kicker=kicker, page_num=p0 + 7)
+    pau.update(kicker=kicker, page_num=pag + 1)
 
-    return [('ficha', lambda c: build_ficha(c, ficha)),
-            ('calentamiento', lambda c: build_calentamiento(c, cal)),
-            ('agudeza', lambda c: build_lectura(c, lec)),
-            ('piano 1', lambda c: build_piano(c, p1)),
-            ('piano 2', lambda c: build_piano(c, p2)),
-            ('relax', lambda c: build_relax(c, rlx)),
-            ('pauta', lambda c: build_pauta(c, pau))]
+    return ([('ficha', lambda c: build_ficha(c, ficha)),
+             ('calentamiento', lambda c: build_calentamiento(c, cal)),
+             ('agudeza', lambda c: build_lectura(c, lec))]
+            + hp
+            + [('relax', lambda c: build_relax(c, rlx)),
+               ('pauta', lambda c: build_pauta(c, pau))])
 
 
 _CACHE_PAGS = {}
@@ -482,7 +496,17 @@ def _revisar(hojas, etiqueta):
         if y is not None and y > 132:
             fallos.append('%s: la hoja se queda corta, sobran %.0f pt de hoja '
                           '(y=%.1f) -> falta material' % (nombre, y - 60, y))
-    ident, parc = audit_duplicados(hojas)
+    # Las hojas "al piano" de una misma pieza se comparan entre ellas SOLO si
+    # son la misma hoja: repetir material entre sus bloques no es un descuido,
+    # es el metodo (aislar -> reducir -> REINSERTAR), y el ultimo bloque tiene
+    # que devolver a la partitura lo que los anteriores sacaron. Desde que la
+    # hoja se pagina sola, esos bloques caen en hojas distintas y el auditor
+    # empezo a marcarlos. Lo que sigue vigilando —y es lo que importa— es que
+    # el calentamiento no copie lo que citan las hojas al piano.
+    ident, parc = audit_duplicados([(nom, fn) for nom, fn in hojas
+                                    if not nom.startswith('piano ')]
+                                   + [('piano', lambda c: [f(c) for _n, f in hojas
+                                                           if _n.startswith('piano ')])])
     if ident:
         fallos.append('material IDENTICO entre hojas: %s' % (ident[:2],))
     if parc:

@@ -156,7 +156,7 @@ CANCION = dict(
                  ]),
         ] + bloques_extra('Fa mayor', 21, 'F4', 'F2',
                           'el Si bemol se olvida justo a mitad de frase',
-                          desde=4, time_sig=(4, 4)),
+                          desde=4, time_sig=(4, 4))[:2],
     ),
 
     trabajo=[
@@ -198,6 +198,14 @@ CANCION = dict(
         ),
     ],
 )
+
+# Un sistema menos en el último bloque. Con él, ningún corte deja las dos hojas
+# dentro de la horquilla de llenado: el bloque de las dos manos ocupa 166 pt y
+# el reparto salta de 490 a 656, con el tope en 625. Es la pieza que peor
+# cuadra de todo el proyecto y se resuelve quitando un giro repetido, no
+# material medido.
+CANCION['piano1']['bloques'][-1]['sistemas'] = \
+    CANCION['piano1']['bloques'][-1]['sistemas'][:1]
 
 if __name__ == '__main__':
     print('generado', construir(CANCION))

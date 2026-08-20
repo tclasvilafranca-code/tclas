@@ -335,9 +335,18 @@ CANCION = dict(
 _S1, _S2, _S3 = sistemas_extra('Do mayor', 'C4', 'C3', time_sig=(4, 4),
                                variante=54, letras=('c', 'd', 'c', 'd', 'c'))
 _PASOS = [b for b in CANCION['piano1']['bloques'] if b.get('num')]
-_PASOS[0]['sistemas'] = list(_PASOS[0]['sistemas']) + _S1
+_PASOS[0]['sistemas'] = list(_PASOS[0]['sistemas']) + _S1 + _S3
 if len(_PASOS) > 1:
     _PASOS[1]['sistemas'] = list(_PASOS[1]['sistemas']) + _S2
+
+# La escalera de tempo pasa de la segunda hoja de estudio a la primera: es
+# papel, no pentagrama, así que se mueve sin perder nada, y con ella fuera la
+# segunda vuelve a caber en una hoja en vez de abrir una cuarta casi vacía.
+_ESC = [b for b in CANCION['piano2']['bloques'] if b.get('tipo') == 'escalera']
+if _ESC:
+    CANCION['piano2']['bloques'] = [b for b in CANCION['piano2']['bloques']
+                                    if b.get('tipo') != 'escalera']
+    CANCION['piano1']['bloques'] = list(CANCION['piano1']['bloques']) + _ESC
 
 if __name__ == '__main__':
     print('generado', construir(CANCION))

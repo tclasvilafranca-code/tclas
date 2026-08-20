@@ -72,7 +72,7 @@ CANCION = dict(
             ('MI · lo escrito', 'ese acorde puesto en fila',
              corch(['D3', 'F3', 'A3', 'F3', 'A3', 'F3']) + [n('D3')], OCRE, 'bass', None),
             ('MD', 'la melodía se planta en una nota y la repite',
-             corch(['C5', 'C5', 'C5', 'B4', 'C5', 'C5', 'B4', 'A4']), AZUL, 'treble', None),
+             corch(['A4', 'A4', 'A4', 'G4', 'A4', 'A4', 'G4', 'F4']), AZUL, 'treble', None),
         ],
         especial=[
             'No hay armadura: cada sostenido o bemol está escrito delante de su nota.',

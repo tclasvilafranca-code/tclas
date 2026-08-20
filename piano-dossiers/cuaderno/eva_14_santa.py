@@ -171,8 +171,7 @@ CANCION = dict(
                        'cosas son instrucciones del arreglista, no adornos: si no las haces, la canción '
                        'suena en el sitio equivocado.'),
             dict(num=4, titulo='El cruce de manos, aislado',
-                 pista='“LH over RH” está escrito en el c. 4; las notas del salto son andamio en '
-                       'Sol mayor · la izquierda sube al registro agudo mientras la derecha sigue',
+                 pista='“LH over RH” del c. 4 · las notas del salto son andamio en Sol mayor',
                  sistemas=[
                      dict(cap='a) primero coloca la izquierda arriba sin tocar nada, cinco veces · '
                               'después ya toca',

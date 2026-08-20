@@ -7,7 +7,14 @@
      - FA MAYOR: hay un bemol detrás de la clave, y eso quiere decir que
        todos los SI de la canción se tocan en la tecla negra de al lado. Es la
        primera pieza del cuaderno con una tecla negra.
-     - Compás de 3/4: tres golpes por compás.
+     - Compás de **4/4**: cuatro golpes por compás. (Esta ficha dijo durante
+       meses que era 3/4, y era falso: se ha vuelto a mirar el PDF a zoom y
+       detras de la armadura hay un 4 sobre un 4. Un nino de diez anos
+       contando de tres una cancion que va de cuatro no puede tocarla bien.)
+     - La cancion **empieza antes del compas**: una negra sola de anacrusa.
+     - En el c. 1 y en el c. 5 hay una **corchea con puntillo y una
+       semicorchea** (el "round and round"): es la unica figura corta de la
+       pieza y es la que le da el balanceo.
      - La melodía empieza con CUATRO FA seguidos y después sube al La y al Do.
        Medido: Fa · Fa · Fa · Fa · La | Do · La | Sol · Sol | Mi · Re · Do.
      - Encima del pentagrama vienen escritas unas LETRAS (F, C, C7, B♭). No
@@ -39,7 +46,7 @@ def ac(ps, d='h.'):
 CANCION = dict(
     alumno='Arnau', num=5, nivel='iniciación', slug='WheelsOnTheBus',
     formato='corto',
-    titulo_corto='The Wheels on the Bus', time_sig=(3, 4), key_sig=FA,
+    titulo_corto='The Wheels on the Bus', time_sig=(4, 4), key_sig=FA,
     partitura=os.path.join(HERE, '..', 'students', 'arnau', 'source', 'ARNAU',
                            'The Wheels on the Bus.pdf'),
     yt='https://www.youtube.com/results?search_query=wheels+on+the+bus+piano',
@@ -70,14 +77,15 @@ CANCION = dict(
         pie_ritmos='Los primeros compases de cada mano. La de arriba repite y sube; la de abajo se '
                    'queda quieta.',
         ritmos=[
-            ('LA DERECHA', 'cuatro Fa seguidos y después sube',
-             [n('F4'), n('F4'), n('F4')], AZUL, 'treble', FA),
+            ('LA DERECHA', 'cuatro Fa: la segunda es larga-corta',
+             [n('F4'), n('F4', 'e.'), n('F4', 's'), n('F4', 'h')], AZUL, 'treble', FA),
             ('LA IZQUIERDA', 'una nota larga que ocupa el compás entero (andamio)',
-             [ac(('F2', 'C3'))], OCRE, 'bass', FA),
+             [ac(('F2', 'C3'), 'w')], OCRE, 'bass', FA),
         ],
         especial=[
             'Hay UN BEMOL detrás de la clave: todos los Si se tocan en la tecla negra.',
-            'Cada compás lleva tres golpes: un-dos-tres.',
+            'Cada compás lleva cuatro golpes: un-dos-tres-cuatro.',
+            'La canción empieza con una nota suelta, antes del primer compás entero.',
             'La melodía empieza repitiendo la misma nota cuatro veces.',
             'Encima del pentagrama hay letras (F, C, C7): son los acordes, no notas.',
             'La izquierda toca notas largas y las deja sonar.',
@@ -93,7 +101,7 @@ CANCION = dict(
                'una cosa: las ruedas giran, el claxon pita, los limpiaparabrisas se mueven. Por eso se '
                'repite tanto: está hecha para no acabarse nunca.',
         qr=dict(titulo='Escúchala',
-                texto='Marca tres golpes con el pie mientras suena: un-dos-tres, un-dos-tres.'),
+                texto='Marca cuatro golpes con el pie mientras suena: un-dos-tres-cua.'),
     ),
 
     taller=dict(),
@@ -112,8 +120,8 @@ CANCION = dict(
                      dict(cap='a) sube y baja pasando por el Si · tócalo despacio y mira la mano: ese '
                               'Si es la tecla negra',
                           events=[n('F4'), n('G4'), n('A4'), n('Bb4'),
-                                  n('A4'), n('G4'), n('F4'), n('F4', 'h')],
-                          bars=3),
+                                  n('A4'), n('G4'), n('F4', 'h')],
+                          bars=2),
                  ]),
             dict(tipo='nota',
                  etiqueta='QUÉ ES ESE SIGNO DEL PRINCIPIO',
@@ -124,27 +132,28 @@ CANCION = dict(
             dict(num=2, titulo='La melodía del principio',
                  pista='medida en tu partitura · cuatro notas iguales y después sube',
                  sistemas=[
-                     dict(cap='a) Fa · Fa · Fa · Fa · La · las cuatro primeras son la misma tecla',
-                          events=[n('F4'), n('F4'), n('F4'),
-                                  n('F4'), n('A4'), n('C5')],
-                          bars=2),
+                     dict(cap='a) Fa · Fa · Fa · Fa · La · las cuatro primeras son la misma tecla, y '
+                              'la segunda es larga-corta: “round and RO-und”',
+                          events=[n('F4'), n('F4', 'e.'), n('F4', 's'),
+                                  n('F4'), n('A4')],
+                          bars=1),
                      dict(cap='b) y lo que sigue · Do · La | Sol · Sol | Mi · Re · Do, bajando otra vez',
-                          events=[n('C5'), n('A4'), n('G4'),
-                                  n('G4'), n('E4'), n('D4'),
-                                  n('C4', 'h.')],
+                          events=[n('C5'), n('A4'), n('F4', 'h'),
+                                  n('G4'), n('G4'), n('F4', 'h'),
+                                  n('E4'), n('D4'), n('C4', 'h')],
                           bars=3, show_time=False),
                  ]),
             dict(num=3, titulo='La izquierda: tocar y dejar sonar', clef='bass',
                  pista='andamio en Fa mayor: el dibujo es el de tu partitura, las notas exactas míralas allí',
                  sistemas=[
-                     dict(cap='a) una nota larga por compás · tócala en el uno y cuenta hasta tres sin '
-                              'volver a apretar',
-                          events=[ac(('F2', 'C3')), ac(('C3', 'G3')),
-                                  ac(('F2', 'C3')), ac(('C3', 'G3'))],
+                     dict(cap='a) una nota larga por compás · tócala en el uno y cuenta hasta cuatro '
+                              'sin volver a apretar',
+                          events=[ac(('F2', 'C3'), 'w'), ac(('C3', 'G3'), 'w'),
+                                  ac(('F2', 'C3'), 'w'), ac(('C3', 'G3'), 'w')],
                           bars=4, clef='bass'),
                      dict(cap='b) y solo la nota de abajo · Fa · Do · Fa · Do: ese es el suelo de toda '
                               'la canción, y son dos notas',
-                          events=[n('F2', 'h.'), n('C3', 'h.'), n('F2', 'h.'), n('C3', 'h.')],
+                          events=[n('F2', 'w'), n('C3', 'w'), n('F2', 'w'), n('C3', 'w')],
                           bars=4, clef='bass', show_time=False),
                  ]),
             dict(tipo='nota',
@@ -212,14 +221,14 @@ CANCION = dict(
                        titulo='El ritmo de las palabras',
                        pista='dilo en voz alta y escríbelo con figuras en la caja'),
                 unir([('El bemol del principio', 'no son notas: es el nombre del acorde'),
-                      ('Las letras F, C, B♭ de arriba', 'tres golpes en cada compás'),
-                      ('El 3/4 de después de la clave', 'todos los Si van en la tecla negra'),
+                      ('Las letras F, C, B♭ de arriba', 'cuatro golpes en cada compás'),
+                      ('El 4/4 de después de la clave', 'todos los Si van en la tecla negra'),
                       ('La mano izquierda', 'toca notas largas, una o dos por compás')],
                      titulo='Une cada cosa con lo que significa',
                      pista='están desordenadas · una raya de un punto al otro'),
                 rutina('La melodía entera, sin fallar ni un Si',
                        'Las dos manos, los cuatro primeros compases',
-                       'Contar un-dos-tres en voz alta mientras tocas'),
+                       'Contar un-dos-tres-cua en voz alta mientras tocas'),
                 juego('Quien esté contigo dice un nombre de nota y tú la buscas en el piano lo más '
                       'rápido que puedas. Si dice Si, tienes que ir a la tecla negra.'),
             ],

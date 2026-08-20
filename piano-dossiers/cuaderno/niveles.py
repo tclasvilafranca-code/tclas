@@ -129,6 +129,14 @@ ESCALON = {
 EXCEPCIONES = {
     ('arnau_10_muffet', 'q.'): 'la pieza real está en 6/8 y su unidad es la negra con puntillo',
     ('arnau_15_largo', 'q.'): 'el Largo de Dvorak lleva la figura con puntillo impresa',
+    # Su edicion de The Wheels on the Bus lleva impresa una CORCHEA CON PUNTILLO
+    # seguida de SEMICORCHEA en los cc. 1 y 5: es el balanceo del "round and
+    # round" y es lo que hace reconocible la cancion. Comprobado a zoom sobre el
+    # PDF (la barra secundaria corta se ve sin ninguna duda). El escalon 1 no
+    # llega a la semicorchea, pero la regla que manda es que todo sale de la
+    # partitura: si el nino la va a tocar, la tiene que ver escrita.
+    ('arnau_05_wheels', 'e.'): 'su edicion lleva impreso el ritmo largo-corto en los cc. 1 y 5',
+    ('arnau_05_wheels', 's'): 'la nota corta de ese mismo ritmo, impresa en su partitura',
     # Su Für Elise es la edición real: va en corcheas casi entera, pero en el
     # c. 20 lleva UNA semicorchea impresa, como nota corta de una figura
     # larga-corta. Es su partitura, así que se escribe. Comprobado a zoom sobre

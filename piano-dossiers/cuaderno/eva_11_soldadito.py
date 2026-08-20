@@ -107,12 +107,10 @@ CANCION = dict(
                               'di “un-dos-tres” en cada grupo y que las tres duren igual',
                           events=[{'pitch': 'C4', 'dur': 'e', 'tresillo': 60, 'beam': 7260}, {'pitch': 'D4', 'dur': 'e', 'tresillo': 60, 'beam': 7260}, {'pitch': 'E4', 'dur': 'e', 'tresillo': 60, 'beam': 7260}, {'pitch': 'D4', 'dur': 'e', 'tresillo': 61, 'beam': 7261}, {'pitch': 'C4', 'dur': 'e', 'tresillo': 61, 'beam': 7261}, {'pitch': 'B3', 'dur': 'e', 'tresillo': 61, 'beam': 7261}, {'pitch': 'C4', 'dur': 'e', 'tresillo': 62, 'beam': 7262}, {'pitch': 'D4', 'dur': 'e', 'tresillo': 62, 'beam': 7262}, {'pitch': 'E4', 'dur': 'e', 'tresillo': 62, 'beam': 7262}, {'pitch': 'F4', 'dur': 'e', 'tresillo': 63, 'beam': 7263}, {'pitch': 'E4', 'dur': 'e', 'tresillo': 63, 'beam': 7263}, {'pitch': 'D4', 'dur': 'e', 'tresillo': 63, 'beam': 7263}],
                           bars=1),
-                     dict(cap='b) y ahora lo mismo en notas largas · la mano ya sabe dónde va, así que '
-                              'ahora solo escuchas si el pulso se mantiene igual',
-                          events=[n('C4', 'h'), n('E4', 'h'), n('G4', 'h'), n('E4', 'h'),
-                                  n('C4', 'h'), n('D4', 'h'), n('E4', 'h'), n('C4', 'h'),
-                                  n('C4', 'w')],
-                          bars=5, show_time=False),
+                     dict(cap='b) y ahora la OTRA figura de la pieza, la semicorchea · cuatro por '
+                              'golpe, que es donde la letra corre · el pie sigue marcando cuatro',
+                          events=[{'pitch': 'G4', 'dur': 's', 'beam': 9820}, {'pitch': 'F4', 'dur': 's', 'beam': 9820}, {'pitch': 'E4', 'dur': 's', 'beam': 9820}, {'pitch': 'D4', 'dur': 's', 'beam': 9820}, {'pitch': 'C4', 'dur': 's', 'beam': 9821}, {'pitch': 'D4', 'dur': 's', 'beam': 9821}, {'pitch': 'E4', 'dur': 's', 'beam': 9821}, {'pitch': 'F4', 'dur': 's', 'beam': 9821}, {'pitch': 'G4', 'dur': 's', 'beam': 9822}, {'pitch': 'A4', 'dur': 's', 'beam': 9822}, {'pitch': 'G4', 'dur': 's', 'beam': 9822}, {'pitch': 'F4', 'dur': 's', 'beam': 9822}, {'pitch': 'E4', 'dur': 's', 'beam': 9823}, {'pitch': 'D4', 'dur': 's', 'beam': 9823}, {'pitch': 'C4', 'dur': 's', 'beam': 9823}, {'pitch': 'D4', 'dur': 's', 'beam': 9823}],
+                          bars=1, show_time=False),
                      dict(cap='c) y con un silencio detrás · el tresillo cuesta el doble cuando hay que '
                               'parar y volver a entrar a tiempo, y en esta canción pasa todo el rato',
                           events=[{'pitch': 'C4', 'dur': 'e', 'tresillo': 70, 'beam': 7270}, {'pitch': 'D4', 'dur': 'e', 'tresillo': 70, 'beam': 7270}, {'pitch': 'E4', 'dur': 'e', 'tresillo': 70, 'beam': 7270}, {'rest': True, 'dur': 'q'}, {'pitch': 'G4', 'dur': 'e', 'tresillo': 80, 'beam': 7280}, {'pitch': 'F4', 'dur': 'e', 'tresillo': 80, 'beam': 7280}, {'pitch': 'E4', 'dur': 'e', 'tresillo': 80, 'beam': 7280}, {'rest': True, 'dur': 'q'}],

@@ -63,8 +63,11 @@ def main(prefijos=None):
             largas = d.get('largas', 0)
             if largas >= UMBRAL and not escribe:
                 huecos.append((m, largas, d['partitura']))
-            elif largas == 0 and escribe:
-                sobra.append((m, escribe, d['partitura']))
+            elif largas == 0 and d.get('escribe_a_mano'):
+                # Solo lo escrito A MANO: el material de apoyo de `relleno` es
+                # tecnica generica sobre la tonalidad, va marcado como tal y
+                # puede llevar una figura que la pieza no tenga.
+                sobra.append((m, d['escribe_a_mano'], d['partitura']))
         elif estado == 'no medible':
             if d.get('partitura') not in MIRADAS:
                 mirar.append((m, d['partitura'], d.get('motivo', '')))

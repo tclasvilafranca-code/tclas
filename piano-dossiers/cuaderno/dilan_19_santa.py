@@ -276,7 +276,8 @@ CANCION = dict(
                           bars=2, show_time=False),
                  ]),
             dict(num=4, titulo='El cruce de manos, aislado',
-                 pista='“LH over RH” · la izquierda salta al registro agudo mientras la derecha sigue',
+                 pista='“LH over RH” está escrito en el c. 4; las notas del salto son andamio en '
+                       'Sol mayor · la izquierda sube al registro agudo mientras la derecha sigue',
                  sistemas=[
                      dict(cap='a) primero coloca la izquierda arriba sin tocar nada, cinco veces · '
                               'después ya toca',

@@ -145,7 +145,7 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) la voz de abajo sola, sostenida · cuenta los cuatro tiempos en voz '
                               'alta y comprueba que sigue sonando al llegar al cuatro',
-                          events=[n('D4', 'w'), n('B3', 'w'), n('E4', 'w'), n('D4', 'w')],
+                          events=[n('B3', 'w'), n('D4', 'w'), n('B3', 'w'), n('E4', 'w')],
                           bars=4),
                      dict(cap='b) y la izquierda · el brazo se queda muerto encima de la tecla, no '
                               'apretando: si aprietas, el hombro se carga y no te enteras hasta el final',

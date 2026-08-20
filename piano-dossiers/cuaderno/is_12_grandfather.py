@@ -113,7 +113,7 @@ CANCION = dict(
                           events=[n('D5'), n('C5'), n('B4'), n('D5')],
                           bars=1),
                      dict(cap='b) y la frase que baja, con la misma exactitud',
-                          events=[n('B4'), n('C5'), n('D5'), n('B4')],
+                          events=[n('D5'), n('C5'), n('B4'), n('G4')],
                           bars=1, show_time=False),
                  ]),
             dict(tipo='nota',

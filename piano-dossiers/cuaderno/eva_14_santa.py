@@ -171,7 +171,8 @@ CANCION = dict(
                        'cosas son instrucciones del arreglista, no adornos: si no las haces, la canción '
                        'suena en el sitio equivocado.'),
             dict(num=4, titulo='El cruce de manos, aislado',
-                 pista='“LH over RH” · la izquierda salta al registro agudo mientras la derecha sigue',
+                 pista='“LH over RH” está escrito en el c. 4; las notas del salto son andamio en '
+                       'Sol mayor · la izquierda sube al registro agudo mientras la derecha sigue',
                  sistemas=[
                      dict(cap='a) primero coloca la izquierda arriba sin tocar nada, cinco veces · '
                               'después ya toca',
@@ -181,7 +182,7 @@ CANCION = dict(
                           bars=3),
                      dict(cap='b) y lo mismo en notas largas, para colocar el brazo antes de saltar · '
                               'el salto se prepara mirando, no de memoria',
-                          events=[n('D6', 'h'), n('B5', 'h'), n('G5', 'h'), n('D5', 'h'),
+                          events=[n('B5', 'h'), n('G5', 'h'), n('D6', 'h'), n('B5', 'h'),
                                   n('G5', 'w')],
                           bars=3, show_time=False),
                  ]),

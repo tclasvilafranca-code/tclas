@@ -147,8 +147,8 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) las dos manos tocando lo mismo · si oyes dos golpecitos en vez '
                               'de uno, para y baja la velocidad a la mitad',
-                          events=[ac(('G3', 'G4'), 'h'), ac(('F3', 'F4')), ac(('E3', 'E4')),
-                                  ac(('D3', 'D4'), 'h'), ac(('C3', 'C4'), 'h')],
+                          events=[ac(('C3', 'C4'), 'h'), ac(('D3', 'D4')), ac(('E3', 'E4')),
+                                  ac(('F3', 'F4'), 'h'), ac(('G3', 'G4'), 'h')],
                           bars=3),
                      dict(cap='b) y con la figura que de verdad usa la pieza: una larga y dos '
                               'cortas · cuenta "UN, dos" y las cortas caen en el dos',

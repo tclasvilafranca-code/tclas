@@ -117,13 +117,13 @@ CANCION = dict(
                  pista='andamio en Do mayor · aquí no hay mano que sostenga',
                  sistemas=[
                      dict(cap='a) primero en negras, para ver hacia dónde va cada mano',
-                          events=[n('E4'), n('G4'), n('A4'), n('G4'),
-                                  n('E4'), n('D4'), n('C4'), n('E4')],
+                          events=[n('C4'), n('E4'), n('G4'), n('C5'),
+                                  n('B4'), n('G4'), n('E4'), n('D4')],
                           bars=2),
                      dict(cap='b) y ahora en corcheas · si tienes que parar a pensar, baja la velocidad '
                               'a la mitad',
-                          events=corch(['E4', 'G4']) + corch(['A4', 'G4']) +
-                                 corch(['E4', 'D4']) + corch(['C4', 'E4']),
+                          events=corch(['C4', 'E4']) + corch(['G4', 'C5']) +
+                                 corch(['B4', 'G4']) + corch(['E4', 'D4']),
                           bars=1, show_time=False),
                  ]),
             dict(num=2, titulo='El cambio de armadura, aislado',

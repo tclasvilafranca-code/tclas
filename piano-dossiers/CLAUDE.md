@@ -337,6 +337,28 @@
 > lo separa nadie. En la primera pasada salieron seis coincidencias de ocho
 > eventos y hubo que rehacerlas.
 >
+> #### El cruce por los datos: `cuaderno/auditar_andamio.py`
+>
+> Los siete `cruzar_*.py` comparan lo **dibujado** y solo miran sistemas de ocho
+> eventos o más. Eso deja dos huecos grandes: los sistemas cortos —que en un
+> cuaderno de piano son la mayoría— y las parejas de alumnos para las que no
+> hay script (Dilan y Eva comparten doce piezas y no se cruzaban con nadie).
+>
+> `auditar_andamio.py` cruza las 199 piezas leyendo los `CANCION`, con **cuatro
+> eventos** de mínimo, y clasifica cada coincidencia leyendo el pie del sistema
+> primero y la pista del bloque después: si dice MEDIDO, literal, cita un compás
+> o sale de los cifrados impresos, es una **cita** y tiene que coincidir; si
+> dice "andamio", es material inventado y **no puede** coincidir. Al estrenarlo
+> salieron **28 ejercicios inventados repetidos**, entre ellos seis sistemas de
+> Greensleeves idénticos entre Luisa y Mercè y cinco casos del mismo alumno
+> repitiéndose a sí mismo con catorce semanas de diferencia. Tiene que decir
+> **0** antes de entregar.
+>
+> Dos cosas que aprendió el auditor por las malas: hay pistas que dicen "MEDIDO
+> sobre tu partitura, **no es** andamio" (buscar la palabra a secas las leía al
+> revés), y un mismo bloque puede mezclar una línea de andamio con la cita de un
+> compás, así que **manda el pie del sistema, no la pista del bloque**.
+>
 > Ver `cuaderno/PLAN_ALBUM_JOSEP.md`.
 >
 > ### Las partituras de Drive llegan como llegan (`fuente.py`)

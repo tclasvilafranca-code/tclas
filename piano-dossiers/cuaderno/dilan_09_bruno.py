@@ -314,7 +314,7 @@ CANCION = dict(
                                  [n('C5', 'w')],
                           bars=3),
                      dict(cap='b) y la misma frase quitando las repeticiones: solo las notas que cambian '
-                              '· mira qué poco se mueve en realidad',
+                              '· mira qué poco se mueve la mano',
                           events=[n('E5', 'h'), n('D5', 'h'), n('C5', 'w'),
                                   n('D5', 'h'), n('C5', 'h'), n('A4', 'h'), n('C5', 'h')],
                           bars=4, show_time=False),

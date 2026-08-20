@@ -72,7 +72,7 @@ CANCION = dict(
             ('MI · lo escrito', 'ese acorde puesto en fila',
              corch(['D3', 'F3', 'A3', 'F3', 'A3', 'F3']) + [n('D3')], OCRE, 'bass', None),
             ('MD', 'la melodía se planta en una nota y la repite',
-             corch(['G5', 'G5', 'G5', 'F5', 'G5', 'G5', 'F5', 'E5']), AZUL, 'treble', None),
+             corch(['C5', 'C5', 'C5', 'B4', 'C5', 'C5', 'B4', 'A4']), AZUL, 'treble', None),
         ],
         especial=[
             'No hay armadura: cada sostenido o bemol está escrito delante de su nota.',
@@ -163,15 +163,15 @@ CANCION = dict(
                  pista='andamio · el ritmo real va en semicorcheas; aquí en figuras largas, para verlo',
                  sistemas=[
                      dict(cap='a) solo las notas que cambian, sin las repeticiones · mira qué poco se '
-                              'mueve en realidad la melodía',
-                          events=[n('E5', 'h'), n('D5', 'h'), n('C5', 'w'),
-                                  n('D5', 'h'), n('C5', 'h'), n('A4', 'h'), n('C5', 'h')],
+                              'mueve la mano',
+                          events=[n('C5', 'h'), n('B4', 'h'), n('A4', 'w'),
+                                  n('B4', 'h'), n('A4', 'h'), n('F4', 'h'), n('A4', 'h')],
                           bars=4),
                      dict(cap='b) y ahora con las repeticiones, que es como está escrita: se planta en '
                               'una nota y la dice tres o cuatro veces antes de moverse',
-                          events=corch(['E5', 'E5', 'E5', 'D5', 'E5', 'E5', 'D5', 'C5']) +
-                                 corch(['D5', 'D5', 'D5', 'C5', 'D5', 'C5', 'A4', 'C5']) +
-                                 [n('C5', 'w')],
+                          events=corch(['C5', 'C5', 'C5', 'B4', 'C5', 'C5', 'B4', 'A4']) +
+                                 corch(['B4', 'B4', 'B4', 'A4', 'B4', 'A4', 'F4', 'A4']) +
+                                 [n('A4', 'w')],
                           bars=3, show_time=False),
                  ]),
             dict(tipo='nota',

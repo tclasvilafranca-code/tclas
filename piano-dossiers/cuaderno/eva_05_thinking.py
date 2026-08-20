@@ -134,10 +134,10 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) cc. 1–4 · un Re dos compases y un La otros dos: eso es todo',
                           events=SOSTEN, bars=4, clef='bass'),
-                     dict(cap='b) el ciclo entero, que es lo que vuelve toda la canción · y cada nota '
+                     dict(cap='b) andamio · más cambios, con la misma manera de tocar: cada nota '
                               'nueva es un cambio de pedal',
-                          events=[n('D2', 'w'), n('A2', 'w'), n('B2', 'w'), n('G2', 'w'),
-                                  n('D2', 'w'), n('A2', 'w'), n('G2', 'w'), n('D2', 'w')],
+                          events=[n('D2', 'w'), n('A2', 'w'), n('G2', 'w'), n('B2', 'w'),
+                                  n('D2', 'w'), n('G2', 'w'), n('A2', 'w'), n('D2', 'w')],
                           bars=4, clef='bass', show_time=False),
                  ]),
         ],

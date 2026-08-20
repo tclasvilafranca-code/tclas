@@ -158,7 +158,8 @@ CANCION = dict(
         reglas=['EL 6/8 SE CUENTA EN DOS', 'ESCUCHA EL SECONDO', 'DESPACIO Y SIN PARAR'],
         bloques=[
             dict(num=3, titulo='El 6/8, en dos golpes',
-                 pista='andamio · aprieta un poco la primera de cada tres corcheas y no las demás',
+                 pista='la primera línea es andamio y el c. 12 va medido · aprieta un poco la '
+                       'primera de cada tres corcheas y no las demás',
                  sistemas=[
                      dict(cap='a) el pie marca solo dos veces por compás · si marcas seis, ya lo estás '
                               'contando mal',

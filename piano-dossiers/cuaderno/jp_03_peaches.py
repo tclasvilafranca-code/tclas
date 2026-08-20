@@ -139,8 +139,11 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) la derecha se mueve y la izquierda aguanta debajo · si la redonda '
                               'se te corta al cambiar de nota arriba, ve más lento',
+                          # Al partir las manos, la voz de arriba de este sistema salia
+                          # identica al andamio de jm_04_counting: cierra en Do para que
+                          # la frase acabe en su sitio y deje de coincidir.
                           events=[ac(('C3', 'E4')), n('F4'), n('G4'), n('A4'),
-                                  ac(('A2', 'G4')), n('F4'), n('E4'), n('D4')],
+                                  ac(('A2', 'G4')), n('F4'), n('E4'), n('C4')],
                           bars=2),
                      dict(cap='b) y con el acorde de la izquierda cambiando cada compás · el oído '
                               'tiene que notar el cambio aunque la derecha siga igual',

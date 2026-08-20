@@ -150,8 +150,8 @@ CANCION = dict(
                           bars=2, clef='bass'),
                      dict(cap='b) y movido de sitio, que es lo que hace la pieza · el dibujo de los '
                               'dedos no cambia, solo dónde empieza',
-                          events=[n('F2'), n('A2'), n('C3'), n('D3'),
-                                  n('G2'), n('B2'), n('D3'), n('E3')],
+                          events=[n('G2'), n('B2'), n('D3'), n('E3'),
+                                  n('C3'), n('E3'), n('G3'), n('A3')],
                           bars=2, clef='bass', show_time=False),
                  ]),
             dict(num=4, titulo='Las dos manos, dos compases',

@@ -129,8 +129,8 @@ CANCION = dict(
                  pista='muy despacio · un solo compás hasta que salga cinco veces seguidas',
                  sistemas=[
                      dict(cap='a) esto es lo que hace la derecha mientras la izquierda aguanta',
-                          events=corch(['B4', 'C5']) + corch(['D5', 'E5']) +
-                                 [n('D5'), n('B4')],
+                          events=corch(['A4', 'B4']) + corch(['C5', 'D5']) +
+                                 [n('C5'), n('A4')],
                           bars=1),
                      dict(cap='b) y esto la izquierda a la vez (andamio) · una sola vez, en el uno',
                           events=[ac(('D3', 'A3'), 'w')],

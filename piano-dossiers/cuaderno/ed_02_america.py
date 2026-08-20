@@ -135,7 +135,8 @@ CANCION = dict(
                           bars=3, clef='bass', show_time=False),
                  ]),
             dict(num=3, titulo='Las dos manos, los dos primeros compases',
-                 pista='muy despacio · la izquierda entra en el uno y no se mueve más',
+                 pista='la derecha va medida (cc. 1–2) · muy despacio · la izquierda entra en el '
+                       'uno y no se mueve más',
                  sistemas=[
                      dict(cap='a) la derecha con su ritmo y la izquierda aguantando debajo',
                           events=[n('C4'), n('C4'), n('D4'),

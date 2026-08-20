@@ -117,10 +117,10 @@ CANCION = dict(
                  pista='andamio · la negra suelta del principio es la de tu partitura',
                  sistemas=[
                      dict(cap='a) una negra sola y ya empieza el compás',
-                          events=[sil('h'), n('G2'), n('C3', 'h.'), n('G2', 'h.')],
+                          events=[sil('h'), n('C3'), n('G2', 'h.'), n('C3', 'h.')],
                           bars=3, clef='bass'),
                      dict(cap='b) y después la izquierda calla dos compases',
-                          events=[n('F2'), sil('h'), sil('q'), sil('h'), sil('q'), n('C3', 'h')],
+                          events=[n('C3'), sil('h'), sil('q'), sil('h'), sil('q'), n('G2', 'h')],
                           bars=3, clef='bass', show_time=False),
                  ]),
             dict(tipo='nota',

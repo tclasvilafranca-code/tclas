@@ -104,7 +104,7 @@ CANCION = dict(
                           events=[n('C4', 'q.'), n('D4', 'e'), n('E4', 'q.'), n('D4', 'e')],
                           bars=1),
                      dict(cap='b) el mismo dibujo, una frase más arriba',
-                          events=[n('E4', 'q.'), n('F4', 'e'), n('G4', 'q.'), n('F4', 'e')],
+                          events=[n('G4', 'q.'), n('A4', 'e'), n('B4', 'q.'), n('A4', 'e')],
                           bars=1, show_time=False),
                  ]),
             dict(num=2, titulo='La izquierda: redondas que sostienen',

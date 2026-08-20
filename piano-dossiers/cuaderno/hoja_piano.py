@@ -133,7 +133,7 @@ def _autobeam(events, time_sig):
     return events
 
 
-def _partir_manos(events, time_sig):
+def _partir_manos(events, time_sig, modo='dobla'):
     """Separa un sistema "las dos manos juntas" en sus dos pentagramas.
 
        El material de estos ejercicios viene escrito en UNA sola lista, con la
@@ -147,24 +147,51 @@ def _partir_manos(events, time_sig):
        izquierda se escribe en clave de fa, en su pentagrama.
 
        El corte va en el Do central: lo que esta por debajo baja al pentagrama
-       de fa y lo demas se queda arriba. Y la nota de la izquierda se ALARGA
-       hasta el siguiente acorde suyo (o hasta el final del compas), que es lo
-       que dicen los propios rotulos de estos ejercicios ("la redonda sostiene
-       bajo las corcheas") y lo que se toca de verdad: escrita como negra, la
-       izquierda parecia soltar en el segundo golpe."""
+       de fa y lo demas se queda arriba.
+
+       QUE PASA CON LA DURACION de la izquierda depende de la pieza, y por eso
+       NO se adivina: se declara en el sistema con `manos=`.
+
+         'dobla' (lo normal, y lo que se hace si no se dice nada)
+             la izquierda conserva la figura escrita y donde no toca hay
+             silencio. Es lo correcto cuando las dos manos van a la vez, como
+             en la Petite Chanson ("la izquierda dobla a la derecha").
+         'sostiene'
+             la izquierda se alarga hasta su siguiente acorde o hasta el final
+             del compas. Es lo correcto cuando el bajo aguanta por debajo de
+             una melodia que corre, como en Counting Stars ("la redonda
+             sostiene bajo las corcheas"): ahi la nota esta escrita como negra
+             solo porque iba metida en el mismo acorde que la melodia.
+
+       Alargar siempre era comodo y estaba mal: en la Petite Chanson metia una
+       blanca con puntillo que no habia escrito nadie."""
     bpb = time_sig[0] * (4.0 / time_sig[1])
+    sostiene = modo == 'sostiene'
     arriba, abajo = [], []
     pos = 0.0
     pendiente = None          # (evento de fa, en que posicion empezo)
 
     def cerrar(hasta):
+        """Cierra la nota de fa pendiente y rellena el hueco si hace falta."""
         if pendiente is None:
             return
         ev, ini = pendiente
-        dur = _figura(hasta - ini)
-        if dur:
-            ev['dur'] = dur
-            abajo.append(ev)
+        if sostiene:
+            dur = _figura(hasta - ini)
+            if dur:
+                ev['dur'] = dur
+                abajo.append(ev)
+            return
+        # modo 'dobla': la figura escrita se respeta y lo que sobra es silencio.
+        # Alargarla seria inventar una duracion que no ha escrito nadie.
+        abajo.append(ev)
+        hueco = (hasta - ini) - beats_de(ev)
+        while hueco > 1e-6:
+            d = _figura(hueco)
+            if not d:
+                break
+            abajo.append({'rest': True, 'dur': d})
+            hueco -= DUR[d]
 
     for e in events:
         b = beats_de(e)
@@ -257,10 +284,11 @@ def _pide_dos_pentagramas(events, clef):
 
 
 def _lineas(c, y, events, time_sig, bars_per_line, gap=GAP, show_time=True,
-            clef='treble', key_sig=None, ottava=False, repetir=None, casilla=None):
+            clef='treble', key_sig=None, ottava=False, repetir=None, casilla=None,
+            manos='dobla'):
     if _pide_dos_pentagramas(events, clef):
         return _lineas_dos_manos(c, y, events, time_sig, bars_per_line, gap,
-                                 show_time, key_sig)
+                                 show_time, key_sig, manos=manos)
     _autobeam(events, time_sig)
     bpb = time_sig[0] * (4.0 / time_sig[1])
     line_beats = bpb * bars_per_line
@@ -299,13 +327,14 @@ def _lineas(c, y, events, time_sig, bars_per_line, gap=GAP, show_time=True,
     return y
 
 
-def _lineas_dos_manos(c, y, events, time_sig, bars_per_line, gap, show_time, key_sig):
+def _lineas_dos_manos(c, y, events, time_sig, bars_per_line, gap, show_time,
+                      key_sig, manos='dobla'):
     """Un sistema de piano de verdad: sol arriba, fa abajo, unidos por su llave.
 
        El material llega en una sola lista con las dos manos mezcladas (ver
        `_partir_manos`). Se parte, se barra cada mano por su cuenta y se dibujan
        los dos pentagramas alineados, que es como se lee el piano."""
-    arriba, abajo = _partir_manos(events, time_sig)
+    arriba, abajo = _partir_manos(events, time_sig, modo=manos)
     _autobeam(arriba, time_sig)
     _autobeam(abajo, time_sig)
     y -= before_staff(gap, arriba, 'treble')
@@ -487,7 +516,8 @@ def _bloque(c, y, blq, cfg):
                         key_sig=s.get('key_sig', cfg.get('key_sig')),
                         ottava=s.get('ottava', False),
                         repetir=s.get('repetir'),
-                        casilla=s.get('casilla'))
+                        casilla=s.get('casilla'),
+                        manos=s.get('manos', 'dobla'))
         y -= blq.get('extra_gap', 3)
     elif tipo == 'nota':
         y = nota_clave(c, y, blq['texto'], blq.get('etiqueta', 'LA CLAVE DE TODO'))
@@ -518,6 +548,44 @@ def _medir(cfg, blq, y):
     return _bloque(prueba, y, copy.deepcopy(blq), cfg)
 
 
+def _combinaciones(seq, k):
+    from itertools import combinations
+    return combinations(seq, k)
+
+
+def _unidades(cfg):
+    """Trocea los bloques en las piezas mas pequenas por las que se puede cortar.
+
+       Un ejercicio de tres sistemas no tiene por que caber entero en una hoja:
+       los metodos impresos parten por sistemas y repiten el titulo con un
+       "(sigue)". Sin eso, la unica granularidad son bloques de 300 pt contra
+       una horquilla de llenado de 84, y casi ninguna pieza tiene un corte
+       legal: hay que ir retocando el material a mano pieza por pieza, que con
+       88 piezas es exactamente lo que no se puede hacer.
+
+       Devuelve una lista de unidades (idx_bloque, sistema, coste, coste_titulo).
+       `coste_titulo` solo se paga cuando la unidad ABRE grupo en su hoja: si
+       dos sistemas del mismo ejercicio caen seguidos, el titulo va una vez."""
+    y0 = _ALTO_CABECERA(cfg)
+    fuera = []
+    for bi, blq in enumerate(cfg['bloques']):
+        sis = blq.get('sistemas') if blq.get('tipo', 'ej') == 'ej' else None
+        if not sis:
+            fuera.append((bi, None, y0 - _medir(cfg, blq, y0), 0.0))
+            continue
+        solo_titulo = y0 - _medir(cfg, dict(blq, sistemas=[]), y0)
+        prev = solo_titulo
+        for s in sis:
+            acum = y0 - _medir(cfg, dict(blq, sistemas=[s]), y0)
+            fuera.append((bi, s, acum - solo_titulo, solo_titulo))
+            prev = acum
+    return fuera
+
+
+def _titulo_sigue(t):
+    return t if t.endswith('(sigue)') else t + ' (sigue)'
+
+
 def _paginar(cfg):
     """Reparte los bloques en las hojas que hagan falta.
 
@@ -526,21 +594,85 @@ def _paginar(cfg):
        escribe el piano— el bloque de las dos manos ya no entra, y la decision
        del cliente fue darle su propia hoja en vez de quitar material medido.
 
-       Se parte por bloques enteros: un ejercicio no se corta a la mitad."""
-    hojas, actual = [], []
-    y = _ALTO_CABECERA(cfg)
-    for blq in cfg['bloques']:
-        y2 = _medir(cfg, blq, y)
-        if actual and y2 < SUELO:
-            hojas.append(actual)
-            actual = []
-            y = _ALTO_CABECERA(cfg)
-            y2 = _medir(cfg, blq, y)
-        actual.append(blq)
-        y = y2
-    if actual:
-        hojas.append(actual)
-    return hojas
+       Se parte por bloques enteros: un ejercicio no se corta a la mitad.
+
+       Y se reparte EQUILIBRANDO, no llenando la primera hasta que revienta.
+       Llenar de forma codiciosa cumple el limite de abajo pero incumple el de
+       arriba: la primera hoja sale a reventar y la ultima con media pagina en
+       blanco, que el estandar cuenta —con razon— como hoja a medio hacer. Se
+       buscan repartos donde TODAS las hojas caigan dentro de la horquilla, y
+       entre ellos el mas parejo."""
+    bloques = cfg['bloques']
+    uds = _unidades(cfg)
+    y0 = _ALTO_CABECERA(cfg)
+
+    def alto(ini, fin):
+        """Lo que ocupa el tramo de unidades [ini, fin) puesto en una hoja."""
+        total, anterior = 0.0, None
+        for bi, _s, coste, titulo in uds[ini:fin]:
+            if bi != anterior:
+                total += titulo
+                anterior = bi
+            total += coste
+        return total
+
+    def rehacer(ini, fin):
+        """Los bloques dibujables de ese tramo, con su "(sigue)" si toca."""
+        salida, anterior, sistemas = [], None, []
+
+        def volcar():
+            if anterior is None:
+                return
+            base = bloques[anterior]
+            if sistemas is None or not sistemas:
+                salida.append(base)
+            else:
+                corta = sistemas[0] is not (base.get('sistemas') or [None])[0]
+                tit = _titulo_sigue(base['titulo']) if corta else base['titulo']
+                salida.append(dict(base, sistemas=list(sistemas), titulo=tit))
+
+        for bi, s, _c, _t in uds[ini:fin]:
+            if bi != anterior:
+                volcar()
+                anterior, sistemas = bi, ([] if s is not None else None)
+            if s is not None:
+                sistemas.append(s)
+        volcar()
+        return salida
+    # cuanto contenido admite una hoja para acabar dentro de la horquilla
+    maximo = y0 - SUELO
+    minimo = y0 - 132.0
+    N = len(uds)
+
+    def cortes_en(n):
+        """Los n-1 cortes que dejan las hojas mas parejas, o None si no cabe.
+
+           Fuerza bruta sobre los cortes posibles: son pocas unidades por hoja,
+           asi que es exacto y sobra de rapido. Con una heuristica salian
+           repartos legales pero feos, del tipo cinco ejercicios arriba y uno
+           abajo."""
+        mejor = None
+        for corte in _combinaciones(range(1, N), n - 1):
+            limites = [0] + list(corte) + [N]
+            trozos = [alto(limites[k], limites[k + 1]) for k in range(n)]
+            if any(t > maximo for t in trozos):
+                continue
+            # todas menos la ultima tienen que llegar al minimo de llenado; la
+            # ultima puede quedarse corta y entonces lo canta el auditor, que
+            # es la senal de que a esa pieza le falta material escrito
+            if any(t < minimo for t in trozos[:-1]):
+                continue
+            coste = max(trozos) - min(trozos)      # lo mas parejo posible
+            if mejor is None or coste < mejor[0]:
+                mejor = (coste, limites)
+        return None if mejor is None else mejor[1]
+
+    for n in range(1, N + 1):
+        limites = cortes_en(n)
+        if limites is None:
+            continue
+        return [rehacer(limites[k], limites[k + 1]) for k in range(n)]
+    return [list(bloques)]
 
 
 def _ALTO_CABECERA(cfg):

@@ -114,13 +114,27 @@ CANCION = dict(
                           events=[n('B3'), n('C4'), n('B3'), n('A3')],
                           bars=1, clef='bass', show_time=False),
                  ]),
+            dict(num=3, titulo='La frase que baja hasta el Do',
+                 pista='andamio en Do mayor · el descenso que cierra cada frase de tu partitura',
+                 sistemas=[
+                     dict(cap='a) bajando por grados hasta la nota de casa · ninguna se acelera '
+                              'al final, que es lo que pasa cuando se ve venir el Do',
+                          events=[n('G4'), n('F4'), n('E4'), n('D4'),
+                                  n('C4', 'h'), sil('h')],
+                          bars=2),
+                     dict(cap='b) y el mismo descenso empezando más arriba · la última se sostiene '
+                              'entera, sin soltarla antes de tiempo',
+                          events=[n('C5'), n('B4'), n('A4'), n('G4'),
+                                  n('F4'), n('E4'), n('D4', 'h')],
+                          bars=2, show_time=False),
+                 ]),
             dict(tipo='nota',
                  etiqueta='QUÉ ES UNA ANACRUSA',
                  texto='Una nota, o un par de notas, que suenan antes de que empiece el primer '
                        'compás completo de la pieza. No llevan el peso del pulso: son un impulso '
                        'hacia la nota siguiente. Se cuenta como si el compás ya hubiera empezado '
                        'antes, y se entra en el tiempo exacto que le corresponde.'),
-            dict(num=3, titulo='Las dos juntas',
+            dict(num=4, titulo='Las dos juntas',
                  pista='andamio · la izquierda dobla a la derecha, una octava abajo · despacio',
                  sistemas=[
                      dict(cap='a) las dos manos con la anacrusa a la vez',
@@ -132,6 +146,22 @@ CANCION = dict(
                           events=[ac(('B3', 'G4'), 'e'), ac(('C4', 'A4'), 'e'),
                                   ac(('B3', 'B4')), ac(('C4', 'C5')), ac(('B3', 'B4')),
                                   ac(('A3', 'A4')), ac(('G3', 'G4')), n('F4'), n('E4')],
+                          bars=2, show_time=False),
+                 ]),
+            dict(num=5, titulo='Y ahora seguido, sin parar entre frase y frase',
+                 pista='andamio · las dos frases enganchadas, que es como suena en la pieza',
+                 sistemas=[
+                     dict(cap='a) las dos frases enganchadas · el sitio donde todo el mundo para '
+                              'es justo el que no lleva silencio',
+                          events=corch(['E4', 'F4']) + [n('G4'), n('A4'), n('G4'), n('F4'),
+                                                        n('E4'), n('D4'), n('C4')]
+                                 + [n('B4'), n('C5'), n('B4'), n('A4'),
+                                    n('G4'), n('F4'), n('E4'), n('D4')],
+                          bars=2),
+                     dict(cap='b) y con la izquierda debajo, ya del tirón',
+                          events=[ac(('C3', 'E4'), 'e'), ac(('D3', 'F4'), 'e'),
+                                  ac(('E3', 'G4')), ac(('F3', 'A4')), ac(('E3', 'G4')),
+                                  ac(('D3', 'F4')), ac(('C3', 'E4')), n('D4'), n('C4')],
                           bars=2, show_time=False),
                  ]),
         ],

@@ -125,10 +125,12 @@ CANCION = dict(
                  pista='andamio · la izquierda no se mueve mientras la derecha corre · despacio',
                  sistemas=[
                      dict(cap='a) la redonda sostiene bajo las corcheas',
+                          manos='sostiene',
                           events=[ac(('C3', 'E3', 'C4'))] + corch(['D4', 'E4', 'D4', 'C4', 'D4', 'E4'])
                                  + [ac(('F2', 'A2', 'D4'))] + corch(['E4', 'D4', 'C4', 'D4', 'E4', 'G4']),
                           bars=2),
                      dict(cap='b) y con la redonda ligada, sin tocarla otra vez',
+                          manos='sostiene',
                           events=[ac(('G2', 'B2', 'F4'))] + corch(['G4', 'F4', 'E4', 'F4', 'G4', 'F4'])
                                  + [n('E4')] + corch(['F4', 'G4', 'F4', 'E4', 'F4', 'B4']),
                           bars=2, show_time=False),

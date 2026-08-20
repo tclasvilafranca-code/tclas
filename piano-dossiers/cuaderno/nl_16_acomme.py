@@ -19,7 +19,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from relleno import escala, cadencia, arpegio, giro
+from relleno import escala, cadencia, arpegio, giro, bloque_tresillos, bloques_extra
 from nl_comun import n, ac, corch, semi
 
 HERE = os.path.dirname(__file__)
@@ -171,6 +171,15 @@ CANCION = dict(
         ],
     ),
 )
+
+# El recurso que la pieza EXPLICA y no dibujaba: durante meses se anotó como
+# "no cabe en la hoja". Desde que la hoja se pagina sola, esa excusa dejó de
+# ser cierta.
+CANCION['piano1']['bloques'] = list(CANCION['piano1']['bloques']) + bloques_extra(
+    'Mi menor', 62, 'E4', 'E2',
+    'la mano en Mi menor antes de contar los tresillos',
+    desde=8, time_sig=(4, 4))[:1] + [
+    bloque_tresillos('Mi menor', 7, 'E4', 'los tresillos, que salen tras el cambio de armadura', time_sig=(4, 4))]
 
 if __name__ == '__main__':
     print('generado', construir(CANCION))

@@ -33,28 +33,25 @@ PREFIJOS = ['arnau', 'lu', 'jm', 'ed', 'me', 'is', 'jp', 'nl', 'dilan', 'eva']
 # alumno no llega, el hueco NO es un fallo: es su nivel haciendo su trabajo.
 # El texto de esas piezas ya explica que el pasaje se trabaja reducido, que es
 # justo lo correcto para ellas (Luisa leyendo el Titanic, por ejemplo).
-# Piezas donde el recurso SI esta explicado en el texto y NO se dibuja porque la
-# hoja esta llena: meterlo obligaria a borrar un ejercicio con notas medidas de
-# la partitura, y eso es peor que el hueco (manda la norma "todo sale de la
-# partitura"). Se anota aqui, con su motivo, en vez de dejarlo como pendiente
-# eterno. Si algun dia esas hojas ganan sitio, se quitan de esta lista.
-LLENAS = {
-    ('dilan_03_your_song', 'tresillo'), ('dilan_04_thinking', 'tresillo'),
-    ('dilan_05_lucia', 'tresillo'), ('dilan_07_amiga', 'tresillo'),
-    ('dilan_08_promesa', 'tresillo'), ('dilan_10_calor', 'tresillo'),
-    ('dilan_16_adagio', 'tresillo'), ('eva_08_promesa', 'tresillo'),
-    ('eva_09_amiga', 'tresillo'), ('eva_10_young', 'tresillo'),
-    ('eva_11_soldadito', 'tresillo'), ('jp_17_unbeso', 'tresillo'),
-    ('jp_19_acomme', 'tresillo'), ('nl_16_acomme', 'tresillo'),
-    # Estas tres si tienen el tresillo dibujado, pero no la semicorchea: sus
-    # hojas de piano estan llenas en las dos paginas (se probo en las dos) y el
-    # unico sistema sustituible cita compases medidos de la partitura.
-    ('dilan_11_soldadito', 'semicorchea'), ('dilan_17_arabesque', 'semicorchea'),
-    ('eva_10_young', 'semicorchea'),
-}
+# VACIA, y que siga asi. Durante meses hubo aqui DIECISIETE piezas cuyo texto
+# explicaba un tresillo o una semicorchea —algunas con su recuadro de "que es un
+# tresillo" y todo— y no dibujaban ni uno, con el motivo anotado: "la hoja esta
+# llena y meterlo obligaria a borrar material medido".
+#
+# Era cierto entonces y dejo de serlo cuando la hoja de "Como se estudia" paso a
+# paginarse sola. Se comprobo una por una: las seis de Josep y Nel, las nueve de
+# Dilan y las cuatro de Eva llevan ya su bloque de tresillos o de semicorcheas,
+# con el material de apoyo que hace falta para que la hoja nueva no salga a
+# medias. Ninguna perdio un compas medido.
+#
+# Si alguna vez vuelve a aparecer un caso, la pregunta correcta NO es "¿cabe?"
+# sino "¿por que no cabe?": la hoja se parte, y si aun asi no cabe es que a esa
+# pieza le falta material, no que le sobre el recurso.
+LLENAS = set()
 
 REQUISITO = {
     'semicorchea': ('figuras', 's'),
+    'puntillo_corto': ('figuras', 'e.'),
     'tresillo': ('recursos', 'tresillo'),
     'ligadura': ('recursos', 'lig'),
     'staccato': ('recursos', 'art'),
@@ -107,6 +104,18 @@ VOCABULARIO = {
         patron=r'cresc|crescendo|diminuendo|dim\.|regulador|reguladores',
         evento=lambda e: bool(e.get('cresc') or e.get('dim')),
         arreglo="cresc=<n_eventos> o dim=<n_eventos>"),
+    # La figura con puntillo CORTA (corchea o semicorchea). Faltaba, y por eso
+    # nadie vio que VEINTE piezas la explicaban sin dibujarla: el ritmo de
+    # Toreador, el de Rasputin, el del Do-Re-Mi. Es el mismo fallo que las
+    # diecisiete del tresillo, solo que este auditor no lo miraba.
+    # `REQUISITO` la ata a la figura 'e.', asi que a Arnau y a Luisa —escalon 1,
+    # que no la tiene— el hueco se les perdona, que es lo correcto.
+    'puntillo_corto': dict(
+        patron=(r'corchea con puntillo|corcheas con puntillo|'
+                r'negra con puntillo y corchea|puntillo y (?:una )?corchea|'
+                r'ritmo con puntillo|semicorchea con puntillo'),
+        evento=lambda e: e.get('dur') in ('e.', 's.'),
+        arreglo="escribir el pasaje con dur='e.' seguido de dur='s'"),
     'pedal': dict(
         patron=r'\bpedal\b',
         evento=lambda e: bool(e.get('pedal')),

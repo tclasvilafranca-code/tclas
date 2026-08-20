@@ -482,3 +482,127 @@ def sistemas_extra(tono, agudo, grave, time_sig=(4, 4), variante=0,
                                  'la izquierda solo la tónica',
                  events=cadencia(tono, agudo, figura=fc, inversion=inv), bars=4, show_time=False)]
     return uno, dos, tres
+
+
+def bloque_tresillos(tono, num, agudo, donde, time_sig=(4, 4), letras=('a', 'b')):
+    """El bloque de tresillos de una pieza que los tiene en su partitura.
+
+       Existe porque durante meses hubo DIECISIETE piezas cuyo texto explicaba
+       el tresillo —algunas con su recuadro de "qué es un tresillo" y todo— y
+       no dibujaban ni uno: la hoja estaba llena y se anotó como excusa. Desde
+       que la hoja se pagina sola esa excusa dejó de ser cierta.
+
+       `donde` es la frase que dice en qué parte de SU partitura están, escrita
+       a mano: es el único dato que el código no puede saber."""
+    t = tonica(tono, agudo)
+    letra, _a, octava = _parte(t)
+    g = [_en_tono(tono, *_sube(letra, octava, k)) for k in range(0, 8)]
+    bpb = time_sig[0] * (4.0 / time_sig[1])
+    por_compas = int(round(bpb))          # un tresillo por golpe
+    grupos = [(g[0], g[1], g[2]), (g[3], g[2], g[1]),
+              (g[2], g[3], g[4]), (g[4], g[2], g[0]),
+              (g[1], g[2], g[3]), (g[5], g[4], g[3])][:por_compas]
+    ev, i = [], 700 + num * 7
+    for k, tri in enumerate(grupos):
+        for p in tri:
+            ev.append(dict(pitch=p, dur='e', tresillo=i + k, beam=i + k, tecnica=True))
+    # y el mismo tresillo alternando con una negra: la negra dura lo mismo que
+    # el grupo entero, y es ahi donde se ve si el alumno lo aprieta
+    # Cuantas veces se repite el par (tresillo + negra) para cerrar compases
+    # enteros: el par dura dos tiempos, asi que en 3/4 hacen falta tres pares
+    # (seis tiempos, dos compases) y en 4/4 bastan dos. Con uno fijo salian
+    # sistemas de dos tiempos en un compas de tres.
+    pares = 1
+    while abs((2.0 * pares) % bpb) > 1e-9 and pares < 8:
+        pares += 1
+    ev2, j = [], i + 40
+    for k in range(pares):
+        for p in grupos[k % len(grupos)]:
+            ev2.append(dict(pitch=p, dur='e', tresillo=j + k, beam=j + k, tecnica=True))
+        ev2.append(dict(pitch=grupos[k % len(grupos)][0], dur='q', tecnica=True))
+    return dict(num=num, titulo='Los tresillos, contados',
+                pista='andamio en %s · %s' % (tono, donde),
+                sistemas=[
+                    dict(cap=letras[0] + ') tres notas en el hueco de dos · di "u-ni-dad" en cada '
+                                         'grupo y que las tres duren igual',
+                         events=ev, bars=1),
+                    dict(cap=letras[1] + ') y alternando con negras · la negra dura lo mismo que el '
+                                         'tresillo entero, y ahí se ve si lo aprietas',
+                         events=ev2, bars=max(1, int(round(2.0 * pares / bpb))),
+                         show_time=False),
+                ])
+
+
+def bloque_semicorcheas(tono, num, agudo, donde, time_sig=(4, 4), letras=('a', 'b')):
+    """El bloque de semicorcheas, para las piezas que las tienen escritas.
+
+       Mismo motivo que `bloque_tresillos`: el texto las explicaba y el papel no
+       las enseñaba. Se escriben primero en corcheas y despues a su velocidad,
+       que es como se estudian de verdad."""
+    t = tonica(tono, agudo)
+    nq = cuantas(time_sig, 'q')
+    ns = cuantas(time_sig, 's') if 's' in ('s',) else nq * 2
+    bpb = time_sig[0] * (4.0 / time_sig[1])
+    lento = escala(tono, t, notas=nq, figura='e')
+    rapido = escala(tono, t, notas=int(bpb * 4), figura='s')
+    return dict(num=num, titulo='Las semicorcheas, primero despacio',
+                pista='andamio en %s · %s' % (tono, donde),
+                sistemas=[
+                    dict(cap=letras[0] + ') el dibujo en corcheas, al doble de lento · así es como '
+                                         'se aprende, no tocándolo rápido desde el principio',
+                         events=lento, bars=max(1, int(nq * 0.5 / bpb))),
+                    dict(cap=letras[1] + ') y AHORA con su figura de verdad, la semicorchea · el '
+                                         'mismo dibujo, cuatro por golpe, como está impreso',
+                         events=rapido, bars=1, show_time=False),
+                ])
+
+
+def bloque_puntillo(tono, num, agudo, donde, time_sig=(4, 4), lento=False,
+                    letras=('a', 'b')):
+    """El ritmo con puntillo: largo-corto, que es el que casi nadie cuenta bien.
+
+       Faltaba en veinte piezas que lo explicaban en el texto (el de Toreador,
+       el de Rasputin, el del Do-Re-Mi) y no lo dibujaban en ningun sitio. No lo
+       vio nadie porque el auditor de vocabulario no tenia entrada para esta
+       figura; ahora la tiene.
+
+       `lento=True` lo escribe como negra con puntillo + corchea en vez de
+       corchea con puntillo + semicorchea. Es el MISMO gesto al doble de lento,
+       y es lo que toca en el escalon 2, que todavia no tiene la semicorchea:
+       escribirla ahi seria saltarse el nivel del alumno para dibujar una figura
+       que aun no sabe leer."""
+    t = tonica(tono, agudo)
+    letra, _a, octava = _parte(t)
+    g = [_en_tono(tono, *_sube(letra, octava, k)) for k in range(0, 6)]
+    largo, corto = ('q.', 'e') if lento else ('e.', 's')
+    paso = 2.0 if lento else 1.0
+    bpb = time_sig[0] * (4.0 / time_sig[1])
+    # cuantos pares hacen falta para cerrar compases enteros. No vale dividir y
+    # redondear: el par largo-corto de la version lenta dura dos tiempos y no
+    # cabe un numero entero de veces en un compas de tres, y salian sistemas de
+    # ocho tiempos en 3/4.
+    pares = 1
+    while abs((pares * paso) % bpb) > 1e-9 and pares < 12:
+        pares += 1
+    compases = max(1, int(round(pares * paso / bpb)))
+    ev = []
+    for k in range(pares):
+        ev.append(dict(pitch=g[k % 5], dur=largo, tecnica=True))
+        ev.append(dict(pitch=g[(k + 1) % 5], dur=corto, tecnica=True))
+    # y el mismo dibujo aplanado, con las dos notas iguales: es la comparacion
+    # que hace que se oiga la diferencia, y sin ella el alumno cree que ya lo
+    # esta haciendo bien
+    plano = []
+    for k in range(pares):
+        for p in (g[k % 5], g[(k + 1) % 5]):
+            plano.append(dict(pitch=p, dur='q' if lento else 'e', tecnica=True))
+    return dict(num=num, titulo='El ritmo con puntillo: largo-corto',
+                pista='andamio en %s · %s' % (tono, donde),
+                sistemas=[
+                    dict(cap=letras[0] + ') primero IGUALES, para tener la referencia · las dos '
+                                         'notas del par duran lo mismo',
+                         events=plano, bars=compases),
+                    dict(cap=letras[1] + ') y ahora con el puntillo · la primera dura tres veces '
+                                         'la segunda, no un poco más',
+                         events=ev, bars=compases, show_time=False),
+                ])

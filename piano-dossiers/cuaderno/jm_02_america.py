@@ -30,6 +30,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloque_puntillo, bloques_extra
 from jm_comun import (n, ac, plan, metronomo, diferencias, nombres, escribir,
                       para_clase)
 
@@ -202,6 +203,16 @@ CANCION = dict(
         ),
     ],
 )
+
+# El ritmo con puntillo que esta pieza EXPLICA en su texto y no dibujaba en
+# ningún sitio. Lo destapó el auditor de vocabulario al ganar la entrada de
+# esta figura, que antes no miraba nadie.
+CANCION['piano1']['bloques'] = list(CANCION['piano1']['bloques']) + bloques_extra(
+    'Do mayor', 33, 'C4', 'C3',
+    'la mano en Do antes de contar el puntillo',
+    desde=5, time_sig=(3, 4)) + [
+    bloque_puntillo('Do mayor', 4, 'C4', 'el ritmo con puntillo de "My country, ’tis of thee"',
+                    time_sig=(3, 4), lento=True)]
 
 if __name__ == '__main__':
     print('generado', construir(CANCION))

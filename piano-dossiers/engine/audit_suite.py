@@ -28,7 +28,14 @@ def audit_music(build_fn, page_w=595.276, page_h=841.89):
         calls.append({
             'clef': clef,
             'total_beats': total_beats,
-            'clean_bars': abs(total_beats % beats_per_bar) < 1e-6,
+            # El resto se mide contra los DOS extremos: un compas de tres
+            # tresillos suma 0.9999999999999999 por golpe (la corchea de
+            # tresillo es 1/3 y no tiene representacion exacta en binario),
+            # y `x % 3` devuelve 2.9999999 en vez de 0. Sin esto, la musica
+            # bien escrita se marcaba como compas incompleto en cuanto una
+            # pieza usaba tresillos de verdad.
+            'clean_bars': min(total_beats % beats_per_bar,
+                              beats_per_bar - (total_beats % beats_per_bar)) < 1e-6,
             'n_bars': total_beats / beats_per_bar,
             'n_events': n_events,
             'px_per_event': px_per_event,

@@ -139,7 +139,38 @@ CANCION = dict(
                  texto='Un tresillo son tres notas donde caben dos, y por eso la música se aprieta; '
                        'en tus tres últimos compases van marcados con un 3. Y F/A es el acorde de '
                        'Fa de siempre con el La abajo: cambia el bajo, no el acorde.'),
-            dict(num=3, titulo='Las dos manos, dos compases',
+            dict(num=3, titulo='Los tresillos del final, contados',
+                 pista='andamio en Fa mayor · los tres últimos compases de tu partitura, donde la '
+                       'música frena',
+                 sistemas=[
+                     dict(cap='a) tres notas en el hueco de dos · di "u-ni-dad" en cada grupo y que '
+                              'las tres duren igual',
+                          events=[dict(n('F4', 'e'), tresillo=1, beam=771),
+                                  dict(n('G4', 'e'), tresillo=1, beam=771),
+                                  dict(n('A4', 'e'), tresillo=1, beam=771),
+                                  dict(n('Bb4', 'e'), tresillo=2, beam=772),
+                                  dict(n('A4', 'e'), tresillo=2, beam=772),
+                                  dict(n('G4', 'e'), tresillo=2, beam=772),
+                                  dict(n('A4', 'e'), tresillo=3, beam=773),
+                                  dict(n('G4', 'e'), tresillo=3, beam=773),
+                                  dict(n('F4', 'e'), tresillo=3, beam=773),
+                                  dict(n('E4', 'e'), tresillo=4, beam=774),
+                                  dict(n('F4', 'e'), tresillo=4, beam=774),
+                                  dict(n('G4', 'e'), tresillo=4, beam=774)],
+                          bars=1),
+                     dict(cap='b) y el mismo grupo alternando con negras · la negra dura lo mismo '
+                              'que el tresillo entero, y ahí es donde se nota si lo aprietas',
+                          events=[dict(n('F4', 'e'), tresillo=5, beam=775),
+                                  dict(n('A4', 'e'), tresillo=5, beam=775),
+                                  dict(n('C5', 'e'), tresillo=5, beam=775),
+                                  n('Bb4'),
+                                  dict(n('A4', 'e'), tresillo=6, beam=776),
+                                  dict(n('G4', 'e'), tresillo=6, beam=776),
+                                  dict(n('F4', 'e'), tresillo=6, beam=776),
+                                  n('F4')],
+                          bars=1, show_time=False),
+                 ]),
+            dict(num=4, titulo='Las dos manos, dos compases',
                  pista='andamio en Fa mayor · a un tercio de la velocidad final',
                  sistemas=[
                      dict(cap='a) grupos arriba y bajo largo abajo · el bajo cae en el uno y ya no '
@@ -155,7 +186,7 @@ CANCION = dict(
                  ]),
         ] + bloques_extra('Fa mayor', 26, 'F4', 'F2',
                           'el Si bemol dentro del acorde, que es donde más se nota',
-                          desde=4, time_sig=(4, 4)),
+                          desde=5, time_sig=(4, 4))[:1],
     ),
 
     trabajo=[

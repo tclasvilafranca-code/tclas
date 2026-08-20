@@ -19,6 +19,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloque_semicorcheas, bloques_extra
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -316,6 +317,15 @@ CANCION = dict(
     ),
 
 )
+
+# El recurso que la pieza EXPLICA y no dibujaba: durante meses se anotó como
+# "no cabe en la hoja". Desde que la hoja se pagina sola, esa excusa dejó de
+# ser cierta.
+CANCION['piano1']['bloques'] = list(CANCION['piano1']['bloques']) + bloques_extra(
+    'Do mayor', 20, 'C4', 'C3',
+    'la mano en Do antes de la carrera de semicorcheas',
+    desde=6, time_sig=(2, 4)) + [
+    bloque_semicorcheas('Do mayor', 5, 'C4', 'las semicorcheas seguidas, que son la pieza entera', time_sig=(2, 4))]
 
 if __name__ == '__main__':
     print('generado', construir(CANCION))

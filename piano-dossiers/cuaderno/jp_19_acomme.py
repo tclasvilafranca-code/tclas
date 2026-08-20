@@ -22,7 +22,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from relleno import bloques_extra
+from relleno import bloques_extra, bloque_tresillos
 from jp_comun import (n, ac, semi, reto, plan, cifrado, verdadero_falso, figuras,
                       para_clase)
 
@@ -156,7 +156,7 @@ CANCION = dict(
                  ]),
         ] + bloques_extra('Mi menor', 26, 'E4', 'E2',
                           'el cambio de armadura del compás 10, oído antes que tocado',
-                          desde=4, time_sig=(4, 4)),
+                          desde=4, time_sig=(4, 4))[:1],
     ),
 
     trabajo=[
@@ -196,6 +196,12 @@ CANCION = dict(
         ),
     ],
 )
+
+# El recurso que la pieza EXPLICA y no dibujaba: durante meses se anotó como
+# "no cabe en la hoja". Desde que la hoja se pagina sola, esa excusa dejó de
+# ser cierta.
+CANCION['piano1']['bloques'] = list(CANCION['piano1']['bloques']) + [
+    bloque_tresillos('Mi menor', 6, 'E4', 'los tresillos, que salen tras el cambio de armadura', time_sig=(4, 4))]
 
 if __name__ == '__main__':
     print('generado', construir(CANCION))

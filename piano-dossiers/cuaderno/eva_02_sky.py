@@ -22,6 +22,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloque_puntillo, bloques_extra
 from dilan_12_sky import n, ac, corch, riff, SIb, FAq, LAm7, SOL
 
 HERE = os.path.dirname(__file__)
@@ -195,6 +196,16 @@ CANCION = dict(
     ),
 
 )
+
+# El ritmo con puntillo que esta pieza EXPLICA en su texto y no dibujaba en
+# ningún sitio. Lo destapó el auditor de vocabulario al ganar la entrada de
+# esta figura, que antes no miraba nadie.
+CANCION['piano1']['bloques'] = list(CANCION['piano1']['bloques']) + bloques_extra(
+    'Fa mayor', 58, 'F4', 'F2',
+    'el Si bemol, antes de contar el puntillo',
+    desde=6, time_sig=(4, 4)) + [
+    bloque_puntillo('Fa mayor', 5, 'F4', 'el puntillo que lleva la melodía',
+                    time_sig=(4, 4))]
 
 if __name__ == '__main__':
     print('generado', construir(CANCION))

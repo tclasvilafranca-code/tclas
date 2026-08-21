@@ -80,10 +80,13 @@ CANCION = dict(
             'La digitación viene impresa.',
             'El arreglista la marca como Level Four, el nivel más alto de esta colección.',
         ],
+        # La figura corta de esta marcha es la SEMICORCHEA, no la corchea: se
+        # midió sobre el papel y se corrigió en las cinco copias del Toreador.
+        # Estas dos frases se quedaron atrás en la corrección.
         reto='Que el ritmo de marcha no se ablande: la corchea con puntillo tiende a acortarse y la '
-             'corchea a adelantarse, y en cuanto eso pasa deja de sonar a marcha.',
+             'semicorchea a adelantarse, y en cuanto eso pasa deja de sonar a marcha.',
         truco='Marca el paso con el pie mientras tocas: pie abajo en el uno y en el tres, y la '
-              'corchea cae justo antes de que el pie vuelva a bajar.',
+              'semicorchea cae justo antes de que el pie vuelva a bajar.',
         sabias='Murió tres meses después del estreno de Carmen, convencido de que había sido un '
                'fracaso. Hoy es una de las óperas más representadas del mundo entero.',
         qr=dict(titulo='Escúchala',

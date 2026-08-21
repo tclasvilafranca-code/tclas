@@ -57,10 +57,14 @@ CANCION = dict(
                 'cuando ya no hay fallos.',
         ),
         titulo_ritmos='Así empieza',
-        pie_ritmos='Un compás de cada mano, medido en tu partitura.',
+        pie_ritmos='La derecha, medida nota a nota en tu partitura. Abajo, el molde que '
+                   'repite la izquierda, que no es una copia literal.',
         ritmos=[
-            ('LA DERECHA', 'sube por escalones y se queda arriba',
-             [n('C4'), n('B4'), n('C5'), n('D5')], AZUL, 'treble', SOL),
+            # Medido sobre el PDF a 300 ppp (21 ago 2026): la cancion entra ANTES
+            # del primer compas con dos corcheas, Si y Do, y el Re de despues es
+            # la nota larga. Antes ponia un Do4 delante que no esta en el papel.
+            ('LA DERECHA', 'Si · Do · Re: sube por escalones y el Re se queda',
+             corch(['B4', 'C5']) + [n('D5', 'h'), n('B4')], AZUL, 'treble', SOL),
             ('LA IZQUIERDA', 'el molde que se repite',
              [n('G3'), n('B3'), n('D4'), n('B3')], OCRE, 'bass', SOL),
         ],

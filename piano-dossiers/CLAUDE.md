@@ -31,19 +31,58 @@
 > para ser el testigo de que alguien miró el papel.
 >
 > **Paso 5 — `auditar_todo.py`.** Un solo comando, un solo veredicto. Pasa los
-> ocho cruces (compás, armadura, figura, tempo, nivel, vocabulario, andamio,
-> índice) y los diez auditores por alumno. Con `--rapido`, solo los cruces
-> contra la partitura, y tarda segundos. Con `--pixeles`, además el control de
-> márgenes sobre los álbumes ya montados.
+> nueve cruces (compás, armadura, figura, tempo, **alturas**, nivel,
+> vocabulario, andamio, índice) y los diez auditores por alumno. Con
+> `--rapido`, solo los cruces contra la partitura, y tarda segundos. Con
+> `--pixeles`, además el control de márgenes sobre los álbumes ya montados.
 >
-> **Los CUATRO datos que el dosier afirma sobre el papel** y que por tanto hay
-> que leer, no suponer: el **compás**, la **armadura**, la **figura más corta**
-> y el **tempo**. Los cuatro tienen su auditor y su testigo de lectura. Y hay
-> un quinto que ninguno de esos cuatro ve, porque los cuatro leen el PRIMER
-> compás: que la partitura **cambie a mitad**. Para eso `auditar_tonalidad.py`
-> lleva una comprobación aparte — si una pieza avisa de un cambio, las demás
-> que tocan ese mismo PDF tienen que avisar también. Cuatro alumnos comparten
-> el Toreador; no puede ser que a uno se le diga y a tres no.
+> **Los CINCO datos que el dosier afirma sobre el papel** y que por tanto hay
+> que leer, no suponer: el **compás**, la **armadura**, la **figura más corta**,
+> el **tempo** y las **alturas del arranque**. Los cinco tienen su auditor y su
+> testigo de lectura. Y hay un sexto que ninguno de ellos ve, porque todos leen
+> el PRIMER compás: que la partitura **cambie a mitad**. Para eso
+> `auditar_tonalidad.py` lleva una comprobación aparte — si una pieza avisa de
+> un cambio, las demás que tocan ese mismo PDF tienen que avisar también.
+> Cuatro alumnos comparten el Toreador; no puede ser que a uno se le diga y a
+> tres no.
+>
+> ### Las alturas, que eran el hueco grande (`medir_arranque.py`)
+>
+> Durante meses fueron el único dato sin testigo, y por el motivo de siempre:
+> **cuestan mucho de transcribir, así que nadie las vuelve a mirar**. Salió al
+> revisar el álbum de Arnau a tamaño real — *Polly Put the Kettle On* llamaba
+> "la melodía del principio" a lo que es el **compás 2**, y su pentagrama traía
+> dos notas que no están en el papel. Al medir las demás aparecieron tres más:
+> *Silent Night* (dos alumnos) escrita una **tercera por debajo**, y *El
+> submarino amarillo* y *Aloha Oe* con un Do4 delante que la partitura no trae.
+>
+> `medir_arranque.arranque(pdf)` lee del PDF el primer compás del pentagrama de
+> arriba. Las cabezas **llenas** salen por apertura morfológica (se come la
+> plica y las barras); las **huecas** no sobreviven a una apertura, así que se
+> buscan por su **agujero cerrado** (`fill_holes` menos la imagen). Cuatro
+> trampas que costó aprender, todas reales:
+>
+> - **las medidas van en espacios de pentagrama, nunca en píxeles**: una edición
+>   imprime a 22 px de espacio y otra a 14;
+> - la **divisoria** se distingue de una plica larga porque va de punta a punta
+>   del SISTEMA; y en una pieza a **cuatro manos** hay dos llaves y la divisoria
+>   no las une, así que se mide solo el piano del alumno;
+> - el **ojo de un bemol** apoyado en la línea del Si se lee como un Si: hay que
+>   descontar la armadura y la cifra de compás por ancho;
+> - fuera del pentagrama, **una nota siempre lleva su línea adicional**. Sin esa
+>   comprobación, el «3» de la digitación de *Oh When the Saints* se leía como
+>   un Do6.
+>
+> Y **un compás de silencio no es un compás sin medir**: *My Bonnie* empieza con
+> un silencio de negra, y el lector saltaba a "no se distingue ninguna cabeza"
+> en una partitura perfectamente legible. Ahora salta hasta dos compases vacíos.
+>
+> Lo cruza `auditar_alturas.py`, que **solo mira las filas que dicen traer las
+> alturas medidas** — las que hablan de *andamio* quedan fuera a propósito,
+> porque ahí las alturas son material construido sobre la tonalidad y no tienen
+> que coincidir con nada. Son once filas en 197 piezas: pocas, pero son justo
+> las que el alumno lee como "así empieza mi canción". Tiene que decir
+> **ALTURAS OK**.
 >
 > **Por qué el sistema no deja pasar una pieza sin medir:** `auditar_compas` y
 > `auditar_tonalidad` fallan mientras la pieza nueva no esté en sus tablas de

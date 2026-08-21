@@ -59,10 +59,14 @@ CANCION = dict(
                 'de las canciones navideñas más traducidas del mundo.',
         ),
         ritmos=[
+            # Medido nota a nota sobre el PDF a 300 ppp (21 ago 2026). Decia
+            # Mi-Fa-Mi y Do-Sol: la melodia esta una TERCERA mas arriba (Sol-La-Sol,
+            # que es el 5-6-5 de siempre de este villancico) y la segunda nota de
+            # la izquierda es un Mi, no un Sol. El ritmo si estaba bien.
             ('MANO DERECHA', 'largo, corto, medio · literal',
-             [n('E4', 'q.'), n('F4', 'e'), n('E4')], OCRE, 'treble', None),
+             [n('G4', 'q.'), n('A4', 'e'), n('G4')], OCRE, 'treble', None),
             ('MANO IZQUIERDA', 'negra y blanca · literal',
-             [n('C3'), n('G3', 'h')], AZUL, 'bass', None),
+             [n('C3'), n('E3', 'h')], AZUL, 'bass', None),
         ],
         especial=[
             'Detrás de la clave no hay nada.',

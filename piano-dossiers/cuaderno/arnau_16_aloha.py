@@ -55,8 +55,11 @@ CANCION = dict(
         titulo_ritmos='Así empieza',
         pie_ritmos='Los primeros compases de la melodía, medidos en tu partitura.',
         ritmos=[
-            ('LA DERECHA', 'dos saltos grandes seguidos',
-             [n('C4'), n('G4'), n('C5', 'h')], AZUL, 'treble', None),
+            # Medido sobre el PDF a 300 ppp (21 ago 2026): Sol, Do y Mi. El Do4
+            # que iba delante no esta en el papel, y sin el Mi no habia dos
+            # saltos, solo uno.
+            ('LA DERECHA', 'Sol · Do · Mi: dos saltos grandes seguidos',
+             [n('G4'), n('C5'), n('E5', 'h')], AZUL, 'treble', None),
             ('Y SE PARA', 'y arriba se queda quieta un buen rato',
              [n('D5', 'h'), n('C5', 'h')], AZUL, 'treble', None),
         ],

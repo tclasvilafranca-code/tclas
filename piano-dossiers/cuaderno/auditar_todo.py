@@ -47,6 +47,7 @@ CONTRA_LA_PARTITURA = [
     ('auditar_compas.py', True, 'el compás que declara cada pieza es el impreso'),
     ('auditar_tonalidad.py', True, 'la armadura declarada es la impresa'),
     ('auditar_figuras.py', True, 'la figura más corta impresa está dibujada'),
+    ('auditar_tempo.py', True, 'el tempo que cita la ficha es el impreso'),
 ]
 CONTRA_LAS_REGLAS = [
     ('auditar_niveles.py', True, 'cada alumno solo ve las figuras de su escalón'),

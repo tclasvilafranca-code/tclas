@@ -114,7 +114,8 @@ CANCION = dict(
             'Los cifrados vienen impresos y EN ESPAÑOL: Mim, Fa♯7, Si7, Lam, Solm, Sol.',
             'Debajo de la clave de fa están escritos los NOMBRES de las notas del bajo.',
             'Hay SEGNO y casillas 1.ª y 2.ª: el orden en que se toca no es el orden escrito.',
-            'Más adelante CAMBIA LA ARMADURA a cuatro sostenidos. Míralo antes de llegar.',
+            'Más adelante CAMBIA LA ARMADURA a cuatro sostenidos durante un tramo corto, y luego '
+            'VUELVE a uno. Mira las dos dobles barras antes de llegar.',
             'Los cuatro primeros compases son introducción: la voz todavía no ha entrado.',
             'Hay TRESILLOS marcados con un 3 en la mano derecha, y los de la introducción son de '
             'SEMICORCHEAS: tres notas en el hueco de dos, muy rápidas.',
@@ -310,11 +311,18 @@ CANCION = dict(
                  ]),
             dict(tipo='nota',
                  etiqueta='CÓMO SE HACE EL PASO 4',
-                 texto='A mitad de la partitura aparece una armadura nueva, de cuatro sostenidos. Eso '
-                       'quiere decir que a partir de ahí los Fa, los Do, los Sol y los Re son todos '
-                       'sostenidos, y que la mano se coloca en otro sitio aunque los cifrados se parezcan. '
-                       'Busca ese cambio en tu hoja y márcalo con lápiz antes de estudiar nada: es el '
-                       'punto donde más gente se cae.'),
+                 # El cambio de armadura NO dura hasta el final: medido sobre el
+                 # PDF, entran cuatro sostenidos despues de la casilla 2.ª y a
+                 # los pocos compases hay otra doble barra que devuelve la
+                 # armadura a un sostenido. Antes esta nota decia "a partir de
+                 # ahi" y el alumno se encontraba el sostenido solo otra vez sin
+                 # que nadie se lo hubiera avisado.
+                 texto='Después de la casilla 2.ª aparece una armadura nueva, de cuatro sostenidos: '
+                       'ahí los Fa, los Do, los Sol y los Re son todos sostenidos, y la mano se coloca '
+                       'en otro sitio aunque los cifrados se parezcan. Y OJO, que es un tramo corto: a '
+                       'los pocos compases hay otra doble barra y la armadura VUELVE a un solo '
+                       'sostenido. Busca las dos dobles barras en tu hoja y márcalas con lápiz antes de '
+                       'estudiar nada: ese ida y vuelta es el punto donde más gente se cae.'),
             dict(tipo='escalera', valores=[70, 84, 96, 108, 116, 124],
                  regla='PASO 5 · SOLO SUBES DE ESCALÓN CUANDO TE SALGA DOS VECES SEGUIDAS SIN PARAR.'),
             dict(tipo='nota', etiqueta='LOS CINCO PASOS, PARA NO PERDERSE',

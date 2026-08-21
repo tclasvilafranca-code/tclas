@@ -28,6 +28,8 @@
          python3 auditar_tonalidad.py arnau lu   (solo esos prefijos)
 """
 import contextlib
+import hashlib
+import re
 import glob
 import importlib
 import io
@@ -354,10 +356,68 @@ LEIDO = {
 }
 
 
+# Palabras con las que una pieza AVISA de que su partitura cambia de tonalidad
+# o de compas a mitad. No busca la palabra por gusto: busca que el aviso exista.
+AVISA = re.compile(
+    r'cambia\s+(de\s+)?(tonalidad|armadura|de\s+tono|el\s+comp[aá]s)'
+    r'|cambio\s+de\s+(armadura|tonalidad|comp[aá]s)'
+    r'|armadura\s+(nueva|de\s+\w+\s+sostenidos?\s+hacia)'
+    r'|aparecen?\s+(una\s+)?armadura'
+    # "un compas SUELTO de 5/4": sin el 'suelto' se colaba cualquier frase que
+    # explicase que en un compas de 4/4 caben ocho corcheas.
+    r'|un\s+comp[aá]s\s+suelto\s+(de\s+|en\s+)?\d\s*/\s*\d'
+    r'|\d\s*/\s*\d\s*(a|→)\s*\d\s*/\s*\d'
+    # "Mi m → La m", "Do mayor → Re mayor": la flecha SOLO cuenta si separa dos
+    # nombres de nota. Sin esta condicion se colaban frases como
+    # "Re7 → Re · Re · La" (un cifrado que resuelve) y salian falsos avisos.
+    r'|\b(do|re|mi|fa|sol|la|si)\b[^.]{0,12}→[^.]{0,12}\b(do|re|mi|fa|sol|la|si)\b',
+    re.IGNORECASE)
+
+
+def _textos(o, out):
+    if isinstance(o, str):
+        out.append(o)
+    elif isinstance(o, dict):
+        for v in o.values():
+            _textos(v, out)
+    elif isinstance(o, (list, tuple)):
+        for v in o:
+            _textos(v, out)
+    return out
+
+
+def avisa_de_cambio(cfg):
+    """True si la pieza dice en algun sitio que su partitura cambia a mitad."""
+    return any(AVISA.search(t) for t in _textos(cfg, []))
+
+
 def _cfg(modulo):
     with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
         mod = importlib.import_module(modulo)
     return getattr(mod, 'CANCION', None)
+
+
+def _cambios_desiguales(prefijos):
+    """Partituras donde unas piezas avisan del cambio y otras no.
+
+       Se agrupa por md5: si el PDF es byte a byte el mismo, lo que cambia
+       dentro cambia para todos los que lo tocan."""
+    por_partitura = {}
+    for p in (prefijos or PREFIJOS):
+        for f in sorted(glob.glob(os.path.join(HERE, p + '_[0-9]*.py'))):
+            m = os.path.basename(f)[:-3]
+            cfg = _cfg(m)
+            r = (cfg or {}).get('partitura') or ''
+            if not cfg or not os.path.exists(r):
+                continue
+            with open(r, 'rb') as fh:
+                h = hashlib.md5(fh.read()).hexdigest()
+            por_partitura.setdefault(h, [os.path.basename(r), [], []])
+            (por_partitura[h][1] if avisa_de_cambio(cfg)
+             else por_partitura[h][2]).append(m)
+    return [(base, avisan, callan)
+            for base, avisan, callan in por_partitura.values()
+            if avisan and callan]
 
 
 def main(prefijos=None):
@@ -380,6 +440,17 @@ def main(prefijos=None):
             elif ARMADURA[ks] != LEIDO[m]:
                 malos.append((m, ks, ARMADURA[ks], LEIDO[m]))
 
+    # --- y el hueco que las dos lecturas dejan abierto ---------------------
+    #
+    # `LEIDO` es la armadura del PRIMER compas. Si la partitura cambia a mitad
+    # —y hay dos que lo hacen: el Flying Theme entra en Re mayor hacia el c. 31,
+    # y `al calor del amor en un bar` se va a cuatro sostenidos y vuelve— eso no
+    # lo ve. Lo que SI se puede comprobar sin medir nada es la coherencia: si
+    # una pieza avisa del cambio, las demas que comparten esa misma partitura
+    # tienen que avisar tambien. Cuatro alumnos tocan el Toreador del mismo PDF;
+    # no puede ser que a uno se le diga y a tres no.
+    desacuerdos = _cambios_desiguales(prefijos)
+
     print('piezas comprobadas: %d de %d con lectura anotada' % (n, len(LEIDO)))
 
     print('\nLA ARMADURA DECLARADA NO ES LA IMPRESA: %d' % len(malos))
@@ -394,7 +465,14 @@ def main(prefijos=None):
     for m, base in sin_leer:
         print('   %-22s %s' % (m, base[:50]))
 
-    fallos = len(malos) + len(sin_tabla) + len(sin_leer)
+    print('\nPARTITURAS QUE CAMBIAN A MITAD Y NO SE AVISA EN TODAS SUS PIEZAS: %d'
+          % len(desacuerdos))
+    for base, avisan, callan in desacuerdos:
+        print('   %s' % base[:52])
+        print('      avisan: %s' % ' '.join(avisan))
+        print('      CALLAN: %s' % ' '.join(callan))
+
+    fallos = len(malos) + len(sin_tabla) + len(sin_leer) + len(desacuerdos)
     if fallos:
         print('\n%d COSAS QUE MIRAR' % fallos)
         return 1

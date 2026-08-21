@@ -13,6 +13,11 @@
        golpe, casi de principio a fin. Es la única pieza del cuaderno que las
        lleva de forma sostenida.
      - El cifrado viene impreso encima: Em, B7…
+     - Y CAMBIA DE ARMADURA en el c. 10: doble barra y un becuadro que
+       quita el Fa sostenido. De ahi en adelante no hay armadura: pasa de
+       Mi menor a La menor. Lo tenian los dosieres de Josep y de Nel, que
+       tocan este mismo PDF, y este no lo decia: el alumno llegaba al c. 10
+       y se encontraba el Fa natural sin que nadie se lo hubiera avisado.
 
    Por qué está en el bloque de los retos: por las semicorcheas. A ♩=69 no son
    rápidas de reloj, pero son cuatro notas por golpe y eso exige una igualdad
@@ -94,6 +99,8 @@ CANCION = dict(
             'La melodía va en semicorcheas: cuatro notas en cada golpe.',
             'La derecha entra en el último golpe del primer compás, después de dos silencios.',
             'El cifrado viene impreso encima: Em, B7…',
+            'En el c. 10 CAMBIA DE ARMADURA: doble barra y un becuadro que quita el Fa sostenido, '
+            'y la pieza pasa de Mi menor a La menor. Márcalo con lápiz antes de estudiar nada.',
             'La mano izquierda toca notas largas y no estorba: todo el trabajo es de la derecha.',
         ],
         reto='Que las cuatro notas de cada golpe suenen exactamente iguales. En cuanto una se alarga o '

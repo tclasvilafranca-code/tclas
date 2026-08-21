@@ -53,7 +53,8 @@ CANCION = dict(
                  'Es el primero de tu cuaderno. Se cuenta uno-dos, uno-dos, y no hay tercer tiempo '
                  'donde descansar. Va más rápido de contar y más lento de tocar.'),
                 ('ADAGIO', 'Sin prisa ninguna',
-                 'No trae número de metrónomo, trae una palabra: despacio. Aquí eso es una ventaja, '
+                 'No trae número de metrónomo, trae una palabra escrita arriba: "Adagio", que quiere '
+                 'decir despacio. Aquí eso es una ventaja, '
                  'porque el largo-corto se oye mejor cuanto más lento vas.'),
                 ('LARGO Y CORTO', 'En un solo golpe',
                  'La primera nota dura y la segunda entra justo antes del siguiente golpe. No son '

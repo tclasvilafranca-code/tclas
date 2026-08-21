@@ -31,10 +31,19 @@
 > para ser el testigo de que alguien miró el papel.
 >
 > **Paso 5 — `auditar_todo.py`.** Un solo comando, un solo veredicto. Pasa los
-> siete cruces (compás, armadura, figura, nivel, vocabulario, andamio, índice) y
-> los diez auditores por alumno. Con `--rapido`, solo los cruces contra la
-> partitura, y tarda segundos. Con `--pixeles`, además el control de márgenes
-> sobre los álbumes ya montados.
+> ocho cruces (compás, armadura, figura, tempo, nivel, vocabulario, andamio,
+> índice) y los diez auditores por alumno. Con `--rapido`, solo los cruces
+> contra la partitura, y tarda segundos. Con `--pixeles`, además el control de
+> márgenes sobre los álbumes ya montados.
+>
+> **Los CUATRO datos que el dosier afirma sobre el papel** y que por tanto hay
+> que leer, no suponer: el **compás**, la **armadura**, la **figura más corta**
+> y el **tempo**. Los cuatro tienen su auditor y su testigo de lectura. Y hay
+> un quinto que ninguno de esos cuatro ve, porque los cuatro leen el PRIMER
+> compás: que la partitura **cambie a mitad**. Para eso `auditar_tonalidad.py`
+> lleva una comprobación aparte — si una pieza avisa de un cambio, las demás
+> que tocan ese mismo PDF tienen que avisar también. Cuatro alumnos comparten
+> el Toreador; no puede ser que a uno se le diga y a tres no.
 >
 > **Por qué el sistema no deja pasar una pieza sin medir:** `auditar_compas` y
 > `auditar_tonalidad` fallan mientras la pieza nueva no esté en sus tablas de
@@ -219,6 +228,15 @@
 > lee el **primer** compás de la **primera** página (un cambio de compás a
 > mitad de pieza no lo ve), y las partituras que comparten fichero comparten
 > lectura porque el PDF es byte a byte el mismo (comprobado por md5).
+>
+> **Y una trampa de la propia comprobación, que casi cuela un error inventado:**
+> el primer barrido se hizo con recortes pequeños, y a ese tamaño **el "4" de la
+> cifra de compás se pega a la armadura y parece una alteración más**. Con eso
+> di por hecho que *Amiga Mía* llevaba tres sostenidos cuando lleva dos, y estuve
+> a punto de reescribirle la tonalidad, las escalas y los arpegios a dos alumnos.
+> Se salvó por volver a mirarlo grande. **Si una comprobación visual va a decidir
+> un cambio, hazla al tamaño en que no quepa duda** — y si el resultado te
+> sorprende, míralo otra vez antes de tocar nada.
 >
 > **Lo que hay debajo de los tres fallos es siempre lo mismo:** la
 > transcripción anotó las alturas —que son laboriosas— y dio el compás por

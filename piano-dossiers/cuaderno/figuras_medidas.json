@@ -32,8 +32,8 @@
   "partitura": "Do Your Ears Hang Low?.pdf"
  },
  "arnau_05_wheels": {
-  "escribe": 0,
-  "escribe_a_mano": 0,
+  "escribe": 2,
+  "escribe_a_mano": 2,
   "estado": "no medible",
   "md5": "7815e612b7528059e51ceafee07d7441",
   "motivo": "el PDF lleva dentro una imagen de 93 ppi",
@@ -248,8 +248,8 @@
   "partitura": " WHEN I WAS YOUR MAN _ Bruno Mars_.pdf"
  },
  "dilan_10_calor": {
-  "escribe": 0,
-  "escribe_a_mano": 0,
+  "escribe": 6,
+  "escribe_a_mano": 6,
   "estado": "no medible",
   "md5": "bfe7bc61c9b60b8589c6472ca10f94f2",
   "motivo": "el pentagrama mide 10.8 px de espacio",
@@ -380,8 +380,8 @@
   "partitura": "Counting-stars.pdf"
  },
  "ed_05_peaches": {
-  "escribe": 0,
-  "escribe_a_mano": 0,
+  "escribe": 6,
+  "escribe_a_mano": 6,
   "estado": "no medible",
   "md5": "6bcfbbd031973600a1c505351aed81c6",
   "motivo": "el PDF lleva dentro una imagen de 50 ppi",
@@ -468,8 +468,8 @@
   "partitura": "Rasputin.pdf"
  },
  "ed_15_toreador": {
-  "escribe": 0,
-  "escribe_a_mano": 0,
+  "escribe": 7,
+  "escribe_a_mano": 3,
   "estado": "no medible",
   "md5": "8d59817143dfb798a7a5bba9a37da3a3",
   "motivo": "el PDF lleva dentro una imagen de 76 ppi",
@@ -602,8 +602,8 @@
  },
  "eva_11_soldadito": {
   "cortas": 28,
-  "escribe": 0,
-  "escribe_a_mano": 0,
+  "escribe": 16,
+  "escribe_a_mano": 16,
   "estado": "ok",
   "largas": 44,
   "md5": "5465fbb00fbf238239e721ffada9a37a",
@@ -815,8 +815,8 @@
   "partitura": "Jailhouse Elvis Presley.pdf"
  },
  "is_18_toreador": {
-  "escribe": 4,
-  "escribe_a_mano": 0,
+  "escribe": 9,
+  "escribe_a_mano": 5,
   "estado": "no medible",
   "md5": "8d59817143dfb798a7a5bba9a37da3a3",
   "motivo": "el PDF lleva dentro una imagen de 76 ppi",
@@ -875,8 +875,8 @@
   "partitura": "Counting-stars.pdf"
  },
  "jm_05_peaches": {
-  "escribe": 0,
-  "escribe_a_mano": 0,
+  "escribe": 6,
+  "escribe_a_mano": 6,
   "estado": "no medible",
   "md5": "6bcfbbd031973600a1c505351aed81c6",
   "motivo": "el PDF lleva dentro una imagen de 50 ppi",
@@ -963,8 +963,8 @@
   "partitura": "Rasputin.pdf"
  },
  "jm_15_toreador": {
-  "escribe": 0,
-  "escribe_a_mano": 0,
+  "escribe": 7,
+  "escribe_a_mano": 3,
   "estado": "no medible",
   "md5": "8d59817143dfb798a7a5bba9a37da3a3",
   "motivo": "el PDF lleva dentro una imagen de 76 ppi",
@@ -1557,8 +1557,8 @@
   "partitura": "Jailhouse Elvis Presley.pdf"
  },
  "me_25_toreador": {
-  "escribe": 0,
-  "escribe_a_mano": 0,
+  "escribe": 9,
+  "escribe_a_mano": 5,
   "estado": "no medible",
   "md5": "8d59817143dfb798a7a5bba9a37da3a3",
   "motivo": "el PDF lleva dentro una imagen de 76 ppi",
@@ -1655,8 +1655,8 @@
   "partitura": "Cant-Falling-in-love-elvis-presley."
  },
  "nl_09_toreador": {
-  "escribe": 4,
-  "escribe_a_mano": 0,
+  "escribe": 8,
+  "escribe_a_mano": 4,
   "estado": "no medible",
   "md5": "8d59817143dfb798a7a5bba9a37da3a3",
   "motivo": "el PDF lleva dentro una imagen de 76 ppi",

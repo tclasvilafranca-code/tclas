@@ -9,8 +9,12 @@
        negra.
      - El compás se escribe con una C, que es 4/4. Pone "March time".
      - Es "Level Four": el escalón más alto de este arreglista.
-     - La digitación viene impresa, y la melodía arranca con negra con
-       puntillo y corchea, la figura de marcha.
+     - La digitación viene impresa, y la melodía arranca con CORCHEA CON
+       PUNTILLO Y SEMICORCHEA, la figura de marcha. Este dosier decía "negra
+       con puntillo y corchea", el mismo gesto al doble de lento y no lo
+       impreso: el c. 1 son negra, corchea con puntillo, semicorchea, negra
+       y negra, y solo así cierran los cuatro tiempos. Medido a 300 ppp:
+       Do5 · Re5 · Do5 · La4 · La4.
 """
 import os
 import sys
@@ -52,7 +56,7 @@ CANCION = dict(
                  'Fa mayor: todos los Si van a la tecla negra de al lado, del primer compás al '
                  'último.'),
                 ('EL RITMO', 'De marcha',
-                 'Negra con puntillo y corchea, una y otra vez: es lo que hace que suene a desfile y '
+                 'Corchea con puntillo y SEMICORCHEA, una y otra vez: es lo que hace que suene a desfile y '
                  'no a canción tranquila.'),
                 ('MARCH TIME', 'Ni rápido ni lento',
                  'A paso de marcha: firme y regular. No es una velocidad, es un carácter que no se '
@@ -63,7 +67,7 @@ CANCION = dict(
         ),
         ritmos=[
             ('MANO DERECHA', 'el ritmo de marcha: larga y corta · andamio',
-             [n('C5', 'q.'), {'pitch': 'A4', 'dur': 'e'}, n('F4'), n('A4')],
+             [n('C5'), n('C5', 'e.'), n('C5', 's'), n('F4'), n('A4')],
              OCRE, 'treble', FA),
             ('MANO IZQUIERDA', 'firme, marcando el paso · andamio',
              [ac(('F2', 'C3'), 'h'), ac(('C3', 'F3'), 'h')], AZUL, 'bass', FA),
@@ -72,11 +76,11 @@ CANCION = dict(
             'Hay un bemol detrás de la clave: todos los Si van a la tecla negra.',
             'El compás se escribe con una C, que quiere decir 4/4.',
             'Pone "March time": a paso de marcha, firme y regular.',
-            'La melodía va en negra con puntillo y corchea casi todo el rato.',
+            'La melodía va en corchea con puntillo y SEMICORCHEA casi todo el rato.',
             'La digitación viene impresa.',
             'El arreglista la marca como Level Four, el nivel más alto de esta colección.',
         ],
-        reto='Que el ritmo de marcha no se ablande: la negra con puntillo tiende a acortarse y la '
+        reto='Que el ritmo de marcha no se ablande: la corchea con puntillo tiende a acortarse y la '
              'corchea a adelantarse, y en cuanto eso pasa deja de sonar a marcha.',
         truco='Marca el paso con el pie mientras tocas: pie abajo en el uno y en el tres, y la '
               'corchea cae justo antes de que el pie vuelva a bajar.',
@@ -99,16 +103,16 @@ CANCION = dict(
                 'EL PULSO NO SE MUEVE'],
         bloques=[
             dict(num=1, titulo='El ritmo de marcha, con un salto más amplio',
-                 pista='andamio en Fa mayor · negra con puntillo y corchea',
+                 pista='medido sobre tu c. 1 · corchea con puntillo y semicorchea',
                  sistemas=[
                      dict(cap='a) primero todo en negras, con el salto de la melodía',
                           events=[n('F4'), n('C5'), n('A4'), n('F4'),
                                   n('D4'), n('Bb4'), n('G4'), n('F4')],
                           bars=2, key_sig=FA),
-                     dict(cap='b) y ahora con el puntillo · cuenta "UN dos-y TRES cuatro" y marca el '
-                              'paso con el pie',
-                          events=[n('F4', 'q.'), {'pitch': 'C5', 'dur': 'e'}, n('A4'), n('F4'),
-                                  n('D4', 'q.'), {'pitch': 'Bb4', 'dur': 'e'}, n('G4'), n('F4')],
+                     dict(cap='b) y ahora con su ritmo de verdad · la larga lleva puntillo y la '
+                              'corta es una SEMICORCHEA, pegada a la siguiente',
+                          events=[n('F4'), n('C5', 'e.'), n('A4', 's'), n('F4'), n('F4'),
+                                  n('D4'), n('Bb4', 'e.'), n('G4', 's'), n('F4'), n('F4')],
                           bars=2, key_sig=FA, show_time=False),
                  ]),
             dict(num=2, titulo='La izquierda: el paso', clef='bass',
@@ -135,7 +139,7 @@ CANCION = dict(
                  pista='andamio · despacio, con el pie marcando el paso',
                  sistemas=[
                      dict(cap='a) la derecha con su marcha encima del paso de la izquierda',
-                          events=[n('F4', 'q.'), {'pitch': 'C5', 'dur': 'e'}, n('A4'), n('F4'),
+                          events=[n('F4'), n('C5', 'e.'), n('A4', 's'), n('F4'), n('F4'),
                                   n('D4', 'h'), n('F4', 'h')],
                           bars=2, key_sig=FA),
                      dict(cap='b) y esto la izquierda a la vez (andamio) · el paso no cambia porque '

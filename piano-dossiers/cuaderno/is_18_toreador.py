@@ -7,8 +7,12 @@
 
      - Detrás de la clave hay UN BEMOL: Fa mayor.
      - El compás se escribe con una C (4/4), y pone "March time".
-     - La melodía arranca con la figura de marcha: negra con puntillo y
-       corchea.
+     - La melodía arranca con la figura de marcha: CORCHEA CON PUNTILLO Y
+       SEMICORCHEA. Este dosier decía "negra con puntillo y corchea", el
+       mismo gesto al doble de lento y no lo impreso: el c. 1 son negra,
+       corchea con puntillo, semicorchea, negra y negra, y solo así cierran
+       los cuatro tiempos (1 + 0,75 + 0,25 + 1 + 1). Medido a 300 ppp sobre
+       el PDF, alturas incluidas: Do5 · Re5 · Do5 · La4 · La4.
      - Digitación impresa. Es "Level Four", el escalón más alto de esta
        colección de arreglos.
 """
@@ -39,8 +43,8 @@ CANCION = dict(
                ('Compás', '4/4'), ('Carácter', 'March time'),
                ('Trae', 'Dedos escritos')],
         titulo_ritmos='La figura de marcha',
-        pie_ritmos='Andamio en Fa mayor. Lo literal es el arranque: negra con puntillo y corchea, '
-                   'la figura que da a la pieza su paso de marcha.',
+        pie_ritmos='Andamio en Fa mayor. Lo literal es el ritmo del arranque: corchea con puntillo '
+                   'y SEMICORCHEA, la figura que da a la pieza su paso de marcha.',
         armonia=dict(
             titulo='Lo que trae esta pieza',
             tarjetas=[
@@ -62,7 +66,7 @@ CANCION = dict(
         ),
         ritmos=[
             ('MANO DERECHA', 'la figura de marcha · literal',
-             [n('F4', 'q.'), n('G4', 'e'), n('Bb4', 'q'), n('C5', 'q')], OCRE, 'treble', None),
+             [n('F4'), n('G4', 'e.'), n('F4', 's'), n('Bb4'), n('C5')], OCRE, 'treble', None),
             ('MANO IZQUIERDA', 'acordes que marcan el paso · andamio',
              [n('F2'), ac(('F2', 'A2', 'C3')), n('F2'), ac(('F2', 'A2', 'C3'))], AZUL, 'bass', None),
         ],
@@ -70,7 +74,7 @@ CANCION = dict(
             'Detrás de la clave hay un bemol: todos los Si son teclas negras.',
             'El compás se escribe con una C, que equivale a 4/4.',
             'Arriba pone "March time".',
-            'La melodía arranca con negra con puntillo y corchea.',
+            'La melodía arranca con corchea con puntillo y SEMICORCHEA: larga y corta, muy juntas.',
             'Trae la digitación completa impresa.',
             'Es la pieza de nivel más alto de esta colección de arreglos.',
         ],
@@ -112,11 +116,12 @@ CANCION = dict(
             dict(num=2, titulo='La figura de marcha, aislada',
                  pista='andamio · cuenta "UUUN, y" y marca el paso con el pie',
                  sistemas=[
-                     dict(cap='a) larga, corta y dos negras firmes, empezando más arriba',
-                          events=[n('A4', 'q.'), n('Bb4', 'e'), n('C5'), n('D5')],
+                     dict(cap='a) el c. 1, medido · negra, la larga con puntillo, la SEMICORCHEA '
+                              'y dos negras firmes',
+                          events=[n('C5'), n('D5', 'e.'), n('C5', 's'), n('A4'), n('A4')],
                           bars=1),
                      dict(cap='b) el mismo dibujo, una frase más abajo',
-                          events=[n('D4', 'q.'), n('E4', 'e'), n('F4'), n('G4')],
+                          events=[n('A4'), n('Bb4', 'e.'), n('A4', 's'), n('F4'), n('F4')],
                           bars=1, show_time=False),
                  ]),
             dict(tipo='nota',
@@ -127,11 +132,11 @@ CANCION = dict(
                  pista='andamio · los acordes marcan el paso bajo la marcha · despacio',
                  sistemas=[
                      dict(cap='a) el acorde firme en cada tiempo, con otra progresión',
-                          events=[ac(('Bb2', 'D4'), 'q.'), n('Eb4', 'e'),
+                          events=[ac(('Bb2', 'D4')), n('Eb4', 'e.'), n('D4', 's'),
                                   ac(('F2', 'Bb2', 'F4')), ac(('C3', 'F2', 'A4'))],
                           bars=1),
                      dict(cap='b) y con la frase que sube',
-                          events=[ac(('C3', 'F4'), 'q.'), n('G4', 'e'),
+                          events=[ac(('C3', 'F4')), n('G4', 'e.'), n('F4', 's'),
                                   ac(('C3', 'F3', 'A4')), ac(('F2', 'C3', 'C5'))],
                           bars=1, show_time=False),
                  ]),

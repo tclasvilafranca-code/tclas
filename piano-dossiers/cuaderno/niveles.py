@@ -148,6 +148,22 @@ EXCEPCIONES = {
     # vieja; el motor llega, y la partitura es la suya.
     ('jm_17_acomme', 's'): 'su partitura va en semicorcheas continuas, medidas sobre el PDF',
     ('ed_17_acomme', 's'): 'la misma partitura de José María, con las mismas semicorcheas',
+
+    # Peaches se para en el c. 12 a proposito, pero del 13 en adelante la
+    # partitura va en semicorcheas y el dosier lo repetia cinco veces sin
+    # dibujarlas nunca. Se dibuja UN compas, marcado como "no es de esta
+    # semana": ver la figura no es tocarla, y no verla nunca es peor.
+    ('jm_05_peaches', 's'): 'el c. 13 de su partitura va en semicorcheas · se dibuja para verlo, no para tocarlo',
+    ('ed_05_peaches', 's'): 'la misma partitura de José María, con las mismas semicorcheas en el c. 13',
+
+    # El Toreador de Gradimi (Level Four) arranca con corchea con puntillo +
+    # SEMICORCHEA, no con negra con puntillo + corchea como decian los cinco
+    # dosieres: el c. 1 solo cierra en cuatro tiempos con la figura corta
+    # (1 + 0,75 + 0,25 + 1 + 1). Es su partitura y es su pieza mas dificil del
+    # curso, puesta ahi a proposito.
+    ('jm_15_toreador', 's'): 'el c. 1 de su partitura lleva la semicorchea del ritmo de marcha',
+    ('ed_15_toreador', 's'): 'la misma edición del Toreador, con la misma semicorchea',
+    ('me_25_toreador', 's'): 'la misma edición del Toreador, con la misma semicorchea',
 }
 
 # Rachas de notas cortas por encima del tope del escalon que SI se aceptan,

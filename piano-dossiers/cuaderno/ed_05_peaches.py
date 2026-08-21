@@ -19,7 +19,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from ed_comun import (n, ac, sil, corch, objetivo, plan, ordenar, contar,
+from ed_comun import (n, ac, sil, corch, semi, objetivo, plan, ordenar, contar,
                       teclado, para_clase, escalera)
 
 HERE = os.path.dirname(__file__)
@@ -52,8 +52,8 @@ CANCION = dict(
                  'Aparece una tecla negra en la izquierda, escrita delante de la nota. Vale solo para '
                  'ese compás.'),
                 ('COMPÁS 13', 'Cambia el paso',
-                 'A partir de ahí entran grupos de cuatro notas por golpe. Es otra pieza, y no es la '
-                 'de esta semana.'),
+                 'A partir de ahí entran grupos de cuatro notas por golpe: son SEMICORCHEAS, y las '
+                 'tienes dibujadas en la hoja de estudio. Es otra pieza, y no es la de esta semana.'),
                 ('LA REPETICIÓN', 'Con barras',
                  'Del 13 en adelante hay barras de repetición. Cuando llegues, mira el camino con el '
                  'lápiz antes de tocar.'),
@@ -75,8 +75,8 @@ CANCION = dict(
             'La izquierda toca UNA nota por compás y la aguanta los cuatro golpes.',
             'La derecha lleva corcheas y silencios de corchea.',
             'Los números de compás vienen impresos: 5, 9, 13 y 15.',
-            'A partir del compás 13 aparecen grupos de cuatro notas por golpe, y la pieza se vuelve '
-            'bastante más rápida.',
+            'A partir del compás 13 aparecen grupos de cuatro notas por golpe —semicorcheas—, y la '
+            'pieza se vuelve bastante más rápida.',
             'Hay barras de repetición a partir del compás 13.',
         ],
         reto='No arrancar a tocar la página entera. El compás 13 no está a tu nivel todavía, y si lo '
@@ -104,16 +104,17 @@ CANCION = dict(
         reglas=['LA PIEZA ACABA EN EL COMPÁS 12', 'LA IZQUIERDA AGUANTA CUATRO GOLPES',
                 'LOS HUECOS DURAN'],
         bloques=[
+            # Igual que en el de Jose Maria: dos sistemas de cuatro redondas eran
+            # ocho compases de papel para decir "una nota y aguanta". Se juntan
+            # en uno y el sistema que se ahorra paga el pentagrama del bloque 3.
             dict(num=1, titulo='La izquierda: una nota por compás', clef='bass',
                  pista='andamio en Do mayor · una redonda y a esperar',
                  sistemas=[
-                     dict(cap='a) tocar en el uno y contar cuatro en voz alta sin soltar',
-                          events=[n('D3', 'w'), n('B2', 'w'), n('G2', 'w'), n('A2', 'w')],
-                          bars=4, clef='bass'),
-                     dict(cap='b) y con el sostenido que aparece en el c. 11 · una sola nota negra en '
-                              'doce compases',
-                          events=[n('G2', 'w'), n('G#2', 'w'), n('A2', 'w'), n('D3', 'w')],
-                          bars=4, clef='bass', show_time=False),
+                     dict(cap='tocar en el uno y contar cuatro en voz alta sin soltar · el cuarto '
+                              'compás lleva el sostenido que te aparece en el c. 11',
+                          events=[n('D3', 'w'), n('B2', 'w'), n('G2', 'w'), n('G#2', 'w'),
+                                  n('A2', 'w'), n('D3', 'w')],
+                          bars=6, clef='bass'),
                  ]),
             dict(num=2, titulo='La derecha: la melodía, sin correr',
                  pista='andamio · el dibujo de corcheas y huecos es el de tu partitura',
@@ -129,14 +130,30 @@ CANCION = dict(
                                  [n('F4'), n('E4'), n('D4')],
                           bars=2, show_time=False),
                  ]),
+            # Mismo arreglo que el de Jose Maria y mismo agujero: se avisaba
+            # cinco veces de los "grupos de cuatro notas por golpe" y no se
+            # dibujaba ninguno. El RITMO de abajo esta medido sobre el c. 13 del
+            # PDF; las ALTURAS no (la partitura es un escaneo borroso), asi que
+            # van como andamio y la hoja lo dice.
+            dict(num=3, titulo='Y esto es lo que empieza en el compás 13',
+                 pista='no es de esta semana · se dibuja para que sepas qué aspecto tiene, no para '
+                       'que lo toques',
+                 sistemas=[
+                     dict(cap='el ritmo del c. 13, medido en tu partitura · las notas van como '
+                              'andamio: cuatro en un solo golpe son SEMICORCHEAS',
+                          events=corch(['F4', 'A4']) + [n('B4', 'e')] +
+                                 semi(['A4', 'F4'], agrupar=2) +
+                                 semi(['E4', 'F4', 'A4', 'B4']) + corch(['A4', 'F4']),
+                          bars=1),
+                 ]),
             dict(tipo='nota',
                  etiqueta='POR QUÉ PARAMOS EN EL COMPÁS 12',
-                 texto='Del 13 en adelante hay grupos de cuatro notas en el tiempo de un golpe. Eso no '
-                       'es "un poco más difícil": es otro nivel de velocidad de dedos, y necesita un '
+                 texto='Del 13 en adelante, eso de ahí arriba. Cuatro notas en un golpe no es "un '
+                       'poco más difícil": es otro nivel de velocidad de dedos, y necesita un '
                        'trabajo que todavía no toca. Los doce primeros compases son una pieza entera '
                        'y suenan a la canción. Cuando los tengas, seguimos desde el 13 sin haber '
                        'perdido nada por el camino.'),
-            dict(num=3, titulo='Las dos manos, dos compases',
+            dict(num=4, titulo='Las dos manos, dos compases',
                  pista='muy despacio · cuenta los cuatro golpes en voz alta',
                  sistemas=[
                      dict(cap='a) lo que hace la derecha mientras la izquierda aguanta',

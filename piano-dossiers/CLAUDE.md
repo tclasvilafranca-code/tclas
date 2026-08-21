@@ -122,6 +122,25 @@
 > paralelas a un espacio exacto (se distinguen por el grosor, que se mide
 > sobre las líneas del propio pentagrama).
 >
+> **Las 31 no medibles se miraron una por una**, a tamaño grande, y el
+> resultado está en `auditar_figuras.MIRADAS` como *(lleva semicorcheas, lo que
+> se vio)*. El booleano no es decorativo: con él esas 31 pasan la misma
+> comprobación en los dos sentidos que las 157 medibles. Mirarlas y no anotar
+> el resultado sería mirarlas para nada.
+>
+> Y destapó seis huecos reales, uno de ellos gordo: **las cinco copias del
+> Toreador decían "negra con puntillo y corchea" y lo impreso es CORCHEA CON
+> PUNTILLO Y SEMICORCHEA**, el mismo gesto al doble de rápido. Se ve a simple
+> vista al ampliar (las dos notas van unidas por una barra, y la segunda lleva
+> una barra corta más), pero además la aritmética no dejaba escapatoria: el
+> c. 1 solo cierra en cuatro tiempos con la figura corta (1 + 0,75 + 0,25 + 1 +
+> 1); con la lenta salen cinco. **Cuando una figura no cuadre a la vista,
+> súmala: un compás mal transcrito casi nunca cierra.** Los otros cinco huecos:
+> Peaches ×2 (semicorcheas del c. 13 en adelante, avisadas cinco veces en prosa
+> y dibujadas cero) y *Al calor del amor en un bar*, cuya introducción no son
+> ocho corcheas lisas sino tres corcheas y un **tresillo de semicorcheas**, dos
+> veces por compás.
+>
 > **Y la regla de oficio que se saca de aplicarlo:** cuando haya que meter una
 > figura que falta, **convertir un sistema que ya existe, no añadir uno**.
 > Añadir un sistema mueve la paginación de la hoja entera y obliga a rellenar

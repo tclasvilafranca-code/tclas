@@ -130,8 +130,13 @@ CANCION = dict(
             dict(num=3, titulo='La izquierda, con el bemol', clef='bass',
                  pista='andamio en Fa mayor · notas sueltas, una o dos por compás',
                  sistemas=[
-                     dict(cap='a) una nota por compás · las letras de encima te avisan de cuándo cambia',
-                          events=[n('F2', 'w'), n('C3', 'w'), n('F2', 'w'), n('C3', 'w')],
+                     # Antes eran Fa · Do · Fa · Do, que es exactamente lo que hace
+                     # la izquierda de The Wheels on the Bus: el mismo andamio en
+                     # dos piezas del mismo alumno. Ahora sigue las LETRAS que la
+                     # edición imprime encima (F · B♭ · C · F), que además es lo
+                     # que la frase dice que hay que mirar.
+                     dict(cap='a) una nota por compás, siguiendo las letras impresas · F · B♭ · C · F',
+                          events=[n('F2', 'w'), n('Bb2', 'w'), n('C3', 'w'), n('F2', 'w')],
                           bars=4, clef='bass'),
                  ]),
             dict(tipo='nota', etiqueta='CÓMO SE SUBE DE VELOCIDAD',

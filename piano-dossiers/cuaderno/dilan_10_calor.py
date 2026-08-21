@@ -46,6 +46,18 @@ def corch(ps, agrupar=4):
     return out
 
 
+def tresillo_semi(p, veces=3):
+    """Tres semicorcheas en el hueco de dos: el grupito con el 3 encima.
+
+       Lo trae la introduccion de esta edicion (los cuatro primeros compases,
+       medidos a 300 ppp sobre el PDF) y el dosier lo escribia en corcheas
+       lisas, ocho por compas. No era eso: son tres corcheas y un tresillo de
+       semicorcheas, dos veces por compas."""
+    _B[0] += 1
+    return [{'pitch': p, 'dur': 's', 'tresillo': _B[0], 'beam': _B[0]}
+            for _ in range(veces)]
+
+
 def molde(fund, quinta, oct_):
     """El dibujo de la izquierda: fundamental · octava · quinta · octava."""
     return [n(fund), n(oct_), n(quinta), n(oct_)]
@@ -104,7 +116,8 @@ CANCION = dict(
             'Hay SEGNO y casillas 1.ª y 2.ª: el orden en que se toca no es el orden escrito.',
             'Más adelante CAMBIA LA ARMADURA a cuatro sostenidos. Míralo antes de llegar.',
             'Los cuatro primeros compases son introducción: la voz todavía no ha entrado.',
-            'Hay TRESILLOS marcados con un 3 en la mano derecha.',
+            'Hay TRESILLOS marcados con un 3 en la mano derecha, y los de la introducción son de '
+            'SEMICORCHEAS: tres notas en el hueco de dos, muy rápidas.',
         ],
         reto='El recorrido de la hoja. Entre el segno, las dos casillas y el cambio de armadura, esta '
              'partitura se toca en un orden que no es el que está escrito, y con una tonalidad que '
@@ -153,7 +166,8 @@ CANCION = dict(
                          n('E4', 'w')],
                  bars_per_line=3),
             dict(num=5, titulo='Notas repetidas, cambiando de dedo',
-                 pista='dedos 3 · 2 · 1 · así empieza la canción, con la misma nota picoteada',
+                 pista='dedos 3 · 2 · 1 · la nota picoteada de la introducción, en corcheas lisas '
+                       'para calentar: el tresillo llega en la hoja de estudio',
                  events=corch(['B4'] * 8) + corch(['A4'] * 8) +
                         corch(['G4'] * 8) + corch(['B4'] * 8),
                  bars_per_line=4),
@@ -262,11 +276,17 @@ CANCION = dict(
             dict(num=3, titulo='El recorrido, y la entrada', clef='treble',
                  pista='primero con el dedo y en voz alta, sin piano · después la introducción',
                  sistemas=[
-                     dict(cap='a) los cuatro primeros compases van sobre una sola nota repetida · el '
-                              'dedo cambia (3 · 2 · 1) pero la tecla no, y no se acelera',
-                          events=corch(['E5'] * 8) + corch(['E5'] * 8) +
-                                 corch(['E5'] * 8) + [n('E5', 'w')],
-                          bars=4),
+                     # Aqui habia ocho corcheas lisas por compas y la introduccion
+                     # no es eso: medida a 300 ppp sobre el PDF, cada mitad de
+                     # compas lleva TRES CORCHEAS y un TRESILLO DE SEMICORCHEAS
+                     # (el grupito con el 3 debajo). La nota, Mi5, no cambia en
+                     # los cuatro compases; lo que cambia es la figura, que es
+                     # justo lo que hace que suene a esta cancion y no a otra.
+                     dict(cap='a) el c. 1, medido · la tecla no cambia (Mi, siempre) pero la figura '
+                              'sí: tres corcheas y un TRESILLO DE SEMICORCHEAS, dos veces',
+                          events=corch(['E5'] * 3, 3) + tresillo_semi('E5') +
+                                 corch(['E5'] * 3, 3) + tresillo_semi('E5'),
+                          bars=1),
                      dict(cap='b) el bajo de la estrofa de un tirón · Mim · Fa♯7 · Si7 · Mim y vuelta: '
                               'así se oye la forma entera sin tocar casi nada',
                           events=[n('E2', 'w'), n('F2', 'w'), n('B2', 'w'), n('E2', 'w'),

@@ -29,14 +29,60 @@ JSON = os.path.join(HERE, 'figuras_medidas.json')
 UMBRAL = 20
 
 # Partituras NO MEDIBLES (una foto de baja resolucion dentro de un PDF) que ya
-# se han mirado a ojo, a tamano grande, y lo que se vio. Sin esta lista el
+# se han mirado a ojo, a tamano grande, pagina a pagina. Sin esta lista el
 # auditor no puede decir nada de ellas, y callarse no vale.
+#
+#   nombre del fichero -> (lleva semicorcheas, lo que se vio)
+#
+# El booleano NO es decorativo: con el, estas 31 partituras pasan exactamente
+# la misma comprobacion en los dos sentidos que las 157 medibles. Mirarlas y
+# no anotar el resultado seria mirarlas para nada.
 MIRADAS = {
-    'Como entrenar a tu dragon.': 'corcheas · una sola barra por grupo en toda la pieza',
-    'Copia de Copia de Como entrenar a tu dragon.': 'la misma edicion del Flying Theme: corcheas',
-    '-PEACHES.': 'CORCHEAS hasta el c. 12 y SEMICORCHEAS del 13 en adelante',
-    'OH WHEN THE SAINT.pdf': 'corcheas · sin barras dobles',
-    'Oh when the Saint.pdf': 'la misma edicion: corcheas',
+    # --- Arnau: casi todo son ediciones de iniciacion sin una sola barra doble
+    'Chopsticks.pdf': (False, 'negras y blancas · ni una barra en toda la pieza'),
+    'Clementine.pdf': (False, 'corcheas unidas de dos en dos · una sola barra'),
+    'JOLLY OLD SAINT NICHOLAS.pdf': (False, 'negras, blancas y redondas · sin barras'),
+    'Do Your Ears Hang Low?.pdf': (False, 'corcheas · una sola barra por grupo'),
+    'The Wheels on the Bus.pdf': (True, 'corchea con puntillo + SEMICORCHEA en los cc. 1 y 5 · '
+                                        'el resto, negras y blancas'),
+    'Oh when the Saint.pdf': (False, 'corcheas · sin barras dobles'),
+    'OH WHEN THE SAINT.pdf': (False, 'la misma edicion: corcheas'),
+    'WE WISH A MERRY CRISTMAS.pdf': (False, 'corcheas · una sola barra'),
+    'Baa Baa Black Sheep.pdf': (False, 'corcheas y negra con puntillo · una sola barra'),
+    'Polly Put the Kettle On.pdf': (False, 'corcheas de principio a fin · una sola barra'),
+    'Little Miss Muffet.pdf': (False, 'corcheas de tres en tres (6/8) · una sola barra'),
+    'MyBonnie.pdf': (False, 'negras, blancas y blancas con puntillo · ni una barra'),
+    'rain-rain-away-easy-piano-4 manos.pdf': (False, 'blancas y negras · ni una corchea'),
+    'the-mulberry-bush-185807.4 manos.pdf': (False, 'corcheas de tres en tres (6/8) · una sola barra'),
+
+    # --- las cuatro copias de la misma edicion del Toreador (Gradimi, Level 4)
+    'Toreador. Bizet': (True, 'SEMICORCHEAS: el largo-corto de los cc. 1-4 y 7, y cuatro '
+                              'seguidas en la primera casilla'),
+    'TOREADOR-BIZET.pdf': (True, 'la misma edicion Gradimi: mismo largo-corto y misma carrerilla'),
+    'TOREADOR-BIZET. Bizet': (True, 'la misma edicion Gradimi'),
+    'Copia de Copia de Toreador. Bizet': (True, 'la misma edicion Gradimi'),
+
+    # --- las dos copias del Grandfather's Clock (Gradimi, Level 3)
+    "Grandfather's Clock.pdf": (False, 'negras, blancas y redondas · ni una barra'),
+    'Grandfather.pdf': (False, 'la misma edicion Gradimi: sin barras'),
+
+    # --- las dos copias de Lovely (arr. Amy Kieran)
+    '-LOVELY.pdf': (False, 'corcheas · ocho por compas, una sola barra'),
+    'LOVELY.': (False, 'la misma edicion: corcheas'),
+
+    # --- las dos copias del Flying Theme
+    'Como entrenar a tu dragon.': (False, 'corcheas · una sola barra por grupo en toda la pieza'),
+    'Copia de Copia de Como entrenar a tu dragon.': (False, 'la misma edicion: corcheas'),
+
+    # --- sueltas
+    '-PEACHES.': (True, 'CORCHEAS hasta el c. 12 y SEMICORCHEAS del 13 en adelante'),
+    'al-calor-del-amor-en-un-bar.pdf': (True, 'SEMICORCHEAS en la introduccion (cc. 1-4) y '
+                                              'TRESILLOS marcados con el 3'),
+    'himno America.pdf': (False, 'corcheas y negra con puntillo + corchea · una sola barra'),
+    'Himno de Estados Unidos.pdf': (False, 'corcheas · una sola barra'),
+    "SUR LE PONT D'AVIGNON.pdf": (False, 'corcheas · una sola barra'),
+    'LAS CUATRO ESTACIONES.pdf': (False, 'corcheas · una sola barra'),
+    'BELLA Y BESTIA .pdf': (False, 'corcheas · una sola barra'),
 }
 
 
@@ -61,22 +107,32 @@ def main(prefijos=None):
         escribe = d.get('escribe', 0)
         if estado == 'ok':
             largas = d.get('largas', 0)
-            if largas >= UMBRAL and not escribe:
-                huecos.append((m, largas, d['partitura']))
-            elif largas == 0 and d.get('escribe_a_mano'):
-                # Solo lo escrito A MANO: el material de apoyo de `relleno` es
-                # tecnica generica sobre la tonalidad, va marcado como tal y
-                # puede llevar una figura que la pieza no tenga.
-                sobra.append((m, d['escribe_a_mano'], d['partitura']))
+            lleva = largas >= UMBRAL
+            cuanto = '%d barras dobles' % largas
         elif estado == 'no medible':
-            if d.get('partitura') not in MIRADAS:
-                mirar.append((m, d['partitura'], d.get('motivo', '')))
+            visto = MIRADAS.get(d.get('partitura'))
+            if visto is None:
+                mirar.append((m, d.get('partitura'), d.get('motivo', '')))
+                continue
+            lleva = visto[0]
+            largas, cuanto = 0, 'mirado a ojo'
+        else:
+            continue
 
-    print('piezas comprobadas: %d (umbral: %d barras dobles)' % (len(datos), UMBRAL))
+        if lleva and not escribe:
+            huecos.append((m, largas, cuanto, d['partitura']))
+        elif not lleva and largas == 0 and d.get('escribe_a_mano'):
+            # Solo lo escrito A MANO: el material de apoyo de `relleno` es
+            # tecnica generica sobre la tonalidad, va marcado como tal y
+            # puede llevar una figura que la pieza no tenga.
+            sobra.append((m, d['escribe_a_mano'], d['partitura']))
+
+    print('piezas comprobadas: %d (umbral: %d barras dobles · %d partituras miradas a ojo)'
+          % (len(datos), UMBRAL, len(MIRADAS)))
 
     print('\nLA PARTITURA LA LLEVA Y EL DOSIER NO LA DIBUJA: %d' % len(huecos))
-    for m, largas, p in sorted(huecos, key=lambda x: -x[1]):
-        print('   %4d barras dobles · %-22s %s' % (largas, m, p[:44]))
+    for m, largas, cuanto, p in sorted(huecos, key=lambda x: -x[1]):
+        print('   %-16s · %-22s %s' % (cuanto, m, p[:40]))
 
     print('\nEL DOSIER LA DIBUJA Y LA PARTITURA NO LA LLEVA: %d' % len(sobra))
     for m, escribe, p in sobra:

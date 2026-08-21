@@ -60,7 +60,7 @@ semicorcheas en el Flying Theme**, que va entero en corcheas.
 | arnau_02_clementine | no medible | — | — | 0 | 0 | Clementine.pdf |
 | arnau_03_jolly | no medible | — | — | 0 | 0 | JOLLY OLD SAINT NICHOLAS.pdf |
 | arnau_04_ears | no medible | — | — | 0 | 0 | Do Your Ears Hang Low?.pdf |
-| arnau_05_wheels | no medible | — | — | 0 | 0 | The Wheels on the Bus.pdf |
+| arnau_05_wheels | no medible | — | — | 2 | 2 | The Wheels on the Bus.pdf |
 | arnau_06_saints | no medible | — | — | 0 | 0 | Oh when the Saint.pdf |
 | arnau_07_wewish | no medible | — | — | 0 | 0 | WE WISH A MERRY CRISTMAS.pdf |
 | arnau_08_baabaa | no medible | — | — | 0 | 0 | Baa Baa Black Sheep.pdf |
@@ -85,7 +85,7 @@ semicorcheas en el Flying Theme**, que va entero en corcheas.
 | dilan_07_amiga | ok | 106 | 1 | 32 | 32 | Amiga mia-alejandro Sanz.pdf |
 | dilan_08_promesa | ok | 155 | 9 | 8 | 8 |  la-promesa-MELENDI.pdf |
 | dilan_09_bruno | ok | 118 | 56 | 8 | 8 |  WHEN I WAS YOUR MAN _ Bruno Mars_.pdf |
-| dilan_10_calor | no medible | — | — | 0 | 0 | al-calor-del-amor-en-un-bar.pdf |
+| dilan_10_calor | no medible | — | — | 6 | 6 | al-calor-del-amor-en-un-bar.pdf |
 | dilan_11_soldadito | ok | 44 | 28 | 24 | 24 |  SOLDADITO DE HIERRO _ Nil Moliner_.pdf |
 | dilan_12_sky | ok | 23 | 54 | 8 | 8 |  a-sky-full-of-stars-coldplay.pdf |
 | dilan_13_what | ok | 14 | 11 | 0 | 0 | what-was-i-made-for-billie-eilish.pdf |
@@ -100,7 +100,7 @@ semicorcheas en el Flying Theme**, que va entero en corcheas.
 | ed_02_america | no medible | — | — | 0 | 0 | himno America.pdf |
 | ed_03_banner | no medible | — | — | 0 | 0 | Himno de Estados Unidos.pdf |
 | ed_04_counting | ok | 8 | 0 | 0 | 0 | Counting-stars.pdf |
-| ed_05_peaches | no medible | — | — | 0 | 0 | -PEACHES. |
+| ed_05_peaches | no medible | — | — | 6 | 6 | -PEACHES. |
 | ed_06_someone | ok | 0 | 2 | 0 | 0 | SOMEONE YOU LOVED. |
 | ed_07_deck | ok | 0 | 4 | 0 | 0 | Deck the Halls (with Boughs of Holly) NAVIDAD.pdf |
 | ed_08_jailhouse | ok | 2 | 2 | 0 | 0 | jailhouse-rock-elvis-presley-.pdf |
@@ -110,7 +110,7 @@ semicorcheas en el Flying Theme**, que va entero en corcheas.
 | ed_12_carol | ok | 4 | 17 | 0 | 0 | carol-of-the-bells   NAVIDAD. |
 | ed_13_adagio | ok | 0 | 0 | 0 | 0 | ADAGIO. |
 | ed_14_rasputin | ok | 0 | 1 | 0 | 0 | Rasputin.pdf |
-| ed_15_toreador | no medible | — | — | 0 | 0 | Toreador. Bizet |
+| ed_15_toreador | no medible | — | — | 7 | 3 | Toreador. Bizet |
 | ed_16_trouble | ok | 0 | 2 | 0 | 0 | Trouble. |
 | ed_17_acomme | ok | 45 | 5 | 8 | 8 | A COMME AMOUR _ Richard Clayderman. |
 | ed_18_interstellar | ok | 8 | 0 | 0 | 0 | Interstellar _ .pdf |
@@ -125,7 +125,7 @@ semicorcheas en el Flying Theme**, que va entero en corcheas.
 | eva_08_promesa | ok | 155 | 9 | 8 | 8 | la-promesa-MELENDI.pdf |
 | eva_09_amiga | ok | 106 | 1 | 16 | 16 | Amiga mia-alejandro Sanz.pdf |
 | eva_10_young | ok | 93 | 88 | 20 | 4 | WHEN WE WERE YOUNG _ Adele Dm .pdf |
-| eva_11_soldadito | ok | 44 | 28 | 0 | 0 | SOLDADITO DE HIERRO _ Nil Moliner.pdf |
+| eva_11_soldadito | ok | 44 | 28 | 16 | 16 | SOLDADITO DE HIERRO _ Nil Moliner.pdf |
 | eva_12_favourite | ok | 6 | 6 | 0 | 0 | my-favourite-things-the-sound-.pdf |
 | eva_13_merry | ok | 9 | 9 | 0 | 0 | have-yourself-a-merry-little-christmas.pdf |
 | eva_14_santa | ok | 22 | 8 | 16 | 16 | Santa-tell-me-ariana-grande.pdf |
@@ -149,14 +149,14 @@ semicorcheas en el Flying Theme**, que va entero en corcheas.
 | is_15_gladiator | ok | 0 | 9 | 0 | 0 | Gladyator.pdf |
 | is_16_rasputin | ok | 0 | 1 | 4 | 0 | Rasputin.pdf |
 | is_17_jailhouse | ok | 2 | 2 | 0 | 0 | Jailhouse Elvis Presley.pdf |
-| is_18_toreador | no medible | — | — | 4 | 0 | TOREADOR-BIZET.pdf |
+| is_18_toreador | no medible | — | — | 9 | 5 | TOREADOR-BIZET.pdf |
 | is_19_furelise | ok | 1 | 3 | 1 | 1 | Para Elisa.pdf |
 | is_20_diabelli | ok | 19 | 14 | 0 | 0 | DIABELLI ( cuatro manos).pdf |
 | jm_01_romance | ok | 6 | 16 | 0 | 0 | Romance-Diabelli 4 manos.pdf |
 | jm_02_america | no medible | — | — | 0 | 0 | himno America.pdf |
 | jm_03_banner | no medible | — | — | 0 | 0 | Himno de Estados Unidos.pdf |
 | jm_04_counting | ok | 8 | 0 | 0 | 0 | Counting-stars.pdf |
-| jm_05_peaches | no medible | — | — | 0 | 0 | -PEACHES. |
+| jm_05_peaches | no medible | — | — | 6 | 6 | -PEACHES. |
 | jm_06_someone | ok | 0 | 2 | 0 | 0 | SOMEONE YOU LOVED. |
 | jm_07_deck | ok | 0 | 4 | 0 | 0 | Deck the Halls (with Boughs of Holly) NAVIDAD.pdf |
 | jm_08_jailhouse | ok | 2 | 2 | 0 | 0 | jailhouse-rock-elvis-presley-.pdf |
@@ -166,7 +166,7 @@ semicorcheas en el Flying Theme**, que va entero en corcheas.
 | jm_12_carol | ok | 4 | 17 | 0 | 0 | carol-of-the-bells   NAVIDAD. |
 | jm_13_adagio | ok | 0 | 0 | 0 | 0 | ADAGIO. |
 | jm_14_rasputin | ok | 0 | 1 | 0 | 0 | Rasputin.pdf |
-| jm_15_toreador | no medible | — | — | 0 | 0 | Toreador. Bizet |
+| jm_15_toreador | no medible | — | — | 7 | 3 | Toreador. Bizet |
 | jm_16_trouble | ok | 0 | 2 | 0 | 0 | Trouble. |
 | jm_17_acomme | ok | 45 | 5 | 8 | 8 | A COMME AMOUR _ Richard Clayderman. |
 | jm_18_interstellar | ok | 8 | 0 | 0 | 0 | Interstellar _ .pdf |
@@ -233,7 +233,7 @@ semicorcheas en el Flying Theme**, que va entero en corcheas.
 | me_22_gladiator | ok | 0 | 9 | 0 | 0 | Gladyator.pdf |
 | me_23_rasputin | ok | 0 | 1 | 0 | 0 | Rasputin.pdf |
 | me_24_jailhouse | ok | 2 | 2 | 0 | 0 | Jailhouse Elvis Presley.pdf |
-| me_25_toreador | no medible | — | — | 0 | 0 | TOREADOR-BIZET. Bizet |
+| me_25_toreador | no medible | — | — | 9 | 5 | TOREADOR-BIZET. Bizet |
 | me_26_furelise | ok | 1 | 3 | 1 | 1 | Para Elisa.pdf |
 | me_27_nocturne | ok | 0 | 7 | 0 | 0 | nocturne-op9-chopin. |
 | nl_01_petite | ok | 1 | 21 | 0 | 0 | petite chanson.(4 manos) |
@@ -244,7 +244,7 @@ semicorcheas en el Flying Theme**, que va entero en corcheas.
 | nl_06_jailhouse | ok | 2 | 2 | 0 | 0 | jailhouse-rock-elvis-presley-.pdf |
 | nl_07_bellaciao | ok | 0 | 11 | 0 | 0 | bella-ciao-piano( 4 manos).pdf |
 | nl_08_canthelp | ok | 0 | 5 | 0 | 0 | Cant-Falling-in-love-elvis-presley. |
-| nl_09_toreador | no medible | — | — | 4 | 0 | Copia de Copia de Toreador. Bizet |
+| nl_09_toreador | no medible | — | — | 8 | 4 | Copia de Copia de Toreador. Bizet |
 | nl_10_lovely | no medible | — | — | 0 | 0 | LOVELY. |
 | nl_11_rasputin | ok | 0 | 1 | 0 | 0 | Rasputin.pdf |
 | nl_12_diamonds | ok | 17 | 19 | 0 | 0 | rihanna-diamond-.pdf |

@@ -184,7 +184,10 @@ def draw_notehead(c, cx, cy, gap, filled=True):
         c.ellipse(-rx, -ry, rx, ry, fill=1, stroke=0)
     else:
         c.setStrokeColor(INK)
-        c.setLineWidth(1.3)
+        # proporcional al tamano: con 1.3 fijo, una cabeza dibujada a tamano de
+        # carta (gap 20) sale con un contorno de pelo. En el cuaderno el gap es
+        # 7-9 y max() devuelve 1.3 exacto, asi que no cambia ni una pagina.
+        c.setLineWidth(max(1.3, gap * 0.13))
         c.ellipse(-rx, -ry, rx, ry, fill=0, stroke=1)
     c.restoreState()
 
@@ -271,7 +274,7 @@ def draw_note(c, cx, staff_bottom_y, staff_top_y, gap, pitch, dur='q', stem_dir=
     stem_len = gap * 3.4
     if dur != 'w':
         c.setStrokeColor(INK)
-        c.setLineWidth(1.3)
+        c.setLineWidth(max(1.3, gap * 0.115))
         if stem_dir == 'up':
             sx = cx + stem_x_off
             stem_top = stem_end_y if stem_end_y is not None else cy + stem_len

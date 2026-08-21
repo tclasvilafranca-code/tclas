@@ -10,3 +10,6 @@ students/*/source/
 # poder leer la clave, la armadura y el compas: son trozos de las partituras
 # originales, o sea el mismo material con copyright. Se miran y se tiran.
 cuaderno/arranques/
+
+# Los PDF de los juegos se generan, como los albumes
+output/juegos/

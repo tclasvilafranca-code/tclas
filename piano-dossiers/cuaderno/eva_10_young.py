@@ -136,7 +136,7 @@ CANCION = dict(
             'La letra va debajo del pentagrama: úsala para el fraseo.',
             'Marca de 8vb en los cc. 7–8 y 15–16, y tresillos con un 3 en los cc. 21, 23 y 60.',
             'El c. 62 cambia a 5/4 y es el único compás de cinco tiempos de la pieza.',
-            'La izquierda va casi siempre en blancas: dos golpes por compás y nada más.',
+            'La izquierda va casi siempre en blancas: dos notas por compás y nada más.',
         ],
         reto='Aguantar cuatro páginas sin perder el sitio. La derecha lleva semicorcheas seguidas con letra '
              'y casi sin silencios: es la pieza más larga de tu álbum, y lo que cansa no son las notas, '

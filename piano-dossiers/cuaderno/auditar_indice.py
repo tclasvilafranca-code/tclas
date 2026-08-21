@@ -134,6 +134,89 @@ def piezas_del_alumno(pref):
     return out
 
 
+# Cuantos golpes se cuentan por compas. En 6/8 no son seis: se cuenta en DOS,
+# que es lo que dicen sus fichas y lo que hace el pie.
+def _golpes(ts):
+    if not ts:
+        return set()
+    num, den = ts
+    golpes = {num}
+    if den == 8 and num % 3 == 0:
+        golpes.add(num // 3)
+    if (num, den) == (2, 2):
+        # el compasillo partido: el compas dura CUATRO negras pero se cuenta en
+        # DOS, y las fichas lo explican asi a proposito ("cuatro golpes, pero
+        # contados de dos en dos"). Las dos cifras son ciertas.
+        golpes.add(4)
+    return golpes
+
+
+PALABRA = {'un': 1, 'una': 1, 'dos': 2, 'tres': 3, 'cuatro': 4, 'cinco': 5,
+           'seis': 6, 'siete': 7, 'ocho': 8, 'nueve': 9, 'doce': 12}
+_N = r'(\d+|un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|doce)'
+# Solo lo que habla de CUANTOS GOLPES TIENE EL COMPAS. No vale buscar "por
+# compas" a secas: media ficha dice cuantas NOTAS toca la izquierda por compas,
+# y eso no tiene por que coincidir con el numero de golpes.
+DEL_COMPAS = re.compile(
+    _N + r'\s+golpes?\s+(por|en\s+cada)\s+comp[aá]s'
+    r'|comp[aá]s\s+lleva\s+' + _N + r'\s+golpes?'
+    r'|se\s+cuenta\s+en\s+' + _N, re.IGNORECASE)
+# Y ademas, cuando el rotulo YA dice que habla del compas ("Golpes: 3 por
+# compas", tarjeta "EL COMPAS · Dos golpes"), cualquier numero suyo es un
+# numero de golpes.
+SUELTO = re.compile(_N + r'\s+(golpes?|por\s+comp[aá]s)', re.IGNORECASE)
+
+
+def _num(x):
+    return int(x) if x.isdigit() else PALABRA[x.lower()]
+
+
+def _cuantos(texto, rotulo_del_compas=False):
+    """Los numeros de GOLPES POR COMPAS que afirma un texto."""
+    out = []
+    for m in DEL_COMPAS.finditer(texto):
+        for g in m.groups():
+            if g:
+                out.append(_num(g))
+                break
+    if rotulo_del_compas:
+        out += [_num(g) for g, _q in SUELTO.findall(texto)]
+    return out
+
+
+def _revisar_golpes(modulo, cfg):
+    """Los rotulos de la ficha no pueden decir un numero de golpes que no sea el
+       del compas.
+
+       Sale de un fallo de verdad: al corregir el compas de The Wheels on the
+       Bus (3/4 -> 4/4) y el de Polly (2/4 -> 4/4) se cambiaron los ejercicios y
+       el indice, pero se quedaron dos rotulos de la ficha diciendo "3 por
+       compas" y "Solo 2 golpes" JUNTO A una vinneta que decia "cada compas
+       lleva cuatro golpes". La misma pagina se contradecia a si misma, y eso no
+       lo veia ningun auditor: lo vio un ojo mirando la hoja impresa."""
+    fallos = []
+    ficha = cfg.get('ficha') or {}
+    golpes = _golpes(tuple(cfg.get('time_sig') or ()))
+    if not golpes:
+        return fallos
+    sitios = []
+    for k, v in (ficha.get('datos') or []):
+        sitios.append(('dato %r' % k, str(v),
+                       k.strip().lower() in ('golpes', 'compás', 'compas')))
+    for t in (ficha.get('armonia') or {}).get('tarjetas', []) or []:
+        del_compas = 'COMP' in str(t[0]).upper() or 'GOLPE' in str(t[0]).upper()
+        sitios.append(('tarjeta %r' % t[0], ' · '.join(str(x) for x in t[1:3]), del_compas))
+    for e in ficha.get('especial', []) or []:
+        sitios.append(('viñeta', str(e), False))
+    for donde, texto, del_compas in sitios:
+        for cuantos in _cuantos(texto, del_compas):
+            if cuantos not in golpes:
+                fallos.append('%s · la ficha dice %r en %s y el compás es %d/%d'
+                              % (modulo, texto[:70], donde,
+                                 cfg['time_sig'][0], cfg['time_sig'][1]))
+    return fallos
+
+
 def _revisar_ficha(modulo, cfg):
     """La ficha de la pieza repite tonalidad y compas en su fila de datos."""
     fallos = []
@@ -201,6 +284,7 @@ def revisar(alumno, pref):
         # mira una vez y la ficha esta delante cada semana. Es la tercera copia
         # del mismo dato y tambien tiene que decir lo mismo.
         fallos += _revisar_ficha(modulo, cfg)
+        fallos += _revisar_golpes(modulo, cfg)
 
     for num, (modulo, _cfg) in sorted(piezas.items()):
         if num not in vistos:

@@ -54,7 +54,7 @@ CANCION = dict(
     ficha=dict(
         titulo='The Wheels on the Bus',
         autor='Canción popular · arr. Jim Paterson (mfiles)',
-        datos=[('Novedad', 'Una tecla negra'), ('Golpes', '3 por compás'),
+        datos=[('Novedad', 'Una tecla negra'), ('Golpes', '4 por compás'),
                ('Mano dcha.', 'La melodía'), ('Mano izq.', 'Notas largas'),
                ('Extras', 'Letras encima')],
         armonia=dict(

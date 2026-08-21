@@ -175,26 +175,73 @@ def _hojas_piano(cfg, kicker, pag, esquina_def):
        ejercicio nunca se parte por la mitad.
 
        `piano2`, cuando la pieza lo trae escrito a mano, sigue siendo una hoja
-       aparte y se pagina igual que la primera."""
+       aparte y se pagina igual que la primera.
+
+       LOS NUMEROS DE EJERCICIO LOS PONE ESTA FUNCION, no la pieza. Es la misma
+       decision que ya se tomo en `hoja_deberes.build_deberes` y por el mismo
+       motivo: a mano se descuadran. Cuando una pieza recibio bloques de apoyo
+       despues de escrita (`relleno.bloques_extra`, `bloque_puntillo`...) los
+       nuevos se anadieron al final con el numero que les tocaba en la cabeza
+       del que los puso, y en el papel salio **1, 2, 6, 7, 5**. Estaba asi en
+       22 piezas, dos de ellas con un numero repetido. Ahora se numera en el
+       orden en que se imprime y no hay forma de que mienta."""
     from hoja_piano import _paginar
     hojas = []
     n = 0
+    paso = 0
+    reparto = []          # [(base ya renumerada, [trozo, trozo...])]
     for bruto in [cfg['piano1']] + ([cfg['piano2']] if cfg.get('piano2') else []):
         base = dict(bruto)
+        bloques = []
+        for b in base.get('bloques', []):
+            if b.get('tipo', 'ej') == 'ej' and 'num' in b:
+                paso += 1
+                b = dict(b, num=paso)
+            bloques.append(b)
+        base['bloques'] = bloques
         base.update(kicker=kicker, time_sig=cfg['time_sig'],
                     key_sig=cfg.get('key_sig'), gap=base.get('gap', 7.0),
                     esquina=base.get('esquina', esquina_def),
                     titulo=base.get('titulo', 'Cómo se estudia'))
-        trozos = _paginar(base)
-        for j, trozo in enumerate(trozos):
+        reparto.append((base, _paginar(base)))
+    total = paso
+    for base, trozos in reparto:
+        for trozo in trozos:
             n += 1
             # La hoja que continua lo dice en su titulo: si no, el alumno ve dos
             # hojas iguales llamadas "Como se estudia" y no sabe cual va antes.
             tit = base['titulo'] if (n == 1) else _sigue(base['titulo'])
-            hoja = dict(base, bloques=trozo, page_num=pag, titulo=tit)
+            hoja = dict(base, bloques=trozo, page_num=pag, titulo=tit,
+                        esquina=_esquina_pasos(base['esquina'], trozo, total))
             hojas.append(('piano %d' % n, (lambda q: lambda c: build_piano(c, q))(hoja)))
             pag += 1
     return hojas, pag
+
+
+def _esquina_pasos(esquina, trozo, total):
+    """El rotulo de la esquina, cuando promete un numero de pasos, tiene que
+       decir los que hay DE VERDAD en esa hoja.
+
+       Estaba escrito a mano pieza por pieza ("pasos 1 y 2 de 4") y se quedo
+       viejo en cuanto la hoja se pagino sola o la pieza recibio material de
+       apoyo: habia hojas con cinco ejercicios cuya esquina seguia diciendo
+       "pasos 1 y 2 de 4", y dos hojas seguidas con la misma etiqueta. Las que
+       no prometen nada ("el orden de estudio") se quedan como estan."""
+    if 'paso' not in (esquina or '').lower():
+        return esquina
+    nums = [b['num'] for b in trozo if b.get('tipo', 'ej') == 'ej' and 'num' in b]
+    if not nums:
+        return esquina
+    cabeza = esquina.split('·')[0].strip() or 'Al piano'
+    if len(nums) == 1:
+        cuales = 'paso %d' % nums[0]
+    elif len(nums) == 2:
+        cuales = 'pasos %d y %d' % (nums[0], nums[1])
+    else:
+        cuales = 'pasos %d a %d' % (nums[0], nums[-1])
+    if len(nums) == total:
+        return '%s · %s' % (cabeza, cuales)
+    return '%s · %s de %d' % (cabeza, cuales, total)
 
 
 def _sigue(titulo):

@@ -12,9 +12,17 @@
        cancion que va de cuatro no puede tocarla bien.)
      - LO NUEVO de verdad: la melodia va en notas cortas casi todo el rato,
        corcheas seguidas, y hay que decir muchas notas seguidas sin acelerar.
-     - La melodia del principio, medida: Sol · La · Sol · Fa · Mi · Do · Do.
+     - Los dos primeros compases, medidos nota a nota sobre el PDF a 300 ppp
+       (21 ago 2026). Los dos llevan el MISMO dibujo: cuatro corcheas unidas,
+       dos corcheas unidas y una negra.
+         c.1  Do · Re · Do · Si(b) · La · Fa · Fa     (Do5 Re5 Do5 Sib4 La4 Fa4 Fa4)
+         c.2  Sol · La · Sol · Fa · Mi · Do · Do      (Sol4 La4 Sol4 Fa4 Mi4 Do4 Do4)
+       El c.2 es el c.1 bajado una cuarta: misma forma, mas abajo. (La ficha
+       decia antes que la cancion EMPEZABA por Sol-La-Sol-Fa-Mi-Do-Do: eso es
+       el compas 2, no el 1. Se ha corregido midiendo.)
      - Encima vienen las letras de los acordes: F, B b, C, C7.
-     - La izquierda toca notas sueltas, una o dos por compas.
+     - La izquierda va en blancas y negras, DOS O TRES notas por compas
+       (c.1 dos blancas; c.4 negra, negra, blanca).
 """
 import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
@@ -40,13 +48,13 @@ CANCION = dict(
     ficha=dict(
         titulo='Polly Put the Kettle On',
         autor='Canción popular · arr. Jim Paterson (mfiles)',
-        datos=[('Novedad', 'Solo 2 golpes'), ('Teclas negras', 'Los Si'),
-               ('Mano dcha.', 'Notas cortas'), ('Mano izq.', 'Notas sueltas'),
+        datos=[('Novedad', 'Corre sin parar'), ('Teclas negras', 'Los Si'),
+               ('Mano dcha.', 'Notas cortas'), ('Mano izq.', 'Notas largas'),
                ('Extras', 'Letras encima')],
         armonia=dict(
             titulo='La melodía corriendo, sin acelerar',
             tarjetas=[
-                ('EL COMPÁS', 'Dos golpes',
+                ('EL COMPÁS', 'Cuatro golpes',
                  'Un-dos-tres-cua. Lo que cambia no es el compás: son las notas, que van seguidas.'),
                 ('LA MELODÍA', 'Notas cortas',
                  'Van de dos en dos, unidas por una barra: caben dos en cada golpe.'),
@@ -60,20 +68,22 @@ CANCION = dict(
                 'sube de velocidad poco a poco, no al revés.',
         ),
         titulo_ritmos='Así empieza',
-        pie_ritmos='Los dos primeros compases de la melodía, medidos en tu partitura.',
+        pie_ritmos='Los dos primeros compases de la melodía, medidos en tu partitura. '
+                   'Fíjate: el dibujo es el mismo dos veces.',
         ritmos=[
-            ('LA DERECHA', 'notas cortas de dos en dos, bajando',
-             corch(['G4', 'A4']) + corch(['G4', 'F4']) + corch(['E4', 'D4']) + corch(['C4', 'D4']),
+            ('COMPÁS 1', 'seis notas cortas y una larga',
+             corch(['C5', 'D5', 'C5', 'Bb4'], 4) + corch(['A4', 'F4']) + [n('F4')],
              AZUL, 'treble', FA),
-            ('Y SE PARA', 'y al final del trozo se queda quieta',
-             [n('E4'), n('C4'), n('C4', 'h')], AZUL, 'treble', FA),
+            ('COMPÁS 2', 'el mismo dibujo, más abajo',
+             corch(['G4', 'A4', 'G4', 'F4'], 4) + corch(['E4', 'C4']) + [n('C4')],
+             AZUL, 'treble', FA),
         ],
         especial=[
             'Hay UN BEMOL detrás de la clave: todos los Si van en la tecla negra.',
             'Cada compás lleva cuatro golpes: un-dos-tres-cua.',
             'La melodía va casi toda en notas cortas, de dos en dos.',
             'Encima del pentagrama hay letras: son los acordes, no notas.',
-            'La izquierda toca notas sueltas, una o dos por compás.',
+            'La izquierda va en notas largas: dos o tres por compás.',
             'La canción se repite: la segunda mitad es casi igual que la primera.',
         ],
         reto='Que las notas cortas no se atropellen. Cuando hay dos notas en cada golpe, lo que pasa '
@@ -116,19 +126,23 @@ CANCION = dict(
                        'la Y es el sitio de la segunda nota. Si la dices siempre en el mismo momento, '
                        'las notas salen iguales solas.'),
             dict(num=2, titulo='La melodía del principio',
-                 pista='medida en tu partitura · Sol · La · Sol · Fa · Mi · Do · Do',
+                 pista='medida en tu partitura · Do · Re · Do · Si · La · Fa · Fa',
+                 # Las siete notas de cada compás, pero estiradas en figuras
+                 # largas: aquí se trata de VERLAS, no de correr. Tal como
+                 # están escritas de verdad salen en la ficha, y repetirlas
+                 # aquí seria imprimir dos veces el mismo compás.
                  sistemas=[
-                     dict(cap='a) tal como está escrita, en notas cortas',
-                          events=corch(['G4', 'A4']) + corch(['G4', 'F4']) +
-                                 corch(['E4', 'C4']) + corch(['C4', 'E4']) + [n('C4', 'w')],
+                     dict(cap='a) las notas del compás 1, estiradas · el Si va en la tecla negra',
+                          events=[n('C5'), n('D5'), n('C5'), n('Bb4'),
+                                  n('A4'), n('F4'), n('F4', 'h')],
                           bars=2),
-                     dict(cap='b) y las mismas notas en figuras largas, para verlas sin prisa',
+                     dict(cap='b) y las del compás 2, que son el mismo dibujo más abajo',
                           events=[n('G4'), n('A4'), n('G4'), n('F4'),
-                                  n('E4'), n('C4'), n('C4'), n('C4')],
+                                  n('E4'), n('C4'), n('C4', 'h')],
                           bars=2, show_time=False),
                  ]),
             dict(num=3, titulo='La izquierda, con el bemol', clef='bass',
-                 pista='andamio en Fa mayor · notas sueltas, una o dos por compás',
+                 pista='andamio en Fa mayor · notas largas, siguiendo las letras',
                  sistemas=[
                      # Antes eran Fa · Do · Fa · Do, que es exactamente lo que hace
                      # la izquierda de The Wheels on the Bus: el mismo andamio en
@@ -168,7 +182,7 @@ CANCION = dict(
                        ['¿Cuántos Do hay?', '¿Cuántas veces sale el Sol?',
                         '¿Cuántas notas hay en total?'],
                        titulo='Cuenta lo que ves',
-                       pista='es la melodía del principio, medida en tu partitura'),
+                       pista='es el compás 2 de tu canción, medido en la partitura'),
                 unir([('El bemol del principio', 'cuatro golpes en cada compás'),
                       ('El 4/4 de después de la clave', 'la mitad de una negra'),
                       ('Una corchea', 'todos los Si van en la tecla negra'),
@@ -178,8 +192,8 @@ CANCION = dict(
                 rutina('Sol · La · Sol · Fa, contando un-y-dos-y',
                        'La melodía entera muy despacio, buscando los Si',
                        'Las dos manos, cuatro compases'),
-                acuerdate('Las rayas pasan muy seguidas y engañan. Cuenta “un-y-dos-y”.',
-                          etiqueta='DOS GOLPES NO ES IR DEPRISA'),
+                acuerdate('Pasan muy seguidas y engañan. Cuenta “un-y-dos-y-tres-y-cua-y”.',
+                          etiqueta='NOTAS CORTAS NO ES IR DEPRISA'),
             ],
         ),
         dict(
@@ -195,14 +209,14 @@ CANCION = dict(
                        titulo='El camino de las notas cortas',
                        pista='colorea solo las que valen medio golpe y sale un camino'),
                 adivinar([('Valgo medio golpe y voy casi siempre acompañada.', 'CORCHEA'),
-                          ('Somos solo dos en cada compás de esta canción.', 'GOLPES'),
+                          ('Somos cuatro en cada compás de esta canción.', 'GOLPES'),
                           ('Estoy al principio y mando en todos los Si.', 'BEMOL')],
                          titulo='Adivina quién soy',
                          pista='una letra en cada casilla'),
                 rodear([[n('G4'), n('A4')], [n('G4'), n('F4')],
                         [n('G4'), n('A4')], [n('E4'), n('C4')]],
-                       titulo='Rodea los dos compases que son iguales',
-                       pista='dos notas en cada compás · míralas de una en una'),
+                       titulo='Rodea los dos grupos que son iguales',
+                       pista='son parejas de notas cortas de tu canción · míralas de una en una'),
                 teclado({0: 1, 2: 2, 4: 3, 6: 4},
                         ['Escribe el nombre de las cuatro teclas marcadas.',
                          'La número 4 es un Si: en esta canción se toca en la tecla negra de al lado.'],

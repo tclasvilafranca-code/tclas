@@ -297,10 +297,16 @@ def bloques_extra(tono, num, agudo, grave, foco, receta=None, desde=90,
     # quedan a ochenta puntos de llenar la hoja. No es relleno: es el giro
     # sobre la tonica, que es lo que se hace al final de cualquier tanda de
     # tecnica para soltar la mano antes de volver a la pieza.
-    cola = ([dict(cap='z) y el giro sobre la tónica para soltar la mano, antes de volver '
-                      'a la partitura',
-                  events=giro(tono, agudo, notas=nq), bars=cq,
-                  show_time=False)] if mas else [])
+    # La letra del rotulo NO puede ser fija: este sistema unas veces va detras
+    # de un a) y un b) —y entonces es la c)— y otras detras de un a) solo. Con
+    # la 'z' que llevaba antes, en el papel salia "a) b) z)".
+    def cola(letra='c'):
+        if not mas:
+            return []
+        return [dict(cap='%s) y el giro sobre la tónica para soltar la mano, antes de '
+                         'volver a la partitura' % letra,
+                     events=giro(tono, agudo, notas=nq), bars=cq,
+                     show_time=False)]
 
     if r == 'escalas':
         return [
@@ -324,7 +330,7 @@ def bloques_extra(tono, num, agudo, grave, foco, receta=None, desde=90,
                               '· tócalo y para: se oye solo que pide volver',
                           events=arpegio(tono, _quinto(tono, agudo), notas=nq, inversion=inv),
                           bars=cq, show_time=False),
-                 ] + cola),
+                 ] + cola()),
         ]
     if r == 'acorde':
         return [
@@ -346,7 +352,7 @@ def bloques_extra(tono, num, agudo, grave, foco, receta=None, desde=90,
                      dict(cap='b) y un grado más arriba · si la muñeca se levanta, estás '
                               'empujando en vez de dejar caer',
                           events=giro(tono, arriba, notas=nq), bars=cq, show_time=False),
-                 ] + cola),
+                 ] + cola()),
         ]
     if r == 'cadencia':
         return [
@@ -368,7 +374,7 @@ def bloques_extra(tono, num, agudo, grave, foco, receta=None, desde=90,
                      dict(cap='b) y subiendo otra vez · es el mismo camino al revés, y no sale '
                               'igual de bien: por eso se hacen los dos',
                           events=escala(tono, agudo, notas=nq), bars=cq, show_time=False),
-                 ] + cola),
+                 ] + cola()),
         ]
     if r == 'corcheas':
         return [
@@ -387,7 +393,7 @@ def bloques_extra(tono, num, agudo, grave, foco, receta=None, desde=90,
                  sistemas=[
                      dict(cap='a) el acorde desplegado, sube y baja',
                           events=arpegio(tono, agudo, notas=nq, inversion=inv), bars=cq),
-                 ] + cola),
+                 ] + cola('b')),
         ]
     # 'mixta'
     return [
@@ -407,7 +413,7 @@ def bloques_extra(tono, num, agudo, grave, foco, receta=None, desde=90,
                  dict(cap='b) y la escala bajando por encima, para unir las dos cosas',
                       events=escala(tono, arriba, sentido='baja', notas=nq),
                       bars=cq, show_time=False),
-             ] + cola),
+             ] + cola()),
     ]
 
 

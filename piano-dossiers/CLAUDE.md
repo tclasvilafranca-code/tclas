@@ -1,5 +1,51 @@
 # El Cuaderno del Pianista — Motor de Dosieres · guía para Claude Code
 
+> ## 🔒 CÓMO SE HACE UNA PIEZA NUEVA. Este orden y no otro
+>
+> Petición del cliente después de tres rondas de correcciones: *"que crear
+> álbumes nuevos sea mucho más directo y no tengamos que estar revisando a cada
+> rato"*. Los fallos caros del proyecto no vinieron de escribir mal, sino de
+> **escribir antes de medir**. Así que el orden es este, y las herramientas
+> están hechas para que saltárselo cueste más que seguirlo.
+>
+> ```
+> 1.  python3 cuaderno/nueva_pieza.py <alumno> <num> <partitura.pdf> <slug>
+> 2.  mirar el PNG que deja en cuaderno/arranques/
+> 3.  escribir la pieza (copiando de la vecina que te ha dicho)
+> 4.  anotar la lectura en las tablas que te ha enumerado
+> 5.  python3 cuaderno/auditar_todo.py <alumno>
+> 6.  python3 cuaderno/build_<alumno>.py
+> 7.  python3 cuaderno/auditar_todo.py --pixeles
+> ```
+>
+> **Paso 1 — `nueva_pieza.py`.** Mide lo que se puede medir solo (páginas, si la
+> primera es portada, si va a dos o a **cuatro manos**, la resolución real del
+> PDF, y cuántas barras dobles hay, que es la firma de la semicorchea) y
+> enumera **los seis sitios** que hay que tocar, con la línea ya escrita. Seis
+> sitios de los que olvidarse de uno no da error: sale mal impreso.
+>
+> **Paso 2 — mirar el recorte.** Deja en `cuaderno/arranques/` un PNG grande con
+> la clave, la armadura y la cifra de compás. **Eso no lo adivina el programa.**
+> El compás y la armadura se leen ahí, y de ahí salen `time_sig` y `key_sig`.
+> A propósito no los rellena nadie automáticamente: la tabla de lecturas existe
+> para ser el testigo de que alguien miró el papel.
+>
+> **Paso 5 — `auditar_todo.py`.** Un solo comando, un solo veredicto. Pasa los
+> siete cruces (compás, armadura, figura, nivel, vocabulario, andamio, índice) y
+> los diez auditores por alumno. Con `--rapido`, solo los cruces contra la
+> partitura, y tarda segundos. Con `--pixeles`, además el control de márgenes
+> sobre los álbumes ya montados.
+>
+> **Por qué el sistema no deja pasar una pieza sin medir:** `auditar_compas` y
+> `auditar_tonalidad` fallan mientras la pieza nueva no esté en sus tablas de
+> lecturas, y `auditar_figuras` falla mientras una partitura no medible no esté
+> en `MIRADAS`. No hay que acordarse: si no se ha mirado, no pasa.
+>
+> **Y la regla que resume las tres:** *lo obvio es justo lo que nadie vuelve a
+> mirar.* Las alturas se transcriben con cuidado porque cuestan; el compás, la
+> armadura y la figura se dan por supuestos porque se ven en un segundo. Los
+> tres fallos gordos de este cuaderno estuvieron ahí.
+
 > ## 🔒 NORMA DEL PROYECTO: la variedad es parte de la calidad
 >
 > Decisión del cliente, y vale para **todos los alumnos**. Un cuaderno no es

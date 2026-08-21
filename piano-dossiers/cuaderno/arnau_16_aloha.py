@@ -33,7 +33,7 @@ CANCION = dict(
     ficha=dict(
         titulo='Aloha Oe',
         autor='Reina Liliʻuokalani de Hawái (1878) · arr. Regina Pratley',
-        datos=[('Novedad', 'Saltos grandes'), ('Compás', 'Se cuenta en dos'),
+        datos=[('Novedad', 'Saltos grandes'), ('Compás', '¢ · en dos'),
                ('Páginas', 'Dos'), ('Teclas', 'Solo blancas'),
                ('Carácter', 'Con moto')],
         armonia=dict(

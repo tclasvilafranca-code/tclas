@@ -36,7 +36,7 @@ ETAPAS = [
         dict(num=4, titulo='Do Your Ears Hang Low?', autor='popular, arr. G. DeBenedetti',
              tonalidad='Do · 4 golpes', compas='4/4', trabaja='Las dos manos se mueven, y hay silencios'),
         dict(num=5, titulo='The Wheels on the Bus', autor='popular, arr. Jim Paterson',
-             tonalidad='Fa · 3 golpes', compas='3/4', trabaja='La primera tecla negra: el bemol'),
+             tonalidad='Fa · 4 golpes', compas='4/4', trabaja='La primera tecla negra: el bemol'),
         dict(num=6, titulo='Oh, When the Saints', autor='popular, arr. G. DeBenedetti',
              tonalidad='Do · 4 golpes', compas='4/4', trabaja='Entrar antes de que empiece el compás'),
         dict(num=7, titulo='We Wish You a Merry Christmas', autor='villancico, arr. G. DeBenedetti',
@@ -46,7 +46,7 @@ ETAPAS = [
         dict(num=8, titulo='Baa Baa Black Sheep', autor='popular, arr. Jim Paterson',
              tonalidad='Do · 4 golpes', compas='4/4', trabaja='Una mano tocando dos cosas a la vez'),
         dict(num=9, titulo='Polly Put the Kettle On', autor='popular, arr. Jim Paterson',
-             tonalidad='Fa · 2 golpes', compas='2/4', trabaja='Dos notas en cada golpe'),
+             tonalidad='Fa · 4 golpes', compas='4/4', trabaja='Dos notas en cada golpe'),
         dict(num=10, titulo='Little Miss Muffet', autor='popular, arr. Jim Paterson',
              tonalidad='Fa · en dos', compas='6/8', trabaja='Seis notas por compás, contadas en dos'),
         dict(num=11, titulo='Eso que tú me das', autor='Jarabe de Palo · Pau Donés',
@@ -72,7 +72,7 @@ ETAPAS = [
         dict(num=19, titulo='Rain Rain Go Away', autor='popular, arr. R. Pratley · 4 manos',
              tonalidad='Do · 4 golpes', compas='4/4', trabaja='A cuatro manos: empezar los dos a la vez'),
         dict(num=20, titulo='The Mulberry Bush', autor='popular, arr. R. Pratley · 4 manos',
-             tonalidad='Do · 4 golpes', compas='4/4', trabaja='A cuatro manos: no pararse si te pierdes'),
+             tonalidad='Do · 2 golpes', compas='6/8', trabaja='A cuatro manos: no pararse si te pierdes'),
     ]),
 ]
 

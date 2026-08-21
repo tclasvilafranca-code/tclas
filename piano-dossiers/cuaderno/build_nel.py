@@ -43,17 +43,17 @@ ETAPAS = [
     ]),
     ('La izquierda se pone a trabajar', 'del acompañamiento que aguanta al que corre', [
         dict(num=3, titulo='Heart and Soul', autor='Hoagy Carmichael · easy piano',
-             tonalidad='Do mayor', compas='4/4', trabaja='El swing y el bajo con acorde, sin mirarse la mano'),
+             tonalidad='Fa mayor', compas='4/4', trabaja='El swing y el bajo con acorde, sin mirarse la mano'),
         dict(num=4, titulo='Hit the Road Jack', autor='Popularizada por Ray Charles',
-             tonalidad='Fa mayor', compas='4/4', trabaja='La primera armadura, con dos texturas distintas'),
+             tonalidad='Do mayor', compas='4/4', trabaja='La primera armadura, con dos texturas distintas'),
         dict(num=5, titulo='Jailhouse Rock', autor='Elvis Presley · arr. Sadie King',
-             tonalidad='Do · blues', compas='4/4', trabaja='Subir a ♩ = 150 sin perder ni un fallo por el camino'),
+             tonalidad='Fa mayor · blues', compas='4/4', trabaja='Subir a ♩ = 150 sin perder ni un fallo por el camino'),
     ]),
     ('El primer tono menor, y villancico', 'diciembre, con dos texturas que no se parecen', [
         dict(num=6, titulo='Bella Ciao', autor='popular italiana · a cuatro manos',
-             tonalidad='Sol menor', compas='4/4', trabaja='Una sensible que va y viene, con metrónomo siempre'),
+             tonalidad='Do mayor', compas='4/4', trabaja='Una sensible que va y viene, con metrónomo siempre'),
         dict(num=7, titulo='Deck the Halls', autor='villancico · arr. Jim Paterson',
-             tonalidad='Fa mayor', compas='4/4', trabaja='Acordes de dos notas en las dos manos a la vez'),
+             tonalidad='Sol menor', compas='4/4', trabaja='Acordes de dos notas en las dos manos a la vez'),
     ]),
     ('Tonalidades nuevas, y una marcha de verdad', 'sostenidos, bemoles y el nivel más alto del cuaderno', [
         dict(num=8, titulo="Can't Help Falling in Love", autor='Elvis Presley · arr. Seb Alejandro',

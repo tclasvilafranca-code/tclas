@@ -5,3 +5,8 @@ output/*.pdf
 # Partituras originales de alumnos: material con copyright de terceros,
 # no se versiona. Solo se versionan los dosieres generados (derivados).
 students/*/source/
+
+# Recortes del arranque de las partituras que deja `medir_partitura.py` para
+# poder leer la clave, la armadura y el compas: son trozos de las partituras
+# originales, o sea el mismo material con copyright. Se miran y se tiran.
+cuaderno/arranques/

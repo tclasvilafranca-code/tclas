@@ -131,6 +131,35 @@
 > (`relleno.bloque_semicorcheas` y compañía), lo mejor es sustituirlo por la
 > cita de los compases medidos de la propia pieza: mismo coste y mucho mejor.
 >
+> ### El compás también hay que leerlo, no suponerlo
+>
+> Mismo agujero que la figura, y todavía más caro. Mirando el álbum de Arnau a
+> tamaño real aparecieron **dos compases mal**: *The Wheels on the Bus* decía
+> 3/4 y va en 4/4, y *Polly Put the Kettle On* decía 2/4 y va en 4/4. Un alumno
+> que cuenta de tres una canción de cuatro no puede tocarla bien ni una semana,
+> y encima no sabe por qué: es el dato que estropea la pieza entera desde el
+> primer compás. Dos de once en un solo álbum obligaba a comprobarlo todo.
+>
+> Se comprobaron **las 93 partituras distintas**, una por una: recortando del
+> PDF el arranque del primer pentagrama (clave, armadura y cifra) y mirándolo a
+> tamaño grande junto al compás que declara el dosier. Apareció una tercera:
+> *The Mulberry Bush* decía 4/4 y va en **6/8** — y ese dosier entero hablaba de
+> "cuatro golpes por compás", así que hubo que rehacerle la ficha, los tres
+> pasos y los deberes.
+>
+> El resultado vive en **`cuaderno/auditar_compas.py`**, que guarda el compás
+> leído de cada pieza y falla si alguien cambia un `time_sig` sin volver a
+> mirar el papel, o si añade una pieza cuyo compás no ha leído nadie. Tiene que
+> decir COMPASES OK. Dos límites suyos, que conviene recordar antes de fiarse:
+> lee el **primer** compás de la **primera** página (un cambio de compás a
+> mitad de pieza no lo ve), y las partituras que comparten fichero comparten
+> lectura porque el PDF es byte a byte el mismo (comprobado por md5).
+>
+> **Lo que hay debajo de los tres fallos es siempre lo mismo:** la
+> transcripción anotó las alturas —que son laboriosas— y dio el compás por
+> supuesto, que parecía obvio. En Mulberry las diez alturas estaban bien y solo
+> el compás estaba mal. Lo obvio es justo lo que nadie vuelve a mirar.
+>
 > **La digitación es el caso al revés, y también lo audita.** Los números de
 > dedo NO se imprimen nunca (decisión del cliente: los escribe el alumno), así
 > que la ausencia es correcta. Lo que se coló fue la prosa: al quitar los
@@ -222,7 +251,10 @@
 >   cruzando el compás, recuadros pisando el pie) salieron todos así, mirando,
 >   no ejecutando el auditor.
 > - Antes de entregar nada: `auditar_dilan.py` (o su equivalente por alumno)
->   tiene que decir TODO OK, y la revisión de píxeles, 0 desbordes.
+>   tiene que decir TODO OK, y la revisión de píxeles, 0 desbordes. Y los
+>   cuatro cruces contra la partitura —`auditar_niveles.py`,
+>   `auditar_vocabulario.py`, `auditar_figuras.py` y `auditar_compas.py`—
+>   también.
 >
 > ### La partitura de Drive es la fuente, y se mide ANTES de escribir nada
 >

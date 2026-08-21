@@ -6,14 +6,28 @@
    empieza en la segunda).
 
      - Do mayor: no hay nada detras de la clave.
+     - COMPAS DE 6/8, leido en la partitura (el 6 y el 8 detras de la clave).
+       Durante meses este dosier decia 4/4 y hablaba de "cuatro golpes por
+       compas": era falso, y lo caro de un compas mal puesto es que el alumno
+       cuenta mal la pieza entera. Arnau ya vio el 6/8 en Little Miss Muffet
+       (cancion 10), asi que aqui no es material nuevo.
      - LO NUEVO: es una pieza a CUATRO MANOS. Se toca entre dos personas en el
        mismo piano: una hace la parte de arriba y la otra la de abajo. Arnau
        toca la parte de arriba, la que lleva la melodía.
-     - Las alturas comprobadas de tu parte: Do · Do · Do · Do · Mi | Sol · Mi · Do · Do | Re · Re · Re · Re.
+     - Los dos pentagramas de Arnau (Primo) van los DOS en clave de sol.
+     - Medido nota a nota sobre el PDF a 300 ppp (alturas por posicion en el
+       pentagrama, duraciones por corchete y puntillo):
+         c. 1  Do5 Do5 Do5 (unidas de tres) · Do5 negra · Mi5 corchea
+         c. 2  Sol5 negra · Mi5 corchea · Do5 negra · Do5 corchea
+         c. 3  Re5 negra · Re5 corchea · Re5 negra · Re5 corchea
+         c. 4  la derecha CALLA · contesta la izquierda: Si4 negra · La4
+               corchea · Sol4 negra con puntillo
+         cc. 5-6 repiten los cc. 1-2
+         c. 7  Re5 negra · Re5 corchea · silencio de negra con puntillo
+         c. 8  la derecha calla · la izquierda: Do5 y Do5, negras con puntillo
 
-   Lo que NO se cita compas a compas: en una partitura a cuatro manos hay
-   cuatro pentagramas por sistema y el lector los empareja mal, asi que se
-   citan solo las alturas comprobadas y el resto va como ANDAMIO.
+   Lo que NO se cita compas a compas: nada de la parte del Secondo (la de la
+   profesora), que no toca Arnau.
 """
 import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
@@ -27,9 +41,25 @@ HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
 OCRE = HexColor('#8C6A3F')
 
+
+def _c1():
+    """El compas 1 de la derecha, medido: tres corcheas unidas, negra, corchea."""
+    return corch(['C5', 'C5', 'C5'], 3) + [n('C5'), n('E5', 'e')]
+
+
+def _c2():
+    """El compas 2, medido: Sol negra, Mi corchea, Do negra, Do corchea."""
+    return [n('G5'), n('E5', 'e'), n('C5'), n('C5', 'e')]
+
+
+def _c3():
+    """El compas 3, medido: cuatro Re, negra-corchea dos veces."""
+    return [n('D5'), n('D5', 'e'), n('D5'), n('D5', 'e')]
+
+
 CANCION = dict(
     alumno='Arnau', num=20, nivel='iniciación', slug='MulberryBush',
-    formato='corto', titulo_corto='The Mulberry Bush', time_sig=(4, 4), key_sig=None,
+    formato='corto', titulo_corto='The Mulberry Bush', time_sig=(6, 8), key_sig=None,
     partitura=os.path.join(HERE, '..', 'students', 'arnau', 'source', 'ARNAU',
                            'the-mulberry-bush-185807.4 manos.pdf'),
     yt='https://www.youtube.com/results?search_query=here+we+go+round+the+mulberry+bush+piano+duet',
@@ -37,7 +67,7 @@ CANCION = dict(
     ficha=dict(
         titulo='The Mulberry Bush',
         autor='Canción popular · arreglo a cuatro manos de Regina Pratley',
-        datos=[('Novedad', 'A cuatro manos'), ('Golpes', '4 por compás'),
+        datos=[('Novedad', 'A cuatro manos'), ('Compás', '6/8, en dos'),
                ('Tu parte', 'La de arriba'), ('Se toca', 'Entre dos'),
                ('Teclas', 'Solo blancas')],
         armonia=dict(
@@ -47,8 +77,8 @@ CANCION = dict(
                  'Dos pianistas en el mismo piano: cada uno toca la mitad de la música.'),
                 ('TU PARTE', 'La de arriba',
                  'Llevas la melodía, en el registro agudo del piano.'),
-                ('LO DIFÍCIL', 'Empezar juntos',
-                 'No son las notas: es entrar los dos a la vez y no acelerar por tu cuenta.'),
+                ('EL COMPÁS', '6/8, en dos',
+                 'Seis cortas por compás, de tres en tres. El pie marca dos veces, como en Miss Muffet.'),
                 ('SI TE PIERDES', 'No pares',
                  'Sigue contando y vuelve a entrar en el compás siguiente. Parar es peor que fallar.'),
             ],
@@ -57,27 +87,31 @@ CANCION = dict(
                 'tocas, que al principio parece imposible y luego sale.',
         ),
         titulo_ritmos='Así empieza tu parte',
-        pie_ritmos='Un compás de ejemplo de lo que tocas tú. La otra parte la toca la profesora.',
+        pie_ritmos='El compás 1 de tu derecha y el compás 4 de tu izquierda, medidos en tu partitura. '
+                   'La parte de abajo la toca la profesora.',
         ritmos=[
-            ('TU MANO DERECHA', 'cuatro notas iguales y sube',
-             [n('C5'), n('C5'), n('C5'), n('E5')], AZUL, 'treble', None),
-            ('TU MANO IZQUIERDA', 'acompaña con notas largas (andamio)',
-             [n('C3', 'h'), n('C3', 'h')], OCRE, 'bass', None),
+            ('TU DERECHA', 'c. 1 · tres cortas, una larga y otra corta',
+             _c1(), AZUL, 'treble', None),
+            ('TU IZQUIERDA', 'c. 4 · calla tres compases y contesta ella sola',
+             [n('B4'), n('A4', 'e'), n('G4', 'q.')], OCRE, 'treble', None),
         ],
         especial=[
             'No hay ni sostenidos ni bemoles: todo son teclas blancas.',
-            'Cada compás lleva cuatro golpes: un-dos-tres-cuatro.',
+            'Va en 6/8: seis notas cortas por compás, agrupadas de tres en tres y contadas en DOS. '
+            'Ya lo viste en Little Miss Muffet.',
             'Es a cuatro manos: se toca entre dos personas en el mismo piano.',
             'Tú tocas la parte de arriba, la que lleva la melodía; la otra parte la toca la profesora.',
-            'La música empieza en la segunda página: la primera es la portada.',
-            'Lo importante no es tocar rápido: es empezar y acabar los dos juntos.',
+            'Tu mano izquierda calla los tres primeros compases y contesta ella sola en el compás 4.',
+            'La música empieza en la segunda página: la primera es la portada. Y lo importante no es '
+            'tocar rápido: es empezar y acabar los dos juntos.',
         ],
         reto='Entrar a la vez. Cuando dos personas tocan juntas, el que empieza antes arrastra al otro '
              'y la música se descoloca desde el primer compás. Y no se arregla tocando mejor: se '
              'arregla contando en voz alta antes de empezar.',
-        truco='Antes de tocar, una de las dos cuenta un compás entero en voz alta y las dos empezáis en '
-              'el golpe siguiente. Siempre la misma persona, y siempre a la misma velocidad. Y mientras '
-              'tocáis, miraos de vez en cuando: eso es lo que hace que suene a una sola música.',
+        truco='Antes de tocar, una de las dos cuenta un compás entero en voz alta —un-dos, dos golpes, '
+              'no seis— y las dos empezáis en el golpe siguiente. Siempre la misma persona, y siempre a '
+              'la misma velocidad. Y mientras tocáis, miraos de vez en cuando: eso es lo que hace que '
+              'suene a una sola música.',
         sabias='Es una canción de corro: los niños se cogen de la mano y dan vueltas alrededor de un arbusto mientras la cantan. Es de mediados del siglo XIX y en Inglaterra dicen que la inventaron unas presas que daban vueltas al patio con sus hijos.',
         qr=dict(titulo='Escúchala',
                 texto='Escúchala pensando en que son dos personas tocando a la vez.'),
@@ -94,38 +128,37 @@ CANCION = dict(
                 'MIRA A LA OTRA PERSONA'],
         bloques=[
             dict(num=1, titulo='Tu parte, sola en casa',
-                 pista='medido · esto es lo que tocas tú, y se aprende como cualquier otra canción',
+                 pista='medido · los cuatro primeros compases de tu partitura, tal y como están escritos',
                  sistemas=[
-                     dict(cap='a) muy despacio, contando en voz alta',
-                          events=[n('C5'), n('C5'), n('C5'), n('C5'), n('E5'), n('G5'), n('E5', 'h')],
+                     dict(cap='a) los cc. 1 y 2, muy despacio, contando UN-dos en cada compás',
+                          events=_c1() + _c2(),
                           bars=2),
-                     dict(cap='b) y lo que sigue · las mismas notas, moviéndose un poco',
-                          events=[n('C5'), n('C5'), n('D5'), n('D5'), n('D5'), n('D5'), n('C5', 'h')],
+                     dict(cap='b) el c. 3 y el c. 4 · fíjate: en el cuarto tu derecha calla y contesta '
+                                  'la izquierda',
+                          events=_c3() + [sil('q.'), sil('q.')],
                           bars=2, show_time=False),
                  ]),
             dict(num=2, titulo='Entrar a tiempo',
                  pista='una de las dos cuenta un compás en voz alta y las dos entran en el golpe siguiente',
                  sistemas=[
                      dict(cap='a) un compás de silencio y entras · cuéntalo todo en voz alta',
-                          events=[sil('q'), sil('q'), sil('q'), sil('q'), n('C5'), n('C5'), n('C5'), n('E5')],
+                          events=[sil('q.'), sil('q.')] + _c1(),
                           bars=2),
                      dict(cap='b) y otra vez, entrando después de dos compases · mientras esperas, '
                               'la otra parte ya está sonando',
-                          events=[sil('q'), sil('q'), sil('q'), sil('q'),
-                                  sil('q'), sil('q'), sil('q'), sil('q'),
-                                  n('C5'), n('C5'), n('C5'), n('E5')],
+                          events=[sil('q.'), sil('q.'), sil('q.'), sil('q.')] + _c1(),
                           bars=3, show_time=False),
                  ]),
             dict(tipo='nota', etiqueta='CÓMO SE EMPIEZA ENTRE DOS',
                  texto='Siempre cuenta la misma persona, en voz alta, un compás entero antes de '
-                       'empezar. Y a la velocidad a la que se va a tocar, no más rápido: la cuenta es '
-                       'la que decide el tempo. Si la cuenta va deprisa, la pieza va deprisa, y ya no '
-                       'hay manera de arreglarlo a mitad.'),
+                       'empezar. En 6/8 se cuenta DOS, no seis. Y a la velocidad a la que se va a '
+                       'tocar, no más rápido: la cuenta es la que decide el tempo. Si la cuenta va '
+                       'deprisa, la pieza va deprisa, y ya no hay manera de arreglarlo a mitad.'),
             dict(num=3, titulo='Y si te pierdes, no pares',
                  pista='se deja de tocar un momento, se sigue contando, y se entra en el compás siguiente',
                  sistemas=[
-                     dict(cap='a) toca, deja un compás sin tocar contando, y vuelve a entrar',
-                          events=[n('C5'), n('C5'), n('C5'), n('E5'), sil('q'), sil('q'), sil('q'), sil('q'), n('G5'), n('E5'), n('C5', 'h')],
+                     dict(cap='a) toca el c. 1, deja un compás sin tocar contando, y entra con el c. 2',
+                          events=_c1() + [sil('q.'), sil('q.')] + _c2(),
                           bars=3),
                  ]),
             dict(tipo='nota', etiqueta='POR QUÉ NO SE PARA',
@@ -146,24 +179,25 @@ CANCION = dict(
             intro='La última del curso, y también a cuatro manos. Esta semana, tu parte en casa.',
             bloques=[
                 diferencias(
-                    [n('C5'), n('C5'), n('C5'), n('C5'), n('E5'), n('G5'), n('E5')],
-                    [n('C5'), n('C5'), n('D5'), n('C5'), n('E5'), n('G5'), n('C5')],
+                    _c1() + _c2()[:2],
+                    corch(['C5', 'C5', 'D5'], 3) + [n('C5'), n('E5', 'e'),
+                                                    n('G5'), n('G5', 'e')],
                     cuantas=2,
                     titulo='Busca las dos diferencias',
-                    pista='el de arriba es tu parte · en el de abajo hay dos cosas cambiadas'),
+                    pista='el de arriba es tu parte · en el de abajo hay dos notas cambiadas'),
                 verdadero_falso([
                     'Esta pieza se toca entre dos personas en el mismo piano.',
                     'Tú tocas la parte de abajo.',
                     'Si te pierdes, hay que parar y empezar otra vez.',
                     'Acabar juntos es tan importante como empezar juntos.',
-                    'Esta pieza tiene cuatro golpes en cada compás.',
+                    'Esta pieza va en 6/8 y se cuenta en dos.',
                 ], titulo='Verdadero o falso', pista='de tu pieza · marca la casilla'),
-                dibujar(['Do', 'Mi', 'Sol', 'Re', 'Si', 'La', 'Fa', 'Do'],
+                dibujar(['Do', 'Mi', 'Sol', 'Re', 'Si', 'La', 'Sol', 'Do'],
                         titulo='Dibuja tú las notas',
-                        pista='solo el óvalo · son las de tu parte, en la zona de arriba'),
+                        pista='solo el óvalo · son todas las notas que tocas en esta pieza'),
                 escribir(titulo='Copia aquí el compás que más te cueste',
                          pista='cópialo tal cual y luego tócalo cinco veces'),
-                rutina('Tu parte, muy despacio, contando en voz alta',
+                rutina('Tu parte, muy despacio, contando UN-dos en voz alta',
                        'Tu parte entera sin parar, aunque haya fallos',
                        'Volver a entrar después de un fallo, sin pararse'),
                 acuerdate('Lo difícil de una pieza a cuatro manos no son las notas: es no pararse. Si '
@@ -177,8 +211,8 @@ CANCION = dict(
             esquina='The Mulberry Bush · para hacer en casa',
             intro='Última hoja del curso. Esta semana ya se toca con otra persona.',
             bloques=[
-                nombres(['C5', 'E5', 'G5', 'D5', 'B4', 'A4', 'F5', 'C5'],
-                        pista='son las notas de tu parte · escríbelas debajo'),
+                nombres(['C5', 'E5', 'G5', 'D5', 'B4', 'A4', 'G4', 'C5'],
+                        pista='son las notas de tu parte, contando las dos manos · escríbelas debajo'),
                 camino([['sigo', 'paro', 'sigo', 'sigo', 'paro', 'sigo'],
                         ['paro', 'sigo', 'sigo', 'paro', 'sigo', 'paro'],
                         ['sigo', 'paro', 'sigo', 'sigo', 'sigo', 'paro'],

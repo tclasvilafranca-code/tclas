@@ -62,7 +62,15 @@ ES_ANDAMIO = re.compile(r'andamio', re.I)
 # Partituras cuyo primer compas no se puede leer (una foto de poca resolucion, o
 # un arranque que el lector no sabe recortar) y lo que se vio al ampliarlas.
 # Mirarlas y no anotar el resultado seria mirarlas para nada.
-MIRADAS = {}
+MIRADAS = {
+    # El lector se deja la PRIMERA nota de este compas: esta edicion pega la
+    # cifra de compas a la musica y el salto de cabecera se la come. Se miro
+    # ampliada del todo (26 ago 2026) y el compas 1 es Do5 · Sol4 · Do5 · Sol4
+    # · Do5, negra, negra, corchea, corchea y negra. Se anota aqui en vez de
+    # aflojar el detector: al probar a aflojarlo aparecio un Fa5 fantasma en
+    # *Los aristogatos* que era la palabra "Adagio".
+    'Eso que tu me das.pdf': ['C5', 'G4', 'C5', 'G4', 'C5'],
+}
 
 
 def _n_alteraciones(key):

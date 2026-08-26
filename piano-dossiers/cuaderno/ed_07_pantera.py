@@ -159,11 +159,11 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) la izquierda sostiene y la derecha entra al final del compás',
                           events=[ac(('C3',), 'h'), ac(('G3',), 'h'),
-                                  ac(('C3',), 'h.'), ac(('C3', 'C4'))],
+                                  ac(('C3',), 'h.'), ac(('C4',))],
                           bars=2, manos='sostiene'),
                      dict(cap='b) y una vez más, con la derecha aguantando su nota',
                           events=[ac(('C3',), 'h'), ac(('G3',), 'h'),
-                                  ac(('C3',), 'h.'), ac(('C3', 'C4'))],
+                                  ac(('C3',), 'h.'), ac(('C4',))],
                           bars=2, manos='sostiene', show_time=False),
                  ]),
         ],

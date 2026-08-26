@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""The Star-Spangled Banner — pieza 3 de Eduard. Formato ADULTO.
+"""The Star-Spangled Banner — pieza 6 de Eduard. Formato ADULTO.
 
    Lo comprobado sobre el PDF de su carpeta (arr. Gilbert DeBenedetti,
    "Level 2", 2 páginas; el mismo archivo que la pieza 3 de José María,
@@ -25,7 +25,7 @@ AZUL = HexColor('#3E6E8F')
 OCRE = HexColor('#8C6A3F')
 
 CANCION = dict(
-    alumno='Eduard', carpeta='Eduard', num=3, nivel='iniciación',
+    alumno='Eduard', carpeta='Eduard', num=6, nivel='iniciación',
     slug='StarSpangledBanner', formato='adulto',
     titulo_corto='The Star-Spangled Banner', time_sig=(3, 4), key_sig=None,
     partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source',

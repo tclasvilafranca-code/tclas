@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Deck the Halls — pieza 7 de Eduard. Formato ADULTO.
+"""Deck the Halls — pieza 12 de Eduard. Formato ADULTO.
 
    Lo comprobado sobre el PDF de su carpeta (mfiles.co.uk, arreglo de Jim
    Paterson, 1 página, 16 compases con repetición; el mismo archivo que la
@@ -31,7 +31,7 @@ OCRE = HexColor('#8C6A3F')
 FA = 'Fa mayor'
 
 CANCION = dict(
-    alumno='Eduard', carpeta='Eduard', num=7, nivel='iniciación',
+    alumno='Eduard', carpeta='Eduard', num=12, nivel='iniciación',
     slug='DeckTheHalls', formato='adulto',
     titulo_corto='Deck the Halls', time_sig=(4, 4), key_sig=FA,
     partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source',

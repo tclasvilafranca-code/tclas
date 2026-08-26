@@ -70,6 +70,38 @@ MIRADAS = {
     # aflojar el detector: al probar a aflojarlo aparecio un Fa5 fantasma en
     # *Los aristogatos* que era la palabra "Adagio".
     'Eso que tu me das.pdf': ['C5', 'G4', 'C5', 'G4', 'C5'],
+
+    # --- las cinco de Eduard, miradas el 26 de agosto de 2026 ---------------
+    #
+    # El lector ve tres cabezas en el c. 1 y a la tercera le pone Si5. No es
+    # una nota: es la palabra "Swing" impresa encima del pentagrama, que tiene
+    # agujeros cerrados igual que una blanca. Ampliado a 300 ppp se ve que las
+    # tres cabezas del c. 1 estan en la MISMA linea adicional, la del do
+    # central: negra, negra y blanca.
+    'Heart and Soul.pdf': ['C4', 'C4', 'C4'],
+
+    # La primera nota cuelga de DOS lineas adicionales y va pegada a la cifra
+    # de compas, asi que el descuento de cabecera se la come — el mismo caso
+    # que *Eso que tu me das*. Ampliado se ve el La3 (negra), el Mi4 (negra con
+    # puntillo) y el Re4 (corchea), y el c. 2 es un Fa4 en redonda.
+    'I Have a Dream.pdf': ['A3', 'E4', 'D4', 'F4'],
+
+    # Con tres sostenidos el descuento de cabecera es tan largo que el lector
+    # se planta en el c. 3 mal recortado y devuelve un Si4 que es la plica de
+    # la primera nota. Ampliado, y con la tabla de lineas al lado, el c. 3 es
+    # Do#4, Fa#4 y La4: las tres notas del acorde de Fa# menor.
+    'Honor Him Gladiator.pdf': ['C#4', 'F#4', 'A4'],
+
+    # Aqui la primera "cabeza" del c. 1 es el SILENCIO DE BLANCA, que es un
+    # rectangulo macizo y pasa la apertura morfologica como si fuera una nota.
+    # Lo impreso es: c. 1 silencio de blanca y Fa4; c. 2 Fa4 y Sol4.
+    'Piano Man.pdf': ['F4', 'F4', 'G4'],
+
+    # A cuatro manos, y en esta edicion las divisorias no unen ni siquiera los
+    # dos pentagramas del Primo, asi que el lector no encuentra el final del
+    # primer compas. Ampliado: Mi5, Mi5 y Mi5 (negra, negra y blanca), que es
+    # el arranque de *Jingle Bells*.
+    'Christmas Songs 4 manos.pdf': ['E5', 'E5', 'E5'],
 }
 
 

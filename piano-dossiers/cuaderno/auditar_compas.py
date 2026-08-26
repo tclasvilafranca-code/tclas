@@ -76,16 +76,13 @@ LEIDO = {
     'nl_10_lovely':            (4, 4),
     # -PEACHES. · leido 4/4
     'jm_05_peaches':           (4, 4),
-    'ed_05_peaches':           (4, 4),
     'jp_03_peaches':           (4, 4),
     # A COMME AMOUR _ Richard Clayderman. · leido 4/4
     'jm_17_acomme':            (4, 4),
-    'ed_17_acomme':            (4, 4),
     'jp_19_acomme':            (4, 4),
     'nl_16_acomme':            (4, 4),
     # ADAGIO. · leido 3/4
     'jm_13_adagio':            (3, 4),
-    'ed_13_adagio':            (3, 4),
     # Adagio en sol menor. Albinoni.pdf · leido 3/4
     'dilan_16_adagio':         (3, 4),
     # Aloha oe.sib.pdf · leido 2/2
@@ -103,7 +100,6 @@ LEIDO = {
     'arnau_02_clementine':     (3, 4),
     # Como entrenar a tu dragon. · leido 4/4
     'jm_19_flying':            (4, 4),
-    'ed_19_flying':            (4, 4),
     'nl_17_dragon':            (4, 4),
     # Copia de 1-----Greensleeves.pdf · leido 3/4
     'lu_15_greensleeves':      (3, 4),
@@ -111,7 +107,6 @@ LEIDO = {
     'is_11_greensleeves':      (3, 4),
     # Counting-stars.pdf · leido 4/4
     'jm_04_counting':          (4, 4),
-    'ed_04_counting':          (4, 4),
     'me_17_countingstars':     (4, 4),
     'jp_04_counting':          (4, 4),
     'nl_02_counting':          (4, 4),
@@ -119,7 +114,6 @@ LEIDO = {
     'is_20_diabelli':          (2, 4),
     # Deck the Halls (with Boughs of Holly) NAVIDAD.pdf · leido 4/4
     'jm_07_deck':              (4, 4),
-    'ed_07_deck':              (4, 4),
     'jp_08_deck':              (4, 4),
     'nl_03_deck':              (4, 4),
     # Do Your Ears Hang Low?.pdf · leido 4/4
@@ -133,15 +127,12 @@ LEIDO = {
     'is_15_gladiator':         (3, 4),
     # Grandfather's Clock.pdf · leido 4/4
     'jm_09_clock':             (4, 4),
-    'ed_09_clock':             (4, 4),
     'me_19_grandfather':       (4, 4),
     'is_12_grandfather':       (4, 4),
     # Himno de Estados Unidos.pdf · leido 3/4
     'jm_03_banner':            (3, 4),
-    'ed_03_banner':            (3, 4),
     # Interstellar _ .pdf · leido 3/4
     'jm_18_interstellar':      (3, 4),
-    'ed_18_interstellar':      (3, 4),
     # JOLLY OLD SAINT NICHOLAS.pdf · leido 4/4
     'arnau_03_jolly':          (4, 4),
     # LA PRIMAVERA.pdf easy · leido 4/4
@@ -177,14 +168,11 @@ LEIDO = {
     'arnau_17_popeye':         (3, 4),
     # Romance-Diabelli 4 manos.pdf · leido 2/2
     'jm_01_romance':           (2, 2),
-    'ed_01_romance':           (2, 2),
     'jp_01_romance':           (2, 2),
     # SHALLOW. · leido 4/4
     'jm_10_shallow':           (4, 4),
-    'ed_10_shallow':           (4, 4),
     # SOMEONE YOU LOVED. · leido 4/4
     'jm_06_someone':           (4, 4),
-    'ed_06_someone':           (4, 4),
     # SUR LE PONT D'AVIGNON.pdf · leido 4/4
     'me_06_avignon':           (4, 4),
     # Santa-tell-me-ariana-grande NAVIDAD.pdf · leido 4/4
@@ -206,13 +194,11 @@ LEIDO = {
     'lu_10_titanic':           (2, 4),
     # Toreador. Bizet · leido 4/4
     'jm_15_toreador':          (4, 4),
-    'ed_15_toreador':          (4, 4),
     'me_25_toreador':          (4, 4),
     'is_18_toreador':          (4, 4),
     'nl_09_toreador':          (4, 4),
     # Trouble. · leido 4/4
     'jm_16_trouble':           (4, 4),
-    'ed_16_trouble':           (4, 4),
     # Un beso-y-una-flor-nino-bravo.pdf · leido 4/4
     'jp_17_unbeso':            (4, 4),
     # WE WISH A MERRY CRISTMAS.pdf · leido 3/4
@@ -242,14 +228,12 @@ LEIDO = {
     'eva_17_bohemian':         (4, 4),
     # cant-help-falling-in-love-elvis-presley. · leido 3/4
     'jm_11_canthelp':          (3, 4),
-    'ed_11_canthelp':          (3, 4),
     'jp_11_canthelp':          (3, 4),
     'nl_08_canthelp':          (3, 4),
     'dilan_02_cancion':        (3, 4),
     'eva_01_canthelp':         (3, 4),
     # carol-of-the-bells   NAVIDAD. · leido 3/4
     'jm_12_carol':             (3, 4),
-    'ed_12_carol':             (3, 4),
     # christmas-songs-(4 manos).pdf · leido 4/4
     'lu_07_christmas':         (4, 4),
     'me_08_christmas':         (4, 4),
@@ -263,7 +247,6 @@ LEIDO = {
     'nl_04_heart':             (4, 4),
     # himno America.pdf · leido 3/4
     'jm_02_america':           (3, 4),
-    'ed_02_america':           (3, 4),
     # hit-the-road-jack-ray-.pdf · leido 4/4
     'jp_07_hittheroad':        (4, 4),
     'nl_05_hittheroad':        (4, 4),
@@ -277,7 +260,6 @@ LEIDO = {
     'eva_15_beginning':        (6, 8),
     # jailhouse-rock-elvis-presley-.pdf · leido 4/4
     'jm_08_jailhouse':         (4, 4),
-    'ed_08_jailhouse':         (4, 4),
     'me_24_jailhouse':         (4, 4),
     'is_17_jailhouse':         (4, 4),
     'jp_09_jailhouse':         (4, 4),
@@ -311,7 +293,6 @@ LEIDO = {
     # rasputin easy.pdf · leido 4/4
     'lu_17_rasputin':          (4, 4),
     'jm_14_rasputin':          (4, 4),
-    'ed_14_rasputin':          (4, 4),
     'me_23_rasputin':          (4, 4),
     'is_16_rasputin':          (4, 4),
     'jp_13_rasputin':          (4, 4),
@@ -336,6 +317,33 @@ LEIDO = {
     # youve-got-a-friend-in-me-easy-piano-.pdf · leido 4/4
     'lu_04_friend':            (4, 4),
     'me_03_friend':            (4, 4),
+    # ------------------------------------------------------------------
+    # EDUARD. Su cuaderno se rehizo entero en agosto de 2026 a partir de SU
+    # carpeta de Drive (antes era una copia del de Jose Maria y le quedaba muy
+    # por encima del nivel). Las 16 partituras nuevas se leyeron una por una
+    # con el recorte ampliado; las cuatro que vienen del dosier antiguo
+    # —Romance, America, Star-Spangled y Deck the Halls— conservan la lectura
+    # que ya tenian, porque el PDF es el mismo fichero.
+    'ed_01_clementine':        (3, 4),
+    'ed_02_aristogatos':       (4, 4),
+    'ed_03_eso':               (4, 4),
+    'ed_04_romance':           (2, 2),
+    'ed_05_america':           (3, 4),
+    'ed_06_banner':            (3, 4),
+    'ed_07_pantera':           (4, 4),
+    'ed_08_nocturno':          (3, 4),
+    'ed_09_beginner':          (3, 4),
+    'ed_10_heart':             (4, 4),
+    'ed_11_dream':             (4, 4),
+    'ed_12_deck':              (4, 4),
+    'ed_13_navidad':           (4, 4),
+    'ed_14_greensleeves':      (3, 4),
+    'ed_15_honor':             (3, 4),
+    'ed_16_rasputin':          (4, 4),
+    'ed_17_jinglerock':        (4, 4),
+    'ed_18_pianoman':          (3, 4),
+    'ed_19_clock':             (4, 4),
+    'ed_20_toreador':          (4, 4),
 }
 
 

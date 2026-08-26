@@ -1,140 +1,132 @@
-# Eduard · las 16 partituras de su carpeta de Drive
+# Eduard · las veinte partituras, medidas
 
-Medido el 26 de agosto de 2026 sobre los PDF **recién bajados de su carpeta**,
-no sobre ninguna copia anterior. Están en `students/eduard/source_new/`.
+**Rehecho entero el 26 de agosto de 2026.** Hasta ese día el cuaderno de Eduard
+era una copia del de José María: mismo repertorio, mismas diecinueve piezas,
+mismo orden. El cliente lo paró en seco —*"el álbum de Eduard no era real a su
+nivel"*— y pasó su carpeta de Drive, con una indicación que lo decide todo:
 
-## Por qué se rehace el álbum entero
+> *"es un señor de unos 65 años con un nivel bajo y que necesita aprender con
+> buena teoría y explicaciones"*
 
-El álbum que hay montado ahora **no es suyo**: se construyó copiando las
-fuentes de José María (Romance de Diabelli, America, Star-Spangled Banner,
-Counting Stars, Peaches, Someone You Loved, Shallow, Can't Help, Carol of the
-Bells, Adagio de Albinoni, Trouble, A comme amour, Interstellar, Flying Theme).
-De sus diecinueve piezas, **solo tres están de verdad en su carpeta**:
-Toreador, Rasputin y Grandfather's Clock — y las tres son de las más difíciles
-que él tiene.
+Y dos más, contestadas después: **la misma estructura que los demás alumnos,
+solo adaptada a su nivel** (no un formato nuevo), y **si alguna partitura del
+dosier antiguo cuadra con el nivel, se aprovecha**.
 
-Su repertorio real es bastante más suave y empieza mucho más abajo: hay tres
-piezas de **un solo pentagrama con letra**, dos a **cuatro manos** y un
-Nocturno de Chopin reducido a lo esencial. Eso es un alumno adulto que empieza,
-que es lo que es.
+De ahí salen las veinte piezas: **dieciséis de su carpeta** y **cuatro
+rescatadas** del dosier viejo.
 
-## Una trampa del nombre de fichero
+---
 
-`Escalas y Arpegios Facil progresando.pdf` **no es un cuaderno de escalas**.
-Dentro pone *Los aristogatos*, de Richard y Robert Sherman, arreglo de
-A. C. Escobés: un solo pentagrama, Adagio. Si se hubiera creído el nombre del
-fichero, el álbum habría tenido una hoja de técnica donde hay una canción.
-Es exactamente el caso que obliga la norma: **leer el título impreso DENTRO del
-PDF, no fiarse del nombre.**
+## Lo que se midió, y con qué
 
-## Lo medido, pieza a pieza
+Todo sobre el PDF de su carpeta, rasterizado a 300 ppp:
 
-Compás y armadura leídos sobre el recorte del primer pentagrama a 300 ppp.
-El tempo, de `pdftotext` cuando la edición lo imprime.
+| dato | herramienta | testigo |
+|---|---|---|
+| compás | recorte ampliado del arranque | `auditar_compas.LEIDO` |
+| armadura | el mismo recorte | `auditar_tonalidad.LEIDO` |
+| figura más corta | `medir_figuras` | `auditar_figuras` |
+| tempo impreso | `pdftotext` | `auditar_tempo.MIRADAS` |
+| alturas del arranque | `medir_arranque` + recorte | `auditar_alturas.MIRADAS` |
 
-| # | pieza | edición | pág | compás | armadura | tempo | manos |
-|---|---|---|---|---|---|---|---|
-| 1 | Clementine (*…OR: Found a Peanut*) | arr. Gilbert DeBenedetti · **Primer Level** | 1 | 3/4 | — | — | 1 pentagrama + letra |
-| 2 | Los Aristogatos | Sherman · arr. A. C. Escobés | 1 | 4/4 | — | Adagio | 1 pentagrama |
-| 3 | Eso que tú me das | Jarabe de Palo · *Parte 1* | 1 | 4/4 | — | — | 1 pentagrama + cifrado |
-| 4 | La Panthère Rose | *Première année* | 1 | 4/4 | — | — | 2 |
-| 5 | Nocturne op. 9 | Chopin · arr. Benny Chaw | 1 | 3/4 | — | *mp* | 2 |
-| 6 | The Beginner · Le Début | Gurlitt op. 211 nº 3 | 1 | 3/4 | — | Allegretto | **4 manos** |
-| 7 | Heart and Soul | Hoagy Carmichael · *Easy Piano Version* | 1 | 4/4 | — | ♩=110 *Swing* | 2 |
-| 8 | I Have a Dream | ABBA · *children song* | 2 | 4/4 | — | 120 | 2 |
-| 9 | Greensleeves | tradicional inglesa | 2 | 3/4 | — | Moderato · *con pedale* | 2 + cifrado |
-| 10 | Honor Him · Gladiator | Hans Zimmer · *Easy Version* | 1 | 3/4 | **3 ♯** | ♩=70 | 2 |
-| 11 | Christmas Songs for Four Little Hands | Mindy Liang · *Beginner Version* | 2 | 4/4 | — | ♩=100 | **4 manos** |
-| 12 | Jingle Bell Rock | arr. Sadie King | 1 | 4/4 | — | *Swing* | 2 |
-| 13 | Piano Man | Billy Joel · *Simplified, SimplyPiano* | 2 | 3/4 | — | ♩=178 | 2 |
-| 14 | Rasputin A | Boney M · *Easy piano* | 2 | 4/4 | **2 ♯** | ♩=124 | 2 + cifrado |
-| 15 | My Grandfather's Clock | arr. Gilbert DeBenedetti · **Level Three** | 2 | **C** (4/4) | — | — | 2 |
-| 16 | Toreador · Carmen | Bizet · arr. DeBenedetti · **Level Four** | 1 | **C** (4/4) | **1 ♭** | *March time* | 2 |
+**La trampa del nombre del fichero**, otra vez. En su carpeta hay un PDF
+llamado *"Escalas y Arpegios Facil progresando.pdf"* y **no es un cuaderno de
+escalas**: dentro pone *Los aristogatos*, de los hermanos Sherman, arreglo de
+A. C. Escobés. Creerse el nombre habría puesto una hoja de técnica donde hay
+una canción. Se comprueba siempre con `pdftotext -f 1 -l 1`.
 
-### Dos comprobaciones que estuvieron a punto de colarse
+**Y la de la resolución.** Tres de las suyas llevan dentro una foto de 72–76 ppi
+(Clementine, el Grandfather's Clock y el Toreador). A esa resolución el agujero
+de una blanca desaparece y una cabeza hueca parece rellena. Lo que se hizo:
+sumar. En Clementine, la anacrusa vale un tiempo, el compás es de tres y detrás
+de la nota dudosa solo hay dos corcheas — negra + corchea + corchea son dos
+tiempos y blanca + corchea + corchea son tres. Es una blanca. *Cuando una figura
+no cuadre a la vista, súmala.*
 
-- **Grandfather's Clock parecía ir en 6/8.** En la miniatura, lo que hay
-  después de la clave se lee como un 6 sobre un 8. Ampliado a 300 ppp es una
-  **C de compasillo**, y el supuesto «8» son **dos redondas apiladas** del
-  pentagrama de abajo. Va en 4/4, como decía el álbum viejo. *Si una
-  comprobación visual va a decidir un cambio, hazla al tamaño en que no quepa
-  duda.*
-- **El Nocturno no lleva armadura.** El op. 9 nº 2 de Chopin está en Mi bemol
-  mayor (tres bemoles) y va en 12/8; este arreglo de Benny Chaw lo pasa a **3/4
-  y sin ninguna alteración**. Se comprobó ampliado porque el dato «Chopin op. 9
-  sin armadura» es justo el que uno da por supuesto al revés.
+---
 
-### Resoluciones que no se pueden medir
+## Las veinte piezas, en orden de cuaderno
 
-Tres PDF son una **foto metida dentro**, no vectorial, y a esa resolución el
-detector de figuras no distingue una semicorchea de un borrón:
+| # | pieza | compás | armadura | manos | lo nuevo |
+|---|---|---|---|---|---|
+| 1 | Clementine | 3/4 | — | una | anacrusa |
+| 2 | Los Aristogatos | 4/4 | — | una | silencio de blanca de entrada |
+| 3 | Eso que tú me das | 4/4 | — | una | cifrado y letra |
+| 4 | Romance · Diabelli | ¢ | — | dos, al unísono | posición fija, cuatro manos |
+| 5 | America | 3/4 | — | dos | negra con puntillo |
+| 6 | Star-Spangled Banner | 3/4 | — | dos | entrar tras un silencio |
+| 7 | La Pantera Rosa | 4/4 | — | dos, distintas | la izquierda empieza sola |
+| 8 | Nocturno op. 9 nº 2 | 3/4 | — | dos, por turnos | notas de tres tiempos |
+| 9 | The Beginner · Gurlitt | 3/4 | — | dos, al unísono | 8va y reguladores |
+| 10 | Heart and Soul | 4/4 | — | dos, distintas | los cuatro acordes |
+| 11 | I Have a Dream | 4/4 | — | dos, distintas | tempo impreso (120) |
+| 12 | Deck the Halls | 4/4 | 1 ♭ | dos | el primer bemol |
+| 13 | Villancicos a cuatro manos | 4/4 | — | dos, las dos en sol | dos claves de sol |
+| 14 | Greensleeves | 3/4 | — | dos, distintas | La menor y el acorde roto |
+| 15 | Honor Him · Gladiator | 3/4 | 3 ♯ | dos, por turnos | la armadura grande |
+| 16 | Rasputin | 4/4 | 2 ♯ | dos | compases callados |
+| 17 | Jingle Bell Rock | 4/4 | — | dos, distintas | cuatro corcheas y ligadura |
+| 18 | Piano Man | 3/4 | — | dos, por turnos | más silencios que notas |
+| 19 | My Grandfather's Clock | 4/4 | 1 ♯ | dos | **reto** de fin de curso |
+| 20 | Toreador · Bizet | 4/4 | 1 ♭ | dos | **reto** de fin de curso |
 
-| pieza | ppi |
-|---|---|
-| Clementine | 72 |
-| Grandfather's Clock | 72 |
-| Toreador | 76 |
+Las cuatro **rescatadas del dosier antiguo** son la 4, la 5, la 6 y la 12. Las
+otras dieciséis salen de su carpeta nueva. Y **siete comparten fichero con otro
+alumno, byte a byte** (comprobado por md5): las cuatro rescatadas más Rasputin,
+el Grandfather's Clock y el Toreador — esas tres estaban en las dos carpetas con
+nombres distintos y resultaron ser el mismo archivo. Eso es lo que vigila
+`cruzar_eduard.py`: pueden compartir la **cita literal medida**, nunca el
+**andamio inventado**.
 
-Van miradas a ojo y anotadas en `auditar_figuras.MIRADAS`, como las otras 31
-del proyecto. **Más vale no saberlo que creer que se sabe.**
+---
 
-## Cuatro del álbum viejo que SÍ son de su nivel
+## Los dos retos del final
 
-El cliente pidió aprovechar lo que encajara. De las diecinueve del álbum
-anterior, cuatro valen — y una de ellas es un hallazgo:
+El cliente los eligió: **"al final del curso, como reto"**. No están ahí porque
+toquen en ese punto de dificultad, sino porque son la pieza con la que se cierra
+el año. El Toreador es, además, la vara de medir del proyecto: la comparten
+cuatro alumnos y su ritmo de marcha es **corchea con puntillo y semicorchea**,
+no negra con puntillo y corchea. Es la única semicorchea del cuaderno de Eduard,
+y está anotada como excepción justificada en `niveles.py` porque su partitura la
+trae impresa.
 
-| pieza | por qué entra |
-|---|---|
-| **Romance · Diabelli** (4 manos, Primo) | el subtítulo impreso dice literalmente *«Primo part for 5 fingers with stationary hand position»*. Es una pieza escrita para exactamente esto |
-| **America** · arr. DeBenedetti | **Level Two** impreso, 16 compases, la melodía entera en siete teclas |
-| **The Star-Spangled Banner** · arr. DeBenedetti | **Level Two** impreso, 3/4, entrar después de un silencio |
-| **Deck the Halls** · arr. Jim Paterson | Fa mayor: el primer bemol, y es villancico para diciembre |
+---
 
-Las otras quince quedan fuera por nivel, no por gusto: Counting Stars y
-Someone You Loved van en corcheas seguidas de principio a fin, A comme amour
-en semicorcheas, Trouble son cuatro páginas a ♩=138 e Interstellar seis.
+## Las cinco lecturas que hubo que hacer a ojo
 
-Con estas cuatro son **20 piezas**, que es lo que cuadra con el plan: 40
-semanas de obra más 4 de repaso, las 44 del curso. Con 16 se quedaba en 32.
+`medir_arranque` no las pudo leer, y lo que se vio está anotado en
+`auditar_alturas.MIRADAS`. Mirarlas y no anotar el resultado sería mirarlas para
+nada.
 
-## El orden: 20 piezas
+| partitura | qué le pasaba al lector | lo que se vio |
+|---|---|---|
+| Heart and Soul | la palabra **Swing** impresa encima tiene agujeros cerrados y se lee como una blanca | Do4 · Do4 · Do4 |
+| I Have a Dream | la primera nota cuelga de dos líneas adicionales y va pegada a la cifra de compás | La3 · Mi4 · Re4 · Fa4 |
+| Honor Him | con tres sostenidos el descuento de cabecera se pasa de largo | Do#4 · Fa#4 · La4 |
+| Piano Man | el **silencio de blanca** es un rectángulo macizo y pasa por cabeza de nota | (silencio) Fa4 · Fa4 · Sol4 |
+| Villancicos 4 manos | a cuatro manos las divisorias no unen los pentagramas del Primo | Mi5 · Mi5 · Mi5 |
 
-**Un solo pentagrama — la mano se coloca y no se mueve**
-1. Clementine · 3/4
-2. Los Aristogatos · 4/4, Adagio
-3. Eso que tú me das · 4/4, con cifrado
+Y una sexta que ya estaba: *Eso que tú me das*, cuya edición pega la cifra de
+compás a la música y se come la primera nota.
 
-**Las dos manos, sin cambiar de sitio**
-4. Romance · Diabelli — **a cuatro manos**, cinco dedos en posición fija
-5. America · la primera figura con puntillo
-6. The Star-Spangled Banner · entrar después de un silencio
+---
 
-**La izquierda empieza a hacer lo suyo**
-7. La Panthère Rose
-8. Nocturne op. 9 · 3/4 y lento: todo el tiempo del mundo
-9. The Beginner · Gurlitt — **a cuatro manos**
+## Qué se decidió y por qué
 
-**Frases largas y swing**
-10. Heart and Soul · ♩=110, swing
-11. I Have a Dream
-
-**Navidad**
-12. Deck the Halls · **el primer bemol**
-13. Christmas Songs · **a cuatro manos**
-
-**Tonos nuevos**
-14. Greensleeves · **la primera en menor**
-15. Honor Him · Gladiator · **tres sostenidos**
-16. Rasputin · Si menor, ♩=124
-
-**Los que piden músculo**
-17. Jingle Bell Rock · swing con más notas
-18. Piano Man · ♩=178
-19. My Grandfather's Clock · *Level Three*
-20. Toreador · *Level Four*
-
-## El nivel
-
-Escalón **1 subiendo a 2** (`niveles.py`): hasta la corchea, con el puntillo
-entrando a mitad de curso. Nada de semicorcheas salvo donde su propia partitura
-las traiga — y ahí manda la partitura, con su excepción anotada.
+- **Las tres primeras piezas se tocan con una sola mano.** No es una
+  simplificación nuestra: sus tres partituras traen un solo pentagrama. Es la
+  única forma decente de empezar con un adulto que no ha tocado nunca — una
+  cosa cada vez.
+- **Las dos manos entran en la 4, y haciendo lo mismo.** Romance de Diabelli y
+  The Beginner de Gurlitt son al unísono: se lee una melodía y se toca dos
+  veces. Entre las dos está el salto real, que es la 7 (*La Pantera Rosa*), donde
+  por primera vez cada mano hace lo suyo — y el arreglo lo pone fácil dejando
+  que la izquierda entre sola y regalando tres compases para colocar la derecha.
+- **La armadura no aparece hasta la 12.** Once piezas sin un solo sostenido ni
+  bemol. Cuando llega, llega de una en una: un bemol (12), después La menor sin
+  alteraciones (14), después tres sostenidos (15).
+- **Los villancicos se adelantan a noviembre y diciembre** en el plan de curso
+  aunque en el cuaderno estén en otro sitio. En enero no sirven.
+- **Tres de las veinte son duetos** (4, 9 y 13), y por eso su hoja semanal lleva
+  el bloque `a_cuatro_manos`: qué acordar con la otra persona antes de empezar.
+  Un dueto no se estudia solo.

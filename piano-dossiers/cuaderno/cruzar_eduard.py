@@ -1,21 +1,24 @@
 # -*- coding: utf-8 -*-
-"""Cruza los sistemas de Eduard: entre sus 19 piezas, y contra José María,
+"""Cruza los sistemas de Eduard: entre sus 20 piezas, y contra José María,
    Josep, Luisa, Mercè, Nel e Isaac.
 
    Regla del proyecto: las CITAS literales de compases medidos pueden
    coincidir entre alumnos (es la misma partitura), pero el ANDAMIO inventado
    no.
 
-   Aquí hace falta más que en casi ningún otro álbum: **las 19 partituras de
-   Eduard son el mismo archivo que las de José María, byte a byte** — se
-   pidió expresamente "el mismo repertorio" y las fuentes se copiaron
-   directamente de `students/jose_maria/source/` (ver
-   TRANSCRIPCION_EDUARD_FUENTES.md). Lo que separa a los alumnos
-   automáticamente es la sal de `cancion._sal_alumno`, que cambia todas las
-   hojas generadas. Lo que NO separa nadie es el material escrito a mano
-   (el andamio de `piano1.bloques` y las `ficha.ritmos`), y eso es lo que
-   comprueba este script: que, salvo las citas literales ya conocidas y
-   documentadas, el andamio de Eduard usa pitches propios.
+   El motivo del cruce cambió en agosto de 2026, pero el cruce sigue haciendo
+   falta. Antes, el álbum de Eduard era una copia del de José María y sus 19
+   partituras eran el mismo archivo, byte a byte. Ahora su repertorio sale de
+   SU carpeta de Drive y solo **siete** de las veinte comparten fichero con
+   otro alumno: el Romance de Diabelli, America, el Star-Spangled Banner,
+   Deck the Halls, Rasputin, el Grandfather's Clock y el Toreador. Esas siete
+   son justo las que pueden repetir una cita literal —y deben—, y las que hay
+   que vigilar para que no repitan andamio.
+
+   Lo que separa a los alumnos automáticamente es la sal de
+   `cancion._sal_alumno`, que cambia todas las hojas generadas. Lo que NO
+   separa nadie es el material escrito a mano (el andamio de `piano1.bloques`
+   y las `ficha.ritmos`), y eso es lo que comprueba este script.
 """
 import os
 import sys
@@ -31,11 +34,12 @@ from portada import W, H
 import hoja_piano, ficha_info, hoja_calentamiento, hoja_lectura, hoja_relax
 import hoja_taller, hoja_deberes
 
-EDUARD = ['ed_01_romance', 'ed_02_america', 'ed_03_banner', 'ed_04_counting',
-          'ed_05_peaches', 'ed_06_someone', 'ed_07_deck', 'ed_08_jailhouse',
-          'ed_09_clock', 'ed_10_shallow', 'ed_11_canthelp', 'ed_12_carol',
-          'ed_13_adagio', 'ed_14_rasputin', 'ed_15_toreador', 'ed_16_trouble',
-          'ed_17_acomme', 'ed_18_interstellar', 'ed_19_flying']
+EDUARD = ['ed_01_clementine', 'ed_02_aristogatos', 'ed_03_eso', 'ed_04_romance',
+          'ed_05_america', 'ed_06_banner', 'ed_07_pantera', 'ed_08_nocturno',
+          'ed_09_beginner', 'ed_10_heart', 'ed_11_dream', 'ed_12_deck',
+          'ed_13_navidad', 'ed_14_greensleeves', 'ed_15_honor',
+          'ed_16_rasputin', 'ed_17_jinglerock', 'ed_18_pianoman',
+          'ed_19_clock', 'ed_20_toreador']
 
 OTROS = ['jm_01_romance', 'jm_02_america', 'jm_03_banner', 'jm_04_counting',
          'jm_05_peaches', 'jm_06_someone', 'jm_07_deck', 'jm_08_jailhouse',
@@ -70,23 +74,20 @@ OTROS = ['jm_01_romance', 'jm_02_america', 'jm_03_banner', 'jm_04_counting',
          'is_13_doremi', 'is_14_dream', 'is_15_gladiator', 'is_16_rasputin',
          'is_17_jailhouse', 'is_18_toreador', 'is_19_furelise', 'is_20_diabelli']
 
-# Las 19 partituras que Eduard comparte con José María, byte a byte (repertorio
-# idéntico, pedido así por el cliente). Cada una recita, además, las mismas
-# citas literales medidas que su gemela jm_XX (silencios de entrada, la FRASE
-# de America, el compás 12 de Jailhouse Rock...): esas coincidencias SÍ son
-# esperables y no son un fallo. El resto de alumnos solo comparte partitura
-# con José María pieza a pieza (ver TRANSCRIPCION_*_FUENTES.md de cada uno).
-COMPARTIDAS = ['Romance · Diabelli (José María 1)', 'America (José María 2)',
-               'The Star-Spangled Banner (José María 3)', 'Counting Stars (José María 4)',
-               'Peaches (José María 5)', 'Someone You Loved (José María 6)',
-               'Deck the Halls (José María 7)', 'Jailhouse Rock (José María 8 · Mercè · Josep · Nel)',
-               "Grandfather's Clock (José María 9 · Mercè · Isaac)", 'Shallow (José María 10)',
-               "Can't Help Falling in Love (José María 11 · Josep · Nel)",
-               'Carol of the Bells (José María 12)', 'Adagio · Albinoni (José María 13)',
+# Las SIETE partituras que Eduard comparte con otro alumno, byte a byte. Son
+# las cuatro que se rescataron de su dosier antiguo (Romance, America,
+# Star-Spangled y Deck the Halls) y las tres de su carpeta nueva que resultaron
+# ser el mismo fichero que ya tenian otros (Rasputin, Grandfather's Clock y
+# Toreador; comprobado por md5). Cada una puede recitar las mismas citas
+# literales medidas que su gemela —es la misma musica—, y esas coincidencias SI
+# son esperables. Las trece restantes son solo suyas.
+COMPARTIDAS = ['Romance · Diabelli (José María 1 · Josep)',
+               'America (José María 2)',
+               'The Star-Spangled Banner (José María 3)',
+               'Deck the Halls (José María 7 · Josep · Nel)',
                'Rasputin (José María 14 · Mercè · Josep · Luisa · Nel · Isaac)',
-               'Toreador (José María 15 · Mercè · Nel · Isaac)', 'Trouble (José María 16)',
-               'A comme amour (José María 17 · Josep · Nel)', 'Interstellar (José María 18)',
-               'Flying Theme (José María 19)']
+               "Grandfather's Clock (José María 9 · Mercè · Isaac)",
+               'Toreador (José María 15 · Mercè · Nel · Isaac)']
 
 MIN_EVENTOS = 8
 
@@ -138,7 +139,7 @@ for mod in EDUARD + OTROS:
         fn(canvas.Canvas(os.devnull, pagesize=(W, H)))
         hojas += 1
 
-print('Las 19 partituras que Eduard comparte con José María, byte a byte:')
+print('Las partituras que Eduard comparte con otro alumno, byte a byte:')
 for t in COMPARTIDAS:
     print('   · %s' % t)
 print('\nhojas escaneadas: %d · sistemas distintos de >=%d eventos: %d'
@@ -170,15 +171,12 @@ for (clef, k), refs in seqs.items():
 # José María tienen el mismo archivo de partitura y el pasaje está MEDIDO
 # sobre él. Cambiarle las notas a uno de los dos seria escribir mal a
 # proposito, porque es la misma música.
-#   · America the Beautiful cc. 1-2 (ed_02/jm_02, bloques 1b y 3a): la frase
-#     medida, primero en negras y despues con su ritmo con puntillo. Los dos
-#     archivos la tienen marcada "Cita literal" en su cabecera.
-#   · Jailhouse Rock c. 12 (ed_08/jm_08/nl_06, bloque 3a): la subida de la
-#     izquierda con la digitación 5-3-2-1 impresa, medida sobre la partitura.
+#   · America cc. 1-4 (ed_05/jm_02, bloque 1): las alturas MEDIDAS, primero en
+#     negras y despues con su ritmo con puntillo. Es la misma partitura y el
+#     mismo pasaje: cambiarle las notas a uno de los dos seria escribir mal a
+#     proposito. Los dos archivos la tienen marcada "Cita literal".
 CITAS_LITERALES_OK = {
-    frozenset(['ed_02_america/piano 1', 'jm_02_america/piano 1']),
-    frozenset(['ed_08_jailhouse/piano 1', 'jm_08_jailhouse/piano 1',
-               'nl_06_jailhouse/piano 1']),
+    frozenset(['ed_05_america/piano 1', 'jm_02_america/piano 1']),
 }
 
 inesperados = [(n, clef, refs) for n, clef, refs in entre_alumnos

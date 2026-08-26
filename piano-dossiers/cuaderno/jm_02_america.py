@@ -125,7 +125,7 @@ CANCION = dict(
             dict(num=1, titulo='La melodía de los cuatro primeros compases',
                  pista='cc. 1-4 · medidos en tu partitura, nota a nota',
                  sistemas=[
-                     dict(cap='a) primero todo en negras, sin el puntillo · así se ven las notas sin '
+                     dict(cap='a) las alturas medidas de los cc. 1–4, en negras y sin el puntillo · así se ven las notas sin '
                               'pelearse con el ritmo',
                           events=[n('C4'), n('C4'), n('D4'),
                                   n('B3'), n('C4'), n('D4'),

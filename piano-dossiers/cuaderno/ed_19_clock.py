@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""My Grandfather's Clock — pieza 9 de Eduard. Formato ADULTO.
+"""My Grandfather's Clock — pieza 19 de Eduard. Formato ADULTO.
 
    Lo comprobado sobre el PDF de su carpeta (Henry Clay Work, arreglo de
    Gilbert DeBenedetti, "Level Three", 2 páginas; el mismo archivo que la
@@ -28,11 +28,11 @@ OCRE = HexColor('#8C6A3F')
 SOL = 'Sol mayor'
 
 CANCION = dict(
-    alumno='Eduard', carpeta='Eduard', num=9, nivel='iniciación',
+    alumno='Eduard', carpeta='Eduard', num=19, nivel='iniciación',
     slug='GrandfathersClock', formato='adulto',
     titulo_corto="My Grandfather's Clock", time_sig=(4, 4), key_sig=SOL,
-    partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source',
-                           "Grandfather's Clock.pdf"),
+    partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source_new',
+                           'Grandfathers Clock.pdf'),
     yt='https://www.youtube.com/results?search_query=my+grandfathers+clock+piano',
 
     ficha=dict(

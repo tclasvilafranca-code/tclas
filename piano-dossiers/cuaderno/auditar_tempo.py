@@ -47,6 +47,7 @@ IMPRESO = re.compile(r'[=＝]\s*(\d{2,3})')
 MIRADAS = {
     'i-have-a-dream-abba-children-song.pdf': [120],   # pone "TEMPO-120", sin el signo
     'i-have-a-dream-abba-.pdf': [120],
+    'I Have a Dream.pdf': [120],                    # la copia de Eduard, mismo caso
     'ADAGIO.': [60],                                # "Adagio ♩ = 60"
     'Rasputin.pdf': [124],
     'christmas-songs-for-four-little- 4 manos.pdf': [100],

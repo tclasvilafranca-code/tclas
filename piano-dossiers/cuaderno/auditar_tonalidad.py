@@ -53,6 +53,7 @@ ARMADURA = {
     'Re mayor': '2 SOST',
     'Si menor': '2 SOST',
     'La mayor': '3 SOST',
+    'Fa# menor': '3 SOST',
     'Fa mayor': '1 BEM',
     'Re menor': '1 BEM',
     'Sib mayor': '2 BEM',
@@ -93,16 +94,13 @@ LEIDO = {
     'nl_10_lovely':            '1 SOST',   # dice Mi menor
     # -PEACHES.                                            0
     'jm_05_peaches':           '0',        # dice nada
-    'ed_05_peaches':           '0',        # dice nada
     'jp_03_peaches':           '0',        # dice nada
     # A COMME AMOUR _ Richard Clayderman.                  1 SOST
     'jm_17_acomme':            '1 SOST',   # dice Mi menor
-    'ed_17_acomme':            '1 SOST',   # dice Mi menor
     'jp_19_acomme':            '1 SOST',   # dice Mi menor
     'nl_16_acomme':            '1 SOST',   # dice Mi menor
     # ADAGIO.                                              0
     'jm_13_adagio':            '0',        # dice nada
-    'ed_13_adagio':            '0',        # dice nada
     # Adagio en sol menor. Albinoni.pdf                    2 BEM
     'dilan_16_adagio':         '2 BEM',    # dice Sol menor
     # Aloha oe.sib.pdf                                     0
@@ -120,7 +118,6 @@ LEIDO = {
     'arnau_02_clementine':     '0',        # dice nada
     # Como entrenar a tu dragon.                           0
     'jm_19_flying':            '0',        # dice nada
-    'ed_19_flying':            '0',        # dice nada
     'nl_17_dragon':            '0',        # dice nada
     # Copia de 1-----Greensleeves.pdf                      0
     'lu_15_greensleeves':      '0',        # dice La menor
@@ -128,7 +125,6 @@ LEIDO = {
     'is_11_greensleeves':      '0',        # dice La menor
     # Counting-stars.pdf                                   0
     'jm_04_counting':          '0',        # dice nada
-    'ed_04_counting':          '0',        # dice nada
     'me_17_countingstars':     '0',        # dice nada
     'jp_04_counting':          '0',        # dice nada
     'nl_02_counting':          '0',        # dice nada
@@ -136,7 +132,6 @@ LEIDO = {
     'is_20_diabelli':          '0',        # dice nada
     # Deck the Halls (with Boughs of Holly) NAVIDAD.pdf    1 BEM
     'jm_07_deck':              '1 BEM',    # dice Fa mayor
-    'ed_07_deck':              '1 BEM',    # dice Fa mayor
     'jp_08_deck':              '1 BEM',    # dice Fa mayor
     'nl_03_deck':              '1 BEM',    # dice Fa mayor
     # Do Your Ears Hang Low?.pdf                           0
@@ -150,15 +145,12 @@ LEIDO = {
     'is_15_gladiator':         '3 SOST',   # dice La mayor
     # Grandfather's Clock.pdf                              1 SOST
     'jm_09_clock':             '1 SOST',   # dice Sol mayor
-    'ed_09_clock':             '1 SOST',   # dice Sol mayor
     'me_19_grandfather':       '1 SOST',   # dice Sol mayor
     'is_12_grandfather':       '1 SOST',   # dice Sol mayor
     # Himno de Estados Unidos.pdf                          0
     'jm_03_banner':            '0',        # dice nada
-    'ed_03_banner':            '0',        # dice nada
     # Interstellar _ .pdf                                  0
     'jm_18_interstellar':      '0',        # dice nada
-    'ed_18_interstellar':      '0',        # dice nada
     # JOLLY OLD SAINT NICHOLAS.pdf                         0
     'arnau_03_jolly':          '0',        # dice nada
     # LA PRIMAVERA.pdf easy                                0
@@ -194,14 +186,11 @@ LEIDO = {
     'arnau_17_popeye':         '1 SOST',   # dice Sol mayor
     # Romance-Diabelli 4 manos.pdf                         0
     'jm_01_romance':           '0',        # dice nada
-    'ed_01_romance':           '0',        # dice nada
     'jp_01_romance':           '0',        # dice nada
     # SHALLOW.                                             1 SOST
     'jm_10_shallow':           '1 SOST',   # dice Sol mayor
-    'ed_10_shallow':           '1 SOST',   # dice Sol mayor
     # SOMEONE YOU LOVED.                                   0
     'jm_06_someone':           '0',        # dice nada
-    'ed_06_someone':           '0',        # dice nada
     # SUR LE PONT D'AVIGNON.pdf                            0
     'me_06_avignon':           '0',        # dice nada
     # Santa-tell-me-ariana-grande NAVIDAD.pdf              1 SOST
@@ -223,13 +212,11 @@ LEIDO = {
     'lu_10_titanic':           '0',        # dice nada
     # Toreador. Bizet                                      1 BEM
     'jm_15_toreador':          '1 BEM',    # dice Fa mayor
-    'ed_15_toreador':          '1 BEM',    # dice Fa mayor
     'me_25_toreador':          '1 BEM',    # dice Fa mayor
     'is_18_toreador':          '1 BEM',    # dice Fa mayor
     'nl_09_toreador':          '1 BEM',    # dice Fa mayor
     # Trouble.                                             1 SOST
     'jm_16_trouble':           '1 SOST',   # dice Sol mayor
-    'ed_16_trouble':           '1 SOST',   # dice Sol mayor
     # Un beso-y-una-flor-nino-bravo.pdf                    1 BEM
     'jp_17_unbeso':            '1 BEM',    # dice Fa mayor
     # WE WISH A MERRY CRISTMAS.pdf                         0
@@ -259,14 +246,12 @@ LEIDO = {
     'eva_17_bohemian':         '2 BEM',    # dice Sib mayor
     # cant-help-falling-in-love-elvis-presley.             2 SOST
     'jm_11_canthelp':          '2 SOST',   # dice Re mayor
-    'ed_11_canthelp':          '2 SOST',   # dice Re mayor
     'jp_11_canthelp':          '2 SOST',   # dice Re mayor
     'nl_08_canthelp':          '2 SOST',   # dice Re mayor
     'dilan_02_cancion':        '2 SOST',   # dice Re mayor
     'eva_01_canthelp':         '2 SOST',   # dice Re mayor
     # carol-of-the-bells   NAVIDAD.                        2 BEM
     'jm_12_carol':             '2 BEM',    # dice Sol menor
-    'ed_12_carol':             '2 BEM',    # dice Sol menor
     # christmas-songs-(4 manos).pdf                        0
     'lu_07_christmas':         '0',        # dice nada
     'me_08_christmas':         '0',        # dice nada
@@ -280,7 +265,6 @@ LEIDO = {
     'nl_04_heart':             '0',        # dice nada
     # himno America.pdf                                    0
     'jm_02_america':           '0',        # dice nada
-    'ed_02_america':           '0',        # dice nada
     # hit-the-road-jack-ray-.pdf                           1 BEM
     'jp_07_hittheroad':        '1 BEM',    # dice Fa mayor
     'nl_05_hittheroad':        '1 BEM',    # dice Fa mayor
@@ -294,7 +278,6 @@ LEIDO = {
     'eva_15_beginning':        '0',        # dice nada
     # jailhouse-rock-elvis-presley-.pdf                    0
     'jm_08_jailhouse':         '0',        # dice nada
-    'ed_08_jailhouse':         '0',        # dice nada
     'me_24_jailhouse':         '0',        # dice nada
     'is_17_jailhouse':         '0',        # dice nada
     'jp_09_jailhouse':         '0',        # dice nada
@@ -328,7 +311,6 @@ LEIDO = {
     # rasputin easy.pdf                                    2 SOST
     'lu_17_rasputin':          '2 SOST',   # dice Si menor
     'jm_14_rasputin':          '2 SOST',   # dice Si menor
-    'ed_14_rasputin':          '2 SOST',   # dice Si menor
     'me_23_rasputin':          '2 SOST',   # dice Si menor
     'is_16_rasputin':          '2 SOST',   # dice Si menor
     'jp_13_rasputin':          '2 SOST',   # dice Si menor
@@ -353,6 +335,31 @@ LEIDO = {
     # youve-got-a-friend-in-me-easy-piano-.pdf             0
     'lu_04_friend':            '0',        # dice nada
     'me_03_friend':            '0',        # dice nada
+    # ------------------------------------------------------------------
+    # EDUARD, cuaderno rehecho en agosto de 2026 sobre su propia carpeta. Las
+    # dieciseis partituras nuevas se miraron una por una: solo cuatro llevan
+    # armadura, y la mas grande —tres sostenidos en Honor Him— es a proposito
+    # la ultima que aprende.
+    'ed_01_clementine':        '0',        # dice Do mayor
+    'ed_02_aristogatos':       '0',        # dice Do mayor
+    'ed_03_eso':               '0',        # dice Do mayor
+    'ed_04_romance':           '0',        # dice Do mayor
+    'ed_05_america':           '0',        # dice Do mayor
+    'ed_06_banner':            '0',        # dice Do mayor
+    'ed_07_pantera':           '0',        # dice Do mayor
+    'ed_08_nocturno':          '0',        # dice Do mayor
+    'ed_09_beginner':          '0',        # dice Do mayor
+    'ed_10_heart':             '0',        # dice Do mayor
+    'ed_11_dream':             '0',        # dice Do mayor
+    'ed_12_deck':              '1 BEM',    # dice Fa mayor
+    'ed_13_navidad':           '0',        # dice Do mayor
+    'ed_14_greensleeves':      '0',        # dice La menor
+    'ed_15_honor':             '3 SOST',   # dice Fa# menor
+    'ed_16_rasputin':          '2 SOST',   # dice Si menor
+    'ed_17_jinglerock':        '0',        # dice Do mayor
+    'ed_18_pianoman':          '0',        # dice Do mayor
+    'ed_19_clock':             '1 SOST',   # dice Sol mayor
+    'ed_20_toreador':          '1 BEM',    # dice Fa mayor
 }
 
 

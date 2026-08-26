@@ -131,8 +131,10 @@ CANCION = dict(
             dict(num=2, titulo='La subida del principio',
                  pista='c. 1 · medido en tu partitura, nota a nota',
                  sistemas=[
-                     dict(cap='a) primero las cuatro teclas en negras, para verlas',
+                     dict(cap='a) primero las cuatro teclas en negras, para verlas · en mf, que es '
+                              'lo que pide tu partitura',
                           events=[n('G4'), n('A4'), n('B4'), n('C5')],
+                          matiz='mf',
                           bars=1),
                      dict(cap='b) y ahora en corcheas, de dos en dos, sin el silencio delante',
                           events=corch(['G4', 'A4']) + corch(['B4', 'C5']) + [n('C5', 'h')],

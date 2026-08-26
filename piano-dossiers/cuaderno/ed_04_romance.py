@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Romance, de Diabelli (pieza 1 de Eduard). Formato ADULTO, seis hojas.
+"""Romance, de Diabelli (pieza 4 de Eduard). Formato ADULTO, seis hojas.
 
-   El mismo repertorio que José María, con el mismo nivel: no le agobia.
+   Una de las CUATRO piezas que se rescataron del dosier antiguo de Eduard
+   cuando su cuaderno se rehizo, en agosto de 2026, sobre su propia carpeta de
+   Drive: el cliente pidió que si alguna partitura del dosier viejo cuadraba
+   con su nivel se aprovechara, y esta cuadra mejor que ninguna. Es a cuatro
+   manos, las dos manos tocan lo mismo y la mano no se mueve de sitio.
 
    Lo comprobado sobre el PDF de su carpeta (free-scores.com, "6 Sonatas for
    Piano 4-hands op. 163, no. 1, Mvmt. 2", 2 páginas; el mismo archivo que la
@@ -30,7 +34,7 @@ AZUL = HexColor('#3E6E8F')
 OCRE = HexColor('#8C6A3F')
 
 CANCION = dict(
-    alumno='Eduard', carpeta='Eduard', num=1, nivel='iniciación', slug='RomanceDiabelli',
+    alumno='Eduard', carpeta='Eduard', num=4, nivel='iniciación', slug='RomanceDiabelli',
     formato='adulto',
     titulo_corto='Romance · Diabelli', time_sig=(2, 2), key_sig=None,
     partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source',

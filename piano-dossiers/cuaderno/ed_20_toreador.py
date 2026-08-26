@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Toreador, de Carmen — pieza 15 de Eduard. Formato ADULTO.
+"""Toreador, de Carmen — pieza 20 de Eduard. Formato ADULTO.
 
    Lo comprobado sobre el PDF de su carpeta (Georges Bizet, arreglo de
    Gilbert DeBenedetti, "Level Four", 1 página; el mismo archivo que la
@@ -34,10 +34,10 @@ OCRE = HexColor('#8C6A3F')
 FA = 'Fa mayor'
 
 CANCION = dict(
-    alumno='Eduard', carpeta='Eduard', num=15, nivel='iniciación',
+    alumno='Eduard', carpeta='Eduard', num=20, nivel='iniciación',
     slug='Toreador', formato='adulto',
     titulo_corto='Toreador · Carmen', time_sig=(4, 4), key_sig=FA,
-    partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source', 'Toreador. Bizet'),
+    partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source_new', 'Toreador Bizet.pdf'),
     yt='https://www.youtube.com/results?search_query=toreador+song+carmen+piano+easy',
 
     ficha=dict(

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Pasa las comprobaciones obligatorias a las 19 piezas de Eduard.
+"""Pasa las comprobaciones obligatorias a las 20 piezas de Eduard.
 
    Compases, márgenes, material repetido entre hojas, altura final de cada
    hoja y texto que no cabe en su caja: lo de siempre, y todo tiene que decir
@@ -17,18 +17,19 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'
 
 from cancion import auditar
 
-MODULOS = ['ed_01_romance', 'ed_02_america', 'ed_03_banner', 'ed_04_counting',
-           'ed_05_peaches', 'ed_06_someone', 'ed_07_deck', 'ed_08_jailhouse',
-           'ed_09_clock', 'ed_10_shallow', 'ed_11_canthelp', 'ed_12_carol',
-           'ed_13_adagio', 'ed_14_rasputin', 'ed_15_toreador', 'ed_16_trouble',
-           'ed_17_acomme', 'ed_18_interstellar', 'ed_19_flying']
+MODULOS = ['ed_01_clementine', 'ed_02_aristogatos', 'ed_03_eso', 'ed_04_romance',
+           'ed_05_america', 'ed_06_banner', 'ed_07_pantera', 'ed_08_nocturno',
+           'ed_09_beginner', 'ed_10_heart', 'ed_11_dream', 'ed_12_deck',
+           'ed_13_navidad', 'ed_14_greensleeves', 'ed_15_honor',
+           'ed_16_rasputin', 'ed_17_jinglerock', 'ed_18_pianoman',
+           'ed_19_clock', 'ed_20_toreador']
 
 
 def revisar_nivel(modulos):
-    """Eduard tiene el mismo nivel y el mismo repertorio que Jose Maria
-       (cancion.CURVA['eduard'] = la misma curva). Aqui solo se comprueba lo
+    """Eduard es un adulto de unos 65 anos que empieza de cero, y su cuaderno
+       se rehizo entero sobre SU carpeta de Drive. Aqui solo se comprueba lo
        que es norma fija: formato adulto y el esquema minimo del dosier
-       presente en las 19 piezas."""
+       presente en las 20 piezas."""
     fallos = []
     for mod in modulos:
         cfg = __import__(mod).CANCION

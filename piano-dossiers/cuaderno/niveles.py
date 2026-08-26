@@ -112,7 +112,11 @@ ESCALON = {
     'luisa': 1,          # adulta, empezo hace nada: "poquito pero bien, sencillo"
     'josé maría': 2,
     'jose maria': 2,
-    'eduard': 2,         # mismo nivel y repertorio que Jose Maria
+    'eduard': 2,         # unos 65 anos, empieza de cero; su repertorio se rehizo
+                         # en agosto de 2026 sobre su propia carpeta y casi todo el
+                         # cuaderno vive en el escalon 1: el 2 es el techo que hace
+                         # falta para las tres ultimas, que son sus retos de final
+                         # de curso
     'mercè': 2,
     'merce': 2,
     'isaac': 3,          # nivel medio "con cana": sube mas rapido, techo mas bajo
@@ -162,7 +166,8 @@ EXCEPCIONES = {
     # (1 + 0,75 + 0,25 + 1 + 1). Es su partitura y es su pieza mas dificil del
     # curso, puesta ahi a proposito.
     ('jm_15_toreador', 's'): 'el c. 1 de su partitura lleva la semicorchea del ritmo de marcha',
-    ('ed_15_toreador', 's'): 'la misma edición del Toreador, con la misma semicorchea',
+    ('ed_20_toreador', 's'): 'la misma edición del Toreador, con la misma semicorchea',
+    ('ed_20_toreador', 'e.'): 'la corchea con puntillo de ese mismo ritmo, impresa',
     ('me_25_toreador', 's'): 'la misma edición del Toreador, con la misma semicorchea',
 }
 

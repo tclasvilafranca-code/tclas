@@ -78,28 +78,60 @@ detector de figuras no distingue una semicorchea de un borrón:
 Van miradas a ojo y anotadas en `auditar_figuras.MIRADAS`, como las otras 31
 del proyecto. **Más vale no saberlo que creer que se sabe.**
 
-## El orden propuesto
+## Cuatro del álbum viejo que SÍ son de su nivel
 
-No es el orden de la carpeta: es un arco que va de un solo pentagrama a las dos
-manos, de ahí a cuatro manos con la profesora, y solo al final a las dos piezas
-que su propia edición marca como *Level Three* y *Level Four*.
+El cliente pidió aprovechar lo que encajara. De las diecinueve del álbum
+anterior, cuatro valen — y una de ellas es un hallazgo:
 
-1. Clementine · un pentagrama, 3/4
-2. Los Aristogatos · un pentagrama, 4/4
-3. Eso que tú me das · un pentagrama con cifrado
-4. La Panthère Rose · **las dos manos por primera vez**
-5. Nocturne op. 9 · 3/4, lento, todo el tiempo del mundo
-6. The Beginner · **a cuatro manos con la profesora**
-7. Heart and Soul · el swing
-8. I Have a Dream · frases largas
-9. Greensleeves · **la primera en menor**
-10. Honor Him · **la primera armadura de verdad, tres sostenidos**
-11. Christmas Songs · cuatro manos otra vez, ya con soltura
-12. Jingle Bell Rock · swing con más notas
-13. Piano Man · ♩=178, la rápida
-14. Rasputin · Si menor y cifrado
-15. My Grandfather's Clock · *Level Three*
-16. Toreador · *Level Four*, el reto del final
+| pieza | por qué entra |
+|---|---|
+| **Romance · Diabelli** (4 manos, Primo) | el subtítulo impreso dice literalmente *«Primo part for 5 fingers with stationary hand position»*. Es una pieza escrita para exactamente esto |
+| **America** · arr. DeBenedetti | **Level Two** impreso, 16 compases, la melodía entera en siete teclas |
+| **The Star-Spangled Banner** · arr. DeBenedetti | **Level Two** impreso, 3/4, entrar después de un silencio |
+| **Deck the Halls** · arr. Jim Paterson | Fa mayor: el primer bemol, y es villancico para diciembre |
+
+Las otras quince quedan fuera por nivel, no por gusto: Counting Stars y
+Someone You Loved van en corcheas seguidas de principio a fin, A comme amour
+en semicorcheas, Trouble son cuatro páginas a ♩=138 e Interstellar seis.
+
+Con estas cuatro son **20 piezas**, que es lo que cuadra con el plan: 40
+semanas de obra más 4 de repaso, las 44 del curso. Con 16 se quedaba en 32.
+
+## El orden: 20 piezas
+
+**Un solo pentagrama — la mano se coloca y no se mueve**
+1. Clementine · 3/4
+2. Los Aristogatos · 4/4, Adagio
+3. Eso que tú me das · 4/4, con cifrado
+
+**Las dos manos, sin cambiar de sitio**
+4. Romance · Diabelli — **a cuatro manos**, cinco dedos en posición fija
+5. America · la primera figura con puntillo
+6. The Star-Spangled Banner · entrar después de un silencio
+
+**La izquierda empieza a hacer lo suyo**
+7. La Panthère Rose
+8. Nocturne op. 9 · 3/4 y lento: todo el tiempo del mundo
+9. The Beginner · Gurlitt — **a cuatro manos**
+
+**Frases largas y swing**
+10. Heart and Soul · ♩=110, swing
+11. I Have a Dream
+
+**Navidad**
+12. Deck the Halls · **el primer bemol**
+13. Christmas Songs · **a cuatro manos**
+
+**Tonos nuevos**
+14. Greensleeves · **la primera en menor**
+15. Honor Him · Gladiator · **tres sostenidos**
+16. Rasputin · Si menor, ♩=124
+
+**Los que piden músculo**
+17. Jingle Bell Rock · swing con más notas
+18. Piano Man · ♩=178
+19. My Grandfather's Clock · *Level Three*
+20. Toreador · *Level Four*
 
 ## El nivel
 

@@ -125,7 +125,7 @@ CANCION = dict(
                      dict(cap='a) la izquierda sigue igual y la derecha aparece en el cuarto tiempo',
                           events=[n('E3', 'h'), n('C3', 'h'),
                                   n('D3', 'h'), n('G2'), ac(('G2', 'G4'))],
-                          bars=2, clef='bass'),
+                          bars=2, manos='dobla'),
                      dict(cap='b) y ya con las dos sonando',
                           events=[ac(('E3', 'G4')), n('A4'), n('B4'), n('A4'),
                                   ac(('A2', 'F4'), 'h'), n('G4'), n('F4')],

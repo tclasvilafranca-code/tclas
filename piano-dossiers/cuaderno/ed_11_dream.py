@@ -153,16 +153,17 @@ CANCION = dict(
                           bars=4, show_time=False),
                  ]),
             dict(num=3, titulo='La izquierda, y las dos manos',
-                 pista='cc. 1–2 · medidos · abajo no hay nada que correr',
+                 pista='la izquierda va medida (cc. 1–2) · el sistema de las dos manos es andamio',
                  sistemas=[
                      dict(cap='a) la izquierda, partida en mitades para colocar la mano · en tu '
                               'partitura cada una es una nota larga',
                           events=[n('C3', 'h'), n('C3', 'h'),
                                   ac(('G3', 'C4'), 'h'), ac(('G3', 'C4'), 'h')],
                           bars=2, clef='bass'),
-                     dict(cap='b) y las dos manos, con la izquierda sosteniendo debajo',
-                          events=[ac(('C3',), 'q'), ac(('A3',)), ac(('E4',), 'q.'),
-                                  ac(('D4',), 'e'), ac(('G3', 'C4', 'F4'), 'w')],
+                     dict(cap='b) y las dos manos, con el mismo ritmo y la derecha colocada más '
+                              'arriba para que quepa en su pentagrama (andamio)',
+                          events=[ac(('C3', 'C4')), ac(('D4',)), ac(('G4',), 'q.'),
+                                  ac(('F4',), 'e'), ac(('G3', 'C4', 'E4'), 'w')],
                           bars=2, manos='sostiene', show_time=False),
                  ]),
         ],

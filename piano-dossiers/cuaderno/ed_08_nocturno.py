@@ -163,7 +163,7 @@ CANCION = dict(
                           bars=4, clef='bass', show_time=False),
                      dict(cap='c) y por último, las dos manos: la izquierda da el impulso y la '
                               'derecha se queda con la nota larga',
-                          events=[ac(('G3',), 'h'), ac(('G3',)), ac(('E4',), 'h.'),
+                          events=[sil('h'), ac(('G3',)), ac(('E4',), 'h.'),
                                   ac(('C3', 'E4'), 'h.')],
                           bars=3, manos='dobla', show_time=False),
                  ]),
@@ -204,8 +204,8 @@ CANCION = dict(
 )
 
 CANCION['piano1']['bloques'] = list(CANCION['piano1']['bloques']) + bloques_extra(
-    'Do mayor', 68, 'E4', 'G3',
-    'notas largas: lo difícil es aguantarlas, no tocarlas',
+    'Do mayor', 68, 'E4', 'C3',
+    'aquí lo que se trabaja es el sonido, no la velocidad',
     desde=4, time_sig=(3, 4), mas=True)
 
 if __name__ == '__main__':

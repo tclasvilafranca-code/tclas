@@ -86,6 +86,53 @@ def _en_tono(tono, letra, octava):
     return '%s%d' % (letra, octava)
 
 
+def _grado_abs(p):
+    """La altura en grados diatonicos, para poder comparar dos notas."""
+    letra, _alt, octava = _parte(p)
+    return octava * 7 + _ORDEN.index(letra)
+
+
+def _octava(p, cuantas_):
+    letra, alt, octava = _parte(p)
+    return '%s%s%d' % (letra, alt, octava + cuantas_)
+
+
+# El techo y el suelo del pentagrama de FA, en grados diatonicos desde Do0. Un
+# acorde que asome mas de UNA linea adicional por arriba ya no se lee de un
+# vistazo, y estos bloques son justamente los que el alumno toca sin pensar.
+_FA_TECHO = _grado_abs('C4')     # una linea adicional por encima del pentagrama
+_FA_SUELO = _grado_abs('E2')     # una linea adicional por debajo
+
+
+def _a_la_clave_de_fa(notas):
+    """Baja (o sube) el acorde ENTERO las octavas que hagan falta para que
+       quepa en el pentagrama de fa.
+
+       La cadencia se construye subiendo terceras desde el bajo, asi que en
+       segunda inversion la voz de arriba se pone nueve grados por encima de la
+       raiz: con un bajo en Do3 el acorde llegaba al Sol4, o sea TRES lineas
+       adicionales por encima del pentagrama de fa. Un pianista no lee eso, y
+       menos en un bloque de tecnica que se toca de memoria.
+
+       Se mueve el acorde completo, nunca una voz suelta: cambiar de octava una
+       sola nota cambiaria la disposicion del acorde, y la disposicion es
+       justamente el eje que separa la cadencia de un alumno de la del de al
+       lado (ver `bloques_extra`)."""
+    if not notas:
+        return notas
+    fuera = list(notas)
+    for _ in range(4):
+        alto = max(_grado_abs(x) for x in fuera)
+        bajo = min(_grado_abs(x) for x in fuera)
+        if alto > _FA_TECHO and bajo - 7 >= _FA_SUELO:
+            fuera = [_octava(x, -1) for x in fuera]
+        elif bajo < _FA_SUELO and alto + 7 <= _FA_TECHO:
+            fuera = [_octava(x, +1) for x in fuera]
+        else:
+            return fuera
+    return fuera
+
+
 def cuantas(time_sig, figura='q'):
     """Cuantas notas de esa figura llenan compases ENTEROS.
 
@@ -206,7 +253,7 @@ def cadencia(tono, bajo, figura='w', inversion=0):
         for paso in voces:
             l, o = _sube(raiz_l, raiz_o, paso)
             notas.append(_en_tono(tono, l, o))
-        fuera.append(dict(pitches=notas, dur=figura, tecnica=True))
+        fuera.append(dict(pitches=_a_la_clave_de_fa(notas), dur=figura, tecnica=True))
     return fuera
 
 
@@ -265,7 +312,7 @@ def _quinto(tono, agudo):
     return _en_tono(tono, l, o)
 
 
-def bloques_extra(tono, num, agudo, grave, foco, receta=None, desde=90,
+def _bloques_extra(tono, num, agudo, grave, foco, receta=None, desde=90,
                   time_sig=(4, 4), mas=False):
     """Los bloques de apoyo de una pieza, ya montados.
 
@@ -283,6 +330,12 @@ def bloques_extra(tono, num, agudo, grave, foco, receta=None, desde=90,
     # negras deja el ultimo compas a medias en 3/4, y una redonda no cabe en un
     # compas de tres. Se calcula, no se supone.
     agudo = tonica(tono, agudo)      # el rotulo dice la tonica: que lo sea
+    # Y el bajo de la cadencia, igual. El rotulo dice "I - IV - V - I", asi que
+    # el I tiene que ser el I: con el grave puesto a mano bastaba pasar un Sol3
+    # en Do mayor para que el papel dibujara Sol-Si-Re y lo llamara primer
+    # grado. Es exactamente el fallo que ya se arreglo arriba para `agudo` —el
+    # arpegio de Mi menor rotulado como Do mayor—, y estaba a medio arreglar.
+    grave = tonica(tono, grave)
     inv = (num // 5) % 3
     if (num // 15) % 2:
         agudo = agudo[:-1] + str(int(agudo[-1]) + 1)
@@ -612,3 +665,65 @@ def bloque_puntillo(tono, num, agudo, donde, time_sig=(4, 4), lento=False,
                                          'la segunda, no un poco más',
                          events=ev, bars=compases, show_time=False),
                 ])
+
+
+# El techo y el suelo del pentagrama de SOL, con el mismo criterio que los del
+# de fa: hasta dos lineas adicionales.
+_SOL_TECHO = _grado_abs('C6')
+_SOL_SUELO = _grado_abs('A3')
+
+
+def _encajar(events, clef):
+    """Sube o baja el sistema ENTERO las octavas que hagan falta para que quepa
+       en su pentagrama con dos lineas adicionales como mucho.
+
+       Las escalas y los arpegios de aqui se construyen HACIA ARRIBA desde el
+       registro que pasa la pieza, y `arriba` es ese registro una octava mas
+       alto: con un ancla en Do5 —que es de lo mas normal— la escala de vuelta
+       salia del Do6 al Do7, o sea SEIS lineas adicionales. Eran 447 notas en
+       los diez albumes, y ninguna se lee.
+
+       Se mueve el sistema completo y por octavas justas, asi que el ejercicio
+       es exactamente el mismo: las mismas notas, el mismo dibujo y el mismo
+       rotulo. Lo unico que cambia es la zona del teclado."""
+    techo, suelo = ((_SOL_TECHO, _SOL_SUELO) if clef != 'bass'
+                    else (_FA_TECHO, _FA_SUELO))
+    alturas = [p for e in events
+                 for p in ([e['pitch']] if e.get('pitch') else e.get('pitches') or [])]
+    if not alturas:
+        return events
+    for _ in range(4):
+        alto = max(_grado_abs(x) for x in alturas)
+        bajo = min(_grado_abs(x) for x in alturas)
+        if alto > techo and bajo - 7 >= suelo:
+            paso = -1
+        elif bajo < suelo and alto + 7 <= techo:
+            paso = +1
+        else:
+            break
+        alturas = [_octava(x, paso) for x in alturas]
+        events = [_mover(e, paso) for e in events]
+    return events
+
+
+def _mover(e, octavas):
+    if e.get('pitch'):
+        return dict(e, pitch=_octava(e['pitch'], octavas))
+    if e.get('pitches'):
+        return dict(e, pitches=[_octava(p, octavas) for p in e['pitches']])
+    return e
+
+
+def bloques_extra(*a, **kw):
+    """Los bloques de apoyo, ya encajados en su pentagrama.
+
+       El encaje va aqui y no dentro de cada receta porque es una decision de
+       GRABADO, no de contenido: da igual que receta toque, ninguna nota puede
+       acabar colgando de seis lineas adicionales. Lo comprueba, ademas,
+       `auditar_registro.py`."""
+    bloques = _bloques_extra(*a, **kw)
+    for b in bloques:
+        for s in b.get('sistemas', []) or []:
+            clef = s.get('clef') or b.get('clef') or 'treble'
+            s['events'] = _encajar(s.get('events', []) or [], clef)
+    return bloques

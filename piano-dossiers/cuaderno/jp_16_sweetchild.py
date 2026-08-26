@@ -163,7 +163,7 @@ CANCION = dict(
                  ]),
         ] + bloques_extra('Sib mayor', 21, 'Bb3', 'Bb2',
                           'dos bemoles y el pedal escrito: las dos cosas a la vez',
-                          desde=4, time_sig=(4, 4)),
+                          desde=4, time_sig=(4, 4), mas=True),
     ),
 
     trabajo=[

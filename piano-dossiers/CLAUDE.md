@@ -333,6 +333,46 @@
 > ejercicios, con tope de 26–30 pt por hueco. Sin justificar hay que retocar el
 > material pieza a pieza hasta cuadrar el número, que con 88 piezas es un bucle.
 >
+> ### Y la parte que faltaba: que la nota esté en el pentagrama que le toca
+>
+> La norma de arriba arregló los sistemas en los que la izquierda iba metida
+> dentro del acorde de la derecha. **No arregló las otras dos formas de dejar
+> una nota colgando de seis líneas adicionales**, y las dos estaban en
+> producción, en los diez álbumes, hasta que se miró el cuaderno de Eduard a
+> tamaño real:
+>
+> 1. **Los sistemas escritos con `clef='bass'` a mano** en vez de con `manos=`.
+>    En el *Gladiator* de Mercè y de Isaac había un **Mi5 en clave de fa** —seis
+>    líneas adicionales— y el propio pie del sistema decía "entra la derecha".
+>    Se arreglan quitando el `clef` y poniendo `manos=`, que es lo que hace que
+>    el motor reparta cada nota a su pentagrama.
+> 2. **El material de `relleno.py`, que se construye HACIA ARRIBA.** La cadencia
+>    sube terceras desde el bajo (en segunda inversión, nueve grados: con el
+>    bajo en Do3 llegaba al **Sol4**) y las escalas y arpegios salen de
+>    `arriba`, que es el registro de la pieza una octava más alto (con un ancla
+>    en Do5, de lo más normal, la escala de vuelta iba del **Do6 al Do7**).
+>    Eran **456 notas**. Ahora `relleno._encajar` sube o baja el sistema entero
+>    por octavas justas hasta que cabe: mismas notas, mismo dibujo, mismo
+>    rótulo, otra zona del teclado.
+>
+> El límite es **dos líneas adicionales**, que es lo que se lee sin contar: en
+> clave de fa, del Do2 al Mi4; en clave de sol, del La3 al Do6. Lo comprueba
+> **`cuaderno/auditar_registro.py`**, que pregunta al propio motor
+> (`hoja_piano._pide_dos_pentagramas`) qué sistemas ya abre él solo en sistema
+> de piano, en vez de repetir la regla en dos sitios.
+>
+> **Y una excepción de verdad, por eso hay tabla:** el cruce de manos. En *My
+> Bonnie* la izquierda cruza por encima y toca un Sol4, y el ejercicio va de
+> eso; escribirlo en clave de sol escondería de quién es la nota.
+>
+> **Lo que queda pendiente y es decisión del cliente:** 164 notas en los otros
+> nueve álbumes siguen en el pentagrama equivocado, y todas son el mismo caso —
+> dos manos en un solo pentagrama escritas con notas sueltas, no con acordes,
+> así que el detector automático no las ve. Arreglarlas obliga a abrir el
+> pentagrama de fa (~75 pt por sistema) y **eso cambia el número de páginas de
+> esos álbumes**, que es justo la decisión que dejó gateado
+> `hoja_piano.DOS_PENTAGRAMAS`.
+>
 > ### El material de apoyo (`cuaderno/relleno.py`)
 >
 > Escalas, arpegios, giros y cadencias construidos **sobre la tonalidad de la

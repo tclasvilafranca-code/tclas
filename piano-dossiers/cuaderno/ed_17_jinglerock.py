@@ -178,6 +178,12 @@ CANCION = dict(
                                   ac(('C3', 'A4'), 'e'), ac(('B4',), 'e'), ac(('A4',), 'e'),
                                   ac(('E4',), 'e'), ac(('G2', 'E4'), 'h')],
                           bars=3, manos='sostiene', show_time=False),
+                     dict(cap='d) y solo los cambios: la primera nota de cada mitad, para que las '
+                              'dos manos caigan juntas',
+                          events=[ac(('C3', 'C5'), 'h'), ac(('G2', 'B4'), 'h'),
+                                  ac(('C3', 'A4'), 'h'), ac(('G2', 'E4'), 'h'),
+                                  ac(('C3', 'C5'), 'w')],
+                          bars=3, manos='sostiene', show_time=False),
                      dict(cap='c) y una vez más, empezando por la mitad grave del compás 1',
                           events=[ac(('G2', 'B4'), 'e'), ac(('B4',), 'e'), ac(('B4',)),
                                   ac(('C3', 'C5'), 'e'), ac(('C5',), 'e'), ac(('C5',)),

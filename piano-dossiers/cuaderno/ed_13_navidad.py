@@ -217,7 +217,7 @@ CANCION = dict(
 )
 
 CANCION['piano1']['bloques'] = list(CANCION['piano1']['bloques']) + bloques_extra(
-    'Do mayor', 73, 'E5', 'E4',
+    'Do mayor', 73, 'E5', 'C3',
     'las dos manos muy juntas, las dos en clave de sol',
     desde=4, time_sig=(4, 4), mas=True)
 

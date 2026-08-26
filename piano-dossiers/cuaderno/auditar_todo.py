@@ -55,6 +55,7 @@ CONTRA_LAS_REGLAS = [
     ('auditar_vocabulario.py', True, 'no se habla de lo que no se dibuja'),
     ('auditar_andamio.py', False, 'el andamio inventado no se repite entre piezas'),
     ('auditar_indice.py', True, 'el índice y la ficha dicen lo mismo que la pieza'),
+    ('auditar_registro.py', True, 'ninguna nota cuelga de más de dos líneas adicionales'),
 ]
 
 

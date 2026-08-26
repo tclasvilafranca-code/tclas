@@ -342,6 +342,8 @@ CANCION = dict(
 
 _S1, _S2, _S3 = sistemas_extra('Re mayor', 'D4', 'D3', time_sig=(4, 4),
                                variante=49, letras=('c', 'd', 'c', 'd', 'c'))
+_S4, _S5, _S6 = sistemas_extra('Re mayor', 'A3', 'A2', time_sig=(4, 4),
+                               variante=17, letras=('e', 'f', 'e', 'f', 'e'))
 _PASOS = [b for b in CANCION['piano1']['bloques']
           if b.get('num') and not b.get('semis')]
 _PASOS[0]['sistemas'] = list(_PASOS[0]['sistemas']) + _S1
@@ -351,6 +353,13 @@ if len(_PASOS) > 1:
 # bloque nuevo de semicorcheas hace falta para llenar la ultima hoja.
 if len(_PASOS) > 2:
     _PASOS[2]['sistemas'] = list(_PASOS[2]['sistemas']) + _S3
+# Y una tanda mas, del mismo sitio: al encajar el material de apoyo en su
+# pentagrama (ver relleno._encajar) los sistemas bajaron de altura y las hojas
+# 1 y 4 se quedaron cortas. Se llena con lo que ya existe, no con material
+# nuevo inventado.
+_PASOS[0]['sistemas'] = list(_PASOS[0]['sistemas']) + _S4
+if len(_PASOS) > 1:
+    _PASOS[1]['sistemas'] = list(_PASOS[1]['sistemas']) + _S5
 
 # La escalera de tempo pasa de la segunda hoja de estudio a la primera: es
 # papel, no pentagrama, así que se mueve sin perder nada, y con ella fuera la
@@ -367,8 +376,9 @@ if _ESC:
 CANCION['piano1']['bloques'] = list(CANCION['piano1']['bloques']) + bloques_extra(
     'Re mayor', 64, 'D4', 'D3',
     'la mano en el tono antes de los tresillos',
-    desde=5, time_sig=(4, 4)) + [
-    bloque_tresillos('Re mayor', 4, 'D4', 'los tresillos marcados con un 3', time_sig=(4, 4))]
+    desde=5, time_sig=(4, 4), mas=True) + [
+    bloque_tresillos('Re mayor', 4, 'D4', 'los tresillos marcados con un 3',
+                     time_sig=(4, 4))]
 
 if __name__ == '__main__':
     print('generado', construir(CANCION))

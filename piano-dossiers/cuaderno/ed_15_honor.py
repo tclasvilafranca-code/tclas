@@ -173,7 +173,8 @@ CANCION = dict(
                           events=[sil('h.'), sil('h.'), n('C#4'), n('F#4'), n('A4'),
                                   n('F#4', 'h.')],
                           key_sig=FASM, bars=4, show_time=False),
-                     dict(cap='c) y las dos manos: abajo aguanta, arriba entra',
+                     dict(cap='c) y las dos manos: abajo la misma nota compás a compás —en tu partitura va '
+                              'ligada, se toca una vez— y arriba la entrada',
                           events=[ac(('F#2',), 'h.'), ac(('F#2',), 'h.'),
                                   ac(('F#2', 'C#4')), ac(('F#4',)), ac(('A4',)),
                                   ac(('F#2', 'F#4'), 'h.')],

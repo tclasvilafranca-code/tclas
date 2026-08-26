@@ -15,6 +15,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from me_comun import n, ac, sil
 
 HERE = os.path.dirname(__file__)
@@ -124,15 +125,21 @@ CANCION = dict(
                  pista='andamio · la izquierda no cambia nada cuando la derecha entra · despacio',
                  sistemas=[
                      dict(cap='a) la izquierda sigue igual y entra la derecha',
-                          events=[n('A2', 'h.'), n('A2', 'h.'), ac(('A2', 'C#5'), 'h.')],
-                          bars=3, clef='bass'),
+                          events=[n('A2', 'h.'), n('A2', 'h.'), ac(('A2', 'C#5'), 'h.'),
+                                  ac(('A2', 'B4'), 'h.')],
+                          bars=4, manos='dobla'),
                      dict(cap='b) y con la frase que sigue',
                           events=[ac(('A2', 'D5'), 'h.'), ac(('A2', 'C#5'), 'h.')],
-                          bars=2, clef='bass', show_time=False),
+                          bars=2, manos='dobla', show_time=False),
                  ]),
         ],
     ),
 )
+
+CANCION['piano1']['bloques'] = list(CANCION['piano1']['bloques']) + bloques_extra(
+    'La mayor', 22, 'A4', 'A2',
+    'la izquierda sostiene mientras la derecha entra',
+    desde=4, time_sig=(3, 4), mas=True)
 
 if __name__ == '__main__':
     print('generado', construir(CANCION))

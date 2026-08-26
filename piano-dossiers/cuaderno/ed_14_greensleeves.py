@@ -163,7 +163,7 @@ CANCION = dict(
             dict(num=3, titulo='Las dos manos, con la izquierda una octava más abajo',
                  pista='andamio en La menor · el mismo dibujo, colocado donde se puede escribir',
                  sistemas=[
-                     dict(cap='a) la derecha aguanta dos tiempos y la izquierda sigue andando',
+                     dict(cap='a) la derecha toca en el uno y en el tres, y la izquierda no para',
                           events=[ac(('A2', 'C5')), ac(('C3',)), ac(('E3', 'D5')),
                                   ac(('A2', 'E5')), ac(('C3',)), ac(('E3',))],
                           bars=2, manos='dobla'),
@@ -172,7 +172,7 @@ CANCION = dict(
                                   ac(('A2', 'D5'), 'h.')],
                           bars=2, manos='dobla', show_time=False),
                      dict(cap='c) y con la anacrusa delante: cuenta un compás y entra en el tres',
-                          events=[ac(('A4',), 'h'), ac(('A4',)),
+                          events=[sil('h'), ac(('A4',)),
                                   ac(('A2', 'C5')), ac(('C3',)), ac(('E3', 'D5'))],
                           bars=2, manos='dobla', show_time=False),
                  ]),

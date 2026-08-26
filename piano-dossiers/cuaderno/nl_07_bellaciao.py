@@ -135,7 +135,7 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) sube y baja · el tercer grado es Si bemol, y es lo que hace que '
                               'suene menor',
-                          events=arpegio('Sol menor', 'G3'), bars=2, clef='bass'),
+                          events=arpegio('Sol menor', 'G2'), bars=2, clef='bass'),
                  ]),
             dict(num=4, titulo='Las dos manos, con la izquierda sosteniendo',
                  pista='andamio en Sol menor · tu izquierda no es el motor: el motor es el Piano 2',

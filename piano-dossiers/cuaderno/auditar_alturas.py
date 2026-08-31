@@ -51,7 +51,7 @@ sys.path.insert(0, os.path.join(HERE, '..', 'engine'))
 import auditar_tonalidad as at                                      # noqa: E402
 import medir_arranque as ma                                         # noqa: E402
 
-PREFIJOS = ['arnau', 'lu', 'jm', 'ed', 'me', 'is', 'jp', 'nl', 'dilan', 'eva']
+PREFIJOS = ['arnau', 'lu', 'jm', 'ed', 'me', 'is', 'jp', 'nl', 'ai', 'dilan', 'eva']
 
 # Una fila entra en la comprobacion si dice que las alturas salen del papel y NO
 # dice que sea andamio. La palabra manda: en este proyecto "andamio" significa
@@ -70,6 +70,35 @@ MIRADAS = {
     # aflojar el detector: al probar a aflojarlo aparecio un Fa5 fantasma en
     # *Los aristogatos* que era la palabra "Adagio".
     'Eso que tu me das.pdf': ['C5', 'G4', 'C5', 'G4', 'C5'],
+
+    # --- We Wish You a Merry Christmas, mirado el 31 de agosto de 2026 ----
+    #
+    # El lector devuelve ['G4', 'D4'] y no es eso: la pieza empieza con una
+    # ANACRUSA de una negra, y al detector le cuadra el primer compas con la
+    # anacrusa dentro. Medido a 300 ppp, y comprobado ademas contra la letra
+    # impresa debajo (que es la mejor prueba que hay: cada silaba tiene su
+    # nota), la entrada es:
+    #
+    #     anacrusa   Re4                    negra          "1.We"
+    #     c. 1       Sol4                   negra          "wish"
+    #                Sol4 · La4             corcheas       "you a"
+    #                Sol4 · Fa#4            corcheas       "mer-ry"
+    #     c. 2       Mi4 · Mi4 · Mi4        negras         "Christ-mas, We"
+    #
+    # Los Fa van a la tecla negra porque la armadura trae un sostenido.
+    # Esta lectura destapo que las citas de Isaac y de Merce decian
+    # Re4 · Sol4 · La4 · Si4(blanca con puntillo), que no es lo impreso: ni
+    # el ritmo ni las alturas. La aritmetica cuadraba (1+1+1+3 = dos compases
+    # de 3/4) y por eso no la cazo ningun auditor.
+    # La lista arranca en el COMPAS 1, sin la anacrusa: una fila de la ficha
+    # tiene que sumar compases enteros, y anacrusa mas dos compases son siete
+    # tiempos en un 3/4. La anacrusa se cuenta en la prosa de la ficha, que es
+    # donde se explica; dibujarla con dos silencios delante seria inventarse
+    # dos tiempos que el papel no imprime.
+    'WE WISH YOU A MERRY CHRISTMAS.pdf':
+        ['G4', 'G4', 'A4', 'G4', 'F#4', 'E4', 'E4', 'E4'],
+    'We Wish You a Merry Christmas.pdf':
+        ['G4', 'G4', 'A4', 'G4', 'F#4', 'E4', 'E4', 'E4'],
 
     # --- las cinco de Eduard, miradas el 26 de agosto de 2026 ---------------
     #

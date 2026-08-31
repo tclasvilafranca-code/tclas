@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
 from relleno import bloques_extra
-from me_comun import n, ac, sil
+from me_comun import n, ac, sil, corch
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -43,8 +43,9 @@ CANCION = dict(
                ('Compás', '3/4'), ('Empieza', 'Antes del compás'),
                ('Trae', 'Letras de acorde')],
         titulo_ritmos='Letras de acorde encima de la melodía',
-        pie_ritmos='Andamio en Sol mayor. Lo literal es la entrada: una sola negra antes del primer '
-                   'compás completo, y las letras de acorde marcando la izquierda.',
+        pie_ritmos='MEDIDO en tu partitura a 300 puntos por pulgada, y comprobado contra la letra '
+                   'impresa debajo: cada sílaba tiene su nota. Arriba, la anacrusa y los dos '
+                   'primeros compases. Abajo, andamio en Sol mayor sobre las letras de acorde.',
         armonia=dict(
             titulo='Lo que trae esta pieza',
             tarjetas=[
@@ -64,9 +65,10 @@ CANCION = dict(
                 'pidiendo un "pudin de Navidad" a cambio de la canción.',
         ),
         ritmos=[
-            ('MANO DERECHA', 'anacrusa y melodía · literal',
-             [n('D4'), n('G4'), n('A4'), n('B4', 'h.')], OCRE, 'treble', None),
-            ('MANO IZQUIERDA', 'acordes con la letra impresa · literal',
+            ('MANO DERECHA', 'los cc. 1 y 2 · MEDIDO · antes va la anacrusa',
+             [n('G4')] + corch(['G4', 'A4']) + corch(['G4', 'F#4'])
+             + [n('E4'), n('E4'), n('E4')], OCRE, 'treble', None),
+            ('MANO IZQUIERDA', 'andamio sobre las letras de acorde impresas',
              [ac(('E2', 'G2'), 'h.'), ac(('F2', 'A2'), 'h.')], AZUL, 'bass', None),
         ],
         especial=[

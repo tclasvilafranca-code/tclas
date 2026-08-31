@@ -173,14 +173,28 @@ def escala(tono, desde, notas=8, sentido='sube', figura='q', **extra):
     """Los grados de la tonalidad, seguidos, desde la nota que se le diga.
 
        Es el ejercicio mas viejo que hay y sigue siendo el que mas arregla:
-       coloca la mano en el tono de la pieza antes de tocarla."""
+       coloca la mano en el tono de la pieza antes de tocarla.
+
+       AL LLEGAR A LA OCTAVA, DA LA VUELTA. Con `notas` <= 8 esto no cambia
+       nada; con mas, si. Un compas de 12/8 lleno de corcheas son DOCE notas, y
+       en linea recta eso es octava y media: del Sol4 al Re6 en clave de sol,
+       o sea tres lineas adicionales por arriba, y bajarlo entero una octava lo
+       saca por abajo. No hay sitio, asi que no es cosa de mover el sistema
+       —que es lo que hace `_encajar`— sino de no escribirlo asi: una escala
+       que sube la octava y se vuelve es lo que se toca de toda la vida, cabe
+       siempre, y de propina obliga a pasar el pulgar en los dos sentidos."""
     letra, _alt, octava = _parte(desde)
     fuera = []
-    for k in range(notas):
-        paso = k if sentido == 'sube' else -k
-        l, o = _sube(letra, octava, paso)
+    paso, direccion = 0, 1
+    for _ in range(notas):
+        l, o = _sube(letra, octava, paso if sentido == 'sube' else -paso)
         fuera.append(dict(pitch=_en_tono(tono, l, o), dur=figura,
                           tecnica=True, **extra))
+        if direccion > 0 and paso >= 7:
+            direccion = -1
+        elif direccion < 0 and paso <= 0:
+            direccion = 1
+        paso += direccion
     return fuera
 
 

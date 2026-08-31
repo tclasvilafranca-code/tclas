@@ -132,18 +132,18 @@ CANCION = dict(
                      dict(cap='a) el acorde de Re desplegado, subiendo y bajando · en corcheas',
                           events=corch(['D3', 'F#3']) + corch(['A3', 'D4']) + corch(['A3', 'F#3']),
                           matiz='mp',
-                          bars=1),
+                          bars=1, clef='bass'),
                      dict(cap='b) y dos compases seguidos, sin parar entre ellos · el hueco entre '
                               'compás y compás es donde todo el mundo respira, y aquí no se puede',
                           events=corch(['D3', 'F#3']) + corch(['A3', 'D4']) +
                                  corch(['A3', 'F#3']) + corch(['D3', 'F#3']) +
                                  corch(['A3', 'D4']) + corch(['A3', 'F#3']),
-                          bars=2, show_time=False),
+                          bars=2, clef='bass', show_time=False),
                      dict(cap='c) y cambiando de acorde, que es lo que pasa de verdad · de Re a Sol',
                           events=corch(['D3', 'F#3']) + corch(['A3', 'F#3']) +
                                  corch(['A3', 'D4']) + corch(['G2', 'B2']) +
                                  corch(['D3', 'G3']) + corch(['D3', 'B2']),
-                          bars=2, show_time=False),
+                          bars=2, clef='bass', show_time=False),
                      dict(cap='d) y con la mano abierta hasta la octava, que es donde llega tu '
                               'partitura en la segunda línea',
                           events=corch(['D3', 'A3']) + corch(['D4', 'A3']) +

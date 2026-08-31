@@ -47,7 +47,7 @@ sys.path.insert(0, os.path.join(HERE, '..', 'engine'))
 
 import hoja_piano                                                # noqa: E402
 
-PREFIJOS = ['arnau', 'lu', 'jm', 'ed', 'me', 'is', 'jp', 'nl', 'dilan', 'eva']
+PREFIJOS = ['arnau', 'lu', 'jm', 'ed', 'me', 'is', 'jp', 'nl', 'ai', 'dilan', 'eva']
 
 _ORDEN = 'CDEFGAB'
 
@@ -63,6 +63,9 @@ TOPES = {
 EXCEPCIONES = {
     ('arnau_14_bonnie', 'G4'): 'el cruce de manos: lo toca la IZQUIERDA por encima, '
                                'y en clave de sol no se vería de quién es',
+    ('ai_10_beginning', 'E6'): 'es la nota mas aguda del c. 4, y en SU edicion esta impresa '
+                               'igual, con tres lineas adicionales. Bajarla una octava seria '
+                               'contarle otra pieza; el ejercicio es justo leer esa cima',
 }
 
 

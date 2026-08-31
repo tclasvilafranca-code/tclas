@@ -38,6 +38,15 @@ UMBRAL = 20
 # la misma comprobacion en los dos sentidos que las 157 medibles. Mirarlas y
 # no anotar el resultado seria mirarlas para nada.
 MIRADAS = {
+    # --- Aida --------------------------------------------------------------
+    # Su *Boig per tu* es un escaneo: el PDF lleva dentro una imagen de 86 ppi
+    # y a esa resolucion las dos barras de una semicorchea no existen. Mirado
+    # a tamano grande el 31 de agosto de 2026, sistema a sistema: corcheas
+    # sueltas y de dos en dos, negras con puntillo, blancas y acordes largos
+    # en la izquierda. Ni una barra doble en toda la pagina.
+    'Boig per tu.pdf': (False, 'corcheas, negras con puntillo y acordes largos · '
+                               'ni una barra doble'),
+
     # --- Arnau: casi todo son ediciones de iniciacion sin una sola barra doble
     'Chopsticks.pdf': (False, 'negras y blancas · ni una barra en toda la pieza'),
     'Clementine.pdf': (False, 'corcheas unidas de dos en dos · una sola barra'),

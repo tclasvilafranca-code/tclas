@@ -343,6 +343,31 @@ LEIDO = {
     'ed_17_pianoman':          (3, 4),
     'ed_18_clock':             (4, 4),
     'ed_19_toreador':          (4, 4),
+
+    # --- AIDA -------------------------------------------------------
+    # Leidas el 31 de agosto de 2026 sobre los PDF de SU carpeta de
+    # Drive, recorte a recorte. Diez de las diecinueve son el mismo
+    # fichero que el de otro alumno (md5 comprobado) y por eso repiten
+    # exactamente la lectura que ya estaba anotada.
+    'ai_01_romance':           (2, 2),
+    'ai_02_scherzo':           (3, 4),
+    'ai_03_wewishyou':         (3, 4),
+    'ai_04_canthelp':          (3, 4),
+    'ai_05_what':              (4, 4),
+    'ai_06_counting':          (4, 4),
+    'ai_07_perfect':           (12, 8),
+    'ai_08_boig':              (4, 4),
+    'ai_09_kiss':              (4, 4),
+    'ai_10_beginning':         (6, 8),
+    'ai_11_titanic':           (2, 4),
+    'ai_12_hijoluna':          (6, 8),
+    'ai_13_carol':             (3, 4),
+    'ai_14_silence':           (4, 4),
+    'ai_15_gladiator':         (4, 4),
+    'ai_16_unbeso':            (4, 4),
+    'ai_17_pachelbel':         (4, 4),
+    'ai_18_preludio':          (4, 4),
+    'ai_19_acomme':            (4, 4),
 }
 
 

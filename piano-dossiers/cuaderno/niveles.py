@@ -23,7 +23,11 @@
 """
 
 # Duraciones ordenadas de larga a corta, para poder decir "hasta aqui".
-ORDEN = ['w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's.', 's']
+# La redonda con puntillo ('w.') abre la lista porque es la figura mas larga
+# del motor: seis tiempos, lo que llena un compas de 12/8. Entro con el
+# Perfect de Aida y esta en TODOS los escalones a proposito -- una nota que
+# dura un compas entero no es dificultad de lectura, es lo contrario.
+ORDEN = ['w.', 'w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's.', 's']
 
 
 # Lo que de verdad separa un escalon de otro NO es prohibir la corchea —las
@@ -49,8 +53,8 @@ ORDEN = ['w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's.', 's']
 NIVELES = {
     1: dict(
         nombre='Lo básico, sin prisa',
-        figuras={'w', 'h.', 'h', 'q.', 'q', 'e'},
-        silencios={'w', 'h.', 'h', 'q.', 'q', 'e'},
+        figuras={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e'},
+        silencios={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e'},
         max_notas_acorde=3,
         max_corcheas_seguidas=8,
         recursos={'lig', 'matiz', 'art', 'cresc', 'dim'},
@@ -61,8 +65,8 @@ NIVELES = {
     ),
     2: dict(
         nombre='La corchea se asienta',
-        figuras={'w', 'h.', 'h', 'q.', 'q', 'e.', 'e'},
-        silencios={'w', 'h.', 'h', 'q.', 'q', 'e'},
+        figuras={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e.', 'e'},
+        silencios={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e'},
         max_notas_acorde=3,
         max_corcheas_seguidas=12,
         recursos={'lig', 'matiz', 'art', 'cresc', 'dim', 'tresillo'},
@@ -72,8 +76,8 @@ NIVELES = {
     ),
     3: dict(
         nombre='Empieza a correr',
-        figuras={'w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's'},
-        silencios={'w', 'h.', 'h', 'q.', 'q', 'e', 's'},
+        figuras={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's'},
+        silencios={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e', 's'},
         max_notas_acorde=4,
         max_corcheas_seguidas=16,
         recursos={'lig', 'matiz', 'art', 'cresc', 'dim', 'tresillo', 'pedal'},
@@ -83,8 +87,8 @@ NIVELES = {
     ),
     4: dict(
         nombre='El exigente',
-        figuras={'w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's.', 's'},
-        silencios={'w', 'h.', 'h', 'q.', 'q', 'e', 's'},
+        figuras={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's.', 's'},
+        silencios={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e', 's'},
         max_notas_acorde=4,
         max_corcheas_seguidas=24,
         recursos={'lig', 'matiz', 'art', 'tresillo', 'cresc', 'dim', 'pedal'},
@@ -94,8 +98,8 @@ NIVELES = {
     ),
     5: dict(
         nombre='Los avanzados',
-        figuras={'w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's.', 's'},
-        silencios={'w', 'h.', 'h', 'q.', 'q', 'e', 's'},
+        figuras={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's.', 's'},
+        silencios={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e', 's'},
         max_notas_acorde=5,
         max_corcheas_seguidas=99,
         recursos={'lig', 'matiz', 'art', 'tresillo', 'cresc', 'dim', 'pedal'},
@@ -122,6 +126,8 @@ ESCALON = {
     'isaac': 3,          # nivel medio "con cana": sube mas rapido, techo mas bajo
     'nel': 3,            # doce anos, mismo repertorio que Josep
     'josep': 4,          # la edad de Jose Maria y mas anos de clase; le gustan los retos
+    'aída': 4,           # unos 40 anos y piano de antes: el nivel de Josep, pero el
+    'aida': 4,           # album esta ordenado para asentar bases antes de correr
     'dilan': 5,
     'eva': 5,
 }

@@ -34,13 +34,13 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, '..', 'output')
 
 ALUMNOS = ['arnau', 'luisa', 'josemaria', 'eduard', 'merce',
-           'isaac', 'josep', 'nel', 'dilan', 'eva']
+           'isaac', 'josep', 'nel', 'aida', 'dilan', 'eva']
 
 # prefijo de modulo -> nombre del auditor por alumno. Los dos nombres no
 # coinciden (el prefijo es corto porque va en el nombre de 199 ficheros).
 PREFIJO = {'arnau': 'arnau', 'lu': 'luisa', 'jm': 'josemaria', 'ed': 'eduard',
            'me': 'merce', 'is': 'isaac', 'jp': 'josep', 'nl': 'nel',
-           'dilan': 'dilan', 'eva': 'eva'}
+           'ai': 'aida', 'dilan': 'dilan', 'eva': 'eva'}
 
 # (script, acepta prefijos, que comprueba)
 CONTRA_LA_PARTITURA = [

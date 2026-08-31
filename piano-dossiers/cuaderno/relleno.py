@@ -227,10 +227,15 @@ def giro(tono, centro, figura='q', notas=None, **extra):
 
 def figura_compas(time_sig):
     """La figura que llena un compas entero: redonda en 4/4, blanca con
-       puntillo en 3/4 y en 6/8, blanca en 2/4. Poner una redonda en un compas
-       de tres es el fallo mas tonto y el mas facil de colar."""
+       puntillo en 3/4 y en 6/8, blanca en 2/4 y REDONDA CON PUNTILLO en 12/8.
+       Poner una redonda en un compas de tres es el fallo mas tonto y el mas
+       facil de colar.
+
+       El 12/8 valia seis tiempos y devolvia 'w', que son cuatro: el compas se
+       quedaba a medias y el auditor lo cantaba. Salio con el Perfect de Aida,
+       que es la primera pieza del proyecto escrita en 12/8."""
     bpb = time_sig[0] * (4.0 / time_sig[1])
-    return {4.0: 'w', 3.0: 'h.', 2.0: 'h', 1.5: 'q.', 6.0: 'w'}.get(round(bpb, 2), 'w')
+    return {4.0: 'w', 3.0: 'h.', 2.0: 'h', 1.5: 'q.', 6.0: 'w.'}.get(round(bpb, 2), 'w')
 
 
 def cadencia(tono, bajo, figura='w', inversion=0):

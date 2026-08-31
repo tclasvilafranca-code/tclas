@@ -359,6 +359,31 @@ LEIDO = {
     'ed_17_pianoman':          '0',        # dice Do mayor
     'ed_18_clock':             '1 SOST',   # dice Sol mayor
     'ed_19_toreador':          '1 BEM',    # dice Fa mayor
+
+    # --- AIDA -------------------------------------------------------
+    # Leidas el 31 de agosto de 2026 sobre los PDF de SU carpeta de
+    # Drive, recorte a recorte. Diez de las diecinueve son el mismo
+    # fichero que el de otro alumno (md5 comprobado) y por eso repiten
+    # exactamente la lectura que ya estaba anotada.
+    'ai_01_romance':           '0',        # dice Do mayor
+    'ai_02_scherzo':           '0',        # dice Do mayor
+    'ai_03_wewishyou':         '1 SOST',   # dice Sol mayor
+    'ai_04_canthelp':          '2 SOST',   # dice Re mayor
+    'ai_05_what':              '0',        # dice Do mayor
+    'ai_06_counting':          '0',        # dice Do mayor
+    'ai_07_perfect':           '1 SOST',   # dice Sol mayor
+    'ai_08_boig':              '0',        # dice La menor
+    'ai_09_kiss':              '0',        # dice Do mayor
+    'ai_10_beginning':         '0',        # dice Do mayor
+    'ai_11_titanic':           '0',        # dice Do mayor
+    'ai_12_hijoluna':          '1 BEM',    # dice Re menor
+    'ai_13_carol':             '2 BEM',    # dice Sol menor
+    'ai_14_silence':           '1 BEM',    # dice Re menor
+    'ai_15_gladiator':         '1 SOST',   # dice Mi menor
+    'ai_16_unbeso':            '1 BEM',    # dice Fa mayor
+    'ai_17_pachelbel':         '2 SOST',   # dice Re mayor
+    'ai_18_preludio':          '0',        # dice Do mayor
+    'ai_19_acomme':            '1 SOST',   # dice Mi menor
 }
 
 

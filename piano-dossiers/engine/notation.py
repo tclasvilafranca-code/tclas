@@ -272,7 +272,10 @@ def draw_note(c, cx, staff_bottom_y, staff_top_y, gap, pitch, dur='q', stem_dir=
     if stem_dir is None:
         stem_dir = 'down' if cy > staff_bottom_y + 2 * gap else 'up'
     stem_len = gap * 3.4
-    if dur != 'w':
+    # Ni la redonda ni la redonda con puntillo llevan plica. La comparacion
+    # tiene que ser contra la figura BASE: con `dur != 'w'` a secas, la 'w.'
+    # salia con plica, que no existe en ninguna edicion.
+    if dur.rstrip('.') != 'w':
         c.setStrokeColor(INK)
         c.setLineWidth(max(1.3, gap * 0.115))
         if stem_dir == 'up':
@@ -356,7 +359,7 @@ def draw_chord(c, cx, staff_bottom_y, staff_top_y, gap, pitches, dur='h', clef='
         c.setFillColor(INK)
         for cy in cys:
             c.circle(cx + gap * 1.05, cy + gap * 0.15, gap * 0.14, fill=1, stroke=0)
-    if dur != 'w':
+    if dur.rstrip('.') != 'w':
         avg = sum(cys) / len(cys)
         stem_dir = 'down' if avg > staff_bottom_y + 2 * gap else 'up'
         c.setStrokeColor(INK)
@@ -415,7 +418,11 @@ def draw_beam(c, x1, y1, x2, y2, stem_dir='up', gap=9):
 # para que el auditor use EXACTAMENTE la misma tabla que el dibujante: cuando
 # estaban duplicadas, anadir una figura nueva en un sitio y no en el otro hacia
 # que el auditor contase mal los compases sin avisar.
-DUR_BEATS = {'w': 4.0, 'h.': 3.0, 'h': 2.0, 'q.': 1.5, 'q': 1.0,
+# La REDONDA CON PUNTILLO ('w.') vale seis tiempos y es lo que llena un compas
+# de 12/8, que es como esta escrito el Perfect de Aida. Se anadio con la pieza:
+# antes el compas de 12/8 no tenia ninguna figura capaz de llenarlo y
+# `relleno.figura_compas` devolvia una redonda, que se queda a dos tiempos.
+DUR_BEATS = {'w.': 6.0, 'w': 4.0, 'h.': 3.0, 'h': 2.0, 'q.': 1.5, 'q': 1.0,
              'e.': 0.75, 'e': 0.5, 's.': 0.375, 's': 0.25}
 
 # Cuantos corchetes/barras lleva cada figura: la corchea una, la semicorchea dos.
@@ -598,7 +605,7 @@ def ottava_y(gap, events, clef='treble'):
         cys = [note_y(0, gap, p, clef=clef) for p in ps]
         alto = max(alto, max(cys))
         # la plica sube desde la nota mas aguda cuando el grupo esta bajo
-        if e.get('dur') != 'w' and sum(cys) / len(cys) <= 2 * gap:
+        if (e.get('dur') or '').rstrip('.') != 'w' and sum(cys) / len(cys) <= 2 * gap:
             alto = max(alto, max(cys) + gap * 3.4)
     return (alto - top_line) + gap * 0.5
 

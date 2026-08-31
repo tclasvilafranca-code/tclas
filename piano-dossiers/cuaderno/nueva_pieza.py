@@ -35,6 +35,7 @@ ALUMNOS = {
     'josemaria': ('jm', 'José María'), 'eduard': ('ed', 'Eduard'),
     'merce': ('me', 'Mercè'), 'isaac': ('is', 'Isaac'),
     'josep': ('jp', 'Josep'), 'nel': ('nl', 'Nel'),
+    'aida': ('ai', 'Aída'),
     'dilan': ('dilan', 'Dilan'), 'eva': ('eva', 'Eva'),
 }
 

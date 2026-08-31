@@ -1,4 +1,4 @@
-# Eduard · las veinte partituras, medidas
+# Eduard · las diecinueve partituras, medidas
 
 **Rehecho entero el 26 de agosto de 2026.** Hasta ese día el cuaderno de Eduard
 era una copia del de José María: mismo repertorio, mismas diecinueve piezas,
@@ -12,8 +12,17 @@ Y dos más, contestadas después: **la misma estructura que los demás alumnos,
 solo adaptada a su nivel** (no un formato nuevo), y **si alguna partitura del
 dosier antiguo cuadra con el nivel, se aprovecha**.
 
-De ahí salen las veinte piezas: **dieciséis de su carpeta** y **cuatro
-rescatadas** del dosier viejo.
+**Ajustado el 31 de agosto de 2026.** El cliente volvió a pasar el mismo enlace
+de Drive avisando de que había tocado la carpeta. Se volvió a bajar entera y se
+comparó por md5: los dieciséis archivos anteriores estaban **byte a byte
+iguales** y había **uno nuevo**, *"Copia de Puff era un Drac Magic.pdf"* (dentro
+pone *Puff the Magic Dragon*, arreglo de Eric Moore). Con eso decidió:
+
+> *"añade la de puff el drac Magic y quita la de romance de diabelli y deck the
+> halls"*
+
+De ahí salen las diecinueve piezas: **diecisiete de su carpeta** y **dos
+rescatadas** del dosier viejo (America y el Star-Spangled Banner).
 
 ---
 
@@ -45,36 +54,35 @@ no cuadre a la vista, súmala.*
 
 ---
 
-## Las veinte piezas, en orden de cuaderno
+## Las diecinueve piezas, en orden de cuaderno
 
 | # | pieza | compás | armadura | manos | lo nuevo |
 |---|---|---|---|---|---|
 | 1 | Clementine | 3/4 | — | una | anacrusa |
 | 2 | Los Aristogatos | 4/4 | — | una | silencio de blanca de entrada |
 | 3 | Eso que tú me das | 4/4 | — | una | cifrado y letra |
-| 4 | Romance · Diabelli | ¢ | — | dos, al unísono | posición fija, cuatro manos |
-| 5 | America | 3/4 | — | dos | negra con puntillo |
-| 6 | Star-Spangled Banner | 3/4 | — | dos | entrar tras un silencio |
-| 7 | La Pantera Rosa | 4/4 | — | dos, distintas | la izquierda empieza sola |
-| 8 | Nocturno op. 9 nº 2 | 3/4 | — | dos, por turnos | notas de tres tiempos |
-| 9 | The Beginner · Gurlitt | 3/4 | — | dos, al unísono | 8va y reguladores |
+| 4 | America | 3/4 | — | dos | negra con puntillo |
+| 5 | Star-Spangled Banner | 3/4 | — | dos | entrar tras un silencio |
+| 6 | La Pantera Rosa | 4/4 | — | dos, distintas | la izquierda empieza sola |
+| 7 | Nocturno op. 9 nº 2 | 3/4 | — | dos, por turnos | notas de tres tiempos |
+| 8 | The Beginner · Gurlitt | 3/4 | — | dos, al unísono | 8va y reguladores |
+| 9 | Puff, el dragón mágico | 4/4 | — | dos, distintas | un acorde que dura el compás |
 | 10 | Heart and Soul | 4/4 | — | dos, distintas | los cuatro acordes |
 | 11 | I Have a Dream | 4/4 | — | dos, distintas | tempo impreso (120) |
-| 12 | Deck the Halls | 4/4 | 1 ♭ | dos | el primer bemol |
-| 13 | Villancicos a cuatro manos | 4/4 | — | dos, las dos en sol | dos claves de sol |
-| 14 | Greensleeves | 3/4 | — | dos, distintas | La menor y el acorde roto |
-| 15 | Honor Him · Gladiator | 3/4 | 3 ♯ | dos, por turnos | la armadura grande |
-| 16 | Rasputin | 4/4 | 2 ♯ | dos | compases callados |
-| 17 | Jingle Bell Rock | 4/4 | — | dos, distintas | cuatro corcheas y ligadura |
-| 18 | Piano Man | 3/4 | — | dos, por turnos | más silencios que notas |
-| 19 | My Grandfather's Clock | 4/4 | 1 ♯ | dos | **reto** de fin de curso |
-| 20 | Toreador · Bizet | 4/4 | 1 ♭ | dos | **reto** de fin de curso |
+| 12 | Villancicos a cuatro manos | 4/4 | — | dos, las dos en sol | dos claves de sol |
+| 13 | Greensleeves | 3/4 | — | dos, distintas | La menor y el acorde roto |
+| 14 | Honor Him · Gladiator | 3/4 | 3 ♯ | dos, por turnos | la primera armadura |
+| 15 | Rasputin | 4/4 | 2 ♯ | dos | compases callados |
+| 16 | Jingle Bell Rock | 4/4 | — | dos, distintas | cuatro corcheas y ligadura |
+| 17 | Piano Man | 3/4 | — | dos, por turnos | más silencios que notas |
+| 18 | My Grandfather's Clock | 4/4 | 1 ♯ | dos | **reto** de fin de curso |
+| 19 | Toreador · Bizet | 4/4 | 1 ♭ | dos | **reto** de fin de curso |
 
-Las cuatro **rescatadas del dosier antiguo** son la 4, la 5, la 6 y la 12. Las
-otras dieciséis salen de su carpeta nueva. Y **siete comparten fichero con otro
-alumno, byte a byte** (comprobado por md5): las cuatro rescatadas más Rasputin,
-el Grandfather's Clock y el Toreador — esas tres estaban en las dos carpetas con
-nombres distintos y resultaron ser el mismo archivo. Eso es lo que vigila
+Las dos **rescatadas del dosier antiguo** son la 4 y la 5. Las otras diecisiete
+salen de su carpeta nueva. Y **cinco comparten fichero con otro alumno, byte a
+byte** (comprobado por md5): las dos rescatadas más Rasputin, el Grandfather's
+Clock y el Toreador — esas tres estaban en las dos carpetas con nombres
+distintos y resultaron ser el mismo archivo. Eso es lo que vigila
 `cruzar_eduard.py`: pueden compartir la **cita literal medida**, nunca el
 **andamio inventado**.
 
@@ -106,6 +114,13 @@ nada.
 | Piano Man | el **silencio de blanca** es un rectángulo macizo y pasa por cabeza de nota | (silencio) Fa4 · Fa4 · Sol4 |
 | Villancicos 4 manos | a cuatro manos las divisorias no unen los pentagramas del Primo | Mi5 · Mi5 · Mi5 |
 
+Y una más, la de *Puff*, que no está en esa tabla porque el lector **sí** leyó
+bien su pentagrama de arriba: lo que no supo leer fue el de abajo. Dos redondas
+a distancia de tercera, una encima de otra, dibujan **un ocho**, y el detector
+devuelve los cuatro bordes de los dos agujeros en vez de los dos centros (en el
+c. 3 daba La3, Sol3, Fa3 y Mi3). Se miró a ocho aumentos, con las líneas del
+pentagrama marcadas en rojo: son **Do3+Mi3, Mi3+Sol3 y Fa3+La3**.
+
 Y una sexta que ya estaba: *Eso que tú me das*, cuya edición pega la cifra de
 compás a la música y se come la primera nota.
 
@@ -117,16 +132,23 @@ compás a la música y se come la primera nota.
   simplificación nuestra: sus tres partituras traen un solo pentagrama. Es la
   única forma decente de empezar con un adulto que no ha tocado nunca — una
   cosa cada vez.
-- **Las dos manos entran en la 4, y haciendo lo mismo.** Romance de Diabelli y
-  The Beginner de Gurlitt son al unísono: se lee una melodía y se toca dos
-  veces. Entre las dos está el salto real, que es la 7 (*La Pantera Rosa*), donde
-  por primera vez cada mano hace lo suyo — y el arreglo lo pone fácil dejando
-  que la izquierda entre sola y regalando tres compases para colocar la derecha.
-- **La armadura no aparece hasta la 12.** Once piezas sin un solo sostenido ni
-  bemol. Cuando llega, llega de una en una: un bemol (12), después La menor sin
-  alteraciones (14), después tres sostenidos (15).
+- **La izquierda entra en la 4 y en la 5, y solo apoya.** America y el
+  Star-Spangled Banner ponen una nota por compás debajo de la melodía: la mano
+  se coloca, toca una vez y aguanta. El salto real es la 6 (*La Pantera Rosa*),
+  donde por primera vez cada mano hace lo suyo — y el arreglo lo pone fácil
+  dejando que la izquierda entre sola y regalando tres compases para colocar la
+  derecha.
+- **La 8 es un descanso a propósito.** *The Beginner* va al unísono: se lee una
+  melodía y se toca dos veces. Va justo detrás de las dos primeras piezas en que
+  cada mano lleva lo suyo, y de ahí se sale a *Puff*, donde vuelven a separarse
+  pero con la izquierda más fácil de todo el cuaderno: dos teclas, una vez por
+  compás, y aguantar.
+- **La armadura no aparece hasta la 14.** Trece piezas sin un solo sostenido ni
+  bemol. Primero llega el modo menor **sin** alteraciones (13, *Greensleeves*),
+  después tres sostenidos (14), después dos (15), y el único bemol del cuaderno
+  es el del Toreador, en la 19.
 - **Los villancicos se adelantan a noviembre y diciembre** en el plan de curso
   aunque en el cuaderno estén en otro sitio. En enero no sirven.
-- **Tres de las veinte son duetos** (4, 9 y 13), y por eso su hoja semanal lleva
+- **Dos de las diecinueve son duetos** (8 y 12), y por eso su hoja semanal lleva
   el bloque `a_cuatro_manos`: qué acordar con la otra persona antes de empezar.
   Un dueto no se estudia solo.

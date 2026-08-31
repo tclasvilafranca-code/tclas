@@ -11,10 +11,10 @@
      - `escalera` y `cifrado` los usa ya Jose Maria en su hoja de trabajo
        semanal (el metronomo por escalones, y las letras de acorde cuando la
        edicion las imprime);
-     - `a_cuatro_manos` hace falta porque TRES de sus veinte piezas son duetos
-       (el Romance de Diabelli, The Beginner de Gurlitt y los villancicos a
-       cuatro manos), y en un dueto hay cosas que acordar antes de tocar que no
-       caben en ningun otro bloque.
+     - `a_cuatro_manos` hace falta porque DOS de sus diecinueve piezas son
+       duetos (The Beginner de Gurlitt y los villancicos de Navidad), y en un
+       dueto hay cosas que acordar antes de tocar que no caben en ningun otro
+       bloque.
 
    Lo que NO se importa es `reto`, que es del piano1 exigente de Josep.
 """

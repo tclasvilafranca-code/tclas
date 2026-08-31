@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""La Pantera Rosa — pieza 7 de Eduard. Formato ADULTO.
+"""La Pantera Rosa — pieza 6 de Eduard. Formato ADULTO.
 
    La PRIMERA pieza del cuaderno con las dos manos escritas, y esta elegida
    justo por como empieza.
@@ -53,7 +53,7 @@ ENTRADA = [sil('w'), sil('q'), sil('q'), sil('q'), n('C4')]
 BAJO = [n('C3', 'h'), n('G3', 'h'), n('C3', 'w')]
 
 CANCION = dict(
-    alumno='Eduard', carpeta='Eduard', num=7, nivel='iniciación',
+    alumno='Eduard', carpeta='Eduard', num=6, nivel='iniciación',
     slug='PanteraRosa', formato='adulto',
     titulo_corto='La Pantera Rosa', time_sig=(4, 4), key_sig=None,
     partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source_new',

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""The Beginner, de Gurlitt — pieza 9 de Eduard. Formato ADULTO. A CUATRO MANOS.
+"""The Beginner, de Gurlitt — pieza 8 de Eduard. Formato ADULTO. A CUATRO MANOS.
 
    Medido sobre el PDF de su carpeta (vectorial, CUATRO pentagramas por
    sistema: dos pianos):
@@ -22,10 +22,11 @@
          c. 3   Mi5 · Re5 · Do5               negra con puntillo, corchea, negra
          c. 4   Re5                           blanca
 
-   POR QUE VA AQUI. Es la segunda pieza del cuaderno en la que las dos manos
-   hacen LO MISMO (la primera fue el Romance de Diabelli), y esta vez con una
-   melodia que se mueve mas. Sirve para lo mismo que la otra: aprender a mover
-   las dos manos juntas sin tener que leer dos cosas distintas a la vez.
+   POR QUE VA AQUI. Es la UNICA pieza del cuaderno en la que las dos manos
+   hacen LO MISMO, y va justo detras de las dos primeras en que cada mano lleva
+   lo suyo (la Pantera y el Nocturno). Es un descanso con sentido: se aprende a
+   mover las dos manos juntas sin tener que leer dos cosas distintas a la vez,
+   y de ahi se sale a Puff, donde vuelven a separarse.
 """
 import os
 import sys
@@ -44,7 +45,7 @@ OCRE = HexColor('#8C6A3F')
 MELODIA = [n('E5'), n('E5'), n('E5'), n('G5', 'h'), n('F5')]
 
 CANCION = dict(
-    alumno='Eduard', carpeta='Eduard', num=9, nivel='iniciación',
+    alumno='Eduard', carpeta='Eduard', num=8, nivel='iniciación',
     slug='TheBeginner', formato='adulto',
     titulo_corto='The Beginner · Gurlitt', time_sig=(3, 4), key_sig=None,
     partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source_new',

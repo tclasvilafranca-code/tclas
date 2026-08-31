@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Greensleeves — pieza 14 de Eduard. Formato ADULTO.
+"""Greensleeves — pieza 13 de Eduard. Formato ADULTO.
 
    Medido sobre el PDF de su carpeta (vectorial, dos pentagramas por sistema):
 
@@ -48,7 +48,7 @@ ARRANQUE = [sil('h'), n('A4'), n('C5', 'h'), n('D5')]
 BAJO = [n('A3'), n('C4'), n('E4'), n('A3'), n('C4'), n('E4')]
 
 CANCION = dict(
-    alumno='Eduard', carpeta='Eduard', num=14, nivel='iniciación',
+    alumno='Eduard', carpeta='Eduard', num=13, nivel='iniciación',
     slug='Greensleeves', formato='adulto',
     titulo_corto='Greensleeves', time_sig=(3, 4), key_sig='La menor',
     partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source_new',

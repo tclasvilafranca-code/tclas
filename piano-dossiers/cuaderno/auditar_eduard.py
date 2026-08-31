@@ -17,12 +17,12 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'
 
 from cancion import auditar
 
-MODULOS = ['ed_01_clementine', 'ed_02_aristogatos', 'ed_03_eso', 'ed_04_romance',
-           'ed_05_america', 'ed_06_banner', 'ed_07_pantera', 'ed_08_nocturno',
-           'ed_09_beginner', 'ed_10_heart', 'ed_11_dream', 'ed_12_deck',
-           'ed_13_navidad', 'ed_14_greensleeves', 'ed_15_honor',
-           'ed_16_rasputin', 'ed_17_jinglerock', 'ed_18_pianoman',
-           'ed_19_clock', 'ed_20_toreador']
+MODULOS = ['ed_01_clementine', 'ed_02_aristogatos', 'ed_03_eso',
+           'ed_04_america', 'ed_05_banner', 'ed_06_pantera', 'ed_07_nocturno',
+           'ed_08_beginner', 'ed_09_puff', 'ed_10_heart', 'ed_11_dream',
+           'ed_12_navidad', 'ed_13_greensleeves', 'ed_14_honor',
+           'ed_15_rasputin', 'ed_16_jinglerock', 'ed_17_pianoman',
+           'ed_18_clock', 'ed_19_toreador']
 
 
 def revisar_nivel(modulos):

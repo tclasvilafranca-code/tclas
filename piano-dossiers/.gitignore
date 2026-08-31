@@ -4,7 +4,11 @@ output/*.pdf
 
 # Partituras originales de alumnos: material con copyright de terceros,
 # no se versiona. Solo se versionan los dosieres generados (derivados).
-students/*/source/
+#
+# El patron lleva el comodin a proposito. Con `students/*/source/` a secas se
+# colaron las dieciseis partituras de Eduard, que viven en `source_new/`:
+# la carpeta se llamo asi al rehacer su album y el .gitignore no la vio.
+students/*/source*/
 
 # Recortes del arranque de las partituras que deja `medir_partitura.py` para
 # poder leer la clave, la armadura y el compas: son trozos de las partituras

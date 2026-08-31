@@ -166,8 +166,8 @@ EXCEPCIONES = {
     # (1 + 0,75 + 0,25 + 1 + 1). Es su partitura y es su pieza mas dificil del
     # curso, puesta ahi a proposito.
     ('jm_15_toreador', 's'): 'el c. 1 de su partitura lleva la semicorchea del ritmo de marcha',
-    ('ed_20_toreador', 's'): 'la misma edición del Toreador, con la misma semicorchea',
-    ('ed_20_toreador', 'e.'): 'la corchea con puntillo de ese mismo ritmo, impresa',
+    ('ed_19_toreador', 's'): 'la misma edición del Toreador, con la misma semicorchea',
+    ('ed_19_toreador', 'e.'): 'la corchea con puntillo de ese mismo ritmo, impresa',
     ('me_25_toreador', 's'): 'la misma edición del Toreador, con la misma semicorchea',
 }
 

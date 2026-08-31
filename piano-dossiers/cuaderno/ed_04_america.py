@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""America (My Country, 'Tis of Thee) — pieza 5 de Eduard. Formato ADULTO.
+"""America (My Country, 'Tis of Thee) — pieza 4 de Eduard. Formato ADULTO.
 
    Lo comprobado sobre el PDF de su carpeta (arr. Gilbert DeBenedetti,
    "Level Two", Gradimi.com, 1 página, 16 compases; el mismo archivo que la
@@ -38,7 +38,7 @@ FRASE = [n('C4'), n('C4'), n('D4'),
          n('E4', 'q.'), {'pitch': 'D4', 'dur': 'e'}, n('C4')]
 
 CANCION = dict(
-    alumno='Eduard', carpeta='Eduard', num=5, nivel='iniciación',
+    alumno='Eduard', carpeta='Eduard', num=4, nivel='iniciación',
     slug='America', formato='adulto',
     titulo_corto='America', time_sig=(3, 4), key_sig=None,
     partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source', 'himno America.pdf'),

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Jingle Bell Rock — pieza 17 de Eduard. Formato ADULTO.
+"""Jingle Bell Rock — pieza 16 de Eduard. Formato ADULTO.
 
    Medido sobre el PDF de su carpeta (vectorial, dos pentagramas por sistema):
 
@@ -46,7 +46,7 @@ ARRANQUE = (corch(['C5', 'C5']) + [n('C5')] + corch(['B4', 'B4']) + [n('B4')])
 BAJO = [n('C3', 'h'), n('G2', 'h'), n('C3', 'h'), n('G2', 'h')]
 
 CANCION = dict(
-    alumno='Eduard', carpeta='Eduard', num=17, nivel='iniciación',
+    alumno='Eduard', carpeta='Eduard', num=16, nivel='iniciación',
     slug='JingleBellRock', formato='adulto',
     titulo_corto='Jingle Bell Rock', time_sig=(4, 4), key_sig=None,
     partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source_new',

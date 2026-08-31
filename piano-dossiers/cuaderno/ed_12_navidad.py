@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Villancicos a cuatro manos — pieza 13 de Eduard. Formato ADULTO.
+"""Villancicos a cuatro manos — pieza 12 de Eduard. Formato ADULTO.
 
    El PDF de su carpeta se llama "Christmas Songs 4 manos" y dentro pone
    *Christmas Songs for Four Little Hands · Jingle Bells + We Wish You A Merry
@@ -59,7 +59,7 @@ ARRANQUE = [n('E5'), n('E5'), n('E5', 'h')]
 BAJO = [n('G4', 'h'), n('E4', 'h'), n('G4', 'h'), n('E4', 'h')]
 
 CANCION = dict(
-    alumno='Eduard', carpeta='Eduard', num=13, nivel='iniciación',
+    alumno='Eduard', carpeta='Eduard', num=12, nivel='iniciación',
     slug='VillancicosCuatroManos', formato='adulto',
     titulo_corto='Villancicos a cuatro manos', time_sig=(4, 4), key_sig=None,
     partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source_new',

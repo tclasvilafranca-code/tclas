@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Rasputin — pieza 16 de Eduard. Formato ADULTO.
+"""Rasputin — pieza 15 de Eduard. Formato ADULTO.
 
    Lo comprobado sobre el PDF de su carpeta (Boney M, descarga de Musescore,
    "Easy piano", 2 páginas; el mismo archivo que la pieza 14 de José María,
@@ -27,7 +27,7 @@ OCRE = HexColor('#8C6A3F')
 SIM = 'Si menor'
 
 CANCION = dict(
-    alumno='Eduard', carpeta='Eduard', num=16, nivel='iniciación',
+    alumno='Eduard', carpeta='Eduard', num=15, nivel='iniciación',
     slug='Rasputin', formato='adulto',
     titulo_corto='Rasputin', time_sig=(4, 4), key_sig=SIM,
     partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source_new', 'Rasputin easy.pdf'),

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Honor Him (Gladiator) — pieza 15 de Eduard. Formato ADULTO.
+"""Honor Him (Gladiator) — pieza 14 de Eduard. Formato ADULTO.
 
    Medido sobre el PDF de su carpeta (vectorial, dos pentagramas por sistema):
 
@@ -52,7 +52,7 @@ ENTRADA = [sil('h.'), sil('h.'), n('C#4'), n('F#4'), n('A4')]
 BAJO = [dict(n('F#2', 'h.'), lig=1), n('F#2', 'h.')]
 
 CANCION = dict(
-    alumno='Eduard', carpeta='Eduard', num=15, nivel='iniciación',
+    alumno='Eduard', carpeta='Eduard', num=14, nivel='iniciación',
     slug='HonorHim', formato='adulto',
     titulo_corto='Honor Him · Gladiator', time_sig=(3, 4), key_sig=FASM,
     partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source_new',

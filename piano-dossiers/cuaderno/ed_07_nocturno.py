@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Nocturno op. 9 nº 2, de Chopin — pieza 8 de Eduard. Formato ADULTO.
+"""Nocturno op. 9 nº 2, de Chopin — pieza 7 de Eduard. Formato ADULTO.
 
    Version muy simplificada, la de su carpeta: el Nocturno original va en Mib
    mayor y en 12/8, y este arreglo lo pasa a 3/4 y a teclas blancas para que
@@ -51,7 +51,7 @@ MELODIA[0] = dict(MELODIA[0], lig=1)
 BAJO = [sil('h'), n('G3'), sil('h.')]
 
 CANCION = dict(
-    alumno='Eduard', carpeta='Eduard', num=8, nivel='iniciación',
+    alumno='Eduard', carpeta='Eduard', num=7, nivel='iniciación',
     slug='NocturnoChopin', formato='adulto',
     titulo_corto='Nocturno op. 9 nº 2', time_sig=(3, 4), key_sig=None,
     partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source_new',

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Piano Man — pieza 18 de Eduard. Formato ADULTO.
+"""Piano Man — pieza 17 de Eduard. Formato ADULTO.
 
    Medido sobre el PDF de su carpeta (vectorial, dos pentagramas por sistema):
 
@@ -44,7 +44,7 @@ ARRANQUE = [sil('h'), n('F4'), n('F4', 'h'), n('G4')]
 BAJO = [sil('h.'), ac(('C3', 'G3'), 'h.')]
 
 CANCION = dict(
-    alumno='Eduard', carpeta='Eduard', num=18, nivel='iniciación',
+    alumno='Eduard', carpeta='Eduard', num=17, nivel='iniciación',
     slug='PianoMan', formato='adulto',
     titulo_corto='Piano Man', time_sig=(3, 4), key_sig=None,
     partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source_new',

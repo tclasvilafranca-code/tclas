@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
-"""Toreador, de Carmen — pieza 20 de Eduard. Formato ADULTO.
+"""Toreador, de Carmen — pieza 19 de Eduard. Formato ADULTO.
 
    Lo comprobado sobre el PDF de su carpeta (Georges Bizet, arreglo de
    Gilbert DeBenedetti, "Level Four", 1 página; el mismo archivo que la
    pieza 15 de José María, byte a byte):
 
-     - FA MAYOR: un bemol detrás de la clave, como Deck the Halls. Todos los
-       Si van a la tecla negra.
+     - FA MAYOR: un bemol detrás de la clave. Es el UNICO bemol de todo el
+       cuaderno de Eduard —las otras dos armaduras, la de Honor Him y la de
+       Rasputin, son de sostenidos—, y quiere decir que todos los Si van a la
+       tecla negra.
      - El compás se escribe con una C, que es 4/4. Pone "March time".
      - Es "LEVEL FOUR": el escalón más alto de este arreglista en todo el
        cuaderno. America era Level Two y Grandfather's Clock, Level Three.
@@ -34,7 +36,7 @@ OCRE = HexColor('#8C6A3F')
 FA = 'Fa mayor'
 
 CANCION = dict(
-    alumno='Eduard', carpeta='Eduard', num=20, nivel='iniciación',
+    alumno='Eduard', carpeta='Eduard', num=19, nivel='iniciación',
     slug='Toreador', formato='adulto',
     titulo_corto='Toreador · Carmen', time_sig=(4, 4), key_sig=FA,
     partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source_new', 'Toreador Bizet.pdf'),
@@ -55,9 +57,9 @@ CANCION = dict(
                 ('LEVEL FOUR', 'Dos escalones',
                  'Del mismo arreglista tienes America (Level Two) y Grandfather\'s Clock (Level '
                  'Three). Esta es dos escalones por encima de la segunda pieza del cuaderno.'),
-                ('LA ARMADURA', 'Ya conocida',
-                 'Fa mayor, la misma que Deck the Halls. Un bemol, y todos los Si a la negra. Eso ya '
-                 'no es trabajo nuevo.'),
+                ('LA ARMADURA', 'El único bemol',
+                 'Fa mayor: un bemol, y todos los Si a la tecla negra. Las otras dos armaduras del '
+                 'cuaderno son de sostenidos, que suben; este baja.'),
                 ('EL RITMO', 'De marcha',
                  'Corchea con puntillo y SEMICORCHEA, una y otra vez. Larga y corta, muy juntas: eso '
                  'es lo que suena a desfile.'),
@@ -187,7 +189,7 @@ CANCION = dict(
                         ['Escribe el nombre de las cuatro teclas blancas marcadas.',
                          'Y pinta la negra que hay a la izquierda de la número 4: ese es el Si bemol.'],
                         titulo='En el teclado',
-                        pista='la misma tonalidad que Deck the Halls'),
+                        pista='Fa mayor · el único bemol de todo el cuaderno'),
                 para_clase('Dos compases a paso de marcha, y la partitura de America al lado para '
                            'mirar juntos qué ha cambiado en quince semanas.'),
             ],

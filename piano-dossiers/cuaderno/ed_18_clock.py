@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-"""My Grandfather's Clock — pieza 19 de Eduard. Formato ADULTO.
+"""My Grandfather's Clock — pieza 18 de Eduard. Formato ADULTO.
 
    Lo comprobado sobre el PDF de su carpeta (Henry Clay Work, arreglo de
    Gilbert DeBenedetti, "Level Three", 2 páginas; el mismo archivo que la
    pieza 9 de José María, byte a byte):
 
-     - SOL MAYOR: un sostenido detrás de la clave. Es la primera pieza del
-       cuaderno con sostenido en la armadura, y quiere decir que todos los Fa
-       se tocan en la tecla negra.
+     - SOL MAYOR: un sostenido detrás de la clave. Es la armadura más corta
+       del cuaderno —Honor Him lleva tres y Rasputin dos—, y quiere decir que
+       todos los Fa se tocan en la tecla negra.
      - El compás se escribe con una C (que es 4/4). Pone "With precision".
      - Lleva la letra debajo del pentagrama, sílaba a sílaba, y la digitación
        impresa en las dos manos.
@@ -28,7 +28,7 @@ OCRE = HexColor('#8C6A3F')
 SOL = 'Sol mayor'
 
 CANCION = dict(
-    alumno='Eduard', carpeta='Eduard', num=19, nivel='iniciación',
+    alumno='Eduard', carpeta='Eduard', num=18, nivel='iniciación',
     slug='GrandfathersClock', formato='adulto',
     titulo_corto="My Grandfather's Clock", time_sig=(4, 4), key_sig=SOL,
     partitura=os.path.join(HERE, '..', 'students', 'eduard', 'source_new',
@@ -45,11 +45,11 @@ CANCION = dict(
         pie_ritmos='Andamio en Sol mayor: el dibujo es el de tu partitura y las notas exactas están '
                    'allí. Ojo con los Fa: en esta pieza van todos a la tecla negra.',
         armonia=dict(
-            titulo='El primer sostenido, y qué cambia respecto al bemol',
+            titulo='Un solo sostenido, y qué hace',
             tarjetas=[
                 ('EL SOSTENIDO', 'Sube medio',
-                 'Un sostenido sube la nota a la tecla de al lado, hacia la derecha. El bemol de Deck '
-                 'the Halls la bajaba hacia la izquierda.'),
+                 'Un sostenido sube la nota a la tecla de al lado, hacia la derecha. Aquí solo hay '
+                 'uno: Honor Him traía tres y Rasputin dos.'),
                 ('CUÁL ES', 'Todos los Fa',
                  'La armadura marca el Fa, así que todos los Fa de la pieza van a la tecla negra que '
                  'tienen a su derecha.'),

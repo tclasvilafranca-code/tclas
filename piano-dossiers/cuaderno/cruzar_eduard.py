@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Cruza los sistemas de Eduard: entre sus 20 piezas, y contra José María,
+"""Cruza los sistemas de Eduard: entre sus 19 piezas, y contra José María,
    Josep, Luisa, Mercè, Nel e Isaac.
 
    Regla del proyecto: las CITAS literales de compases medidos pueden
@@ -9,11 +9,11 @@
    El motivo del cruce cambió en agosto de 2026, pero el cruce sigue haciendo
    falta. Antes, el álbum de Eduard era una copia del de José María y sus 19
    partituras eran el mismo archivo, byte a byte. Ahora su repertorio sale de
-   SU carpeta de Drive y solo **siete** de las veinte comparten fichero con
-   otro alumno: el Romance de Diabelli, America, el Star-Spangled Banner,
-   Deck the Halls, Rasputin, el Grandfather's Clock y el Toreador. Esas siete
-   son justo las que pueden repetir una cita literal —y deben—, y las que hay
-   que vigilar para que no repitan andamio.
+   SU carpeta de Drive y solo **cinco** de las diecinueve comparten fichero
+   con otro alumno: America, el Star-Spangled Banner, Rasputin, el
+   Grandfather's Clock y el Toreador. Esas cinco son justo las que pueden
+   repetir una cita literal —y deben—, y las que hay que vigilar para que no
+   repitan andamio.
 
    Lo que separa a los alumnos automáticamente es la sal de
    `cancion._sal_alumno`, que cambia todas las hojas generadas. Lo que NO
@@ -34,12 +34,12 @@ from portada import W, H
 import hoja_piano, ficha_info, hoja_calentamiento, hoja_lectura, hoja_relax
 import hoja_taller, hoja_deberes
 
-EDUARD = ['ed_01_clementine', 'ed_02_aristogatos', 'ed_03_eso', 'ed_04_romance',
-          'ed_05_america', 'ed_06_banner', 'ed_07_pantera', 'ed_08_nocturno',
-          'ed_09_beginner', 'ed_10_heart', 'ed_11_dream', 'ed_12_deck',
-          'ed_13_navidad', 'ed_14_greensleeves', 'ed_15_honor',
-          'ed_16_rasputin', 'ed_17_jinglerock', 'ed_18_pianoman',
-          'ed_19_clock', 'ed_20_toreador']
+EDUARD = ['ed_01_clementine', 'ed_02_aristogatos', 'ed_03_eso',
+          'ed_04_america', 'ed_05_banner', 'ed_06_pantera', 'ed_07_nocturno',
+          'ed_08_beginner', 'ed_09_puff', 'ed_10_heart', 'ed_11_dream',
+          'ed_12_navidad', 'ed_13_greensleeves', 'ed_14_honor',
+          'ed_15_rasputin', 'ed_16_jinglerock', 'ed_17_pianoman',
+          'ed_18_clock', 'ed_19_toreador']
 
 OTROS = ['jm_01_romance', 'jm_02_america', 'jm_03_banner', 'jm_04_counting',
          'jm_05_peaches', 'jm_06_someone', 'jm_07_deck', 'jm_08_jailhouse',
@@ -74,17 +74,15 @@ OTROS = ['jm_01_romance', 'jm_02_america', 'jm_03_banner', 'jm_04_counting',
          'is_13_doremi', 'is_14_dream', 'is_15_gladiator', 'is_16_rasputin',
          'is_17_jailhouse', 'is_18_toreador', 'is_19_furelise', 'is_20_diabelli']
 
-# Las SIETE partituras que Eduard comparte con otro alumno, byte a byte. Son
-# las cuatro que se rescataron de su dosier antiguo (Romance, America,
-# Star-Spangled y Deck the Halls) y las tres de su carpeta nueva que resultaron
-# ser el mismo fichero que ya tenian otros (Rasputin, Grandfather's Clock y
-# Toreador; comprobado por md5). Cada una puede recitar las mismas citas
-# literales medidas que su gemela —es la misma musica—, y esas coincidencias SI
-# son esperables. Las trece restantes son solo suyas.
-COMPARTIDAS = ['Romance · Diabelli (José María 1 · Josep)',
-               'America (José María 2)',
+# Las CINCO partituras que Eduard comparte con otro alumno, byte a byte. Son
+# las dos que se rescataron de su dosier antiguo (America y el Star-Spangled
+# Banner) y las tres de su carpeta nueva que resultaron ser el mismo fichero
+# que ya tenian otros (Rasputin, Grandfather's Clock y Toreador; comprobado por
+# md5). Cada una puede recitar las mismas citas literales medidas que su gemela
+# —es la misma musica—, y esas coincidencias SI son esperables. Las catorce
+# restantes son solo suyas.
+COMPARTIDAS = ['America (José María 2)',
                'The Star-Spangled Banner (José María 3)',
-               'Deck the Halls (José María 7 · Josep · Nel)',
                'Rasputin (José María 14 · Mercè · Josep · Luisa · Nel · Isaac)',
                "Grandfather's Clock (José María 9 · Mercè · Isaac)",
                'Toreador (José María 15 · Mercè · Nel · Isaac)']
@@ -171,12 +169,12 @@ for (clef, k), refs in seqs.items():
 # José María tienen el mismo archivo de partitura y el pasaje está MEDIDO
 # sobre él. Cambiarle las notas a uno de los dos seria escribir mal a
 # proposito, porque es la misma música.
-#   · America cc. 1-4 (ed_05/jm_02, bloque 1): las alturas MEDIDAS, primero en
+#   · America cc. 1-4 (ed_04/jm_02, bloque 1): las alturas MEDIDAS, primero en
 #     negras y despues con su ritmo con puntillo. Es la misma partitura y el
 #     mismo pasaje: cambiarle las notas a uno de los dos seria escribir mal a
 #     proposito. Los dos archivos la tienen marcada "Cita literal".
 CITAS_LITERALES_OK = {
-    frozenset(['ed_05_america/piano 1', 'jm_02_america/piano 1']),
+    frozenset(['ed_04_america/piano 1', 'jm_02_america/piano 1']),
 }
 
 inesperados = [(n, clef, refs) for n, clef, refs in entre_alumnos

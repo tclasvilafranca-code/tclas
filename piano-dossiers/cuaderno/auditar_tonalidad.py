@@ -343,23 +343,22 @@ LEIDO = {
     'ed_01_clementine':        '0',        # dice Do mayor
     'ed_02_aristogatos':       '0',        # dice Do mayor
     'ed_03_eso':               '0',        # dice Do mayor
-    'ed_04_romance':           '0',        # dice Do mayor
-    'ed_05_america':           '0',        # dice Do mayor
-    'ed_06_banner':            '0',        # dice Do mayor
-    'ed_07_pantera':           '0',        # dice Do mayor
-    'ed_08_nocturno':          '0',        # dice Do mayor
-    'ed_09_beginner':          '0',        # dice Do mayor
+    'ed_04_america':           '0',        # dice Do mayor
+    'ed_05_banner':            '0',        # dice Do mayor
+    'ed_06_pantera':           '0',        # dice Do mayor
+    'ed_07_nocturno':          '0',        # dice Do mayor
+    'ed_08_beginner':          '0',        # dice Do mayor
+    'ed_09_puff':              '0',        # dice Do mayor
     'ed_10_heart':             '0',        # dice Do mayor
     'ed_11_dream':             '0',        # dice Do mayor
-    'ed_12_deck':              '1 BEM',    # dice Fa mayor
-    'ed_13_navidad':           '0',        # dice Do mayor
-    'ed_14_greensleeves':      '0',        # dice La menor
-    'ed_15_honor':             '3 SOST',   # dice Fa# menor
-    'ed_16_rasputin':          '2 SOST',   # dice Si menor
-    'ed_17_jinglerock':        '0',        # dice Do mayor
-    'ed_18_pianoman':          '0',        # dice Do mayor
-    'ed_19_clock':             '1 SOST',   # dice Sol mayor
-    'ed_20_toreador':          '1 BEM',    # dice Fa mayor
+    'ed_12_navidad':           '0',        # dice Do mayor
+    'ed_13_greensleeves':      '0',        # dice La menor
+    'ed_14_honor':             '3 SOST',   # dice Fa# menor
+    'ed_15_rasputin':          '2 SOST',   # dice Si menor
+    'ed_16_jinglerock':        '0',        # dice Do mayor
+    'ed_17_pianoman':          '0',        # dice Do mayor
+    'ed_18_clock':             '1 SOST',   # dice Sol mayor
+    'ed_19_toreador':          '1 BEM',    # dice Fa mayor
 }
 
 

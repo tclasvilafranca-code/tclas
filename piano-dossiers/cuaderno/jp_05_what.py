@@ -23,6 +23,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import bloques_extra
 from jp_comun import (n, ac, sil, reto, plan, escalera, cifrado, colorear,
                       para_clase)
 
@@ -199,6 +200,15 @@ CANCION = dict(
         ),
     ],
 )
+
+# Al abrir de verdad el pentagrama de piano en el bloque 3 (dos_pentagramas=True,
+# ver auditar_registro), la hoja "Cómo se estudia" dejó de caber en una sola
+# pagina y se partio en dos que se quedaban cortas (faltaban 121 y 286 puntos):
+# no habia bastante material para llenar la segunda. Se añade tecnica en Do
+# mayor —la tonalidad de la pieza— y la propia paginacion reparte de nuevo.
+CANCION['piano1']['bloques'] = list(CANCION['piano1']['bloques']) + bloques_extra(
+    'Do mayor', 5, 'C4', 'C3', 'la izquierda marca el reloj, igual que en la pieza',
+    desde=4, time_sig=(4, 4))
 
 if __name__ == '__main__':
     print('generado', construir(CANCION))

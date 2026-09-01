@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.join(HERE, '..', 'engine'))
 
 import medir_figuras as mf                                       # noqa: E402
 
-PREFIJOS = ['arnau', 'lu', 'jm', 'ed', 'me', 'is', 'jp', 'nl', 'dilan', 'eva']
+PREFIJOS = ['arnau', 'lu', 'jm', 'ed', 'me', 'is', 'jp', 'nl', 'dilan', 'eva', 'ai']
 JSON = os.path.join(HERE, 'figuras_medidas.json')
 MD = os.path.join(HERE, 'FIGURAS_MEDIDAS.md')
 

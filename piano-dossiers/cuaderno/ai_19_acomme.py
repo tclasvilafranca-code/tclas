@@ -64,7 +64,7 @@ EM = [ac(('E3', 'G3', 'B3'), 'w')]
 
 CANCION = dict(
     alumno='Aída', carpeta='Aida', num=19, nivel='intermedio',
-    slug='AComme', formato='adulto',
+    slug='ACommeAmour', formato='adulto',
     titulo_corto='A comme amour', time_sig=(4, 4), key_sig='Mi menor',
     partitura=os.path.join(HERE, '..', 'students', 'aida', 'source',
                            'A comme amour.pdf'),

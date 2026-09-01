@@ -97,7 +97,7 @@ ETAPAS = [
         dict(num=17, titulo='Canon de Pachelbel', autor='Johann Pachelbel · Canon in D',
              tonalidad='Re mayor', compas='4/4', trabaja='El bajo de ocho notas que sostiene la pieza entera'),
         dict(num=18, titulo='Preludio nº 1', autor='J. S. Bach · BWV 846 · el del Ave María',
-             tonalidad='Do mayor', compas='4/4', trabaja='Un solo dibujo de mano, repetido treinta y cinco veces'),
+             tonalidad='Do mayor', compas='4/4', trabaja='Un solo dibujo de mano, y 35 compases hechos con él'),
         dict(num=19, titulo='A comme amour', autor='Richard Clayderman · Paul de Senneville',
              tonalidad='Mi menor', compas='4/4', trabaja='Semicorcheas de principio a fin: el reto del curso'),
     ]),

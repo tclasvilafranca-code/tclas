@@ -21,6 +21,7 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, '..', 'engine'))
 
 from niveles import NIVELES, ESCALON, EXCEPCIONES, RACHAS_JUSTIFICADAS, escalon_de
+import hoja_piano as hp
 
 PREFIJOS = ['arnau', 'lu', 'jm', 'ed', 'me', 'is', 'jp', 'nl', 'ai', 'dilan', 'eva']
 
@@ -30,9 +31,9 @@ RECURSOS = ('lig', 'art', 'tresillo', 'matiz', 'cresc', 'dim', 'pedal')
 def _eventos(cfg):
     """Todos los eventos escritos a mano, con su procedencia."""
     out = []
-    for donde, ev in _sistemas(cfg):
+    for donde, ev, corte in _sistemas(cfg):
         for e in ev:
-            out.append((donde, e))
+            out.append((donde, e, corte))
     return out
 
 
@@ -56,11 +57,34 @@ def _sistemas(cfg):
                         extra[k] = s[k]
                 if s.get('ligar'):
                     extra['lig'] = True
-                out.append((donde, evs + ([extra] if extra else [])))
+                out.append((donde, evs + ([extra] if extra else []),
+                            s.get('corte', 'C4') if s.get('manos') else None))
     for r in (cfg.get('ficha') or {}).get('ritmos', []) or []:
         if len(r) > 2 and isinstance(r[2], list):
-            out.append(('ficha.ritmos', [e for e in r[2] if isinstance(e, dict)]))
+            out.append(('ficha.ritmos',
+                        [e for e in r[2] if isinstance(e, dict)], None))
     return out
+
+
+def _cuantas_por_mano(ps, corte):
+    """Cuantas notas toca A LA VEZ una sola mano en ese evento.
+
+       En un sistema con `manos=`, las dos manos van escritas en la misma
+       lista y el motor las reparte por el Do central antes de dibujar
+       (`hoja_piano._partir_manos`). Contar el acorde entero medía una mano que
+       no existe: el `ac(('C4','E4','G4','C5','E5'))` del Preludio de Bach son
+       cinco notas en el papel, pero dos en la izquierda y tres en la derecha,
+       que es justo el reparto que trae su edicion. Se contaba como acorde de
+       cinco y saltaba el techo del escalon 4 sin que nadie estirara la mano.
+
+       `corte` es None cuando el sistema no lleva `manos=`; si lo lleva, es la
+       nota por la que el motor parte (por defecto el Do central, y el propio
+       sistema puede moverla con `corte=`). Se le pregunta a el en vez de
+       repetir la regla aqui."""
+    if corte is None:
+        return [len(ps)]
+    graves = [p for p in ps if hp._es_grave(p, corte)]
+    return [len(graves), len(ps) - len(graves)]
 
 
 def _racha_corta(eventos):
@@ -96,7 +120,7 @@ def revisar(modulo):
     num = cfg.get('num', 0)
     fallos = []
 
-    for donde, e in _eventos(cfg):
+    for donde, e, corte in _eventos(cfg):
         dur = e.get('dur')
         es_sil = bool(e.get('rest'))
         if dur is not None:
@@ -111,9 +135,12 @@ def revisar(modulo):
                               'no la admite antes de la %d'
                               % (modulo, donde, dur, num, n, minimo))
         ps = e.get('pitches')
-        if ps and len(ps) > nivel['max_notas_acorde']:
-            fallos.append('%s · %s: acorde de %d notas (máximo %d en el nivel %d)'
-                          % (modulo, donde, len(ps), nivel['max_notas_acorde'], n))
+        if ps:
+            peor = max(_cuantas_por_mano(ps, corte))
+            if peor > nivel['max_notas_acorde']:
+                fallos.append('%s · %s: acorde de %d notas en una mano '
+                              '(máximo %d en el nivel %d)'
+                              % (modulo, donde, peor, nivel['max_notas_acorde'], n))
         for r in RECURSOS:
             if e.get(r) and r not in nivel['recursos']:
                 fallos.append('%s · %s: recurso %r fuera del nivel %d'
@@ -123,7 +150,7 @@ def revisar(modulo):
                           'que los dedos los escriba el alumno' % (modulo, donde))
 
     tope = nivel.get('max_corcheas_seguidas', 99)
-    for donde, ev in _sistemas(cfg):
+    for donde, ev, _ in _sistemas(cfg):
         r = _racha_corta(ev)
         if r > tope and modulo not in RACHAS_JUSTIFICADAS:
             fallos.append('%s · %s: %d notas cortas seguidas (el nivel %d admite %d)'

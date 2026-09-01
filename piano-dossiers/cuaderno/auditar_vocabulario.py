@@ -58,6 +58,9 @@ REQUISITO = {
     # escrito al doble de lento, que es como se estudia y no se salta su
     # nivel. Atarlo a 'e.' marcaba como fallo justo lo que estaba bien.
     'puntillo_corto': ('figuras', 's'),
+    # El largo-corto de arriba (`q.` + `e`) esta en todos los escalones desde el
+    # primero, asi que no perdona a nadie: si se habla de el, se dibuja.
+    'puntillo_largo': ('figuras', 'q.'),
     'tresillo': ('recursos', 'tresillo'),
     'ligadura': ('recursos', 'lig'),
     'staccato': ('recursos', 'art'),
@@ -118,10 +121,23 @@ VOCABULARIO = {
     # que no la tiene— el hueco se les perdona, que es lo correcto.
     'puntillo_corto': dict(
         patron=(r'corchea con puntillo|corcheas con puntillo|'
-                r'negra con puntillo y corchea|puntillo y (?:una )?corchea|'
+                r'puntillo y (?:una )?semicorchea|'
                 r'ritmo con puntillo|semicorchea con puntillo'),
         evento=lambda e: e.get('dur') in ('e.', 's.'),
         arreglo="escribir el pasaje con dur='e.' seguido de dur='s'"),
+    # Y EL LARGO-CORTO DE ARRIBA, que no es el mismo gesto ni se escribe igual.
+    # "Negra con puntillo y corchea" se dibuja `q.` + `e`; "corchea con puntillo
+    # y semicorchea", `e.` + `s`. El patron de arriba los metia en el mismo saco
+    # y pedia `e.` para los dos, asi que marcaba como hueco el *Un beso y una
+    # flor* de Aida, cuya izquierda esta medida y escrita con `q.` + `e`, que es
+    # justo lo impreso. Separarlos ademas devuelve la comprobacion util: si una
+    # pieza dice "negra con puntillo" y no hay ni una `q.`, eso si es un hueco.
+    'puntillo_largo': dict(
+        patron=r'negra con puntillo y (?:una )?corchea|negra con puntillo',
+        veto=(r'(?:all[íi] era|aqu[íi] no|dec[íi]a|pon[íi]a|en vez de|'
+              r'no es|no era|antes|hasta ahora)\s*[«"“]?\s*$'),
+        evento=lambda e: e.get('dur') == 'q.',
+        arreglo="escribir el pasaje con dur='q.' seguido de dur='e'"),
     # OJO A LA DIFERENCIA, que costo un rato: `pedal=` dibuja la MARCA de pedal
     # de la edicion (el "Ped." y su raya), no la accion de pisarlo. Una hoja
     # puede —y debe— hablar de pisar el pedal, o de estudiar SIN pedal, en una
@@ -267,6 +283,29 @@ def _eventos(cfg):
     return out
 
 
+def _menciona(spec, txt):
+    """Si el texto AFIRMA que la pieza lleva eso.
+
+       No basta con que la palabra aparezca: hay hojas que la nombran para
+       decir lo contrario. Los cuatro Toreador escriben "allí era negra con
+       puntillo y corchea, y aquí es la mitad de largo" —hablando de OTRA
+       pieza— y una hoja corregida cuenta lo que decía antes: "este dosier
+       decía negra con puntillo y corchea". Contar esas menciones marcaba como
+       hueco justo las piezas que estan bien.
+
+       Por eso un recurso puede traer `veto`: un patron que se prueba contra
+       las 40 letras que van DELANTE de la mencion. Si todas las menciones de
+       la pieza estan vetadas, es que no se afirma en ningun sitio. Es la misma
+       idea que las negaciones de `matiz` ("no hay dinamicas"), pero sin tener
+       que meterlas dentro del propio patron."""
+    veto = spec.get('veto')
+    for m in re.finditer(spec['patron'], txt):
+        if veto and re.search(veto, txt[max(0, m.start() - 40):m.start()]):
+            continue
+        return True
+    return False
+
+
 def revisar(modulo):
     with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
         mod = importlib.import_module(modulo)
@@ -279,7 +318,7 @@ def revisar(modulo):
     nivel = NIVELES.get(n) if n else None
     huecos = []
     for nombre, spec in VOCABULARIO.items():
-        if not re.search(spec['patron'], txt):
+        if not _menciona(spec, txt):
             continue
         if any(spec['evento'](e) for e in evs):
             continue

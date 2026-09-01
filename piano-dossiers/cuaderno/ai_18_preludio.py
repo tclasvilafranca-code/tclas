@@ -25,6 +25,12 @@
      - NO trae tempo impreso ni caracter escrito.
      - Semicorcheas de principio a fin: 276 pares de barras dobles medidos en
        el PDF, que es con diferencia el numero mas alto de las diecinueve.
+     - **35 compases**, contados sobre el papel: se localizaron las divisorias
+       por columnas de tinta que cruzan el sistema entero, descontando la
+       llave del principio y la doble barra del final. Salen tres compases en
+       cada uno de los diez primeros sistemas, dos en el penultimo y tres en
+       el ultimo. El indice del album cita ese numero, asi que estaba obligado
+       a medirse.
 
    LAS ALTURAS del compas 1, medidas a 150 ppp sobre las cinco lineas de cada
    pentagrama. El compas son DOS MITADES IGUALES, y cada mitad es:
@@ -199,6 +205,12 @@ CANCION = dict(
                  pista='c. 1 con las dos manos · MEDIDO · juntando las dos sale Do · Mi · Sol · Do '
                        '· Mi de grave a agudo',
                  sistemas=[
+                     # `corte='G4'` en los dos acordes: en ESTA edicion el Do
+                     # central y el Mi de encima los toca la IZQUIERDA (van en
+                     # clave de fa, sobre lineas adicionales) y la derecha
+                     # empieza en el Sol4. Con el corte de siempre —el Do
+                     # central— las cinco notas se iban al pentagrama de sol y
+                     # salia un acorde de cinco para una mano, que no lo es.
                      dict(cap='a) las cinco notas del acorde, de grave a agudo · andamio: es lo que '
                               'suena cuando las dos manos van juntas',
                           events=[n('C4', 'h'), n('E4', 'h'), n('G4', 'h'),
@@ -206,11 +218,11 @@ CANCION = dict(
                           bars=3, manos='dobla'),
                      dict(cap='b) y el acorde entero de una vez, para oírlo antes de desplegarlo',
                           events=[ac(('C4', 'E4', 'G4', 'C5', 'E5'), 'w')],
-                          bars=1, manos='dobla', show_time=False),
+                          bars=1, manos='dobla', corte='G4', show_time=False),
                      dict(cap='c) y el del c. 2, que es el mismo dibujo un grado más arriba · '
                               'andamio: las dos manos juntas, primero acorde y luego desplegado',
                           events=[ac(('D4', 'F4', 'A4', 'D5', 'F5'), 'w')],
-                          bars=1, manos='dobla', show_time=False),
+                          bars=1, manos='dobla', corte='A4', show_time=False),
                      dict(cap='d) y los dos acordes seguidos, desplegados en negras · andamio: es '
                               'el camino que hace la mano al pasar del c. 1 al c. 2',
                           events=[n('C4'), n('E4'), n('G4'), n('C5'),

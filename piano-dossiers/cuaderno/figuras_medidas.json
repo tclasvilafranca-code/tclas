@@ -1,4 +1,174 @@
 {
+ "ai_01_romance": {
+  "cortas": 16,
+  "escribe": 0,
+  "escribe_a_mano": 0,
+  "estado": "ok",
+  "largas": 6,
+  "md5": "36e937a5b1027ecbb5c977eba3372e44",
+  "partitura": "Romance Diabelli 4 manos.pdf"
+ },
+ "ai_02_scherzo": {
+  "cortas": 10,
+  "escribe": 0,
+  "escribe_a_mano": 0,
+  "estado": "ok",
+  "largas": 3,
+  "md5": "f7c6dde1c8ef1de1aded09e3fd37c1f3",
+  "partitura": "Scherzo Diabelli 4 manos.pdf"
+ },
+ "ai_03_wewishyou": {
+  "cortas": 6,
+  "escribe": 0,
+  "escribe_a_mano": 0,
+  "estado": "ok",
+  "largas": 0,
+  "md5": "23900de6a5635c0b076980a7b11be4f0",
+  "partitura": "We Wish You a Merry Christmas.pdf"
+ },
+ "ai_04_canthelp": {
+  "cortas": 5,
+  "escribe": 0,
+  "escribe_a_mano": 0,
+  "estado": "ok",
+  "largas": 0,
+  "md5": "c70b7fe75552c533e6af4497667e94be",
+  "partitura": "Can't Help Falling in Love.pdf"
+ },
+ "ai_05_what": {
+  "cortas": 11,
+  "escribe": 0,
+  "escribe_a_mano": 0,
+  "estado": "ok",
+  "largas": 14,
+  "md5": "b2af7e6f2ce53cd5f378d196d6c68acd",
+  "partitura": "What Was I Made For.pdf"
+ },
+ "ai_06_counting": {
+  "cortas": 0,
+  "escribe": 0,
+  "escribe_a_mano": 0,
+  "estado": "ok",
+  "largas": 8,
+  "md5": "af108beaa07ce461eab73e9274601c73",
+  "partitura": "Counting Stars.pdf"
+ },
+ "ai_07_perfect": {
+  "cortas": 0,
+  "escribe": 0,
+  "escribe_a_mano": 0,
+  "estado": "ok",
+  "largas": 0,
+  "md5": "946d691f9966bfebdb17fa106001af8a",
+  "partitura": "Perfect.pdf"
+ },
+ "ai_08_boig": {
+  "escribe": 0,
+  "escribe_a_mano": 0,
+  "estado": "no medible",
+  "md5": "daa33c1a2bf20df0b418a976ee53cd44",
+  "motivo": "el PDF lleva dentro una imagen de 86 ppi",
+  "partitura": "Boig per tu.pdf"
+ },
+ "ai_09_kiss": {
+  "cortas": 5,
+  "escribe": 56,
+  "escribe_a_mano": 56,
+  "estado": "ok",
+  "largas": 16,
+  "md5": "a63b723ec6356d744b2a55a07b823a8d",
+  "partitura": "Kiss the Rain.pdf"
+ },
+ "ai_10_beginning": {
+  "cortas": 14,
+  "escribe": 0,
+  "escribe_a_mano": 0,
+  "estado": "ok",
+  "largas": 1,
+  "md5": "4d98ecda346474ba2262bc4bef862493",
+  "partitura": "Its Beginning to Look 4 manos.pdf"
+ },
+ "ai_11_titanic": {
+  "cortas": 3,
+  "escribe": 18,
+  "escribe_a_mano": 18,
+  "estado": "ok",
+  "largas": 6,
+  "md5": "4529752ca68d4ff500c4efd8c99e32a0",
+  "partitura": "Titanic.pdf"
+ },
+ "ai_12_hijoluna": {
+  "cortas": 2,
+  "escribe": 20,
+  "escribe_a_mano": 20,
+  "estado": "ok",
+  "largas": 36,
+  "md5": "6cd6cf1f4acc4e04c1341da100dcefee",
+  "partitura": "Hijo de la luna.pdf"
+ },
+ "ai_13_carol": {
+  "cortas": 17,
+  "escribe": 0,
+  "escribe_a_mano": 0,
+  "estado": "ok",
+  "largas": 4,
+  "md5": "2ba90dfba2eceb76b103296ded8f9a2f",
+  "partitura": "Carol of the Bells.pdf"
+ },
+ "ai_14_silence": {
+  "cortas": 18,
+  "escribe": 0,
+  "escribe_a_mano": 0,
+  "estado": "ok",
+  "largas": 12,
+  "md5": "ebb2b6aadb98cd6f86792ac9bacb3e1b",
+  "partitura": "The Sound of Silence.pdf"
+ },
+ "ai_15_gladiator": {
+  "cortas": 28,
+  "escribe": 11,
+  "escribe_a_mano": 11,
+  "estado": "ok",
+  "largas": 10,
+  "md5": "cef0c8c2da904292709b9aefd69c3ce4",
+  "partitura": "Gladiator.pdf"
+ },
+ "ai_16_unbeso": {
+  "cortas": 17,
+  "escribe": 26,
+  "escribe_a_mano": 26,
+  "estado": "ok",
+  "largas": 38,
+  "md5": "5cec3ebf395bbf160c50389ab67512b6",
+  "partitura": "Un beso y una flor.pdf"
+ },
+ "ai_17_pachelbel": {
+  "cortas": 15,
+  "escribe": 12,
+  "escribe_a_mano": 12,
+  "estado": "ok",
+  "largas": 82,
+  "md5": "f487aee6ce21212fc9b6e9da912a5520",
+  "partitura": "Canon de Pachelbel.pdf"
+ },
+ "ai_18_preludio": {
+  "cortas": 0,
+  "escribe": 24,
+  "escribe_a_mano": 24,
+  "estado": "ok",
+  "largas": 276,
+  "md5": "78aff92be7788cafdb29ff713fb5ab7f",
+  "partitura": "Preludio n1 Bach.pdf"
+ },
+ "ai_19_acomme": {
+  "cortas": 5,
+  "escribe": 36,
+  "escribe_a_mano": 36,
+  "estado": "ok",
+  "largas": 45,
+  "md5": "ab5cfa7dfe9612a011adef3f82d920a7",
+  "partitura": "A comme amour.pdf"
+ },
  "arnau_01_chopsticks": {
   "escribe": 0,
   "escribe_a_mano": 0,
@@ -345,16 +515,33 @@
   "md5": "4d98ecda346474ba2262bc4bef862493",
   "partitura": " its-beginning-to-look-a-lot-li ke (4 manos NAVIDAD).pdf"
  },
- "ed_01_romance": {
-  "cortas": 16,
+ "ed_01_clementine": {
+  "escribe": 0,
+  "escribe_a_mano": 0,
+  "estado": "no medible",
+  "md5": "ef3fbf86eb2e9ff509f90575f0c57c53",
+  "motivo": "el PDF lleva dentro una imagen de 72 ppi",
+  "partitura": "Clementine.pdf"
+ },
+ "ed_02_aristogatos": {
+  "cortas": 0,
   "escribe": 0,
   "escribe_a_mano": 0,
   "estado": "ok",
-  "largas": 6,
-  "md5": "36e937a5b1027ecbb5c977eba3372e44",
-  "partitura": "Romance-Diabelli 4 manos.pdf"
+  "largas": 0,
+  "md5": "176aa3aded6e1580e1a7fa5d89f43f47",
+  "partitura": "Los Aristogatos.pdf"
  },
- "ed_02_america": {
+ "ed_03_eso": {
+  "cortas": 0,
+  "escribe": 0,
+  "escribe_a_mano": 0,
+  "estado": "ok",
+  "largas": 0,
+  "md5": "5b257c2f9f8eea8822e2470ce95b9fc5",
+  "partitura": "Eso que tu me das.pdf"
+ },
+ "ed_04_america": {
   "escribe": 0,
   "escribe_a_mano": 0,
   "estado": "no medible",
@@ -362,7 +549,7 @@
   "motivo": "el PDF lleva dentro una imagen de 72 ppi",
   "partitura": "himno America.pdf"
  },
- "ed_03_banner": {
+ "ed_05_banner": {
   "escribe": 0,
   "escribe_a_mano": 0,
   "estado": "no medible",
@@ -370,145 +557,129 @@
   "motivo": "el PDF lleva dentro una imagen de 72 ppi",
   "partitura": "Himno de Estados Unidos.pdf"
  },
- "ed_04_counting": {
+ "ed_06_pantera": {
   "cortas": 0,
   "escribe": 0,
   "escribe_a_mano": 0,
   "estado": "ok",
-  "largas": 8,
-  "md5": "af108beaa07ce461eab73e9274601c73",
-  "partitura": "Counting-stars.pdf"
+  "largas": 0,
+  "md5": "5d4f2480073c3b59fd5d7db75c3254de",
+  "partitura": "La Panthere Rose.pdf"
  },
- "ed_05_peaches": {
-  "escribe": 6,
-  "escribe_a_mano": 6,
-  "estado": "no medible",
-  "md5": "6bcfbbd031973600a1c505351aed81c6",
-  "motivo": "el PDF lleva dentro una imagen de 50 ppi",
-  "partitura": "-PEACHES."
- },
- "ed_06_someone": {
-  "cortas": 2,
+ "ed_07_nocturno": {
+  "cortas": 7,
   "escribe": 0,
   "escribe_a_mano": 0,
   "estado": "ok",
   "largas": 0,
-  "md5": "c2f44951d2be2ae7e3c3803848452658",
-  "partitura": "SOMEONE YOU LOVED."
+  "md5": "7f5d0fb7f3a04c54c83490d8732658fb",
+  "partitura": "Nocturne op9 Chopin.pdf"
  },
- "ed_07_deck": {
-  "cortas": 4,
+ "ed_08_beginner": {
+  "cortas": 3,
   "escribe": 0,
   "escribe_a_mano": 0,
   "estado": "ok",
   "largas": 0,
-  "md5": "8d7056b47b7baae6749aae8f59acf546",
-  "partitura": "Deck the Halls (with Boughs of Holly) NAVIDAD.pdf"
+  "md5": "022a25c1772fb11a29c6970821b7a7bf",
+  "partitura": "The Beginner Gurlitt 4 manos.pdf"
  },
- "ed_08_jailhouse": {
-  "cortas": 2,
+ "ed_09_puff": {
+  "cortas": 0,
   "escribe": 0,
   "escribe_a_mano": 0,
   "estado": "ok",
-  "largas": 2,
-  "md5": "d5a4bc207e27556fc2df179e14005f40",
-  "partitura": "jailhouse-rock-elvis-presley-.pdf"
+  "largas": 0,
+  "md5": "f480274e68b0cf473338ff67b72404cb",
+  "partitura": "Puff the Magic Dragon.pdf"
  },
- "ed_09_clock": {
-  "escribe": 0,
-  "escribe_a_mano": 0,
-  "estado": "no medible",
-  "md5": "302bbe6f3c5819db596d6a2ee60f46fd",
-  "motivo": "el PDF lleva dentro una imagen de 72 ppi",
-  "partitura": "Grandfather's Clock.pdf"
- },
- "ed_10_shallow": {
-  "cortas": 68,
-  "escribe": 0,
-  "escribe_a_mano": 0,
-  "estado": "ok",
-  "largas": 3,
-  "md5": "3a6d639d75c09de5bb0db80a5f616909",
-  "partitura": "SHALLOW."
- },
- "ed_11_canthelp": {
+ "ed_10_heart": {
   "cortas": 5,
   "escribe": 0,
   "escribe_a_mano": 0,
   "estado": "ok",
   "largas": 0,
-  "md5": "c70b7fe75552c533e6af4497667e94be",
-  "partitura": "cant-help-falling-in-love-elvis-presley."
+  "md5": "774bcc757ea9dfef348f8ccdc0f614cb",
+  "partitura": "Heart and Soul.pdf"
  },
- "ed_12_carol": {
-  "cortas": 17,
+ "ed_11_dream": {
+  "cortas": 7,
   "escribe": 0,
   "escribe_a_mano": 0,
   "estado": "ok",
-  "largas": 4,
-  "md5": "2ba90dfba2eceb76b103296ded8f9a2f",
-  "partitura": "carol-of-the-bells   NAVIDAD."
+  "largas": 1,
+  "md5": "748abf8e880912df384aa0370f3ee9dd",
+  "partitura": "I Have a Dream.pdf"
  },
- "ed_13_adagio": {
-  "cortas": 0,
+ "ed_12_navidad": {
+  "cortas": 9,
   "escribe": 0,
   "escribe_a_mano": 0,
   "estado": "ok",
   "largas": 0,
-  "md5": "5599497ea3a0e58878a15ab0f8f8f7d5",
-  "partitura": "ADAGIO."
+  "md5": "6e7e935054da175b9170f713819bce8b",
+  "partitura": "Christmas Songs 4 manos.pdf"
  },
- "ed_14_rasputin": {
+ "ed_13_greensleeves": {
+  "cortas": 0,
+  "escribe": 0,
+  "escribe_a_mano": 0,
+  "estado": "ok",
+  "largas": 4,
+  "md5": "99e39e4fd619a879c5a1cc6e7d9020fc",
+  "partitura": "Greensleeves.pdf"
+ },
+ "ed_14_honor": {
+  "cortas": 9,
+  "escribe": 0,
+  "escribe_a_mano": 0,
+  "estado": "ok",
+  "largas": 0,
+  "md5": "ac4f90d4698e46e13c2709f9a7c0a01a",
+  "partitura": "Honor Him Gladiator.pdf"
+ },
+ "ed_15_rasputin": {
   "cortas": 1,
   "escribe": 0,
   "escribe_a_mano": 0,
   "estado": "ok",
   "largas": 0,
   "md5": "8f4c6802248aaf402b8370ff2fead67b",
-  "partitura": "Rasputin.pdf"
+  "partitura": "Rasputin easy.pdf"
  },
- "ed_15_toreador": {
+ "ed_16_jinglerock": {
+  "cortas": 6,
+  "escribe": 0,
+  "escribe_a_mano": 0,
+  "estado": "ok",
+  "largas": 0,
+  "md5": "66e4ede6d6fcbed86654e57d555b61fb",
+  "partitura": "Jingle Bell Rock.pdf"
+ },
+ "ed_17_pianoman": {
+  "cortas": 5,
+  "escribe": 0,
+  "escribe_a_mano": 0,
+  "estado": "ok",
+  "largas": 0,
+  "md5": "393a9d934d5f0ca4a862b35ae7550022",
+  "partitura": "Piano Man.pdf"
+ },
+ "ed_18_clock": {
+  "escribe": 0,
+  "escribe_a_mano": 0,
+  "estado": "no medible",
+  "md5": "302bbe6f3c5819db596d6a2ee60f46fd",
+  "motivo": "el PDF lleva dentro una imagen de 72 ppi",
+  "partitura": "Grandfathers Clock.pdf"
+ },
+ "ed_19_toreador": {
   "escribe": 7,
   "escribe_a_mano": 3,
   "estado": "no medible",
   "md5": "8d59817143dfb798a7a5bba9a37da3a3",
   "motivo": "el PDF lleva dentro una imagen de 76 ppi",
-  "partitura": "Toreador. Bizet"
- },
- "ed_16_trouble": {
-  "cortas": 2,
-  "escribe": 0,
-  "escribe_a_mano": 0,
-  "estado": "ok",
-  "largas": 0,
-  "md5": "eb02f94f8bef2d94e7ff990faba50abd",
-  "partitura": "Trouble."
- },
- "ed_17_acomme": {
-  "cortas": 5,
-  "escribe": 8,
-  "escribe_a_mano": 8,
-  "estado": "ok",
-  "largas": 45,
-  "md5": "ab5cfa7dfe9612a011adef3f82d920a7",
-  "partitura": "A COMME AMOUR _ Richard Clayderman."
- },
- "ed_18_interstellar": {
-  "cortas": 0,
-  "escribe": 0,
-  "escribe_a_mano": 0,
-  "estado": "ok",
-  "largas": 8,
-  "md5": "1c2fed41bdd881962739ad0e918053bd",
-  "partitura": "Interstellar _ .pdf"
- },
- "ed_19_flying": {
-  "escribe": 0,
-  "escribe_a_mano": 0,
-  "estado": "no medible",
-  "md5": "bc8d14f0b3396a7b64481f7bb07a317e",
-  "motivo": "el PDF lleva dentro una imagen de 60 ppi",
-  "partitura": "Como entrenar a tu dragon."
+  "partitura": "Toreador Bizet.pdf"
  },
  "eva_01_canthelp": {
   "cortas": 5,

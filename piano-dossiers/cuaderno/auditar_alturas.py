@@ -159,6 +159,19 @@ MIRADAS = {
     # c. 2: Si4 (negra con doble puntillo), Mi4 (semicorchea), Si4 (negra con
     # doble puntillo), Sol4 (semicorchea).
     'Gladiator.pdf': ['B4', 'E4', 'B4', 'G4'],
+
+    # El lector DUPLICA cabezas en esta edicion: devuelve diecisiete notas para
+    # un compas que tiene doce, con los Do5 y los Mi5 repetidos de dos en dos.
+    # Son las semicorcheas mas apretadas de las diecinueve partituras (276
+    # pares de barras dobles) y ahi la cabeza, la plica y el arranque de la
+    # barra le salen como dos manchas.
+    #
+    # Medido a 300 ppp el 1 de septiembre de 2026, cabeza a cabeza contra las
+    # cinco lineas: el c. 1 son DOS MITADES IGUALES, y cada mitad es un
+    # silencio de corchea, dos semicorcheas barradas (Sol4 · Do5) y cuatro mas
+    # (Mi5 · Sol4 · Do5 · Mi5). Suma 0,5 + 0,5 + 1 = 2 tiempos por mitad.
+    'Preludio n1 Bach.pdf': ['G4', 'C5', 'E5', 'G4', 'C5', 'E5',
+                             'G4', 'C5', 'E5', 'G4', 'C5', 'E5'],
 }
 
 

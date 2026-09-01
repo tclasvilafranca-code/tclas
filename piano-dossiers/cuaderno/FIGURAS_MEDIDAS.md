@@ -11,7 +11,7 @@ compás, tempo y páginas, pero nunca la figura más corta.
 
 ## Lo que este documento NO puede decir
 
-**31 partituras salen como NO MEDIBLE.** No son PDF vectoriales: llevan dentro
+**34 partituras salen como NO MEDIBLE.** No son PDF vectoriales: llevan dentro
 una foto, a veces de 50 o 60 ppi, y a esa resolución las dos barras de una
 semicorchea no se pueden separar. Hay que mirarlas a ojo.
 
@@ -24,6 +24,7 @@ semicorcheas en el Flying Theme**, que va entero en corcheas.
 - -PEACHES.
 - BELLA Y BESTIA .pdf
 - Baa Baa Black Sheep.pdf
+- Boig per tu.pdf
 - Chopsticks.pdf
 - Clementine.pdf
 - Como entrenar a tu dragon.
@@ -32,6 +33,7 @@ semicorcheas en el Flying Theme**, que va entero en corcheas.
 - Do Your Ears Hang Low?.pdf
 - Grandfather's Clock.pdf
 - Grandfather.pdf
+- Grandfathers Clock.pdf
 - Himno de Estados Unidos.pdf
 - JOLLY OLD SAINT NICHOLAS.pdf
 - LAS CUATRO ESTACIONES.pdf
@@ -45,6 +47,7 @@ semicorcheas en el Flying Theme**, que va entero en corcheas.
 - TOREADOR-BIZET. Bizet
 - TOREADOR-BIZET.pdf
 - The Wheels on the Bus.pdf
+- Toreador Bizet.pdf
 - Toreador. Bizet
 - WE WISH A MERRY CRISTMAS.pdf
 - al-calor-del-amor-en-un-bar.pdf
@@ -56,6 +59,25 @@ semicorcheas en el Flying Theme**, que va entero en corcheas.
 
 | pieza | estado | barras dobles | rabitos | escribe | de ellas citadas | partitura |
 |---|---|---|---|---|---|---|
+| ai_01_romance | ok | 6 | 16 | 0 | 0 | Romance Diabelli 4 manos.pdf |
+| ai_02_scherzo | ok | 3 | 10 | 0 | 0 | Scherzo Diabelli 4 manos.pdf |
+| ai_03_wewishyou | ok | 0 | 6 | 0 | 0 | We Wish You a Merry Christmas.pdf |
+| ai_04_canthelp | ok | 0 | 5 | 0 | 0 | Can't Help Falling in Love.pdf |
+| ai_05_what | ok | 14 | 11 | 0 | 0 | What Was I Made For.pdf |
+| ai_06_counting | ok | 8 | 0 | 0 | 0 | Counting Stars.pdf |
+| ai_07_perfect | ok | 0 | 0 | 0 | 0 | Perfect.pdf |
+| ai_08_boig | no medible | — | — | 0 | 0 | Boig per tu.pdf |
+| ai_09_kiss | ok | 16 | 5 | 56 | 56 | Kiss the Rain.pdf |
+| ai_10_beginning | ok | 1 | 14 | 0 | 0 | Its Beginning to Look 4 manos.pdf |
+| ai_11_titanic | ok | 6 | 3 | 18 | 18 | Titanic.pdf |
+| ai_12_hijoluna | ok | 36 | 2 | 20 | 20 | Hijo de la luna.pdf |
+| ai_13_carol | ok | 4 | 17 | 0 | 0 | Carol of the Bells.pdf |
+| ai_14_silence | ok | 12 | 18 | 0 | 0 | The Sound of Silence.pdf |
+| ai_15_gladiator | ok | 10 | 28 | 11 | 11 | Gladiator.pdf |
+| ai_16_unbeso | ok | 38 | 17 | 26 | 26 | Un beso y una flor.pdf |
+| ai_17_pachelbel | ok | 82 | 15 | 12 | 12 | Canon de Pachelbel.pdf |
+| ai_18_preludio | ok | 276 | 0 | 24 | 24 | Preludio n1 Bach.pdf |
+| ai_19_acomme | ok | 45 | 5 | 36 | 36 | A comme amour.pdf |
 | arnau_01_chopsticks | no medible | — | — | 0 | 0 | Chopsticks.pdf |
 | arnau_02_clementine | no medible | — | — | 0 | 0 | Clementine.pdf |
 | arnau_03_jolly | no medible | — | — | 0 | 0 | JOLLY OLD SAINT NICHOLAS.pdf |
@@ -96,25 +118,25 @@ semicorcheas en el Flying Theme**, que va entero en corcheas.
 | dilan_18_merry | ok | 9 | 9 | 0 | 0 | have-yourself-a-merry-little-NAVIDAD       ADhristmas_.pdf |
 | dilan_19_santa | ok | 22 | 8 | 16 | 16 | Santa-tell-me-ariana-grande NAVIDAD.pdf |
 | dilan_20_beginning | ok | 1 | 14 | 0 | 0 |  its-beginning-to-look-a-lot-li ke (4 manos NAVIDAD).pdf |
-| ed_01_romance | ok | 6 | 16 | 0 | 0 | Romance-Diabelli 4 manos.pdf |
-| ed_02_america | no medible | — | — | 0 | 0 | himno America.pdf |
-| ed_03_banner | no medible | — | — | 0 | 0 | Himno de Estados Unidos.pdf |
-| ed_04_counting | ok | 8 | 0 | 0 | 0 | Counting-stars.pdf |
-| ed_05_peaches | no medible | — | — | 6 | 6 | -PEACHES. |
-| ed_06_someone | ok | 0 | 2 | 0 | 0 | SOMEONE YOU LOVED. |
-| ed_07_deck | ok | 0 | 4 | 0 | 0 | Deck the Halls (with Boughs of Holly) NAVIDAD.pdf |
-| ed_08_jailhouse | ok | 2 | 2 | 0 | 0 | jailhouse-rock-elvis-presley-.pdf |
-| ed_09_clock | no medible | — | — | 0 | 0 | Grandfather's Clock.pdf |
-| ed_10_shallow | ok | 3 | 68 | 0 | 0 | SHALLOW. |
-| ed_11_canthelp | ok | 0 | 5 | 0 | 0 | cant-help-falling-in-love-elvis-presley. |
-| ed_12_carol | ok | 4 | 17 | 0 | 0 | carol-of-the-bells   NAVIDAD. |
-| ed_13_adagio | ok | 0 | 0 | 0 | 0 | ADAGIO. |
-| ed_14_rasputin | ok | 0 | 1 | 0 | 0 | Rasputin.pdf |
-| ed_15_toreador | no medible | — | — | 7 | 3 | Toreador. Bizet |
-| ed_16_trouble | ok | 0 | 2 | 0 | 0 | Trouble. |
-| ed_17_acomme | ok | 45 | 5 | 8 | 8 | A COMME AMOUR _ Richard Clayderman. |
-| ed_18_interstellar | ok | 8 | 0 | 0 | 0 | Interstellar _ .pdf |
-| ed_19_flying | no medible | — | — | 0 | 0 | Como entrenar a tu dragon. |
+| ed_01_clementine | no medible | — | — | 0 | 0 | Clementine.pdf |
+| ed_02_aristogatos | ok | 0 | 0 | 0 | 0 | Los Aristogatos.pdf |
+| ed_03_eso | ok | 0 | 0 | 0 | 0 | Eso que tu me das.pdf |
+| ed_04_america | no medible | — | — | 0 | 0 | himno America.pdf |
+| ed_05_banner | no medible | — | — | 0 | 0 | Himno de Estados Unidos.pdf |
+| ed_06_pantera | ok | 0 | 0 | 0 | 0 | La Panthere Rose.pdf |
+| ed_07_nocturno | ok | 0 | 7 | 0 | 0 | Nocturne op9 Chopin.pdf |
+| ed_08_beginner | ok | 0 | 3 | 0 | 0 | The Beginner Gurlitt 4 manos.pdf |
+| ed_09_puff | ok | 0 | 0 | 0 | 0 | Puff the Magic Dragon.pdf |
+| ed_10_heart | ok | 0 | 5 | 0 | 0 | Heart and Soul.pdf |
+| ed_11_dream | ok | 1 | 7 | 0 | 0 | I Have a Dream.pdf |
+| ed_12_navidad | ok | 0 | 9 | 0 | 0 | Christmas Songs 4 manos.pdf |
+| ed_13_greensleeves | ok | 4 | 0 | 0 | 0 | Greensleeves.pdf |
+| ed_14_honor | ok | 0 | 9 | 0 | 0 | Honor Him Gladiator.pdf |
+| ed_15_rasputin | ok | 0 | 1 | 0 | 0 | Rasputin easy.pdf |
+| ed_16_jinglerock | ok | 0 | 6 | 0 | 0 | Jingle Bell Rock.pdf |
+| ed_17_pianoman | ok | 0 | 5 | 0 | 0 | Piano Man.pdf |
+| ed_18_clock | no medible | — | — | 0 | 0 | Grandfathers Clock.pdf |
+| ed_19_toreador | no medible | — | — | 7 | 3 | Toreador Bizet.pdf |
 | eva_01_canthelp | ok | 0 | 5 | 0 | 0 | cant-help-falling-in-love-.pdf |
 | eva_02_sky | ok | 23 | 54 | 12 | 8 | a-sky-full-of-stars-coldplay.pdf |
 | eva_03_poema | ok | 0 | 8 | 0 | 0 | poema-de-amor-joan-manuel-serrat.pdf |

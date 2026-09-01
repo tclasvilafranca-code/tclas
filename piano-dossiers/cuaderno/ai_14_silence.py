@@ -62,7 +62,7 @@ DOM = ac(('C3', 'E3', 'G3'), 'h')
 
 CANCION = dict(
     alumno='Aída', carpeta='Aida', num=14, nivel='intermedio',
-    slug='SoundOfSilence', formato='adulto',
+    slug='TheSoundOfSilence', formato='adulto',
     titulo_corto='The Sound of Silence', time_sig=(4, 4), key_sig='Re menor',
     partitura=os.path.join(HERE, '..', 'students', 'aida', 'source',
                            'The Sound of Silence.pdf'),

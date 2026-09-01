@@ -133,7 +133,7 @@ def _autobeam(events, time_sig):
     return events
 
 
-def _partir_manos(events, time_sig, modo='dobla'):
+def _partir_manos(events, time_sig, modo='dobla', corte='C4'):
     """Separa un sistema "las dos manos juntas" en sus dos pentagramas.
 
        El material de estos ejercicios viene escrito en UNA sola lista, con la
@@ -147,7 +147,19 @@ def _partir_manos(events, time_sig, modo='dobla'):
        izquierda se escribe en clave de fa, en su pentagrama.
 
        El corte va en el Do central: lo que esta por debajo baja al pentagrama
-       de fa y lo demas se queda arriba.
+       de fa y lo demas se queda arriba. Es lo normal y es lo que se hace si no
+       se dice nada.
+
+       PERO EL DO CENTRAL NO SIEMPRE ES DE LA DERECHA, y hay ediciones que lo
+       dicen sin lugar a dudas. En el Preludio nº 1 de Bach de la carpeta de
+       Aida, la izquierda toca Do4 y Mi4 —escritos en clave de fa, sobre lineas
+       adicionales— y la derecha empieza en el Sol4. Con el corte en el Do
+       central las cinco notas se iban al pentagrama de sol y salia un acorde
+       de CINCO para una sola mano, que no lo es ni en el papel ni en el
+       teclado: son dos abajo y tres arriba. Por eso el corte se puede mover
+       con `corte=`, dando la nota mas grave que se queda ARRIBA (ahi,
+       `corte='G4'`). Solo se toca donde la edicion reparte de otra manera;
+       inventarse el reparto seria contarle otra pieza.
 
        QUE PASA CON LA DURACION de la izquierda depende de la pieza, y por eso
        NO se adivina: se declara en el sistema con `manos=`.
@@ -212,8 +224,8 @@ def _partir_manos(events, time_sig, modo='dobla'):
     for e in events:
         b = beats_de(e)
         ps = e.get('pitches') or ([e['pitch']] if 'pitch' in e else [])
-        graves = [p for p in ps if _es_grave(p)]
-        agudas = [p for p in ps if not _es_grave(p)]
+        graves = [p for p in ps if _es_grave(p, corte)]
+        agudas = [p for p in ps if not _es_grave(p, corte)]
         if e.get('rest') or not ps:
             arriba.append(dict(e))
         else:
@@ -247,11 +259,24 @@ def _partir_manos(events, time_sig, modo='dobla'):
     return arriba, abajo
 
 
-def _es_grave(p):
-    """Por debajo del Do central va al pentagrama de fa."""
+_GRADO = {'C': 0, 'D': 1, 'E': 2, 'F': 3, 'G': 4, 'A': 5, 'B': 6}
+
+
+def _indice(p):
+    """El grado absoluto de una altura, contando desde el Do0. La alteracion no
+       cuenta: un Mib y un Mi ocupan el mismo sitio en el pentagrama, que es de
+       lo que va este reparto."""
     import re
     m = re.match(r'^([A-G])([b#]?)(-?\d+)$', str(p))
-    return bool(m) and int(m.group(3)) < 4
+    if not m:
+        return None
+    return int(m.group(3)) * 7 + _GRADO[m.group(1)]
+
+
+def _es_grave(p, corte='C4'):
+    """Por debajo del corte va al pentagrama de fa. Por defecto, el Do central."""
+    i = _indice(p)
+    return i is not None and i < _indice(corte)
 
 
 # Que figura corresponde a un numero de tiempos. Solo las que el motor sabe
@@ -273,7 +298,7 @@ def _figura(beats):
 DOS_PENTAGRAMAS = [True]
 
 
-def _pide_dos_pentagramas(events, clef):
+def _pide_dos_pentagramas(events, clef, corte='C4'):
     """True si el sistema mete las dos manos en un solo pentagrama de sol.
 
        Se detecta solo, sin tocar las 144 piezas afectadas: si un acorde lleva
@@ -294,17 +319,18 @@ def _pide_dos_pentagramas(events, clef):
         return False
     for e in events:
         ps = e.get('pitches') or []
-        if len(ps) > 1 and any(_es_grave(p) for p in ps) and any(not _es_grave(p) for p in ps):
+        if (len(ps) > 1 and any(_es_grave(p, corte) for p in ps)
+                and any(not _es_grave(p, corte) for p in ps)):
             return True
     return False
 
 
 def _lineas(c, y, events, time_sig, bars_per_line, gap=GAP, show_time=True,
             clef='treble', key_sig=None, ottava=False, repetir=None, casilla=None,
-            manos='dobla'):
-    if _pide_dos_pentagramas(events, clef):
+            manos='dobla', corte='C4'):
+    if _pide_dos_pentagramas(events, clef, corte):
         return _lineas_dos_manos(c, y, events, time_sig, bars_per_line, gap,
-                                 show_time, key_sig, manos=manos)
+                                 show_time, key_sig, manos=manos, corte=corte)
     _autobeam(events, time_sig)
     bpb = time_sig[0] * (4.0 / time_sig[1])
     line_beats = bpb * bars_per_line
@@ -344,13 +370,13 @@ def _lineas(c, y, events, time_sig, bars_per_line, gap=GAP, show_time=True,
 
 
 def _lineas_dos_manos(c, y, events, time_sig, bars_per_line, gap, show_time,
-                      key_sig, manos='dobla'):
+                      key_sig, manos='dobla', corte='C4'):
     """Un sistema de piano de verdad: sol arriba, fa abajo, unidos por su llave.
 
        El material llega en una sola lista con las dos manos mezcladas (ver
        `_partir_manos`). Se parte, se barra cada mano por su cuenta y se dibujan
        los dos pentagramas alineados, que es como se lee el piano."""
-    arriba, abajo = _partir_manos(events, time_sig, modo=manos)
+    arriba, abajo = _partir_manos(events, time_sig, modo=manos, corte=corte)
     _autobeam(arriba, time_sig)
     _autobeam(abajo, time_sig)
     y -= before_staff(gap, arriba, 'treble')
@@ -533,7 +559,8 @@ def _bloque(c, y, blq, cfg):
                         ottava=s.get('ottava', False),
                         repetir=s.get('repetir'),
                         casilla=s.get('casilla'),
-                        manos=s.get('manos', 'dobla'))
+                        manos=s.get('manos', 'dobla'),
+                        corte=s.get('corte', 'C4'))
         y -= blq.get('extra_gap', 3)
     elif tipo == 'nota':
         y = nota_clave(c, y, blq['texto'], blq.get('etiqueta', 'LA CLAVE DE TODO'))

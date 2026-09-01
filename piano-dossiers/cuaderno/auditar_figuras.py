@@ -95,6 +95,25 @@ MIRADAS = {
 }
 
 
+def por_md5(datos):
+    """MIRADAS va por NOMBRE de archivo, y el nombre cambia: al reorganizar el
+       album de Eduard, "Grandfather's Clock.pdf" paso a llamarse "Grandfathers
+       Clock.pdf" y "Toreador. Bizet" a "Toreador Bizet.pdf". Mismo PDF byte a
+       byte, y sin embargo las dos piezas volvieron a salir como "sin mirar":
+       la mirada estaba hecha y se habia perdido por un apostrofo.
+
+       Lo que identifica una partitura es su md5, no su nombre — es el mismo
+       argumento con el que `auditar_compas` comparte lectura entre piezas que
+       comparten fichero. Asi que ademas del nombre se indexa por md5: si un
+       PDF ya mirado aparece con otro nombre, hereda lo que se vio."""
+    fuera = {}
+    for d in datos.values():
+        visto = MIRADAS.get(d.get('partitura'))
+        if visto and d.get('md5'):
+            fuera[d['md5']] = visto
+    return fuera
+
+
 def cargar():
     if not os.path.exists(JSON):
         print('falta %s · ejecuta antes medir_figuras_todas.py' % os.path.basename(JSON))
@@ -109,6 +128,7 @@ def main(prefijos=None):
         datos = {m: d for m, d in datos.items()
                  if m.split('_')[0] in prefijos}
 
+    miradas_md5 = por_md5(cargar())
     huecos, sobra, mirar = [], [], []
     for m in sorted(datos):
         d = datos[m]
@@ -119,7 +139,7 @@ def main(prefijos=None):
             lleva = largas >= UMBRAL
             cuanto = '%d barras dobles' % largas
         elif estado == 'no medible':
-            visto = MIRADAS.get(d.get('partitura'))
+            visto = MIRADAS.get(d.get('partitura')) or miradas_md5.get(d.get('md5'))
             if visto is None:
                 mirar.append((m, d.get('partitura'), d.get('motivo', '')))
                 continue

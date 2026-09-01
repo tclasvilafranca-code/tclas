@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.join(HERE, '..', 'engine'))
 
 from niveles import NIVELES, ESCALON, EXCEPCIONES, RACHAS_JUSTIFICADAS, escalon_de
 
-PREFIJOS = ['arnau', 'lu', 'jm', 'ed', 'me', 'is', 'jp', 'nl', 'dilan', 'eva']
+PREFIJOS = ['arnau', 'lu', 'jm', 'ed', 'me', 'is', 'jp', 'nl', 'ai', 'dilan', 'eva']
 
 RECURSOS = ('lig', 'art', 'tresillo', 'matiz', 'cresc', 'dim', 'pedal')
 

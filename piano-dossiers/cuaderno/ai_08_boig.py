@@ -17,7 +17,7 @@
      - La izquierda hace un acorde de dos notas en REDONDA por compas.
 
    UNA PARTITURA QUE NO SE PUEDE MEDIR. El PDF lleva dentro una imagen de 86
-   ppi y a esa resolucion las dos barras de una semicorchea no existen, asi que
+   ppi y a esa resolucion las dos barras de la figura mas corta no existen, asi que
    `medir_figuras` dice NO MEDIBLE en vez de inventarse un numero. Se miro a
    tamano grande, sistema a sistema: corcheas sueltas y de dos en dos, negras
    con puntillo, blancas y acordes largos abajo. **Ni una barra doble.** Queda

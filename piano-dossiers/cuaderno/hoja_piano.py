@@ -98,7 +98,7 @@ def _autobeam(events, time_sig):
        No toca lo que ya trae `beam=` a mano ni los acordes (el motor no sabe
        barrar acordes), y un grupo de uno se queda con su corchete, que es lo
        correcto."""
-    corta = ('e', 'e.', 's', 's.')
+    corta = ('e', 'e.', 'e..', 's', 's.')
     unidad = 1.5 if (time_sig[1] == 8 and time_sig[0] % 3 == 0) else 1.0
     bpb = time_sig[0] * (4.0 / time_sig[1])
     pos = 0.0            # posicion dentro del compas, en negras

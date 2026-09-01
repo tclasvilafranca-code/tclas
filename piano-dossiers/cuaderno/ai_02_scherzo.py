@@ -153,6 +153,11 @@ CANCION = dict(
                           events=[n('C3', 'e'), n('D3', 'e'), _st(n('E3')), _st(n('E3')),
                                   n('D3', 'e'), n('E3', 'e'), _st(n('F3')), _st(n('F3'))],
                           bars=2, clef='bass', show_time=False),
+                     dict(cap='e) y subiendo la posición con el sonido creciendo · así se lee el '
+                              'regulador que tu edición trae debajo del pentagrama',
+                          events=[dict(n('C4'), cresc=5), n('D4'), n('E4'),
+                                  n('F4'), n('G4'), n('C5')],
+                          bars=2, show_time=False),
                  ]),
             dict(tipo='nota',
                  etiqueta='QUÉ ES DE VERDAD UN STACCATO',

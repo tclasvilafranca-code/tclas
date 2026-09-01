@@ -227,7 +227,7 @@ def draw_rest(c, cx, staff_bottom_y, staff_top_y, gap, dur='q'):
        bueno porque si le contaba los tiempos. Salieron 20 casos ya impresos."""
     mid = staff_bottom_y + 2 * gap
     base = dur.rstrip('.')
-    dotted = dur.endswith('.')
+    puntillos = len(dur) - len(base)
     c.setFillColor(INK)
     if base == 'q':
         c.setFont('FreeSerif', gap * 2.6)
@@ -248,9 +248,14 @@ def draw_rest(c, cx, staff_bottom_y, staff_top_y, gap, dur='q'):
     elif base == 's':
         c.setFont('FreeSerif', gap * 2.6)
         c.drawCentredString(cx, mid - gap * 0.6, '\U0001D13F')
-    if dotted:
-        c.setFillColor(INK)
-        c.circle(cx + gap * 0.85, mid + gap * 0.5, gap * 0.14, fill=1, stroke=0)
+    # Uno o DOS puntillos. El segundo va justo detras del primero y a la misma
+    # altura, como en cualquier edicion: no es un adorno, cambia la duracion
+    # (ver DUR_BEATS), y el Gladiator de Aida abre con un silencio de corchea
+    # con puntillo y una negra con DOBLE puntillo.
+    c.setFillColor(INK)
+    for k in range(puntillos):
+        c.circle(cx + gap * (0.85 + 0.42 * k), mid + gap * 0.5, gap * 0.14,
+                 fill=1, stroke=0)
 
 def draw_note(c, cx, staff_bottom_y, staff_top_y, gap, pitch, dur='q', stem_dir=None,
               number=None, label=None, beam_to=None, clef='treble', stem_end_y=None):
@@ -263,11 +268,12 @@ def draw_note(c, cx, staff_bottom_y, staff_top_y, gap, pitch, dur='q', stem_dir=
     _letter, _acc, _oct = _parse_pitch(pitch)
     if _acc:
         draw_accidental(c, cx, cy, gap, _acc)
-    filled = dur in ('q', 'e', 'q.', 'e.', 's', 's.')
+    filled = dur.rstrip('.') in ('q', 'e', 's')
     draw_notehead(c, cx, cy, gap, filled=filled)
-    if dur.endswith('.'):
-        c.setFillColor(INK)
-        c.circle(cx + gap * 1.05, cy + gap * 0.15, gap * 0.14, fill=1, stroke=0)
+    c.setFillColor(INK)
+    for _k in range(len(dur) - len(dur.rstrip('.'))):
+        c.circle(cx + gap * (1.05 + 0.42 * _k), cy + gap * 0.15, gap * 0.14,
+                 fill=1, stroke=0)
     stem_x_off = gap * 0.6
     if stem_dir is None:
         stem_dir = 'down' if cy > staff_bottom_y + 2 * gap else 'up'
@@ -286,11 +292,11 @@ def draw_note(c, cx, staff_bottom_y, staff_top_y, gap, pitch, dur='q', stem_dir=
             sx = cx - stem_x_off
             stem_top = stem_end_y if stem_end_y is not None else cy - stem_len
             c.line(sx, cy, sx, stem_top)
-        if dur in ('e', 'e.', 's', 's.') and beam_to is None:
+        if dur.rstrip('.') in ('e', 's') and beam_to is None:
             # curved flag (filled bezier, not a straight wedge). La semicorchea
             # lleva DOS corchetes: el segundo cuelga un espacio mas abajo (o mas
             # arriba, si la plica va hacia abajo), que es como se graba de verdad.
-            n_flags = 2 if dur in ('s', 's.') else 1
+            n_flags = 2 if dur.rstrip('.') == 's' else 1
             for k in range(n_flags):
                 off = k * gap * 0.9 * (-1 if stem_dir == 'up' else 1)
                 fx, fy = sx, stem_top + off
@@ -352,13 +358,14 @@ def draw_chord(c, cx, staff_bottom_y, staff_top_y, gap, pitches, dur='h', clef='
         _letter, _acc, _oct = _parse_pitch(p)
         if _acc:
             draw_accidental(c, cx - stagger.get(i, 0) * gap * 1.05, cy, gap, _acc)
-    filled = dur in ('q', 'e', 'q.', 'e.', 's', 's.')
+    filled = dur.rstrip('.') in ('q', 'e', 's')
     for cy in cys:
         draw_notehead(c, cx, cy, gap, filled=filled)
-    if dur.endswith('.'):
-        c.setFillColor(INK)
+    c.setFillColor(INK)
+    for _k in range(len(dur) - len(dur.rstrip('.'))):
         for cy in cys:
-            c.circle(cx + gap * 1.05, cy + gap * 0.15, gap * 0.14, fill=1, stroke=0)
+            c.circle(cx + gap * (1.05 + 0.42 * _k), cy + gap * 0.15, gap * 0.14,
+                     fill=1, stroke=0)
     if dur.rstrip('.') != 'w':
         avg = sum(cys) / len(cys)
         stem_dir = 'down' if avg > staff_bottom_y + 2 * gap else 'up'
@@ -375,12 +382,12 @@ def draw_chord(c, cx, staff_bottom_y, staff_top_y, gap, pitches, dur='h', clef='
             # stop it short of the label instead of slicing through the text
             stem_top = min(cys) - gap * 1.05 if label else min(cys) - gap * 3.4
             c.line(sx, max(cys), sx, stem_top)
-        if dur in ('e', 'e.', 's', 's.'):
+        if dur.rstrip('.') in ('e', 's'):
             # chords are never beamed (draw_system has no beam support for
             # 'pitches' events), so an eighth chord always gets its own flag --
             # same curved-bezier flag as draw_note, anchored at the stem tip.
             # La semicorchea lleva dos corchetes, igual que en draw_note.
-            for _k in range(2 if dur in ('s', 's.') else 1):
+            for _k in range(2 if dur.rstrip('.') == 's' else 1):
                 _off = _k * gap * 0.9 * (-1 if stem_dir == 'up' else 1)
                 fx, fy = sx, stem_top + _off
                 c.setFillColor(INK)
@@ -422,11 +429,18 @@ def draw_beam(c, x1, y1, x2, y2, stem_dir='up', gap=9):
 # de 12/8, que es como esta escrito el Perfect de Aida. Se anadio con la pieza:
 # antes el compas de 12/8 no tenia ninguna figura capaz de llenarlo y
 # `relleno.figura_compas` devolvia una redonda, que se queda a dos tiempos.
-DUR_BEATS = {'w.': 6.0, 'w': 4.0, 'h.': 3.0, 'h': 2.0, 'q.': 1.5, 'q': 1.0,
-             'e.': 0.75, 'e': 0.5, 's.': 0.375, 's': 0.25}
+# El DOBLE PUNTILLO ('h..', 'q..', 'e..') anade la mitad del primer puntillo:
+# una negra con doble puntillo vale 1 + 1/2 + 1/4 = 1,75 tiempos. Entro en el
+# motor con el Gladiator de Aida (arr. A. C. Escobes), que abre con negra de
+# doble puntillo + semicorchea cuatro veces seguidas; escribirlo con un solo
+# puntillo habria dejado el compas en 3,5 tiempos y el auditor lo habria
+# cazado, pero escribirlo "parecido" habria sido contarle otro ritmo.
+DUR_BEATS = {'w.': 6.0, 'w': 4.0, 'h..': 3.5, 'h.': 3.0, 'h': 2.0,
+             'q..': 1.75, 'q.': 1.5, 'q': 1.0,
+             'e..': 0.875, 'e.': 0.75, 'e': 0.5, 's.': 0.375, 's': 0.25}
 
 # Cuantos corchetes/barras lleva cada figura: la corchea una, la semicorchea dos.
-DUR_FLAGS = {'e': 1, 'e.': 1, 's': 2, 's.': 2}
+DUR_FLAGS = {'e': 1, 'e.': 1, 'e..': 1, 's': 2, 's.': 2}
 
 
 def beats_de(e):
@@ -630,7 +644,7 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
                  repetir=None, casilla=None, ottava=False):
     """events: list of dicts with keys:
          pitch (str) OR pitches (list, for a chord)
-         dur: 'w','h.','h','q.','q','e.','e','s.','s'  (ver DUR_BEATS)
+         dur: 'w','h.','h','q..','q.','q','e.','e','s.','s'  (ver DUR_BEATS)
          number (fingering, optional), label (optional)
          beam (optional group id -- consecutive same-id eighth notes get a beam)
          art: 'staccato' | 'acento' | 'tenuto' | 'calderon' (o lista de varias)

@@ -27,7 +27,7 @@ sys.path.insert(0, os.path.join(HERE, '..', 'engine'))
 
 from niveles import NIVELES, escalon_de
 
-PREFIJOS = ['arnau', 'lu', 'jm', 'ed', 'me', 'is', 'jp', 'nl', 'dilan', 'eva']
+PREFIJOS = ['arnau', 'lu', 'jm', 'ed', 'me', 'is', 'jp', 'nl', 'ai', 'dilan', 'eva']
 
 # Que hace falta tener en el escalon para poder dibujar cada recurso. Si el
 # alumno no llega, el hueco NO es un fallo: es su nivel haciendo su trabajo.
@@ -122,8 +122,19 @@ VOCABULARIO = {
                 r'ritmo con puntillo|semicorchea con puntillo'),
         evento=lambda e: e.get('dur') in ('e.', 's.'),
         arreglo="escribir el pasaje con dur='e.' seguido de dur='s'"),
+    # OJO A LA DIFERENCIA, que costo un rato: `pedal=` dibuja la MARCA de pedal
+    # de la edicion (el "Ped." y su raya), no la accion de pisarlo. Una hoja
+    # puede —y debe— hablar de pisar el pedal, o de estudiar SIN pedal, en una
+    # pieza cuya edicion no imprime ninguna marca: eso no es un hueco, es
+    # pedagogia. Por eso el patron pide que el texto afirme que la marca ESTA en
+    # el papel, en vez de cazar la palabra suelta. Comprobado sobre el Kiss the
+    # Rain de Aida, cuya edicion de Musescore no imprime ni un "Ped." (no
+    # aparece en el `pdftotext`) y cuya hoja habla de pedal cuatro veces, las
+    # tres primeras para decir que se estudie sin el.
     'pedal': dict(
-        patron=r'\bpedal\b',
+        patron=(r'pedal (?:escrito|impreso|marcado|dibujado)'
+                r'|(?:trae|lleva|hay|tiene|traen|llevan) (?:el |un )?pedal'
+                r'|marcas? de pedal|raya del pedal|\bPed\.'),
         evento=lambda e: bool(e.get('pedal')),
         arreglo="pedal=<n_eventos>"),
 }

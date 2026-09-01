@@ -131,6 +131,34 @@ MIRADAS = {
     # primer compas. Ampliado: Mi5, Mi5 y Mi5 (negra, negra y blanca), que es
     # el arranque de *Jingle Bells*.
     'Christmas Songs 4 manos.pdf': ['E5', 'E5', 'E5'],
+
+    # --- las tres de Aida que el lector no sabe recortar, medidas a mano ------
+    #
+    # A cuatro manos otra vez, y con el mismo problema que el Christmas Songs:
+    # las divisorias no unen los dos pentagramas del Piano 1, asi que el lector
+    # no encuentra el final del c. 1 y mezcla las dos manos (devuelve
+    # E5-A4-E5-F5, y el A4 es del pentagrama de abajo). Medido el 31 de agosto
+    # de 2026 sobre las cinco lineas de cada pentagrama: el c. 1 de arriba es
+    # un silencio de negra con puntillo, Mi5 (negra) y Fa5 (corchea).
+    'Its Beginning to Look 4 manos.pdf': ['E5', 'F5'],
+    ' its-beginning-to-look-a-lot-li ke (4 manos NAVIDAD).pdf': ['E5', 'F5'],
+    'its-beginning-to-look-a-lot-li ke (4 manos NAVIDAD).pdf': ['E5', 'F5'],
+    'its-beginning-to-look-a-lot-like (4 manos).pdf': ['E5', 'F5'],
+
+    # El c. 1 de la derecha es un COMPAS ENTERO DE SILENCIO y el lector solo
+    # salta hasta dos compases vacios cuando no distingue ninguna cabeza; aqui
+    # el silencio de redonda es un rectangulo macizo que pasa la apertura como
+    # si fuera una nota, asi que devuelve un Do5 fantasma. Lo primero que suena
+    # es el c. 2: Re4 Re4 Fa4 Fa4 La4 La4, todo corcheas tras un silencio de
+    # negra.
+    'The Sound of Silence.pdf': ['D4', 'D4', 'F4', 'F4', 'A4', 'A4'],
+
+    # Empieza con una ANACRUSA de un tiempo (silencio de corchea con puntillo y
+    # un Mi4 en semicorchea), asi que al lector le cuadra el "primer compas" con
+    # la anacrusa dentro y devuelve E4-B4-A4. El primer compas completo es el
+    # c. 2: Si4 (negra con doble puntillo), Mi4 (semicorchea), Si4 (negra con
+    # doble puntillo), Sol4 (semicorchea).
+    'Gladiator.pdf': ['B4', 'E4', 'B4', 'G4'],
 }
 
 

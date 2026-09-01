@@ -27,7 +27,7 @@
 # del motor: seis tiempos, lo que llena un compas de 12/8. Entro con el
 # Perfect de Aida y esta en TODOS los escalones a proposito -- una nota que
 # dura un compas entero no es dificultad de lectura, es lo contrario.
-ORDEN = ['w.', 'w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's.', 's']
+ORDEN = ['w.', 'w', 'h..', 'h.', 'h', 'q..', 'q.', 'q', 'e..', 'e.', 'e', 's.', 's']
 
 
 # Lo que de verdad separa un escalon de otro NO es prohibir la corchea —las
@@ -87,19 +87,27 @@ NIVELES = {
     ),
     4: dict(
         nombre='El exigente',
-        figuras={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's.', 's'},
-        silencios={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e', 's'},
+        figuras={'w.', 'w', 'h..', 'h.', 'h', 'q..', 'q.', 'q', 'e..', 'e.', 'e',
+                 's.', 's'},
+        # El SILENCIO DE CORCHEA CON PUNTILLO entro con el Gladiator de Aida:
+        # su anacrusa es exactamente eso mas una semicorchea. Quien ya lee la
+        # semicorchea lee su silencio con puntillo, asi que va al 4 y al 5.
+        silencios={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's'},
         max_notas_acorde=4,
         max_corcheas_seguidas=24,
         recursos={'lig', 'matiz', 'art', 'tresillo', 'cresc', 'dim', 'pedal'},
         desde={},
         nota='Grupos de cuatro semicorcheas, tresillos, staccato y matices '
-             'impresos. Las dos manos en movimiento a la vez.',
+             'impresos. Las dos manos en movimiento a la vez. Y el DOBLE '
+             'PUNTILLO, que entro con el Gladiator de Aida: una negra con dos '
+             'puntillos vale 1 + 1/2 + 1/4, y la nota corta que la sigue entra '
+             'todavia mas tarde que con un puntillo solo.',
     ),
     5: dict(
         nombre='Los avanzados',
-        figuras={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's.', 's'},
-        silencios={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e', 's'},
+        figuras={'w.', 'w', 'h..', 'h.', 'h', 'q..', 'q.', 'q', 'e..', 'e.', 'e',
+                 's.', 's'},
+        silencios={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's'},
         max_notas_acorde=5,
         max_corcheas_seguidas=99,
         recursos={'lig', 'matiz', 'art', 'tresillo', 'cresc', 'dim', 'pedal'},

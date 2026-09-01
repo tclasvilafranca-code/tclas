@@ -63,6 +63,12 @@ TOPES = {
 EXCEPCIONES = {
     ('arnau_14_bonnie', 'G4'): 'el cruce de manos: lo toca la IZQUIERDA por encima, '
                                'y en clave de sol no se vería de quién es',
+    ('ai_13_carol', 'G4'): 'la izquierda de los cc. 5-7 esta impresa asi en SU edicion: en '
+                           'clave de fa y por encima del Do central, porque en esta pieza '
+                           'las dos manos van muy juntas. Pasarla a clave de sol escondería '
+                           'que la toca la izquierda, que es el mismo caso de My Bonnie',
+    ('ai_13_carol', 'F4'): 'la nota siguiente de esa misma bajada de la izquierda, por el '
+                           'mismo motivo',
     ('ai_10_beginning', 'E6'): 'es la nota mas aguda del c. 4, y en SU edicion esta impresa '
                                'igual, con tres lineas adicionales. Bajarla una octava seria '
                                'contarle otra pieza; el ejercicio es justo leer esa cima',

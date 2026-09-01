@@ -168,7 +168,7 @@ CANCION = dict(
                  etiqueta='POR QUÉ NO ES LO MISMO QUE UN 3/4',
                  texto='Un 3/4 tiene tres golpes y cada uno se parte en dos; un 6/8 tiene dos '
                        'golpes y cada uno se parte en tres. Escritos con corcheas se parecen mucho, '
-                       'pero suenan distinto porque el acento cae en otro sitio: en 3/4 hay tres '
+                       'pero suenan distinto porque el golpe fuerte cae en otro sitio: en 3/4 hay tres '
                        'sitios fuertes por compás y en 6/8 solo dos. Si cuentas un 6/8 de tres, la '
                        'música empieza a sonar a vals y deja de sonar a villancico.'),
             dict(num=2, titulo='Los compases 1 y 2, tal y como están escritos',

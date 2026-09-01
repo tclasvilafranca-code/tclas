@@ -154,13 +154,14 @@ CANCION = dict(
                           events=[ac(('C3', 'G3'), 'h'), ac(('C3', 'E3'), 'h'),
                                   ac(('A2', 'E3'), 'h'), ac(('A2', 'C3'), 'h')],
                           bars=2, clef='bass'),
-                     dict(cap='b) y la vuelta entera de cuatro acordes, que es la que se repite',
-                          events=[ac(('C3', 'G3'), 'w'), ac(('A2', 'E3'), 'w'),
-                                  ac(('F2', 'C3'), 'w'), ac(('G2', 'D3'), 'w')],
+                     dict(cap='b) y la vuelta entera con la TERCERA arriba en vez de la quinta · '
+                              'es la nota que decide si el acorde suena alegre o triste',
+                          events=[ac(('C3', 'E3'), 'w'), ac(('A2', 'C3'), 'w'),
+                                  ac(('F2', 'A2'), 'w'), ac(('G2', 'B2'), 'w')],
                           bars=4, clef='bass', show_time=False),
-                     dict(cap='c) y con el acorde partido en dos mitades, para oír las dos notas · '
-                              'en tu partitura suenan a la vez',
-                          events=[n('C3', 'h'), n('G3', 'h'), n('A2', 'h'), n('E3', 'h')],
+                     dict(cap='c) y con esos mismos partidos en dos mitades, para oír las dos '
+                              'notas · en tu partitura suenan a la vez',
+                          events=[n('C3', 'h'), n('E3', 'h'), n('A2', 'h'), n('C3', 'h')],
                           bars=2, clef='bass', show_time=False),
                  ]),
             dict(num=3, titulo='Las dos manos',

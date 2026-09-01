@@ -72,6 +72,16 @@ EXCEPCIONES = {
     ('ai_10_beginning', 'E6'): 'es la nota mas aguda del c. 4, y en SU edicion esta impresa '
                                'igual, con tres lineas adicionales. Bajarla una octava seria '
                                'contarle otra pieza; el ejercicio es justo leer esa cima',
+    # El mismo archivo (md5 4d98ecda...) lo tienen Dilan y Eva, y sus dosieres
+    # citan ademas los cc. 6-7 y 9-10, donde la melodia se queda arriba: el
+    # Mi6 del c. 4 y del c. 6, y el Re6 del c. 7 y del c. 10. Su edicion los
+    # imprime justo asi, con tres y con dos lineas adicionales. Es el caso de
+    # ai_10, y la razon es la misma: el trabajo de la semana es leer ese
+    # registro, no esquivarlo.
+    ('dilan_20_beginning', 'E6'): 'la cima de los cc. 4 y 6, impresa igual en su edicion',
+    ('dilan_20_beginning', 'D6'): 'los cc. 7 y 10, en el mismo registro y por el mismo motivo',
+    ('eva_15_beginning', 'E6'): 'la cima de los cc. 4 y 6, impresa igual en su edicion',
+    ('eva_15_beginning', 'D6'): 'los cc. 7 y 10, en el mismo registro y por el mismo motivo',
 }
 
 

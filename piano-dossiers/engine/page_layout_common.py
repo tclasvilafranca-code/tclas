@@ -96,7 +96,10 @@ def _alcance(gap, e, clef):
         else:
             plica_bajo = min(cys) - gap * STEM_LEN
     acc = any(_parse_pitch(p)[1] for p in pitches)
-    return alto, bajo, plica_alto, plica_bajo, acc
+    # y hacia donde va la plica, que es lo que decide de que lado se arquea una
+    # ligadura: `notation` la dibuja por ARRIBA solo cuando la plica baja.
+    plica_abajo = e.get('dur') != 'w' and sum(cys) / len(cys) > 2 * gap
+    return alto, bajo, plica_alto, plica_bajo, acc, plica_abajo
 
 
 def before_staff(gap, events=None, clef='treble', ottava=False, casilla=None):
@@ -109,7 +112,7 @@ def before_staff(gap, events=None, clef='treble', ottava=False, casilla=None):
     if not events:
         return base
     top_line = 4 * gap  # staff top relative to a staff_bottom_y of 0
-    max_over, over_has_acc, max_plica = 0.0, False, 0.0
+    max_over, over_has_acc, max_plica, max_lig = 0.0, False, 0.0, None
     for e in events:
         alc = _alcance(gap, e, clef)
         if alc is None:
@@ -118,11 +121,28 @@ def before_staff(gap, events=None, clef='treble', ottava=False, casilla=None):
         if over > max_over:
             max_over, over_has_acc = over, alc[4]
         max_plica = max(max_plica, alc[2] - top_line)
+        if e.get('lig') and alc[5]:
+            max_lig = over if max_lig is None else max(max_lig, over)
     extra = base
     if max_over > 0:
+        # 0.4 es justo: la cabeza mide 0.44*gap de radio, asi que su borde de
+        # arriba queda a ras de la LINEA DE BASE del rotulo. Se probo a subirlo
+        # a 0.75 y se descarto: son 2,6 pt por sistema, y con eso el "Merry
+        # Little Christmas" de Dilan —que iba a 3,4 pt de su limite— pasaba de
+        # dos hojas a tres. A tamano real la cabeza no toca las letras; lo que
+        # si las tachaba era la LIGADURA, y eso se arregla mas abajo.
         extra = max(extra, max_over + (gap * 1.3 if over_has_acc else gap * 0.4))
     if max_plica > 0:
         extra = max(extra, max_plica + gap * 0.15)
+    # LA LIGADURA SE ARQUEA POR ENCIMA de las cabezas SOLO cuando la plica va
+    # hacia abajo, que es lo que pasa en el registro agudo: `notation` la
+    # arranca a un espacio de la cabeza y la sube otro tanto (`draw_ligadura`,
+    # alto minimo 0.7*gap). Sin reservarle sitio, el arco cruzaba el rotulo
+    # aunque las cabezas cupieran — se vio en los cc. 6-7 de It's Beginning.
+    # Con la plica hacia arriba se arquea por DEBAJO y no hace falta nada, que
+    # es el caso de casi todas las ligaduras del cuaderno.
+    if max_lig is not None:
+        extra = max(extra, max_lig + gap * 2.3)
     # El corchete del tresillo y el 8va van POR ENCIMA del pentagrama y hay que
     # reservarles sitio, o el numero 3 se dibuja encima del rotulo del sistema.
     if any(e.get('tresillo') for e in events):

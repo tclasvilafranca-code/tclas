@@ -365,8 +365,10 @@
 > Bonnie* la izquierda cruza por encima y toca un Sol4, y el ejercicio va de
 > eso; escribirlo en clave de sol escondería de quién es la nota.
 >
-> **Lo que queda pendiente y es decisión del cliente:** 164 notas en los otros
-> nueve álbumes siguen en el pentagrama equivocado, y todas son el mismo caso —
+> **Lo que queda pendiente y es decisión del cliente:** **158 notas** siguen en
+> el pentagrama equivocado (60 de Luisa, 23 de Dilan, 18 de Josep, 17 de Mercè,
+> 12 de José María, 12 de Isaac, 12 de Eva, 8 de Nel, 1 de Arnau, **0 de
+> Aída**), y todas son el mismo caso —
 > dos manos en un solo pentagrama escritas con notas sueltas, no con acordes,
 > así que el detector automático no las ve. Arreglarlas obliga a abrir el
 > pentagrama de fa (~75 pt por sistema) y **eso cambia el número de páginas de

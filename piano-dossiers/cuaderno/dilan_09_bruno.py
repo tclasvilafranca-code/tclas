@@ -7,9 +7,12 @@
      - el caracter de la melodia, que se planta en una nota y la repite tres,
        cuatro y cinco veces antes de moverse.
 
-   Lo que NO se cita: numeros de compas (la edicion no los numera y la
-   deteccion de barras de esta partitura no es fiable) ni el ritmo de la
-   derecha (semicorcheas con ligaduras y silencios que el motor no escribe).
+   Lo que NO se cita: numeros de compas, porque la edicion no los numera y la
+   deteccion de barras de esta partitura no es fiable.
+
+   (Esta cabecera decia tambien que el ritmo de la derecha no se citaba porque
+   el motor no escribia semicorcheas. Eso dejo de ser cierto: el motor las
+   escribe, y esta pieza dibuja ocho.)
 
    Sin armadura: todas las alteraciones van escritas una a una.
 """

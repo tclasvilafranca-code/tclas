@@ -9,9 +9,9 @@
        de linea o espacio;
      - la melodia con score_reader, con posiciones igual de limpias.
 
-   Lo unico que NO se escribe es el ritmo real de la derecha: va lleno de
-   tresillos y silencios de semicorchea, y el motor no sabe escribir eso. Se
-   dice expresamente en cada bloque que lo cita.
+   (Esta cabecera decia que el ritmo real de la derecha no se escribia porque
+   el motor no sabia hacer tresillos ni silencios de semicorchea. Dejo de ser
+   cierto: la pieza dibuja hoy veinticuatro semicorcheas y doce tresillos.)
 
    La numeracion: el lector cuenta la anacrusa como compas 1, la edicion no.
    Aqui se usa SIEMPRE la numeracion impresa (= lector - 1).

@@ -12,11 +12,29 @@
        compás entero.
      - Hay barras de repetición y casillas de primera y segunda vez.
 
-   Aviso sobre el andamio: el motor del cuaderno no escribe semicorcheas. El
-   largo-corto de la partitura vive DENTRO de un tiempo; en las hojas se
-   escribe un tamaño mayor (negra con puntillo y corchea, que ocupa el compás)
-   y se dice en el propio pie. Es el mismo gesto contado más despacio, no otro
-   ritmo.
+   LO IMPRESO, medido a 300 ppp el 1 de septiembre de 2026 sobre el mismo PDF
+   que tiene Aída (md5 4529752a…), cabeza a cabeza contra las cinco líneas:
+
+       DERECHA    c. 1  Do5 (CORCHEA CON PUNTILLO) · Do5 (SEMICORCHEA) ·
+                        Do5 · Do5 (corcheas)
+                  c. 2  Si4 · Do5 (corcheas) · silencio de corchea · Do5
+                  c. 3  Si4 · Do5 (corcheas) · silencio de corchea · Re5
+                  c. 4  Mi5 · Re5 (negras)
+       IZQUIERDA  una BLANCA por compás: Do3 · Sol3 · Fa3 · Sol3
+
+   POR QUÉ LAS HOJAS LO ESCRIBEN AL DOBLE DE LENTO, que es la pregunta que
+   toca hacerse aquí. NO es porque el motor no sepa dibujar la semicorchea:
+   la dibuja desde hace tiempo, y en el cuaderno de Aída —que toca esta misma
+   partitura— el compás 1 va escrito tal cual, con su corchea con puntillo y
+   su semicorchea. Es porque **Luisa está en el escalón 1** (ver niveles.py),
+   donde la figura más corta es la corchea, y el auditor de niveles lo
+   comprueba pieza por pieza.
+
+   Así que el gesto se trabaja en negra con puntillo + corchea, que es el
+   mismo reparto largo-corto ocupando el compás entero, y la hoja lo DICE:
+   dice qué figura trae su partitura y que aquí está escrito a la mitad de
+   velocidad a propósito. Lo que no vale —y es lo que ponía antes— es dar
+   como motivo una limitación del programa que no existe.
 """
 import os
 import sys
@@ -44,8 +62,9 @@ CANCION = dict(
                ('Carácter', 'Adagio · despacio'), ('Izquierda', 'Una por compás'),
                ('Trae', '1ª y 2ª vez')],
         titulo_ritmos='Dos tiempos por compás',
-        pie_ritmos='Andamio en Do mayor. Lo literal es el reparto: la izquierda aguanta el compás '
-                   'entero y la derecha se mueve por encima, larga y corta.',
+        pie_ritmos='Arriba, el largo-corto de tu partitura escrito A LA MITAD DE VELOCIDAD, para '
+                   'que se pueda contar; en el papel las dos caben en un solo golpe. Abajo, la '
+                   'izquierda del c. 1, medida: una blanca que ocupa el compás entero.',
         armonia=dict(
             titulo='Lo nuevo de esta pieza',
             tarjetas=[
@@ -57,8 +76,8 @@ CANCION = dict(
                  'decir despacio. Aquí eso es una ventaja, '
                  'porque el largo-corto se oye mejor cuanto más lento vas.'),
                 ('LARGO Y CORTO', 'En un solo golpe',
-                 'La primera nota dura y la segunda entra justo antes del siguiente golpe. No son '
-                 'dos notas iguales: si suenan iguales, la melodía no se reconoce.'),
+                 'Tu partitura lo escribe con una corchea con puntillo y una semicorchea: las dos '
+                 'caben en un golpe. Si suenan iguales, la melodía no se reconoce.'),
                 ('PRIMERA Y SEGUNDA VEZ', 'Dos finales',
                  'Al final hay dos casillas numeradas. La primera vez se toca la del 1 y se vuelve; '
                  'la segunda vez se salta esa y se toca la del 2.'),
@@ -67,9 +86,9 @@ CANCION = dict(
                 'de toda la pieza, y por eso puedes dedicar la cabeza a la derecha.',
         ),
         ritmos=[
-            ('MANO DERECHA', 'larga y corta · andamio, un tamaño mayor',
+            ('MANO DERECHA', 'largo y corto, escrito al doble de lento',
              [n('E4', 'q.'), n('E4', 'e')], OCRE, 'treble', None),
-            ('MANO IZQUIERDA', 'una nota, el compás entero · literal',
+            ('MANO IZQUIERDA', 'el c. 1, MEDIDO · una nota, el compás entero',
              [n('C3', 'h')], AZUL, 'bass', None),
         ],
         especial=[
@@ -116,7 +135,8 @@ CANCION = dict(
                           bars=4, clef='bass', show_time=False),
                  ]),
             dict(num=2, titulo='Largo y corto',
-                 pista='andamio · escrito un tamaño mayor que en la partitura, para poder contarlo',
+                 pista='andamio · el gesto del c. 1 de tu partitura, escrito al doble de lento para '
+                       'poder contarlo',
                  sistemas=[
                      dict(cap='a) la larga ocupa golpe y medio y la corta entra justo antes del '
                               'compás siguiente · cuenta "UUUN y"',
@@ -128,12 +148,13 @@ CANCION = dict(
                           bars=2, show_time=False),
                  ]),
             dict(tipo='nota',
-                 etiqueta='POR QUÉ EL ANDAMIO ESTÁ ESCRITO MÁS GRANDE',
-                 texto='En tu partitura el largo-corto pasa dentro de un solo golpe, y a esa '
-                       'velocidad casi no se puede contar. Aquí está escrito el doble de grande: el '
-                       'mismo gesto, pero ocupando el compás entero. Cuando lo tengas en el cuerpo, '
-                       've a la partitura y hazlo igual pero en la mitad de tiempo. Es el mismo '
-                       'ritmo, no otro.'),
+                 etiqueta='POR QUÉ AQUÍ ESTÁ ESCRITO MÁS GRANDE QUE EN TU PARTITURA',
+                 texto='Mira el c. 1 de tu papel: la larga lleva puntillo y la corta es una '
+                       'SEMICORCHEA, la mitad que una corchea. Las dos caben en un solo golpe, y a '
+                       'esa velocidad no hay quien lo cuente. Por eso aquí va escrito al doble de '
+                       'lento, ocupando el compás entero: no es otro ritmo ni una versión fácil, es '
+                       'el mismo reparto a cámara lenta. Cuando lo tengas, hazlo igual en la mitad '
+                       'de tiempo.'),
             dict(num=3, titulo='Las dos juntas',
                  pista='andamio · la izquierda toca en el uno y ya no se mueve · muy despacio',
                  sistemas=[

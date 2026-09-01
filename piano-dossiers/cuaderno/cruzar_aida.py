@@ -150,7 +150,11 @@ for m in (hoja_piano, ficha_info, hoja_calentamiento, hoja_lectura, hoja_relax,
 
 hojas = 0
 for mod in AIDA + OTROS:
-    cfg = __import__(mod).CANCION
+    # Las dos primeras piezas de Dilan son del formato viejo, montado a mano:
+    # su modulo no lleva `CANCION` y no hay nada que escanear.
+    cfg = getattr(__import__(mod), 'CANCION', None)
+    if not cfg:
+        continue
     segno.make(cfg['yt'], error='m').save(qr, scale=10, border=2, dark='#1A2332', light='#F3F1EA')
     for nb, fn in cancion._hojas(cfg, qr):
         cur[0] = '%s/%s' % (mod, nb)
@@ -188,7 +192,18 @@ for (clef, k), refs in seqs.items():
 # MEDIDO sobre el. Cambiarle las notas a uno de los dos seria escribir mal a
 # proposito, porque es la misma musica. Se anotan aqui una a una segun
 # aparecen, con el bloque y el motivo.
-CITAS_LITERALES_OK = set()
+CITAS_LITERALES_OK = {
+    # Los cc. 1 y 2 de *We Wish You a Merry Christmas*, en la ficha de las tres
+    # alumnas que tocan ese mismo archivo. Es la lectura que salio de medir el
+    # PDF a 300 ppp y de comprobarla contra las silabas impresas debajo (cada
+    # una tiene su nota): Sol4 · Sol4-La4 · Sol4-Fa#4 · Mi4-Mi4-Mi4. Antes las
+    # tres decian otra cosa —y las de Isaac y Merce lo decian presentandolo
+    # como literal—, asi que la coincidencia de ahora no es un descuido: es que
+    # las tres han quedado bien. Cambiarle las notas a una para que no coincida
+    # seria volver a escribir mal a proposito.
+    frozenset({'ai_03_wewishyou/ficha', 'is_05_wewishyou/ficha',
+               'me_10_wewishyou/ficha'}),
+}
 
 inesperados = [(n, clef, refs) for n, clef, refs in entre_alumnos
                if frozenset(refs) not in CITAS_LITERALES_OK]

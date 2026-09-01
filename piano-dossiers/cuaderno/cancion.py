@@ -431,6 +431,147 @@ SIN_PARTITURA = []
 SUELO_AUDIT = {'ficha': 33}
 
 
+A4 = (595.276, 841.89)
+_TOL_A4 = 2.0
+# Paginas de partitura descartadas al montar: vacias o repetidas. Las dos
+# cosas vienen del archivo del cliente, no de aqui.
+PAGINAS_VACIAS = []
+PAGINAS_REPETIDAS = []
+
+
+def _huella(pg):
+    """Con que se compara una pagina de partitura con la anterior.
+
+       El *Rain Rain Go Away* de Arnau trae TRES paginas y la segunda y la
+       tercera son la misma, byte a byte, en el archivo del cliente. En el
+       album eso es una hoja repetida seguida, que en imprenta se paga y encima
+       despista. Se compara el flujo de contenido junto con las imagenes y
+       formularios que usa: dos paginas con el mismo dibujo dan la misma
+       huella. Se descarta SOLO si es identica a la ANTERIOR, que es el caso
+       real; dos paginas iguales separadas por otras pueden ser un da capo."""
+    import hashlib
+    import re as _re
+    try:
+        datos = pg.get_contents()
+        datos = b'' if datos is None else datos.get_data()
+        res = (pg.get('/Resources') or {}).get_object()
+        xo = res.get('/XObject')
+        if xo is not None:
+            # NO vale comparar el nombre del XObject: las dos paginas iguales
+            # del Rain Rain llaman /TPL1 y /TPL2 a la MISMA plantilla, asi que
+            # por nombre parecen distintas. Se sustituye cada nombre por el
+            # md5 de lo que ese objeto dibuja, y entonces si se comparan.
+            for nom, ref in xo.get_object().items():
+                try:
+                    cuerpo = ref.get_object().get_data()
+                except Exception:                                # noqa: BLE001
+                    cuerpo = repr(ref).encode()
+                sello = hashlib.md5(cuerpo).hexdigest().encode()
+                datos = _re.sub(br'/' + _re.escape(nom[1:].encode()) + br'\b',
+                                b'/X' + sello, datos)
+        return datos
+    except Exception:                                            # noqa: BLE001
+        return None
+# operadores que PINTAN algo. Si no aparece ninguno y ademas no hay imagen ni
+# formulario, la pagina esta vacia de verdad.
+_PINTA = (b' S\n', b' S\r', b'\nS\n', b' s\n', b' f\n', b' f*\n', b' F\n',
+          b' B\n', b' B*\n', b' b\n', b' b*\n', b' sh\n', b'\nf\n', b'\nre\nf')
+
+
+def _pagina_en_blanco(pg):
+    """True solo si la pagina de partitura NO dibuja absolutamente nada.
+
+       El *Flying Theme* de la carpeta de José María y de Nel (el mismo
+       archivo) trae una TERCERA PAGINA VACIA: sin imagen, sin trazos y con un
+       unico espacio como texto. En el album montado eso es una hoja en blanco
+       en medio del cuaderno, que en imprenta es papel pagado y parece un
+       fallo. Se descarta al montar.
+
+       El criterio es deliberadamente conservador —ante la duda, la pagina se
+       queda—, porque colar una hoja de mas es un problema pequeno y perder un
+       compas de musica es un problema grave: basta con que haya una imagen, un
+       formulario o un solo operador de pintado para darla por buena."""
+    try:
+        res = (pg.get('/Resources') or {}).get_object()
+        if res.get('/XObject'):
+            return False
+        datos = pg.get_contents()
+        datos = b'' if datos is None else datos.get_data()
+    except Exception:                                            # noqa: BLE001
+        return False
+    if any(op in datos for op in _PINTA):
+        return False
+    # texto: solo cuenta si hay algun caracter que no sea espacio
+    import re as _re
+    for tro in _re.findall(rb'\((?:\\.|[^()\\])*\)', datos):
+        if tro[1:-1].strip():
+            return False
+    return True
+
+
+def _a_a4(pg):
+    """Deja cualquier página de partitura en A4 vertical.
+
+       ESTO ES PARA LA IMPRENTA, y salió al revisar los once álbumes antes de
+       mandarlos. Nuestras hojas son A4 desde el primer día, pero las
+       partituras de Drive llegan como las exportó cada quien y en el álbum
+       montado convivían CINCO tamaños: A4, Carta (216×279, que son 153
+       páginas repartidas por los once álbumes), tres apaisadas de Hijo de la
+       Luna y de Amiga Mía, y cuatro sueltas más raras todavía. Un PDF con
+       tamaños mezclados no tiene arreglo bueno en imprenta: o lo escalan todo
+       a la caja mayor —y entonces nuestras hojas salen recortadas o con
+       márgenes distintos según la página— o lo imprimen al 100 % y cada hoja
+       cae en un sitio del papel.
+
+       Qué se hace con cada caso:
+
+         - **A4 ya**: no se toca. Es la mayoría, y es importante no tocarla:
+           reescalar por reescalar mueve el pentagrama medio punto.
+         - **vertical de otro tamaño** (Carta y las cuatro sueltas): se escala
+           proporcionalmente hasta que quepa en A4 y se centra. Carta encoge un
+           2,7 %, que en un pentagrama de 7 mm son 0,2 mm: no se nota.
+         - **apaisada**: se GIRA 90° y entra al 100 %, porque una partitura
+           apaisada es A4 apaisado y A4 girado es A4. El alumno gira el
+           cuaderno, que es como se lee cualquier partitura ancha encuadernada.
+           Escalarla sin girar la dejaría al 70 % —los pentagramas al tamaño de
+           un libro de bolsillo— y esta pieza se lee sentada al piano.
+
+       No se toca el contenido: solo la caja y una transformación afín.
+
+       SE TRANSFORMA LA PÁGINA EN SU SITIO, y no creando una hoja A4 en blanco
+       y fusionando la partitura encima. Lo segundo es lo primero que se
+       intenta y sale mal de una manera que no avisa: con
+       `PageObject.create_blank_page` la hoja nueva no cuelga de ningún PDF, y
+       al escribir varias seguidas solo sobrevive la PRIMERA. Las tres páginas
+       de Hijo de la Luna quedaron en una buena y dos EN BLANCO, y el PDF se
+       abría sin dar ningún error. Lo canta el control de páginas en blanco,
+       que por eso está en la revisión de imprenta."""
+    from pypdf import Transformation
+    from pypdf.generic import RectangleObject
+    caja = pg.mediabox
+    w, h = float(caja.width), float(caja.height)
+    if abs(w - A4[0]) <= _TOL_A4 and abs(h - A4[1]) <= _TOL_A4:
+        return pg
+    x0, y0 = float(caja.left), float(caja.bottom)
+    if w > h:                                   # apaisada: girar 90 grados
+        s = min(A4[0] / h, A4[1] / w)
+        t = (Transformation().translate(-x0, -y0).rotate(90).translate(h, 0)
+             .scale(s).translate((A4[0] - h * s) / 2.0, (A4[1] - w * s) / 2.0))
+    else:
+        s = min(A4[0] / w, A4[1] / h)
+        t = (Transformation().translate(-x0, -y0).scale(s)
+             .translate((A4[0] - w * s) / 2.0, (A4[1] - h * s) / 2.0))
+    pg.add_transformation(t, expand=False)
+    nueva = RectangleObject((0, 0, A4[0], A4[1]))
+    # las cinco cajas, no solo la mediabox: si la cropbox se queda con el
+    # tamano viejo, el lector recorta y el error no se ve hasta imprimir
+    from pypdf.generic import NameObject
+    for nombre in ('/MediaBox', '/CropBox', '/TrimBox', '/BleedBox', '/ArtBox'):
+        if nombre == '/MediaBox' or nombre in pg:
+            pg[NameObject(nombre)] = nueva
+    return pg
+
+
 def _paginas_partitura(cfg):
     """Cuantas paginas ocupa la partitura original. La numeracion de las hojas
        arranca donde acaba ella; antes estaba escrita a mano (siempre 4) y en
@@ -442,7 +583,18 @@ def _paginas_partitura(cfg):
         return 2
     if ruta not in _CACHE_PAGS:
         try:
-            _CACHE_PAGS[ruta] = len(PdfReader(ruta).pages)
+            # se cuentan las paginas que SE VAN A MONTAR, no las del archivo:
+            # las vacias se descartan (ver `_pagina_en_blanco`) y si no se
+            # descontaran aqui, el pie de las hojas iria una pagina adelantado
+            utiles, ant = 0, None
+            for x in PdfReader(ruta).pages:
+                if _pagina_en_blanco(x):
+                    continue
+                hx = _huella(x)
+                if hx is not None and hx == ant:
+                    continue
+                ant, utiles = hx, utiles + 1
+            _CACHE_PAGS[ruta] = utiles
         except Exception:
             # Las partituras originales no estan en el repositorio (son del
             # cliente). Sin ellas se sigue pudiendo generar y auditar todo lo
@@ -471,8 +623,17 @@ def construir(cfg, verificar=True):
     # un PDF utilizable al lado y devuelve esa ruta.
     part = _normalizar_partitura(cfg['partitura'])
     if os.path.exists(part):
+        anterior = None
         for p in PdfReader(part).pages:
-            wr.add_page(p)
+            if _pagina_en_blanco(p):
+                PAGINAS_VACIAS.append((cfg['slug'], os.path.basename(part)))
+                continue
+            hue = _huella(p)
+            if hue is not None and hue == anterior:
+                PAGINAS_REPETIDAS.append((cfg['slug'], os.path.basename(part)))
+                continue
+            anterior = hue
+            wr.add_page(_a_a4(p))
     else:
         SIN_PARTITURA.append(cfg['slug'])
     for p in PdfReader(tmp).pages:

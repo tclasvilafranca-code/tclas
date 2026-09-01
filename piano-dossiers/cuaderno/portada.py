@@ -10,10 +10,13 @@
      el arco pedagogico: Do mayor -> primera armadura -> retos -> a duo.
 """
 import os
+import sys
 from reportlab.lib.colors import HexColor, white
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'engine'))
+from notation import BLEED_SAFE
 
 for _n, _p in [('DejaVuSans', 'DejaVuSans.ttf'), ('DejaVuSans-Bold', 'DejaVuSans-Bold.ttf'),
                ('DejaVuSerif', 'DejaVuSerif.ttf'), ('DejaVuSerif-Bold', 'DejaVuSerif-Bold.ttf')]:
@@ -173,7 +176,7 @@ def build_plan_curso(c, alumno, plan, page_num=3, titulo='El curso, semana a sem
     c.setFillColor(CREAM)
     c.rect(0, 0, W, H, fill=1, stroke=0)
     c.setFillColor(NAVY)
-    c.rect(0, H - 6, W, 6, fill=1, stroke=0)
+    c.rect(BLEED_SAFE, H - 6 - BLEED_SAFE, W - 2 * BLEED_SAFE, 6, fill=1, stroke=0)
 
     total = sum(len(s) for _, s in plan)
     y = H - 44
@@ -267,7 +270,7 @@ def _index_header(c, alumno, continuacion=False):
     c.setFillColor(CREAM)
     c.rect(0, 0, W, H, fill=1, stroke=0)
     c.setFillColor(NAVY)
-    c.rect(0, H - 6, W, 6, fill=1, stroke=0)
+    c.rect(BLEED_SAFE, H - 6 - BLEED_SAFE, W - 2 * BLEED_SAFE, 6, fill=1, stroke=0)
 
     y = H - 44
     c.setFont('DejaVuSans-Bold', 8.4)

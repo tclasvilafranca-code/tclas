@@ -113,7 +113,7 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) ida y vuelta entre dos teclas vecinas · las seis notas duran '
                               'exactamente lo mismo',
-                          events=corch(['E3', 'D#3', 'E3', 'D#3', 'E3', 'B3']),
+                          events=corch(['E5', 'D#5', 'E5', 'D#5', 'E5', 'B4']),
                           bars=1),
                      dict(cap='b) el mismo dibujo con el becuadro, que quita el sostenido · el '
                               'segundo Re NO es el mismo que el primero',

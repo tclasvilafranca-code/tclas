@@ -121,10 +121,9 @@ CANCION = dict(
                      dict(cap='a) la mano derecha · negras, y una blanca donde acaba la frase',
                           events=[n('G4'), n('B4'), n('D5'), n('B4'), n('A4'), n('B4'), n('G4', 'h')],
                           bars=2, key_sig='Sol mayor'),
-                     dict(cap='b) la mano izquierda, más grave · el mismo dibujo, y también en '
-                              'clave de sol',
+                     dict(cap='b) la mano izquierda, más grave · el mismo dibujo, ya en clave de fa',
                           events=[n('G3'), n('B3'), n('D4'), n('B3'), n('A3'), n('B3'), n('G3', 'h')],
-                          bars=2, key_sig='Sol mayor', show_time=False),
+                          bars=2, key_sig='Sol mayor', clef='bass', show_time=False),
                  ]),
             dict(num=3, titulo='Las dos juntas',
                  pista='andamio · despacio · un solo sonido, no dos',

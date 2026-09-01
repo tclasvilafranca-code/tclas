@@ -559,7 +559,7 @@ def sistemas_extra(tono, agudo, grave, time_sig=(4, 4), variante=0,
     tres = [dict(cap=letras[4] + ') y los mismos tres acordes con la derecha, arriba · '
                                  'la izquierda solo la tónica',
                  events=cadencia(tono, agudo, figura=fc, inversion=inv), bars=4, show_time=False)]
-    return uno, dos, tres
+    return (_encajar_sistemas(uno), _encajar_sistemas(dos), _encajar_sistemas(tres))
 
 
 def bloque_tresillos(tono, num, agudo, donde, time_sig=(4, 4), letras=('a', 'b')):
@@ -598,17 +598,18 @@ def bloque_tresillos(tono, num, agudo, donde, time_sig=(4, 4), letras=('a', 'b')
         for p in grupos[k % len(grupos)]:
             ev2.append(dict(pitch=p, dur='e', tresillo=j + k, beam=j + k, tecnica=True))
         ev2.append(dict(pitch=grupos[k % len(grupos)][0], dur='q', tecnica=True))
+    sistemas = [
+        dict(cap=letras[0] + ') tres notas en el hueco de dos · di "u-ni-dad" en cada '
+                             'grupo y que las tres duren igual',
+             events=ev, bars=1),
+        dict(cap=letras[1] + ') y alternando con negras · la negra dura lo mismo que el '
+                             'tresillo entero, y ahí se ve si lo aprietas',
+             events=ev2, bars=max(1, int(round(2.0 * pares / bpb))),
+             show_time=False),
+    ]
     return dict(num=num, titulo='Los tresillos, contados',
                 pista='andamio en %s · %s' % (tono, donde),
-                sistemas=[
-                    dict(cap=letras[0] + ') tres notas en el hueco de dos · di "u-ni-dad" en cada '
-                                         'grupo y que las tres duren igual',
-                         events=ev, bars=1),
-                    dict(cap=letras[1] + ') y alternando con negras · la negra dura lo mismo que el '
-                                         'tresillo entero, y ahí se ve si lo aprietas',
-                         events=ev2, bars=max(1, int(round(2.0 * pares / bpb))),
-                         show_time=False),
-                ])
+                sistemas=_encajar_sistemas(sistemas))
 
 
 def bloque_semicorcheas(tono, num, agudo, donde, time_sig=(4, 4), letras=('a', 'b')):
@@ -623,16 +624,17 @@ def bloque_semicorcheas(tono, num, agudo, donde, time_sig=(4, 4), letras=('a', '
     bpb = time_sig[0] * (4.0 / time_sig[1])
     lento = escala(tono, t, notas=nq, figura='e')
     rapido = escala(tono, t, notas=int(bpb * 4), figura='s')
+    sistemas = [
+        dict(cap=letras[0] + ') el dibujo en corcheas, al doble de lento · así es como '
+                             'se aprende, no tocándolo rápido desde el principio',
+             events=lento, bars=max(1, int(nq * 0.5 / bpb))),
+        dict(cap=letras[1] + ') y AHORA con su figura de verdad, la semicorchea · el '
+                             'mismo dibujo, cuatro por golpe, como está impreso',
+             events=rapido, bars=1, show_time=False),
+    ]
     return dict(num=num, titulo='Las semicorcheas, primero despacio',
                 pista='andamio en %s · %s' % (tono, donde),
-                sistemas=[
-                    dict(cap=letras[0] + ') el dibujo en corcheas, al doble de lento · así es como '
-                                         'se aprende, no tocándolo rápido desde el principio',
-                         events=lento, bars=max(1, int(nq * 0.5 / bpb))),
-                    dict(cap=letras[1] + ') y AHORA con su figura de verdad, la semicorchea · el '
-                                         'mismo dibujo, cuatro por golpe, como está impreso',
-                         events=rapido, bars=1, show_time=False),
-                ])
+                sistemas=_encajar_sistemas(sistemas))
 
 
 def bloque_puntillo(tono, num, agudo, donde, time_sig=(4, 4), lento=False,
@@ -674,16 +676,17 @@ def bloque_puntillo(tono, num, agudo, donde, time_sig=(4, 4), lento=False,
     for k in range(pares):
         for p in (g[k % 5], g[(k + 1) % 5]):
             plano.append(dict(pitch=p, dur='q' if lento else 'e', tecnica=True))
+    sistemas = [
+        dict(cap=letras[0] + ') primero IGUALES, para tener la referencia · las dos '
+                             'notas del par duran lo mismo',
+             events=plano, bars=compases),
+        dict(cap=letras[1] + ') y ahora con el puntillo · la primera dura tres veces '
+                             'la segunda, no un poco más',
+             events=ev, bars=compases, show_time=False),
+    ]
     return dict(num=num, titulo='El ritmo con puntillo: largo-corto',
                 pista='andamio en %s · %s' % (tono, donde),
-                sistemas=[
-                    dict(cap=letras[0] + ') primero IGUALES, para tener la referencia · las dos '
-                                         'notas del par duran lo mismo',
-                         events=plano, bars=compases),
-                    dict(cap=letras[1] + ') y ahora con el puntillo · la primera dura tres veces '
-                                         'la segunda, no un poco más',
-                         events=ev, bars=compases, show_time=False),
-                ])
+                sistemas=_encajar_sistemas(sistemas))
 
 
 # El techo y el suelo del pentagrama de SOL, con el mismo criterio que los del
@@ -731,6 +734,36 @@ def _mover(e, octavas):
     if e.get('pitches'):
         return dict(e, pitches=[_octava(p, octavas) for p in e['pitches']])
     return e
+
+
+def _encajar_sistemas(sistemas):
+    """Aplica `_encajar` sistema a sistema, cada uno con su propia clave (o
+       'treble' si no la declara). Es el mismo encaje que ya hace
+       `bloques_extra`, pero para material que se usa suelto —los tresillos,
+       las semicorcheas, el puntillo y los sistemas de `sistemas_extra`— y que
+       hasta ahora se colaba sin pasar por el."""
+    for s in sistemas or []:
+        s['events'] = _encajar(s.get('events', []) or [], s.get('clef', 'treble'))
+    return sistemas
+
+
+def encajar_para(sistemas, clef):
+    """Para cuando el grupo que devuelve `sistemas_extra` se añade a un paso
+       cuya mano no es la que se asume por defecto (treble): fuerza CLEF en
+       los sistemas que no traigan ya el suyo propio (los que ya lo declaran,
+       como la cadencia en clave de fa, no se tocan) y los vuelve a encajar
+       con ese registro. Se llama DESPUES de `sistemas_extra`, que es cuando
+       quien llama sabe a que pentagrama va cada grupo."""
+    for s in sistemas or []:
+        s.setdefault('clef', clef)
+    return _encajar_sistemas(sistemas)
+
+
+# Publico: para encajar a mano una lista de eventos suelta (un `escala(...)`,
+# `arpegio(...)` o `giro(...)` llamado directamente en el archivo de una
+# cancion, fuera de `bloques_extra`/`sistemas_extra`) sin tener que calcular
+# el desplazamiento de octava a ojo.
+encajar = _encajar
 
 
 def bloques_extra(*a, **kw):

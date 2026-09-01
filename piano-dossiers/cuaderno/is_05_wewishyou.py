@@ -18,7 +18,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from relleno import bloques_extra
+from relleno import bloques_extra, encajar
 from is_comun import n, ac, sil, corch
 
 HERE = os.path.dirname(__file__)
@@ -105,7 +105,7 @@ CANCION = dict(
                           events=[sil('h'), n('B4'), n('A4'), n('G4'), n('F#4'), n('E4', 'h.')],
                           bars=3),
                      dict(cap='b) lo mismo empezando más abajo',
-                          events=[sil('h'), n('D4'), n('C4'), n('B3'), n('A3'), n('G3', 'h.')],
+                          events=encajar([sil('h'), n('D4'), n('C4'), n('B3'), n('A3'), n('G3', 'h.')], 'treble'),
                           bars=3, show_time=False),
                  ]),
             dict(num=2, titulo='La izquierda: los acordes de las letras',

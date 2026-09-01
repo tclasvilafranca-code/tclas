@@ -82,6 +82,33 @@ EXCEPCIONES = {
     ('dilan_20_beginning', 'D6'): 'los cc. 7 y 10, en el mismo registro y por el mismo motivo',
     ('eva_15_beginning', 'E6'): 'la cima de los cc. 4 y 6, impresa igual en su edicion',
     ('eva_15_beginning', 'D6'): 'los cc. 7 y 10, en el mismo registro y por el mismo motivo',
+    # El bloque "El 8va del c. 24" ENSEÑA por que existe el signo 8va: el
+    # sistema a) esta a proposito escrito SIN el 8va, en el registro real que
+    # suena, para que se vea cuantas lineas adicionales se ahorra el editor
+    # al ponerlo (el sistema b) de al lado repite la misma frase una octava
+    # mas abajo, ya con el 8va, para comparar). Bajarlo de octava borraria la
+    # comparacion, que es el ejercicio entero.
+    ('dilan_14_writings', 'D6'): 'el 8va del c. 24, sin el signo a proposito: para comparar '
+                                 'lineas adicionales con y sin 8va',
+    ('dilan_14_writings', 'E6'): 'el 8va del c. 24, mismo motivo',
+    ('dilan_14_writings', 'F6'): 'el 8va del c. 24, mismo motivo',
+    # El cruce de manos de Santa Tell Me: la izquierda salta por ENCIMA de la
+    # derecha y baja desde ahi en semicorcheas (c. 4 de la partitura). Es el
+    # mismo caso que My Bonnie: escribirlo una octava mas abajo dejaria de
+    # verse como un cruce y contaria una cosa distinta a la que suena.
+    ('dilan_19_santa', 'D6'): 'el cruce de manos del c. 4: la izquierda salta por encima y baja '
+                              'desde ahi, igual que en My Bonnie',
+    ('eva_14_santa', 'D6'): 'el cruce de manos del c. 4, mismo motivo que en Dilan',
+    # El bloque "El 8va del c. 5, ya en su sitio" dice explicitamente que esta
+    # escrito DONDE DE VERDAD SUENA (su pista: "escrito donde de verdad se
+    # toca"), para que la alumna practique la octava real antes de encontrarla
+    # en la partitura con el signo 8va puesto. Es el mismo caso de arriba.
+    ('eva_16_arabesque', 'A6'): 'el 8va del c. 5, escrito en su octava real a proposito · su '
+                                'pista lo dice: "donde de verdad se toca"',
+    ('eva_16_arabesque', 'D6'): 'el 8va del c. 5, mismo motivo',
+    ('eva_16_arabesque', 'E6'): 'el 8va del c. 5, mismo motivo',
+    ('eva_16_arabesque', 'F6'): 'el 8va del c. 5, mismo motivo',
+    ('eva_16_arabesque', 'G6'): 'el 8va del c. 5, mismo motivo',
 }
 
 
@@ -112,7 +139,17 @@ def revisar(prefijos=None):
                 continue
             for b in hoja.get('bloques', []) or []:
                 for s in b.get('sistemas', []) or []:
-                    clef = s.get('clef') or b.get('clef') or 'treble'
+                    # OJO: tiene que ser EXACTAMENTE la misma resolucion que usa
+                    # el motor al dibujar (`hoja_piano._bloque`, `clef=s.get(
+                    # 'clef', 'treble')`), que NO hereda del bloque. Heredar
+                    # aqui y no alli fue un fallo real: hacia que el auditor
+                    # diera por mala clave de fa una entrada de la derecha que
+                    # ya se imprimia bien en clave de sol (jm_10_shallow, "b) y
+                    # con la derecha encima"), y al reves, dejaba pasar como
+                    # buena en clave de sol una escala de la izquierda que el
+                    # motor imprimia sin clave propia y por tanto en sol de
+                    # verdad (dilan_11_soldadito, lu_04/05/06).
+                    clef = s.get('clef', 'treble')
                     # Los sistemas que el motor abre en sistema de piano —los
                     # que llevan `manos=` y los que `_pide_dos_pentagramas`
                     # detecta solo, porque un acorde mezcla los dos registros—

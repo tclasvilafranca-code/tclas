@@ -52,7 +52,7 @@ from reportlab.lib.colors import HexColor, white
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from notation import (draw_staff, draw_clef, draw_barline, draw_note, draw_chord,
                       draw_notehead, draw_ledger, ledger_lines_needed, note_y,
-                      draw_rest, draw_time_sig)
+                      draw_rest, draw_time_sig, BLEED_SAFE)
 from portada import (W, H, MARGIN, CONTENT_W, NAVY, NAVY_SOFT, CREAM, RULE,
                      INK, MUTED, ACCENT, _fit, _wrap)
 from ficha_info import BLACK_AFTER
@@ -72,7 +72,7 @@ def _cabecera(c, cfg):
     c.setFillColor(CREAM)
     c.rect(0, 0, W, H, fill=1, stroke=0)
     c.setFillColor(NAVY)
-    c.rect(0, H - 6, W, 6, fill=1, stroke=0)
+    c.rect(BLEED_SAFE, H - 6 - BLEED_SAFE, W - 2 * BLEED_SAFE, 6, fill=1, stroke=0)
 
     y = H - 44
     c.setFont('DejaVuSans-Bold', 8.4)

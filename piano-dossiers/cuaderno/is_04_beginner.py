@@ -115,15 +115,15 @@ CANCION = dict(
                  texto='Una blanca vale dos golpes. El puntito de al lado le añade la mitad, así que '
                        'vale tres: justo un compás entero de esta pieza. Cuando la veas, cuenta "un, '
                        'dos, tres" con la tecla bajada y no la sueltes hasta el tres.'),
-            dict(num=2, titulo='La izquierda, que hace lo mismo',
-                 pista='andamio · el mismo dibujo, una octava más abajo',
+            dict(num=2, titulo='La izquierda, que hace lo mismo', clef='bass',
+                 pista='andamio · el mismo dibujo, una octava más abajo y ya en clave de fa',
                  sistemas=[
-                     dict(cap='a) las mismas notas, más graves · también en clave de sol',
+                     dict(cap='a) las mismas notas, más graves · ya en clave de fa',
                           events=[n('C4'), n('C4'), n('C4'), n('A3'), n('B3'), n('C4')],
-                          bars=2, time_sig=(3, 4)),
+                          bars=2, time_sig=(3, 4), clef='bass'),
                      dict(cap='b) y bajando hasta la nota de casa · la última se aguanta entera',
                           events=[n('F3'), n('G3'), n('A3'), n('F3'), n('G3', 'h')],
-                          bars=2, time_sig=(3, 4), show_time=False),
+                          bars=2, time_sig=(3, 4), clef='bass', show_time=False),
                  ]),
             dict(num=3, titulo='Las dos juntas',
                  pista='andamio · despacio, y contando en voz alta',

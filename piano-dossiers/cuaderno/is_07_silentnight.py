@@ -19,7 +19,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from relleno import bloques_extra
+from relleno import bloques_extra, encajar
 from is_comun import n, ac
 
 HERE = os.path.dirname(__file__)
@@ -114,7 +114,7 @@ CANCION = dict(
                           events=[n('F4', 'q.'), n('G4', 'e'), n('F4'), n('D4', 'h.')],
                           bars=2),
                      dict(cap='b) el mismo ritmo un poco más abajo',
-                          events=[n('C4', 'q.'), n('D4', 'e'), n('C4'), n('G3', 'h.')],
+                          events=encajar([n('C4', 'q.'), n('D4', 'e'), n('C4'), n('G3', 'h.')], 'treble'),
                           bars=2, show_time=False),
                  ]),
             dict(tipo='nota',

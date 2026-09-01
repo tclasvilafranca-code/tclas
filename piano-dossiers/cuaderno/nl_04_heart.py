@@ -17,7 +17,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from relleno import arpegio, giro, cadencia, escala
+from relleno import arpegio, giro, cadencia, escala, encajar
 from nl_comun import n, ac, corch
 
 HERE = os.path.dirname(__file__)
@@ -142,7 +142,7 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) sube y baja sin parar en la cima · la mano se abre una vez y se '
                               'queda abierta',
-                          events=arpegio('Do mayor', 'G3'), bars=2),
+                          events=encajar(arpegio('Do mayor', 'G3'), 'treble'), bars=2),
                  ]),
             dict(num=5, titulo='Las dos manos, cuatro compases',
                  pista='andamio a partir del material medido · despacio, y sin mirarse la izquierda',
@@ -169,7 +169,7 @@ CANCION = dict(
                               'pieza se queda en la mitad de trabajo',
                           events=cadencia('Do mayor', 'C3'), bars=4, clef='bass'),
                      dict(cap='b) y la escala por encima, para colocar la derecha',
-                          events=escala('Do mayor', 'G4', sentido='baja'),
+                          events=encajar(escala('Do mayor', 'G4', sentido='baja'), 'treble'),
                           bars=2, show_time=False),
                  ]),
         ],

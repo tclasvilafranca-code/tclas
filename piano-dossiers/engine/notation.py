@@ -18,6 +18,15 @@ GRAY = HexColor('#333333')
 LIGHTLINE = HexColor('#B8B2A2')
 INK = HexColor('#1A1A1A')
 
+# Margen de seguridad para la unica pieza a sangre de todo el diseno: la
+# banda de color del borde superior de cada hoja. Antes tocaba las tres
+# aristas (arriba, izquierda y derecha) del papel; imprimirla asi obliga a
+# la imprenta a sangrado y trimado, o a que una impresora domestica normal
+# (que no llega al borde) la recorte o la encoja con un marco blanco
+# alrededor de toda la hoja. Insetada este margen, la banda queda dentro
+# del area que imprime cualquier maquina sin instrucciones especiales.
+BLEED_SAFE = 8.5   # ~3mm
+
 # Generic diatonic step index, one step = half a line-gap
 _LETTER_VAL = {'C':0,'D':1,'E':2,'F':3,'G':4,'A':5,'B':6}
 

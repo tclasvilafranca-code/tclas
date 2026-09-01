@@ -16,7 +16,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from relleno import bloques_extra, bloque_puntillo
+from relleno import bloques_extra, bloque_puntillo, encajar
 from me_comun import n, ac, sil
 
 HERE = os.path.dirname(__file__)
@@ -103,8 +103,8 @@ CANCION = dict(
                                   n('C#5'), n('E5'), n('G4'), n('B4')],
                           bars=2),
                      dict(cap='b) saltando de cuarta, con las mismas dos teclas negras',
-                          events=[n('F#3'), n('B3'), n('C#4'), n('F#4'),
-                                  n('G3'), n('C#4'), n('D4'), n('G4')],
+                          events=encajar([n('F#3'), n('B3'), n('C#4'), n('F#4'),
+                                          n('G3'), n('C#4'), n('D4'), n('G4')], 'treble'),
                           bars=2, show_time=False),
                  ]),
             dict(num=2, titulo='La derecha sola, con el largo-corto',

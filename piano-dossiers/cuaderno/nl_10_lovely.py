@@ -18,7 +18,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from relleno import escala, cadencia, arpegio, giro
+from relleno import escala, cadencia, arpegio, giro, encajar
 from nl_comun import n, ac, corch
 
 HERE = os.path.dirname(__file__)
@@ -107,10 +107,10 @@ CANCION = dict(
                                   n('A4', 'e'), n('F#4', 'e'), n('A4', 'e'), n('C5', 'e')],
                           bars=2, key_sig=MIm),
                      dict(cap='b) y con el acorde cambiando otra vez, un peldaño distinto',
-                          events=[n('G3', 'e'), n('B3', 'e'), n('D4', 'e'), n('B3', 'e'),
-                                  n('G3', 'e'), n('E4', 'e'), n('G3', 'e'), n('B3', 'e'),
-                                  n('F#3', 'e'), n('A3', 'e'), n('D4', 'e'), n('A3', 'e'),
-                                  n('F#3', 'e'), n('B3', 'e'), n('F#3', 'e'), n('A3', 'e')],
+                          events=encajar([n('G3', 'e'), n('B3', 'e'), n('D4', 'e'), n('B3', 'e'),
+                                          n('G3', 'e'), n('E4', 'e'), n('G3', 'e'), n('B3', 'e'),
+                                          n('F#3', 'e'), n('A3', 'e'), n('D4', 'e'), n('A3', 'e'),
+                                          n('F#3', 'e'), n('B3', 'e'), n('F#3', 'e'), n('A3', 'e')], 'treble'),
                           bars=2, key_sig=MIm, show_time=False),
                  ]),
             dict(num=2, titulo='La izquierda: un acorde y aguantar', clef='bass',

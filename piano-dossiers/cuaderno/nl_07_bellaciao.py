@@ -20,7 +20,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from relleno import arpegio, escala, cadencia, giro
+from relleno import arpegio, escala, cadencia, giro, encajar
 from nl_comun import n, ac, corch
 
 HERE = os.path.dirname(__file__)
@@ -105,8 +105,8 @@ CANCION = dict(
                  pista='andamio en Sol menor · es exactamente lo que hace la pieza',
                  sistemas=[
                      dict(cap='a) en terceras, subiendo con el Fa sostenido',
-                          events=[n('G3'), n('Bb3'), n('A3'), n('C4'),
-                                  n('Bb3'), n('D4'), n('C4'), n('F#4')],
+                          events=encajar([n('G3'), n('Bb3'), n('A3'), n('C4'),
+                                          n('Bb3'), n('D4'), n('C4'), n('F#4')], 'treble'),
                           bars=2, key_sig=SOLm),
                      dict(cap='b) y en terceras bajando, con el Fa natural',
                           events=[n('G4'), n('Eb4'), n('F4'), n('D4'),

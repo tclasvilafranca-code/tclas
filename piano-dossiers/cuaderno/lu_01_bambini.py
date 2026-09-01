@@ -121,18 +121,18 @@ CANCION = dict(
                  texto='Casi todo lo que sale mal al empezar sale mal por hacer dos cosas a la vez. '
                        'Con una mano sola solo hay que pensar en las notas; con las dos, además hay '
                        'que juntarlas. Son dos trabajos, y se hacen de uno en uno.'),
-            dict(num=2, titulo='La mano izquierda sola, que hace lo mismo',
-                 pista='andamio · fíjate en que es el mismo dibujo, solo que más grave',
+            dict(num=2, titulo='La mano izquierda sola, que hace lo mismo', clef='bass',
+                 pista='andamio · el mismo dibujo, ahora en clave de fa: es la mano que lo toca',
                  sistemas=[
-                     dict(cap='a) las mismas notas, más abajo · y también en clave de sol',
+                     dict(cap='a) las mismas notas, más abajo · ya en clave de fa',
                           events=[n('A3'), n('B3'), n('C4'), n('B3'),
                                   n('A3'), n('B3'), n('C4'), n('A3')],
-                          bars=2),
+                          bars=2, clef='bass'),
                      dict(cap='b) el mismo dibujo bajando · el meñique es el que menos fuerza tiene, '
                               'y aquí es el que empieza',
                           events=[n('C4'), n('B3'), n('A3'), n('G3'),
                                   n('A3'), n('B3'), n('C4', 'h')],
-                          bars=2, show_time=False),
+                          bars=2, clef='bass', show_time=False),
                  ]),
             dict(num=3, titulo='Y ahora las dos juntas',
                  pista='andamio · muy despacio · si oyes dos golpecitos, ve más lento',

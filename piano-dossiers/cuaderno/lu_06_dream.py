@@ -16,7 +16,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from relleno import sistemas_extra
+from relleno import sistemas_extra, encajar_para
 from lu_comun import n, ac, sil
 
 HERE = os.path.dirname(__file__)
@@ -144,7 +144,9 @@ _S1, _S2, _S3 = sistemas_extra('Do mayor', 'C4', 'G2', time_sig=(4, 4), variante
 _PASOS = [b for b in CANCION['piano1']['bloques'] if b.get('num')]
 _PASOS[0]['sistemas'] = list(_PASOS[0]['sistemas']) + _S1
 if len(_PASOS) > 1:
-    _PASOS[1]['sistemas'] = list(_PASOS[1]['sistemas']) + _S2
+    # El paso 2 es "la izquierda, que ya sabes" (clef='bass'): _S2 tiene que
+    # sonar ahi, no en clave de sol.
+    _PASOS[1]['sistemas'] = list(_PASOS[1]['sistemas']) + encajar_para(_S2, 'bass')
 if len(_PASOS) > 2:
     _PASOS[2]['sistemas'] = list(_PASOS[2]['sistemas']) + _S3
 

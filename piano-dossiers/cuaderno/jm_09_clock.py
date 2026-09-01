@@ -24,6 +24,7 @@ from reportlab.lib.colors import HexColor
 from cancion import construir
 from jm_comun import (n, ac, sil, objetivo, plan, verdadero_falso, dibujar,
                       contar, para_clase)
+from relleno import encajar
 
 HERE = os.path.dirname(__file__)
 AZUL = HexColor('#3E6E8F')
@@ -111,9 +112,11 @@ CANCION = dict(
                  pista='andamio en Sol mayor · el séptimo escalón es el Fa sostenido',
                  sistemas=[
                      dict(cap='a) subiendo y bajando · la única tecla negra es la penúltima al subir',
-                          events=[n('G3'), n('A3'), n('B3'), n('C4'),
-                                  n('D4'), n('E4'), n('F#4'), n('G4')],
-                          bars=2, key_sig=SOL),
+                          events=encajar([n('G3'), n('A3'), n('B3'), n('C4'),
+                                          n('D4'), n('E4'), n('F#4'), n('G4'),
+                                          n('F#4'), n('E4'), n('D4'), n('C4'),
+                                          n('B3'), n('A3'), n('G3', 'h')], 'treble'),
+                          bars=4, key_sig=SOL),
                      dict(cap='b) y saltando al Fa sostenido desde varios sitios · para el tacto, no '
                               'para la vista',
                           events=[n('G4'), n('F#4'), n('D4'), n('F#4'),

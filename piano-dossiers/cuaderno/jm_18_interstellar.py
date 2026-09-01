@@ -23,6 +23,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
+from relleno import encajar
 from jm_comun import (n, ac, sil, corch, plan, teclado, inventa, rodear,
                       metronomo, para_clase, escalera)
 
@@ -118,9 +119,9 @@ CANCION = dict(
                           bars=4),
                      dict(cap='b) y el mismo dibujo empezando en otra nota · es lo único que cambia '
                               'durante páginas enteras',
-                          events=[n('A3'), n('C4'), n('E4'),
-                                  n('F3'), n('A3'), n('C4'),
-                                  n('G3'), n('B3'), n('D4')],
+                          events=encajar([n('A3'), n('C4'), n('E4'),
+                                          n('F3'), n('A3'), n('C4'),
+                                          n('G3'), n('B3'), n('D4')], 'treble'),
                           bars=3, show_time=False),
                  ]),
             dict(tipo='nota',
@@ -145,10 +146,10 @@ CANCION = dict(
                  pista='andamio · flojito, y con metrónomo desde el primer día',
                  sistemas=[
                      dict(cap='a) la derecha repitiendo su dibujo encima de la izquierda',
-                          events=[n('C4'), n('E4'), n('G4'),
-                                  n('C4'), n('E4'), n('G4'),
-                                  n('A3'), n('C4'), n('E4'),
-                                  n('G3'), n('B3'), n('D4')],
+                          events=encajar([n('C4'), n('E4'), n('G4'),
+                                          n('C4'), n('E4'), n('G4'),
+                                          n('A3'), n('C4'), n('E4'),
+                                          n('G3'), n('B3'), n('D4')], 'treble'),
                           bars=4),
                      dict(cap='b) y esto la izquierda a la vez (andamio) · una nota por compás, y '
                               'aguanta los tres golpes',

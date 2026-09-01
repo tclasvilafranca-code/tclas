@@ -22,7 +22,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from relleno import bloques_extra
+from relleno import bloques_extra, encajar
 from jp_comun import (n, ac, reto, plan, a_cuatro_manos, ordenar, nombres,
                       figuras, para_clase)
 
@@ -112,13 +112,13 @@ CANCION = dict(
                  sistemas=[
                      dict(cap='a) subiendo con el Fa sostenido: es el que empuja hacia el Sol de '
                               'arriba · escúchalo, no lo mires',
-                          events=[n('G3'), n('A3'), n('Bb3'), n('C4'),
-                                  n('D4'), n('Eb4'), n('F#4'), n('G4')],
+                          events=encajar([n('G3'), n('A3'), n('Bb3'), n('C4'),
+                                          n('D4'), n('Eb4'), n('F#4'), n('G4')], 'treble'),
                           bars=2, key_sig='Sol menor'),
                      dict(cap='b) y bajando con el Fa natural, que es como baja la pieza · las dos '
                               'versiones son correctas y suenan distinto',
-                          events=[n('G4'), n('F4'), n('Eb4'), n('D4'),
-                                  n('C4'), n('Bb3'), n('A3'), n('G3')],
+                          events=encajar([n('G4'), n('F4'), n('Eb4'), n('D4'),
+                                          n('C4'), n('Bb3'), n('A3'), n('G3')], 'treble'),
                           bars=2, key_sig='Sol menor', show_time=False),
                  ]),
             dict(num=2, titulo='La melodía, en negras y blancas',

@@ -365,15 +365,43 @@
 > Bonnie* la izquierda cruza por encima y toca un Sol4, y el ejercicio va de
 > eso; escribirlo en clave de sol escondería de quién es la nota.
 >
-> **Lo que queda pendiente y es decisión del cliente:** **158 notas** siguen en
-> el pentagrama equivocado (60 de Luisa, 23 de Dilan, 18 de Josep, 17 de Mercè,
-> 12 de José María, 12 de Isaac, 12 de Eva, 8 de Nel, 1 de Arnau, **0 de
-> Aída**), y todas son el mismo caso —
-> dos manos en un solo pentagrama escritas con notas sueltas, no con acordes,
-> así que el detector automático no las ve. Arreglarlas obliga a abrir el
-> pentagrama de fa (~75 pt por sistema) y **eso cambia el número de páginas de
-> esos álbumes**, que es justo la decisión que dejó gateado
-> `hoja_piano.DOS_PENTAGRAMAS`.
+> **Actualización de la revisión final antes de imprenta (1 de septiembre de
+> 2026).** De las 158 notas de arriba, 137 no eran un problema de "dos manos en
+> un pentagrama": eran **material de andamio (técnica inventada) escrito en el
+> registro equivocado**, casi siempre por una de dos razones — `sistemas_extra`,
+> `bloque_tresillos`, `bloque_semicorcheas` y `bloque_puntillo` construían el
+> sistema y nunca lo pasaban por `relleno._encajar` (que ya existía y ya se
+> usaba en `bloques_extra`), o un ejercicio de "la izquierda hace lo mismo, una
+> octava más abajo" se escribía **a propósito en clave de sol** para que las
+> dos versiones se compararan de un vistazo, y esa clave no soporta el
+> registro. La primera se arregló reutilizando `_encajar` donde faltaba
+> (`relleno.encajar_sistemas`/`encajar_para`, más el nuevo `relleno.encajar`
+> público para los `escala`/`arpegio`/`giro` llamados sueltos); la segunda,
+> pasando esos sistemas a clave de fa de verdad. Ninguna de las dos cambia una
+> nota ni un tiempo: solo mueve octavas o cambia la clave, así que **el número
+> de páginas de los ocho álbumes afectados no se movió ni una hoja**
+> (comprobado reconstruyendo los once después del cambio). De paso salió un
+> fallo real del propio `auditar_registro.py`: resolvía la clave heredando la
+> del bloque (`s.get('clef') or b.get('clef') or 'treble'`) cuando el motor
+> que dibuja de verdad **no hereda, solo mira el sistema** — daba falsos
+> positivos (una entrada de la derecha ya bien impresa) y dejaba pasar falsos
+> negativos (una escala de la izquierda que en realidad salía en sol). Ahora
+> el auditor usa exactamente la misma resolución que `hoja_piano._bloque`.
+>
+> Quedan **21 notas en 4 sistemas** (`jp_05_what`, `jp_16_sweetchild`,
+> `lu_06_dream`, `lu_16_chimchim`) que sí son el caso original: dos manos
+> tocando A LA VEZ, con la izquierda grave y la derecha aguda entrelazadas
+> nota a nota en un solo pentagrama. Ahí subir de octava falsearía el ejercicio
+> (la nota grave tiene que sonar grave) y la única corrección real sigue siendo
+> abrir el pentagrama de fa, que en estos 4 sistemas sueltos es un cambio mucho
+> más pequeño que el original. Sigue pendiente de decisión del cliente.
+>
+> Y **18 excepciones más**, todas nuevas en esta revisión y documentadas en
+> `EXCEPCIONES` con su motivo: los bloques "el 8va" de `dilan_14_writings` y
+> `eva_16_arabesque` (enseñan a propósito el registro real que un signo 8va
+> ahorraría, o lo practican ya en su octava de verdad — bajarlas de octava
+> borraría la lección) y el cruce de manos de `dilan_19_santa`/`eva_14_santa`
+> (la izquierda salta por encima de la derecha, mismo caso que My Bonnie).
 >
 > ### El material de apoyo (`cuaderno/relleno.py`)
 >

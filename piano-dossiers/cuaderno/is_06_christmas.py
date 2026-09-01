@@ -18,7 +18,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from relleno import bloques_extra
+from relleno import bloques_extra, encajar
 from is_comun import n, ac
 
 HERE = os.path.dirname(__file__)
@@ -112,7 +112,7 @@ CANCION = dict(
                           events=[n('E4'), n('E4'), n('E4', 'h'), n('F4'), n('F4'), n('F4', 'h')],
                           bars=2),
                      dict(cap='b) y la frase que baja y sube, con la última aguantada entera',
-                          events=[n('E4'), n('B3'), n('A3'), n('G3'), n('F3', 'w')],
+                          events=encajar([n('E4'), n('B3'), n('A3'), n('G3'), n('F3', 'w')], 'treble'),
                           bars=2, show_time=False),
                  ]),
             dict(tipo='nota',

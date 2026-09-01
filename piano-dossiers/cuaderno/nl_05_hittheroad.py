@@ -18,7 +18,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from reportlab.lib.colors import HexColor
 from cancion import construir
-from relleno import escala, cadencia, arpegio, giro
+from relleno import escala, cadencia, arpegio, giro, encajar
 from nl_comun import n, ac, sil, corch
 
 HERE = os.path.dirname(__file__)
@@ -101,12 +101,12 @@ CANCION = dict(
                  pista='andamio en Fa mayor · el bemol vale para toda la pieza',
                  sistemas=[
                      dict(cap='a) arpegio en Fa, con el Si bemol de paso',
-                          events=[n('F3'), n('A3'), n('C4'), n('F4'),
-                                  n('D4'), n('Bb3'), n('G3'), n('F3')],
+                          events=encajar([n('F3'), n('A3'), n('C4'), n('F4'),
+                                          n('D4'), n('Bb3'), n('G3'), n('F3')], 'treble'),
                           bars=2, key_sig=FA),
                      dict(cap='b) y girando alrededor del Si bemol, que es donde se olvida',
-                          events=[n('C4'), n('Bb3'), n('C4'), n('D4'),
-                                  n('Bb3'), n('A3'), n('F3', 'h')],
+                          events=encajar([n('C4'), n('Bb3'), n('C4'), n('D4'),
+                                          n('Bb3'), n('A3'), n('F3', 'h')], 'treble'),
                           bars=2, key_sig=FA, show_time=False),
                  ]),
             dict(num=2, titulo='La introducción: acordes y silencios',

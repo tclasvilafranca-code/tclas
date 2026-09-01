@@ -150,7 +150,7 @@ CANCION = dict(
                                   n('D5', 'e'), n('Bb4', 'e'), n('D5', 'e'), n('F5', 'e'),
                                   ac(('Eb2', 'Eb5'), 'e'), n('Bb4', 'e'), n('Eb5', 'e'), n('G5', 'e'),
                                   n('Eb5', 'e'), n('Bb4', 'e'), n('Eb5', 'e'), n('G5', 'e')],
-                          bars=2, key_sig='Sib mayor'),
+                          bars=2, key_sig='Sib mayor', manos='sostiene', dos_pentagramas=True),
                      dict(cap='b) y con el acorde de tres notas debajo, que es lo del c. 13 · el '
                               'pedal cambia una vez por compás y no una vez por acorde de arriba',
                           events=[ac(('Bb2', 'F3', 'Bb3'), 'e'), n('Bb4', 'e'), n('D5', 'e'),
@@ -159,6 +159,7 @@ CANCION = dict(
                                   ac(('F2', 'C3', 'F3'), 'e'), n('C5', 'e'), n('A4', 'e'),
                                   n('F5', 'e'), n('C5', 'e'), n('A4', 'e'), n('C5', 'e'),
                                   n('F5', 'e')],
+                          manos='sostiene', dos_pentagramas=True,
                           bars=2, key_sig='Sib mayor', show_time=False),
                  ]),
         ] + bloques_extra('Sib mayor', 21, 'Bb3', 'Bb2',

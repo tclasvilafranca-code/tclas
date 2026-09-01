@@ -327,8 +327,14 @@ def _pide_dos_pentagramas(events, clef, corte='C4'):
 
 def _lineas(c, y, events, time_sig, bars_per_line, gap=GAP, show_time=True,
             clef='treble', key_sig=None, ottava=False, repetir=None, casilla=None,
-            manos='dobla', corte='C4'):
-    if _pide_dos_pentagramas(events, clef, corte):
+            manos='dobla', corte='C4', dos_pentagramas=False):
+    # `_pide_dos_pentagramas` solo detecta el caso que arreglo solo (un acorde
+    # con la izquierda metida dentro del mismo evento que la melodia). Las dos
+    # manos entrelazadas en eventos SUELTOS —silencio, nota grave, nota aguda,
+    # nota aguda...— no dejan ningun evento mixto que mirar, asi que no las ve
+    # y hay que declararlo a mano con `dos_pentagramas=True` en el sistema,
+    # igual que `manos=` y `corte=` no se adivinan.
+    if dos_pentagramas or _pide_dos_pentagramas(events, clef, corte):
         return _lineas_dos_manos(c, y, events, time_sig, bars_per_line, gap,
                                  show_time, key_sig, manos=manos, corte=corte)
     _autobeam(events, time_sig)
@@ -560,7 +566,8 @@ def _bloque(c, y, blq, cfg):
                         repetir=s.get('repetir'),
                         casilla=s.get('casilla'),
                         manos=s.get('manos', 'dobla'),
-                        corte=s.get('corte', 'C4'))
+                        corte=s.get('corte', 'C4'),
+                        dos_pentagramas=s.get('dos_pentagramas', False))
         y -= blq.get('extra_gap', 3)
     elif tipo == 'nota':
         y = nota_clave(c, y, blq['texto'], blq.get('etiqueta', 'LA CLAVE DE TODO'))

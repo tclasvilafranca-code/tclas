@@ -95,7 +95,7 @@ ETAPAS = [
         dict(num=16, titulo='Un beso y una flor', autor='Nino Bravo · piano, acordes y letra',
              tonalidad='Fa mayor', compas='4/4', trabaja='El cifrado impreso, ya con la mano abierta'),
         dict(num=17, titulo='Canon de Pachelbel', autor='Johann Pachelbel · Canon in D',
-             tonalidad='Re mayor', compas='4/4', trabaja='El bajo de ocho notas que sostiene la pieza entera'),
+             tonalidad='Re mayor', compas='4/4', trabaja='Las ocho notas de bajo sobre las que está hecha'),
         dict(num=18, titulo='Preludio nº 1', autor='J. S. Bach · BWV 846 · el del Ave María',
              tonalidad='Do mayor', compas='4/4', trabaja='Un solo dibujo de mano, y 35 compases hechos con él'),
         dict(num=19, titulo='A comme amour', autor='Richard Clayderman · Paul de Senneville',
@@ -136,7 +136,7 @@ PLAN = [
     ]),
     ('Diciembre', [
         (13, "NAVIDAD · 10 It's Beginning — contar el 6/8 en dos golpes", 'especial'),
-        (14, "NAVIDAD · 10 It's Beginning — con la profesora, a cuatro manos", 'especial'),
+        (14, "NAVIDAD · 10 It's Beginning — a cuatro manos en clase", 'especial'),
         (15, 'NAVIDAD · los dos villancicos seguidos, para tocarlos en casa', 'especial'),
         (16, 'REPASO · las cuatro primeras, una detrás de otra', 'repaso'),
     ]),

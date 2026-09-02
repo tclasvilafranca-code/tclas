@@ -186,6 +186,85 @@ def figura_en_caja(c, cx, cy, ancho, alto, clave, color=None):
     return gap
 
 
+def simbolo(c, cx, cy, r, cual, color):
+    """El vocabulario de simbolos musicales que NO son una figura suelta:
+       silencios dentro de un simbolo mayor, alteraciones, calderones, claves,
+       flechas de intercambio... Vive aqui y no en un juego concreto porque
+       varios juegos lo comparten (el silencio y el becuadro del UNO son
+       literalmente la misma casilla que el silencio y el becuadro de la Oca)
+       — un alumno que reconoce el simbolo en un juego lo reconoce en todos.
+
+       Se dibujan, no se buscan en una fuente: ningun tipo de texto trae una
+       doble barra de compas ni un calderon con la proporcion que hace falta
+       a este tamano."""
+    c.saveState()
+    c.setFillColor(color)
+    c.setStrokeColor(color)
+    if cual == 'silencio':
+        figura_en_caja(c, cx, cy, r * 1.5, r * 1.9, 'Rq', color)
+    elif cual == 'becuadro':
+        # a r*2.4 el trazo vertical del becuadro se salia por arriba y por
+        # abajo del ovalo blanco; a r*1.3 queda dentro con margen
+        c.setFont('FreeSerif', r * 1.3)
+        c.drawCentredString(cx, cy - r * 0.42, '♮')
+    elif cual == 'doblebarra':
+        c.setFont('DejaVuSerif-Bold', r * 1.5)
+        c.drawCentredString(cx, cy - r * 0.5, '+2')
+    elif cual == 'canon':
+        # dos flechas curvas en circulo, el icono universal de intercambio:
+        # cada jugador se lleva la mano del otro
+        c.setLineWidth(r * 0.16)
+        c.arc(cx - r * 0.85, cy - r * 0.55, cx + r * 0.85, cy + r * 1.05,
+              startAng=15, extent=155)
+        c.arc(cx - r * 0.85, cy - r * 1.05, cx + r * 0.85, cy + r * 0.55,
+              startAng=195, extent=155)
+        for (px, py, ang) in ((cx + r * 0.80, cy + r * 0.44, -60),
+                              (cx - r * 0.80, cy - r * 0.44, 120)):
+            c.saveState()
+            c.translate(px, py)
+            c.rotate(ang)
+            p = c.beginPath()
+            p.moveTo(0, 0); p.lineTo(-r * 0.30, r * 0.16)
+            p.lineTo(-r * 0.30, -r * 0.16); p.close()
+            c.drawPath(p, fill=1, stroke=0)
+            c.restoreState()
+    elif cual == 'clave_sol':
+        # la clave de sol de verdad (mismo glifo que abre cada pentagrama)
+        c.setFont('FreeSerif', r * 1.7)
+        c.drawCentredString(cx, cy - r * 0.55, '\U0001D11E')
+    elif cual == 'clave_fa':
+        c.setFont('FreeSerif', r * 1.6)
+        c.drawCentredString(cx, cy - r * 0.50, '\U0001D122')
+    elif cual == 'staccato':
+        figura_en_caja(c, cx, cy + r * 0.22, r * 1.1, r * 1.35, 'q', color)
+        c.circle(cx, cy - r * 0.95, r * 0.16, fill=1, stroke=0)
+    elif cual == 'calderon':
+        c.setLineWidth(r * 0.13)
+        c.arc(cx - r * 0.92, cy - r * 0.80, cx + r * 0.92, cy + r * 1.00,
+              startAng=0, extent=180)
+        c.circle(cx, cy - r * 0.10, r * 0.15, fill=1, stroke=0)
+    elif cual == 'corchea':
+        figura_en_caja(c, cx, cy, r * 1.5, r * 1.9, 'e', color)
+    elif cual == 'ligadura':
+        # el arco de la ligadura, el mismo trazo que une dos notas en la
+        # partitura — aqui une dos casillas del tablero
+        c.setLineWidth(r * 0.15)
+        p = c.beginPath()
+        p.moveTo(cx - r * 0.95, cy - r * 0.1)
+        p.curveTo(cx - r * 0.4, cy + r * 0.75, cx + r * 0.4, cy + r * 0.75,
+                 cx + r * 0.95, cy - r * 0.1)
+        c.drawPath(p, fill=0, stroke=1)
+    elif cual == 'redonda_espera':
+        figura_en_caja(c, cx, cy, r * 1.5, r * 1.9, 'Rw', color)
+    elif cual == 'dacapo':
+        c.setFont('DejaVuSerif-Bold', r * 0.95)
+        c.drawCentredString(cx, cy - r * 0.30, 'D.C.')
+    elif cual == 'fine':
+        c.setFont('DejaVuSerif-Bold', r * 1.05)
+        c.drawCentredString(cx, cy - r * 0.35, 'FINE')
+    c.restoreState()
+
+
 class _tinta(object):
     """El motor de notacion pinta siempre con SU negro (`notation.INK`). Para
        sacar una figura en blanco encima del color del palo hay que cambiarle el
@@ -372,7 +451,8 @@ def portada_juego(c, titulo, subtitulo, nivel, resumen, reglas, materiales,
     c.rect(0, 0, W, H, fill=1, stroke=0)
 
     c.setFillColor(NAVY)
-    c.rect(0, H - 132, W, 132, fill=1, stroke=0)
+    b = nt.BLEED_SAFE
+    c.rect(b, H - 132 - b, W - 2 * b, 132, fill=1, stroke=0)
     c.setFont('DejaVuSans-Bold', 8.2)
     c.setFillColor(HexColor('#9FB0C4'))
     c.drawString(52, H - 40, 'JUEGOS DE CLASE · EL CUADERNO DEL PIANISTA')

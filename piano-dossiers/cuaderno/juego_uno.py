@@ -60,7 +60,7 @@ from juegos_comun import (W, H, NAVY, CREAM, INK, MUTED, ACCENT, RULE,        # 
                           PALOS, COLOR_PALO, FORMA_PALO, FIGURAS, figura,
                           figura_en_caja, forma, marco, oval_central,
                           logo_tclas, hoja_de_cartas, hoja_dorso,
-                          portada_juego, CARTA_W, CARTA_H)
+                          portada_juego, CARTA_W, CARTA_H, simbolo as _simbolo)
 
 SALIDA = os.path.join(HERE, '..', 'output', 'juegos')
 
@@ -290,64 +290,6 @@ def _esquinas(c, x, y, w, h, etiqueta, palo):
         else:
             forma(c, 0, 0, 4.3, fm, white)
         c.restoreState()
-
-
-def _simbolo(c, cx, cy, r, cual, color):
-    """Los simbolos de las especiales. Se dibujan, no se buscan en una fuente:
-       ningun tipo de texto trae una doble barra de compas ni un calderon con la
-       proporcion que hace falta a este tamano."""
-    c.saveState()
-    c.setFillColor(color)
-    c.setStrokeColor(color)
-    if cual == 'silencio':
-        from juegos_comun import figura_en_caja as _fc
-        _fc(c, cx, cy, r * 1.5, r * 1.9, 'Rq', color)
-    elif cual == 'becuadro':
-        # a r*2.4 el trazo vertical del becuadro se salia por arriba y por
-        # abajo del ovalo blanco; a r*1.3 queda dentro con margen
-        c.setFont('FreeSerif', r * 1.3)
-        c.drawCentredString(cx, cy - r * 0.42, '♮')
-    elif cual == 'doblebarra':
-        c.setFont('DejaVuSerif-Bold', r * 1.5)
-        c.drawCentredString(cx, cy - r * 0.5, '+2')
-    elif cual == 'canon':
-        # dos flechas curvas en circulo, el icono universal de intercambio:
-        # cada jugador se lleva la mano del otro
-        c.setLineWidth(r * 0.16)
-        c.arc(cx - r * 0.85, cy - r * 0.55, cx + r * 0.85, cy + r * 1.05,
-              startAng=15, extent=155)
-        c.arc(cx - r * 0.85, cy - r * 1.05, cx + r * 0.85, cy + r * 0.55,
-              startAng=195, extent=155)
-        for (px, py, ang) in ((cx + r * 0.80, cy + r * 0.44, -60),
-                              (cx - r * 0.80, cy - r * 0.44, 120)):
-            c.saveState()
-            c.translate(px, py)
-            c.rotate(ang)
-            p = c.beginPath()
-            p.moveTo(0, 0); p.lineTo(-r * 0.30, r * 0.16)
-            p.lineTo(-r * 0.30, -r * 0.16); p.close()
-            c.drawPath(p, fill=1, stroke=0)
-            c.restoreState()
-    elif cual == 'clave_sol':
-        # la clave de sol de verdad (mismo glifo que abre cada pentagrama):
-        # "cambias DOS cartas por el mazo", la clave que manda en la mitad
-        # de arriba del piano
-        c.setFont('FreeSerif', r * 1.7)
-        c.drawCentredString(cx, cy - r * 0.55, '\U0001D11E')
-    elif cual == 'clave_fa':
-        # la clave de fa: "cambias UNA carta por el mazo"
-        c.setFont('FreeSerif', r * 1.6)
-        c.drawCentredString(cx, cy - r * 0.50, '\U0001D122')
-    elif cual == 'staccato':
-        from juegos_comun import figura_en_caja as _fc
-        _fc(c, cx, cy + r * 0.22, r * 1.1, r * 1.35, 'q', color)
-        c.circle(cx, cy - r * 0.95, r * 0.16, fill=1, stroke=0)
-    elif cual == 'calderon':
-        c.setLineWidth(r * 0.13)
-        c.arc(cx - r * 0.92, cy - r * 0.80, cx + r * 0.92, cy + r * 1.00,
-              startAng=0, extent=180)
-        c.circle(cx, cy - r * 0.10, r * 0.15, fill=1, stroke=0)
-    c.restoreState()
 
 
 # --------------------------------------------------------------------------

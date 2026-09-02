@@ -263,6 +263,23 @@ def simbolo(c, cx, cy, r, cual, color):
     elif cual == 'fine':
         c.setFont('DejaVuSerif-Bold', r * 1.05)
         c.drawCentredString(cx, cy - r * 0.35, 'FINE')
+    elif cual == 'escalera':
+        # el pentagrama-escalera en miniatura: las cinco lineas de siempre,
+        # y una flecha que las atraviesa subiendo — el mismo gesto que la
+        # escalera grande que cruza el tablero, para que la casilla se
+        # reconozca sin necesidad de ver el tablero entero
+        c.setLineWidth(r * 0.10)
+        bot, top = cy - r * 0.60, cy + r * 0.60
+        for i in range(5):
+            ly = bot + i * (top - bot) / 4.0
+            c.line(cx - r * 0.68, ly, cx + r * 0.68, ly)
+        c.setLineWidth(r * 0.20)
+        c.setLineJoin(1)
+        p = c.beginPath()
+        p.moveTo(cx - r * 0.30, cy - r * 0.15)
+        p.lineTo(cx, cy + r * 0.55)
+        p.lineTo(cx + r * 0.30, cy - r * 0.15)
+        c.drawPath(p, fill=0, stroke=1)
     c.restoreState()
 
 

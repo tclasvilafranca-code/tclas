@@ -40,6 +40,7 @@
 
    Uso:  python3 juego_oca.py
 """
+import math
 import os
 import sys
 
@@ -84,20 +85,26 @@ CARCEL = 52          # silencio de redonda: 2 turnos
 DACAPO = 58
 FINE = 63
 CAMBIOS = [16, 47]   # cambias de sitio con quien va primero
+# la escalera: subes directa de la casilla de abajo a la de arriba (no al
+# reves, y no es un intercambio como la ligadura — es pura ganancia). Dos
+# tramos, saltos grandes a proposito, para que de verdad se note el subidon.
+ESCALERAS = {8: 29, 22: 40}
 
-PLAIN_BG = HexColor('#7DC6E8')       # azul cielo: el color de fondo por defecto
-MAGENTA = HexColor('#D6457E')        # cambio, y las cuñas de los giros
+PLAIN_BG = HexColor('#2E7391')       # azul petroleo, no azul cielo de app
+MAGENTA = HexColor('#C13C74')        # cambio, y las cuñas de los giros
 FINE_GOLD = HexColor('#C9962B')
+ESCALERA_COLOR = HexColor('#3E8E7E')  # verde azulado, distinto de corchea y ligadura
 
 COLOR_TIPO = {
-    'corchea':          HexColor('#4A6741'),
-    'ligadura':         HexColor('#2C4C6B'),
-    'calderon':         HexColor('#A9762F'),
+    'corchea':          HexColor('#3F5A38'),
+    'ligadura':         HexColor('#20364F'),
+    'calderon':         HexColor('#8C6423'),
     'silencio':         NAVY,
-    'becuadro':         HexColor('#B4462F'),
+    'becuadro':         HexColor('#96381F'),
     'redonda_espera':   NAVY,
-    'dacapo':           HexColor('#6E2A1F'),
+    'dacapo':           HexColor('#5C2118'),
     'cambio':           MAGENTA,
+    'escalera':         ESCALERA_COLOR,
     'fine':             FINE_GOLD,
 }
 
@@ -110,6 +117,7 @@ NOMBRE_TIPO = {
     'redonda_espera': 'SILENCIO DE REDONDA',
     'dacapo':         'DA CAPO',
     'cambio':         'CAMBIO',
+    'escalera':       'ESCALERA',
     'fine':           'FINE',
 }
 
@@ -131,6 +139,9 @@ DETALLE = {
                        'casilla 1 — se empieza de cero.',
     'cambio':         'Cambias de sitio con quien va primero — si vas último, '
                        'de un tirón te pones en cabeza; si vas primero, cuidado.',
+    'escalera':       'Nueva. El pentagrama hace de escalera: subes directo a '
+                       'la casilla de arriba. Solo hacia arriba — no es un '
+                       'intercambio, es pura ganancia.',
     'fine':           '(la "meta") Hay que caer justo encima. Si el dado '
                        'te hace pasarte, rebotas hacia atrás lo que sobre.',
 }
@@ -155,6 +166,8 @@ def _tipo_casilla(n):
         return 'ligadura'
     if n in CORCHEAS:
         return 'corchea'
+    if n in ESCALERAS:
+        return 'escalera'
     return None
 
 
@@ -203,13 +216,15 @@ def _giros(orden):
 # --------------------------------------------------------------------------
 # La hoja del tablero
 # --------------------------------------------------------------------------
-def _cuna(c, x, y, w, h, sx, sy, color):
+def _cuna(c, x, y, w, h, sx, sy, color, jit=0):
     """La cuña triangular de la esquina del giro, el detalle que hace que la
        espiral se lea como un camino que dobla y no como una cuadricula
-       lisa — el mismo lenguaje que las cuñas de color de la referencia."""
+       lisa — el mismo lenguaje que las cuñas de color de la referencia.
+       `jit` varia el tamaño un poco entre giro y giro para que las ocho
+       cuñas del tablero no salgan todas del mismo molde exacto."""
     if sx == 0 or sy == 0:
         return
-    lado = min(w, h) * 0.42
+    lado = min(w, h) * (0.42 + jit)
     cxo = x + w / 2.0 + sx * w / 2.0
     cyo = y + h / 2.0 + sy * h / 2.0
     p = c.beginPath()
@@ -247,7 +262,8 @@ def _dibujar_casilla(c, x, y, w, h, numero, clave_instrumento, giro):
         c.setLineWidth(1.4)
         c.roundRect(x, y, w, h, 7, fill=1, stroke=1)
         if giro:
-            _cuna(c, x, y, w, h, giro[0], giro[1], MAGENTA)
+            _cuna(c, x, y, w, h, giro[0], giro[1], MAGENTA,
+                 jit=((numero * 19) % 11 - 5) * 0.006)
         r = min(w, h) * 0.30
         # la sombra propia del instrumento, para que "flote" sobre la
         # casilla igual que la casilla flota sobre el tablero
@@ -260,7 +276,17 @@ def _dibujar_casilla(c, x, y, w, h, numero, clave_instrumento, giro):
         if numero == 1:
             simbolo(c, x + w / 2.0, y + h * 0.56, r, 'clave_sol', white)
         else:
-            instrumento(c, x + w / 2.0, y + h * 0.53, r, clave_instrumento, fondo=PLAIN_BG)
+            # un pelin de giro y de escala, distinto y determinista por
+            # casilla: es lo que evita que sesenta iconos identicos, todos
+            # rectos y del mismo tamano, delaten un tablero hecho a maquina
+            ang = ((numero * 47) % 17) - 8
+            esc = 1.0 + (((numero * 31) % 9) - 4) * 0.012
+            c.saveState()
+            c.translate(x + w / 2.0, y + h * 0.53)
+            c.rotate(ang)
+            c.scale(esc, esc)
+            instrumento(c, 0, 0, r, clave_instrumento, fondo=PLAIN_BG)
+            c.restoreState()
         _chip_numero(c, x, y, w, h, numero, NAVY, white)
         if numero == 1:
             c.setFont('DejaVuSans-Bold', w * 0.075)
@@ -273,7 +299,8 @@ def _dibujar_casilla(c, x, y, w, h, numero, clave_instrumento, giro):
     c.setLineWidth(1.4)
     c.roundRect(x, y, w, h, 7, fill=1, stroke=1)
     if giro:
-        _cuna(c, x, y, w, h, giro[0], giro[1], MAGENTA)
+        _cuna(c, x, y, w, h, giro[0], giro[1], MAGENTA,
+             jit=((numero * 19) % 11 - 5) * 0.006)
     r = min(w, h) * 0.25
     cy = y + h * 0.58
     simbolo(c, x + w / 2.0, cy, r, tipo, white)
@@ -287,6 +314,8 @@ def _dibujar_casilla(c, x, y, w, h, numero, clave_instrumento, giro):
         extra = '→1'
     elif tipo == 'redonda_espera':
         extra = '2 turnos'
+    elif tipo == 'escalera':
+        extra = '↑%d' % ESCALERAS[numero]
     if extra:
         c.setFont('DejaVuSans-Bold', w * 0.052)
         c.setFillColor(white)
@@ -311,6 +340,95 @@ def _chip_numero(c, x, y, w, h, numero, color_texto, color_chip):
     c.setFont('DejaVuSans-Bold', ch * 0.62)
     c.setFillColor(color_texto)
     c.drawCentredString(cx0 + cw / 2.0, cy0 + ch * 0.28, texto)
+
+
+def _escaleras_dibujo(c, orden, gx0, gy_top, cell_w, cell_h):
+    """La escalera de verdad: no un icono suelto en una casilla, sino un
+       pentagrama que CRUZA EL TABLERO en diagonal de la casilla de abajo a
+       la de arriba — cinco lineas de pentagrama dobladas en peldaños, con
+       una escalilla de notas que sube por encima. Es la pieza que rompe la
+       cuadricula: todo lo demas en el tablero vive dentro de su casilla,
+       esto vuela por encima de varias.
+
+       Se dibuja DESPUES de la cuadricula, asi que "sobrevuela" lo que pisa
+       en el camino — a proposito: una escalera de verdad tambien tapa un
+       poco de lo que hay debajo."""
+    def centro(numero):
+        gx, gy = orden[numero - 1]
+        px = gx0 + gx * cell_w
+        py = gy_top - (gy + 1) * cell_h
+        return (px + cell_w / 2.0, py + cell_h / 2.0)
+
+    for origen, destino in sorted(ESCALERAS.items()):
+        x0, y0 = centro(origen)
+        x1, y1 = centro(destino)
+        dx, dy = x1 - x0, y1 - y0
+        dist = math.hypot(dx, dy)
+        ux, uy = dx / dist, dy / dist
+        px, py = -uy, ux
+        paso = cell_h * 0.115
+
+        c.saveState()
+        c.setFillColor(black)
+        c.setStrokeColor(black)
+        c.setFillAlpha(0.15)
+        c.setStrokeAlpha(0.15)
+        for i in range(5):
+            off = (i - 2) * paso
+            c.setLineWidth(2.6 if i in (0, 4) else 1.7)
+            c.line(x0 + px * off + 2.5, y0 + py * off - 2.5,
+                  x1 + px * off + 2.5, y1 + py * off - 2.5)
+        c.restoreState()
+
+        c.saveState()
+        c.setStrokeColor(ESCALERA_COLOR)
+        c.setFillColor(ESCALERA_COLOR)
+        for i in range(5):
+            off = (i - 2) * paso
+            c.setLineWidth(2.8 if i in (0, 4) else 1.8)
+            c.line(x0 + px * off, y0 + py * off, x1 + px * off, y1 + py * off)
+        # los peldaños: travesaños perpendiculares que atraviesan las cinco
+        # lineas, el gesto que convierte un pentagrama en una escalera
+        n_peldanos = max(4, int(dist / (cell_w * 0.85)))
+        for k in range(1, n_peldanos):
+            t = k / float(n_peldanos)
+            rx, ry = x0 + dx * t, y0 + dy * t
+            c.setLineWidth(2.0)
+            c.line(rx + px * paso * 2.3, ry + py * paso * 2.3,
+                  rx - px * paso * 2.3, ry - py * paso * 2.3)
+        # una escalilla de notas subiendo, de peldaño en peldaño — la
+        # metafora entera en tres golpes: subir la escalera ES subir la
+        # escala
+        for j, t in enumerate((0.22, 0.5, 0.78)):
+            nx, ny = x0 + dx * t, y0 + dy * t
+            off = (j - 1) * paso * 1.5
+            nhx, nhy = nx + px * off, ny + py * off
+            c.saveState()
+            c.translate(nhx, nhy)
+            ang_grados = math.degrees(math.atan2(uy, ux))
+            c.rotate(ang_grados - 20)
+            c.ellipse(-cell_w * 0.052, -cell_w * 0.036,
+                     cell_w * 0.052, cell_w * 0.036, fill=1, stroke=0)
+            c.setLineWidth(cell_w * 0.018)
+            c.line(cell_w * 0.05, 0, cell_w * 0.05, cell_w * 0.16)
+            c.restoreState()
+        c.restoreState()
+
+        # flecha en el extremo de llegada, apuntando en la direccion de la
+        # subida, para que no quepa duda de hacia donde tira la escalera
+        c.saveState()
+        c.setFillColor(ESCALERA_COLOR)
+        c.translate(x1 - ux * cell_h * 0.30, y1 - uy * cell_h * 0.30)
+        ang_grados = math.degrees(math.atan2(uy, ux))
+        c.rotate(ang_grados - 90)
+        p = c.beginPath()
+        lado = cell_w * 0.11
+        p.moveTo(0, lado)
+        p.lineTo(-lado * 0.8, -lado * 0.5)
+        p.lineTo(lado * 0.8, -lado * 0.5)
+        p.close()
+        c.drawPath(p, fill=1, stroke=0)
+        c.restoreState()
 
 
 def _marco_decorativo(c):
@@ -407,6 +525,8 @@ def _hoja_tablero(c):
                          cell_w - GAP, cell_h - GAP, numero,
                          ronda_instrumentos[idx], giros.get(idx))
 
+    _escaleras_dibujo(c, orden, gx0, gy_top, cell_w, cell_h)
+
     # el medallon central. La primera version lo hacia mas grande que una
     # casilla y tapaba el numero de las vecinas — dos de ellas especiales
     # (52 y 54), no solo llanas. Ahora el disco solido se queda DENTRO del
@@ -468,6 +588,8 @@ def reglas():
         'otro jugador caiga contigo; el silencio de redonda son DOS '
         'turnos seguidos.',
         'BECUADRO deshace lo andado: retrocedes a la casilla que marca.',
+        'ESCALERA: el pentagrama cruza el tablero y te sube directo a la '
+        'casilla de arriba — solo se sube, nunca se baja.',
         'CAMBIO: cambias de sitio con quien va primero — para bien o para mal.',
         'DA CAPO te manda derecho a la SALIDA — se empieza de cero.',
         'Para llegar a FINE hay que caer justo encima: si te pasas, '
@@ -511,8 +633,8 @@ def _hoja_leyenda(c):
     c.setFillColor(MUTED)
     c.drawString(52, H - 98, 'Déjala al lado del tablero las primeras partidas. '
                              'A la tercera ya no hace falta.')
-    orden = ['corchea', 'ligadura', 'calderon', 'silencio', 'cambio',
-             'becuadro', 'redonda_espera', 'dacapo', 'fine']
+    orden = ['corchea', 'ligadura', 'calderon', 'silencio', 'escalera',
+             'cambio', 'becuadro', 'redonda_espera', 'dacapo', 'fine']
     gutter = 22
     colw = (W - 104 - gutter) / 2.0
     filas = (len(orden) + 1) // 2

@@ -69,10 +69,11 @@ FIGURAS = {
     'e.': ('corchea con puntillo',  0.75, '¾'),
     'e':  ('corchea',               0.5,  '½'),
     's':  ('semicorchea',           0.25, '¼'),
-    'Rw': ('silencio de redonda',   4.0,  '4'),
-    'Rh': ('silencio de blanca',    2.0,  '2'),
-    'Rq': ('silencio de negra',     1.0,  '1'),
-    'Re': ('silencio de corchea',   0.5,  '½'),
+    'Rw': ('silencio de redonda',      4.0,  '4'),
+    'Rh': ('silencio de blanca',       2.0,  '2'),
+    'Rq': ('silencio de negra',        1.0,  '1'),
+    'Re': ('silencio de corchea',      0.5,  '½'),
+    'Rs': ('silencio de semicorchea',  0.25, '¼'),
 }
 
 NIVELES = {
@@ -122,7 +123,7 @@ def figura(c, cx, cy, gap, clave, color=None):
     c.saveState()
     with _tinta(color):
         if clave.startswith('R'):
-            dur = {'Rw': 'w', 'Rh': 'h', 'Rq': 'q', 'Re': 'e'}[clave]
+            dur = {'Rw': 'w', 'Rh': 'h', 'Rq': 'q', 'Re': 'e', 'Rs': 's'}[clave]
             nt.draw_rest(c, cx, sb, st, gap, dur)
         else:
             nt.draw_note(c, cx, sb, st, gap, 'B4', clave, stem_dir='up', clef='treble')
@@ -233,10 +234,14 @@ def logo_tclas(c, cx, cy, r):
 
 
 # --------------------------------------------------------------------------
-# La hoja de cartas: 2 x 3, con marcas de corte
+# La hoja de cartas: 3 x 4, con marcas de corte
 # --------------------------------------------------------------------------
-CARTA_W, CARTA_H = 180.0, 246.0        # 63.5 x 86.8 mm, tamano poker/UNO real
-COLS, FILAS = 2, 3
+# Ancho de poker de verdad (63.5mm) para que una semicorchea se lea; alto
+# recortado de 88.9 a 70.6mm para que quepan doce por hoja en vez de seis. El
+# recorte se hace con guillotina, asi que el numero de hojas no es problema;
+# lo que si lo era es una carta tan alta que desperdicia media hoja de aire.
+CARTA_W, CARTA_H = 180.0, 200.0        # 63.5 x 70.6 mm
+COLS, FILAS = 3, 4
 POR_HOJA = COLS * FILAS
 
 

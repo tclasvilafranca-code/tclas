@@ -23,10 +23,11 @@
    de la escuela solo tiene toner negro, el juego sigue siendo jugable. Un juego
    que se muere en una fotocopia es un juego que no se lleva a clase.
 
-   EL TAMANO DE CARTA es de baraja pequena (51 x 73 mm, 16 por hoja A4). Es
-   deliberado: con el tamano de poker una baraja de sesenta cartas son siete
-   hojas de recortar, y una mano de siete cartas no le cabe a un nino de diez
-   anos entre los dedos.
+   EL TAMANO DE CARTA es tamano poker de verdad (63,5 x 88,9 mm — 2,5" x 3,5",
+   el mismo que un UNO real), 6 por hoja A4. Antes era baraja mini para que
+   saliera mas barajas por hoja, pero a ese tamano una semicorchea con su
+   doble corchete no se lee bien ni de cerca; con figuras de por medio el
+   tamano manda sobre el numero de hojas.
 """
 import os
 import sys
@@ -215,11 +216,27 @@ def forma(c, cx, cy, r, cual, color):
     c.restoreState()
 
 
+LOGO_TCLAS = os.path.join(HERE, '..', 'assets', 'asset_logo_tclas_v2.png')
+
+
+def logo_tclas(c, cx, cy, r):
+    """El sello de T-Clas, centrado en (cx, cy) con radio r. Vive aqui y no en
+       cada comodin porque el logo real (fondo blanco, clave en circulo azul
+       noche) es lo que hace que un comodin se reconozca desde el otro lado de
+       la mesa sin leer letra ninguna — igual que el arco iris del UNO de
+       verdad."""
+    try:
+        c.drawImage(LOGO_TCLAS, cx - r, cy - r, r * 2, r * 2,
+                    mask='auto', preserveAspectRatio=True)
+    except Exception:
+        pass
+
+
 # --------------------------------------------------------------------------
-# La hoja de cartas: 4 x 4, con marcas de corte
+# La hoja de cartas: 2 x 3, con marcas de corte
 # --------------------------------------------------------------------------
-CARTA_W, CARTA_H = 138.0, 192.0        # 48.7 x 67.7 mm, baraja pequena
-COLS, FILAS = 4, 4
+CARTA_W, CARTA_H = 180.0, 246.0        # 63.5 x 86.8 mm, tamano poker/UNO real
+COLS, FILAS = 2, 3
 POR_HOJA = COLS * FILAS
 
 

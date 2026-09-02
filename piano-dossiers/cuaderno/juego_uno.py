@@ -1,117 +1,156 @@
 # -*- coding: utf-8 -*-
-"""UNO MUSICAL — tres barajas, una por nivel.
+"""UNO MUSICAL — una sola baraja, para todo el mundo.
 
-   LA IDEA. Es el UNO de siempre con una sola sustitucion: donde el UNO pone un
-   NUMERO, aqui va una FIGURA. Y como cada figura vale lo que vale, se puede
-   encadenar de dos maneras:
+   LA IDEA. Es el UNO de siempre con una sustitucion y un anadido. La
+   sustitucion: donde el UNO pone un NUMERO, aqui va una FIGURA (o su
+   silencio). El anadido: TAMBIEN hay numerales de verdad —¼, ½, ¾, 1, 1½, 2,
+   3, 4—, que valen exactamente lo mismo que la figura de su valor y se
+   pueden jugar unos sobre otros. Si sale un "1" se puede tirar una negra
+   encima, y al reves.
+
+   Tres caminos para encadenar una carta sobre la de arriba:
 
      - por PALO   (color y forma), como en el UNO;
-     - por FIGURA (el mismo dibujo), como en el UNO;
-     - y, en las barajas media y dificil, tambien **por VALOR**: una blanca
-       encima de una negra con puntillo no vale, pero DOS corcheas valen lo que
-       una negra y eso si se puede cantar.
+     - por FIGURA/NUMERAL IGUAL (la misma cara), como en el UNO;
+     - por VALOR: una negra vale lo mismo que un "1", y DOS corcheas valen lo
+       que UNA negra, y eso tambien se puede jugar y cantar.
 
-   Ese tercer camino es todo el aprendizaje del juego, y no hace falta
-   explicarlo: el alumno lo descubre porque le sirve para ganar. Nadie ha
-   aprendido nunca que dos corcheas son una negra por que se lo dijeran; se
-   aprende usandolo.
+   Ese ultimo camino es todo el aprendizaje del juego, y no hace falta
+   explicarlo: se descubre porque sirve para ganar. LA REGLA QUE HACE QUE SEA
+   MUSICA Y NO CROMOS: la carta se gana, no se tira — para soltarla hay que
+   DECIR lo que vale en voz alta ("media", "uno y medio"), o palmearla. Sin
+   esta regla el juego funciona igual... y no ensena nada, que es como acaban
+   casi todos los juegos educativos.
 
-   LA REGLA QUE HACE QUE SEA MUSICA Y NO CROMOS. **La carta se gana, no se
-   tira**: para soltar una carta hay que DECIR lo que vale en voz alta ("media"),
-   o palmearla. Si no se dice, no se suelta. Sin esta regla el juego funciona
-   igual de bien... y no ensena absolutamente nada, que es como acaban casi
-   todos los juegos educativos.
+   POR QUE UNA SOLA BARAJA Y NO TRES. Decision del cliente: esta la juega
+   cualquiera, no hace falta escalonarla por figuras como el resto del
+   material (eso ya lo hacen los propios dosieres). Lleva las CINCO figuras
+   completas —de la semicorchea a la redonda— con sus CINCO silencios y el
+   PUNTILLO en las tres que lo admiten (blanca, negra y corchea), que es mas
+   de lo que llevaba cualquiera de los tres niveles antiguos por separado.
 
-   LAS ESPECIALES SALEN SOLAS DEL LENGUAJE, no hay que inventarse nada:
+   LAS ESPECIALES, la mitad clasicas del UNO y la mitad nuevas:
 
-     SILENCIO        el siguiente se calla un turno
-     BECUADRO        cambia el sentido (deshace lo que habia)
-     DOBLE BARRA     el siguiente roba dos
-     ARMADURA        comodin: eliges palo
-     CALDERON        comodin: eliges palo y el siguiente roba cuatro
+     SILENCIO        el siguiente se calla un turno           (el "salta")
+     BECUADRO        cambia el sentido de la ronda             (el "reverse")
+     DOBLE BARRA     el siguiente roba dos                     (el "+2")
+     CANON           cambias tu mano con la de otro jugador
+     STACCATO        el siguiente tiene 3 segundos o roba una
 
-   QUE LLEVA CADA BARAJA (sale de `niveles.py`, no de la cabeza de nadie):
+   Y los comodines, sin palo, con el sello de T-Clas:
 
-     FACIL    redonda, blanca, negra, corchea y dos silencios       60 cartas
-     MEDIO    entra el puntillo                                     76 cartas
-     DIFICIL  entra la semicorchea y la corchea con puntillo        92 cartas
+     ARMADURA        eliges el palo a partir de ahora           (el "wild")
+     CALDERÓN        eliges palo y el siguiente roba cuatro     (el "wild +4")
+     CLAVE DE SOL    cambias DOS cartas tuyas por otras del mazo
+     CLAVE DE FA     cambias UNA carta tuya por otra del mazo
 
-   Uso:  python3 juego_uno.py            (las tres barajas)
-         python3 juego_uno.py 1          (solo la facil)
+   Uso:  python3 juego_uno.py
 """
 import os
 import sys
 
 from reportlab.lib.colors import white
-from juegos_comun import ACCENT, RULE
 from reportlab.pdfgen import canvas as rl_canvas
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, '..', 'engine'))
 
-from juegos_comun import (W, H, NAVY, CREAM, INK, MUTED, PALOS, COLOR_PALO,     # noqa: E402
-                          FORMA_PALO, FIGURAS, NIVELES, figura, figura_en_caja,
-                          forma, marco, oval_central, sello_nivel,
-                          hoja_de_cartas, hoja_dorso, portada_juego,
-                          CARTA_W, CARTA_H)
+from juegos_comun import (W, H, NAVY, CREAM, INK, MUTED, ACCENT, RULE,        # noqa: E402
+                          PALOS, COLOR_PALO, FORMA_PALO, FIGURAS, figura,
+                          figura_en_caja, forma, marco, oval_central,
+                          logo_tclas, hoja_de_cartas, hoja_dorso,
+                          portada_juego, CARTA_W, CARTA_H)
 
 SALIDA = os.path.join(HERE, '..', 'output', 'juegos')
 
-# Cuantas copias de cada figura por palo. Dos es lo que hace que una mano de
-# siete tenga jugada casi siempre; con una sola copia el juego se atasca y hay
-# que robar cuatro veces seguidas, que es cuando un nino de diez anos se va.
-COPIAS = 2
+# --------------------------------------------------------------------------
+# La baraja: que lleva y cuantas copias
+# --------------------------------------------------------------------------
+# Las ocho figuras que suenan (con puntillo) y sus cinco silencios. Dos
+# copias de cada una por color: con una sola, una mano de siete se atasca y
+# hay que robar todo el rato.
+FIGURAS_CARTA = ['w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's',
+                 'Rw', 'Rh', 'Rq', 'Re', 'Rs']
+COPIAS_FIGURA = 2
 
+# Los numerales, con mas peso en los cuatro valores que de verdad se usan
+# tocando (corchea, negra, blanca, redonda) que en los otros cuatro (los tres
+# con puntillo y la semicorchea), que aparecen menos en una pieza real.
+NUMERAL_DOS_COPIAS = ['w', 'h', 'q', 'e']
+NUMERAL_UNA_COPIA = ['h.', 'q.', 'e.', 's']
+
+# Cuantas copias de cada especial, UNA por color salvo la que se dijo a
+# proposito que llevara el doble (como el "+2" del UNO real, que tambien
+# lleva dos copias por color).
 ESPECIALES = {
-    1: ['silencio', 'doblebarra'],
-    2: ['silencio', 'becuadro', 'doblebarra'],
-    3: ['silencio', 'becuadro', 'doblebarra'],
+    'silencio':   1,
+    'becuadro':   1,
+    'doblebarra': 2,
+    'canon':      1,
+    'staccato':   1,
 }
-COMODINES = {1: [('armadura', 4)],
-             2: [('armadura', 4), ('calderon', 2)],
-             3: [('armadura', 4), ('calderon', 4)]}
+# Los comodines no llevan palo: valen igual sobre cualquier carta. Las dos
+# claves son mulligan contra el MAZO (no contra otro jugador, que es lo que
+# ya hace CANON): mismo reparto de 6 copias que armadura/calderón.
+COMODINES = {'armadura': 6, 'calderon': 6, 'clave_sol': 6, 'clave_fa': 6}
 
 NOMBRE_ESPECIAL = {
     'silencio':   ('SILENCIO', 'se calla un turno'),
     'becuadro':   ('BECUADRO', 'cambia el sentido'),
-    'doblebarra': ('DOBLE BARRA', 'robas dos'),
+    'doblebarra': ('+2', 'el siguiente roba dos'),
+    'canon':      ('CANON', 'cambias tu mano con otro'),
+    'staccato':   ('STACCATO', '3 segundos o robas'),
     'armadura':   ('ARMADURA', 'eliges palo'),
-    'calderon':   ('CALDERÓN', 'palo y robas cuatro'),
+    'calderon':   ('CALDERÓN', 'palo y el siguiente roba cuatro'),
+    'clave_sol':  ('CLAVE DE SOL', 'cambias 2 cartas por el mazo'),
+    'clave_fa':   ('CLAVE DE FA', 'cambias 1 carta por el mazo'),
 }
 
 
 # --------------------------------------------------------------------------
 # La baraja
 # --------------------------------------------------------------------------
-def baraja(nivel):
+def baraja():
     cartas = []
-    for clave in NIVELES[nivel]['figuras']:
+    for clave in FIGURAS_CARTA:
         for palo, _c, _f in PALOS:
-            for _ in range(COPIAS):
+            for _ in range(COPIAS_FIGURA):
                 cartas.append(dict(tipo='figura', palo=palo, clave=clave))
-    for esp in ESPECIALES[nivel]:
+    for clave in NUMERAL_DOS_COPIAS:
         for palo, _c, _f in PALOS:
-            cartas.append(dict(tipo='especial', palo=palo, cual=esp))
-    for cual, cuantas in COMODINES[nivel]:
-        for _ in range(cuantas):
+            for _ in range(2):
+                cartas.append(dict(tipo='numeral', palo=palo, clave=clave))
+    for clave in NUMERAL_UNA_COPIA:
+        for palo, _c, _f in PALOS:
+            cartas.append(dict(tipo='numeral', palo=palo, clave=clave))
+    for esp, copias in ESPECIALES.items():
+        for palo, _c, _f in PALOS:
+            for _ in range(copias):
+                cartas.append(dict(tipo='especial', palo=palo, cual=esp))
+    for cual, copias in COMODINES.items():
+        for _ in range(copias):
             cartas.append(dict(tipo='comodin', cual=cual))
     return cartas
 
 
 def _reparto(cartas):
-    """Las cartas se colocan en la hoja AGRUPADAS POR PALO y por figura, no
-       barajadas. Recortar una hoja donde todo es distinto es un suplicio; con
-       las iguales juntas, la tijera va de corrido y ademas se ve de un vistazo
-       si falta alguna."""
-    orden = dict((p, i) for i, (p, _c, _f) in enumerate(PALOS))
-    figs = NIVELES_ORDEN
+    """Las cartas se colocan en la hoja AGRUPADAS, no barajadas: recortar una
+       hoja donde todo es distinto es un suplicio, y con las iguales juntas se
+       ve de un vistazo si falta alguna."""
+    orden_palo = dict((p, i) for i, (p, _c, _f) in enumerate(PALOS))
+    orden_clave = dict((k, i) for i, k in enumerate(FIGURAS_CARTA))
+    orden_num = dict((k, i) for i, k in enumerate(
+        NUMERAL_DOS_COPIAS + NUMERAL_UNA_COPIA))
+
     def clave(k):
         if k['tipo'] == 'comodin':
-            return (3, 0, k['cual'])
+            return (4, 0, k['cual'])
         if k['tipo'] == 'especial':
-            return (2, orden[k['palo']], k['cual'])
-        return (1, figs.index(k['clave']), orden[k['palo']])
+            return (3, orden_palo[k['palo']], k['cual'])
+        if k['tipo'] == 'numeral':
+            return (2, orden_num[k['clave']], orden_palo[k['palo']])
+        return (1, orden_clave[k['clave']], orden_palo[k['palo']])
     return sorted(cartas, key=clave)
 
 
@@ -123,17 +162,15 @@ def pintar(c, x, y, w, h, carta):
         _comodin(c, x, y, w, h, carta)
     elif carta['tipo'] == 'especial':
         _especial(c, x, y, w, h, carta)
+    elif carta['tipo'] == 'numeral':
+        _numeral(c, x, y, w, h, carta)
     else:
         _figura(c, x, y, w, h, carta)
-    sello_nivel(c, x, y, w, PINTANDO['nivel'])
-
-
-PINTANDO = dict(nivel=1)
 
 
 # El centro del ovalo va por encima de la mitad de la carta: abajo hay que
-# dejar sitio para el nombre de la figura, que es lo que convierte la carta en
-# material de clase y no en un cromo.
+# dejar sitio para el nombre, que es lo que convierte la carta en material de
+# clase y no en un cromo.
 CY_OVALO = 0.575
 
 
@@ -143,9 +180,25 @@ def _figura(c, x, y, w, h, carta):
     cy = y + h * CY_OVALO
     marco(c, x, y, w, h, col)
     oval_central(c, x, y, w, h, cy=cy)
-    figura_en_caja(c, x + w * 0.5, cy, w * 0.46, h * 0.44, carta['clave'])
+    figura_en_caja(c, x + w * 0.5, cy, w * 0.46, h * 0.40, carta['clave'])
     _esquinas(c, x, y, w, h, etiqueta, carta['palo'])
     _rotulo(c, x, y, w, nombre.upper(), None)
+
+
+def _numeral(c, x, y, w, h, carta):
+    """El numeral: MISMO valor que su figura gemela, pero la cara es un
+       numero grande, como en el UNO de verdad. Es lo que deja jugar un "1"
+       encima de una negra o al reves: la carta cambia, el valor no."""
+    col = COLOR_PALO[carta['palo']]
+    nombre, _valor, etiqueta = FIGURAS[carta['clave']]
+    cy = y + h * CY_OVALO
+    marco(c, x, y, w, h, col)
+    oval_central(c, x, y, w, h, cy=cy)
+    c.setFont('DejaVuSerif-Bold', h * 0.30)
+    c.setFillColor(col)
+    c.drawCentredString(x + w * 0.5, cy - h * 0.10, etiqueta)
+    _esquinas(c, x, y, w, h, etiqueta, carta['palo'])
+    _rotulo(c, x, y, w, nombre.upper(), 'vale lo mismo que la figura')
 
 
 def _especial(c, x, y, w, h, carta):
@@ -161,22 +214,19 @@ def _especial(c, x, y, w, h, carta):
 
 def _comodin(c, x, y, w, h, carta):
     """El comodin no tiene palo, y eso hay que VERLO desde el otro lado de la
-       mesa: fondo azul noche (ninguna otra carta lo es) y los cuatro palos
-       rodeando el simbolo, como los cuatro colores del comodin del UNO."""
+       mesa: fondo azul noche (ninguna otra carta lo es), el sello de T-Clas
+       en el centro —igual que el dorso, para que se reconozca a la vez como
+       comodin y como "de esta baraja"— y los cuatro palos en las esquinas,
+       como el arco iris del comodin del UNO de verdad."""
     rotulo, que = NOMBRE_ESPECIAL[carta['cual']]
     cy = y + h * CY_OVALO
     marco(c, x, y, w, h, NAVY)
     cx = x + w / 2.0
-    # los cuatro palos en cruz, POR FUERA del ovalo, no debajo
-    r = w * 0.34
-    for i, (_palo, color, fm) in enumerate(PALOS):
-        ang = [(0, 1), (1, 0), (0, -1), (-1, 0)][i]
-        forma(c, cx + ang[0] * r * 1.02, cy + ang[1] * r * 1.34,
-              w * 0.055, fm, color)
-    oval_central(c, x, y, w, h, cy=cy, rx=0.30, ry=0.235)
-    _simbolo(c, cx, cy, w * 0.20, carta['cual'], INK)
+    logo_tclas(c, cx, cy, w * 0.30)
+    if carta['cual'] in ('calderon', 'clave_sol', 'clave_fa'):
+        _simbolo(c, cx, y + h * 0.245, w * 0.11, carta['cual'], white)
     for (ex, ey) in ((x + 13, y + h - 19), (x + w - 13, y + 19)):
-        lado = 5.2
+        lado = 5.6
         for i, (_p, color, _fm) in enumerate(PALOS):
             c.setFillColor(color)
             dx = -lado if i % 2 == 0 else 0
@@ -190,15 +240,15 @@ def _rotulo(c, x, y, w, titulo, pie):
        corchea' es el doble de largo que 'negra' y a cuerpo fijo se sale."""
     from portada import _fit
     if pie:
-        t = _fit(titulo, 'DejaVuSans-Bold', 6.8, w - 16, floor=5.0)
+        t = _fit(titulo, 'DejaVuSans-Bold', 7.4, w - 16, floor=5.2)
         c.setFont('DejaVuSans-Bold', t)
         c.setFillColor(white)
-        c.drawCentredString(x + w / 2.0, y + 26, titulo)
-        p = _fit(pie, 'DejaVuSans', 5.8, w - 14, floor=4.4)
+        c.drawCentredString(x + w / 2.0, y + 27, titulo)
+        p = _fit(pie, 'DejaVuSans', 6.2, w - 14, floor=4.6)
         c.setFont('DejaVuSans', p)
         c.drawCentredString(x + w / 2.0, y + 18, pie)
     else:
-        t = _fit(titulo, 'DejaVuSans-Bold', 7.0, w - 16, floor=4.8)
+        t = _fit(titulo, 'DejaVuSans-Bold', 7.6, w - 16, floor=5.0)
         c.setFont('DejaVuSans-Bold', t)
         c.setFillColor(white)
         c.drawCentredString(x + w / 2.0, y + 21, titulo)
@@ -211,17 +261,17 @@ def _esquinas(c, x, y, w, h, etiqueta, palo):
        golpes. Y la FORMA va siempre, tenga o no numero la carta: es lo que
        salva la partida si un dia se imprime en blanco y negro."""
     fm = FORMA_PALO[palo]
-    for (ex, ey, giro) in ((x + 12, y + h - 20, 0), (x + w - 12, y + 20, 180)):
+    for (ex, ey, giro) in ((x + 12, y + h - 18, 0), (x + w - 12, y + 18, 180)):
         c.saveState()
         c.translate(ex, ey)
         c.rotate(giro)
         if etiqueta:
-            c.setFont('DejaVuSans-Bold', 12.5)
+            c.setFont('DejaVuSans-Bold', 11.5)
             c.setFillColor(white)
             c.drawCentredString(0, 0, etiqueta)
-            forma(c, 0, -9.5, 3.4, fm, white)
+            forma(c, 0, -9.5, 3.2, fm, white)
         else:
-            forma(c, 0, 0, 4.6, fm, white)
+            forma(c, 0, 0, 4.3, fm, white)
         c.restoreState()
 
 
@@ -239,15 +289,40 @@ def _simbolo(c, cx, cy, r, cual, color):
         c.setFont('FreeSerif', r * 2.4)
         c.drawCentredString(cx, cy - r * 0.75, '♮')
     elif cual == 'doblebarra':
-        c.setLineWidth(r * 0.13)
-        c.line(cx - r * 0.30, cy - r * 0.85, cx - r * 0.30, cy + r * 0.85)
-        c.setLineWidth(r * 0.34)
-        c.line(cx + r * 0.22, cy - r * 0.85, cx + r * 0.22, cy + r * 0.85)
-    elif cual == 'armadura':
-        # uno al lado del otro y con aire: pegados se leen como un solo garabato
-        c.setFont('FreeSerif', r * 1.55)
-        c.drawCentredString(cx - r * 0.52, cy - r * 0.52, '♯')
-        c.drawCentredString(cx + r * 0.54, cy - r * 0.42, '♭')
+        c.setFont('DejaVuSerif-Bold', r * 1.5)
+        c.drawCentredString(cx, cy - r * 0.5, '+2')
+    elif cual == 'canon':
+        # dos flechas curvas en circulo, el icono universal de intercambio:
+        # cada jugador se lleva la mano del otro
+        c.setLineWidth(r * 0.16)
+        c.arc(cx - r * 0.85, cy - r * 0.55, cx + r * 0.85, cy + r * 1.05,
+              startAng=15, extent=155)
+        c.arc(cx - r * 0.85, cy - r * 1.05, cx + r * 0.85, cy + r * 0.55,
+              startAng=195, extent=155)
+        for (px, py, ang) in ((cx + r * 0.80, cy + r * 0.44, -60),
+                              (cx - r * 0.80, cy - r * 0.44, 120)):
+            c.saveState()
+            c.translate(px, py)
+            c.rotate(ang)
+            p = c.beginPath()
+            p.moveTo(0, 0); p.lineTo(-r * 0.30, r * 0.16)
+            p.lineTo(-r * 0.30, -r * 0.16); p.close()
+            c.drawPath(p, fill=1, stroke=0)
+            c.restoreState()
+    elif cual == 'clave_sol':
+        # la clave de sol de verdad (mismo glifo que abre cada pentagrama):
+        # "cambias DOS cartas por el mazo", la clave que manda en la mitad
+        # de arriba del piano
+        c.setFont('FreeSerif', r * 1.7)
+        c.drawCentredString(cx, cy - r * 0.55, '\U0001D11E')
+    elif cual == 'clave_fa':
+        # la clave de fa: "cambias UNA carta por el mazo"
+        c.setFont('FreeSerif', r * 1.6)
+        c.drawCentredString(cx, cy - r * 0.50, '\U0001D122')
+    elif cual == 'staccato':
+        from juegos_comun import figura_en_caja as _fc
+        _fc(c, cx, cy + r * 0.22, r * 1.1, r * 1.35, 'q', color)
+        c.circle(cx, cy - r * 0.95, r * 0.16, fill=1, stroke=0)
     elif cual == 'calderon':
         c.setLineWidth(r * 0.13)
         c.arc(cx - r * 0.92, cy - r * 0.80, cx + r * 0.92, cy + r * 1.00,
@@ -258,33 +333,24 @@ def _simbolo(c, cx, cy, r, cual, color):
 
 # --------------------------------------------------------------------------
 # La tira de ejemplo. Es lo que de verdad explica el juego: seis lineas de
-# reglas se leen una vez y se olvidan, y una fila de cuatro cartas con una
-# flecha entre ellas no hace falta leerla dos veces.
+# reglas se leen una vez y se olvidan, y una fila de cartas con una flecha
+# entre ellas no hace falta leerla dos veces.
 # --------------------------------------------------------------------------
-def _cadena(nivel):
-    if nivel == 1:
-        return [
-            (dict(tipo='figura', palo='rojo', clave='q'), 'sale una NEGRA roja'),
-            (dict(tipo='figura', palo='rojo', clave='h'), 'vale: mismo palo'),
-            (dict(tipo='figura', palo='azul', clave='h'), 'vale: misma figura'),
-            (dict(tipo='especial', palo='azul', cual='silencio'), 'y te callas un turno'),
-        ]
+def _cadena():
     return [
         (dict(tipo='figura', palo='rojo', clave='q'), 'sale una NEGRA roja'),
-        (dict(tipo='figura', palo='azul', clave='q'), 'vale: misma figura'),
+        (dict(tipo='numeral', palo='azul', clave='q'), 'vale: mismo valor (1), aunque sea un numeral'),
         (dict(tipo='figura', palo='azul', clave='e'), 'vale: mismo palo'),
-        (dict(tipo='figura', palo='azul', clave='e'), 'y otra: las dos valen una'),
+        (dict(tipo='figura', palo='azul', clave='e'), 'y otra corchea: las dos juntas valen una negra'),
     ]
 
 
 def _tira_ejemplo(c, y):
     from portada import _wrap as _w
-    from juegos_comun import RULE
-    nivel = PINTANDO['nivel']
-    cadena = _cadena(nivel)
-    esc = 0.52
+    cadena = _cadena()
+    esc = 0.60
     cw, ch = CARTA_W * esc, CARTA_H * esc
-    hueco = 30
+    hueco = 26
     ancho = len(cadena) * cw + (len(cadena) - 1) * hueco
     x0 = (W - ancho) / 2.0
     alto = ch + 66
@@ -299,7 +365,7 @@ def _tira_ejemplo(c, y):
     c.drawString(68, y - 20, 'UNA MANO DE EJEMPLO')
     c.setFont('DejaVuSans', 8.2)
     c.setFillColor(MUTED)
-    c.drawString(68 + 132, y - 20, 'de izquierda a derecha, y cada una dice por qué vale')
+    c.drawString(68 + 148, y - 20, 'de izquierda a derecha, y cada una dice por qué vale')
 
     cy = y - 34 - ch
     for i, (carta, pie) in enumerate(cadena):
@@ -329,17 +395,18 @@ def _tira_ejemplo(c, y):
 # --------------------------------------------------------------------------
 # Las reglas, en una hoja
 # --------------------------------------------------------------------------
-def reglas(nivel):
-    n = NIVELES[nivel]
-    valor = ('Y hay un tercer camino, que es de donde sale todo lo que se '
-             'aprende aquí: puedes soltar VARIAS cartas cortas si entre todas '
-             'valen lo mismo que la de encima. Dos corcheas encima de una '
-             'negra, por ejemplo.') if nivel > 1 else ''
+def reglas():
     return [
         'Se reparten SIETE cartas a cada uno. El resto es el mazo, boca abajo, '
         'y se levanta la primera para empezar el montón.',
-        'En tu turno sueltas UNA carta que coincida con la de encima: o en el '
-        'palo (el color y la forma) o en la figura. ' + valor,
+        'En tu turno sueltas UNA carta que coincida con la de encima: en el '
+        'palo (color y forma), en la cara (misma figura o mismo numeral), o '
+        'en el VALOR — un numeral "1" y una negra valen igual, y se pueden '
+        'jugar una sobre otra.',
+        'Y hay un tercer camino: puedes soltar VARIAS cartas cortas si entre '
+        'todas valen lo mismo que la de encima. Dos corcheas encima de una '
+        'negra, por ejemplo, o una negra con puntillo encima de una blanca '
+        'con puntillo menos media.',
         'Para soltarla hay que DECIR EN VOZ ALTA lo que vale: «una», «media», '
         '«dos y media». Si no lo dices, la carta se vuelve a tu mano. Ésta es '
         'la única regla que no se puede saltar.',
@@ -368,20 +435,50 @@ VARIANTES = [
 ]
 
 
-def _hoja_reglas(c, nivel):
-    n = NIVELES[nivel]
-    y = portada_juego(
-        c, 'UNO musical', 'La baraja donde los números son figuras', nivel,
-        'Es el UNO de siempre con una sola diferencia: donde el UNO pone un '
-        'número, aquí hay una figura. Y como cada figura vale lo que vale, '
-        'encadenar deja de ser cuestión de color y pasa a ser cuestión de '
-        'cuánto dura cada cosa. Esta baraja lleva %s.' % n['que'],
-        reglas(nivel), MATERIALES, dibujo=_tira_ejemplo)
-    return y
+def _hoja_reglas(c):
+    return portada_juego(
+        c, 'UNO musical', 'La baraja donde los números también son figuras', None,
+        'Es el UNO de siempre con una diferencia y un añadido: donde el UNO '
+        'pone un número, aquí hay una figura (o su silencio) — y ADEMÁS hay '
+        'numerales de verdad, que valen igual que la figura de su mismo '
+        'valor. Encadenar deja de ser solo cuestión de color y pasa a ser '
+        'cuestión de cuánto dura cada cosa.',
+        reglas(), MATERIALES, dibujo=_tira_ejemplo)
 
 
-def _hoja_especiales(c, nivel):
-    """La chuleta de las especiales, para dejarla encima de la mesa."""
+DETALLE = {
+    'silencio':   'El siguiente pierde el turno. Con dos jugadores, vuelves a '
+                  'tirar tú: es la carta más cruel de la baraja.',
+    'becuadro':   'Se invierte el sentido de la ronda. Un becuadro deshace lo '
+                  'que había, igual que en la partitura.',
+    'doblebarra': 'El siguiente roba dos y pierde el turno. Se pueden encadenar: '
+                  'si él también tiene una, la pasa y roban cuatro.',
+    'canon':      'Cambias TODA tu mano por la de otro jugador, el que tú '
+                  'elijas. Un canon es una voz que repite lo que hace otra: '
+                  'aquí es literal.',
+    'staccato':   'El siguiente tiene tres segundos —contados en voz alta— '
+                  'para jugar o robar. Picado quiere decir corto: no hay '
+                  'tiempo de pensarlo.',
+    'armadura':   'Vale sobre cualquier carta. Dices en voz alta qué palo mandas '
+                  'a partir de ahora, igual que la armadura manda sobre la pieza.',
+    'calderon':   'Eliges palo y el siguiente roba cuatro. Sólo se puede soltar '
+                  'si de verdad no tienes ninguna carta del palo de encima.',
+    'clave_sol':  'Cambias DOS cartas tuyas por otras del mazo, boca abajo y '
+                  'sin mirar.',
+    'clave_fa':   'Cambias UNA carta tuya por otra del mazo, boca abajo y sin '
+                  'mirar — la pequeña de la clave de sol.',
+}
+
+
+def _explicar(c, x, y, cual, ancho):
+    from portada import _wrap
+    _wrap(c, DETALLE[cual], x, y, 'DejaVuSans', 8.6, ancho, 12.0, INK)
+
+
+def _hoja_especiales(c):
+    """La chuleta de las especiales y los comodines, para dejarla en la mesa.
+       A DOS COLUMNAS: con 5 especiales + 4 comodines (9 filas) una sola
+       columna no cabe en la hoja."""
     c.setFillColor(CREAM)
     c.rect(0, 0, W, H, fill=1, stroke=0)
     c.setFont('DejaVuSerif-Bold', 22)
@@ -391,111 +488,83 @@ def _hoja_especiales(c, nivel):
     c.setFillColor(MUTED)
     c.drawString(52, H - 98, 'Déjala encima de la mesa las primeras partidas. '
                              'A la tercera ya no hace falta.')
-    y = H - 150
-    todas = [(e, 'palo') for e in ESPECIALES[nivel]] + \
-            [(cu, 'comodin') for cu, _n in COMODINES[nivel]]
-    for cual, clase in todas:
+    todas = [(e, 'palo') for e in ESPECIALES] + [(cu, 'comodin') for cu in COMODINES]
+    gutter = 22
+    colw = (W - 104 - gutter) / 2.0
+    filas = (len(todas) + 1) // 2
+    alto, paso = 76, 84
+    y0 = H - 150
+    esc = 0.30
+    for i, (cual, clase) in enumerate(todas):
+        col, fila = divmod(i, filas)
+        x0 = 52 + col * (colw + gutter)
+        y = y0 - fila * paso
         rotulo, que = NOMBRE_ESPECIAL[cual]
-        alto = 92
         c.setFillColor(white)
-        c.setStrokeColor(HexColor_rule())
+        c.setStrokeColor(RULE)
         c.setLineWidth(0.7)
-        c.roundRect(52, y - alto, W - 104, alto, 7, fill=1, stroke=1)
+        c.roundRect(x0, y - alto, colw, alto, 7, fill=1, stroke=1)
         carta = (dict(tipo='comodin', cual=cual) if clase == 'comodin'
                  else dict(tipo='especial', palo='azul', cual=cual))
-        esc = 0.42
         c.saveState()
-        c.translate(70, y - alto + (alto - CARTA_H * esc) / 2.0)
+        c.translate(x0 + 14, y - alto + (alto - CARTA_H * esc) / 2.0)
         c.scale(esc, esc)
         pintar(c, 0, 0, CARTA_W, CARTA_H, carta)
         c.restoreState()
-        tx = 70 + CARTA_W * esc + 22
-        c.setFont('DejaVuSans-Bold', 12)
+        tx = x0 + 14 + CARTA_W * esc + 14
+        c.setFont('DejaVuSans-Bold', 10.6)
         c.setFillColor(NAVY)
-        c.drawString(tx, y - 30, rotulo)
-        c.setFont('DejaVuSans', 9.6)
+        c.drawString(tx, y - 24, rotulo)
+        c.setFont('DejaVuSans', 8.6)
         c.setFillColor(INK)
-        _explicar(c, tx, y - 48, cual)
-        y -= alto + 12
+        _explicar(c, tx, y - 39, cual, x0 + colw - tx - 10)
 
+    y = y0 - filas * paso - 8
     c.setFont('DejaVuSans-Bold', 8.6)
     c.setFillColor(NAVY)
     c.drawString(52, y - 8, 'TRES MANERAS DE JUGAR LA MISMA BARAJA')
-    y -= 28
+    y -= 20
+    from portada import _wrap
     for rotulo, texto in VARIANTES:
         c.setFont('DejaVuSans-Bold', 8.4)
         c.setFillColor(NAVY)
         c.drawString(52, y, rotulo)
-        c.setFont('DejaVuSans', 9.2)
+        c.setFont('DejaVuSans', 9.0)
         c.setFillColor(INK)
-        c.drawString(52 + 128, y, texto)
-        y -= 17
+        y = _wrap(c, texto, 52 + 128, y, 'DejaVuSans', 9.0, W - 52 - 128 - 52, 12.6, INK)
+        y -= 8
     c.setFont('DejaVuSans', 7.4)
     c.setFillColor(MUTED)
     c.drawCentredString(W / 2.0, 30, 'El Cuaderno del Pianista · T-Clas')
     c.showPage()
 
 
-def HexColor_rule():
-    from juegos_comun import RULE
-    return RULE
-
-
-DETALLE = {
-    'silencio': 'El siguiente pierde el turno. Con dos jugadores, vuelves a '
-                'tirar tú: es la carta más cruel de la baraja.',
-    'becuadro': 'Se invierte el sentido de la ronda. Un becuadro deshace lo '
-                'que había, igual que en la partitura.',
-    'doblebarra': 'El siguiente roba dos y pierde el turno. Se pueden encadenar: '
-                  'si él también tiene una, la pasa y roban cuatro.',
-    'armadura': 'Vale sobre cualquier carta. Dices en voz alta qué palo mandas '
-                'a partir de ahora, igual que la armadura manda sobre la pieza.',
-    'calderon': 'Eliges palo y el siguiente roba cuatro. Sólo se puede soltar '
-                'si de verdad no tienes ninguna carta del palo de encima.',
-}
-
-
-def _explicar(c, x, y, cual):
-    from portada import _wrap
-    _wrap(c, DETALLE[cual], x, y, 'DejaVuSans', 9.4, W - x - 62, 13.4, INK)
-
-
 # --------------------------------------------------------------------------
-NIVELES_ORDEN = []
-
-
-def construir(nivel):
-    global NIVELES_ORDEN
-    NIVELES_ORDEN = NIVELES[nivel]['figuras']
-    PINTANDO['nivel'] = nivel
+def construir():
     os.makedirs(SALIDA, exist_ok=True)
-    n = NIVELES[nivel]
-    ruta = os.path.join(SALIDA, 'UNO_musical_%d_%s.pdf'
-                        % (nivel, n['nombre'].lower().replace('í', 'i')))
+    ruta = os.path.join(SALIDA, 'UNO_musical.pdf')
     c = rl_canvas.Canvas(ruta, pagesize=(W, H))
-    c.setTitle('UNO musical · nivel %s' % n['nombre'])
+    c.setTitle('UNO musical')
 
-    _hoja_reglas(c, nivel)
-    _hoja_especiales(c, nivel)
+    _hoja_reglas(c)
+    _hoja_especiales(c)
 
-    cartas = _reparto(baraja(nivel))
+    cartas = _reparto(baraja())
     total = len(cartas)
     hoja = 1
     while cartas:
-        pie = 'UNO musical · nivel %s · hoja %d de cartas' % (n['nombre'], hoja)
+        pie = 'UNO musical · hoja %d de cartas' % hoja
         cartas = hoja_de_cartas(c, cartas, pintar, pie)
         hoja += 1
-    hoja_dorso(c, 'UNO', nivel)
+    hoja_dorso(c, 'UNO')
     c.save()
     return ruta, total, hoja - 1
 
 
 def main(argv):
-    niveles = [int(a) for a in argv] or [1, 2, 3]
-    for nv in niveles:
-        ruta, total, hojas = construir(nv)
-        print('%-9s %3d cartas · %d hojas de recorte · %s'
-              % (NIVELES[nv]['nombre'], total, hojas, os.path.basename(ruta)))
+    ruta, total, hojas = construir()
+    print('%3d cartas · %d hojas de recorte · %s'
+          % (total, hojas, os.path.basename(ruta)))
     return 0
 
 

@@ -225,7 +225,17 @@ def logo_tclas(c, cx, cy, r):
        cada comodin porque el logo real (fondo blanco, clave en circulo azul
        noche) es lo que hace que un comodin se reconozca desde el otro lado de
        la mesa sin leer letra ninguna — igual que el arco iris del UNO de
-       verdad."""
+       verdad.
+
+       El PNG en si es un recorte: su canal de color es azul noche liso en
+       toda la imagen y el dibujo entero (aro blanco, texto, clave) vive en
+       el canal alfa, pensado para pegarse sobre fondo BLANCO. Sobre una
+       carta azul noche, aro y clave desaparecen (azul sobre azul), asi que
+       aqui se pinta primero un disco blanco de fondo."""
+    c.saveState()
+    c.setFillColor(white)
+    c.circle(cx, cy, r * 1.02, fill=1, stroke=0)
+    c.restoreState()
     try:
         c.drawImage(LOGO_TCLAS, cx - r, cy - r, r * 2, r * 2,
                     mask='auto', preserveAspectRatio=True)
@@ -337,8 +347,12 @@ def portada_juego(c, titulo, subtitulo, nivel, resumen, reglas, materiales,
     """La hoja 1 de cada juego: como se juega, en una sola cara.
 
        Norma de la coleccion: si las reglas no caben en una hoja, el juego no se
-       juega. En una clase de media hora nadie lee dos paginas de reglas."""
-    n = NIVELES[nivel]
+       juega. En una clase de media hora nadie lee dos paginas de reglas.
+
+       `nivel=None` es un juego de una sola baraja para todo el mundo (como el
+       UNO musical): se salta la pastilla de nivel, que no pinta nada si no
+       hay nada que distinguir."""
+    n = NIVELES[nivel] if nivel is not None else None
     c.setFillColor(CREAM)
     c.rect(0, 0, W, H, fill=1, stroke=0)
 
@@ -354,16 +368,17 @@ def portada_juego(c, titulo, subtitulo, nivel, resumen, reglas, materiales,
     c.setFillColor(HexColor('#C3CEDB'))
     c.drawString(52, H - 98, subtitulo)
 
-    # la pastilla de nivel, arriba a la derecha
-    pw = 108
-    c.setFillColor(n['color'])
-    c.roundRect(W - 52 - pw, H - 86, pw, 30, 6, fill=1, stroke=0)
-    c.setFont('DejaVuSans-Bold', 13)
-    c.setFillColor(white)
-    c.drawCentredString(W - 52 - pw / 2.0, H - 76, n['nombre'])
-    c.setFont('DejaVuSans', 7.4)
-    c.setFillColor(HexColor('#C3CEDB'))
-    c.drawRightString(W - 52, H - 98, n['que'])
+    if n is not None:
+        # la pastilla de nivel, arriba a la derecha
+        pw = 108
+        c.setFillColor(n['color'])
+        c.roundRect(W - 52 - pw, H - 86, pw, 30, 6, fill=1, stroke=0)
+        c.setFont('DejaVuSans-Bold', 13)
+        c.setFillColor(white)
+        c.drawCentredString(W - 52 - pw / 2.0, H - 76, n['nombre'])
+        c.setFont('DejaVuSans', 7.4)
+        c.setFillColor(HexColor('#C3CEDB'))
+        c.drawRightString(W - 52, H - 98, n['que'])
 
     y = H - 168
     c.setFont('DejaVuSans', 11)
@@ -412,12 +427,16 @@ def _bloque(c, y, titulo, lineas, numerado=False):
     return y
 
 
-def hoja_dorso(c, titulo, nivel):
+def hoja_dorso(c, titulo, nivel=None):
     """Una hoja entera de dorsos, para pegar por detras si se quiere.
 
        Es opcional y va la ultima: con cartulina de un solo color la baraja ya
-       es opaca, y pegar 60 dorsos a mano no lo hace nadie dos veces."""
-    n = NIVELES[nivel]
+       es opaca, y pegar sesenta dorsos a mano no lo hace nadie dos veces.
+
+       El sello de T-Clas centrado, igual que en los comodines: asi el dorso
+       se reconoce desde el otro lado de la mesa como parte de la misma
+       coleccion, sin tener que leer nada. `nivel=None` (el caso normal ahora,
+       una sola baraja) se salta los puntitos de nivel."""
     x0, y0 = _origen()
     marcas_de_corte(c)
     for k in range(POR_HOJA):
@@ -426,15 +445,13 @@ def hoja_dorso(c, titulo, nivel):
         y = y0 + (FILAS - 1 - fil) * CARTA_H
         marco(c, x, y, CARTA_W, CARTA_H, NAVY)
         oval_central(c, x, y, CARTA_W, CARTA_H, color=NAVY_SOFT,
-                     rx=0.34, ry=0.27)
-        c.setFont('DejaVuSerif-Bold', 15)
+                     rx=0.40, ry=0.36)
+        logo_tclas(c, x + CARTA_W / 2.0, y + CARTA_H * 0.565, CARTA_W * 0.30)
+        c.setFont('DejaVuSerif-Bold', 12)
         c.setFillColor(white)
-        c.saveState()
-        c.translate(x + CARTA_W / 2.0, y + CARTA_H / 2.0)
-        c.rotate(-20)
-        c.drawCentredString(0, -5, titulo)
-        c.restoreState()
-        sello_nivel(c, x, y, CARTA_W, nivel, color=NAVY_SOFT)
+        c.drawCentredString(x + CARTA_W / 2.0, y + 20, titulo.upper())
+        if nivel is not None:
+            sello_nivel(c, x, y, CARTA_W, nivel, color=NAVY_SOFT)
     c.setFont('DejaVuSans', 6.6)
     c.setFillColor(MUTED)
     c.drawString(x0, y0 - 26, 'Dorsos · opcional, solo si quieres pegarlos por detrás')

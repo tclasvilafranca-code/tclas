@@ -26,8 +26,8 @@
    cualquiera, no hace falta escalonarla por figuras como el resto del
    material (eso ya lo hacen los propios dosieres). Lleva las CINCO figuras
    completas —de la semicorchea a la redonda— con sus CINCO silencios y el
-   PUNTILLO en las tres que lo admiten (blanca, negra y corchea), que es mas
-   de lo que llevaba cualquiera de los tres niveles antiguos por separado.
+   PUNTILLO en las dos que lo admiten (blanca y negra), que es mas de lo que
+   llevaba cualquiera de los tres niveles antiguos por separado.
 
    LAS ESPECIALES, la mitad clasicas del UNO y la mitad nuevas:
 
@@ -39,8 +39,8 @@
 
    Y los comodines, sin palo, con el sello de T-Clas:
 
-     ARMADURA        eliges el palo a partir de ahora           (el "wild")
-     CALDERÓN        eliges palo y el siguiente roba cuatro     (el "wild +4")
+     ARMADURA        eliges el color a partir de ahora          (el "wild")
+     CALDERÓN        eliges color y el siguiente roba cuatro    (el "wild +4")
      CLAVE DE SOL    cambias DOS cartas tuyas por otras del mazo
      CLAVE DE FA     cambias UNA carta tuya por otra del mazo
 
@@ -67,18 +67,18 @@ SALIDA = os.path.join(HERE, '..', 'output', 'juegos')
 # --------------------------------------------------------------------------
 # La baraja: que lleva y cuantas copias
 # --------------------------------------------------------------------------
-# Las ocho figuras que suenan (con puntillo) y sus cinco silencios. Dos
-# copias de cada una por color: con una sola, una mano de siete se atasca y
-# hay que robar todo el rato.
-FIGURAS_CARTA = ['w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's',
+# Las siete figuras que suenan (con puntillo en blanca y negra, la corchea
+# se queda lisa) y sus cinco silencios. Dos copias de cada una por color: con
+# una sola, una mano de siete se atasca y hay que robar todo el rato.
+FIGURAS_CARTA = ['w', 'h.', 'h', 'q.', 'q', 'e', 's',
                  'Rw', 'Rh', 'Rq', 'Re', 'Rs']
 COPIAS_FIGURA = 2
 
 # Los numerales, con mas peso en los cuatro valores que de verdad se usan
-# tocando (corchea, negra, blanca, redonda) que en los otros cuatro (los tres
+# tocando (corchea, negra, blanca, redonda) que en los otros tres (los dos
 # con puntillo y la semicorchea), que aparecen menos en una pieza real.
 NUMERAL_DOS_COPIAS = ['w', 'h', 'q', 'e']
-NUMERAL_UNA_COPIA = ['h.', 'q.', 'e.', 's']
+NUMERAL_UNA_COPIA = ['h.', 'q.', 's']
 
 # Cuantas copias de cada especial, UNA por color salvo la que se dijo a
 # proposito que llevara el doble (como el "+2" del UNO real, que tambien
@@ -101,8 +101,8 @@ NOMBRE_ESPECIAL = {
     'doblebarra': ('+2', 'el siguiente roba dos'),
     'canon':      ('CANON', 'cambias tu mano con otro'),
     'staccato':   ('STACCATO', '3 segundos o robas'),
-    'armadura':   ('ARMADURA', 'eliges palo'),
-    'calderon':   ('CALDERÓN', 'palo y el siguiente roba cuatro'),
+    'armadura':   ('ARMADURA', 'eliges color'),
+    'calderon':   ('CALDERÓN', 'color y el siguiente roba cuatro'),
     'clave_sol':  ('CLAVE DE SOL', 'cambias 2 cartas por el mazo'),
     'clave_fa':   ('CLAVE DE FA', 'cambias 1 carta por el mazo'),
 }
@@ -215,16 +215,33 @@ def _especial(c, x, y, w, h, carta):
 def _comodin(c, x, y, w, h, carta):
     """El comodin no tiene palo, y eso hay que VERLO desde el otro lado de la
        mesa: fondo azul noche (ninguna otra carta lo es), el sello de T-Clas
-       en el centro —igual que el dorso, para que se reconozca a la vez como
+       arriba —igual que el dorso, para que se reconozca a la vez como
        comodin y como "de esta baraja"— y los cuatro palos en las esquinas,
-       como el arco iris del comodin del UNO de verdad."""
+       como el arco iris del comodin del UNO de verdad.
+
+       Las tres variantes (calderón, clave de sol, clave de fa) llevan ADEMÁS
+       una segunda burbuja BLANCA, clara y separada de la del sello —no una
+       marca suelta flotando en el azul, que quedaba pegada al sello y a
+       medias invisible (blanco sobre blanco donde se solapaban)— con su
+       icono en tinta azul noche, mismo lenguaje que el sello (oscuro sobre
+       claro), para que se lea como parte del mismo diseño."""
     rotulo, que = NOMBRE_ESPECIAL[carta['cual']]
-    cy = y + h * CY_OVALO
     marco(c, x, y, w, h, NAVY)
     cx = x + w / 2.0
-    logo_tclas(c, cx, cy, w * 0.30)
+    cy_logo = y + h * 0.66
+    logo_tclas(c, cx, cy_logo, w * 0.24)
     if carta['cual'] in ('calderon', 'clave_sol', 'clave_fa'):
-        _simbolo(c, cx, y + h * 0.245, w * 0.11, carta['cual'], white)
+        rb = w * 0.125
+        cy_b = y + h * 0.305
+        c.setFillColor(white)
+        c.circle(cx, cy_b, rb, fill=1, stroke=0)
+        if carta['cual'] == 'calderon':
+            _simbolo(c, cx, cy_b + rb * 0.34, rb * 0.55, 'calderon', NAVY)
+            c.setFont('DejaVuSerif-Bold', rb * 0.92)
+            c.setFillColor(NAVY)
+            c.drawCentredString(cx, cy_b - rb * 0.62, '+4')
+        else:
+            _simbolo(c, cx, cy_b, rb * 0.82, carta['cual'], NAVY)
     for (ex, ey) in ((x + 13, y + h - 19), (x + w - 13, y + 19)):
         lado = 5.6
         for i, (_p, color, _fm) in enumerate(PALOS):
@@ -286,8 +303,10 @@ def _simbolo(c, cx, cy, r, cual, color):
         from juegos_comun import figura_en_caja as _fc
         _fc(c, cx, cy, r * 1.5, r * 1.9, 'Rq', color)
     elif cual == 'becuadro':
-        c.setFont('FreeSerif', r * 2.4)
-        c.drawCentredString(cx, cy - r * 0.75, '♮')
+        # a r*2.4 el trazo vertical del becuadro se salia por arriba y por
+        # abajo del ovalo blanco; a r*1.3 queda dentro con margen
+        c.setFont('FreeSerif', r * 1.3)
+        c.drawCentredString(cx, cy - r * 0.42, '♮')
     elif cual == 'doblebarra':
         c.setFont('DejaVuSerif-Bold', r * 1.5)
         c.drawCentredString(cx, cy - r * 0.5, '+2')
@@ -459,10 +478,10 @@ DETALLE = {
     'staccato':   'El siguiente tiene tres segundos —contados en voz alta— '
                   'para jugar o robar. Picado quiere decir corto: no hay '
                   'tiempo de pensarlo.',
-    'armadura':   'Vale sobre cualquier carta. Dices en voz alta qué palo mandas '
+    'armadura':   'Vale sobre cualquier carta. Dices en voz alta qué color manda '
                   'a partir de ahora, igual que la armadura manda sobre la pieza.',
-    'calderon':   'Eliges palo y el siguiente roba cuatro. Sólo se puede soltar '
-                  'si de verdad no tienes ninguna carta del palo de encima.',
+    'calderon':   'Eliges color y el siguiente roba cuatro. Sólo se puede soltar '
+                  'si de verdad no tienes ninguna carta del color de encima.',
     'clave_sol':  'Cambias DOS cartas tuyas por otras del mazo, boca abajo y '
                   'sin mirar.',
     'clave_fa':   'Cambias UNA carta tuya por otra del mazo, boca abajo y sin '
@@ -556,7 +575,7 @@ def construir():
         pie = 'UNO musical · hoja %d de cartas' % hoja
         cartas = hoja_de_cartas(c, cartas, pintar, pie)
         hoja += 1
-    hoja_dorso(c, 'UNO')
+    hoja_dorso(c, 'UNO MUSICAL')
     c.save()
     return ruta, total, hoja - 1
 

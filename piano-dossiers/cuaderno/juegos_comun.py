@@ -127,6 +127,21 @@ def figura(c, cx, cy, gap, clave, color=None):
             nt.draw_rest(c, cx, sb, st, gap, dur)
         else:
             nt.draw_note(c, cx, sb, st, gap, 'B4', clave, stem_dir='up', clef='treble')
+    if clave in ('Rw', 'Rh'):
+        # los dos son un rectangulo casi identico, y sin pentagrama alrededor
+        # no se distingue cual se APOYA en una linea y cual CUELGA de otra —
+        # que es justo la diferencia que hay que leer. Dos trazos guia (las
+        # dos lineas de las que penden) bastan para verlo sin dibujar las
+        # cinco del pentagrama entero.
+        mid = sb + 2 * gap
+        c.saveState()
+        guia = color if color is not None else nt.GRAY
+        c.setStrokeColor(guia)
+        c.setLineWidth(max(0.6, gap * 0.09))
+        lw = gap * 2.3
+        for ly in (mid, mid + gap):
+            c.line(cx - lw / 2.0, ly, cx + lw / 2.0, ly)
+        c.restoreState()
     c.restoreState()
     return alto
 
@@ -444,9 +459,10 @@ def hoja_dorso(c, titulo, nivel=None):
         x = x0 + col * CARTA_W
         y = y0 + (FILAS - 1 - fil) * CARTA_H
         marco(c, x, y, CARTA_W, CARTA_H, NAVY)
+        cy_logo = y + CARTA_H * 0.565
         oval_central(c, x, y, CARTA_W, CARTA_H, color=NAVY_SOFT,
-                     rx=0.40, ry=0.36)
-        logo_tclas(c, x + CARTA_W / 2.0, y + CARTA_H * 0.565, CARTA_W * 0.30)
+                     rx=0.40, ry=0.36, cy=cy_logo)
+        logo_tclas(c, x + CARTA_W / 2.0, cy_logo, CARTA_W * 0.30)
         c.setFont('DejaVuSerif-Bold', 12)
         c.setFillColor(white)
         c.drawCentredString(x + CARTA_W / 2.0, y + 20, titulo.upper())

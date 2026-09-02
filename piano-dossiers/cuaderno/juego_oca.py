@@ -43,7 +43,8 @@
 import os
 import sys
 
-from reportlab.lib.colors import HexColor, white
+from reportlab.lib.colors import HexColor, white, black
+from reportlab.lib.pagesizes import A3, landscape
 from reportlab.pdfgen import canvas as rl_canvas
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -62,7 +63,10 @@ SALIDA = os.path.join(HERE, '..', 'output', 'juegos')
 # El tablero clásico: 9x7 casillas, espiral hacia el centro
 # --------------------------------------------------------------------------
 COLS, ROWS = 9, 7
-BOARD_W, BOARD_H = H, W          # A4 apaisada: 841.89 x 595.276
+# A3 apaisada: 1190.55 x 841.89 — un A4 se quedaba corto para que el tablero
+# respirase de verdad (casillas grandes, medallón central con presencia,
+# marco decorativo) en vez de ir todo encajado al milímetro.
+BOARD_W, BOARD_H = landscape(A3)
 
 # Las posiciones son las de la Oca de toda la vida (13 ocas, cada 4-5
 # casillas; puentes en 6 y 12; posada 19; pozo 31; laberinto 42; carcel 52;
@@ -205,7 +209,7 @@ def _cuna(c, x, y, w, h, sx, sy, color):
        lisa — el mismo lenguaje que las cuñas de color de la referencia."""
     if sx == 0 or sy == 0:
         return
-    lado = min(w, h) * 0.4
+    lado = min(w, h) * 0.42
     cxo = x + w / 2.0 + sx * w / 2.0
     cyo = y + h / 2.0 + sy * h / 2.0
     p = c.beginPath()
@@ -213,45 +217,67 @@ def _cuna(c, x, y, w, h, sx, sy, color):
     p.lineTo(cxo - sx * lado, cyo)
     p.lineTo(cxo, cyo - sy * lado)
     p.close()
+    c.saveState()
+    c.setFillColor(black)
+    c.setFillAlpha(0.14)
+    c.translate(1.2, -1.2)
+    c.drawPath(p, fill=1, stroke=0)
+    c.restoreState()
     c.setFillColor(color)
     c.drawPath(p, fill=1, stroke=0)
 
 
+def _sombra_rect(c, x, y, w, h, r=6, dx=3, dy=-3, alpha=0.20):
+    """La sombra de una casilla, un desplazamiento sutil para que "flote"
+       sobre el fondo — la diferencia entre un icono plano y uno con cuerpo.
+       Se pinta ANTES que la casilla, en negro translucido."""
+    c.saveState()
+    c.setFillColor(black)
+    c.setFillAlpha(alpha)
+    c.roundRect(x + dx, y + dy, w, h, r, fill=1, stroke=0)
+    c.restoreState()
+
+
 def _dibujar_casilla(c, x, y, w, h, numero, clave_instrumento, giro):
     tipo = _tipo_casilla(numero)
+    _sombra_rect(c, x, y, w, h)
     if tipo is None:
         c.setFillColor(PLAIN_BG)
         c.setStrokeColor(white)
-        c.setLineWidth(1.1)
-        c.roundRect(x, y, w, h, 5, fill=1, stroke=1)
+        c.setLineWidth(1.4)
+        c.roundRect(x, y, w, h, 7, fill=1, stroke=1)
         if giro:
             _cuna(c, x, y, w, h, giro[0], giro[1], MAGENTA)
         r = min(w, h) * 0.30
+        # la sombra propia del instrumento, para que "flote" sobre la
+        # casilla igual que la casilla flota sobre el tablero
+        c.saveState()
+        c.setFillColor(black)
+        c.setFillAlpha(0.12)
+        c.ellipse(x + w * 0.5 - r * 0.85, y + h * 0.53 - r * 0.72,
+                 x + w * 0.5 + r * 0.85, y + h * 0.53 - r * 0.42, fill=1, stroke=0)
+        c.restoreState()
         if numero == 1:
             simbolo(c, x + w / 2.0, y + h * 0.56, r, 'clave_sol', white)
         else:
             instrumento(c, x + w / 2.0, y + h * 0.53, r, clave_instrumento, fondo=PLAIN_BG)
-        c.setFont('DejaVuSans-Bold', 8.2)
-        c.setFillColor(white)
-        c.drawString(x + 4, y + h - 12, str(numero))
+        _chip_numero(c, x, y, w, h, numero, NAVY, white)
         if numero == 1:
-            c.setFont('DejaVuSans-Bold', 6.6)
+            c.setFont('DejaVuSans-Bold', w * 0.075)
             c.setFillColor(white)
-            c.drawCentredString(x + w / 2.0, y + 4, 'SALIDA')
+            c.drawCentredString(x + w / 2.0, y + h * 0.06, 'SALIDA')
         return
     color = COLOR_TIPO[tipo]
     c.setFillColor(color)
     c.setStrokeColor(white)
-    c.setLineWidth(1.1)
-    c.roundRect(x, y, w, h, 5, fill=1, stroke=1)
+    c.setLineWidth(1.4)
+    c.roundRect(x, y, w, h, 7, fill=1, stroke=1)
     if giro:
         _cuna(c, x, y, w, h, giro[0], giro[1], MAGENTA)
-    c.setFont('DejaVuSans-Bold', 7.8)
-    c.setFillColor(white)
-    c.drawString(x + 4, y + h - 11, str(numero))
-    r = min(w, h) * 0.245
-    cy = y + h * 0.56
+    r = min(w, h) * 0.25
+    cy = y + h * 0.58
     simbolo(c, x + w / 2.0, cy, r, tipo, white)
+    _chip_numero(c, x, y, w, h, numero, color, white)
     extra = None
     if tipo == 'ligadura':
         extra = '→%d' % LIGADURAS[numero]
@@ -262,9 +288,57 @@ def _dibujar_casilla(c, x, y, w, h, numero, clave_instrumento, giro):
     elif tipo == 'redonda_espera':
         extra = '2 turnos'
     if extra:
-        c.setFont('DejaVuSans-Bold', 6.4)
+        c.setFont('DejaVuSans-Bold', w * 0.052)
         c.setFillColor(white)
-        c.drawCentredString(x + w / 2.0, y + 4, extra)
+        c.drawCentredString(x + w / 2.0, y + h * 0.05, extra)
+
+
+def _chip_numero(c, x, y, w, h, numero, color_texto, color_chip):
+    """El numero en una pastilla blanca redondeada, no suelto sobre el
+       fondo — se lee igual de bien tenga la casilla el color que tenga, y
+       da ese acabado "con cuerpo" que un numero pintado a pelo no tiene."""
+    texto = str(numero)
+    cw = w * (0.20 if len(texto) > 1 else 0.14)
+    ch = h * 0.16
+    cx0, cy0 = x + w * 0.08, y + h - ch - h * 0.07
+    c.saveState()
+    c.setFillColor(black)
+    c.setFillAlpha(0.15)
+    c.roundRect(cx0 + 1, cy0 - 1, cw, ch, ch / 2.0, fill=1, stroke=0)
+    c.restoreState()
+    c.setFillColor(color_chip)
+    c.roundRect(cx0, cy0, cw, ch, ch / 2.0, fill=1, stroke=0)
+    c.setFont('DejaVuSans-Bold', ch * 0.62)
+    c.setFillColor(color_texto)
+    c.drawCentredString(cx0 + cw / 2.0, cy0 + ch * 0.28, texto)
+
+
+def _marco_decorativo(c):
+    """El marco del poster: dos filetes (azul noche grueso, oro fino por
+       dentro) y un adorno redondo en cada esquina — lo que hace que el
+       tablero se lea como una pieza diseñada y no como una cuadricula
+       suelta flotando en la hoja."""
+    OUTER = 24
+    c.saveState()
+    c.setStrokeColor(NAVY)
+    c.setLineWidth(3.2)
+    c.roundRect(OUTER, OUTER, BOARD_W - 2 * OUTER, BOARD_H - 2 * OUTER, 16,
+               fill=0, stroke=1)
+    c.setStrokeColor(FINE_GOLD)
+    c.setLineWidth(1.1)
+    c.roundRect(OUTER + 6, OUTER + 6, BOARD_W - 2 * (OUTER + 6),
+               BOARD_H - 2 * (OUTER + 6), 12, fill=0, stroke=1)
+    c.restoreState()
+    for (cx, cy) in ((OUTER, OUTER), (BOARD_W - OUTER, OUTER),
+                     (OUTER, BOARD_H - OUTER), (BOARD_W - OUTER, BOARD_H - OUTER)):
+        c.setFillColor(white)
+        c.circle(cx, cy, 11, fill=1, stroke=0)
+        c.setFillColor(FINE_GOLD)
+        c.setStrokeColor(NAVY)
+        c.setLineWidth(1.4)
+        c.circle(cx, cy, 9, fill=1, stroke=1)
+        simbolo(c, cx, cy, 4.6, 'corchea', NAVY)
+    return OUTER
 
 
 def _hoja_tablero(c):
@@ -272,30 +346,37 @@ def _hoja_tablero(c):
     c.setFillColor(CREAM)
     c.rect(0, 0, BOARD_W, BOARD_H, fill=1, stroke=0)
 
-    band_h = 42
-    c.setFillColor(NAVY)
-    c.rect(BLEED_SAFE, BOARD_H - band_h - BLEED_SAFE, BOARD_W - 2 * BLEED_SAFE,
-          band_h, fill=1, stroke=0)
-    c.setFont('DejaVuSerif-Bold', 19)
-    c.setFillColor(white)
-    c.drawString(28, BOARD_H - 30, 'Oca musical')
-    c.setFont('DejaVuSans', 8.6)
-    c.setFillColor(HexColor('#C3CEDB'))
-    c.drawString(28, BOARD_H - 30 - 13, 'de corchea en corchea, y tiro porque me toca')
-    logo_tclas(c, BOARD_W - 40, BOARD_H - band_h / 2.0, 16)
+    outer = _marco_decorativo(c)
+    pad = 18
+    content_l = outer + pad
+    content_r = BOARD_W - outer - pad
+    content_t = BOARD_H - outer - pad
+    content_b = outer + pad
 
-    margin_x_max = max(26, BLEED_SAFE + 18)
-    margin_top, margin_bottom = band_h + BLEED_SAFE + 14, 20
-    gy_top = BOARD_H - margin_top
-    grid_h = gy_top - margin_bottom
-    grid_w_max = BOARD_W - 2 * margin_x_max
+    band_h = 62
+    band_y = content_t - band_h
+    c.setFillColor(NAVY)
+    c.roundRect(content_l, band_y, content_r - content_l, band_h, 10, fill=1, stroke=0)
+    c.rect(content_l, band_y, content_r - content_l, band_h / 2.0, fill=1, stroke=0)
+    c.setFont('DejaVuSerif-Bold', 27)
+    c.setFillColor(white)
+    c.drawString(content_l + 22, band_y + band_h - 34, 'Oca musical')
+    c.setFont('DejaVuSans', 11)
+    c.setFillColor(HexColor('#C3CEDB'))
+    c.drawString(content_l + 22, band_y + 16, 'de corchea en corchea, y tiro porque me toca')
+    logo_tclas(c, content_r - 34, band_y + band_h / 2.0, 22)
+
+    gy_top = band_y - 20
+    grid_bottom = content_b + 26
+    grid_h = gy_top - grid_bottom
+    grid_w_max = content_r - content_l
     # celda CUADRADA (no rectangular): un tablero de Oca se lee como tal
     # cuando las casillas son cuadradas, no ladrillos anchos. El limite lo
     # pone la altura de la hoja; sobra ancho, y ese sobrante se reparte en
     # los dos margenes laterales.
     cell = min(grid_w_max / COLS, grid_h / ROWS)
     grid_w = cell * COLS
-    gx0 = (BOARD_W - grid_w) / 2.0
+    gx0 = content_l + (grid_w_max - grid_w) / 2.0
     cell_w = cell_h = cell
 
     orden = _espiral(COLS, ROWS)
@@ -314,7 +395,7 @@ def _hoja_tablero(c):
         else:
             ronda_instrumentos.append(None)
 
-    GAP = 2.2
+    GAP = 3.0
     centro_px = None
     for idx, (gx, gy) in enumerate(orden):
         numero = idx + 1
@@ -326,33 +407,47 @@ def _hoja_tablero(c):
                          cell_w - GAP, cell_h - GAP, numero,
                          ronda_instrumentos[idx], giros.get(idx))
 
-    # el medallon central: mas grande que una casilla, a proposito — es el
-    # "premio" visual del centro, con el mismo protagonismo que tiene en un
-    # tablero de Oca de verdad. Se pinta el ULTIMO, encima de las cuatro
-    # casillas vecinas, con un aro y el gramofono.
+    # el medallon central. La primera version lo hacia mas grande que una
+    # casilla y tapaba el numero de las vecinas — dos de ellas especiales
+    # (52 y 54), no solo llanas. Ahora el disco solido se queda DENTRO del
+    # hueco de su propia casilla (no invade ninguna vecina) y el "premio"
+    # visual viene de un halo dorado en capas, translucido, que sí se
+    # derrama sobre las vecinas pero sin taparlas — se ve, no se lee encima.
     mx, my = centro_px
-    mr = cell * 0.86
+    for rad, alpha in ((cell * 1.55, 0.05), (cell * 1.15, 0.09), (cell * 0.82, 0.14)):
+        c.saveState()
+        c.setFillColor(FINE_GOLD)
+        c.setFillAlpha(alpha)
+        c.circle(mx, my, rad, fill=1, stroke=0)
+        c.restoreState()
+
+    mr = cell * 0.56
+    c.saveState()
+    c.setFillColor(black)
+    c.setFillAlpha(0.22)
+    c.circle(mx + 3, my - 3, mr, fill=1, stroke=0)
+    c.restoreState()
     c.setFillColor(white)
-    c.circle(mx, my, mr + 5, fill=1, stroke=0)
+    c.circle(mx, my, mr + 4, fill=1, stroke=0)
     c.setFillColor(FINE_GOLD)
     c.setStrokeColor(white)
-    c.setLineWidth(3)
+    c.setLineWidth(2.6)
     c.circle(mx, my, mr, fill=1, stroke=1)
     c.setStrokeColor(white)
     c.setLineWidth(1)
-    c.circle(mx, my, mr - 8, fill=0, stroke=1)
+    c.circle(mx, my, mr - 6, fill=0, stroke=1)
     c.setFont('DejaVuSerif-Bold', mr * 0.30)
     c.setFillColor(white)
-    c.drawCentredString(mx, my + mr * 0.62, 'OCA')
-    c.drawCentredString(mx, my + mr * 0.30, 'MUSICAL')
-    instrumento(c, mx, my - mr * 0.14, mr * 0.42, 'gramofono', fondo=FINE_GOLD)
-    c.setFont('DejaVuSans-Bold', mr * 0.20)
+    c.drawCentredString(mx, my + mr * 0.52, 'OCA')
+    c.drawCentredString(mx, my + mr * 0.20, 'MUSICAL')
+    instrumento(c, mx, my - mr * 0.42, mr * 0.32, 'gramofono', fondo=FINE_GOLD)
+    c.setFont('DejaVuSans-Bold', mr * 0.17)
     c.setFillColor(white)
     c.drawCentredString(mx, my - mr * 0.85, 'FINE · 63')
 
-    c.setFont('DejaVuSans', 6.8)
+    c.setFont('DejaVuSans', 8.4)
     c.setFillColor(MUTED)
-    c.drawCentredString(BOARD_W / 2.0, 8, 'El Cuaderno del Pianista · T-Clas')
+    c.drawCentredString(BOARD_W / 2.0, content_b - 6, 'El Cuaderno del Pianista · T-Clas')
     c.showPage()
     c.setPageSize((W, H))
 

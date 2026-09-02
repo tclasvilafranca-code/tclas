@@ -29,6 +29,7 @@
    doble corchete no se lee bien ni de cerca; con figuras de por medio el
    tamano manda sobre el numero de hojas.
 """
+import math
 import os
 import sys
 
@@ -210,7 +211,7 @@ def simbolo(c, cx, cy, r, cual, color):
     elif cual == 'doblebarra':
         c.setFont('DejaVuSerif-Bold', r * 1.5)
         c.drawCentredString(cx, cy - r * 0.5, '+2')
-    elif cual == 'canon':
+    elif cual in ('canon', 'cambio'):
         # dos flechas curvas en circulo, el icono universal de intercambio:
         # cada jugador se lleva la mano del otro
         c.setLineWidth(r * 0.16)
@@ -262,6 +263,260 @@ def simbolo(c, cx, cy, r, cual, color):
     elif cual == 'fine':
         c.setFont('DejaVuSerif-Bold', r * 1.05)
         c.drawCentredString(cx, cy - r * 0.35, 'FINE')
+    c.restoreState()
+
+
+# --------------------------------------------------------------------------
+# Los instrumentos: para tableros (la Oca musical) donde cada casilla quiere
+# un dibujo de verdad y no solo un numero. Catorce instrumentos reconocibles
+# a tamano de casilla, en dos colores plano — no hace falta mas para leerse
+# desde el otro lado de la mesa, y con mas detalle se vuelven manchas a este
+# tamano. `fondo` es el color de la celda: el violin lo usa para tallarse la
+# cintura (dos muescas del color de fondo encima de un cuerpo entero, mas
+# fiable que una curva bezier de un solo trazo para la forma de reloj de
+# arena de un violin de verdad).
+# --------------------------------------------------------------------------
+INSTRUMENTOS = ['guitarra', 'piano', 'tambor', 'trompeta', 'violin', 'saxofon',
+                'maracas', 'pandereta', 'xilofono', 'acordeon', 'trombon',
+                'arpa', 'platillos', 'microfono', 'flauta']
+
+
+def instrumento(c, cx, cy, r, cual, fondo=white):
+    c.saveState()
+    if cual == 'guitarra':
+        madera = HexColor('#B5793B')
+        osc = HexColor('#8C5A28')
+        c.setFillColor(madera)
+        c.setStrokeColor(osc)
+        c.setLineWidth(r * 0.05)
+        c.ellipse(cx - r * 0.62, cy - r * 0.92, cx + r * 0.62, cy - r * 0.02, fill=1, stroke=1)
+        c.ellipse(cx - r * 0.44, cy - r * 0.15, cx + r * 0.44, cy + r * 0.65, fill=1, stroke=1)
+        c.setFillColor(osc)
+        c.rect(cx - r * 0.09, cy + r * 0.45, r * 0.18, r * 0.85, fill=1, stroke=0)
+        c.setFillColor(HexColor('#3B2413'))
+        c.circle(cx, cy - r * 0.42, r * 0.16, fill=1, stroke=0)
+        c.setStrokeColor(HexColor('#E8D9B0'))
+        c.setLineWidth(r * 0.025)
+        for dx in (-0.10, 0, 0.10):
+            c.line(cx + dx * r, cy - r * 0.02, cx + dx * r, cy - r * 0.9)
+    elif cual == 'piano':
+        c.setFillColor(white)
+        c.setStrokeColor(INK)
+        c.setLineWidth(r * 0.05)
+        c.roundRect(cx - r * 0.9, cy - r * 0.55, r * 1.8, r * 1.1, r * 0.12, fill=1, stroke=1)
+        nk = 7
+        kw = r * 1.8 / nk
+        c.setFillColor(INK)
+        for i in range(1, nk):
+            c.rect(cx - r * 0.9 + i * kw - r * 0.045, cy - r * 0.05,
+                  r * 0.09, r * 0.55, fill=1, stroke=0)
+    elif cual == 'tambor':
+        rojo = HexColor('#C0392B')
+        c.setFillColor(rojo)
+        c.setStrokeColor(HexColor('#7A231C'))
+        c.setLineWidth(r * 0.05)
+        c.rect(cx - r * 0.62, cy - r * 0.5, r * 1.24, r * 0.85, fill=1, stroke=1)
+        c.setFillColor(HexColor('#E8DCC0'))
+        c.ellipse(cx - r * 0.62, cy + r * 0.15, cx + r * 0.62, cy + r * 0.55, fill=1, stroke=1)
+        c.setStrokeColor(HexColor('#7A231C'))
+        for dx in (-0.4, 0, 0.4):
+            c.line(cx + dx * r, cy - r * 0.5, cx + dx * r, cy + r * 0.35)
+        c.setStrokeColor(HexColor('#5B3A1E'))
+        c.setLineWidth(r * 0.08)
+        c.line(cx - r * 0.1, cy + r * 0.7, cx + r * 0.55, cy + r * 1.15)
+        c.line(cx + r * 0.15, cy + r * 0.65, cx - r * 0.45, cy + r * 1.1)
+    elif cual in ('trompeta', 'gramofono'):
+        oro = HexColor('#D4A017')
+        c.setFillColor(oro)
+        c.setStrokeColor(HexColor('#8C6A0F'))
+        c.setLineWidth(r * 0.04)
+        if cual == 'trompeta':
+            c.rect(cx - r * 0.85, cy - r * 0.12, r * 1.0, r * 0.24, fill=1, stroke=1)
+            p = c.beginPath()
+            p.moveTo(cx + r * 0.15, cy + r * 0.12)
+            p.lineTo(cx + r * 0.75, cy + r * 0.42)
+            p.lineTo(cx + r * 0.75, cy - r * 0.42)
+            p.lineTo(cx + r * 0.15, cy - r * 0.12)
+            p.close()
+            c.drawPath(p, fill=1, stroke=1)
+            for dx in (-0.55, -0.35, -0.15):
+                c.rect(cx + dx * r, cy + r * 0.12, r * 0.08, r * 0.22, fill=1, stroke=1)
+        else:
+            # el gramofono del medallon central: una bocina curva sobre una
+            # caja, el icono clasico de "musica antigua" para el centro
+            c.setFillColor(HexColor('#5B3A1A'))
+            c.roundRect(cx - r * 0.4, cy - r * 1.05, r * 0.8, r * 0.42, r * 0.06, fill=1, stroke=0)
+            c.setFillColor(oro)
+            p = c.beginPath()
+            p.moveTo(cx - r * 0.1, cy - r * 0.68)
+            p.curveTo(cx - r * 0.15, cy - r * 0.2, cx - r * 0.05, cy + r * 0.15, cx + r * 0.35, cy + r * 0.35)
+            p.curveTo(cx + r * 0.95, cy + r * 0.65, cx + r * 1.05, cy + r * 0.05, cx + r * 0.55, cy - r * 0.15)
+            p.curveTo(cx + r * 0.3, cy - r * 0.28, cx + r * 0.2, cy - r * 0.5, cx + r * 0.18, cy - r * 0.68)
+            p.close()
+            c.setStrokeColor(HexColor('#8C6A0F'))
+            c.setLineWidth(r * 0.03)
+            c.drawPath(p, fill=1, stroke=1)
+    elif cual == 'violin':
+        madera = HexColor('#A9702E')
+        c.setFillColor(madera)
+        c.setStrokeColor(HexColor('#5B3A1A'))
+        c.setLineWidth(r * 0.045)
+        c.roundRect(cx - r * 0.46, cy - r * 0.95, r * 0.92, r * 1.65, r * 0.42, fill=1, stroke=1)
+        c.setFillColor(fondo)
+        c.ellipse(cx - r * 0.72, cy - r * 0.14, cx - r * 0.30, cy + r * 0.30, fill=1, stroke=0)
+        c.ellipse(cx + r * 0.30, cy - r * 0.14, cx + r * 0.72, cy + r * 0.30, fill=1, stroke=0)
+        c.setStrokeColor(HexColor('#5B3A1A'))
+        c.setLineWidth(r * 0.035)
+        c.arc(cx - r * 0.72, cy - r * 0.14, cx - r * 0.30, cy + r * 0.30, startAng=-55, extent=110)
+        c.arc(cx + r * 0.30, cy - r * 0.14, cx + r * 0.72, cy + r * 0.30, startAng=125, extent=110)
+        c.setFillColor(HexColor('#3B2413'))
+        c.setStrokeColor(HexColor('#3B2413'))
+        c.setLineWidth(r * 0.05)
+        c.line(cx - r * 0.14, cy + r * 0.02, cx - r * 0.04, cy + r * 0.28)
+        c.line(cx + r * 0.14, cy + r * 0.02, cx + r * 0.04, cy + r * 0.28)
+        c.setStrokeColor(HexColor('#3B2413'))
+        c.setLineWidth(r * 0.16)
+        c.line(cx, cy + r * 0.70, cx, cy + r * 1.32)
+        c.setFillColor(HexColor('#3B2413'))
+        c.circle(cx, cy + r * 1.36, r * 0.13, fill=1, stroke=0)
+    elif cual == 'saxofon':
+        oro = HexColor('#D4A017')
+        c.setStrokeColor(oro)
+        c.setLineWidth(r * 0.22)
+        p = c.beginPath()
+        p.moveTo(cx - r * 0.15, cy - r * 0.95)
+        p.curveTo(cx + r * 0.35, cy - r * 0.6, cx + r * 0.35, cy - r * 0.1, cx + r * 0.05, cy + r * 0.3)
+        p.curveTo(cx - r * 0.25, cy + r * 0.7, cx - r * 0.15, cy + r * 1.05, cx + r * 0.25, cy + r * 1.0)
+        c.drawPath(p, fill=0, stroke=1)
+        c.setFillColor(HexColor('#8C6A0F'))
+        for t in (0.25, 0.45, 0.65):
+            c.circle(cx - r * 0.02 + t * r * 0.3, cy - r * 0.5 + t * r * 0.9, r * 0.06, fill=1, stroke=0)
+    elif cual == 'maracas':
+        naranja = HexColor('#D9752B')
+        for sgn in (-1, 1):
+            c.saveState()
+            c.translate(cx + sgn * r * 0.32, cy)
+            c.rotate(sgn * 18)
+            c.setFillColor(naranja)
+            c.setStrokeColor(HexColor('#8C4A16'))
+            c.setLineWidth(r * 0.04)
+            c.ellipse(-r * 0.3, -r * 0.1, r * 0.3, r * 0.7, fill=1, stroke=1)
+            c.rect(-r * 0.07, -r * 0.75, r * 0.14, r * 0.7, fill=1, stroke=1)
+            c.setFillColor(HexColor('#F4D9A0'))
+            for (ddx, ddy) in ((-0.1, 0.2), (0.12, 0.35), (-0.05, 0.5)):
+                c.circle(ddx * r, ddy * r, r * 0.045, fill=1, stroke=0)
+            c.restoreState()
+    elif cual == 'pandereta':
+        tan = HexColor('#C9A15A')
+        c.setStrokeColor(tan)
+        c.setLineWidth(r * 0.22)
+        c.circle(cx, cy, r * 0.68, fill=0, stroke=1)
+        c.setFillColor(HexColor('#E8DCC0'))
+        c.setStrokeColor(HexColor('#8C6A34'))
+        c.setLineWidth(r * 0.03)
+        for ang in range(0, 360, 45):
+            ax = cx + r * 0.68 * math.cos(math.radians(ang))
+            ay = cy + r * 0.68 * math.sin(math.radians(ang))
+            c.circle(ax, ay, r * 0.11, fill=1, stroke=1)
+    elif cual == 'xilofono':
+        colores = [HexColor('#B4462F'), HexColor('#D9752B'), HexColor('#D4A017'),
+                  HexColor('#4A6741'), HexColor('#2C4C6B')]
+        n = len(colores)
+        totw = r * 1.7
+        bw = totw / n
+        for i, col in enumerate(colores):
+            bh = r * (1.0 - i * 0.12)
+            bx = cx - totw / 2.0 + i * bw
+            c.setFillColor(col)
+            c.setStrokeColor(HexColor('#232323'))
+            c.setLineWidth(r * 0.02)
+            c.roundRect(bx + bw * 0.08, cy - bh / 2.0, bw * 0.84, bh, bw * 0.12, fill=1, stroke=1)
+    elif cual == 'acordeon':
+        c.setFillColor(HexColor('#8C1F1F'))
+        c.setStrokeColor(HexColor('#5B1414'))
+        c.setLineWidth(r * 0.04)
+        c.roundRect(cx - r * 0.85, cy - r * 0.55, r * 0.42, r * 1.1, r * 0.06, fill=1, stroke=1)
+        c.setFillColor(white)
+        c.roundRect(cx + r * 0.43, cy - r * 0.55, r * 0.42, r * 1.1, r * 0.06, fill=1, stroke=1)
+        c.setFillColor(INK)
+        for i in range(4):
+            c.rect(cx + r * 0.5 + i * r * 0.09, cy - r * 0.4, r * 0.05, r * 0.85, fill=1, stroke=0)
+        c.setFillColor(HexColor('#C9A15A'))
+        c.setStrokeColor(HexColor('#8C6A34'))
+        nx = 5
+        w = r * 0.86 / nx
+        for i in range(nx):
+            x0 = cx - r * 0.43 + i * w
+            mid = cy + (r * 0.5 if i % 2 == 0 else -r * 0.5)
+            p = c.beginPath()
+            p.moveTo(x0, cy - r * 0.55)
+            p.lineTo(x0 + w / 2.0, mid)
+            p.lineTo(x0 + w, cy - r * 0.55)
+            p.lineTo(x0 + w, cy + r * 0.55)
+            p.lineTo(x0 + w / 2.0, cy - mid + cy)
+            p.lineTo(x0, cy + r * 0.55)
+            p.close()
+            c.drawPath(p, fill=1, stroke=1)
+    elif cual == 'trombon':
+        oro = HexColor('#D4A017')
+        c.setStrokeColor(oro)
+        c.setLineWidth(r * 0.2)
+        c.line(cx - r * 0.85, cy - r * 0.3, cx + r * 0.15, cy - r * 0.3)
+        c.line(cx - r * 0.65, cy - r * 0.3, cx - r * 0.65, cy + r * 0.25)
+        c.line(cx - r * 0.85, cy + r * 0.25, cx - r * 0.45, cy + r * 0.25)
+        p = c.beginPath()
+        p.moveTo(cx + r * 0.15, cy - r * 0.42)
+        p.lineTo(cx + r * 0.65, cy - r * 0.62)
+        p.lineTo(cx + r * 0.65, cy - r * 0.02)
+        p.lineTo(cx + r * 0.15, cy - r * 0.18)
+        p.close()
+        c.setFillColor(oro)
+        c.drawPath(p, fill=1, stroke=1)
+    elif cual == 'arpa':
+        madera = HexColor('#8C5A28')
+        c.setStrokeColor(madera)
+        c.setLineWidth(r * 0.14)
+        p = c.beginPath()
+        p.moveTo(cx - r * 0.5, cy + r * 0.9)
+        p.curveTo(cx - r * 0.75, cy + r * 0.2, cx - r * 0.35, cy - r * 0.7, cx + r * 0.35, cy - r * 0.95)
+        c.drawPath(p, fill=0, stroke=1)
+        c.line(cx - r * 0.5, cy + r * 0.9, cx + r * 0.35, cy + r * 0.9)
+        c.line(cx + r * 0.35, cy - r * 0.95, cx + r * 0.35, cy + r * 0.9)
+        c.setStrokeColor(HexColor('#C9A15A'))
+        c.setLineWidth(r * 0.035)
+        for i in range(6):
+            t = i / 5.0
+            topx = cx - r * 0.5 + t * (cx + r * 0.35 - (cx - r * 0.5)) * 0.55
+            c.line(topx, cy + r * 0.78 - t * r * 0.1, cx + r * 0.28, cy - r * 0.75 + t * r * 1.5)
+    elif cual == 'platillos':
+        oro = HexColor('#D4A017')
+        for sgn in (-1, 1):
+            c.setFillColor(oro)
+            c.setStrokeColor(HexColor('#8C6A0F'))
+            c.setLineWidth(r * 0.03)
+            c.ellipse(cx - r * 0.75 + sgn * r * 0.05, cy - r * 0.5 + sgn * r * 0.15,
+                     cx + r * 0.15 + sgn * r * 0.05, cy + r * 0.5 + sgn * r * 0.15, fill=1, stroke=1)
+    elif cual == 'microfono':
+        c.setFillColor(HexColor('#4A4A4A'))
+        c.setStrokeColor(HexColor('#232323'))
+        c.setLineWidth(r * 0.03)
+        c.roundRect(cx - r * 0.28, cy + r * 0.05, r * 0.56, r * 0.85, r * 0.26, fill=1, stroke=1)
+        c.setFillColor(HexColor('#8A8A8A'))
+        for yy in (0.2, 0.35, 0.5, 0.65, 0.8):
+            c.circle(cx, cy + yy * r, r * 0.02, fill=1, stroke=0)
+        c.setStrokeColor(HexColor('#4A4A4A'))
+        c.setLineWidth(r * 0.09)
+        c.line(cx, cy + r * 0.05, cx, cy - r * 0.65)
+        c.line(cx - r * 0.3, cy - r * 0.85, cx + r * 0.3, cy - r * 0.85)
+    elif cual == 'flauta':
+        plata = HexColor('#B7C4CC')
+        c.setFillColor(plata)
+        c.setStrokeColor(HexColor('#6E7B82'))
+        c.setLineWidth(r * 0.03)
+        c.roundRect(cx - r * 0.95, cy - r * 0.12, r * 1.9, r * 0.24, r * 0.1, fill=1, stroke=1)
+        c.setFillColor(HexColor('#6E7B82'))
+        for dx in (-0.65, -0.35, -0.05, 0.25, 0.55):
+            c.circle(cx + dx * r, cy, r * 0.06, fill=1, stroke=0)
     c.restoreState()
 
 

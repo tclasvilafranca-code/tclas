@@ -5,10 +5,11 @@
    POR QUÉ ASÍ. Decisión del cliente: estos juegos son para el final de
    clase, para romper la dinámica y pasarlo bien — no para seguir en clase
    con otro disfraz. Así que aquí NO hay cartas de reto ni preguntas: es la
-   Oca de siempre, con el mismo tablero de 63 casillas y las mismas siete
-   casillas especiales de siempre, cada una vestida con un signo musical
-   real. La diversión es la de la Oca — el azar, el "otra vez a la casilla
-   1" — y la música es la piel, no una prueba.
+   Oca de siempre, con el mismo tablero de 63 casillas y las siete casillas
+   especiales de siempre, cada una vestida con un signo musical real, más
+   UNA nueva (CAMBIO) para que cueste más llegar al final — sigue siendo
+   puro azar, nunca una pregunta. La diversión es la de la Oca — el azar, el
+   "otra vez a la casilla 1" — y la música es la piel, no una prueba.
 
    LAS CASILLAS, con su equivalencia clásica entre paréntesis:
 
@@ -19,17 +20,23 @@
      BECUADRO           (laberinto) deshace lo andado, retrocedes
      SILENCIO DE REDONDA (cárcel)   el silencio más largo: dos turnos
      DA CAPO            (calavera)  vuelves derecho a la salida
+     CAMBIO             (nueva)     cambias de sitio con quien va primero
      FINE               (meta)      hay que caer justo para ganar
 
    Silencio y becuadro son LOS MISMOS símbolos que en el UNO musical
    (`juegos_comun.simbolo`): un alumno que ha aprendido a leer una baraja
    lee el tablero sin que nadie le explique nada — es la norma de la
-   colección.
+   colección. Y cada casilla llana lleva un instrumento de verdad
+   (`juegos_comun.instrumento`, catorce en total, cíclicos) en vez de
+   quedarse en blanco con solo un número — el tablero se lee como un
+   tablero de juego, no como una hoja de instrucciones.
 
-   Tablero: cuadrícula de 9×7 (=63) recorrida en espiral desde la esquina
-   superior izquierda hasta el centro, que es donde cae la casilla 63
-   (FINE) — el mismo gesto visual de "el camino se enrosca hasta la meta"
-   que tiene una Oca de verdad.
+   Tablero: cuadrícula de 9×7 (=63), CASILLAS CUADRADAS, recorrida en
+   espiral desde la esquina superior izquierda hasta el centro, que es
+   donde cae la casilla 63 (FINE) bajo un medallón dorado con el gramófono
+   — el mismo gesto visual de "el camino se enrosca hasta el premio" que
+   tiene una Oca de verdad. Las esquinas donde la espiral gira llevan una
+   cuña de color, y no una cuadrícula lisa.
 
    Uso:  python3 juego_oca.py
 """
@@ -45,7 +52,7 @@ sys.path.insert(0, os.path.join(HERE, '..', 'engine'))
 
 from juegos_comun import (W, H, NAVY, CREAM, INK, MUTED, ACCENT, RULE,        # noqa: E402
                           PALOS, COLOR_PALO, FORMA_PALO, forma, simbolo,
-                          logo_tclas, portada_juego)
+                          logo_tclas, portada_juego, instrumento, INSTRUMENTOS)
 from portada import _wrap                                                    # noqa: E402
 from notation import BLEED_SAFE                                              # noqa: E402
 
@@ -60,7 +67,9 @@ BOARD_W, BOARD_H = H, W          # A4 apaisada: 841.89 x 595.276
 # Las posiciones son las de la Oca de toda la vida (13 ocas, cada 4-5
 # casillas; puentes en 6 y 12; posada 19; pozo 31; laberinto 42; carcel 52;
 # calavera 58; meta 63) — no las hemos inventado, para que quien conoce el
-# juego real la reconozca de un vistazo.
+# juego real la reconozca de un vistazo. CAMBIO es la unica que no tiene
+# equivalente clasico: se añade para que cueste mas llegar (y de paso, mas
+# risas) — un jugador puede caer bien situado y de repente estar el ultimo.
 CORCHEAS = [5, 9, 14, 18, 23, 27, 32, 36, 41, 45, 50, 54, 59]
 LIGADURAS = {6: 12, 12: 6}
 CALDERON = 19
@@ -70,6 +79,11 @@ BECUADRO_DESTINO = 30
 CARCEL = 52          # silencio de redonda: 2 turnos
 DACAPO = 58
 FINE = 63
+CAMBIOS = [16, 47]   # cambias de sitio con quien va primero
+
+PLAIN_BG = HexColor('#7DC6E8')       # azul cielo: el color de fondo por defecto
+MAGENTA = HexColor('#D6457E')        # cambio, y las cuñas de los giros
+FINE_GOLD = HexColor('#C9962B')
 
 COLOR_TIPO = {
     'corchea':          HexColor('#4A6741'),
@@ -79,7 +93,8 @@ COLOR_TIPO = {
     'becuadro':         HexColor('#B4462F'),
     'redonda_espera':   NAVY,
     'dacapo':           HexColor('#6E2A1F'),
-    'fine':             ACCENT,
+    'cambio':           MAGENTA,
+    'fine':             FINE_GOLD,
 }
 
 NOMBRE_TIPO = {
@@ -90,6 +105,7 @@ NOMBRE_TIPO = {
     'becuadro':       'BECUADRO',
     'redonda_espera': 'SILENCIO DE REDONDA',
     'dacapo':         'DA CAPO',
+    'cambio':         'CAMBIO',
     'fine':           'FINE',
 }
 
@@ -109,6 +125,8 @@ DETALLE = {
                        'quedas DOS turnos completos sin moverte.',
     'dacapo':         '(la "calavera") Vuelves derecho a la salida, la '
                        'casilla 1 — se empieza de cero.',
+    'cambio':         'Cambias de sitio con quien va primero — si vas último, '
+                       'de un tirón te pones en cabeza; si vas primero, cuidado.',
     'fine':           '(la "meta") Hay que caer justo encima. Si el dado '
                        'te hace pasarte, rebotas hacia atrás lo que sobre.',
 }
@@ -127,6 +145,8 @@ def _tipo_casilla(n):
         return 'redonda_espera'
     if n == DACAPO:
         return 'dacapo'
+    if n in CAMBIOS:
+        return 'cambio'
     if n in LIGADURAS:
         return 'ligadura'
     if n in CORCHEAS:
@@ -159,31 +179,74 @@ def _espiral(cols, rows):
     return grid
 
 
+def _giros(orden):
+    """Las casillas donde la espiral cambia de direccion, con la esquina
+       (sx, sy) hacia la que apunta el giro — para pintar ahi la cuña de
+       color de la referencia, en vez de una cuadricula lisa."""
+    giros = {}
+    for i in range(1, len(orden) - 1):
+        dx1 = orden[i][0] - orden[i - 1][0]
+        dy1 = orden[i][1] - orden[i - 1][1]
+        dx2 = orden[i + 1][0] - orden[i][0]
+        dy2 = orden[i + 1][1] - orden[i][1]
+        if (dx1, dy1) != (dx2, dy2):
+            sx = 1 if (dx1 > 0 or dx2 > 0) else (-1 if (dx1 < 0 or dx2 < 0) else 0)
+            sy = 1 if (dy1 > 0 or dy2 > 0) else (-1 if (dy1 < 0 or dy2 < 0) else 0)
+            giros[i] = (sx, sy)
+    return giros
+
+
 # --------------------------------------------------------------------------
 # La hoja del tablero
 # --------------------------------------------------------------------------
-def _dibujar_casilla(c, x, y, w, h, numero, alterna):
+def _cuna(c, x, y, w, h, sx, sy, color):
+    """La cuña triangular de la esquina del giro, el detalle que hace que la
+       espiral se lea como un camino que dobla y no como una cuadricula
+       lisa — el mismo lenguaje que las cuñas de color de la referencia."""
+    if sx == 0 or sy == 0:
+        return
+    lado = min(w, h) * 0.4
+    cxo = x + w / 2.0 + sx * w / 2.0
+    cyo = y + h / 2.0 + sy * h / 2.0
+    p = c.beginPath()
+    p.moveTo(cxo, cyo)
+    p.lineTo(cxo - sx * lado, cyo)
+    p.lineTo(cxo, cyo - sy * lado)
+    p.close()
+    c.setFillColor(color)
+    c.drawPath(p, fill=1, stroke=0)
+
+
+def _dibujar_casilla(c, x, y, w, h, numero, clave_instrumento, giro):
     tipo = _tipo_casilla(numero)
     if tipo is None:
-        fondo = CREAM if alterna else white
-        c.setFillColor(fondo)
-        c.setStrokeColor(RULE)
-        c.setLineWidth(0.6)
-        c.rect(x, y, w, h, fill=1, stroke=1)
-        c.setFont('DejaVuSans-Bold', 8.4)
-        c.setFillColor(NAVY)
+        c.setFillColor(PLAIN_BG)
+        c.setStrokeColor(white)
+        c.setLineWidth(1.1)
+        c.roundRect(x, y, w, h, 5, fill=1, stroke=1)
+        if giro:
+            _cuna(c, x, y, w, h, giro[0], giro[1], MAGENTA)
+        r = min(w, h) * 0.30
+        if numero == 1:
+            simbolo(c, x + w / 2.0, y + h * 0.56, r, 'clave_sol', white)
+        else:
+            instrumento(c, x + w / 2.0, y + h * 0.53, r, clave_instrumento, fondo=PLAIN_BG)
+        c.setFont('DejaVuSans-Bold', 8.2)
+        c.setFillColor(white)
         c.drawString(x + 4, y + h - 12, str(numero))
         if numero == 1:
-            c.setFont('DejaVuSans-Bold', 6.0)
-            c.setFillColor(HexColor('#4A6741'))
+            c.setFont('DejaVuSans-Bold', 6.6)
+            c.setFillColor(white)
             c.drawCentredString(x + w / 2.0, y + 4, 'SALIDA')
         return
     color = COLOR_TIPO[tipo]
     c.setFillColor(color)
-    c.setStrokeColor(RULE)
-    c.setLineWidth(0.6)
-    c.rect(x, y, w, h, fill=1, stroke=1)
-    c.setFont('DejaVuSans-Bold', 7.6)
+    c.setStrokeColor(white)
+    c.setLineWidth(1.1)
+    c.roundRect(x, y, w, h, 5, fill=1, stroke=1)
+    if giro:
+        _cuna(c, x, y, w, h, giro[0], giro[1], MAGENTA)
+    c.setFont('DejaVuSans-Bold', 7.8)
     c.setFillColor(white)
     c.drawString(x + 4, y + h - 11, str(numero))
     r = min(w, h) * 0.245
@@ -221,44 +284,71 @@ def _hoja_tablero(c):
     c.drawString(28, BOARD_H - 30 - 13, 'de corchea en corchea, y tiro porque me toca')
     logo_tclas(c, BOARD_W - 40, BOARD_H - band_h / 2.0, 16)
 
-    margin_x = max(26, BLEED_SAFE + 18)
+    margin_x_max = max(26, BLEED_SAFE + 18)
     margin_top, margin_bottom = band_h + BLEED_SAFE + 14, 20
-    gx0 = margin_x
     gy_top = BOARD_H - margin_top
-    grid_w = BOARD_W - 2 * margin_x
     grid_h = gy_top - margin_bottom
-    cell_w = grid_w / COLS
-    cell_h = grid_h / ROWS
+    grid_w_max = BOARD_W - 2 * margin_x_max
+    # celda CUADRADA (no rectangular): un tablero de Oca se lee como tal
+    # cuando las casillas son cuadradas, no ladrillos anchos. El limite lo
+    # pone la altura de la hoja; sobra ancho, y ese sobrante se reparte en
+    # los dos margenes laterales.
+    cell = min(grid_w_max / COLS, grid_h / ROWS)
+    grid_w = cell * COLS
+    gx0 = (BOARD_W - grid_w) / 2.0
+    cell_w = cell_h = cell
 
     orden = _espiral(COLS, ROWS)
+    giros = _giros(orden)
 
-    # el camino: una linea que pasa por el centro de cada casilla en el
-    # orden en que se juega, para que la espiral se LEA como un camino y no
-    # como una cuadricula suelta. Las casillas se dibujan con un hueco fino
-    # entre ellas (ver GAP mas abajo) para que la linea asome por la juntura
-    # y se vea de verdad, no solo quede debajo tapada.
-    c.saveState()
-    c.setStrokeColor(HexColor('#C7BCA6'))
-    c.setLineWidth(3.4)
-    pts = []
-    for (gx, gy) in orden:
-        cx = gx0 + (gx + 0.5) * cell_w
-        cy = gy_top - (gy + 0.5) * cell_h
-        pts.append((cx, cy))
-    p = c.beginPath()
-    p.moveTo(*pts[0])
-    for pt in pts[1:]:
-        p.lineTo(*pt)
-    c.drawPath(p, fill=0, stroke=1)
-    c.restoreState()
+    # un instrumento distinto por casilla llana, en el orden en que se
+    # juegan (asi dos casillas vecinas casi nunca repiten instrumento);
+    # las especiales y la salida no cuentan para el ciclo.
+    ronda_instrumentos = []
+    ii = 0
+    for idx in range(len(orden)):
+        numero = idx + 1
+        if numero != 1 and _tipo_casilla(numero) is None:
+            ronda_instrumentos.append(INSTRUMENTOS[ii % len(INSTRUMENTOS)])
+            ii += 1
+        else:
+            ronda_instrumentos.append(None)
 
-    GAP = 1.6
+    GAP = 2.2
+    centro_px = None
     for idx, (gx, gy) in enumerate(orden):
         numero = idx + 1
         x = gx0 + gx * cell_w
         y = gy_top - (gy + 1) * cell_h
+        if numero == FINE:
+            centro_px = (x + cell_w / 2.0, y + cell_h / 2.0)
         _dibujar_casilla(c, x + GAP / 2.0, y + GAP / 2.0,
-                         cell_w - GAP, cell_h - GAP, numero, (gx + gy) % 2 == 0)
+                         cell_w - GAP, cell_h - GAP, numero,
+                         ronda_instrumentos[idx], giros.get(idx))
+
+    # el medallon central: mas grande que una casilla, a proposito — es el
+    # "premio" visual del centro, con el mismo protagonismo que tiene en un
+    # tablero de Oca de verdad. Se pinta el ULTIMO, encima de las cuatro
+    # casillas vecinas, con un aro y el gramofono.
+    mx, my = centro_px
+    mr = cell * 0.86
+    c.setFillColor(white)
+    c.circle(mx, my, mr + 5, fill=1, stroke=0)
+    c.setFillColor(FINE_GOLD)
+    c.setStrokeColor(white)
+    c.setLineWidth(3)
+    c.circle(mx, my, mr, fill=1, stroke=1)
+    c.setStrokeColor(white)
+    c.setLineWidth(1)
+    c.circle(mx, my, mr - 8, fill=0, stroke=1)
+    c.setFont('DejaVuSerif-Bold', mr * 0.30)
+    c.setFillColor(white)
+    c.drawCentredString(mx, my + mr * 0.62, 'OCA')
+    c.drawCentredString(mx, my + mr * 0.30, 'MUSICAL')
+    instrumento(c, mx, my - mr * 0.14, mr * 0.42, 'gramofono', fondo=FINE_GOLD)
+    c.setFont('DejaVuSans-Bold', mr * 0.20)
+    c.setFillColor(white)
+    c.drawCentredString(mx, my - mr * 0.85, 'FINE · 63')
 
     c.setFont('DejaVuSans', 6.8)
     c.setFillColor(MUTED)
@@ -283,6 +373,7 @@ def reglas():
         'otro jugador caiga contigo; el silencio de redonda son DOS '
         'turnos seguidos.',
         'BECUADRO deshace lo andado: retrocedes a la casilla que marca.',
+        'CAMBIO: cambias de sitio con quien va primero — para bien o para mal.',
         'DA CAPO te manda derecho a la SALIDA — se empieza de cero.',
         'Para llegar a FINE hay que caer justo encima: si te pasas, '
         'rebotas hacia atrás lo que sobre.',
@@ -314,7 +405,7 @@ def _explicar(c, x, y, tipo, ancho):
 
 
 def _hoja_leyenda(c):
-    """La chuleta de las ocho casillas especiales, a dos columnas — mismo
+    """La chuleta de las nueve casillas especiales, a dos columnas — mismo
        patron que la del UNO musical, para que la coleccion se lea igual."""
     c.setFillColor(CREAM)
     c.rect(0, 0, W, H, fill=1, stroke=0)
@@ -325,7 +416,7 @@ def _hoja_leyenda(c):
     c.setFillColor(MUTED)
     c.drawString(52, H - 98, 'Déjala al lado del tablero las primeras partidas. '
                              'A la tercera ya no hace falta.')
-    orden = ['corchea', 'ligadura', 'calderon', 'silencio',
+    orden = ['corchea', 'ligadura', 'calderon', 'silencio', 'cambio',
              'becuadro', 'redonda_espera', 'dacapo', 'fine']
     gutter = 22
     colw = (W - 104 - gutter) / 2.0

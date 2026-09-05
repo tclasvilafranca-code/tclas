@@ -23,11 +23,12 @@
    alumno que ya sabe leer estas figuras del UNO y de la Oca las reconoce
    aquí también, sin aprender un símbolo nuevo.
 
-   LAS FICHAS: alfabeto español de Scrabble de siempre (sin K ni W, que no
-   entran en el reparto clásico), en una tanda más pequeña — unas 59
-   fichas en vez de 100 — para que una partida de dos o tres manos quepa
-   en el rato de clase. Los valores de punto son los de siempre: cuanto
-   más rara la letra, más vale.
+   LAS FICHAS: el abecedario completo, de la A a la Z (con la Ñ, que en
+   español es una letra de pleno derecho) — en una tanda más pequeña que
+   un Scrabble de caja (que trae unas 100) para que una partida de dos o
+   tres manos quepa en el rato de clase. Los valores de punto son los de
+   siempre: cuanto más rara la letra, más vale — K y W son tan raras en
+   español que valen lo mismo que la J, la Ñ o la X.
 
    Uso:  python3 juego_scrabble.py
 """
@@ -128,7 +129,7 @@ LETRAS = [
     ('C', 3, 2), ('M', 3, 1), ('P', 3, 1), ('B', 3, 1),
     ('H', 4, 1), ('F', 4, 1), ('V', 4, 1), ('Y', 4, 1),
     ('Q', 5, 1),
-    ('J', 8, 1), ('Ñ', 8, 1), ('X', 8, 1),
+    ('J', 8, 1), ('K', 8, 1), ('Ñ', 8, 1), ('W', 8, 1), ('X', 8, 1),
     ('Z', 10, 1),
     ('★', 0, 2),
 ]

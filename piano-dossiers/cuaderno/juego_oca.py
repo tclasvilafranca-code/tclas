@@ -488,14 +488,16 @@ def _hoja_tablero(c):
     grid_bottom = content_b + 26
     grid_h = gy_top - grid_bottom
     grid_w_max = content_r - content_l
-    # celda CUADRADA (no rectangular): un tablero de Oca se lee como tal
-    # cuando las casillas son cuadradas, no ladrillos anchos. El limite lo
-    # pone la altura de la hoja; sobra ancho, y ese sobrante se reparte en
-    # los dos margenes laterales.
-    cell = min(grid_w_max / COLS, grid_h / ROWS)
-    grid_w = cell * COLS
-    gx0 = content_l + (grid_w_max - grid_w) / 2.0
-    cell_w = cell_h = cell
+    # la cuadricula llena TODO el ancho disponible del A3, no solo el que le
+    # tocaria a una celda cuadrada: con 9x7 casillas cuadradas sobraban casi
+    # 10 cm de hoja en blanco a cada lado, que es la clase de margen que hace
+    # que un tablero se vea "perdido" en la pagina en vez de ocuparla. El
+    # icono de cada instrumento sigue calibrado sobre el alto de la celda
+    # (`min(w, h)`), asi que no crece con el ancho: lo que gana la celda es
+    # aire alrededor del dibujo, no un icono deforme.
+    cell_w = grid_w_max / COLS
+    cell_h = grid_h / ROWS
+    gx0 = content_l
 
     orden = _espiral(COLS, ROWS)
     giros = _giros(orden)
@@ -534,14 +536,15 @@ def _hoja_tablero(c):
     # visual viene de un halo dorado en capas, translucido, que sí se
     # derrama sobre las vecinas pero sin taparlas — se ve, no se lee encima.
     mx, my = centro_px
-    for rad, alpha in ((cell * 1.55, 0.05), (cell * 1.15, 0.09), (cell * 0.82, 0.14)):
+    cell_min = min(cell_w, cell_h)
+    for rad, alpha in ((cell_min * 1.55, 0.05), (cell_min * 1.15, 0.09), (cell_min * 0.82, 0.14)):
         c.saveState()
         c.setFillColor(FINE_GOLD)
         c.setFillAlpha(alpha)
         c.circle(mx, my, rad, fill=1, stroke=0)
         c.restoreState()
 
-    mr = cell * 0.56
+    mr = cell_min * 0.56
     c.saveState()
     c.setFillColor(black)
     c.setFillAlpha(0.22)

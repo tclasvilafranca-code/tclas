@@ -1,0 +1,781 @@
+# -*- coding: utf-8 -*-
+"""Material de apoyo para las hojas "al piano", derivado de la propia pieza.
+
+   POR QUE EXISTE. Al escribir las dos manos en su sistema de piano —sol arriba,
+   fa abajo, que es como se lee el piano— el bloque de manos juntas dejo de
+   caber con los demas y el cliente decidio darle una segunda hoja. Eso dejo 88
+   piezas con las dos hojas a medio llenar, y el estandar del proyecto es claro:
+   una hoja a medias no se entrega, se llena.
+
+   QUE NO ES. No es relleno. Estas funciones NO inventan una melodia: construyen
+   escalas, arpegios y giros SOBRE LA TONALIDAD DE LA PIEZA, que es material de
+   tecnica de toda la vida y lo que un profesor escribiria a mano en el margen.
+   Los rotulos —lo que se le pide al alumno y por que— se escriben a mano en
+   cada pieza; aqui solo viven las notas, para que no se cuele una nota que no
+   pertenece a la tonalidad.
+
+   COMO SE USA. En el archivo de la cancion:
+
+       from relleno import escala, arpegio, giro
+
+       dict(num=4, titulo='...', pista='andamio en Sol mayor · ...',
+            sistemas=[dict(cap='a) ...', events=escala('Sol mayor', 'G4'), bars=2)])
+
+   La regla de no repetirse entre alumnos sigue vigente y la comprueba
+   `cruzar_<alumno>.py`: por eso todas admiten `desde`, `sentido` y `figura`,
+   que es lo que separa la escala de un alumno de la del de al lado.
+"""
+import re
+
+# Los siete grados de cada tonalidad, en orden, con su alteracion escrita como
+# la escribe el motor ('Bb4', 'F#4'). No se deduce de la armadura al vuelo
+# porque las menores armonicas alteran el septimo grado y eso hay que decidirlo,
+# no adivinarlo: aqui van las escalas NATURALES, y si una pieza necesita la
+# sensible alterada se escribe a mano en su archivo.
+GRADOS = {
+    'Do mayor':  ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
+    'Sol mayor': ['G', 'A', 'B', 'C', 'D', 'E', 'F#'],
+    'Re mayor':  ['D', 'E', 'F#', 'G', 'A', 'B', 'C#'],
+    'La mayor':  ['A', 'B', 'C#', 'D', 'E', 'F#', 'G#'],
+    'Mi mayor':  ['E', 'F#', 'G#', 'A', 'B', 'C#', 'D#'],
+    'Fa mayor':  ['F', 'G', 'A', 'Bb', 'C', 'D', 'E'],
+    'Sib mayor': ['Bb', 'C', 'D', 'Eb', 'F', 'G', 'A'],
+    'Mib mayor': ['Eb', 'F', 'G', 'Ab', 'Bb', 'C', 'D'],
+    'Lab mayor': ['Ab', 'Bb', 'C', 'Db', 'Eb', 'F', 'G'],
+    'La menor':  ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
+    'Mi menor':  ['E', 'F#', 'G', 'A', 'B', 'C', 'D'],
+    'Si menor':  ['B', 'C#', 'D', 'E', 'F#', 'G', 'A'],
+    'Re menor':  ['D', 'E', 'F', 'G', 'A', 'Bb', 'C'],
+    'Sol menor': ['G', 'A', 'Bb', 'C', 'D', 'Eb', 'F'],
+    'Do menor':  ['C', 'D', 'Eb', 'F', 'G', 'Ab', 'Bb'],
+    'Fa menor':  ['F', 'G', 'Ab', 'Bb', 'C', 'Db', 'Eb'],
+    'Fa# menor': ['F#', 'G#', 'A', 'B', 'C#', 'D', 'E'],
+    'Do# menor': ['C#', 'D#', 'E', 'F#', 'G#', 'A', 'B'],
+    'Re dórico': ['D', 'E', 'F', 'G', 'A', 'B', 'C'],
+}
+
+# Todo lo que sale de aqui va marcado con `tecnica=True`. Lo miran los
+# `cruzar_*.py`: la escala de Do mayor es la escala de Do mayor, la tenga un
+# alumno o los siete, y lo mismo la cadencia I-IV-V-I. Que coincidan entre
+# albumes NO es el fallo que persigue esa comprobacion —que es el andamio
+# INVENTADO repetido sin motivo—, igual que no lo es una cita literal del mismo
+# compas de la misma partitura. Sin la marca, los cruces sepultaban los fallos
+# de verdad bajo docenas de escalas.
+
+_ORDEN = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
+
+
+def _parte(p):
+    m = re.match(r'^([A-G])([b#]?)(-?\d+)$', str(p))
+    if not m:
+        raise ValueError('altura rara: %r' % (p,))
+    return m.group(1), m.group(2), int(m.group(3))
+
+
+def _sube(letra, octava, pasos):
+    """Sube `pasos` grados diatonicos desde una letra, llevando la octava."""
+    i = _ORDEN.index(letra) + pasos
+    return _ORDEN[i % 7], octava + i // 7
+
+
+def _en_tono(tono, letra, octava):
+    """La misma letra con la alteracion que le toca en esa tonalidad."""
+    for g in GRADOS[tono]:
+        if g[0] == letra:
+            return '%s%d' % (g, octava)
+    return '%s%d' % (letra, octava)
+
+
+def _grado_abs(p):
+    """La altura en grados diatonicos, para poder comparar dos notas."""
+    letra, _alt, octava = _parte(p)
+    return octava * 7 + _ORDEN.index(letra)
+
+
+def _octava(p, cuantas_):
+    letra, alt, octava = _parte(p)
+    return '%s%s%d' % (letra, alt, octava + cuantas_)
+
+
+# El techo y el suelo del pentagrama de FA, en grados diatonicos desde Do0. Un
+# acorde que asome mas de UNA linea adicional por arriba ya no se lee de un
+# vistazo, y estos bloques son justamente los que el alumno toca sin pensar.
+_FA_TECHO = _grado_abs('C4')     # una linea adicional por encima del pentagrama
+_FA_SUELO = _grado_abs('E2')     # una linea adicional por debajo
+
+
+def _a_la_clave_de_fa(notas):
+    """Baja (o sube) el acorde ENTERO las octavas que hagan falta para que
+       quepa en el pentagrama de fa.
+
+       La cadencia se construye subiendo terceras desde el bajo, asi que en
+       segunda inversion la voz de arriba se pone nueve grados por encima de la
+       raiz: con un bajo en Do3 el acorde llegaba al Sol4, o sea TRES lineas
+       adicionales por encima del pentagrama de fa. Un pianista no lee eso, y
+       menos en un bloque de tecnica que se toca de memoria.
+
+       Se mueve el acorde completo, nunca una voz suelta: cambiar de octava una
+       sola nota cambiaria la disposicion del acorde, y la disposicion es
+       justamente el eje que separa la cadencia de un alumno de la del de al
+       lado (ver `bloques_extra`)."""
+    if not notas:
+        return notas
+    fuera = list(notas)
+    for _ in range(4):
+        alto = max(_grado_abs(x) for x in fuera)
+        bajo = min(_grado_abs(x) for x in fuera)
+        if alto > _FA_TECHO and bajo - 7 >= _FA_SUELO:
+            fuera = [_octava(x, -1) for x in fuera]
+        elif bajo < _FA_SUELO and alto + 7 <= _FA_TECHO:
+            fuera = [_octava(x, +1) for x in fuera]
+        else:
+            return fuera
+    return fuera
+
+
+def cuantas(time_sig, figura='q'):
+    """Cuantas notas de esa figura llenan compases ENTEROS.
+
+       Una escala de ocho negras cabe en 4/4 y en 2/4, pero en 3/4 deja el
+       ultimo compas a medias y el auditor de compases lo canta —con razon: un
+       ejercicio que no cierra el compas es un ejercicio mal escrito. Aqui se
+       elige el numero que cuadra en cada compas."""
+    bpb = time_sig[0] * (4.0 / time_sig[1])
+    paso = {'q': 1.0, 'e': 0.5, 'h': 2.0}.get(figura, 1.0)
+    # se busca el numero de notas MAS CERCANO A OCHO que cierra compases
+    # enteros. No vale dividir y redondear: la blanca no cabe un numero entero
+    # de veces en un compas de tres, y por ahi salian sistemas de dieciseis
+    # tiempos en 3/4 que el auditor de compases cantaba, con razon.
+    mejor = None
+    for n in range(1, 33):
+        if abs((n * paso) % bpb) < 1e-9:
+            d = abs(n - 8)
+            if mejor is None or d < mejor[0]:
+                mejor = (d, n)
+    return mejor[1] if mejor else 8
+
+
+
+def tonica(tono, registro):
+    """La tonica del tono, en la octava de `registro`.
+
+       Los rotulos generados dicen "la escala de Sol mayor", "el acorde de Sol
+       mayor desplegado", "el giro sobre la tonica". Si la nota de partida se
+       pasa a mano, basta equivocarse de octava o de grado para que el papel
+       diga una cosa y dibuje otra: paso de verdad, con un rotulo que anunciaba
+       el acorde de Do mayor encima de un arpegio de Mi menor. Asi que el grado
+       lo pone el tono y lo unico que se elige por fuera es el registro."""
+    letra, _alt, octava = _parte(registro)
+    return _en_tono(tono, GRADOS[tono][0][0], octava)
+
+
+def escala(tono, desde, notas=8, sentido='sube', figura='q', **extra):
+    """Los grados de la tonalidad, seguidos, desde la nota que se le diga.
+
+       Es el ejercicio mas viejo que hay y sigue siendo el que mas arregla:
+       coloca la mano en el tono de la pieza antes de tocarla.
+
+       AL LLEGAR A LA OCTAVA, DA LA VUELTA. Con `notas` <= 8 esto no cambia
+       nada; con mas, si. Un compas de 12/8 lleno de corcheas son DOCE notas, y
+       en linea recta eso es octava y media: del Sol4 al Re6 en clave de sol,
+       o sea tres lineas adicionales por arriba, y bajarlo entero una octava lo
+       saca por abajo. No hay sitio, asi que no es cosa de mover el sistema
+       —que es lo que hace `_encajar`— sino de no escribirlo asi: una escala
+       que sube la octava y se vuelve es lo que se toca de toda la vida, cabe
+       siempre, y de propina obliga a pasar el pulgar en los dos sentidos."""
+    letra, _alt, octava = _parte(desde)
+    fuera = []
+    paso, direccion = 0, 1
+    for _ in range(notas):
+        l, o = _sube(letra, octava, paso if sentido == 'sube' else -paso)
+        fuera.append(dict(pitch=_en_tono(tono, l, o), dur=figura,
+                          tecnica=True, **extra))
+        if direccion > 0 and paso >= 7:
+            direccion = -1
+        elif direccion < 0 and paso <= 0:
+            direccion = 1
+        paso += direccion
+    return fuera
+
+
+def arpegio(tono, desde, figura='q', ida_vuelta=True, notas=None,
+            inversion=0, **extra):
+    """El acorde de la tonalidad desplegado: 1-3-5-8 y de vuelta 8-5-3-1.
+
+       Ocho notas justas, o sea dos compases de cuatro por cuatro, y cierra en
+       la nota de partida: un arpegio que acaba colgando en el aire hace que el
+       alumno acelere para terminar cuanto antes."""
+    letra, _alt, octava = _parte(desde)
+    # La INVERSION no cambia el acorde, solo por que nota se empieza: por eso
+    # el rotulo ("el acorde de Sol mayor desplegado") sigue siendo cierto en las
+    # tres. Es el eje que faltaba para que dos alumnos con la misma tonalidad no
+    # reciban el mismo ejercicio: con siete albumes y medio repertorio en Do
+    # mayor, sin esto la escala de uno es la del otro.
+    grados = [(0, 2, 4, 7), (2, 4, 7, 9), (4, 7, 9, 11)][inversion % 3]
+    subida = [_en_tono(tono, *_sube(letra, octava, paso)) for paso in grados]
+    camino = subida + list(reversed(subida)) if ida_vuelta else subida
+    if notas and notas != len(camino):
+        # se recorta por donde tiene sentido musical, no cortando por lo sano:
+        # 1-3-5-8-5-3 para seis, y repitiendo el camino entero si piden mas
+        if notas == 6:
+            camino = subida + list(reversed(subida[1:3]))
+        elif notas == 9:
+            camino = subida + list(reversed(subida))[1:] + [subida[1], subida[0]]
+        else:
+            camino = (camino * 3)[:notas]
+    return [dict(pitch=p, dur=figura, tecnica=True, **extra) for p in camino]
+
+
+def giro(tono, centro, figura='q', notas=None, **extra):
+    """El giro de siempre alrededor de una nota: la de arriba, la de abajo, y
+       vuelta. Es lo que suelta un dedo agarrotado sin cambiar de posicion."""
+    letra, _alt, octava = _parte(centro)
+    arriba = _en_tono(tono, *_sube(letra, octava, 1))
+    abajo = _en_tono(tono, *_sube(letra, octava, -1))
+    c = _en_tono(tono, letra, octava)
+    camino = [c, arriba, c, abajo, c, arriba, c, c]
+    if notas:
+        camino = (camino * 3)[:notas]
+    return [dict(pitch=p, dur=figura, tecnica=True, **extra) for p in camino]
+
+
+def figura_compas(time_sig):
+    """La figura que llena un compas entero: redonda en 4/4, blanca con
+       puntillo en 3/4 y en 6/8, blanca en 2/4 y REDONDA CON PUNTILLO en 12/8.
+       Poner una redonda en un compas de tres es el fallo mas tonto y el mas
+       facil de colar.
+
+       El 12/8 valia seis tiempos y devolvia 'w', que son cuatro: el compas se
+       quedaba a medias y el auditor lo cantaba. Salio con el Perfect de Aida,
+       que es la primera pieza del proyecto escrita en 12/8."""
+    bpb = time_sig[0] * (4.0 / time_sig[1])
+    return {4.0: 'w', 3.0: 'h.', 2.0: 'h', 1.5: 'q.', 6.0: 'w.'}.get(round(bpb, 2), 'w')
+
+
+def cadencia(tono, bajo, figura='w', inversion=0):
+    """I - IV - V - I en la mano izquierda, en estado fundamental.
+
+       Los tres acordes que sostienen casi todo el repertorio del cuaderno.
+       Saberlos de memoria en el tono de la pieza es lo que permite acompanar
+       sin leer, y es teoria que se toca, no que se estudia."""
+    letra, _alt, octava = _parte(bajo)
+    # La DISPOSICION del acorde (fundamental, primera o segunda inversion) no
+    # cambia que acorde es, asi que el rotulo "I - IV - V - I" sigue siendo
+    # cierto en las tres. Es el eje que separa la cadencia de un alumno de la
+    # del de al lado: sin el, dos albumes con piezas en Do mayor recibian los
+    # mismos cuatro acordes clavados.
+    voces = [(0, 2, 4), (2, 4, 7), (4, 7, 9)][inversion % 3]
+    fuera = []
+    for grado in (0, 3, 4, 0):
+        raiz_l, raiz_o = _sube(letra, octava, grado)
+        notas = []
+        for paso in voces:
+            l, o = _sube(raiz_l, raiz_o, paso)
+            notas.append(_en_tono(tono, l, o))
+        fuera.append(dict(pitches=_a_la_clave_de_fa(notas), dur=figura, tecnica=True))
+    return fuera
+
+
+# ---------------------------------------------------------------- recetas
+#
+# Los bloques que llenan la segunda hoja de "Como se estudia". Se montan aqui y
+# no a mano pieza por pieza por una razon de calidad, no de prisa: el texto de
+# cada rotulo se construye con los datos REALES de la tonalidad (que grado lleva
+# alteracion y cual es), asi que dice la verdad siempre. Escribiendo doscientos
+# rotulos a mano, la nota equivocada acaba colandose.
+#
+# Lo que si se escribe a mano en cada pieza es el FOCO: la dificultad concreta
+# de esa cancion, que es lo unico que el codigo no puede saber.
+
+def _alteradas(tono):
+    """Los grados con alteracion, en nombre de solfeo: [('Si', 'bemol'), ...]."""
+    nombres = {'C': 'Do', 'D': 'Re', 'E': 'Mi', 'F': 'Fa',
+               'G': 'Sol', 'A': 'La', 'B': 'Si'}
+    fuera = []
+    for g in GRADOS[tono]:
+        if len(g) > 1:
+            fuera.append((nombres[g[0]], 'bemol' if g[1] == 'b' else 'sostenido'))
+    return fuera
+
+
+def _frase_alteraciones(tono):
+    alt = _alteradas(tono)
+    if not alt:
+        return 'no hay ni un sostenido ni un bemol: todo teclas blancas'
+    if len(alt) == 1:
+        return 'el único que cambia es el %s, que es %s' % (alt[0][0], alt[0][1])
+    tipo = 'bemoles' if alt[0][1] == 'bemol' else 'sostenidos'
+    return 'los que cambian son %s y %s, todos %s' % (
+        ', '.join(a[0] for a in alt[:-1]), alt[-1][0], tipo)
+
+
+# Cada receta son dos bloques. Rotan con el numero de pieza para que dos
+# semanas seguidas no traigan el mismo esqueleto, que es la norma de variedad
+# del proyecto aplicada tambien aqui.
+RECETAS = ('escalas', 'acorde', 'cadencia', 'corcheas', 'mixta')
+
+
+def _tercero(tono, agudo):
+    """La tercera del tono, en el registro de la mano derecha."""
+    letra, _alt, octava = _parte(agudo)
+    raiz = GRADOS[tono][0][0]
+    l, o = _sube(raiz, octava, 2)
+    return _en_tono(tono, l, o)
+
+
+def _quinto(tono, agudo):
+    """La dominante del tono, en el registro de la mano derecha."""
+    letra, _alt, octava = _parte(agudo)
+    raiz = GRADOS[tono][0][0]
+    l, o = _sube(raiz, octava, 4)
+    return _en_tono(tono, l, o)
+
+
+def _bloques_extra(tono, num, agudo, grave, foco, receta=None, desde=90,
+                  time_sig=(4, 4), mas=False):
+    """Los bloques de apoyo de una pieza, ya montados.
+
+       tono   · la tonalidad de la pieza, tal cual ('Sol mayor')
+       num    · el numero de la pieza, para rotar la receta
+       agudo  · donde empieza la mano derecha ('G4')
+       grave  · donde empieza la izquierda ('G2')
+       foco   · UNA frase escrita a mano: la dificultad concreta de la cancion
+       desde  · numero del primer bloque nuevo
+    """
+    r = receta or RECETAS[num % len(RECETAS)]
+    alt = _frase_alteraciones(tono)
+    arriba = agudo[0] + str(int(agudo[-1]) + 1) if agudo[-1].isdigit() else agudo
+    # cuantas notas y que figura cuadran en ESTE compas: una escala de ocho
+    # negras deja el ultimo compas a medias en 3/4, y una redonda no cabe en un
+    # compas de tres. Se calcula, no se supone.
+    agudo = tonica(tono, agudo)      # el rotulo dice la tonica: que lo sea
+    # Y el bajo de la cadencia, igual. El rotulo dice "I - IV - V - I", asi que
+    # el I tiene que ser el I: con el grave puesto a mano bastaba pasar un Sol3
+    # en Do mayor para que el papel dibujara Sol-Si-Re y lo llamara primer
+    # grado. Es exactamente el fallo que ya se arreglo arriba para `agudo` —el
+    # arpegio de Mi menor rotulado como Do mayor—, y estaba a medio arreglar.
+    grave = tonica(tono, grave)
+    inv = (num // 5) % 3
+    if (num // 15) % 2:
+        agudo = agudo[:-1] + str(int(agudo[-1]) + 1)
+    nq = cuantas(time_sig, 'q')
+    ne = cuantas(time_sig, 'e')
+    fc = figura_compas(time_sig)
+    bpb = time_sig[0] * (4.0 / time_sig[1])
+    cq = max(1, int(round(nq / bpb)))
+    ce = max(1, int(round(ne * 0.5 / bpb)))
+
+    # Un sistema mas, para las piezas cuyo material original es corto y se
+    # quedan a ochenta puntos de llenar la hoja. No es relleno: es el giro
+    # sobre la tonica, que es lo que se hace al final de cualquier tanda de
+    # tecnica para soltar la mano antes de volver a la pieza.
+    # La letra del rotulo NO puede ser fija: este sistema unas veces va detras
+    # de un a) y un b) —y entonces es la c)— y otras detras de un a) solo. Con
+    # la 'z' que llevaba antes, en el papel salia "a) b) z)".
+    def cola(letra='c'):
+        if not mas:
+            return []
+        return [dict(cap='%s) y el giro sobre la tónica para soltar la mano, antes de '
+                         'volver a la partitura' % letra,
+                     events=giro(tono, agudo, notas=nq), bars=cq,
+                     show_time=False)]
+
+    if r == 'escalas':
+        return [
+            dict(num=desde, titulo='La escala de %s, para colocar la mano' % tono,
+                 pista='andamio en %s · %s' % (tono, alt),
+                 sistemas=[
+                     dict(cap='a) los siete grados y la octava · %s' % foco,
+                          events=escala(tono, agudo, notas=nq), bars=cq),
+                     dict(cap='b) y de vuelta abajo · si alguna alteración se te escapa, '
+                              'es aquí donde pasa',
+                          events=escala(tono, arriba, sentido='baja', notas=nq),
+                          bars=cq, show_time=False),
+                 ]),
+            dict(num=desde + 1, titulo='Los tres acordes que la sostienen',
+                 pista='andamio en %s · la armonía de la pieza, reducida a lo esencial' % tono,
+                 sistemas=[
+                     dict(cap='a) I - IV - V - I, una redonda cada uno · apréndelos de memoria '
+                              'y luego búscalos en tu partitura',
+                          events=cadencia(tono, grave, figura=fc, inversion=inv), bars=4, clef='bass'),
+                     dict(cap='b) y el de V desplegado, que es el que empuja de vuelta al primero '
+                              '· tócalo y para: se oye solo que pide volver',
+                          events=arpegio(tono, _quinto(tono, agudo), notas=nq, inversion=inv),
+                          bars=cq, show_time=False),
+                 ] + cola()),
+        ]
+    if r == 'acorde':
+        return [
+            dict(num=desde, titulo='El acorde de %s, desplegado' % tono,
+                 pista='andamio en %s · las notas del acorde, una detrás de otra' % tono,
+                 sistemas=[
+                     dict(cap='a) sube y baja sin pararse en la cima · %s' % foco,
+                          events=arpegio(tono, agudo, notas=nq, inversion=inv), bars=cq),
+                     dict(cap='b) y el mismo acorde empezando por su tercera · las notas son las '
+                              'mismas y la mano se coloca distinto, que es de lo que se trata',
+                          events=arpegio(tono, _tercero(tono, agudo), notas=nq, inversion=inv),
+                          bars=cq, show_time=False),
+                 ]),
+            dict(num=desde + 1, titulo='El giro que suelta la mano',
+                 pista='andamio en %s · sin mover la mano de sitio' % tono,
+                 sistemas=[
+                     dict(cap='a) alrededor de la tónica · las cuatro notas del mismo peso',
+                          events=giro(tono, agudo, notas=nq), bars=cq),
+                     dict(cap='b) y un grado más arriba · si la muñeca se levanta, estás '
+                              'empujando en vez de dejar caer',
+                          events=giro(tono, arriba, notas=nq), bars=cq, show_time=False),
+                 ] + cola()),
+        ]
+    if r == 'cadencia':
+        return [
+            dict(num=desde, titulo='Los acordes, con la izquierda sola',
+                 pista='andamio en %s · lo que hace la izquierda casi toda la pieza' % tono,
+                 sistemas=[
+                     dict(cap='a) I - IV - V - I · %s' % foco,
+                          events=cadencia(tono, grave, figura=fc, inversion=inv), bars=4, clef='bass'),
+                     dict(cap='b) y el de V desplegado con la derecha · es el acorde que pide '
+                              'volver al principio',
+                          events=arpegio(tono, _quinto(tono, agudo), notas=nq, inversion=inv),
+                          bars=cq, show_time=False),
+                 ]),
+            dict(num=desde + 1, titulo='Y la escala por encima',
+                 pista='andamio en %s · %s' % (tono, alt),
+                 sistemas=[
+                     dict(cap='a) bajando desde arriba, que es por donde se escapan',
+                          events=escala(tono, arriba, sentido='baja', notas=nq), bars=cq),
+                     dict(cap='b) y subiendo otra vez · es el mismo camino al revés, y no sale '
+                              'igual de bien: por eso se hacen los dos',
+                          events=escala(tono, agudo, notas=nq), bars=cq, show_time=False),
+                 ] + cola()),
+        ]
+    if r == 'corcheas':
+        return [
+            dict(num=desde, titulo='La escala en corcheas, sin aflojar',
+                 pista='andamio en %s · aquí lo que se trabaja es aguantar, no leer' % tono,
+                 sistemas=[
+                     dict(cap='a) ocho corcheas seguidas, todas del mismo peso · %s' % foco,
+                          events=escala(tono, agudo, figura='e', notas=ne), bars=ce),
+                     dict(cap='b) y bajando · si la última suena más floja, has empezado a '
+                              'frenar antes de tiempo',
+                          events=escala(tono, arriba, sentido='baja', figura='e', notas=ne),
+                          bars=ce, show_time=False),
+                 ]),
+            dict(num=desde + 1, titulo='El acorde, para descansar la mano',
+                 pista='andamio en %s · después de correr, abrir' % tono,
+                 sistemas=[
+                     dict(cap='a) el acorde desplegado, sube y baja',
+                          events=arpegio(tono, agudo, notas=nq, inversion=inv), bars=cq),
+                 ] + cola('b')),
+        ]
+    # 'mixta'
+    return [
+        dict(num=desde, titulo='El acorde y el giro, seguidos',
+             pista='andamio en %s · %s' % (tono, alt),
+             sistemas=[
+                 dict(cap='a) el acorde desplegado · %s' % foco,
+                      events=arpegio(tono, agudo, notas=nq, inversion=inv), bars=cq),
+                 dict(cap='b) y el giro sobre la tónica, sin mover la mano',
+                      events=giro(tono, agudo, notas=nq), bars=cq, show_time=False),
+             ]),
+        dict(num=desde + 1, titulo='Los acordes con la izquierda',
+             pista='andamio en %s · la armonía de la pieza en cuatro acordes' % tono,
+             sistemas=[
+                 dict(cap='a) I - IV - V - I, una redonda cada uno',
+                      events=cadencia(tono, grave, figura=fc, inversion=inv), bars=4, clef='bass'),
+                 dict(cap='b) y la escala bajando por encima, para unir las dos cosas',
+                      events=escala(tono, arriba, sentido='baja', notas=nq),
+                      bars=cq, show_time=False),
+             ] + cola()),
+    ]
+
+
+def sistemas_extra(tono, agudo, grave, time_sig=(4, 4), variante=0,
+                   letras=('c', 'd', 'c', 'd', 'c')):
+    """El mismo material, pero como SISTEMAS sueltos en vez de bloques nuevos.
+
+       Para Luisa, cuyo album esta disenado con TRES pasos al piano y una sola
+       hoja de estudio (lo comprueba `auditar_luisa`): meterle bloques 4 y 5 le
+       cambia el nivel, que es justo lo que el cliente no quiere para ella
+       —"poquito pero bien"—. El material se anade dentro de los pasos que ya
+       tiene, que es mas trabajo en la misma estructura y no un escalon mas.
+
+       `letras` son las que continuan la serie de cada paso (a, b, c...):
+       las pone quien llama, que es el unico que sabe cuantos sistemas hay ya.
+
+       Devuelve (para_el_paso_1, para_el_paso_2)."""
+    # La tonica manda sobre el rotulo (ver `tonica`), asi que la variedad entre
+    # piezas del MISMO tono no puede venir de cambiar de nota: viene de cambiar
+    # de registro, de direccion y de figura. Con doce piezas de Luisa en Do o La
+    # menor —que son las mismas teclas— hacen falta los tres ejes o media docena
+    # de semanas traen el mismo ejercicio, que es justo la norma de variedad.
+    agudo = tonica(tono, agudo)
+    if (variante // 3) % 2:
+        agudo = agudo[:-1] + str(int(agudo[-1]) + 1)
+    baja_primero = (variante // 6) % 2
+    fig = 'h' if (variante // 12) % 2 else 'q'
+    inv = (variante // 24) % 3
+    nq = cuantas(time_sig, fig)
+    bpb = time_sig[0] * (4.0 / time_sig[1])
+    cq = max(1, int(round(nq * (2.0 if fig == 'h' else 1.0) / bpb)))
+    fc = figura_compas(time_sig)
+    arriba = agudo[0] + str(int(agudo[-1]) + 1) if agudo[-1].isdigit() else agudo
+    if baja_primero:
+        agudo, arriba = arriba, agudo
+    alt = _frase_alteraciones(tono)
+
+    escalas = [
+        dict(cap=letras[0] + ') la escala de %s entera · %s' % (tono, alt),
+             events=escala(tono, agudo, notas=nq, figura=fig,
+                           sentido='baja' if baja_primero else 'sube'),
+             bars=cq, show_time=False),
+        dict(cap=letras[1] + ') y de vuelta · es el mismo camino y no sale igual de bien',
+             events=escala(tono, arriba, notas=nq, figura=fig,
+                           sentido='sube' if baja_primero else 'baja'),
+             bars=cq, show_time=False),
+    ]
+    acordes = [
+        dict(cap=letras[2] + ') el acorde de %s desplegado, sube y baja' % tono,
+             events=arpegio(tono, agudo, notas=nq, figura=fig, inversion=inv), bars=cq, show_time=False),
+        dict(cap=letras[3] + ') y los tres acordes que sostienen la pieza: I - IV - V - I',
+             events=cadencia(tono, grave, figura=fc, inversion=inv), bars=4, clef='bass',
+             show_time=False),
+    ]
+    giros = [
+        dict(cap=letras[0] + ') el giro sobre la tónica, sin mover la mano de sitio',
+             events=giro(tono, agudo, notas=nq), bars=cq, show_time=False),
+        dict(cap=letras[1] + ') y los tres acordes de la pieza con la izquierda',
+             events=cadencia(tono, grave, figura=fc, inversion=inv), bars=4, clef='bass',
+             show_time=False),
+    ]
+    # Dos sistemas por paso: con uno solo la hoja se seguia quedando corta, y
+    # el sitio da justo para esto. El reparto rota con la pieza para que dos
+    # semanas seguidas no traigan lo mismo.
+    juegos = (escalas, acordes, giros)
+    uno = juegos[variante % 3]
+    dos = juegos[(variante + 1) % 3]
+    # y uno mas para el paso de las dos manos: los mismos tres acordes, pero
+    # arriba. Saberlos con las dos manos es lo que permite acompanar sin leer,
+    # y cierra el paso volviendo a la pieza en vez de a un ejercicio suelto.
+    tres = [dict(cap=letras[4] + ') y los mismos tres acordes con la derecha, arriba · '
+                                 'la izquierda solo la tónica',
+                 events=cadencia(tono, agudo, figura=fc, inversion=inv), bars=4, show_time=False)]
+    return (_encajar_sistemas(uno), _encajar_sistemas(dos), _encajar_sistemas(tres))
+
+
+def bloque_tresillos(tono, num, agudo, donde, time_sig=(4, 4), letras=('a', 'b')):
+    """El bloque de tresillos de una pieza que los tiene en su partitura.
+
+       Existe porque durante meses hubo DIECISIETE piezas cuyo texto explicaba
+       el tresillo —algunas con su recuadro de "qué es un tresillo" y todo— y
+       no dibujaban ni uno: la hoja estaba llena y se anotó como excusa. Desde
+       que la hoja se pagina sola esa excusa dejó de ser cierta.
+
+       `donde` es la frase que dice en qué parte de SU partitura están, escrita
+       a mano: es el único dato que el código no puede saber."""
+    t = tonica(tono, agudo)
+    letra, _a, octava = _parte(t)
+    g = [_en_tono(tono, *_sube(letra, octava, k)) for k in range(0, 8)]
+    bpb = time_sig[0] * (4.0 / time_sig[1])
+    por_compas = int(round(bpb))          # un tresillo por golpe
+    grupos = [(g[0], g[1], g[2]), (g[3], g[2], g[1]),
+              (g[2], g[3], g[4]), (g[4], g[2], g[0]),
+              (g[1], g[2], g[3]), (g[5], g[4], g[3])][:por_compas]
+    ev, i = [], 700 + num * 7
+    for k, tri in enumerate(grupos):
+        for p in tri:
+            ev.append(dict(pitch=p, dur='e', tresillo=i + k, beam=i + k, tecnica=True))
+    # y el mismo tresillo alternando con una negra: la negra dura lo mismo que
+    # el grupo entero, y es ahi donde se ve si el alumno lo aprieta
+    # Cuantas veces se repite el par (tresillo + negra) para cerrar compases
+    # enteros: el par dura dos tiempos, asi que en 3/4 hacen falta tres pares
+    # (seis tiempos, dos compases) y en 4/4 bastan dos. Con uno fijo salian
+    # sistemas de dos tiempos en un compas de tres.
+    pares = 1
+    while abs((2.0 * pares) % bpb) > 1e-9 and pares < 8:
+        pares += 1
+    ev2, j = [], i + 40
+    for k in range(pares):
+        for p in grupos[k % len(grupos)]:
+            ev2.append(dict(pitch=p, dur='e', tresillo=j + k, beam=j + k, tecnica=True))
+        ev2.append(dict(pitch=grupos[k % len(grupos)][0], dur='q', tecnica=True))
+    sistemas = [
+        dict(cap=letras[0] + ') tres notas en el hueco de dos · di "u-ni-dad" en cada '
+                             'grupo y que las tres duren igual',
+             events=ev, bars=1),
+        dict(cap=letras[1] + ') y alternando con negras · la negra dura lo mismo que el '
+                             'tresillo entero, y ahí se ve si lo aprietas',
+             events=ev2, bars=max(1, int(round(2.0 * pares / bpb))),
+             show_time=False),
+    ]
+    return dict(num=num, titulo='Los tresillos, contados',
+                pista='andamio en %s · %s' % (tono, donde),
+                sistemas=_encajar_sistemas(sistemas))
+
+
+def bloque_semicorcheas(tono, num, agudo, donde, time_sig=(4, 4), letras=('a', 'b')):
+    """El bloque de semicorcheas, para las piezas que las tienen escritas.
+
+       Mismo motivo que `bloque_tresillos`: el texto las explicaba y el papel no
+       las enseñaba. Se escriben primero en corcheas y despues a su velocidad,
+       que es como se estudian de verdad."""
+    t = tonica(tono, agudo)
+    nq = cuantas(time_sig, 'q')
+    ns = cuantas(time_sig, 's') if 's' in ('s',) else nq * 2
+    bpb = time_sig[0] * (4.0 / time_sig[1])
+    lento = escala(tono, t, notas=nq, figura='e')
+    rapido = escala(tono, t, notas=int(bpb * 4), figura='s')
+    sistemas = [
+        dict(cap=letras[0] + ') el dibujo en corcheas, al doble de lento · así es como '
+                             'se aprende, no tocándolo rápido desde el principio',
+             events=lento, bars=max(1, int(nq * 0.5 / bpb))),
+        dict(cap=letras[1] + ') y AHORA con su figura de verdad, la semicorchea · el '
+                             'mismo dibujo, cuatro por golpe, como está impreso',
+             events=rapido, bars=1, show_time=False),
+    ]
+    return dict(num=num, titulo='Las semicorcheas, primero despacio',
+                pista='andamio en %s · %s' % (tono, donde),
+                sistemas=_encajar_sistemas(sistemas))
+
+
+def bloque_puntillo(tono, num, agudo, donde, time_sig=(4, 4), lento=False,
+                    letras=('a', 'b')):
+    """El ritmo con puntillo: largo-corto, que es el que casi nadie cuenta bien.
+
+       Faltaba en veinte piezas que lo explicaban en el texto (el de Toreador,
+       el de Rasputin, el del Do-Re-Mi) y no lo dibujaban en ningun sitio. No lo
+       vio nadie porque el auditor de vocabulario no tenia entrada para esta
+       figura; ahora la tiene.
+
+       `lento=True` lo escribe como negra con puntillo + corchea en vez de
+       corchea con puntillo + semicorchea. Es el MISMO gesto al doble de lento,
+       y es lo que toca en el escalon 2, que todavia no tiene la semicorchea:
+       escribirla ahi seria saltarse el nivel del alumno para dibujar una figura
+       que aun no sabe leer."""
+    t = tonica(tono, agudo)
+    letra, _a, octava = _parte(t)
+    g = [_en_tono(tono, *_sube(letra, octava, k)) for k in range(0, 6)]
+    largo, corto = ('q.', 'e') if lento else ('e.', 's')
+    paso = 2.0 if lento else 1.0
+    bpb = time_sig[0] * (4.0 / time_sig[1])
+    # cuantos pares hacen falta para cerrar compases enteros. No vale dividir y
+    # redondear: el par largo-corto de la version lenta dura dos tiempos y no
+    # cabe un numero entero de veces en un compas de tres, y salian sistemas de
+    # ocho tiempos en 3/4.
+    pares = 1
+    while abs((pares * paso) % bpb) > 1e-9 and pares < 12:
+        pares += 1
+    compases = max(1, int(round(pares * paso / bpb)))
+    ev = []
+    for k in range(pares):
+        ev.append(dict(pitch=g[k % 5], dur=largo, tecnica=True))
+        ev.append(dict(pitch=g[(k + 1) % 5], dur=corto, tecnica=True))
+    # y el mismo dibujo aplanado, con las dos notas iguales: es la comparacion
+    # que hace que se oiga la diferencia, y sin ella el alumno cree que ya lo
+    # esta haciendo bien
+    plano = []
+    for k in range(pares):
+        for p in (g[k % 5], g[(k + 1) % 5]):
+            plano.append(dict(pitch=p, dur='q' if lento else 'e', tecnica=True))
+    sistemas = [
+        dict(cap=letras[0] + ') primero IGUALES, para tener la referencia · las dos '
+                             'notas del par duran lo mismo',
+             events=plano, bars=compases),
+        dict(cap=letras[1] + ') y ahora con el puntillo · la primera dura tres veces '
+                             'la segunda, no un poco más',
+             events=ev, bars=compases, show_time=False),
+    ]
+    return dict(num=num, titulo='El ritmo con puntillo: largo-corto',
+                pista='andamio en %s · %s' % (tono, donde),
+                sistemas=_encajar_sistemas(sistemas))
+
+
+# El techo y el suelo del pentagrama de SOL, con el mismo criterio que los del
+# de fa: hasta dos lineas adicionales.
+_SOL_TECHO = _grado_abs('C6')
+_SOL_SUELO = _grado_abs('A3')
+
+
+def _encajar(events, clef):
+    """Sube o baja el sistema ENTERO las octavas que hagan falta para que quepa
+       en su pentagrama con dos lineas adicionales como mucho.
+
+       Las escalas y los arpegios de aqui se construyen HACIA ARRIBA desde el
+       registro que pasa la pieza, y `arriba` es ese registro una octava mas
+       alto: con un ancla en Do5 —que es de lo mas normal— la escala de vuelta
+       salia del Do6 al Do7, o sea SEIS lineas adicionales. Eran 447 notas en
+       los diez albumes, y ninguna se lee.
+
+       Se mueve el sistema completo y por octavas justas, asi que el ejercicio
+       es exactamente el mismo: las mismas notas, el mismo dibujo y el mismo
+       rotulo. Lo unico que cambia es la zona del teclado."""
+    techo, suelo = ((_SOL_TECHO, _SOL_SUELO) if clef != 'bass'
+                    else (_FA_TECHO, _FA_SUELO))
+    alturas = [p for e in events
+                 for p in ([e['pitch']] if e.get('pitch') else e.get('pitches') or [])]
+    if not alturas:
+        return events
+    for _ in range(4):
+        alto = max(_grado_abs(x) for x in alturas)
+        bajo = min(_grado_abs(x) for x in alturas)
+        if alto > techo and bajo - 7 >= suelo:
+            paso = -1
+        elif bajo < suelo and alto + 7 <= techo:
+            paso = +1
+        else:
+            break
+        alturas = [_octava(x, paso) for x in alturas]
+        events = [_mover(e, paso) for e in events]
+    return events
+
+
+def _mover(e, octavas):
+    if e.get('pitch'):
+        return dict(e, pitch=_octava(e['pitch'], octavas))
+    if e.get('pitches'):
+        return dict(e, pitches=[_octava(p, octavas) for p in e['pitches']])
+    return e
+
+
+def _encajar_sistemas(sistemas):
+    """Aplica `_encajar` sistema a sistema, cada uno con su propia clave (o
+       'treble' si no la declara). Es el mismo encaje que ya hace
+       `bloques_extra`, pero para material que se usa suelto —los tresillos,
+       las semicorcheas, el puntillo y los sistemas de `sistemas_extra`— y que
+       hasta ahora se colaba sin pasar por el."""
+    for s in sistemas or []:
+        s['events'] = _encajar(s.get('events', []) or [], s.get('clef', 'treble'))
+    return sistemas
+
+
+def encajar_para(sistemas, clef):
+    """Para cuando el grupo que devuelve `sistemas_extra` se añade a un paso
+       cuya mano no es la que se asume por defecto (treble): fuerza CLEF en
+       los sistemas que no traigan ya el suyo propio (los que ya lo declaran,
+       como la cadencia en clave de fa, no se tocan) y los vuelve a encajar
+       con ese registro. Se llama DESPUES de `sistemas_extra`, que es cuando
+       quien llama sabe a que pentagrama va cada grupo."""
+    for s in sistemas or []:
+        s.setdefault('clef', clef)
+    return _encajar_sistemas(sistemas)
+
+
+# Publico: para encajar a mano una lista de eventos suelta (un `escala(...)`,
+# `arpegio(...)` o `giro(...)` llamado directamente en el archivo de una
+# cancion, fuera de `bloques_extra`/`sistemas_extra`) sin tener que calcular
+# el desplazamiento de octava a ojo.
+encajar = _encajar
+
+
+def bloques_extra(*a, **kw):
+    """Los bloques de apoyo, ya encajados en su pentagrama.
+
+       El encaje va aqui y no dentro de cada receta porque es una decision de
+       GRABADO, no de contenido: da igual que receta toque, ninguna nota puede
+       acabar colgando de seis lineas adicionales. Lo comprueba, ademas,
+       `auditar_registro.py`."""
+    bloques = _bloques_extra(*a, **kw)
+    for b in bloques:
+        for s in b.get('sistemas', []) or []:
+            clef = s.get('clef') or b.get('clef') or 'treble'
+            s['events'] = _encajar(s.get('events', []) or [], clef)
+    return bloques

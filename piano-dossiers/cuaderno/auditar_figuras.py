@@ -1,0 +1,183 @@
+# -*- coding: utf-8 -*-
+"""Cruza la figura IMPRESA en la partitura con la que el dosier DIBUJA.
+
+   Es la comprobacion que faltaba, y la que dejo pasar el fallo mas gordo del
+   proyecto: durante meses varias piezas se escribieron en corcheas "porque el
+   motor no sabe dibujar la semicorchea", y cuando el motor aprendio a
+   dibujarla esas frases se quedaron en el papel. El alumno leia una hoja que
+   le contaba una figura que su partitura no tiene, o —peor— no veia nunca la
+   figura que si tiene.
+
+   `auditar_vocabulario.py` comprueba que no se HABLE de lo que no se dibuja.
+   Esto comprueba lo otro: que se DIBUJE lo que la partitura trae.
+
+   Lee `figuras_medidas.json`, que genera `medir_figuras_todas.py` (medir tarda
+   varios minutos y no puede colgar de cada auditoria).
+
+   Uso:  python3 auditar_figuras.py [prefijo ...]
+"""
+import json
+import os
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+JSON = os.path.join(HERE, 'figuras_medidas.json')
+
+# A partir de cuantas barras dobles medidas se considera que la semicorchea es
+# un rasgo REAL de la pieza y no ruido del detector. Por debajo hay falsos
+# positivos (cabezas de acorde, lineas adicionales) y hay que mirarlo a ojo.
+UMBRAL = 20
+
+# Partituras NO MEDIBLES (una foto de baja resolucion dentro de un PDF) que ya
+# se han mirado a ojo, a tamano grande, pagina a pagina. Sin esta lista el
+# auditor no puede decir nada de ellas, y callarse no vale.
+#
+#   nombre del fichero -> (lleva semicorcheas, lo que se vio)
+#
+# El booleano NO es decorativo: con el, estas 31 partituras pasan exactamente
+# la misma comprobacion en los dos sentidos que las 157 medibles. Mirarlas y
+# no anotar el resultado seria mirarlas para nada.
+MIRADAS = {
+    # --- Aida --------------------------------------------------------------
+    # Su *Boig per tu* es un escaneo: el PDF lleva dentro una imagen de 86 ppi
+    # y a esa resolucion las dos barras de una semicorchea no existen. Mirado
+    # a tamano grande el 31 de agosto de 2026, sistema a sistema: corcheas
+    # sueltas y de dos en dos, negras con puntillo, blancas y acordes largos
+    # en la izquierda. Ni una barra doble en toda la pagina.
+    'Boig per tu.pdf': (False, 'corcheas, negras con puntillo y acordes largos · '
+                               'ni una barra doble'),
+
+    # --- Arnau: casi todo son ediciones de iniciacion sin una sola barra doble
+    'Chopsticks.pdf': (False, 'negras y blancas · ni una barra en toda la pieza'),
+    'Clementine.pdf': (False, 'corcheas unidas de dos en dos · una sola barra'),
+    'JOLLY OLD SAINT NICHOLAS.pdf': (False, 'negras, blancas y redondas · sin barras'),
+    'Do Your Ears Hang Low?.pdf': (False, 'corcheas · una sola barra por grupo'),
+    'The Wheels on the Bus.pdf': (True, 'corchea con puntillo + SEMICORCHEA en los cc. 1 y 5 · '
+                                        'el resto, negras y blancas'),
+    'Oh when the Saint.pdf': (False, 'corcheas · sin barras dobles'),
+    'OH WHEN THE SAINT.pdf': (False, 'la misma edicion: corcheas'),
+    'WE WISH A MERRY CRISTMAS.pdf': (False, 'corcheas · una sola barra'),
+    'Baa Baa Black Sheep.pdf': (False, 'corcheas y negra con puntillo · una sola barra'),
+    'Polly Put the Kettle On.pdf': (False, 'corcheas de principio a fin · una sola barra'),
+    'Little Miss Muffet.pdf': (False, 'corcheas de tres en tres (6/8) · una sola barra'),
+    'MyBonnie.pdf': (False, 'negras, blancas y blancas con puntillo · ni una barra'),
+    'rain-rain-away-easy-piano-4 manos.pdf': (False, 'blancas y negras · ni una corchea'),
+    'the-mulberry-bush-185807.4 manos.pdf': (False, 'corcheas de tres en tres (6/8) · una sola barra'),
+
+    # --- las cuatro copias de la misma edicion del Toreador (Gradimi, Level 4)
+    'Toreador. Bizet': (True, 'SEMICORCHEAS: el largo-corto de los cc. 1-4 y 7, y cuatro '
+                              'seguidas en la primera casilla'),
+    'TOREADOR-BIZET.pdf': (True, 'la misma edicion Gradimi: mismo largo-corto y misma carrerilla'),
+    'TOREADOR-BIZET. Bizet': (True, 'la misma edicion Gradimi'),
+    'Copia de Copia de Toreador. Bizet': (True, 'la misma edicion Gradimi'),
+
+    # --- las dos copias del Grandfather's Clock (Gradimi, Level 3)
+    "Grandfather's Clock.pdf": (False, 'negras, blancas y redondas · ni una barra'),
+    'Grandfather.pdf': (False, 'la misma edicion Gradimi: sin barras'),
+
+    # --- las dos copias de Lovely (arr. Amy Kieran)
+    '-LOVELY.pdf': (False, 'corcheas · ocho por compas, una sola barra'),
+    'LOVELY.': (False, 'la misma edicion: corcheas'),
+
+    # --- las dos copias del Flying Theme
+    'Como entrenar a tu dragon.': (False, 'corcheas · una sola barra por grupo en toda la pieza'),
+    'Copia de Copia de Como entrenar a tu dragon.': (False, 'la misma edicion: corcheas'),
+
+    # --- sueltas
+    '-PEACHES.': (True, 'CORCHEAS hasta el c. 12 y SEMICORCHEAS del 13 en adelante'),
+    'al-calor-del-amor-en-un-bar.pdf': (True, 'SEMICORCHEAS en la introduccion (cc. 1-4) y '
+                                              'TRESILLOS marcados con el 3'),
+    'himno America.pdf': (False, 'corcheas y negra con puntillo + corchea · una sola barra'),
+    'Himno de Estados Unidos.pdf': (False, 'corcheas · una sola barra'),
+    "SUR LE PONT D'AVIGNON.pdf": (False, 'corcheas · una sola barra'),
+    'LAS CUATRO ESTACIONES.pdf': (False, 'corcheas · una sola barra'),
+    'BELLA Y BESTIA .pdf': (False, 'corcheas · una sola barra'),
+}
+
+
+def por_md5(datos):
+    """MIRADAS va por NOMBRE de archivo, y el nombre cambia: al reorganizar el
+       album de Eduard, "Grandfather's Clock.pdf" paso a llamarse "Grandfathers
+       Clock.pdf" y "Toreador. Bizet" a "Toreador Bizet.pdf". Mismo PDF byte a
+       byte, y sin embargo las dos piezas volvieron a salir como "sin mirar":
+       la mirada estaba hecha y se habia perdido por un apostrofo.
+
+       Lo que identifica una partitura es su md5, no su nombre — es el mismo
+       argumento con el que `auditar_compas` comparte lectura entre piezas que
+       comparten fichero. Asi que ademas del nombre se indexa por md5: si un
+       PDF ya mirado aparece con otro nombre, hereda lo que se vio."""
+    fuera = {}
+    for d in datos.values():
+        visto = MIRADAS.get(d.get('partitura'))
+        if visto and d.get('md5'):
+            fuera[d['md5']] = visto
+    return fuera
+
+
+def cargar():
+    if not os.path.exists(JSON):
+        print('falta %s · ejecuta antes medir_figuras_todas.py' % os.path.basename(JSON))
+        sys.exit(2)
+    with open(JSON) as fh:
+        return json.load(fh)
+
+
+def main(prefijos=None):
+    datos = cargar()
+    if prefijos:
+        datos = {m: d for m, d in datos.items()
+                 if m.split('_')[0] in prefijos}
+
+    miradas_md5 = por_md5(cargar())
+    huecos, sobra, mirar = [], [], []
+    for m in sorted(datos):
+        d = datos[m]
+        estado = d.get('estado')
+        escribe = d.get('escribe', 0)
+        if estado == 'ok':
+            largas = d.get('largas', 0)
+            lleva = largas >= UMBRAL
+            cuanto = '%d barras dobles' % largas
+        elif estado == 'no medible':
+            visto = MIRADAS.get(d.get('partitura')) or miradas_md5.get(d.get('md5'))
+            if visto is None:
+                mirar.append((m, d.get('partitura'), d.get('motivo', '')))
+                continue
+            lleva = visto[0]
+            largas, cuanto = 0, 'mirado a ojo'
+        else:
+            continue
+
+        if lleva and not escribe:
+            huecos.append((m, largas, cuanto, d['partitura']))
+        elif not lleva and largas == 0 and d.get('escribe_a_mano'):
+            # Solo lo escrito A MANO: el material de apoyo de `relleno` es
+            # tecnica generica sobre la tonalidad, va marcado como tal y
+            # puede llevar una figura que la pieza no tenga.
+            sobra.append((m, d['escribe_a_mano'], d['partitura']))
+
+    print('piezas comprobadas: %d (umbral: %d barras dobles · %d partituras miradas a ojo)'
+          % (len(datos), UMBRAL, len(MIRADAS)))
+
+    print('\nLA PARTITURA LA LLEVA Y EL DOSIER NO LA DIBUJA: %d' % len(huecos))
+    for m, largas, cuanto, p in sorted(huecos, key=lambda x: -x[1]):
+        print('   %-16s · %-22s %s' % (cuanto, m, p[:40]))
+
+    print('\nEL DOSIER LA DIBUJA Y LA PARTITURA NO LA LLEVA: %d' % len(sobra))
+    for m, escribe, p in sobra:
+        print('   escribe %2d · %-22s %s' % (escribe, m, p[:44]))
+
+    print('\nSin mirar (partitura de baja resolucion y no anotada en MIRADAS): %d'
+          % len(mirar))
+    for m, p, motivo in mirar:
+        print('   %-22s %-40s %s' % (m, p[:40], motivo))
+
+    if huecos or sobra or mirar:
+        print('\n%d COSAS QUE MIRAR' % (len(huecos) + len(sobra) + len(mirar)))
+        return 1
+    print('\nFIGURAS OK — lo que la partitura trae impreso, el cuaderno lo dibuja.')
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv[1:] or None))

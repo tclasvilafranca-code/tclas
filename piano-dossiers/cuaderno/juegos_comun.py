@@ -1,0 +1,826 @@
+# -*- coding: utf-8 -*-
+"""La lengua visual de los CINCO juegos de clase.
+
+   Aqui no vive ningun juego: vive lo que todos comparten, que es lo que hace
+   que parezcan una coleccion y no cinco cosas sueltas. Misma paleta que el
+   cuaderno, mismos cuatro palos, mismos dibujos de figura, mismo dorso y las
+   mismas marcas de corte. Un alumno que ha aprendido a leer la baraja del UNO
+   sabe leer el tablero de la Oca sin que nadie le explique nada.
+
+   LOS TRES NIVELES SE LLAMAN POR DIFICULTAD, NO POR EDAD. "Facil, medio,
+   dificil" y no "ninos, adolescentes, adultos". El motivo es concreto: Jose
+   Maria tiene sesenta anos y empezo hace poco, y darle una caja que ponga
+   ADULTOS con semicorcheas dentro seria mentirle dos veces. Lo que cambia de un
+   nivel a otro son las FIGURAS que entran, y salen de `niveles.py`, que ya
+   existe y ya lo audita `auditar_niveles.py`:
+
+     FACIL    escalon 1 · redonda, blanca, negra, corchea y sus silencios
+     MEDIO    escalon 2 · entra el PUNTILLO
+     DIFICIL  escalon 3 · entra la SEMICORCHEA
+
+   LOS PALOS SE DISTINGUEN TAMBIEN EN BLANCO Y NEGRO. Cada palo lleva color y
+   ademas FORMA (rombo, circulo, triangulo, cuadrado). Si un dia la impresora
+   de la escuela solo tiene toner negro, el juego sigue siendo jugable. Un juego
+   que se muere en una fotocopia es un juego que no se lleva a clase.
+
+   EL TAMANO DE CARTA es tamano poker de verdad (63,5 x 88,9 mm — 2,5" x 3,5",
+   el mismo que un UNO real), 6 por hoja A4. Antes era baraja mini para que
+   saliera mas barajas por hoja, pero a ese tamano una semicorchea con su
+   doble corchete no se lee bien ni de cerca; con figuras de por medio el
+   tamano manda sobre el numero de hojas.
+"""
+import math
+import os
+import sys
+
+from reportlab.lib.colors import HexColor, white, black
+from reportlab.pdfbase.pdfmetrics import stringWidth
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.join(HERE, '..', 'engine'))
+
+import notation as nt                                               # noqa: E402
+from portada import (W, H, NAVY, NAVY_SOFT, CREAM, RULE, INK, MUTED,  # noqa: E402
+                     ACCENT, _fit, _wrap)
+
+# --------------------------------------------------------------------------
+# Los cuatro palos. Color + FORMA, siempre las dos cosas.
+# --------------------------------------------------------------------------
+PALOS = [
+    ('rojo',   HexColor('#B4462F'), 'rombo'),
+    ('azul',   HexColor('#2C4C6B'), 'circulo'),
+    ('verde',  HexColor('#4A6741'), 'triangulo'),
+    ('ocre',   HexColor('#A9762F'), 'cuadrado'),
+]
+COLOR_PALO = dict((n, c) for n, c, _f in PALOS)
+FORMA_PALO = dict((n, f) for n, _c, f in PALOS)
+
+# --------------------------------------------------------------------------
+# Las figuras, con su valor en golpes y su nombre. La clave es la misma que usa
+# el motor (`notation.DUR_BEATS`), con una R delante para los silencios, para
+# que no haya dos vocabularios distintos en el proyecto.
+# --------------------------------------------------------------------------
+FIGURAS = {
+    'w':  ('redonda',               4.0,  '4'),
+    'h.': ('blanca con puntillo',   3.0,  '3'),
+    'h':  ('blanca',                2.0,  '2'),
+    'q.': ('negra con puntillo',    1.5,  '1½'),
+    'q':  ('negra',                 1.0,  '1'),
+    'e.': ('corchea con puntillo',  0.75, '¾'),
+    'e':  ('corchea',               0.5,  '½'),
+    's':  ('semicorchea',           0.25, '¼'),
+    'Rw': ('silencio de redonda',      4.0,  '4'),
+    'Rh': ('silencio de blanca',       2.0,  '2'),
+    'Rq': ('silencio de negra',        1.0,  '1'),
+    'Re': ('silencio de corchea',      0.5,  '½'),
+    'Rs': ('silencio de semicorchea',  0.25, '¼'),
+}
+
+NIVELES = {
+    1: dict(
+        nombre='FÁCIL', color=HexColor('#4A6741'),
+        que='redonda, blanca, negra y corchea',
+        figuras=['w', 'h', 'q', 'e', 'Rh', 'Rq'],
+    ),
+    2: dict(
+        nombre='MEDIO', color=HexColor('#A9762F'),
+        que='entra el puntillo',
+        figuras=['w', 'h.', 'h', 'q.', 'q', 'e', 'Rh', 'Rq'],
+    ),
+    3: dict(
+        nombre='DIFÍCIL', color=HexColor('#B4462F'),
+        que='entra la semicorchea',
+        figuras=['w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's', 'Rq', 'Re'],
+    ),
+}
+
+
+# --------------------------------------------------------------------------
+# Dibujar una figura SUELTA, fuera de un pentagrama
+# --------------------------------------------------------------------------
+def figura(c, cx, cy, gap, clave, color=None):
+    """Una figura o un silencio, **centrados de verdad** en (cx, cy).
+
+       El truco para reaprovechar el motor tal cual: se le pasa un pentagrama
+       imaginario cuya TERCERA LINEA cae donde queremos la cabeza, y la nota que
+       se pide es la de esa linea (Si4 en clave de sol). Asi `note_y` la coloca
+       ahi, `ledger_lines_needed` no dibuja ninguna linea adicional porque la
+       nota esta dentro, y la plica sale hacia arriba. Ni una constante nueva ni
+       una copia del codigo de dibujo.
+
+       Y una cuenta que hay que hacer o el dibujo queda descolgado: una negra NO
+       esta centrada en su cabeza, porque le cuelga una plica de tres espacios y
+       medio hacia arriba. Su centro visual esta a 1,45 espacios por encima de la
+       cabeza. Sin descontarlo, en una carta la figura se va al fondo y parece
+       que se ha impreso torcida."""
+    alto = alto_figura(gap, clave)
+    if clave.startswith('R') or clave == 'w':
+        cabeza = cy
+    else:
+        cabeza = cy - gap * 1.45
+    sb = cabeza - 2 * gap              # linea de abajo del pentagrama imaginario
+    st = cabeza + 2 * gap              # linea de arriba
+    c.saveState()
+    with _tinta(color):
+        if clave.startswith('R'):
+            dur = {'Rw': 'w', 'Rh': 'h', 'Rq': 'q', 'Re': 'e', 'Rs': 's'}[clave]
+            nt.draw_rest(c, cx, sb, st, gap, dur)
+        else:
+            nt.draw_note(c, cx, sb, st, gap, 'B4', clave, stem_dir='up', clef='treble')
+    if clave in ('Rw', 'Rh'):
+        # los dos son un rectangulo casi identico, y sin pentagrama alrededor
+        # no se distingue cual se APOYA en una linea y cual CUELGA de otra —
+        # que es justo la diferencia que hay que leer. Dos trazos guia (las
+        # dos lineas de las que penden) bastan para verlo sin dibujar las
+        # cinco del pentagrama entero.
+        mid = sb + 2 * gap
+        c.saveState()
+        guia = color if color is not None else nt.GRAY
+        c.setStrokeColor(guia)
+        c.setLineWidth(max(0.6, gap * 0.09))
+        lw = gap * 2.3
+        for ly in (mid, mid + gap):
+            c.line(cx - lw / 2.0, ly, cx + lw / 2.0, ly)
+        c.restoreState()
+    c.restoreState()
+    return alto
+
+
+def alto_figura(gap, clave):
+    """Lo que ocupa de alto, para poder encajarla en una caja."""
+    return gap * _PROPORCION[_familia(clave)][0]
+
+
+def _familia(clave):
+    if clave.startswith('R'):
+        return 'silencio'
+    if clave == 'w':
+        return 'redonda'
+    if clave.endswith('.'):
+        return 'puntillo'
+    return 'plica'
+
+
+# (alto, ancho) de cada familia, en espacios de pentagrama. Medido sobre el
+# propio motor, no estimado: la plica son 3,4 espacios y la cabeza 0,9.
+_PROPORCION = {
+    'redonda':  (0.95, 1.35),
+    'plica':    (3.95, 1.30),
+    'puntillo': (3.95, 1.95),
+    'silencio': (2.30, 1.35),
+}
+
+
+def figura_en_caja(c, cx, cy, ancho, alto, clave, color=None):
+    """Dibuja la figura AL TAMANO QUE LLENE la caja que se le da.
+
+       Sin esto, todas las figuras se dibujan con el mismo espacio de pentagrama
+       y en una carta pasa algo raro: la negra llena el hueco y **la redonda se
+       queda como un garbanzo en medio de un plato**, porque una redonda es solo
+       una cabeza y una negra tiene tres espacios y medio de plica. En una
+       partitura eso es correcto —las figuras se comparan entre si—, pero en una
+       carta cada figura esta sola y tiene que mandar en su carta."""
+    fa, fw = _PROPORCION[_familia(clave)]
+    gap = min(alto / fa, ancho / fw)
+    figura(c, cx, cy, gap, clave, color)
+    return gap
+
+
+def simbolo(c, cx, cy, r, cual, color):
+    """El vocabulario de simbolos musicales que NO son una figura suelta:
+       silencios dentro de un simbolo mayor, alteraciones, calderones, claves,
+       flechas de intercambio... Vive aqui y no en un juego concreto porque
+       varios juegos lo comparten (el silencio y el becuadro del UNO son
+       literalmente la misma casilla que el silencio y el becuadro de la Oca)
+       — un alumno que reconoce el simbolo en un juego lo reconoce en todos.
+
+       Se dibujan, no se buscan en una fuente: ningun tipo de texto trae una
+       doble barra de compas ni un calderon con la proporcion que hace falta
+       a este tamano."""
+    c.saveState()
+    c.setFillColor(color)
+    c.setStrokeColor(color)
+    if cual == 'silencio':
+        figura_en_caja(c, cx, cy, r * 1.5, r * 1.9, 'Rq', color)
+    elif cual == 'becuadro':
+        # a r*2.4 el trazo vertical del becuadro se salia por arriba y por
+        # abajo del ovalo blanco; a r*1.3 queda dentro con margen
+        c.setFont('FreeSerif', r * 1.3)
+        c.drawCentredString(cx, cy - r * 0.42, '♮')
+    elif cual == 'doblebarra':
+        c.setFont('DejaVuSerif-Bold', r * 1.5)
+        c.drawCentredString(cx, cy - r * 0.5, '+2')
+    elif cual in ('canon', 'cambio'):
+        # dos flechas curvas en circulo, el icono universal de intercambio:
+        # cada jugador se lleva la mano del otro
+        c.setLineWidth(r * 0.16)
+        c.arc(cx - r * 0.85, cy - r * 0.55, cx + r * 0.85, cy + r * 1.05,
+              startAng=15, extent=155)
+        c.arc(cx - r * 0.85, cy - r * 1.05, cx + r * 0.85, cy + r * 0.55,
+              startAng=195, extent=155)
+        for (px, py, ang) in ((cx + r * 0.80, cy + r * 0.44, -60),
+                              (cx - r * 0.80, cy - r * 0.44, 120)):
+            c.saveState()
+            c.translate(px, py)
+            c.rotate(ang)
+            p = c.beginPath()
+            p.moveTo(0, 0); p.lineTo(-r * 0.30, r * 0.16)
+            p.lineTo(-r * 0.30, -r * 0.16); p.close()
+            c.drawPath(p, fill=1, stroke=0)
+            c.restoreState()
+    elif cual == 'clave_sol':
+        # la clave de sol de verdad (mismo glifo que abre cada pentagrama)
+        c.setFont('FreeSerif', r * 1.7)
+        c.drawCentredString(cx, cy - r * 0.55, '\U0001D11E')
+    elif cual == 'clave_fa':
+        c.setFont('FreeSerif', r * 1.6)
+        c.drawCentredString(cx, cy - r * 0.50, '\U0001D122')
+    elif cual == 'staccato':
+        figura_en_caja(c, cx, cy + r * 0.22, r * 1.1, r * 1.35, 'q', color)
+        c.circle(cx, cy - r * 0.95, r * 0.16, fill=1, stroke=0)
+    elif cual == 'calderon':
+        c.setLineWidth(r * 0.13)
+        c.arc(cx - r * 0.92, cy - r * 0.80, cx + r * 0.92, cy + r * 1.00,
+              startAng=0, extent=180)
+        c.circle(cx, cy - r * 0.10, r * 0.15, fill=1, stroke=0)
+    elif cual == 'corchea':
+        figura_en_caja(c, cx, cy, r * 1.5, r * 1.9, 'e', color)
+    elif cual == 'ligadura':
+        # el arco de la ligadura, el mismo trazo que une dos notas en la
+        # partitura — aqui une dos casillas del tablero
+        c.setLineWidth(r * 0.15)
+        p = c.beginPath()
+        p.moveTo(cx - r * 0.95, cy - r * 0.1)
+        p.curveTo(cx - r * 0.4, cy + r * 0.75, cx + r * 0.4, cy + r * 0.75,
+                 cx + r * 0.95, cy - r * 0.1)
+        c.drawPath(p, fill=0, stroke=1)
+    elif cual == 'redonda_espera':
+        figura_en_caja(c, cx, cy, r * 1.5, r * 1.9, 'Rw', color)
+    elif cual == 'dacapo':
+        c.setFont('DejaVuSerif-Bold', r * 0.95)
+        c.drawCentredString(cx, cy - r * 0.30, 'D.C.')
+    elif cual == 'fine':
+        c.setFont('DejaVuSerif-Bold', r * 1.05)
+        c.drawCentredString(cx, cy - r * 0.35, 'FINE')
+    elif cual == 'escalera':
+        # el pentagrama-escalera en miniatura: las cinco lineas de siempre,
+        # y una flecha que las atraviesa subiendo — el mismo gesto que la
+        # escalera grande que cruza el tablero, para que la casilla se
+        # reconozca sin necesidad de ver el tablero entero
+        c.setLineWidth(r * 0.10)
+        bot, top = cy - r * 0.60, cy + r * 0.60
+        for i in range(5):
+            ly = bot + i * (top - bot) / 4.0
+            c.line(cx - r * 0.68, ly, cx + r * 0.68, ly)
+        c.setLineWidth(r * 0.20)
+        c.setLineJoin(1)
+        p = c.beginPath()
+        p.moveTo(cx - r * 0.30, cy - r * 0.15)
+        p.lineTo(cx, cy + r * 0.55)
+        p.lineTo(cx + r * 0.30, cy - r * 0.15)
+        c.drawPath(p, fill=0, stroke=1)
+    c.restoreState()
+
+
+# --------------------------------------------------------------------------
+# Los instrumentos: para tableros (la Oca musical) donde cada casilla quiere
+# un dibujo de verdad y no solo un numero. Catorce instrumentos reconocibles
+# a tamano de casilla, en dos colores plano — no hace falta mas para leerse
+# desde el otro lado de la mesa, y con mas detalle se vuelven manchas a este
+# tamano. `fondo` es el color de la celda: el violin lo usa para tallarse la
+# cintura (dos muescas del color de fondo encima de un cuerpo entero, mas
+# fiable que una curva bezier de un solo trazo para la forma de reloj de
+# arena de un violin de verdad).
+# --------------------------------------------------------------------------
+INSTRUMENTOS = ['guitarra', 'piano', 'tambor', 'trompeta', 'violin', 'saxofon',
+                'maracas', 'pandereta', 'xilofono', 'acordeon', 'trombon',
+                'arpa', 'platillos', 'microfono', 'flauta']
+
+
+def instrumento(c, cx, cy, r, cual, fondo=white):
+    c.saveState()
+    if cual == 'guitarra':
+        madera = HexColor('#B5793B')
+        osc = HexColor('#8C5A28')
+        c.setFillColor(madera)
+        c.setStrokeColor(osc)
+        c.setLineWidth(r * 0.05)
+        c.ellipse(cx - r * 0.62, cy - r * 0.92, cx + r * 0.62, cy - r * 0.02, fill=1, stroke=1)
+        c.ellipse(cx - r * 0.44, cy - r * 0.15, cx + r * 0.44, cy + r * 0.65, fill=1, stroke=1)
+        c.setFillColor(osc)
+        c.rect(cx - r * 0.09, cy + r * 0.45, r * 0.18, r * 0.85, fill=1, stroke=0)
+        c.setFillColor(HexColor('#3B2413'))
+        c.circle(cx, cy - r * 0.42, r * 0.16, fill=1, stroke=0)
+        c.setStrokeColor(HexColor('#E8D9B0'))
+        c.setLineWidth(r * 0.025)
+        for dx in (-0.10, 0, 0.10):
+            c.line(cx + dx * r, cy - r * 0.02, cx + dx * r, cy - r * 0.9)
+    elif cual == 'piano':
+        c.setFillColor(white)
+        c.setStrokeColor(INK)
+        c.setLineWidth(r * 0.05)
+        c.roundRect(cx - r * 0.9, cy - r * 0.55, r * 1.8, r * 1.1, r * 0.12, fill=1, stroke=1)
+        nk = 7
+        kw = r * 1.8 / nk
+        c.setFillColor(INK)
+        for i in range(1, nk):
+            c.rect(cx - r * 0.9 + i * kw - r * 0.045, cy - r * 0.05,
+                  r * 0.09, r * 0.55, fill=1, stroke=0)
+    elif cual == 'tambor':
+        rojo = HexColor('#C0392B')
+        c.setFillColor(rojo)
+        c.setStrokeColor(HexColor('#7A231C'))
+        c.setLineWidth(r * 0.05)
+        c.rect(cx - r * 0.62, cy - r * 0.5, r * 1.24, r * 0.85, fill=1, stroke=1)
+        c.setFillColor(HexColor('#E8DCC0'))
+        c.ellipse(cx - r * 0.62, cy + r * 0.15, cx + r * 0.62, cy + r * 0.55, fill=1, stroke=1)
+        c.setStrokeColor(HexColor('#7A231C'))
+        for dx in (-0.4, 0, 0.4):
+            c.line(cx + dx * r, cy - r * 0.5, cx + dx * r, cy + r * 0.35)
+        c.setStrokeColor(HexColor('#5B3A1E'))
+        c.setLineWidth(r * 0.08)
+        c.line(cx - r * 0.1, cy + r * 0.7, cx + r * 0.55, cy + r * 1.15)
+        c.line(cx + r * 0.15, cy + r * 0.65, cx - r * 0.45, cy + r * 1.1)
+    elif cual in ('trompeta', 'gramofono'):
+        oro = HexColor('#D4A017')
+        c.setFillColor(oro)
+        c.setStrokeColor(HexColor('#8C6A0F'))
+        c.setLineWidth(r * 0.04)
+        if cual == 'trompeta':
+            c.rect(cx - r * 0.85, cy - r * 0.12, r * 1.0, r * 0.24, fill=1, stroke=1)
+            p = c.beginPath()
+            p.moveTo(cx + r * 0.15, cy + r * 0.12)
+            p.lineTo(cx + r * 0.75, cy + r * 0.42)
+            p.lineTo(cx + r * 0.75, cy - r * 0.42)
+            p.lineTo(cx + r * 0.15, cy - r * 0.12)
+            p.close()
+            c.drawPath(p, fill=1, stroke=1)
+            for dx in (-0.55, -0.35, -0.15):
+                c.rect(cx + dx * r, cy + r * 0.12, r * 0.08, r * 0.22, fill=1, stroke=1)
+        else:
+            # el gramofono del medallon central: una bocina curva sobre una
+            # caja, el icono clasico de "musica antigua" para el centro
+            c.setFillColor(HexColor('#5B3A1A'))
+            c.roundRect(cx - r * 0.4, cy - r * 1.05, r * 0.8, r * 0.42, r * 0.06, fill=1, stroke=0)
+            c.setFillColor(oro)
+            p = c.beginPath()
+            p.moveTo(cx - r * 0.1, cy - r * 0.68)
+            p.curveTo(cx - r * 0.15, cy - r * 0.2, cx - r * 0.05, cy + r * 0.15, cx + r * 0.35, cy + r * 0.35)
+            p.curveTo(cx + r * 0.95, cy + r * 0.65, cx + r * 1.05, cy + r * 0.05, cx + r * 0.55, cy - r * 0.15)
+            p.curveTo(cx + r * 0.3, cy - r * 0.28, cx + r * 0.2, cy - r * 0.5, cx + r * 0.18, cy - r * 0.68)
+            p.close()
+            c.setStrokeColor(HexColor('#8C6A0F'))
+            c.setLineWidth(r * 0.03)
+            c.drawPath(p, fill=1, stroke=1)
+    elif cual == 'violin':
+        madera = HexColor('#A9702E')
+        c.setFillColor(madera)
+        c.setStrokeColor(HexColor('#5B3A1A'))
+        c.setLineWidth(r * 0.045)
+        c.roundRect(cx - r * 0.46, cy - r * 0.95, r * 0.92, r * 1.65, r * 0.42, fill=1, stroke=1)
+        c.setFillColor(fondo)
+        c.ellipse(cx - r * 0.72, cy - r * 0.14, cx - r * 0.30, cy + r * 0.30, fill=1, stroke=0)
+        c.ellipse(cx + r * 0.30, cy - r * 0.14, cx + r * 0.72, cy + r * 0.30, fill=1, stroke=0)
+        c.setStrokeColor(HexColor('#5B3A1A'))
+        c.setLineWidth(r * 0.035)
+        c.arc(cx - r * 0.72, cy - r * 0.14, cx - r * 0.30, cy + r * 0.30, startAng=-55, extent=110)
+        c.arc(cx + r * 0.30, cy - r * 0.14, cx + r * 0.72, cy + r * 0.30, startAng=125, extent=110)
+        c.setFillColor(HexColor('#3B2413'))
+        c.setStrokeColor(HexColor('#3B2413'))
+        c.setLineWidth(r * 0.05)
+        c.line(cx - r * 0.14, cy + r * 0.02, cx - r * 0.04, cy + r * 0.28)
+        c.line(cx + r * 0.14, cy + r * 0.02, cx + r * 0.04, cy + r * 0.28)
+        c.setStrokeColor(HexColor('#3B2413'))
+        c.setLineWidth(r * 0.16)
+        c.line(cx, cy + r * 0.70, cx, cy + r * 1.32)
+        c.setFillColor(HexColor('#3B2413'))
+        c.circle(cx, cy + r * 1.36, r * 0.13, fill=1, stroke=0)
+    elif cual == 'saxofon':
+        oro = HexColor('#D4A017')
+        c.setStrokeColor(oro)
+        c.setLineWidth(r * 0.22)
+        p = c.beginPath()
+        p.moveTo(cx - r * 0.15, cy - r * 0.95)
+        p.curveTo(cx + r * 0.35, cy - r * 0.6, cx + r * 0.35, cy - r * 0.1, cx + r * 0.05, cy + r * 0.3)
+        p.curveTo(cx - r * 0.25, cy + r * 0.7, cx - r * 0.15, cy + r * 1.05, cx + r * 0.25, cy + r * 1.0)
+        c.drawPath(p, fill=0, stroke=1)
+        c.setFillColor(HexColor('#8C6A0F'))
+        for t in (0.25, 0.45, 0.65):
+            c.circle(cx - r * 0.02 + t * r * 0.3, cy - r * 0.5 + t * r * 0.9, r * 0.06, fill=1, stroke=0)
+    elif cual == 'maracas':
+        naranja = HexColor('#D9752B')
+        for sgn in (-1, 1):
+            c.saveState()
+            c.translate(cx + sgn * r * 0.32, cy)
+            c.rotate(sgn * 18)
+            c.setFillColor(naranja)
+            c.setStrokeColor(HexColor('#8C4A16'))
+            c.setLineWidth(r * 0.04)
+            c.ellipse(-r * 0.3, -r * 0.1, r * 0.3, r * 0.7, fill=1, stroke=1)
+            c.rect(-r * 0.07, -r * 0.75, r * 0.14, r * 0.7, fill=1, stroke=1)
+            c.setFillColor(HexColor('#F4D9A0'))
+            for (ddx, ddy) in ((-0.1, 0.2), (0.12, 0.35), (-0.05, 0.5)):
+                c.circle(ddx * r, ddy * r, r * 0.045, fill=1, stroke=0)
+            c.restoreState()
+    elif cual == 'pandereta':
+        tan = HexColor('#C9A15A')
+        c.setStrokeColor(tan)
+        c.setLineWidth(r * 0.22)
+        c.circle(cx, cy, r * 0.68, fill=0, stroke=1)
+        c.setFillColor(HexColor('#E8DCC0'))
+        c.setStrokeColor(HexColor('#8C6A34'))
+        c.setLineWidth(r * 0.03)
+        for ang in range(0, 360, 45):
+            ax = cx + r * 0.68 * math.cos(math.radians(ang))
+            ay = cy + r * 0.68 * math.sin(math.radians(ang))
+            c.circle(ax, ay, r * 0.11, fill=1, stroke=1)
+    elif cual == 'xilofono':
+        colores = [HexColor('#B4462F'), HexColor('#D9752B'), HexColor('#D4A017'),
+                  HexColor('#4A6741'), HexColor('#2C4C6B')]
+        n = len(colores)
+        totw = r * 1.7
+        bw = totw / n
+        for i, col in enumerate(colores):
+            bh = r * (1.0 - i * 0.12)
+            bx = cx - totw / 2.0 + i * bw
+            c.setFillColor(col)
+            c.setStrokeColor(HexColor('#232323'))
+            c.setLineWidth(r * 0.02)
+            c.roundRect(bx + bw * 0.08, cy - bh / 2.0, bw * 0.84, bh, bw * 0.12, fill=1, stroke=1)
+    elif cual == 'acordeon':
+        c.setFillColor(HexColor('#8C1F1F'))
+        c.setStrokeColor(HexColor('#5B1414'))
+        c.setLineWidth(r * 0.04)
+        c.roundRect(cx - r * 0.85, cy - r * 0.55, r * 0.42, r * 1.1, r * 0.06, fill=1, stroke=1)
+        c.setFillColor(white)
+        c.roundRect(cx + r * 0.43, cy - r * 0.55, r * 0.42, r * 1.1, r * 0.06, fill=1, stroke=1)
+        c.setFillColor(INK)
+        for i in range(4):
+            c.rect(cx + r * 0.5 + i * r * 0.09, cy - r * 0.4, r * 0.05, r * 0.85, fill=1, stroke=0)
+        c.setFillColor(HexColor('#C9A15A'))
+        c.setStrokeColor(HexColor('#8C6A34'))
+        nx = 5
+        w = r * 0.86 / nx
+        for i in range(nx):
+            x0 = cx - r * 0.43 + i * w
+            mid = cy + (r * 0.5 if i % 2 == 0 else -r * 0.5)
+            p = c.beginPath()
+            p.moveTo(x0, cy - r * 0.55)
+            p.lineTo(x0 + w / 2.0, mid)
+            p.lineTo(x0 + w, cy - r * 0.55)
+            p.lineTo(x0 + w, cy + r * 0.55)
+            p.lineTo(x0 + w / 2.0, cy - mid + cy)
+            p.lineTo(x0, cy + r * 0.55)
+            p.close()
+            c.drawPath(p, fill=1, stroke=1)
+    elif cual == 'trombon':
+        oro = HexColor('#D4A017')
+        c.setStrokeColor(oro)
+        c.setLineWidth(r * 0.2)
+        c.line(cx - r * 0.85, cy - r * 0.3, cx + r * 0.15, cy - r * 0.3)
+        c.line(cx - r * 0.65, cy - r * 0.3, cx - r * 0.65, cy + r * 0.25)
+        c.line(cx - r * 0.85, cy + r * 0.25, cx - r * 0.45, cy + r * 0.25)
+        p = c.beginPath()
+        p.moveTo(cx + r * 0.15, cy - r * 0.42)
+        p.lineTo(cx + r * 0.65, cy - r * 0.62)
+        p.lineTo(cx + r * 0.65, cy - r * 0.02)
+        p.lineTo(cx + r * 0.15, cy - r * 0.18)
+        p.close()
+        c.setFillColor(oro)
+        c.drawPath(p, fill=1, stroke=1)
+    elif cual == 'arpa':
+        madera = HexColor('#8C5A28')
+        c.setStrokeColor(madera)
+        c.setLineWidth(r * 0.14)
+        p = c.beginPath()
+        p.moveTo(cx - r * 0.5, cy + r * 0.9)
+        p.curveTo(cx - r * 0.75, cy + r * 0.2, cx - r * 0.35, cy - r * 0.7, cx + r * 0.35, cy - r * 0.95)
+        c.drawPath(p, fill=0, stroke=1)
+        c.line(cx - r * 0.5, cy + r * 0.9, cx + r * 0.35, cy + r * 0.9)
+        c.line(cx + r * 0.35, cy - r * 0.95, cx + r * 0.35, cy + r * 0.9)
+        c.setStrokeColor(HexColor('#C9A15A'))
+        c.setLineWidth(r * 0.035)
+        for i in range(6):
+            t = i / 5.0
+            topx = cx - r * 0.5 + t * (cx + r * 0.35 - (cx - r * 0.5)) * 0.55
+            c.line(topx, cy + r * 0.78 - t * r * 0.1, cx + r * 0.28, cy - r * 0.75 + t * r * 1.5)
+    elif cual == 'platillos':
+        oro = HexColor('#D4A017')
+        for sgn in (-1, 1):
+            c.setFillColor(oro)
+            c.setStrokeColor(HexColor('#8C6A0F'))
+            c.setLineWidth(r * 0.03)
+            c.ellipse(cx - r * 0.75 + sgn * r * 0.05, cy - r * 0.5 + sgn * r * 0.15,
+                     cx + r * 0.15 + sgn * r * 0.05, cy + r * 0.5 + sgn * r * 0.15, fill=1, stroke=1)
+    elif cual == 'microfono':
+        c.setFillColor(HexColor('#4A4A4A'))
+        c.setStrokeColor(HexColor('#232323'))
+        c.setLineWidth(r * 0.03)
+        c.roundRect(cx - r * 0.28, cy + r * 0.05, r * 0.56, r * 0.85, r * 0.26, fill=1, stroke=1)
+        c.setFillColor(HexColor('#8A8A8A'))
+        for yy in (0.2, 0.35, 0.5, 0.65, 0.8):
+            c.circle(cx, cy + yy * r, r * 0.02, fill=1, stroke=0)
+        c.setStrokeColor(HexColor('#4A4A4A'))
+        c.setLineWidth(r * 0.09)
+        c.line(cx, cy + r * 0.05, cx, cy - r * 0.65)
+        c.line(cx - r * 0.3, cy - r * 0.85, cx + r * 0.3, cy - r * 0.85)
+    elif cual == 'flauta':
+        plata = HexColor('#B7C4CC')
+        c.setFillColor(plata)
+        c.setStrokeColor(HexColor('#6E7B82'))
+        c.setLineWidth(r * 0.03)
+        c.roundRect(cx - r * 0.95, cy - r * 0.12, r * 1.9, r * 0.24, r * 0.1, fill=1, stroke=1)
+        c.setFillColor(HexColor('#6E7B82'))
+        for dx in (-0.65, -0.35, -0.05, 0.25, 0.55):
+            c.circle(cx + dx * r, cy, r * 0.06, fill=1, stroke=0)
+    c.restoreState()
+
+
+class _tinta(object):
+    """El motor de notacion pinta siempre con SU negro (`notation.INK`). Para
+       sacar una figura en blanco encima del color del palo hay que cambiarle el
+       tinte mientras dura el dibujo — y devolverselo despues, sin excepciones,
+       o la siguiente pagina sale entera del color de la ultima carta."""
+
+    def __init__(self, color):
+        self.color = color
+
+    def __enter__(self):
+        if self.color is None:
+            return self
+        self.previo = (nt.INK, nt.GRAY)
+        nt.INK = nt.GRAY = self.color
+        return self
+
+    def __exit__(self, *_e):
+        if self.color is not None:
+            nt.INK, nt.GRAY = self.previo
+        return False
+
+
+# --------------------------------------------------------------------------
+# Las formas de palo
+# --------------------------------------------------------------------------
+def forma(c, cx, cy, r, cual, color):
+    c.saveState()
+    c.setFillColor(color)
+    c.setStrokeColor(color)
+    if cual == 'circulo':
+        c.circle(cx, cy, r, fill=1, stroke=0)
+    elif cual == 'cuadrado':
+        c.rect(cx - r * 0.88, cy - r * 0.88, r * 1.76, r * 1.76, fill=1, stroke=0)
+    elif cual == 'rombo':
+        p = c.beginPath()
+        p.moveTo(cx, cy + r); p.lineTo(cx + r, cy)
+        p.lineTo(cx, cy - r); p.lineTo(cx - r, cy); p.close()
+        c.drawPath(p, fill=1, stroke=0)
+    else:                                                   # triangulo
+        p = c.beginPath()
+        p.moveTo(cx, cy + r); p.lineTo(cx + r * 0.92, cy - r * 0.72)
+        p.lineTo(cx - r * 0.92, cy - r * 0.72); p.close()
+        c.drawPath(p, fill=1, stroke=0)
+    c.restoreState()
+
+
+LOGO_TCLAS = os.path.join(HERE, '..', 'assets', 'asset_logo_tclas_v2.png')
+
+
+def logo_tclas(c, cx, cy, r):
+    """El sello de T-Clas, centrado en (cx, cy) con radio r. Vive aqui y no en
+       cada comodin porque el logo real (fondo blanco, clave en circulo azul
+       noche) es lo que hace que un comodin se reconozca desde el otro lado de
+       la mesa sin leer letra ninguna — igual que el arco iris del UNO de
+       verdad.
+
+       El PNG en si es un recorte: su canal de color es azul noche liso en
+       toda la imagen y el dibujo entero (aro blanco, texto, clave) vive en
+       el canal alfa, pensado para pegarse sobre fondo BLANCO. Sobre una
+       carta azul noche, aro y clave desaparecen (azul sobre azul), asi que
+       aqui se pinta primero un disco blanco de fondo."""
+    c.saveState()
+    c.setFillColor(white)
+    c.circle(cx, cy, r * 1.02, fill=1, stroke=0)
+    c.restoreState()
+    try:
+        c.drawImage(LOGO_TCLAS, cx - r, cy - r, r * 2, r * 2,
+                    mask='auto', preserveAspectRatio=True)
+    except Exception:
+        pass
+
+
+# --------------------------------------------------------------------------
+# La hoja de cartas: 3 x 4, con marcas de corte
+# --------------------------------------------------------------------------
+# Ancho de poker de verdad (63.5mm) para que una semicorchea se lea; alto
+# recortado de 88.9 a 70.6mm para que quepan doce por hoja en vez de seis. El
+# recorte se hace con guillotina, asi que el numero de hojas no es problema;
+# lo que si lo era es una carta tan alta que desperdicia media hoja de aire.
+CARTA_W, CARTA_H = 180.0, 200.0        # 63.5 x 70.6 mm
+COLS, FILAS = 3, 4
+POR_HOJA = COLS * FILAS
+
+
+def _origen():
+    ancho = COLS * CARTA_W
+    alto = FILAS * CARTA_H
+    return (W - ancho) / 2.0, (H - alto) / 2.0
+
+
+def marcas_de_corte(c):
+    """Las rayitas de fuera, no las de dentro.
+
+       Una reticula dibujada ENTRE las cartas se ve en el borde de la carta ya
+       recortada y queda sucia. Las marcas van en los margenes, alineadas con
+       cada corte, y la tijera une los dos extremos."""
+    x0, y0 = _origen()
+    c.setStrokeColor(RULE)
+    c.setLineWidth(0.5)
+    for i in range(COLS + 1):
+        x = x0 + i * CARTA_W
+        c.line(x, y0 - 16, x, y0 - 5)
+        c.line(x, y0 + FILAS * CARTA_H + 5, x, y0 + FILAS * CARTA_H + 16)
+    for j in range(FILAS + 1):
+        y = y0 + j * CARTA_H
+        c.line(x0 - 16, y, x0 - 5, y)
+        c.line(x0 + COLS * CARTA_W + 5, y, x0 + COLS * CARTA_W + 16, y)
+
+
+def hoja_de_cartas(c, cartas, pintar, pie=''):
+    """Coloca hasta 16 cartas en una A4 y devuelve las que no han cabido."""
+    x0, y0 = _origen()
+    marcas_de_corte(c)
+    for k, carta in enumerate(cartas[:POR_HOJA]):
+        col = k % COLS
+        fil = k // COLS
+        x = x0 + col * CARTA_W
+        y = y0 + (FILAS - 1 - fil) * CARTA_H
+        pintar(c, x, y, CARTA_W, CARTA_H, carta)
+    if pie:
+        c.setFont('DejaVuSans', 6.6)
+        c.setFillColor(MUTED)
+        c.drawString(x0, y0 - 26, pie)
+        c.drawRightString(x0 + COLS * CARTA_W, y0 - 26, 'El Cuaderno del Pianista · T-Clas')
+    c.showPage()
+    return cartas[POR_HOJA:]
+
+
+def marco(c, x, y, w, h, fondo, borde=None, r=9):
+    """El rectangulo redondeado de una carta, con su filete claro por dentro.
+
+       El filete no es adorno: recortar a mano nunca sale recto, y un margen de
+       cortesia de tres puntos hace que un corte torcido no se coma el dibujo."""
+    c.setFillColor(fondo)
+    c.setStrokeColor(borde or fondo)
+    c.setLineWidth(0.6)
+    c.roundRect(x + 1.5, y + 1.5, w - 3, h - 3, r, fill=1, stroke=1)
+
+
+def oval_central(c, x, y, w, h, color=white, giro=-14, cy=None,
+                 rx=0.415, ry=0.335):
+    """El ovalo blanco inclinado del centro, que es lo que hace que una carta se
+       lea como una carta de UNO y no como una ficha de domino.
+
+       Va MENOS inclinado que el del UNO de verdad (14 grados y no 20) por una
+       razon de oficio: el numero del UNO es ancho y el ovalo puede tumbarse,
+       pero una negra es alta y estrecha, y a veinte grados la plica se sale por
+       el borde de arriba."""
+    c.saveState()
+    c.translate(x + w / 2.0, cy if cy is not None else y + h / 2.0)
+    c.rotate(giro)
+    c.setFillColor(color)
+    c.setStrokeColor(color)
+    c.ellipse(-w * rx, -h * ry, w * rx, h * ry, fill=1, stroke=0)
+    c.restoreState()
+
+
+def sello_nivel(c, x, y, w, nivel, color=None):
+    """Uno, dos o tres puntitos al pie de la carta. Discreto a proposito: sirve
+       para que dos barajas mezcladas se puedan volver a separar, no para
+       ponerle una etiqueta de nivel al alumno en la mano."""
+    col = color or white
+    c.setFillColor(col)
+    for i in range(nivel):
+        c.circle(x + w / 2.0 + (i - (nivel - 1) / 2.0) * 6.5, y + 9, 1.7,
+                 fill=1, stroke=0)
+
+
+# --------------------------------------------------------------------------
+# Portada de juego y dorso, comunes a los cinco
+# --------------------------------------------------------------------------
+def portada_juego(c, titulo, subtitulo, nivel, resumen, reglas, materiales,
+                  dibujo=None):
+    """La hoja 1 de cada juego: como se juega, en una sola cara.
+
+       Norma de la coleccion: si las reglas no caben en una hoja, el juego no se
+       juega. En una clase de media hora nadie lee dos paginas de reglas.
+
+       `nivel=None` es un juego de una sola baraja para todo el mundo (como el
+       UNO musical): se salta la pastilla de nivel, que no pinta nada si no
+       hay nada que distinguir."""
+    n = NIVELES[nivel] if nivel is not None else None
+    c.setFillColor(CREAM)
+    c.rect(0, 0, W, H, fill=1, stroke=0)
+
+    c.setFillColor(NAVY)
+    b = nt.BLEED_SAFE
+    c.rect(b, H - 132 - b, W - 2 * b, 132, fill=1, stroke=0)
+    c.setFont('DejaVuSans-Bold', 8.2)
+    c.setFillColor(HexColor('#9FB0C4'))
+    c.drawString(52, H - 40, 'JUEGOS DE CLASE · EL CUADERNO DEL PIANISTA')
+    c.setFont('DejaVuSerif-Bold', 30)
+    c.setFillColor(white)
+    c.drawString(52, H - 78, titulo)
+    c.setFont('DejaVuSans', 10.5)
+    c.setFillColor(HexColor('#C3CEDB'))
+    c.drawString(52, H - 98, subtitulo)
+
+    if n is not None:
+        # la pastilla de nivel, arriba a la derecha
+        pw = 108
+        c.setFillColor(n['color'])
+        c.roundRect(W - 52 - pw, H - 86, pw, 30, 6, fill=1, stroke=0)
+        c.setFont('DejaVuSans-Bold', 13)
+        c.setFillColor(white)
+        c.drawCentredString(W - 52 - pw / 2.0, H - 76, n['nombre'])
+        c.setFont('DejaVuSans', 7.4)
+        c.setFillColor(HexColor('#C3CEDB'))
+        c.drawRightString(W - 52, H - 98, n['que'])
+
+    y = H - 168
+    c.setFont('DejaVuSans', 11)
+    c.setFillColor(INK)
+    y = _wrap(c, resumen, 52, y, 'DejaVuSans', 11, W - 104, 16, INK)
+
+    y -= 18
+    y = _bloque(c, y, 'QUÉ HACE FALTA', materiales)
+    y -= 6
+    y = _bloque(c, y, 'CÓMO SE JUEGA', reglas, numerado=True)
+    if dibujo:
+        y = dibujo(c, y - 10)
+
+    c.setFont('DejaVuSans', 7.4)
+    c.setFillColor(MUTED)
+    c.drawCentredString(W / 2.0, 30, 'El Cuaderno del Pianista · T-Clas')
+    c.showPage()
+    return y
+
+
+def _bloque(c, y, titulo, lineas, numerado=False):
+    c.setFont('DejaVuSans-Bold', 8.6)
+    c.setFillColor(ACCENT)
+    c.drawString(52, y, titulo)
+    c.setStrokeColor(ACCENT)
+    c.setLineWidth(1.4)
+    c.line(52, y - 5, 52 + stringWidth(titulo, 'DejaVuSans-Bold', 8.6), y - 5)
+    y -= 20
+    for i, ln in enumerate(lineas, 1):
+        # La vinieta va a la altura de la PRIMERA linea del parrafo, no del
+        # centro del bloque: con un texto de tres lineas el punto se quedaba
+        # flotando encima y parecia que pertenecia al parrafo anterior.
+        if numerado:
+            c.setFillColor(NAVY)
+            c.circle(58, y - 3.2, 7.6, fill=1, stroke=0)
+            c.setFont('DejaVuSans-Bold', 8)
+            c.setFillColor(white)
+            c.drawCentredString(58, y - 5.8, str(i))
+            x = 76
+        else:
+            c.setFillColor(ACCENT)
+            c.circle(57, y - 3.2, 2.2, fill=1, stroke=0)
+            x = 68
+        y = _wrap(c, ln, x, y, 'DejaVuSans', 9.6, W - x - 52, 13.6, INK)
+        y -= 8
+    return y
+
+
+def hoja_dorso(c, titulo, nivel=None):
+    """Una hoja entera de dorsos, para pegar por detras si se quiere.
+
+       Es opcional y va la ultima: con cartulina de un solo color la baraja ya
+       es opaca, y pegar sesenta dorsos a mano no lo hace nadie dos veces.
+
+       El sello de T-Clas centrado, igual que en los comodines: asi el dorso
+       se reconoce desde el otro lado de la mesa como parte de la misma
+       coleccion, sin tener que leer nada. `nivel=None` (el caso normal ahora,
+       una sola baraja) se salta los puntitos de nivel."""
+    x0, y0 = _origen()
+    marcas_de_corte(c)
+    for k in range(POR_HOJA):
+        col, fil = k % COLS, k // COLS
+        x = x0 + col * CARTA_W
+        y = y0 + (FILAS - 1 - fil) * CARTA_H
+        marco(c, x, y, CARTA_W, CARTA_H, NAVY)
+        cy_logo = y + CARTA_H * 0.565
+        oval_central(c, x, y, CARTA_W, CARTA_H, color=NAVY_SOFT,
+                     rx=0.40, ry=0.36, cy=cy_logo)
+        logo_tclas(c, x + CARTA_W / 2.0, cy_logo, CARTA_W * 0.30)
+        c.setFont('DejaVuSerif-Bold', 12)
+        c.setFillColor(white)
+        c.drawCentredString(x + CARTA_W / 2.0, y + 20, titulo.upper())
+        if nivel is not None:
+            sello_nivel(c, x, y, CARTA_W, nivel, color=NAVY_SOFT)
+    c.setFont('DejaVuSans', 6.6)
+    c.setFillColor(MUTED)
+    c.drawString(x0, y0 - 26, 'Dorsos · opcional, solo si quieres pegarlos por detrás')
+    c.showPage()

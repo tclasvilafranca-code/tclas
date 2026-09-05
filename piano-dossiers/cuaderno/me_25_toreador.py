@@ -1,0 +1,161 @@
+# -*- coding: utf-8 -*-
+"""Toreador, de Carmen — pieza 25 de Mercè.
+
+   Lo comprobado sobre el PDF de su carpeta de Drive (Georges Bizet, arr.
+   Gilbert DeBenedetti, *Level Four*, 1 página; el mismo archivo que la pieza
+   15 de José María, byte a byte), leído a 230 dpi:
+
+     - Detrás de la clave hay UN BEMOL: Fa mayor.
+     - El compás se escribe con una C (4/4), y pone "March time".
+     - La melodía arranca con la figura de marcha: CORCHEA CON PUNTILLO Y
+       SEMICORCHEA. Este dosier decía "negra con puntillo y corchea", que es
+       el mismo gesto al doble de lento y no es lo impreso: el c. 1 son negra,
+       corchea con puntillo, semicorchea, negra y negra, y solo así cierran
+       los cuatro tiempos (1 + 0,75 + 0,25 + 1 + 1). Medido a 300 ppp sobre
+       el PDF, alturas incluidas: Do5 · Re5 · Do5 · La4 · La4.
+     - Digitación impresa. Es "Level Four", el escalón más alto de esta
+       colección de arreglos.
+"""
+import os
+import sys
+sys.path.insert(0, os.path.dirname(__file__))
+from reportlab.lib.colors import HexColor
+from cancion import construir
+from relleno import bloques_extra, bloque_puntillo
+from me_comun import n, ac
+
+HERE = os.path.dirname(__file__)
+AZUL = HexColor('#3E6E8F')
+OCRE = HexColor('#8C6A3F')
+
+CANCION = dict(
+    alumno='Mercè', carpeta='Merce', num=25, nivel='intermedio', slug='Toreador',
+    formato='adulto',
+    titulo_corto='Toreador · Carmen', time_sig=(4, 4), key_sig='Fa mayor',
+    partitura=os.path.join(HERE, '..', 'students', 'merce', 'source', 'TOREADOR-BIZET. Bizet'),
+    yt='https://www.youtube.com/results?search_query=toreador+song+carmen+piano+easy',
+
+    ficha=dict(
+        titulo='Toreador · Carmen',
+        autor='Georges Bizet · arr. Gilbert DeBenedetti · Nivel cuatro',
+        datos=[('Tonalidad', 'Fa mayor'), ('Armadura', 'Un bemol'),
+               ('Compás', '4/4'), ('Carácter', 'March time'),
+               ('Trae', 'Dedos escritos')],
+        titulo_ritmos='La figura de marcha',
+        pie_ritmos='Andamio en Fa mayor. Lo literal es el ritmo del arranque: corchea con puntillo '
+                   'y SEMICORCHEA, la figura que da a la pieza su paso de marcha.',
+        armonia=dict(
+            titulo='Lo que trae esta pieza',
+            tarjetas=[
+                ('UN BEMOL', 'Fa mayor',
+                 'Todos los Si de la pieza son bemoles, en las dos manos. Es la misma tonalidad que '
+                 'otras piezas de tu cuaderno, así que ya te resulta familiar.'),
+                ('FIGURA DE MARCHA', 'Larga y corta',
+                 'Es el dibujo rítmico que abre la pieza, y el que le da ese paso firme, como de '
+                 'desfile.'),
+                ('MARCH TIME', 'Con paso firme',
+                 'No es una velocidad concreta, es una manera de tocar: cada golpe cae con la misma '
+                 'firmeza, sin arrastrar ninguno.'),
+                ('NIVEL CUATRO', 'El más alto',
+                 'El propio arreglista la marca como la más exigente de todas las piezas parecidas '
+                 'que tienes en tu carpeta.'),
+            ],
+            pie='Es una de las melodías de ópera más reconocibles del mundo, del tercer acto de '
+                'Carmen, cuando el torero Escamillo hace su entrada triunfal.',
+        ),
+        ritmos=[
+            ('MANO DERECHA', 'la figura de marcha · ritmo literal',
+             [n('F4'), n('G4', 'e.'), n('F4', 's'), n('Bb4'), n('C5')], OCRE, 'treble', None),
+            ('MANO IZQUIERDA', 'acordes que marcan el paso · andamio',
+             [n('F2'), ac(('F2', 'A2', 'C3')), n('F2'), ac(('F2', 'A2', 'C3'))], AZUL, 'bass', None),
+        ],
+        especial=[
+            'Detrás de la clave hay un bemol: todos los Si son teclas negras.',
+            'El compás se escribe con una C, que equivale a 4/4.',
+            'Arriba pone "March time".',
+            'La melodía arranca con corchea con puntillo y SEMICORCHEA: larga y corta, muy juntas.',
+            'Trae la digitación completa impresa.',
+            'Es la pieza de nivel más alto de esta colección de arreglos.',
+        ],
+        reto='Mantener el paso de marcha firme sin acelerarse ni arrastrar. Cada golpe tiene que '
+             'sonar igual de decidido que el anterior, del primero al último.',
+        truco='Marca el pulso golpeando suavemente con el pie mientras tocas solo la melodía, muy '
+              'despacio. Si el pie se desajusta de las manos, es que el compás se ha movido: para y '
+              'retoma desde el último punto seguro.',
+        sabias='La ópera Carmen se estrenó en 1875 y fue un fracaso en su noche de estreno; Bizet '
+               'murió tres meses después sin saber que se convertiría en una de las óperas más '
+               'representadas de la historia.',
+        qr=dict(titulo='Escúchala',
+                texto='Escucha la orquesta completa y fíjate en cómo los metales marcan el paso de '
+                      'marcha: esa firmeza es la que tiene que tener tu mano derecha.'),
+    ),
+
+    calentamiento=dict(),
+    agudeza=dict(),
+
+    piano1=dict(
+        titulo='Cómo se estudia',
+        esquina='Al piano · el orden de estudio',
+        intro='La figura de marcha es lo nuevo. Se estudia aislada, con el pulso muy marcado, antes '
+              'de añadir la izquierda.',
+        reglas=['LA FIGURA DE MARCHA, BIEN CONTADA', 'CADA GOLPE, LA MISMA FIRMEZA',
+                'MARCH TIME: SIN ARRASTRAR NINGUNO'],
+        bloques=[
+            dict(num=1, titulo='La mano en Fa mayor',
+                 pista='andamio · el bemol está en la armadura',
+                 sistemas=[
+                     dict(cap='a) en terceras, arpegiando la tonalidad',
+                          events=[n('F4'), n('A4'), n('G4'), n('Bb4'),
+                                  n('A4'), n('C5'), n('Bb4'), n('D5')],
+                          bars=2),
+                     dict(cap='b) y la izquierda, con el mismo bemol',
+                          events=[n('F3'), n('C3'), n('F3'), n('C3'),
+                                  n('Bb2'), n('F3'), n('Bb2'), n('F3')],
+                          bars=2, clef='bass', show_time=False),
+                 ]),
+            dict(num=2, titulo='La figura de marcha, aislada',
+                 pista='andamio · cuenta "UUUN, y" y marca el paso con el pie',
+                 sistemas=[
+                     dict(cap='a) el c. 1, medido: negra · la larga con puntillo · la SEMICORCHEA '
+                              '· y dos negras firmes',
+                          events=[n('C5'), n('D5', 'e.'), n('C5', 's'), n('A4'), n('A4')],
+                          bars=1),
+                     dict(cap='b) el mismo dibujo, una frase más arriba',
+                          events=[n('F5'), n('G5', 'e.'), n('F5', 's'), n('D5'), n('D5')],
+                          bars=1, show_time=False),
+                 ]),
+            dict(tipo='nota',
+                 etiqueta='QUÉ SIGNIFICA "MARCH TIME"',
+                 texto='No es una cifra de metrónomo, sino una manera de tocar: cada tiempo pesa lo '
+                       'mismo que el anterior, sin acelerones ni frenazos, como el paso regular de '
+                       'un desfile. Es distinto de "Allegro" o de "Andantino", que hablan de '
+                       'velocidad; "March time" habla de carácter, y se nota tanto en el pulso como '
+                       'en el volumen.'),
+            dict(num=3, titulo='Las dos juntas',
+                 pista='andamio · los acordes marcan el paso bajo la marcha · despacio',
+                 sistemas=[
+                     dict(cap='a) el acorde firme en cada tiempo, bajo la figura de marcha',
+                          events=[ac(('F2', 'C4')), n('D4', 'e.'), n('C4', 's'),
+                                  ac(('F2', 'A2', 'F4')), ac(('C3', 'F2', 'A4'))],
+                          bars=1),
+                     dict(cap='b) y con la frase que sube',
+                          events=[ac(('Bb2', 'F4')), n('G4', 'e.'), n('F4', 's'),
+                                  ac(('Bb2', 'D3', 'A4')), ac(('F3', 'Bb2', 'C5'))],
+                          bars=1, show_time=False),
+                 ]),
+        ] + bloques_extra('Fa mayor', 12, 'F4', 'F2',
+                          'el Si bemol cae justo donde la mano ya va deprisa',
+                          desde=4, time_sig=(4, 4))[:1],
+    ),
+)
+
+# El ritmo con puntillo que esta pieza EXPLICA en su texto y no dibujaba en
+# ningún sitio. Lo destapó el auditor de vocabulario al ganar la entrada de
+# esta figura, que antes no miraba nadie.
+CANCION['piano1']['bloques'] = list(CANCION['piano1']['bloques']) + [
+    # Sin `lento=True`: la partitura trae la semicorchea, y manda la partitura.
+    bloque_puntillo('Fa mayor', 6, 'F4', 'el ritmo con puntillo de la marcha',
+                    time_sig=(4, 4))]
+
+if __name__ == '__main__':
+    print('generado', construir(CANCION))

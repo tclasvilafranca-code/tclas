@@ -1,0 +1,179 @@
+# -*- coding: utf-8 -*-
+"""28 melodische Übungsstücke nº 3, de Diabelli — pieza 20 de Isaac. El reto
+   final del álbum.
+
+   Lo comprobado sobre el PDF de su carpeta de Drive (Anton Diabelli, Op.
+   149, edición Mutopia/MutopiaBSD, 3 páginas; medida de cero, no coincide
+   con ninguna otra partitura del proyecto):
+
+     - Detrás de la clave NO HAY NADA: Do mayor.
+     - 2/4, y pone "Moderato." (sin número de metrónomo impreso).
+     - Es a cuatro manos. Tu parte es el Primo (páginas 2-3): LOS DOS
+       PENTAGRAMAS EN CLAVE DE SOL, con un "8va" al principio — se toca una
+       octava más alto de lo escrito.
+     - La derecha y la izquierda se mueven con dibujos parecidos: corcheas
+       con silencios de por medio, en staccato.
+     - Hay ligaduras, algún adorno (apoyatura) y acentos (>).
+     - Hay una repetición hacia el compás 15, y la pieza termina con un
+       acorde con calderón.
+
+   Es la pieza más exigente de tu carpeta: por eso cierra el álbum, como
+   Für Elise cierra el de Mercè. El Secondo (páginas 1-2), con arpegios
+   rápidos en clave de fa, lo toca la profesora.
+"""
+import os
+import sys
+sys.path.insert(0, os.path.dirname(__file__))
+from reportlab.lib.colors import HexColor
+from cancion import construir
+from is_comun import n, ac, sil, corch
+
+HERE = os.path.dirname(__file__)
+AZUL = HexColor('#3E6E8F')
+OCRE = HexColor('#8C6A3F')
+
+CANCION = dict(
+    alumno='Isaac', carpeta='Isaac', num=20, nivel='intermedio', slug='Diabelli',
+    formato='adulto',
+    titulo_corto='Diabelli · Op. 149 nº 3', time_sig=(2, 4), key_sig=None,
+    partitura=os.path.join(HERE, '..', 'students', 'isaac', 'source',
+                           'DIABELLI ( cuatro manos).pdf'),
+    yt='https://www.youtube.com/results?search_query=diabelli+op+149+melodische+ubungsstucke+piano+4+hands',
+
+    ficha=dict(
+        titulo='28 melodische Übungsstücke nº 3',
+        autor='Anton Diabelli · Op. 149 · a cuatro manos · tu parte es el Primo',
+        datos=[('Tonalidad', 'Do mayor'), ('Compás', '2/4'),
+               ('Carácter', 'Moderato'), ('Las dos manos', 'Clave de sol'),
+               ('Se toca', 'Entre dos')],
+        titulo_ritmos='Corcheas con silencios, en staccato',
+        pie_ritmos='Andamio en Do mayor, inspirado en el dibujo de tu partitura: corcheas cortas '
+                   'separadas por silencios, en las dos manos.',
+        armonia=dict(
+            titulo='El cierre del álbum, a propósito',
+            tarjetas=[
+                ('EL 8va', 'Una octava más alto',
+                 'Encima del primer compás hay una raya de puntos con "8va": todo lo que hay debajo '
+                 'suena una octava por encima de lo escrito, hasta que la raya termina.'),
+                ('LAS DOS EN CLAVE DE SOL', 'Sin clave de fa',
+                 'Tu parte entera va en clave de sol, arriba y abajo, con dibujos parecidos en las '
+                 'dos manos: no hay una que sostenga y otra que corra.'),
+                ('CORCHEAS Y SILENCIOS', 'Staccato',
+                 'El dibujo que más se repite: una corchea corta, un hueco, otra corchea. Pero no '
+                 'es lo único: también hay pasajes ligados de dos en dos, y acentos (>).'),
+                ('LA MÁS EXIGENTE', 'De toda tu carpeta',
+                 'Cierra el álbum a propósito, igual que otros compañeros cierran el suyo con la '
+                 'pieza más difícil que tienen.'),
+            ],
+            pie='Diabelli escribió estos 28 estudios como escalones progresivos para alumnos que ya '
+                'dominaban lo básico: cada uno mete una dificultad nueva sin avisar demasiado.',
+        ),
+        ritmos=[
+            ('MANO DERECHA', 'corcheas cortas con silencio detrás · andamio',
+             [n('C5', 'e'), sil('e'), n('E5', 'e'), sil('e')], OCRE, 'treble', None),
+            ('MANO IZQUIERDA', 'el mismo tipo de dibujo, más grave · andamio',
+             [n('C4', 'e'), sil('e'), n('E4', 'e'), sil('e')], AZUL, 'treble', None),
+        ],
+        especial=[
+            'Detrás de la clave no hay nada: Do mayor.',
+            'Compás de 2/4.',
+            'Pone "Moderato.", sin número de metrónomo impreso.',
+            'Tus dos pentagramas van en clave de sol, con un "8va" al principio.',
+            'Las dos manos se mueven en corcheas con silencios, en staccato.',
+            'Hay una repetición hacia la mitad de la pieza, y acaba con un acorde con calderón.',
+        ],
+        reto='Que las corcheas suenen realmente cortas y separadas, sin que el silencio de detrás '
+             'se coma o se alargue: en staccato de verdad, la nota y el silencio duran exactamente '
+             'lo mismo.',
+        truco='Toca cada corchea levantando el dedo justo después de pulsarla, como si la tecla '
+              'quemara. Cuenta el silencio en voz alta ("corchea-Y") para que dure lo mismo que la '
+              'nota, ni más ni menos.',
+        sabias='Diabelli es más conocido hoy por el vals que le compró a Beethoven para pedirle una '
+               'variación, y que acabó convirtiéndose en las 33 Variaciones Diabelli: una de las '
+               'obras más ambiciosas de toda la música para piano.',
+        qr=dict(titulo='Escúchala',
+                texto='Busca una grabación de las "28 melodische Übungsstücke" y escucha lo separado '
+                      'que suena cada corchea: ese hueco de silencio es la clave del estilo.'),
+    ),
+
+    calentamiento=dict(),
+    agudeza=dict(),
+
+    piano1=dict(
+        titulo='Cómo se estudia',
+        esquina='Al piano · el orden de estudio',
+        intro='El reto final del álbum. Lo nuevo es el staccato con silencio real: cada nota se '
+              'suelta antes de que llegue la siguiente.',
+        reglas=['LA CORCHEA Y EL SILENCIO DURAN LO MISMO', 'LAS DOS MANOS EN CLAVE DE SOL',
+                'EL 8va CAMBIA TODO UN COMPÁS ENTERO'],
+        bloques=[
+            dict(num=1, titulo='El dibujo de corcheas con silencio, aislado',
+                 pista='andamio en Do mayor · el patrón de tu partitura, con su 8va',
+                 sistemas=[
+                     dict(cap='a) un hueco detrás de cada nota · el 8va manda: suena una octava '
+                              'más arriba de lo que lees',
+                          events=[n('C5', 'e'), sil('e'), n('D5', 'e'), sil('e'),
+                                  n('E5', 'e'), sil('e'), n('F5', 'e'), sil('e')],
+                          staccato=True,
+                          ottava=True,
+                          bars=4),
+                     dict(cap='b) bajando, con el mismo hueco · el acento (>) es de los tuyos',
+                          events=[n('G5', 'e'), sil('e'), n('F5', 'e'), sil('e'),
+                                  n('E5', 'e'), sil('e'), n('D5', 'e'), sil('e')],
+                          staccato=True,
+                          acento=True,
+                          bars=4, show_time=False),
+                 ]),
+            dict(num=2, titulo='La izquierda, que aquí también va en clave de sol',
+                 pista='andamio · las dos manos comparten patrón, y las dos en clave de sol',
+                 sistemas=[
+                     dict(cap='a) subiendo, con el hueco · misma clave, solo que más grave',
+                          events=[n('C4', 'e'), sil('e'), n('D4', 'e'), sil('e'),
+                                  n('E4', 'e'), sil('e'), n('F4', 'e'), sil('e')],
+                          staccato=True,
+                          bars=4),
+                     dict(cap='b) ligadas de dos en dos, el otro dibujo de tu partitura',
+                          # la ligadura va pareja a pareja (lig=1 abarca la nota
+                          # siguiente): con `ligar=2` en el sistema salia UNA
+                          # sola ligadura larga al principio y el rotulo decia
+                          # "de dos en dos", que es justo lo que no puede pasar
+                          # y barradas de dos en dos: en 2/4 el golpe es la
+                          # negra, o sea dos corcheas. Sin `beam` salian ocho
+                          # plicas sueltas con su corchete, que en una edicion
+                          # solo se escribe asi cuando la corchea va sola.
+                          events=[dict(n('G4', 'e'), lig=1, beam=1), dict(n('F4', 'e'), beam=1),
+                                  dict(n('E4', 'e'), lig=1, beam=2), dict(n('D4', 'e'), beam=2),
+                                  dict(n('C4', 'e'), lig=1, beam=3), dict(n('D4', 'e'), beam=3),
+                                  dict(n('E4', 'e'), lig=1, beam=4), dict(n('F4', 'e'), beam=4),
+                                  n('G4', 'h')],
+                          bars=4, show_time=False),
+                 ]),
+            dict(tipo='nota',
+                 etiqueta='QUÉ QUIERE DECIR EL 8va',
+                 texto='La raya de puntos que sigue a "8va" marca hasta dónde llega su efecto: todo '
+                       'lo que está debajo de esa raya suena una octava más agudo de lo que está '
+                       'escrito en el papel. No cambia ninguna nota ni ningún dedo: cambia solo '
+                       'dónde suena, y hay que recordarlo mientras dura la raya. En el ejercicio '
+                       '1a lo tienes dibujado igual que en tu partitura.'),
+            dict(num=3, titulo='Las dos manos juntas, y el final',
+                 pista='andamio · las dos sueltan la nota exactamente igual de rápido · despacio',
+                 sistemas=[
+                     dict(cap='a) juntas · las barras de los extremos son tu repetición del c. 15',
+                          events=[ac(('C4', 'C5'), 'e'), sil('e'), ac(('D4', 'D5'), 'e'), sil('e'),
+                                  ac(('E4', 'E5'), 'e'), sil('e'), ac(('F4', 'F5'), 'e'), sil('e')],
+                          staccato=True,
+                          repetir='ambas',
+                          bars=4),
+                     dict(cap='b) el final: el acorde con calderón, aguantado hasta la señal',
+                          events=[ac(('G4', 'G5'), 'e'), sil('e'), ac(('F4', 'F5'), 'e'), sil('e'),
+                                  ac(('E4', 'E5'), 'e'), sil('e'), ac(('D4', 'D5'), 'e'), sil('e'),
+                                  ac(('C4', 'E4', 'G4', 'C5'), 'h')],
+                          calderon=True,
+                          bars=4, show_time=False),
+                 ]),
+        ],
+    ),
+)
+
+if __name__ == '__main__':
+    print('generado', construir(CANCION))

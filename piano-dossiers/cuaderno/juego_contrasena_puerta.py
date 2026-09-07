@@ -1,32 +1,38 @@
 # -*- coding: utf-8 -*-
-"""LA CONTRASEÑA DE LA PUERTA — fichas de figuras y silencios para recortar y
-   pegar en la puerta del aula. La profesora compone la contraseña de la
-   semana pegando varias fichas seguidas (una blanca, tres corcheas, un
-   silencio, un tresillo...) y quien la lee bien en voz alta —o la toca—
-   entra. No es un juego con reglas propias: es MATERIAL SUELTO, muchas
-   fichas de golpe, para que dé para mezclar contraseñas distintas cada
-   semana sin quedarse sin figuras.
+"""LA CONTRASEÑA DE LA PUERTA — fichas para recortar, UNA figura o silencio
+   por recuadro, sin ningún texto encima. La profesora compone la
+   contraseña de la semana poniendo varias fichas seguidas en la puerta
+   (una blanca, tres corcheas, un silencio, un tresillo...) y quien la lee
+   bien en voz alta —o la toca— entra. Es MATERIAL SUELTO, no un juego con
+   reglas propias: muchas fichas de golpe y bien variadas, para que dé para
+   mezclar contraseñas distintas cada semana sin quedarse sin figuras.
+
+   UNA COSA POR RECUADRO, SIEMPRE. Nada de sumar valores distintos en una
+   misma ficha (una negra pegada a dos corcheas, por ejemplo): cada ficha es
+   UNA figura, UN silencio, o UN grupo de notas del MISMO valor (dos, tres o
+   cuatro corcheas bajo su barra, cuatro semicorcheas, un tresillo) — que
+   es justo cómo se lee de un vistazo en una partitura de verdad, y no una
+   frase rítmica inventada por combinar figuras sueltas.
 
    DOS FAMILIAS DE FICHA:
      - SUELTAS: una sola figura o silencio (`juegos_comun.figura_en_caja`,
        la misma pieza que ya dibuja los pips del UNO musical). Redonda,
        blanca, negra, corchea, sus puntillos y la semicorchea, con sus
        silencios — 13 figuras distintas en total.
-     - GRUPOS: varias notas juntas (dos corcheas bajo una barra, cuatro
-       semicorcheas, un tresillo...). No hay ninguna pieza ya hecha para
-       esto, así que se reaprovecha el truco de `juegos_comun.figura()`
-       llevado a `notation.draw_system`: todas las notas en Si4 (la línea
-       de en medio, para que ninguna pida línea adicional), sin clave ni
-       compás — el motor ya sabe barrar corcheas seguidas y dibujar un
-       tresillo con su corchete, así que aquí no se repite nada de eso.
+     - GRUPOS DEL MISMO VALOR: dos, tres o cuatro corcheas bajo una barra,
+       cuatro semicorcheas, un tresillo de corcheas. No hay ninguna pieza ya
+       hecha para esto, así que se reaprovecha el truco de
+       `juegos_comun.figura()` llevado a `notation.draw_system`: todas las
+       notas en Si4 (la línea de en medio, para que ninguna pida línea
+       adicional), sin clave ni compás — el motor ya sabe barrar corcheas
+       seguidas y dibujar un tresillo con su corchete, así que aquí no se
+       repite nada de eso.
 
-   CADA FICHA LLEVA EL COLOR DE SU NIVEL — verde/ocre/granate, el mismo
-   código de `niveles.py` que usan los cinco juegos —para que, con solo
-   mirar el color, la profesora sepa qué figuras puede mezclar para un
-   alumno que va empezando y cuáles solo para uno que ya lee corcheas y
-   puntillos. LA CANTIDAD ES A PROPÓSITO DESIGUAL: las figuras fáciles se
-   repiten más veces (hacen falta muchas para una contraseña larga) y las
-   difíciles menos (una o dos bastan para "subir el nivel" de una semana).
+   SIN NOMBRE NI TÍTULO EN LA FICHA: solo la figura, más grande al no tener
+   que dejarle sitio a una etiqueta debajo — así caben muchas más por hoja.
+   El color del trazo (verde/ocre/granate, el mismo código de `niveles.py`
+   que usan los cinco juegos) es la única pista de dificultad, para quien
+   quiera mezclar solo fichas fáciles o subir el nivel de una semana.
 
    Uso:  python3 juego_contrasena_puerta.py
 """
@@ -50,7 +56,6 @@ from juegos_comun import (W, H, NAVY, NAVY_SOFT, CREAM, RULE, INK, MUTED,     # 
                           JUEGO_BODY, JUEGO_BODY_BOLD, JUEGO_BODY_BLACK,
                           _con_tracking)
 from notation import BLEED_SAFE                                              # noqa: E402
-from portada import _wrap                                                    # noqa: E402
 
 SALIDA = os.path.join(HERE, '..', 'output', 'juegos')
 
@@ -90,18 +95,14 @@ def _ev(dur, beam=None, tresillo=None):
 
 
 GRUPOS = [
-    # (nombre, nivel, repeticiones, eventos)
-    ('dos corcheas',              2, 3, [_ev('e', 1), _ev('e', 1)]),
-    ('tres corcheas',             2, 2, [_ev('e', 1), _ev('e', 1), _ev('e', 1)]),
-    ('cuatro corcheas',           2, 2, [_ev('e', 1)] * 4),
-    ('negra y dos corcheas',      2, 2, [_ev('q'), _ev('e', 1), _ev('e', 1)]),
-    ('dos corcheas y negra',      2, 2, [_ev('e', 1), _ev('e', 1), _ev('q')]),
-    ('corchea, silencio, corchea', 2, 2, [_ev('e'), {'rest': True, 'dur': 'e'}, _ev('e')]),
-    ('tresillo de corcheas',      3, 3, [_ev('e', tresillo=1), _ev('e', tresillo=1), _ev('e', tresillo=1)]),
-    ('corchea con puntillo y semicorchea', 3, 2, [_ev('e.', 1), _ev('s', 1)]),
-    ('semicorchea y corchea con puntillo', 3, 2, [_ev('s', 1), _ev('e.', 1)]),
-    ('cuatro semicorcheas',       3, 2, [_ev('s', 1)] * 4),
-    ('dos semicorcheas y corchea', 3, 2, [_ev('s', 1), _ev('s', 1), _ev('e', 1)]),
+    # (nombre, nivel, repeticiones, eventos) — todas las notas del grupo son
+    # del MISMO valor: no se suman figuras distintas en una ficha.
+    ('dos corcheas',         1, 4, [_ev('e', 1), _ev('e', 1)]),
+    ('tres corcheas',        2, 3, [_ev('e', 1), _ev('e', 1), _ev('e', 1)]),
+    ('cuatro corcheas',      2, 3, [_ev('e', 1)] * 4),
+    ('cuatro semicorcheas',  3, 3, [_ev('s', 1)] * 4),
+    ('tresillo de corcheas', 3, 4,
+     [_ev('e', tresillo=1), _ev('e', tresillo=1), _ev('e', tresillo=1)]),
 ]
 
 
@@ -146,13 +147,13 @@ def _grupo_en_caja(c, cx, cy, ancho, alto, eventos, color=None):
 # --------------------------------------------------------------------------
 def construir_mazo():
     mazo = []
-    for clave, (nombre, _beats, _sym) in FIGURAS.items():
+    for clave, (_nombre, _beats, _sym) in FIGURAS.items():
         nivel = NIVEL_DE_FIGURA[clave]
         for _ in range(REPETIR_SUELTA[nivel]):
-            mazo.append(('suelta', nombre, nivel, clave))
-    for nombre, nivel, veces, eventos in GRUPOS:
+            mazo.append(('suelta', nivel, clave))
+    for _nombre, nivel, veces, eventos in GRUPOS:
         for _ in range(veces):
-            mazo.append(('grupo', nombre, nivel, eventos))
+            mazo.append(('grupo', nivel, eventos))
     random.Random(77).shuffle(mazo)
     return mazo
 
@@ -160,15 +161,16 @@ def construir_mazo():
 # --------------------------------------------------------------------------
 # La hoja: cuadrícula densa, con retícula de corte de punta a punta —a este
 # tamaño de ficha una marca solo en las esquinas no basta para guiar un
-# recorte interior recto.
+# recorte interior recto. Sin nombre debajo de la figura caben muchas más
+# por hoja: 6x8 en vez de las 5x6 de la primera versión.
 # --------------------------------------------------------------------------
 MARGIN = 40
 CONTENT_W = W - 2 * MARGIN
-COLS, FILAS = 5, 6
+COLS, FILAS = 6, 8
 POR_HOJA = COLS * FILAS
 FICHA_W = CONTENT_W / COLS
-CABECERA_H = 172
-FICHA_H = (H - CABECERA_H - 60) / FILAS
+CABECERA_H = 92
+FICHA_H = (H - CABECERA_H - 50) / FILAS
 
 
 def _reticula(c, x0, y0, filas):
@@ -189,75 +191,57 @@ def _reticula(c, x0, y0, filas):
 
 
 def _ficha(c, x, y, w, h, item):
-    tipo, nombre, nivel, dato = item
+    """Una ficha: SOLO la figura, centrada, sin nombre ni ningún otro texto
+       — el color del trazo es la única pista de dificultad."""
+    tipo, nivel, dato = item
     color = NIVELES[nivel]['color']
     c.setFillColor(white)
     c.setStrokeColor(color)
     c.setLineWidth(1.1)
     c.roundRect(x + 4, y + 4, w - 8, h - 8, 6, fill=1, stroke=1)
 
-    cx = x + w / 2.0
-    zona_h = h * 0.62
-    zona_cy = y + h - 10 - zona_h / 2.0
+    cx, cy = x + w / 2.0, y + h / 2.0
     if tipo == 'suelta':
-        figura_en_caja(c, cx, zona_cy, w * 0.6, zona_h, dato, color)
+        figura_en_caja(c, cx, cy, w * 0.62, h * 0.72, dato, color)
     else:
-        _grupo_en_caja(c, cx, zona_cy, w * 0.82, zona_h, dato, color)
-
-    c.setFont(JUEGO_BODY_BLACK, 7.4)
-    c.setFillColor(color)
-    etiqueta = nombre.upper()
-    while stringWidth(etiqueta, JUEGO_BODY_BLACK, 7.4) > w - 12 and len(etiqueta) > 4:
-        etiqueta = etiqueta[:-1]
-        while etiqueta and etiqueta[-1] == ' ':
-            etiqueta = etiqueta[:-1]
-    if len(etiqueta) < len(nombre.upper()):
-        etiqueta += '…'
-    c.drawCentredString(cx, y + 9, etiqueta)
+        _grupo_en_caja(c, cx, cy, w * 0.82, h * 0.72, dato, color)
 
 
 def _cabecera_pagina(c, pagina, total):
+    """Cabecera mínima — una línea de kicker, el título y la leyenda de
+       color. Nada de instrucciones ni de texto largo: eso ya se explicó
+       una vez, y esta hoja es para recortar, no para leer."""
     c.setFillColor(CREAM)
     c.rect(0, 0, W, H, fill=1, stroke=0)
     b = BLEED_SAFE
     c.setFillColor(NAVY)
     c.rect(b, H - CABECERA_H - b, W - 2 * b, CABECERA_H, fill=1, stroke=0)
 
-    c.setFont(JUEGO_BODY_BOLD, 8.2)
+    c.setFont(JUEGO_BODY_BOLD, 7.6)
     c.setFillColor(HexColor('#9FB0C4'))
-    _con_tracking(c, MARGIN, H - 40, 'MATERIAL DE CLASE · EL CUADERNO DEL PIANISTA', 1.1)
-    c.setFont(JUEGO_DISPLAY_BLACK, 27)
+    _con_tracking(c, MARGIN, H - 34, 'MATERIAL DE CLASE · EL CUADERNO DEL PIANISTA', 1.0)
+    c.setFont(JUEGO_DISPLAY_BLACK, 22)
     c.setFillColor(white)
-    c.drawString(MARGIN, H - 74, 'La contraseña de la puerta')
-    c.setFont(JUEGO_DISPLAY_ITALIC, 10.8)
-    c.setFillColor(HexColor('#C3CEDB'))
-    c.drawString(MARGIN, H - 92,
-                'Recorta las fichas y pega en la puerta la contraseña de la semana')
-
-    c.setFont(JUEGO_BODY, 8.4)
-    c.setFillColor(HexColor('#C3CEDB'))
-    instr = ('Se combinan varias fichas en fila (ej.: una blanca + tres corcheas + un silencio + '
-            'un tresillo). Quien la lee bien en voz alta —o la toca— entra en clase.')
-    _wrap(c, instr, MARGIN, H - 112, JUEGO_BODY, 8.4, CONTENT_W, 12.0, HexColor('#C3CEDB'))
+    c.drawString(MARGIN, H - 62, 'La contraseña de la puerta')
 
     leyenda_x = W - MARGIN
     for nivel in (3, 2, 1):
         n = NIVELES[nivel]
-        c.setFont(JUEGO_BODY_BOLD, 7.6)
-        tw = stringWidth(n['nombre'], JUEGO_BODY_BOLD, 7.6)
+        c.setFont(JUEGO_BODY_BOLD, 7.4)
+        tw = stringWidth(n['nombre'], JUEGO_BODY_BOLD, 7.4)
         leyenda_x -= tw
         c.setFillColor(white)
-        c.drawString(leyenda_x, H - 152, n['nombre'])
-        leyenda_x -= 14
+        c.drawString(leyenda_x, H - 62, n['nombre'])
+        leyenda_x -= 13
         c.setFillColor(n['color'])
-        c.circle(leyenda_x, H - 148, 4.2, fill=1, stroke=0)
-        leyenda_x -= 18
+        c.circle(leyenda_x, H - 58, 4.0, fill=1, stroke=0)
+        leyenda_x -= 17
 
     c.setFont(JUEGO_BODY, 6.8)
     c.setFillColor(MUTED)
-    c.drawString(MARGIN, 24, 'El Cuaderno del Pianista · T-Clas')
+    c.drawString(MARGIN, 22, 'El Cuaderno del Pianista · T-Clas')
     c.setFont(JUEGO_DISPLAY_ITALIC, 7.4)
-    c.drawRightString(W - MARGIN, 24, 'Hoja %d de %d' % (pagina, total))
+    c.drawRightString(W - MARGIN, 22, 'Hoja %d de %d' % (pagina, total))
 
 
 def construir():

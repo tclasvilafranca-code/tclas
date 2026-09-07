@@ -23,12 +23,15 @@
    alumno que ya sabe leer estas figuras del UNO y de la Oca las reconoce
    aquí también, sin aprender un símbolo nuevo.
 
-   LAS FICHAS: el abecedario completo, de la A a la Z (con la Ñ, que en
-   español es una letra de pleno derecho) — en una tanda más pequeña que
-   un Scrabble de caja (que trae unas 100) para que una partida de dos o
-   tres manos quepa en el rato de clase. Los valores de punto son los de
-   siempre: cuanto más rara la letra, más vale — K y W son tan raras en
-   español que valen lo mismo que la J, la Ñ o la X.
+   LAS FICHAS: la distribución OFICIAL del Scrabble en español, letra por
+   letra (comprobada, no repartida a ojo) — el abecedario completo, de la A
+   a la Z, con la misma abundancia de vocales y letras comunes que una caja
+   de verdad. La primera versión repartía poco de todo por igual y por eso
+   costaba combinar palabras: aquí la A y la E tienen 12 fichas cada una,
+   como en el Scrabble real, y la Z tiene 1. Los valores de punto son los
+   de siempre: cuanto más rara la letra, más vale — K y W (que la baraja
+   clásica no trae, pero hacen falta para el abecedario completo) valen lo
+   mismo que la J, la Ñ o la X.
 
    Uso:  python3 juego_scrabble.py
 """
@@ -120,16 +123,27 @@ def _construir_mapa():
 MAPA_CASILLAS = _construir_mapa()
 
 # --------------------------------------------------------------------------
-# Las fichas: alfabeto español clásico de Scrabble (sin K ni W), en una
-# tanda mas pequeña para que una partida quepa en el rato de clase.
+# Las fichas: la distribución OFICIAL del Scrabble en español (100 fichas,
+# Hasbro/Mattel), letra por letra — comprobada contra la tabla real, no
+# estimada a ojo. Un Scrabble de verdad no reparte las letras a partes
+# iguales: la A y la E tienen 12 fichas cada una porque hacen falta en casi
+# toda palabra, y la Z tiene 1 porque casi no sale. Repartir poco de todo,
+# como se hizo en la primera version, es lo que hacia dificil combinar
+# palabras — se agotaban las vocales a la tercera jugada.
+#
+# Los digrafos CH, LL y RR de la baraja clasica no se usan aqui (la reforma
+# ortografica de 2010 los quito del alfabeto; ya no son letras propias). En
+# su lugar van la K y la W, que la baraja clasica omite pero que hacen
+# falta para tener el abecedario completo de la A a la Z — con el mismo
+# valor que la J, la Ñ o la X, que es donde les toca por lo raras que son.
 # (letra, valor, cuantas)
 # --------------------------------------------------------------------------
 LETRAS = [
-    ('A', 1, 6), ('E', 1, 6), ('O', 1, 5), ('I', 1, 3), ('S', 1, 3),
-    ('N', 1, 3), ('R', 1, 3), ('U', 1, 3), ('L', 1, 3), ('T', 1, 2),
-    ('D', 2, 3), ('G', 2, 1),
-    ('C', 3, 2), ('M', 3, 1), ('P', 3, 1), ('B', 3, 1),
-    ('H', 4, 1), ('F', 4, 1), ('V', 4, 2), ('Y', 4, 1),
+    ('A', 1, 12), ('E', 1, 12), ('O', 1, 9), ('I', 1, 6), ('S', 1, 6),
+    ('N', 1, 5), ('R', 1, 5), ('U', 1, 5), ('L', 1, 4), ('T', 1, 4),
+    ('D', 2, 5), ('G', 2, 2),
+    ('C', 3, 4), ('M', 3, 2), ('P', 3, 2), ('B', 3, 2),
+    ('H', 4, 2), ('F', 4, 1), ('V', 4, 1), ('Y', 4, 1),
     ('Q', 5, 1),
     ('J', 8, 1), ('K', 8, 1), ('Ñ', 8, 1), ('W', 8, 1), ('X', 8, 1),
     ('Z', 10, 1),
@@ -434,7 +448,9 @@ def _ficha(c, x, y, s, letra, valor):
     c.roundRect(x, y, s, s, 6, fill=1, stroke=1)
     c.setFillColor(HexColor('#3B2413'))
     if letra == '★':
-        c.setFont(JUEGO_BODY_BOLD, s * 0.42)
+        # JUEGO_BODY_BOLD (Work Sans) no trae el glifo de estrella — solo
+        # cubre Latin. DejaVuSans-Bold si lo tiene, comprobado a ojo.
+        c.setFont('DejaVuSans-Bold', s * 0.42)
     else:
         c.setFont(JUEGO_DISPLAY_BLACK, s * 0.50)
     c.drawCentredString(x + s / 2.0, y + s * 0.30, letra)

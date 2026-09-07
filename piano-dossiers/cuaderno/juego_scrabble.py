@@ -44,7 +44,9 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, '..', 'engine'))
 
 from juegos_comun import (W, H, NAVY, CREAM, INK, MUTED, ACCENT, RULE,        # noqa: E402
-                          logo_tclas, portada_juego, figura_en_caja)
+                          logo_tclas, portada_juego, figura_en_caja,
+                          JUEGO_DISPLAY_BLACK, JUEGO_DISPLAY_ITALIC,
+                          JUEGO_BODY, JUEGO_BODY_MEDIUM, JUEGO_BODY_BOLD)
 from portada import _wrap                                                    # noqa: E402
 from notation import BLEED_SAFE                                              # noqa: E402
 
@@ -218,14 +220,14 @@ def _hoja_reglas(c):
 def _hoja_palabras(c):
     c.setFillColor(CREAM)
     c.rect(0, 0, W, H, fill=1, stroke=0)
-    c.setFont('DejaVuSerif-Bold', 22)
+    c.setFont(JUEGO_DISPLAY_BLACK, 22)
     c.setFillColor(NAVY)
     c.drawString(52, H - 78, 'Las palabras musicales')
-    c.setFont('DejaVuSans', 10)
+    c.setFont(JUEGO_BODY, 10)
     c.setFillColor(MUTED)
     _wrap(c, 'Si formas una de estas, dobla su valor otra vez — no hace '
              'falta memorizarlas, basta con tenerla al lado mientras juegas.',
-         52, H - 98, 'DejaVuSans', 10, W - 104, 14, MUTED)
+         52, H - 98, JUEGO_BODY, 10, W - 104, 14, MUTED)
 
     categorias = list(PALABRAS_MUSICALES.items())
     gutter = 22
@@ -236,7 +238,7 @@ def _hoja_palabras(c):
     def _columna(x0, cats):
         y = H - 140
         for titulo, palabras in cats:
-            c.setFont('DejaVuSans-Bold', 10.6)
+            c.setFont(JUEGO_BODY_BOLD, 10.6)
             c.setFillColor(ACCENT)
             c.drawString(x0, y, titulo.upper())
             c.setStrokeColor(ACCENT)
@@ -244,14 +246,14 @@ def _hoja_palabras(c):
             c.line(x0, y - 4, x0 + colw, y - 4)
             y -= 18
             texto = ' · '.join(palabras)
-            y = _wrap(c, texto, x0, y, 'DejaVuSans', 8.8, colw, 13.0, INK)
+            y = _wrap(c, texto, x0, y, JUEGO_BODY, 8.8, colw, 13.0, INK)
             y -= 16
         return y
 
     _columna(52, col_izq)
     _columna(52 + colw + gutter, col_der)
 
-    c.setFont('DejaVuSans', 7.4)
+    c.setFont(JUEGO_BODY, 7.4)
     c.setFillColor(MUTED)
     c.drawCentredString(W / 2.0, 30, 'El Cuaderno del Pianista · T-Clas')
     c.showPage()
@@ -282,7 +284,7 @@ def _dibujar_casilla(c, x, y, w, h, tipo):
     figura_en_caja(c, x + w / 2.0, y + h * 0.56, r * 1.3, r * 1.6, clave, white)
     etiqueta = {'TW': 'x3 PAL.', 'DW': 'x2 PAL.', 'TL': 'x3 LET.',
                'DL': 'x2 LET.', 'CENTRO': 'SALIDA'}[tipo]
-    c.setFont('DejaVuSans-Bold', w * 0.16)
+    c.setFont(JUEGO_BODY_BOLD, w * 0.16)
     c.setFillColor(white)
     c.drawCentredString(x + w / 2.0, y + h * 0.09, etiqueta)
 
@@ -318,7 +320,7 @@ def _panel_leyenda(c, x, y_top, ancho, y_bottom):
        jugador necesita consultar mientras juega, al lado del tablero y
        no en otra hoja."""
     y = y_top
-    c.setFont('DejaVuSerif-Bold', 15)
+    c.setFont(JUEGO_DISPLAY_BLACK, 15)
     c.setFillColor(NAVY)
     c.drawString(x, y, 'Las casillas')
     y -= 26
@@ -328,13 +330,13 @@ def _panel_leyenda(c, x, y_top, ancho, y_bottom):
         c.setFillColor(color)
         c.circle(x + r, y - r, r, fill=1, stroke=0)
         figura_en_caja(c, x + r, y - r + 3, r * 1.0, r * 1.2, FIGURA_TIPO[tipo], white)
-        c.setFont('DejaVuSans-Bold', 9.6)
+        c.setFont(JUEGO_BODY_BOLD, 9.6)
         c.setFillColor(NAVY)
         c.drawString(x + 2 * r + 10, y - r + 5, NOMBRE_TIPO[tipo])
-        c.setFont('DejaVuSans', 7.6)
+        c.setFont(JUEGO_BODY, 7.6)
         c.setFillColor(INK)
         y2 = _wrap(c, DETALLE_TIPO[tipo], x + 2 * r + 10, y - r - 8,
-                  'DejaVuSans', 7.6, ancho - 2 * r - 10, 10.4, INK)
+                  JUEGO_BODY, 7.6, ancho - 2 * r - 10, 10.4, INK)
         y = min(y2, y - 2 * r - 6) - 14
 
     y -= 6
@@ -342,7 +344,7 @@ def _panel_leyenda(c, x, y_top, ancho, y_bottom):
     c.setLineWidth(0.7)
     c.line(x, y, x + ancho, y)
     y -= 22
-    c.setFont('DejaVuSerif-Bold', 15)
+    c.setFont(JUEGO_DISPLAY_BLACK, 15)
     c.setFillColor(NAVY)
     c.drawString(x, y, 'Valor de las fichas')
     y -= 20
@@ -352,10 +354,10 @@ def _panel_leyenda(c, x, y_top, ancho, y_bottom):
     for valor in sorted(por_valor):
         c.setFillColor(CENTRO_COLOR if valor >= 8 else NAVY)
         c.circle(x + 9, y - 3, 9, fill=1, stroke=0)
-        c.setFont('DejaVuSans-Bold', 8.6)
+        c.setFont(JUEGO_BODY_BOLD, 8.6)
         c.setFillColor(white)
         c.drawCentredString(x + 9, y - 6, str(valor))
-        c.setFont('DejaVuSans', 8.4)
+        c.setFont(JUEGO_BODY, 8.4)
         c.setFillColor(INK)
         c.drawString(x + 24, y - 6, ' · '.join(letras for letras in por_valor[valor]))
         y -= 20
@@ -380,10 +382,10 @@ def _hoja_tablero(c):
     c.setFillColor(NAVY)
     c.roundRect(content_l, band_y, content_r - content_l, band_h, 10, fill=1, stroke=0)
     c.rect(content_l, band_y, content_r - content_l, band_h / 2.0, fill=1, stroke=0)
-    c.setFont('DejaVuSerif-Bold', 27)
+    c.setFont(JUEGO_DISPLAY_BLACK, 27)
     c.setFillColor(white)
     c.drawString(content_l + 22, band_y + band_h - 34, 'Scrabble musical')
-    c.setFont('DejaVuSans', 11)
+    c.setFont(JUEGO_BODY, 11)
     c.setFillColor(HexColor('#C3CEDB'))
     c.drawString(content_l + 22, band_y + 16, 'cualquier palabra vale — la musical, doble')
     logo_tclas(c, content_r - 34, band_y + band_h / 2.0, 22)
@@ -410,7 +412,7 @@ def _hoja_tablero(c):
     panel_ancho = content_r - panel_x
     _panel_leyenda(c, panel_x, gy_top - 6, panel_ancho, grid_bottom)
 
-    c.setFont('DejaVuSans', 8.4)
+    c.setFont(JUEGO_BODY, 8.4)
     c.setFillColor(MUTED)
     c.drawCentredString(BOARD_W / 2.0, content_b - 6, 'El Cuaderno del Pianista · T-Clas')
     c.showPage()
@@ -432,12 +434,12 @@ def _ficha(c, x, y, s, letra, valor):
     c.roundRect(x, y, s, s, 6, fill=1, stroke=1)
     c.setFillColor(HexColor('#3B2413'))
     if letra == '★':
-        c.setFont('DejaVuSans-Bold', s * 0.42)
+        c.setFont(JUEGO_BODY_BOLD, s * 0.42)
     else:
-        c.setFont('DejaVuSerif-Bold', s * 0.50)
+        c.setFont(JUEGO_DISPLAY_BLACK, s * 0.50)
     c.drawCentredString(x + s / 2.0, y + s * 0.30, letra)
     if valor:
-        c.setFont('DejaVuSans-Bold', s * 0.17)
+        c.setFont(JUEGO_BODY_BOLD, s * 0.17)
         c.drawRightString(x + s - s * 0.10, y + s * 0.08, str(valor))
 
 
@@ -455,10 +457,10 @@ def _hoja_fichas(c):
     def _cabecera(pagina):
         c.setFillColor(CREAM)
         c.rect(0, 0, W, H, fill=1, stroke=0)
-        c.setFont('DejaVuSerif-Bold', 22)
+        c.setFont(JUEGO_DISPLAY_BLACK, 22)
         c.setFillColor(NAVY)
         c.drawString(52, H - 78, 'Fichas de letra')
-        c.setFont('DejaVuSans', 10)
+        c.setFont(JUEGO_BODY, 10)
         c.setFillColor(MUTED)
         sub = ('Recorta las %d fichas y mételas en una bolsa opaca — se sacan '
               'sin mirar.' % TOTAL_FICHAS) if pagina == 1 else '(continúan de la hoja anterior)'
@@ -471,7 +473,7 @@ def _hoja_fichas(c):
     col = 0
     for letra, valor in tiles:
         if y - TILE < 40:
-            c.setFont('DejaVuSans', 7.4)
+            c.setFont(JUEGO_BODY, 7.4)
             c.setFillColor(MUTED)
             c.drawCentredString(W / 2.0, 24, 'El Cuaderno del Pianista · T-Clas')
             c.showPage()
@@ -487,7 +489,7 @@ def _hoja_fichas(c):
         else:
             x += TILE + TGAP
 
-    c.setFont('DejaVuSans', 7.4)
+    c.setFont(JUEGO_BODY, 7.4)
     c.setFillColor(MUTED)
     c.drawCentredString(W / 2.0, 24, 'El Cuaderno del Pianista · T-Clas')
     c.showPage()

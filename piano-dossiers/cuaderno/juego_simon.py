@@ -37,7 +37,9 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, '..', 'engine'))
 
 from juegos_comun import (W, H, NAVY, CREAM, INK, MUTED, ACCENT,             # noqa: E402
-                          portada_juego, INSTRUMENTOS)
+                          portada_juego, INSTRUMENTOS,
+                          JUEGO_DISPLAY_BLACK, JUEGO_DISPLAY_ITALIC,
+                          JUEGO_BODY, JUEGO_BODY_MEDIUM, JUEGO_BODY_BOLD)
 from portada import _wrap                                                    # noqa: E402
 
 SALIDA = os.path.join(HERE, '..', 'output', 'juegos')
@@ -132,15 +134,15 @@ def _hoja_reglas(c):
 def _hoja_repertorio(c):
     c.setFillColor(CREAM)
     c.rect(0, 0, W, H, fill=1, stroke=0)
-    c.setFont('DejaVuSerif-Bold', 22)
+    c.setFont(JUEGO_DISPLAY_BLACK, 22)
     c.setFillColor(NAVY)
     c.drawString(52, H - 78, 'El repertorio de Simón')
-    c.setFont('DejaVuSans', 10)
+    c.setFont(JUEGO_BODY, 10)
     c.setFillColor(MUTED)
     _wrap(c, 'Todo lo que Simón puede pedir — mézclalo, repítelo, cambia '
              'el orden. Cuantas más categorías uses en una partida, más '
              'cuesta seguirte.',
-         52, H - 98, 'DejaVuSans', 10, W - 104, 14, MUTED)
+         52, H - 98, JUEGO_BODY, 10, W - 104, 14, MUTED)
 
     categorias = list(REPERTORIO.items())
     gutter = 22
@@ -151,7 +153,7 @@ def _hoja_repertorio(c):
     def _columna(x0, cats):
         y = H - 140
         for titulo, acciones in cats:
-            c.setFont('DejaVuSans-Bold', 10.6)
+            c.setFont(JUEGO_BODY_BOLD, 10.6)
             c.setFillColor(ACCENT)
             c.drawString(x0, y, titulo.upper())
             c.setStrokeColor(ACCENT)
@@ -159,14 +161,14 @@ def _hoja_repertorio(c):
             c.line(x0, y - 4, x0 + colw, y - 4)
             y -= 18
             texto = ' · '.join(acciones)
-            y = _wrap(c, texto, x0, y, 'DejaVuSans', 8.8, colw, 13.0, INK)
+            y = _wrap(c, texto, x0, y, JUEGO_BODY, 8.8, colw, 13.0, INK)
             y -= 16
         return y
 
     _columna(52, col_izq)
     _columna(52 + colw + gutter, col_der)
 
-    c.setFont('DejaVuSans', 7.4)
+    c.setFont(JUEGO_BODY, 7.4)
     c.setFillColor(MUTED)
     c.drawCentredString(W / 2.0, 30, 'El Cuaderno del Pianista · T-Clas')
     c.showPage()

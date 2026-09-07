@@ -60,7 +60,9 @@ from juegos_comun import (W, H, NAVY, CREAM, INK, MUTED, ACCENT, RULE,        # 
                           PALOS, COLOR_PALO, FORMA_PALO, FIGURAS, figura,
                           figura_en_caja, forma, marco, oval_central,
                           logo_tclas, hoja_de_cartas, hoja_dorso,
-                          portada_juego, CARTA_W, CARTA_H, simbolo as _simbolo)
+                          portada_juego, CARTA_W, CARTA_H, simbolo as _simbolo,
+                          JUEGO_DISPLAY_BLACK, JUEGO_DISPLAY_ITALIC,
+                          JUEGO_BODY, JUEGO_BODY_MEDIUM, JUEGO_BODY_BOLD)
 
 SALIDA = os.path.join(HERE, '..', 'output', 'juegos')
 
@@ -194,7 +196,7 @@ def _numeral(c, x, y, w, h, carta):
     cy = y + h * CY_OVALO
     marco(c, x, y, w, h, col)
     oval_central(c, x, y, w, h, cy=cy)
-    c.setFont('DejaVuSerif-Bold', h * 0.30)
+    c.setFont(JUEGO_DISPLAY_BLACK, h * 0.30)
     c.setFillColor(col)
     c.drawCentredString(x + w * 0.5, cy - h * 0.10, etiqueta)
     _esquinas(c, x, y, w, h, etiqueta, carta['palo'])
@@ -237,7 +239,7 @@ def _comodin(c, x, y, w, h, carta):
         c.circle(cx, cy_b, rb, fill=1, stroke=0)
         if carta['cual'] == 'calderon':
             _simbolo(c, cx, cy_b + rb * 0.34, rb * 0.55, 'calderon', NAVY)
-            c.setFont('DejaVuSerif-Bold', rb * 0.92)
+            c.setFont(JUEGO_DISPLAY_BLACK, rb * 0.92)
             c.setFillColor(NAVY)
             c.drawCentredString(cx, cy_b - rb * 0.62, '+4')
         else:
@@ -257,16 +259,16 @@ def _rotulo(c, x, y, w, titulo, pie):
        corchea' es el doble de largo que 'negra' y a cuerpo fijo se sale."""
     from portada import _fit
     if pie:
-        t = _fit(titulo, 'DejaVuSans-Bold', 7.4, w - 16, floor=5.2)
-        c.setFont('DejaVuSans-Bold', t)
+        t = _fit(titulo, JUEGO_BODY_BOLD, 7.4, w - 16, floor=5.2)
+        c.setFont(JUEGO_BODY_BOLD, t)
         c.setFillColor(white)
         c.drawCentredString(x + w / 2.0, y + 27, titulo)
-        p = _fit(pie, 'DejaVuSans', 6.2, w - 14, floor=4.6)
-        c.setFont('DejaVuSans', p)
+        p = _fit(pie, JUEGO_BODY, 6.2, w - 14, floor=4.6)
+        c.setFont(JUEGO_BODY, p)
         c.drawCentredString(x + w / 2.0, y + 18, pie)
     else:
-        t = _fit(titulo, 'DejaVuSans-Bold', 7.6, w - 16, floor=5.0)
-        c.setFont('DejaVuSans-Bold', t)
+        t = _fit(titulo, JUEGO_BODY_BOLD, 7.6, w - 16, floor=5.0)
+        c.setFont(JUEGO_BODY_BOLD, t)
         c.setFillColor(white)
         c.drawCentredString(x + w / 2.0, y + 21, titulo)
 
@@ -283,7 +285,7 @@ def _esquinas(c, x, y, w, h, etiqueta, palo):
         c.translate(ex, ey)
         c.rotate(giro)
         if etiqueta:
-            c.setFont('DejaVuSans-Bold', 11.5)
+            c.setFont(JUEGO_BODY_BOLD, 11.5)
             c.setFillColor(white)
             c.drawCentredString(0, 0, etiqueta)
             forma(c, 0, -9.5, 3.2, fm, white)
@@ -321,10 +323,10 @@ def _tira_ejemplo(c, y):
     c.setLineWidth(0.7)
     c.roundRect(52, y - alto, W - 104, alto, 8, fill=1, stroke=1)
 
-    c.setFont('DejaVuSans-Bold', 8.6)
+    c.setFont(JUEGO_BODY_BOLD, 8.6)
     c.setFillColor(ACCENT)
     c.drawString(68, y - 20, 'UNA MANO DE EJEMPLO')
-    c.setFont('DejaVuSans', 8.2)
+    c.setFont(JUEGO_BODY, 8.2)
     c.setFillColor(MUTED)
     c.drawString(68 + 148, y - 20, 'de izquierda a derecha, y cada una dice por qué vale')
 
@@ -336,9 +338,9 @@ def _tira_ejemplo(c, y):
         c.scale(esc, esc)
         pintar(c, 0, 0, CARTA_W, CARTA_H, carta)
         c.restoreState()
-        c.setFont('DejaVuSans', 6.9)
+        c.setFont(JUEGO_BODY, 6.9)
         c.setFillColor(INK)
-        _w(c, pie, cx - 6, cy - 11, 'DejaVuSans', 6.9, cw + 12, 8.6, INK)
+        _w(c, pie, cx - 6, cy - 11, JUEGO_BODY, 6.9, cw + 12, 8.6, INK)
         if i:                      # la flecha entre carta y carta
             fx = cx - hueco / 2.0
             fy = cy + ch / 2.0
@@ -433,7 +435,7 @@ DETALLE = {
 
 def _explicar(c, x, y, cual, ancho):
     from portada import _wrap
-    _wrap(c, DETALLE[cual], x, y, 'DejaVuSans', 8.6, ancho, 12.0, INK)
+    _wrap(c, DETALLE[cual], x, y, JUEGO_BODY, 8.6, ancho, 12.0, INK)
 
 
 def _hoja_especiales(c):
@@ -442,10 +444,10 @@ def _hoja_especiales(c):
        columna no cabe en la hoja."""
     c.setFillColor(CREAM)
     c.rect(0, 0, W, H, fill=1, stroke=0)
-    c.setFont('DejaVuSerif-Bold', 22)
+    c.setFont(JUEGO_DISPLAY_BLACK, 22)
     c.setFillColor(NAVY)
     c.drawString(52, H - 78, 'Las cartas especiales')
-    c.setFont('DejaVuSans', 10)
+    c.setFont(JUEGO_BODY, 10)
     c.setFillColor(MUTED)
     c.drawString(52, H - 98, 'Déjala encima de la mesa las primeras partidas. '
                              'A la tercera ya no hace falta.')
@@ -473,28 +475,28 @@ def _hoja_especiales(c):
         pintar(c, 0, 0, CARTA_W, CARTA_H, carta)
         c.restoreState()
         tx = x0 + 14 + CARTA_W * esc + 14
-        c.setFont('DejaVuSans-Bold', 10.6)
+        c.setFont(JUEGO_BODY_BOLD, 10.6)
         c.setFillColor(NAVY)
         c.drawString(tx, y - 24, rotulo)
-        c.setFont('DejaVuSans', 8.6)
+        c.setFont(JUEGO_BODY, 8.6)
         c.setFillColor(INK)
         _explicar(c, tx, y - 39, cual, x0 + colw - tx - 10)
 
     y = y0 - filas * paso - 8
-    c.setFont('DejaVuSans-Bold', 8.6)
+    c.setFont(JUEGO_BODY_BOLD, 8.6)
     c.setFillColor(NAVY)
     c.drawString(52, y - 8, 'TRES MANERAS DE JUGAR LA MISMA BARAJA')
     y -= 20
     from portada import _wrap
     for rotulo, texto in VARIANTES:
-        c.setFont('DejaVuSans-Bold', 8.4)
+        c.setFont(JUEGO_BODY_BOLD, 8.4)
         c.setFillColor(NAVY)
         c.drawString(52, y, rotulo)
-        c.setFont('DejaVuSans', 9.0)
+        c.setFont(JUEGO_BODY, 9.0)
         c.setFillColor(INK)
-        y = _wrap(c, texto, 52 + 128, y, 'DejaVuSans', 9.0, W - 52 - 128 - 52, 12.6, INK)
+        y = _wrap(c, texto, 52 + 128, y, JUEGO_BODY, 9.0, W - 52 - 128 - 52, 12.6, INK)
         y -= 8
-    c.setFont('DejaVuSans', 7.4)
+    c.setFont(JUEGO_BODY, 7.4)
     c.setFillColor(MUTED)
     c.drawCentredString(W / 2.0, 30, 'El Cuaderno del Pianista · T-Clas')
     c.showPage()

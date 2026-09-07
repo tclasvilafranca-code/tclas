@@ -36,7 +36,9 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, '..', 'engine'))
 
 from juegos_comun import (W, H, NAVY, CREAM, INK, MUTED, ACCENT, RULE,       # noqa: E402
-                          simbolo, portada_juego)
+                          simbolo, portada_juego,
+                          JUEGO_DISPLAY_BLACK, JUEGO_DISPLAY_ITALIC,
+                          JUEGO_BODY, JUEGO_BODY_MEDIUM, JUEGO_BODY_BOLD)
 from portada import _wrap                                                    # noqa: E402
 
 SALIDA = os.path.join(HERE, '..', 'output', 'juegos')
@@ -114,15 +116,15 @@ def _grid(c, x0, y_top, cell, titulo, subtitulo):
     gx0 = x0 + ancho_filas
     gy_top = y_top - 34   # deja sitio al titulo y a las cabeceras de columna
 
-    c.setFont('DejaVuSerif-Bold', 13.5)
+    c.setFont(JUEGO_DISPLAY_BLACK, 13.5)
     c.setFillColor(NAVY)
     c.drawString(x0, y_top, titulo)
-    c.setFont('DejaVuSans', 8.4)
+    c.setFont(JUEGO_BODY, 8.4)
     c.setFillColor(MUTED)
     c.drawString(x0, y_top - 15, subtitulo)
 
     # cabeceras de columna (las notas)
-    c.setFont('DejaVuSans-Bold', 8.6)
+    c.setFont(JUEGO_BODY_BOLD, 8.6)
     c.setFillColor(NAVY)
     for j, nota in enumerate(NOTAS):
         cx = gx0 + j * cell + cell / 2.0
@@ -131,7 +133,7 @@ def _grid(c, x0, y_top, cell, titulo, subtitulo):
     # la cuadricula y las etiquetas de fila (las octavas)
     for i, octava in enumerate(OCTAVAS):
         ry = gy_top - (i + 1) * cell
-        c.setFont('DejaVuSans-Bold', 8.6)
+        c.setFont(JUEGO_BODY_BOLD, 8.6)
         c.setFillColor(NAVY)
         c.drawCentredString(x0 + ancho_filas / 2.0, ry + cell / 2.0 - 3, str(octava))
         for j in range(len(NOTAS)):
@@ -146,14 +148,14 @@ def _grid(c, x0, y_top, cell, titulo, subtitulo):
 
 
 def _leyenda_marcas(c, x, y, colw):
-    c.setFont('DejaVuSans-Bold', 8.6)
+    c.setFont(JUEGO_BODY_BOLD, 8.6)
     c.setFillColor(NAVY)
     c.drawString(x, y, 'Cómo anotas un disparo:')
     y -= 20
     r = 8
     cx1 = x + r
     simbolo(c, cx1, y + 3, r, 'corchea', ACCENT)
-    c.setFont('DejaVuSans', 8.4)
+    c.setFont(JUEGO_BODY, 8.4)
     c.setFillColor(INK)
     c.drawString(cx1 + r + 6, y, '= tocado')
     cx2 = x + colw / 2.0 + r
@@ -164,15 +166,15 @@ def _leyenda_marcas(c, x, y, colw):
 def _hoja_juego(c):
     c.setFillColor(CREAM)
     c.rect(0, 0, W, H, fill=1, stroke=0)
-    c.setFont('DejaVuSerif-Bold', 20)
+    c.setFont(JUEGO_DISPLAY_BLACK, 20)
     c.setFillColor(NAVY)
     c.drawString(52, H - 58, 'Tu tablero')
-    c.setFont('DejaVuSans', 9.4)
+    c.setFont(JUEGO_BODY, 9.4)
     c.setFillColor(MUTED)
     _wrap(c, 'Fotocopia esta hoja una vez por jugador. A la izquierda '
              'escondes tu flota; a la derecha anotas tus disparos contra '
              'la del otro.',
-         52, H - 76, 'DejaVuSans', 9.4, W - 104, 13, MUTED)
+         52, H - 76, JUEGO_BODY, 9.4, W - 104, 13, MUTED)
 
     # las dos rejillas van UNA AL LADO DE LA OTRA, no apiladas: asi usan
     # el ancho entero de la hoja en vez de dejarlo en blanco, y de paso
@@ -188,26 +190,26 @@ def _hoja_juego(c):
     y = _grid(c, x_izq, y_top, cell, 'MI FLOTA',
              'Dibuja tu flota SIN que la vea el otro — luego tápala.')
     y -= 8
-    c.setFont('DejaVuSans-Bold', 9.2)
+    c.setFont(JUEGO_BODY_BOLD, 9.2)
     c.setFillColor(ACCENT)
     c.drawString(x_izq, y, 'TU FLOTA:')
     y -= 13
     piezas = ' · '.join('%s (%s)' % (nombre, ' y '.join([str(tam)] * n))
                         for nombre, tam, n in FLOTA)
-    y = _wrap(c, piezas, x_izq, y, 'DejaVuSans', 8.6, colw, 11.6, INK)
+    y = _wrap(c, piezas, x_izq, y, JUEGO_BODY, 8.6, colw, 11.6, INK)
     y -= 4
-    c.setFont('DejaVuSans', 7.8)
+    c.setFont(JUEGO_BODY, 7.8)
     c.setFillColor(MUTED)
     _wrap(c, 'En línea recta, horizontal o vertical — nunca en diagonal — '
              'y sin tocarse entre sí, ni por una esquina.',
-         x_izq, y, 'DejaVuSans', 7.8, colw, 10.6, MUTED)
+         x_izq, y, JUEGO_BODY, 7.8, colw, 10.6, MUTED)
 
     y2 = _grid(c, x_der, y_top, cell, 'TABLERO DE TIRO',
               'Aquí marcas tus disparos contra el tablero del otro.')
     y2 -= 8
     _leyenda_marcas(c, x_der, y2, colw)
 
-    c.setFont('DejaVuSans', 7.4)
+    c.setFont(JUEGO_BODY, 7.4)
     c.setFillColor(MUTED)
     c.drawCentredString(W / 2.0, 24, 'El Cuaderno del Pianista · T-Clas')
     c.showPage()

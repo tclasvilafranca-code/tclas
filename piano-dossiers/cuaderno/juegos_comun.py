@@ -35,6 +35,8 @@ import sys
 
 from reportlab.lib.colors import HexColor, white, black
 from reportlab.pdfbase.pdfmetrics import stringWidth
+from reportlab.pdfbase.pdfmetrics import registerFont
+from reportlab.pdfbase.ttfonts import TTFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -43,6 +45,46 @@ sys.path.insert(0, os.path.join(HERE, '..', 'engine'))
 import notation as nt                                               # noqa: E402
 from portada import (W, H, NAVY, NAVY_SOFT, CREAM, RULE, INK, MUTED,  # noqa: E402
                      ACCENT, _fit, _wrap)
+
+# --------------------------------------------------------------------------
+# LA TIPOGRAFIA PROPIA DE LOS JUEGOS. El resto del cuaderno (las partituras,
+# los 200 y pico dosieres de alumno) usa DejaVu/FreeSerif — son las que pide
+# el motor de notacion, no se tocan (`notation.py`, `portada.py`). Pero para
+# LOS JUEGOS, que son papel de mesa y no partitura, esas fuentes se ven
+# genericas: son las de sistema de cualquier Linux, no una tipografia elegida.
+# Aqui se registran dos familias de verdad, SOLO para lo que dibujan los
+# `juego_*.py` y este modulo — nunca se usan dentro de una figura musical
+# (eso lo sigue pintando `notation.py` con FreeSerif, que esta calibrado al
+# pixel) ni en ningun sitio del cuaderno principal.
+#   JUEGO_DISPLAY  — Playfair Display: una serifa editorial de mucho
+#                    contraste, para titulos y numeros — la que hace que una
+#                    portada se lea como diseñada y no como un documento.
+#   JUEGO_BODY     — Work Sans: una de palo seco contemporanea, para todo el
+#                    texto corrido — mas calida y menos "de terminal" que
+#                    DejaVuSans.
+_FONTS_DIR = os.path.join(HERE, '..', 'assets', 'fonts_juegos')
+JUEGO_DISPLAY = 'JuegoDisplay'
+JUEGO_DISPLAY_BOLD = 'JuegoDisplay-Bold'
+JUEGO_DISPLAY_BLACK = 'JuegoDisplay-Black'
+JUEGO_DISPLAY_ITALIC = 'JuegoDisplay-Italic'
+JUEGO_BODY = 'JuegoBody'
+JUEGO_BODY_MEDIUM = 'JuegoBody-Medium'
+JUEGO_BODY_BOLD = 'JuegoBody-Bold'
+JUEGO_BODY_BLACK = 'JuegoBody-Black'
+for _nombre, _archivo in (
+    (JUEGO_DISPLAY, 'PlayfairDisplay-Medium.ttf'),
+    (JUEGO_DISPLAY_BOLD, 'PlayfairDisplay-Bold.ttf'),
+    (JUEGO_DISPLAY_BLACK, 'PlayfairDisplay-Black.ttf'),
+    (JUEGO_DISPLAY_ITALIC, 'PlayfairDisplay-SemiBoldItalic.ttf'),
+    (JUEGO_BODY, 'WorkSans-Regular.ttf'),
+    (JUEGO_BODY_MEDIUM, 'WorkSans-Medium.ttf'),
+    (JUEGO_BODY_BOLD, 'WorkSans-SemiBold.ttf'),
+    (JUEGO_BODY_BLACK, 'WorkSans-ExtraBold.ttf'),
+):
+    try:
+        registerFont(TTFont(_nombre, os.path.join(_FONTS_DIR, _archivo)))
+    except Exception:
+        pass
 
 # --------------------------------------------------------------------------
 # Los cuatro palos. Color + FORMA, siempre las dos cosas.
@@ -209,7 +251,7 @@ def simbolo(c, cx, cy, r, cual, color):
         c.setFont('FreeSerif', r * 1.3)
         c.drawCentredString(cx, cy - r * 0.42, '♮')
     elif cual == 'doblebarra':
-        c.setFont('DejaVuSerif-Bold', r * 1.5)
+        c.setFont(JUEGO_DISPLAY_BLACK, r * 1.5)
         c.drawCentredString(cx, cy - r * 0.5, '+2')
     elif cual in ('canon', 'cambio'):
         # dos flechas curvas en circulo, el icono universal de intercambio:
@@ -258,10 +300,10 @@ def simbolo(c, cx, cy, r, cual, color):
     elif cual == 'redonda_espera':
         figura_en_caja(c, cx, cy, r * 1.5, r * 1.9, 'Rw', color)
     elif cual == 'dacapo':
-        c.setFont('DejaVuSerif-Bold', r * 0.95)
+        c.setFont(JUEGO_DISPLAY_BLACK, r * 0.95)
         c.drawCentredString(cx, cy - r * 0.30, 'D.C.')
     elif cual == 'fine':
-        c.setFont('DejaVuSerif-Bold', r * 1.05)
+        c.setFont(JUEGO_DISPLAY_BLACK, r * 1.05)
         c.drawCentredString(cx, cy - r * 0.35, 'FINE')
     elif cual == 'escalera':
         # el pentagrama-escalera en miniatura: las cinco lineas de siempre,
@@ -657,9 +699,10 @@ def hoja_de_cartas(c, cartas, pintar, pie=''):
         y = y0 + (FILAS - 1 - fil) * CARTA_H
         pintar(c, x, y, CARTA_W, CARTA_H, carta)
     if pie:
-        c.setFont('DejaVuSans', 6.6)
+        c.setFont(JUEGO_BODY, 6.6)
         c.setFillColor(MUTED)
         c.drawString(x0, y0 - 26, pie)
+        c.setFont(JUEGO_DISPLAY_ITALIC, 7)
         c.drawRightString(x0 + COLS * CARTA_W, y0 - 26, 'El Cuaderno del Pianista · T-Clas')
     c.showPage()
     return cartas[POR_HOJA:]
@@ -725,13 +768,13 @@ def portada_juego(c, titulo, subtitulo, nivel, resumen, reglas, materiales,
     c.setFillColor(NAVY)
     b = nt.BLEED_SAFE
     c.rect(b, H - 132 - b, W - 2 * b, 132, fill=1, stroke=0)
-    c.setFont('DejaVuSans-Bold', 8.2)
+    c.setFont(JUEGO_BODY_BOLD, 8.2)
     c.setFillColor(HexColor('#9FB0C4'))
-    c.drawString(52, H - 40, 'JUEGOS DE CLASE · EL CUADERNO DEL PIANISTA')
-    c.setFont('DejaVuSerif-Bold', 30)
+    _con_tracking(c, 52, H - 40, 'JUEGOS DE CLASE · EL CUADERNO DEL PIANISTA', 1.1)
+    c.setFont(JUEGO_DISPLAY_BLACK, 32)
     c.setFillColor(white)
-    c.drawString(52, H - 78, titulo)
-    c.setFont('DejaVuSans', 10.5)
+    c.drawString(52, H - 79, titulo)
+    c.setFont(JUEGO_DISPLAY_ITALIC, 12.5)
     c.setFillColor(HexColor('#C3CEDB'))
     c.drawString(52, H - 98, subtitulo)
 
@@ -740,17 +783,17 @@ def portada_juego(c, titulo, subtitulo, nivel, resumen, reglas, materiales,
         pw = 108
         c.setFillColor(n['color'])
         c.roundRect(W - 52 - pw, H - 86, pw, 30, 6, fill=1, stroke=0)
-        c.setFont('DejaVuSans-Bold', 13)
+        c.setFont(JUEGO_BODY_BOLD, 13)
         c.setFillColor(white)
         c.drawCentredString(W - 52 - pw / 2.0, H - 76, n['nombre'])
-        c.setFont('DejaVuSans', 7.4)
+        c.setFont(JUEGO_BODY, 7.4)
         c.setFillColor(HexColor('#C3CEDB'))
         c.drawRightString(W - 52, H - 98, n['que'])
 
     y = H - 168
-    c.setFont('DejaVuSans', 11)
+    c.setFont(JUEGO_BODY, 11)
     c.setFillColor(INK)
-    y = _wrap(c, resumen, 52, y, 'DejaVuSans', 11, W - 104, 16, INK)
+    y = _wrap(c, resumen, 52, y, JUEGO_BODY, 11, W - 104, 16.5, INK)
 
     y -= 18
     y = _bloque(c, y, 'QUÉ HACE FALTA', materiales)
@@ -759,20 +802,31 @@ def portada_juego(c, titulo, subtitulo, nivel, resumen, reglas, materiales,
     if dibujo:
         y = dibujo(c, y - 10)
 
-    c.setFont('DejaVuSans', 7.4)
+    c.setFont(JUEGO_DISPLAY_ITALIC, 8.6)
     c.setFillColor(MUTED)
     c.drawCentredString(W / 2.0, 30, 'El Cuaderno del Pianista · T-Clas')
     c.showPage()
     return y
 
 
+def _con_tracking(c, x, y, texto, espacio):
+    """Un `drawString` con las letras un poco separadas — el gesto tipico
+       de un kicker editorial (todo mayusculas, tracking abierto). ReportLab
+       no expone tracking en `drawString`, asi que se dibuja letra a letra."""
+    cx = x
+    fuente, tam = c._fontname, c._fontsize
+    for ch in texto:
+        c.drawString(cx, y, ch)
+        cx += stringWidth(ch, fuente, tam) + espacio
+
+
 def _bloque(c, y, titulo, lineas, numerado=False):
-    c.setFont('DejaVuSans-Bold', 8.6)
+    c.setFont(JUEGO_BODY_BOLD, 8.6)
     c.setFillColor(ACCENT)
-    c.drawString(52, y, titulo)
+    _con_tracking(c, 52, y, titulo, 0.9)
     c.setStrokeColor(ACCENT)
     c.setLineWidth(1.4)
-    c.line(52, y - 5, 52 + stringWidth(titulo, 'DejaVuSans-Bold', 8.6), y - 5)
+    c.line(52, y - 5, 52 + stringWidth(titulo, JUEGO_BODY_BOLD, 8.6) + 0.9 * len(titulo), y - 5)
     y -= 20
     for i, ln in enumerate(lineas, 1):
         # La vinieta va a la altura de la PRIMERA linea del parrafo, no del
@@ -781,7 +835,7 @@ def _bloque(c, y, titulo, lineas, numerado=False):
         if numerado:
             c.setFillColor(NAVY)
             c.circle(58, y - 3.2, 7.6, fill=1, stroke=0)
-            c.setFont('DejaVuSans-Bold', 8)
+            c.setFont(JUEGO_BODY_BOLD, 8)
             c.setFillColor(white)
             c.drawCentredString(58, y - 5.8, str(i))
             x = 76
@@ -789,7 +843,7 @@ def _bloque(c, y, titulo, lineas, numerado=False):
             c.setFillColor(ACCENT)
             c.circle(57, y - 3.2, 2.2, fill=1, stroke=0)
             x = 68
-        y = _wrap(c, ln, x, y, 'DejaVuSans', 9.6, W - x - 52, 13.6, INK)
+        y = _wrap(c, ln, x, y, JUEGO_BODY, 9.6, W - x - 52, 13.8, INK)
         y -= 8
     return y
 
@@ -815,12 +869,12 @@ def hoja_dorso(c, titulo, nivel=None):
         oval_central(c, x, y, CARTA_W, CARTA_H, color=NAVY_SOFT,
                      rx=0.40, ry=0.36, cy=cy_logo)
         logo_tclas(c, x + CARTA_W / 2.0, cy_logo, CARTA_W * 0.30)
-        c.setFont('DejaVuSerif-Bold', 12)
+        c.setFont(JUEGO_DISPLAY_BLACK, 12.5)
         c.setFillColor(white)
-        c.drawCentredString(x + CARTA_W / 2.0, y + 20, titulo.upper())
+        c.drawCentredString(x + CARTA_W / 2.0, y + 19, titulo.upper())
         if nivel is not None:
             sello_nivel(c, x, y, CARTA_W, nivel, color=NAVY_SOFT)
-    c.setFont('DejaVuSans', 6.6)
+    c.setFont(JUEGO_BODY, 6.6)
     c.setFillColor(MUTED)
     c.drawString(x0, y0 - 26, 'Dorsos · opcional, solo si quieres pegarlos por detrás')
     c.showPage()

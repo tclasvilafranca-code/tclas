@@ -571,6 +571,10 @@ def _bloque(c, y, blq, cfg):
         y -= blq.get('extra_gap', 3)
     elif tipo == 'nota':
         y = nota_clave(c, y, blq['texto'], blq.get('etiqueta', 'LA CLAVE DE TODO'))
+    elif tipo == 'misol':
+        from misol import caja_misol
+        y = caja_misol(c, y, blq['texto'], blq.get('etiqueta', 'MUSOL MISOL DICE'),
+                       blq.get('pose', 'normal'))
     elif tipo == 'escalera':
         y = escalera_tempo(c, y, blq['valores'], blq['regla'])
     elif tipo == 'tracker':

@@ -1004,7 +1004,15 @@ def ej_escalera(c, y, b):
     return yy - 6
 
 
+def misol(c, y, b):
+    """El recuadro del buho del curso de Pekes (ver `misol.py`)."""
+    from misol import caja_misol
+    return caja_misol(c, y, b['texto'], b.get('etiqueta', 'MUSOL MISOL DICE'),
+                      b.get('pose', 'normal'))
+
+
 TIPOS = {
+    'misol': misol,
     'nombres': ej_nombres, 'dibuja': ej_dibuja, 'figuras': ej_figuras,
     'une': ej_une, 'rodea': ej_rodea, 'colorea': ej_colorea,
     'rutina': rutina, 'escucha': ej_escucha, 'nota': nota,
@@ -1026,7 +1034,7 @@ TIPOS = {
 # Estos no son ejercicios y van sin casilla numerada: la tabla de la semana es
 # un marcador, y el juego, el recuadro de acordarse, el objetivo y el reto son
 # texto.
-SIN_NUMERO = {'rutina', 'escucha', 'nota', 'objetivo', 'reto', 'cuatro_manos'}
+SIN_NUMERO = {'rutina', 'escucha', 'nota', 'objetivo', 'reto', 'cuatro_manos', 'misol'}
 
 
 def build_deberes(c, cfg):

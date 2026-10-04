@@ -27,6 +27,27 @@ from pekes_libro_datos import TEMAS                                           # 
 
 SALIDA = os.path.join(HERE, '..', 'output', 'pekes')
 
+# El Musol Misol real, recortado del Canva original del cliente y pasado a
+# gris (el cliente lo pidio explicito: "el musol misol lo puedes coger del
+# canva y ponerlo directamente porque ya se veia bien" -- su dibujo vectorial
+# desde cero no llegaba a ese nivel). Dos poses: normal (con birrete, para
+# explicar) y happy (cantando, para portadas/celebraciones).
+_ASSETS_OWL = os.path.join(HERE, '..', 'assets', 'pekes_owl')
+from reportlab.lib.utils import ImageReader                                   # noqa: E402
+_OWL_IMG = {
+    'normal': ImageReader(os.path.join(_ASSETS_OWL, 'owl_normal.png')),
+    'happy': ImageReader(os.path.join(_ASSETS_OWL, 'owl_happy.png')),
+}
+
+
+def _dibujar_owl(c, cx, cy_base, alto, pose='normal'):
+    """Dibuja a Misol centrado en cx, con la base (las patas) en cy_base."""
+    img = _OWL_IMG[pose]
+    iw, ih = img.getSize()
+    w = alto * iw / float(ih)
+    c.drawImage(img, cx - w / 2.0, cy_base, w, alto, mask='auto')
+    return w
+
 INK = HexColor('#1A1A1A')
 PAPER = white
 TITLE_FONT = 'WorkSans-ExtraBold'
@@ -127,14 +148,12 @@ def _cabecera(c, tema, etiqueta):
     return y
 
 
-def _bloque_misol(c, y, texto, titulo=None, alto=118, r=50):
+def _bloque_misol(c, y, texto, titulo=None, alto=118, pose='normal'):
     """Misol a la izquierda, su globo a la derecha -- la fila que abre el
        contenido de cada una de las tres hojas."""
-    cx = MARGIN + r * 0.95
-    cy = y - alto / 2.0 + 6
-    mascota.musol_misol(c, cx, cy, r, pose='normal')
-    bx = MARGIN + r * 2.05
-    bw = CONTENT_W - r * 2.05
+    owl_w = _dibujar_owl(c, MARGIN + alto * 0.42, y - alto, alto, pose=pose)
+    bx = MARGIN + owl_w + 18
+    bw = CONTENT_W - owl_w - 18
     mascota.globo_texto(c, bx, y - alto, bw, alto, texto,
                         cola_x=bx + 26, cola_abajo=False, titulo=titulo,
                         font=BODY_FONT, font_bold=BODY_BOLD, size=10.6, leading=14.2)
@@ -245,7 +264,7 @@ def pagina_ficha(c, tema, num_pagina):
     c.line(MARGIN + 288, y - 2, MARGIN + CONTENT_W, y - 2)
     y -= 26
 
-    y = _bloque_misol(c, y, f['intro'], titulo='MUSOL MISOL DICE...', alto=96, r=42)
+    y = _bloque_misol(c, y, f['intro'], titulo='MUSOL MISOL DICE...', alto=96)
 
     alto_dibujo = 240
     c.setStrokeColor(INK)

@@ -1,179 +1,216 @@
 # -*- coding: utf-8 -*-
-"""EL LIBRO DE PEKES — contenido.
+"""EL LLIBRE DE PEKES — contingut (en catala).
 
-   Tercer intento, y el bueno en cuanto a forma: el cliente descarto los dos
-   disenos propios ("todo el diseno en general es feo") y pidio usar EL MISMO
-   MOTOR Y EL MISMO ASPECTO de los albumes de alumno, solo que "un poco mas
-   infantil, resumido, didactico, y que realmente sea para ninos".
+   Historia, perque no es repeteixi:
+   - v1 (setmanes, una fulla per classe) i v2 (disseny propi en blanc i negre):
+     rebutjades pel client ("todo el diseno en general es feo").
+   - v3: el motor i l'aspecte dels albums d'alumne. Li agrada, pero demana:
+     TOT EN CATALA, mes informacio i practica de la MA ESQUERRA, fitxes de
+     casa mes dinamiques (relacionar, pintar, comptar, amb el codi de colors
+     de les notes que ja coneixen) i la lletra MOLT mes gran.
+   - v4 (aquesta): `pekes_hojas.py` posa tot aixo a mida de nen.
 
-   Estructura (lo que pidio antes y sigue en pie):
-   - un libro de teoria y ejercicios, SIN semanas ni dias pautados: la
-     profesora lo va usando a su ritmo;
-   - cada tema son TRES hojas: teoria, al piano y ficha;
-   - Musol Misol, el buho del Canva original, sale en todas.
+   Estructura: un llibre de teoria i exercicis, SENSE setmanes. Cada tema son
+   quatre fulles: teoria, al piano i dues fitxes per a casa. L'ordre dels
+   capitols es el de "La ruta musical" del Canva original del client.
 
-   El orden de los capitulos es el de "La ruta musical" del propio Canva del
-   cliente (antes de tocar · pentagrama y clave de Sol · las notas y sus
-   colores · las figuras · los silencios · las plicas · escalera musical),
-   resumido a 17 temas en vez de las 44 clases del original.
-
-   De momento solo esta escrito el tema de MUESTRA (Do, Re y Mi). El resto
-   se escribe cuando el cliente apruebe la muestra.
+   Les notes de la ma esquerra: en aquest punt del curs el nen nomes llegeix
+   la clau de Sol, aixi que l'esquerra toca les MATEIXES notes (Do-Re-Mi del
+   mig del piano) amb els dits 3-2-1. Escriure-la una octava avall demanaria
+   la clau de Fa o sis linies addicionals, i cap de les dues coses es pot
+   llegir encara.
 """
 
-CAPITULOS = [
-    ('Antes de tocar', 'conocer el piano y las manos', [
-        (1, 'El piano y sus partes'),
-        (2, 'Mis manos y mis dedos'),
-        (3, 'Grave y agudo'),
-        (4, 'El Do, nuestra casa'),
+CAPITOLS = [
+    ('Abans de tocar', 'conèixer el piano i les mans', [
+        (1, 'El piano i les seves parts'),
+        (2, 'Les meves mans i els meus dits'),
+        (3, 'Greu i agut'),
+        (4, 'El Do, casa nostra'),
     ]),
-    ('El pentagrama y la clave de Sol', 'la casa donde viven las notas', [
-        (5, 'La casa de las notas'),
-        (6, 'Líneas y espacios'),
-        (7, 'La clave de Sol'),
+    ('El pentagrama i la clau de Sol', 'la casa on viuen les notes', [
+        (5, 'La casa de les notes'),
+        (6, 'Línies i espais'),
+        (7, 'La clau de Sol'),
     ]),
-    ('Las notas y sus colores', 'una a una, en el piano y en el papel', [
-        (8, 'Do, Re y Mi'),
-        (9, 'Fa y Sol'),
-        (10, 'La y Si'),
-        (11, 'Las siete notas'),
+    ('Les notes i els seus colors', 'una a una, al piano i al paper', [
+        (8, 'Do, Re i Mi'),
+        (9, 'Fa i Sol'),
+        (10, 'La i Si'),
+        (11, 'Les set notes'),
     ]),
-    ('Las figuras', 'lo que dura cada nota', [
-        (12, 'Redonda, blanca y negra'),
-        (13, 'El compás'),
+    ('Les figures', 'el que dura cada nota', [
+        (12, 'Rodona, blanca i negra'),
+        (13, 'El compàs'),
     ]),
-    ('Los silencios', 'cuando no se toca, también se cuenta', [
-        (14, 'Los tres silencios'),
+    ('Els silencis', 'quan no es toca, també es compta', [
+        (14, 'Els tres silencis'),
     ]),
-    ('Las plicas', 'el palito de las notas', [
-        (15, 'Plica arriba, plica abajo'),
+    ('Les pliques', 'el pal de les notes', [
+        (15, 'Plica amunt, plica avall'),
     ]),
-    ('La escalera musical', 'todo junto', [
+    ("L'escala musical", 'tot junt', [
         (16, 'De Do a Do'),
-        (17, 'El gran repaso y mi primer concierto'),
+        (17, 'El gran repàs i el meu primer concert'),
     ]),
 ]
 
-HOJAS_POR_TEMA = 3
-PRIMERA_PAGINA_TEMAS = 3        # 1 portada · 2 indice
+# Amb la lletra a mida de nen, cada part del tema ocupa dues fulles: retallar
+# material per fer-lo cabre en una era justament el contrari del que es va
+# demanar ("anadir info y practica").
+FULLES_PER_TEMA = 6            # teoria ×2 · al piano ×2 · fitxa ×2
+PRIMERA_PAGINA_TEMES = 3       # 1 portada · 2 index
 
 
 def pagina_de(n_tema):
-    return PRIMERA_PAGINA_TEMAS + (n_tema - 1) * HOJAS_POR_TEMA
+    return PRIMERA_PAGINA_TEMES + (n_tema - 1) * FULLES_PER_TEMA
 
 
-def capitulo_de(n_tema):
-    for i, (nombre, _sub, temas) in enumerate(CAPITULOS, 1):
-        if any(n == n_tema for n, _t in temas):
-            return i, nombre
+def capitol_de(n_tema):
+    for i, (nom, _sub, temes) in enumerate(CAPITOLS, 1):
+        if any(n == n_tema for n, _t in temes):
+            return i, nom
     raise ValueError(n_tema)
 
 
-def m(p, d='q'):
-    """Una nota de la mano derecha. Sin numero de dedo encima: norma del
-       proyecto, los dedos no se imprimen nunca en el pentagrama (los escribe
-       el alumno). Donde va cada dedo lo dice el texto y el teclado dibujado."""
+def q(p, d='q'):
+    """Una nota. Sense numero de dit a sobre: norma del projecte, els dits
+       no s'imprimeixen mai al pentagrama (els escriu l'alumne). On va cada
+       dit ho diu el text i el teclat dibuixat."""
     return {'pitch': p, 'dur': d}
 
 
-TEMAS = {
+HOT_CROSS_BUNS = [q('E4'), q('D4'), q('C4', 'h'),
+                  q('E4'), q('D4'), q('C4', 'h'),
+                  q('C4'), q('C4'), q('D4'), q('D4'),
+                  q('E4'), q('D4'), q('C4', 'h')]
+
+TEMES = {
     8: dict(
-        titulo='Do, Re y Mi',
+        titol='Do, Re i Mi',
         teoria=dict(
-            intro='Nuestras tres primeras notas. Viven juntas en el piano y juntas en el '
-                  'pentagrama: una al lado de la otra, como tres escalones.',
-            reglas=['DO · RE · MI', 'SUBEN COMO UNA ESCALERA', 'CADA UNA CON SU DEDO'],
-            bloques=[
-                dict(tipo='misol',
-                     texto='¡Hola! Hoy conocemos a tres amigas que siempre van juntas: Do, Re '
-                           'y Mi. Si sabes dónde vive el Do, las otras dos están justo al lado.'),
-                dict(tipo='teclado', titulo='En el piano', teclas=10,
-                     marcas={0: 'dedo 1', 1: 'dedo 2', 2: 'dedo 3'},
-                     pie='El Do está justo a la izquierda de las dos teclas negras. El Re, entre '
-                         'las dos negras. Y el Mi, justo a su derecha.'),
-                dict(tipo='pentagrama', titulo='En el pentagrama',
-                     notas=[('C4', 'Do'), ('D4', 'Re'), ('E4', 'Mi')],
-                     pie='Cada nota está un escalón más arriba que la anterior: en el papel '
-                         'suben igual que en el piano.'),
-                dict(tipo='tarjetas', titulo='Las tres, una a una', items=[
-                    ('DEDO 1', 'Do', 'Lleva una rayita que le cruza por la mitad. En el piano, a '
-                                     'la izquierda de las dos negras.'),
-                    ('DEDO 2', 'Re', 'Se cuelga justo debajo del pentagrama, sin rayita. En el '
-                                     'piano, entre las dos negras.'),
-                    ('DEDO 3', 'Mi', 'La primera línea le pasa por la barriga. En el piano, a '
-                                     'la derecha de las dos negras.'),
+            intro='Les nostres tres primeres notes. Viuen juntes al piano i juntes al '
+                  'pentagrama: l’una al costat de l’altra, com tres esglaons.',
+            regles=['DO · RE · MI', 'PUGEN COM UNA ESCALA', 'AMB LES DUES MANS'],
+            fulles=[[
+                dict(tipus='misol',
+                     text='Hola! Avui coneixerem tres amigues que sempre van juntes: el Do, '
+                          'el Re i el Mi. Si saps on viu el Do, les altres dues són just al '
+                          'costat!'),
+                dict(tipus='mans', titol='On van els dits',
+                     esquerra={0: 3, 1: 2, 2: 1}, dreta={0: 1, 1: 2, 2: 3},
+                     peu='Mira-ho bé: a la mà esquerra els dits van al revés. El dit 3 toca '
+                         'el Do i el polze, que és el dit 1, toca el Mi.'),
+                dict(tipus='pentagrama', titol='Al pentagrama',
+                     notes=[('C4', 'Do'), ('D4', 'Re'), ('E4', 'Mi')],
+                     peu='Cada nota és un esglaó més amunt que l’anterior: al paper pugen '
+                         'igual que al piano.'),
+            ], [
+                dict(tipus='escala', titol='L’escala Do-Re-Mi',
+                     notes=['Do', 'Re', 'Mi'],
+                     peu='Pinta el cercle de cada esglaó del seu color. Quan toques Do-Re-Mi '
+                         'puges l’escala, i quan toques Mi-Re-Do la baixes.'),
+                dict(tipus='targetes', titol='Una a una', items=[
+                    ('LA PRIMERA', 'Do',
+                     'Porta una ratlleta que la travessa pel mig. Al piano, a l’esquerra '
+                     'de les dues negres.'),
+                    ('LA DEL MIG', 'Re',
+                     'Penja just a sota del pentagrama, sense ratlleta. Al piano, entre '
+                     'les dues negres.'),
+                    ('LA TERCERA', 'Mi',
+                     'La primera línia li passa per la panxa. Al piano, a la dreta de les '
+                     'dues negres.'),
                 ]),
-                dict(tipo='sabias',
-                     texto='Los nombres Do, Re, Mi vienen de una canción de hace más de mil '
-                           'años: cada nota empezaba con una sílaba de una frase en latín. ¡Y al '
-                           'principio el Do no se llamaba Do, sino «Ut»!'),
-            ],
+                dict(tipus='nota', etiqueta='RECORDA',
+                     text='El Do sempre és a l’esquerra de les dues tecles negres juntes. Si '
+                          'trobes el Do, el Re i el Mi són just al costat!'),
+                dict(tipus='sabies',
+                     text='Els noms Do, Re i Mi vénen d’una cançó de fa més de mil anys: cada '
+                          'nota començava amb una síl·laba d’una frase en llatí. I al principi '
+                          'el Do no es deia Do, sinó «Ut»!'),
+            ]],
         ),
         piano=dict(
-            intro='Ahora a tocar de verdad. Mano derecha, y cada dedo encima de su tecla: el 1 '
-                  'en el Do, el 2 en el Re y el 3 en el Mi.',
-            reglas=['MANO DERECHA', 'DEDO 1 EN EL DO', 'DESPACITO Y CANTANDO'],
-            bloques=[
-                dict(tipo='misol',
-                     texto='Antes de tocar, pon los tres dedos encima de sus teclas y déjalos '
-                           'ahí. ¡Los dedos no se mueven de su casa en toda la hoja!'),
-                dict(num=1, titulo='Subir y bajar la escalera',
-                     pista='canta el nombre de cada nota mientras la tocas',
-                     sistemas=[
-                         dict(cap='a) subimos y bajamos, muy despacio',
-                              events=[m('C4'), m('D4'), m('E4'), m('D4'), m('C4', 'w')],
-                              bars=2),
-                         dict(cap='b) y ahora con notas largas · las de cabeza hueca duran dos golpes',
-                              events=[m('C4', 'h'), m('D4', 'h'), m('E4', 'h'), m('D4', 'h'),
-                                      m('C4', 'w')],
-                              bars=3, show_time=False),
+            intro='Ara toquem de debò! Primer amb la mà dreta, després amb l’esquerra, i al '
+                  'final les dues, l’una darrere l’altra.',
+            regles=['MÀ DRETA: DITS 1-2-3', 'MÀ ESQUERRA: DITS 3-2-1', 'A POC A POC I CANTANT'],
+            fulles=[[
+                dict(tipus='misol',
+                     text='Abans de tocar, posa els dits a casa: a la mà dreta, el dit 1 al Do. '
+                          'A la mà esquerra, el dit 3 al Do. I no es mouen de casa en tota la '
+                          'pàgina!'),
+                dict(tipus='exercici', titol='La mà dreta puja i baixa',
+                     pista='dits 1, 2 i 3 · canta el nom de cada nota mentre la toques',
+                     sistemes=[dict(events=[q('C4'), q('D4'), q('E4'), q('D4'), q('C4', 'w')],
+                                    compassos=2)]),
+                dict(tipus='exercici', titol='Ara, la mà esquerra',
+                     pista='dits 3, 2 i 1 · comença pel Mi, amb el polze',
+                     sistemes=[dict(events=[q('E4'), q('D4'), q('C4'), q('D4'), q('E4', 'w')],
+                                    compassos=2)]),
+                dict(tipus='exercici', titol='Pregunta i resposta',
+                     pista='un compàs amb la mà dreta, el següent amb l’esquerra',
+                     sistemes=[dict(events=[q('C4'), q('D4'), q('E4', 'h'),
+                                            q('E4'), q('D4'), q('C4', 'h'),
+                                            q('C4'), q('D4'), q('E4', 'h'),
+                                            q('E4'), q('D4'), q('C4', 'h')],
+                                    compassos=4)]),
+            ], [
+                dict(tipus='misol', pose='happy', etiqueta='EN MUSSOL MISOL CANTA',
+                     text='Ja saps tres notes amb les dues mans! Ara les posem juntes en una '
+                          'cançó de veritat. Primer canta-la, i després toca-la.'),
+                dict(tipus='exercici', titol='La meva primera cançó',
+                     pista='Hot Cross Buns · cançó popular anglesa, simplificada',
+                     sistemes=[
+                         dict(cap='a) amb la mà dreta', events=HOT_CROSS_BUNS, compassos=4),
+                         dict(cap='b) i ara amb la mà esquerra · són les mateixes notes!',
+                              events=HOT_CROSS_BUNS, compassos=4, show_time=False),
                      ]),
-                dict(tipo='nota', etiqueta='CÓMO SABER SI LO ESTÁS HACIENDO BIEN',
-                     texto='Si para tocar el Mi tienes que mover la mano, es que no estaba bien '
-                           'puesta: vuelve a dejar el dedo 1 en el Do y empieza otra vez.'),
-                dict(num=2, titulo='Mi primera canción con tres notas',
-                     pista='Hot Cross Buns · canción popular inglesa, simplificada',
-                     sistemas=[
-                         dict(cap='solo Do, Re y Mi · fíjate: empieza ARRIBA, en el Mi',
-                              events=[m('E4'), m('D4'), m('C4', 'h'),
-                                      m('E4'), m('D4'), m('C4', 'h'),
-                                      m('C4'), m('C4'), m('D4'), m('D4'),
-                                      m('E4'), m('D4'), m('C4', 'h')],
-                              bars=4),
-                     ]),
-                dict(tipo='nota', etiqueta='UN JUEGO CON LA PROFE: EL ECO',
-                     texto='La profe toca tres notas (solo Do, Re y Mi) y tú las repites como un '
-                           'eco. Luego cambiáis: tocas tú y la profe hace de eco.'),
-            ],
+                dict(tipus='nota', etiqueta='COM SABER SI HO FAS BÉ',
+                     text='Si per tocar el Mi has de moure la mà, és que no estava ben posada. '
+                          'Torna a deixar els dits a casa i comença de nou: a poc a poc surt '
+                          'sol!'),
+                dict(tipus='joc', etiqueta='UN JOC AMB LA PROFE: L’ECO',
+                     text='La profe toca tres notes amb una mà i tu les repeteixes amb la '
+                          'mateixa mà, com un eco. Després canvieu de mà!'),
+                dict(tipus='estrelles',
+                     etiqueta='CADA DIA QUE TOQUIS LA CANÇÓ, PINTA UNA ESTRELLA'),
+            ]],
         ),
-        ficha=dict(
-            intro='Coge un lápiz y tus colores. Todo lo de esta hoja es de Do, Re y Mi.',
-            bloques=[
-                dict(tipo='misol',
-                     texto='En este libro cada nota tiene su color: el Do es ROJO, el Re es '
-                           'NARANJA y el Mi es AMARILLO. ¡Cuando veas una, píntala!'),
-                dict(tipo='nombres', titulo='¿Cómo se llama cada nota?',
-                     notas=['C4', 'E4', 'D4', 'C4', 'E4', 'D4', 'E4', 'C4'],
-                     pista='escribe Do, Re o Mi en la cajita · y luego píntala de su color'),
-                dict(tipo='teclado', titulo='Busca en el teclado', teclas=15,
-                     pista='hay más de un Do, de un Re y de un Mi',
-                     preguntas=['Pinta de ROJO todos los Do que encuentres.',
-                                'Pinta de NARANJA todos los Re.',
-                                'Pinta de AMARILLO todos los Mi.']),
-                dict(tipo='une', titulo='Une cada nota con su sitio',
-                     pares=[('Do', ''), ('Re', ''), ('Mi', '')],
-                     derecha=['entre las dos teclas negras',
-                              'a la derecha de las dos negras',
-                              'a la izquierda de las dos negras']),
-                dict(tipo='adivina', titulo='Adivina quién soy', items=[
-                    ('Soy la primera de las tres y llevo una rayita.', 'DO'),
-                    ('Vivo en medio, entre el Do y el Mi.', 'RE'),
-                    ('La primera línea me pasa por la barriga.', 'MI'),
-                ]),
-                dict(tipo='escucha', titulo='UN JUEGO, CON ALGUIEN DE CASA',
-                     texto='Canta Do-Re-Mi subiendo y Mi-Re-Do bajando, sin decir cuál haces. '
-                           'Quien esté contigo dice si subes o bajas. ¡Cinco veces cada uno!'),
+        fitxa=dict(
+            intro='Agafa un llapis i els teus colors. Tot el que hi ha en aquestes fitxes és '
+                  'del Do, el Re i el Mi.',
+            fulles=[
+                [
+                    dict(tipus='misol',
+                         text='En aquest llibre cada nota té el seu color: el Do és VERMELL, '
+                              'el Re és TARONJA i el Mi és GROC. Primer pinta les rodonetes '
+                              'de la llegenda!'),
+                    dict(tipus='pinta', titol='Escriu el nom i pinta',
+                         pista='escriu DO, RE o MI a la caixeta i pinta la nota del seu color',
+                         llegenda=['DO', 'RE', 'MI'],
+                         notes=['C4', 'E4', 'D4', 'C4', 'E4', 'D4', 'E4', 'C4']),
+                    dict(tipus='relaciona', titol='Cada nota amb la seva tecla',
+                         pista='uneix amb una ratlla cada nota amb la tecla que té el punt',
+                         notes=['C4', 'D4', 'E4'], tecles=['E4', 'C4', 'D4']),
+                ],
+                [
+                    dict(tipus='compta', titol='Compta i pinta',
+                         pista='quantes n’hi ha de cada? Escriu el número i pinta el cercle '
+                               'del seu color',
+                         notes=['C4', 'E4', 'E4', 'D4', 'C4', 'E4', 'D4', 'E4', 'C4', 'E4'],
+                         quines=['DO', 'RE', 'MI']),
+                    dict(tipus='cami', titol='Ajuda en Mussol Misol',
+                         pista='pinta el camí trepitjant les notes en ordre: DO, RE, MI, DO, '
+                               'RE, MI... fins al piano',
+                         files=4, columnes=7, cicle=['DO', 'RE', 'MI'],
+                         cami=[(0, 0), (0, 1), (0, 2), (1, 2), (2, 2), (2, 3), (2, 4),
+                               (1, 4), (1, 5), (1, 6), (2, 6), (3, 6)]),
+                    dict(tipus='teclat_pinta', titol='Busca-les al teclat',
+                         pista='n’hi ha més d’un de cada!', pintar=['DO', 'RE', 'MI']),
+                    dict(tipus='joc', etiqueta='UN JOC AMB ALGÚ DE CASA',
+                         text='Canta Do-Re-Mi pujant o Mi-Re-Do baixant, sense dir quin. Qui '
+                              'està amb tu endevina si puges o baixes!'),
+                ],
             ],
         ),
     ),

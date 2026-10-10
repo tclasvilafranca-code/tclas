@@ -381,6 +381,7 @@ LEIDO = {
     'jau_11_largo':            (4, 4),   # Largo-Sinfonia Dvorak · leido 4/4
     'jau_12_beginning':        (6, 8),
     'jau_13_perfect':          (12, 8),
+    'jau_14_whatwasi':         (4, 4),
 }
 
 

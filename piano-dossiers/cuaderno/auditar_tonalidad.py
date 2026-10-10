@@ -397,6 +397,7 @@ LEIDO = {
     'jau_11_largo':            '0',      # dice Do mayor
     'jau_12_beginning':        '0',      
     'jau_13_perfect':          '1 SOST', 
+    'jau_14_whatwasi':         '0',      
 }
 
 

@@ -384,6 +384,7 @@ LEIDO = {
     'ai_17_pachelbel':         '2 SOST',   # dice Re mayor
     'ai_18_preludio':          '0',        # dice Do mayor
     'ai_19_acomme':            '1 SOST',   # dice Mi menor
+    'jau_01_himno':            '0',      # dice Do mayor
 }
 
 

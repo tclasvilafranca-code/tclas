@@ -368,6 +368,7 @@ LEIDO = {
     'ai_17_pachelbel':         (4, 4),
     'ai_18_preludio':          (4, 4),
     'ai_19_acomme':            (4, 4),
+    'jau_01_himno':            (4, 4),   # Himno de la alegria · leido 4/4 (C)
 }
 
 

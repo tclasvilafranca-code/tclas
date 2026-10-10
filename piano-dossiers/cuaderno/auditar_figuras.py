@@ -92,6 +92,7 @@ MIRADAS = {
     "SUR LE PONT D'AVIGNON.pdf": (False, 'corcheas · una sola barra'),
     'LAS CUATRO ESTACIONES.pdf': (False, 'corcheas · una sola barra'),
     'BELLA Y BESTIA .pdf': (False, 'corcheas · una sola barra'),
+    'Himno de la alegria': (False, 'negras, blancas, redondas y dos parejas de corcheas (cc. 10-11) · ni una barra doble'),
 }
 
 

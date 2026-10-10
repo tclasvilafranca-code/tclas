@@ -14,6 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from reportlab.pdfgen import canvas
 from pypdf import PdfWriter, PdfReader
 from portada import build_cover, build_index, build_plan_curso, W, H
+from ensamblar import anadir_dosier
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ASSETS = os.path.join(HERE, '..', 'assets')
@@ -194,8 +195,8 @@ def main():
         if not os.path.exists(ruta):
             faltan.append(nombre)
             continue
-        for p in PdfReader(ruta).pages:
-            wr.add_page(p)
+        if anadir_dosier(wr, ruta):
+            print('  %s: hoja de pauta intercalada para que el dúo se vea abierto' % nombre)
     out = os.path.join(OUT_DIR, 'JoseMaria_Cuaderno_del_Pianista_2026.pdf')
     with open(out, 'wb') as f:
         wr.write(f)

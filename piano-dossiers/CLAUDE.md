@@ -94,6 +94,21 @@
 > armadura y la figura se dan por supuestos porque se ven en un segundo. Los
 > tres fallos gordos de este cuaderno estuvieron ahí.
 
+> ## 🔒 NORMA DEL PROYECTO: las piezas a cuatro manos se ven abiertas de un vistazo
+>
+> Decisión del cliente, y vale para **todos los alumnos**. Entre dos personas
+> sentadas al mismo piano no se puede pasar página a mitad de pieza: las dos
+> páginas de la partitura a cuatro manos tienen que quedar **enfrentadas**.
+> Con la portada como página 1 (a la derecha), lo que se ve junto es (2,3),
+> (4,5)…, así que la partitura **empieza en página par**. Si el montaje la
+> dejaría empezando en impar, se intercala delante **una hoja de papel
+> pautado** (la de `hoja_pauta.py`, pentagramas vacíos); si ya cae en par, no
+> se mete nada, porque una hoja de más es papel pagado.
+>
+> Lo hace `cuaderno/ensamblar.anadir_dosier`, que usan los 12 `build_<alumno>.py`.
+> **Al dar de alta una pieza a cuatro manos hay que añadir su PDF a
+> `ensamblar.DUETOS`**; si se olvida, el dúo sale sin su hoja de pauta.
+
 > ## 🔒 NORMA DEL PROYECTO: la variedad es parte de la calidad
 >
 > Decisión del cliente, y vale para **todos los alumnos**. Un cuaderno no es

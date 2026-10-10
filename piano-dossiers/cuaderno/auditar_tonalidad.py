@@ -399,6 +399,7 @@ LEIDO = {
     'jau_13_perfect':          '1 SOST', 
     'jau_14_whatwasi':         '0',      
     'jau_15_mammamia':         '0',      
+    'jau_16_shallow':          '1 SOST', 
 }
 
 

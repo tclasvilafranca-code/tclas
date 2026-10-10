@@ -383,6 +383,7 @@ LEIDO = {
     'jau_13_perfect':          (12, 8),
     'jau_14_whatwasi':         (4, 4),
     'jau_15_mammamia':         (4, 4),
+    'jau_16_shallow':          (4, 4),
 }
 
 

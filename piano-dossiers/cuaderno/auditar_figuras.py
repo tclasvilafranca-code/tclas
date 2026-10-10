@@ -96,6 +96,7 @@ MIRADAS = {
     'MyBonnie.pdf': (False, 'negras, blancas y blancas con puntillo · ni una barra doble ni una corchea'),
     'What-was-i-made-for-billie-eilish': (True, 'semicorcheas en el c. 4 y en varios compases más (barras dobles muy claras en vectorial) · ligaduras de unión'),
     'Mama Mia': (True, 'semicorcheas (dos, c. 21 y alguna más); el resto corcheas · apaisada, vectorial'),
+    'SHALLOW.': (True, 'semicorcheas en el c. 20 y en los compases que repiten ese final · el resto corcheas'),
 }
 
 

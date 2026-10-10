@@ -1,9 +1,16 @@
 # -*- coding: utf-8 -*-
 """EL LLIBRE DE PEKES — muntatge.
 
-   Portada i index amb l'aspecte dels albums, i cada tema en quatre fulles
-   (teoria · al piano · fitxa 1 · fitxa 2) dibuixades per `pekes_hojas.py`.
-   Si alguna fulla no hi cap, s'atura i diu quant sobra.
+   Portada i index amb l'aspecte dels albums; cada tema amb les seves fulles
+   de teoria, d'al piano i de fitxa, dibuixades per `pekes_hojas.py`; i al
+   final de cada capitol, la pagina de repas amb la medalla.
+
+   Tres comprovacions, i cap es pot saltar:
+   - si una fulla no hi cap, s'atura i diu quant sobra;
+   - si una fulla acaba massa amunt (y final > 132), avisa: sobra paper;
+   - la norma de varietat: dos temes seguits no poden portar les mateixes
+     fitxes (cada tema n'ha de portar almenys DOS tipus que l'anterior no
+     tenia) i cap tipus pot sortir a mes del 60 % dels temes.
 
    Us:  python3 build_pekes_libro.py
 """
@@ -23,8 +30,8 @@ from portada import (W, H, MARGIN, CONTENT_W, NAVY, NAVY_SOFT, CREAM,     # noqa
                      RULE, INK, MUTED, ACCENT)
 from misol import dibujar_buho                                            # noqa: E402
 import pekes_hojas as ph                                                  # noqa: E402
-from pekes_libro_datos import (CAPITOLS, TEMES, FULLES_PER_TEMA,          # noqa: E402
-                               pagina_de, capitol_de)
+from pekes_libro_datos import (CAPITOLS, TEMES, REPASSOS,                 # noqa: E402
+                               paginacio, capitol_de)
 
 SORTIDA = os.path.join(HERE, '..', 'output', 'pekes')
 LOGO = os.path.join(HERE, '..', 'assets', 'asset_logo_tclas_v2.png')
@@ -107,6 +114,7 @@ def _index(c):
     c.line(MARGIN, y, W - MARGIN, y)
     y -= 24
 
+    pags = paginacio()
     fila = 20.5
     for i, (nom, sub, temes) in enumerate(CAPITOLS, 1):
         c.setFont('DejaVuSans-Bold', 10.5)
@@ -117,6 +125,9 @@ def _index(c):
         c.setFont('DejaVuSans', 9.5)
         c.setFillColor(MUTED)
         c.drawString(MARGIN + tw + 10, y, sub)
+        c.setFont('DejaVuSans-Bold', 9)
+        c.setFillColor(ACCENT)
+        c.drawRightString(W - MARGIN, y, 'repàs i medalla · %d' % pags[('repas', i)])
         y -= 6
         c.setStrokeColor(NAVY)
         c.setLineWidth(1.5)
@@ -129,7 +140,7 @@ def _index(c):
             c.setFont('DejaVuSans-Bold', 12)
             c.setFillColor(INK)
             c.drawString(MARGIN + 28, y - 8, titol)
-            pag = str(pagina_de(num))
+            pag = str(pags[('tema', num)])
             c.setFont('DejaVuSans', 10.5)
             c.setFillColor(MUTED)
             c.drawRightString(W - MARGIN, y - 8, pag)
@@ -150,7 +161,7 @@ def _fulles_tema(c, num):
     tema = TEMES[num]
     cap_n, cap = capitol_de(num)
     base = dict(kicker='Pekes · capítol %d · %s' % (cap_n, cap), titol=tema['titol'])
-    pag = pagina_de(num)
+    pag = paginacio()[('tema', num)]
     finals = []
     for clau, nom in (('teoria', 'teoria'), ('piano', 'al piano'), ('fitxa', 'fitxa')):
         sec = tema[clau]
@@ -163,26 +174,72 @@ def _fulles_tema(c, num):
             cfg = dict(base, esquina=esq, intro=sec.get('intro') if k == 0 else None,
                        regles=sec.get('regles') if k == 0 else None,
                        nom_data=(clau == 'fitxa'))
-            y, num_ex = ph.fulla(c, cfg, blocs, pag, primer_num=num_ex)
+            y, num_ex = _fulla(c, cfg, blocs, pag, num_ex)
             finals.append((esq, y))
             pag += 1
-    if pag - pagina_de(num) != FULLES_PER_TEMA:
-        raise ph.NoHiCap('el tema %d te %d fulles i l’index en compta %d'
-                         % (num, pag - pagina_de(num), FULLES_PER_TEMA))
     return finals
 
 
-def construir(nom='Llibre_Pekes_mostra.pdf'):
+NO_HI_CAP = []
+
+
+def _fulla(c, cfg, blocs, pag, num_ex):
+    """Com `ph.fulla`, pero si no hi cap ho apunta i continua: aixi una sola
+       passada diu TOTES les fulles que s'han de retallar, no nomes la primera."""
+    try:
+        return ph.fulla(c, cfg, blocs, pag, primer_num=num_ex)
+    except ph.NoHiCap as e:
+        NO_HI_CAP.append(str(e))
+        c.showPage()
+        return 0.0, num_ex + 9
+
+
+def _repas(c, cap_n):
+    nom = CAPITOLS[cap_n - 1][0]
+    r = REPASSOS[cap_n]
+    cfg = dict(kicker='Pekes · capítol %d · %s' % (cap_n, nom), titol='Repàs i medalla',
+               esquina='Capítol %d · repàs' % cap_n, intro=r['intro'], nom_data=True)
+    y, _n = _fulla(c, cfg, r['blocs'], paginacio()[('repas', cap_n)], 1)
+    return [(cfg['esquina'], y)]
+
+
+def revisar_varietat():
+    """La norma de varietat del projecte, aplicada a les fitxes dels temes."""
+    errors = []
+    tipus = {}
+    for n in sorted(TEMES):
+        tipus[n] = {b['tipus'] for f in TEMES[n]['fitxa']['fulles'] for b in f
+                    if b['tipus'] in ph.FITXA}
+    nums = sorted(tipus)
+    for a, b in zip(nums, nums[1:]):
+        nous = tipus[b] - tipus[a]
+        if len(nous) < 2:
+            errors.append('tema %d: nomes %d tipus de fitxa nous respecte al %d (%s)'
+                          % (b, len(nous), a, ', '.join(sorted(tipus[b]))))
+    compte = {}
+    for n in nums:
+        for t in tipus[n]:
+            compte[t] = compte.get(t, 0) + 1
+    for t, k in sorted(compte.items()):
+        if k > 0.6 * len(nums):
+            errors.append('el tipus %s surt a %d temes de %d' % (t, k, len(nums)))
+    return errors, compte
+
+
+def construir(nom='Llibre_Pekes.pdf'):
     os.makedirs(SORTIDA, exist_ok=True)
     ruta = os.path.join(SORTIDA, nom)
     c = rl_canvas.Canvas(ruta, pagesize=(W, H))
     c.setTitle('El Quadern del Pianista · Pekes')
     del portada.NO_CABEN[:]
+    del NO_HI_CAP[:]
     _portada(c)
     _index(c)
     finals = []
-    for num in sorted(TEMES):
-        finals += _fulles_tema(c, num)
+    for i, (_nom, _sub, temes) in enumerate(CAPITOLS, 1):
+        for num, _t in temes:
+            finals += _fulles_tema(c, num)
+        finals += _repas(c, i)
     c.save()
     return ruta, finals
 
@@ -193,12 +250,29 @@ def main(argv):
     except ph.NoHiCap as e:
         print('NO HI CAP:', e)
         return 1
-    print('Llibre Pekes · %s' % os.path.basename(ruta))
+    print('Llibre Pekes · %s · %d pagines' % (os.path.basename(ruta), len(finals) + 2))
+    mal = 0
     for etq, y in finals:
-        print('  %-26s y final = %.1f' % (etq, y))
+        avis = ''
+        if y > 132:
+            avis = '  <-- SOBRA PAPER'
+            mal += 1
+        elif y < 44:
+            avis = '  <-- TREPITJA EL PEU'
+            mal += 1
+        print('  %-30s y final = %6.1f%s' % (etq, y, avis))
+    errors, compte = revisar_varietat()
+    print('Tipus de fitxa:', ', '.join('%s %d' % kv for kv in sorted(compte.items())))
+    for e in errors:
+        print('VARIETAT:', e)
+    for e in NO_HI_CAP:
+        print('NO HI CAP:', e)
     if portada.NO_CABEN:
         print('NO CABEN:', portada.NO_CABEN)
         return 1
+    if NO_HI_CAP or mal or errors:
+        return 1
+    print('TOT OK')
     return 0
 
 

@@ -406,6 +406,7 @@ LEIDO = {
     'jau_20_unbeso':           '1 BEM',  
     'jau_21_sweetchild':       '2 BEM',  
     'jau_22_primavera':        '0',      
+    'jau_23_elisa':            '0',      
 }
 
 

@@ -101,6 +101,7 @@ MIRADAS = {
     'Toreador.Bizet': (True, 'SEMICORCHEAS: el largo-corto de los cc. 1-3 y ocho seguidas en la primera casilla'),
     'Un beso y una flor Nino Bravo': (True, 'semicorcheas sueltas mezcladas con corcheas (c. 1) · y tresillos en la primera casilla'),
     'La Primavera. Vivaldi': (False, 'negras, blancas con puntillo y corcheas · una sola barra (imagen a 88 ppp, mirada a 110 y 220 ppp)'),
+    'Para Elisa Beethoven': (True, 'corcheas, con UNA semicorchea (c. 20) que se ata a las notas largas de los dos compases siguientes'),
 }
 
 

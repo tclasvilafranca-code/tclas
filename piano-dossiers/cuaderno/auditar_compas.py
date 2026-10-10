@@ -388,6 +388,7 @@ LEIDO = {
     'jau_18_golpe':            (2, 2),
     'jau_19_toreador':         (4, 4),
     'jau_20_unbeso':           (4, 4),
+    'jau_21_sweetchild':       (4, 4),
 }
 
 

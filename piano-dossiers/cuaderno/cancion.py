@@ -93,6 +93,9 @@ CURVA = {
     'merce':      dict(base=0, cada=7,  tope=2),
     # Josep: la edad de Jose Maria y mas tiempo en clase. Le gustan los retos.
     'josep':      dict(base=1, cada=6,  tope=3),
+    # Jaume: unos 60 años, nivel medio y base musical. Como Josep: empieza
+    # un escalon por encima y sube a buen ritmo (la carpeta trae 23 piezas).
+    'jaume':      dict(base=1, cada=6,  tope=3),
     # Dilan y Eva: los avanzados. Empiezan donde los demas acaban.
     'dilan':      dict(base=2, cada=6,  tope=3),
     'eva':        dict(base=2, cada=6,  tope=3),

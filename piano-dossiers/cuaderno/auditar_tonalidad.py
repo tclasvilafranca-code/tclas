@@ -392,6 +392,7 @@ LEIDO = {
     'jau_06_bellaciao':        '2 BEM',  # dice Sol menor (dos bemoles: Mi bemol sobre la 5a linea)
     'jau_07_jailhouse':        '0',      # dice Do (con Mib, Fa# y Sib escritos delante)
     'jau_08_hijoluna':         '1 BEM',  # dice Re menor (un bemol: Si bemol)
+    'jau_09_titanic':          '0',      # dice Do mayor
 }
 
 

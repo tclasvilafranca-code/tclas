@@ -376,6 +376,7 @@ LEIDO = {
     'jau_06_bellaciao':        (4, 4),   # Bella Ciao 4 mains · leido 4/4
     'jau_07_jailhouse':        (4, 4),   # Jailhouse Elvis Presley · leido 4/4
     'jau_08_hijoluna':         (6, 8),   # Hijo de la luna Mecano · leido 6/8
+    'jau_09_titanic':          (2, 4),   # Titanic · leido 2/4
 }
 
 

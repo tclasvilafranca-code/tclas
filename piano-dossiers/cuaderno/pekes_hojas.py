@@ -47,6 +47,7 @@ SOFT = HexColor('#E6DCC6')
 SUELO = 50.0          # per sota d'aixo es trepitja el peu
 OBJECTIU = 70.0       # on es vol que acabi una fulla justificada
 AIRE_MAX = 34.0
+COMPRESSIO = 5.0      # pt que es poden estrenyer entre blocs si falta una mica de lloc
 
 # el codi de colors del curs (el mateix del Canva original del client)
 COLORS = {'DO': 'vermell', 'RE': 'taronja', 'MI': 'groc', 'FA': 'verd',
@@ -1295,10 +1296,10 @@ BLOCS = {
     'divisories': b_divisories, 'posa_pliques': b_posa_pliques,
     'quadre': b_quadre, 'pauta_buida': b_pauta_buida, 'apunts': b_apunts,
 }
-SENSE_NUMERO |= CREIXEN
 SENSE_NUMERO = {'misol', 'nota', 'joc', 'sabies', 'estrelles', 'teclat', 'mans',
                 'pentagrama', 'linies_espais', 'clau', 'gran', 'targetes', 'escala',
                 'figures', 'compas', 'pliques', 'medalla'}
+SENSE_NUMERO |= CREIXEN
 # Els tipus que compten per a la norma de varietat de les fitxes
 FITXA = {'pinta', 'relaciona', 'compta', 'cami', 'teclat_pinta', 'dibuixa',
          'encercla', 'sopa', 'endevina', 'vf', 'uneix', 'quant_dura',
@@ -1328,6 +1329,43 @@ class NoHiCap(Exception):
     pass
 
 
+def altura(cfg, blocs, primer_num=1):
+    """On acabaria una fulla amb aquests blocs (sense repartir aire): serveix per
+       saber, abans de dibuixar, si hi cap o quant paper sobra."""
+    blocs, _s = _numerar(blocs, primer_num)
+    prova = Canvas(io.BytesIO(), pagesize=(W, H))
+    # es compta el que es pot estrènyer (COMPRESSIO per forat entre blocs)
+    return _dibuixar(prova, capcalera(prova, cfg), blocs, 0.0) + \
+        max(1, len(blocs) - 1) * COMPRESSIO
+
+
+# Si una fulla no porta cap bloc que creixi i li sobra molt paper, se li afegeix
+# el que toca a la seva seccio. Aixi no queda mitja fulla en blanc ni s'infla
+# l'espai entre exercicis (AIRE_MAX) fins que es vegi buit.
+AUTO = {
+    'teoria': dict(tipus='quadre', etiqueta='DIBUIXA AQUÍ',
+                   text='Dibuixa o escriu el que t’ha agradat més d’aquest tema.', alt=40.0),
+    'al piano': dict(tipus='pauta_buida', etiqueta='ESCRIU AQUÍ',
+                     text='Escriu a la pauta les notes de la cançó que més t’han costat.', max=3),
+    'fitxa': dict(tipus='apunts', alt=70.0),
+    'repàs': dict(tipus='apunts', alt=56.0, etiqueta='LA PROFE M’APUNTA EL QUE HEM DE REPASSAR'),
+}
+
+
+def _auto(cfg, blocs, y_fi):
+    """El bloc que creix per a aquesta fulla, o None si no cal."""
+    if any(b['tipus'] in CREIXEN for b in blocs):
+        return None
+    esq = cfg.get('esquina', '')
+    clau = next((k for k in AUTO if k in esq), None)
+    if clau is None:
+        return None
+    forats = max(1, len(blocs) - 1)
+    if y_fi - OBJECTIU <= forats * AIRE_MAX * 0.55 + 25:
+        return None
+    return dict(AUTO[clau])
+
+
 def fulla(c, cfg, blocs, num_pag, primer_num=1):
     """Dibuixa UNA fulla i retorna (y final, seguent numero d'exercici).
 
@@ -1338,8 +1376,27 @@ def fulla(c, cfg, blocs, num_pag, primer_num=1):
     prova = Canvas(io.BytesIO(), pagesize=(W, H))
     y0 = capcalera(prova, cfg)
     y_fi = _dibuixar(prova, y0, blocs, 0.0)
+    forats0 = max(1, len(blocs) - 1)
+    if y_fi < SUELO and SUELO - y_fi <= forats0 * COMPRESSIO:
+        # falta una mica: s'estrenyen els espais entre blocs (aire negatiu)
+        aire = -(SUELO - y_fi) / forats0
+        y0 = capcalera(c, cfg)
+        y_fi = _dibuixar(c, y0, blocs, aire)
+        peu(c, num_pag)
+        c.showPage()
+        return y_fi, seguent
     if y_fi < SUELO:
         raise NoHiCap('%s: sobren %.0f pt' % (cfg['esquina'], SUELO - y_fi))
+    nou = _auto(cfg, blocs, y_fi)
+    if nou is not None:
+        blocs = blocs + [nou]
+        prova = Canvas(io.BytesIO(), pagesize=(W, H))
+        y_fi = _dibuixar(prova, capcalera(prova, cfg), blocs, 0.0)
+        if y_fi < SUELO:                       # no hi cap: es renuncia al bloc
+            blocs = blocs[:-1]
+            y_fi = _dibuixar(Canvas(io.BytesIO(), pagesize=(W, H)),
+                             capcalera(Canvas(io.BytesIO(), pagesize=(W, H)), cfg),
+                             blocs, 0.0)
     creixen = [i for i, b in enumerate(blocs) if b['tipus'] in CREIXEN]
     if creixen and y_fi > OBJECTIU + 4:
         # el paper que sobra se l'emporten els blocs que creixen; el que no

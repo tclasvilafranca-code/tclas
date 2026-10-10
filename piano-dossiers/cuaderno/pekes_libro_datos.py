@@ -90,7 +90,7 @@ CAPITOLS = [
         (7, 'La clau de Fa'),
         (8, 'El gran pentagrama'),
     ]),
-    ('Les notes i els seus colors', 'una a una, amb les dues mans', [
+    ('Les notes i els seus colors', 'una a una, amb colors', [
         (9, 'Do, Re i Mi'),
         (10, 'Fa i Sol'),
         (11, 'La i Si'),

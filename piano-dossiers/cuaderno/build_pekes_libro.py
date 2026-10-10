@@ -226,6 +226,49 @@ def revisar_varietat():
     return errors, compte
 
 
+def reequilibrar():
+    """Abans de res: cap fulla pot desbordar. Si una no hi cap, l'ultim bloc passa
+       al principi de la seguent fulla de la mateixa seccio (o en neix una de
+       nova). Es fa sobre les DADES, abans de calcular la paginacio, perque el
+       numero de pagina de l'index depen de quantes fulles te cada tema."""
+    moguts = []
+    for num in sorted(TEMES):
+        cap_n, cap = capitol_de(num)
+        base = dict(kicker='Pekes · capítol %d · %s' % (cap_n, cap),
+                    titol=TEMES[num]['titol'])
+        for clau, nom in (('teoria', 'teoria'), ('piano', 'al piano'), ('fitxa', 'fitxa')):
+            sec = TEMES[num][clau]
+            fulles = sec['fulles']
+            k = 0
+            while k < len(fulles):
+                cfg = dict(base, esquina='Tema %d · %s' % (num, nom),
+                           intro=sec.get('intro') if k == 0 else None,
+                           regles=sec.get('regles') if k == 0 else None,
+                           nom_data=(clau == 'fitxa'))
+                while len(fulles[k]) > 1 and ph.altura(cfg, fulles[k]) < ph.SUELO:
+                    sobra = [i for i, b in enumerate(fulles[k]) if b['tipus'] in ph.CREIXEN]
+                    if sobra and sobra[-1] > 0:
+                        # un bloc que creix es pot perdre sense perdre material
+                        bl = fulles[k].pop(sobra[-1])
+                        moguts.append('tema %d · %s: es treu un bloc "%s" que sobrava'
+                                      % (num, nom, bl['tipus']))
+                        continue
+                    bl = fulles[k].pop()
+                    if bl['tipus'] == 'estrelles' and k + 1 == len(fulles):
+                        # unes estrelles soles no justifiquen una fulla nova
+                        moguts.append('tema %d · %s: es treuen les estrelles, que no hi caben'
+                                      % (num, nom))
+                        continue
+                    if k + 1 == len(fulles):
+                        fulles.append([bl])
+                    else:
+                        fulles[k + 1].insert(0, bl)
+                    moguts.append('tema %d · %s: un bloc "%s" passa a la fulla %d'
+                                  % (num, nom, bl['tipus'], k + 2))
+                k += 1
+    return moguts
+
+
 def construir(nom='Llibre_Pekes.pdf'):
     os.makedirs(SORTIDA, exist_ok=True)
     ruta = os.path.join(SORTIDA, nom)
@@ -233,6 +276,8 @@ def construir(nom='Llibre_Pekes.pdf'):
     c.setTitle('El Quadern del Pianista · Pekes')
     del portada.NO_CABEN[:]
     del NO_HI_CAP[:]
+    for m in reequilibrar():
+        print('  reequilibri:', m)
     _portada(c)
     _index(c)
     finals = []

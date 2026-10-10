@@ -125,6 +125,7 @@ MIRADAS = {
     # de la ligadura de frase. Medido cabeza a cabeza a 250 ppp, el c. 1 de la derecha
     # es Mi4 (negra con puntillo), Sol4 (corchea) y Sol4 (blanca).
     'Largo-Sinfonia Dvorak': ['E4', 'G4', 'G4'],
+    'Its-beginning-to-look-a-lot-li ke (4 manos NAVIDAD)': ['E5', 'F5'],
 
     # La primera nota cuelga de DOS lineas adicionales y va pegada a la cifra
     # de compas, asi que el descuento de cabecera se la come — el mismo caso

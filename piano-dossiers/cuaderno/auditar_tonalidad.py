@@ -395,6 +395,7 @@ LEIDO = {
     'jau_09_titanic':          '0',      # dice Do mayor
     'jau_10_submarino':        '1 SOST', # dice Sol mayor
     'jau_11_largo':            '0',      # dice Do mayor
+    'jau_12_beginning':        '0',      
 }
 
 

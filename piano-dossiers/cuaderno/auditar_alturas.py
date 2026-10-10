@@ -127,6 +127,7 @@ MIRADAS = {
     'Largo-Sinfonia Dvorak': ['E4', 'G4', 'G4'],
     'Its-beginning-to-look-a-lot-li ke (4 manos NAVIDAD)': ['E5', 'F5'],
     'Perfect .Ed Sheeran.': ['D4', 'E4', 'G4'],
+    'La Primavera. Vivaldi': ['D4', 'C4', 'G4', 'F4'],
 
     # La primera nota cuelga de DOS lineas adicionales y va pegada a la cifra
     # de compas, asi que el descuento de cabecera se la come — el mismo caso

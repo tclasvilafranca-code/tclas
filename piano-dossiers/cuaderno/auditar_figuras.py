@@ -100,6 +100,7 @@ MIRADAS = {
     'El Golpe': (False, 'negras, blancas y redondas · ni una corchea ni una barra (imagen a 72 ppp, mirada a 150 y 250 ppp)'),
     'Toreador.Bizet': (True, 'SEMICORCHEAS: el largo-corto de los cc. 1-3 y ocho seguidas en la primera casilla'),
     'Un beso y una flor Nino Bravo': (True, 'semicorcheas sueltas mezcladas con corcheas (c. 1) · y tresillos en la primera casilla'),
+    'La Primavera. Vivaldi': (False, 'negras, blancas con puntillo y corcheas · una sola barra (imagen a 88 ppp, mirada a 110 y 220 ppp)'),
 }
 
 

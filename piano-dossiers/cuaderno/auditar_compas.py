@@ -375,6 +375,7 @@ LEIDO = {
     'jau_05_greensleeves':     (3, 4),   # Greensleeves. · leido 3/4
     'jau_06_bellaciao':        (4, 4),   # Bella Ciao 4 mains · leido 4/4
     'jau_07_jailhouse':        (4, 4),   # Jailhouse Elvis Presley · leido 4/4
+    'jau_08_hijoluna':         (6, 8),   # Hijo de la luna Mecano · leido 6/8
 }
 
 

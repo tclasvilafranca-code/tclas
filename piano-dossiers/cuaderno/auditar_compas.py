@@ -373,6 +373,8 @@ LEIDO = {
     'jau_03_bonnie':           (3, 4),   # MyBonnie · leido 3/4
     'jau_04_heart':            (4, 4),   # Heart-and-soul · leido 4/4
     'jau_05_greensleeves':     (3, 4),   # Greensleeves. · leido 3/4
+    'jau_06_bellaciao':        (4, 4),   # Bella Ciao 4 mains · leido 4/4
+    'jau_07_jailhouse':        (4, 4),   # Jailhouse Elvis Presley · leido 4/4
 }
 
 

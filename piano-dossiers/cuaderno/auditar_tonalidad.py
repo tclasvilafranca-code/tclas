@@ -389,6 +389,8 @@ LEIDO = {
     'jau_03_bonnie':           '0',      # dice Do mayor (lleva un Fa sostenido suelto)
     'jau_04_heart':            '0',      # dice Do mayor
     'jau_05_greensleeves':     '0',      # dice La menor
+    'jau_06_bellaciao':        '2 BEM',  # dice Sol menor (dos bemoles: Mi bemol sobre la 5a linea)
+    'jau_07_jailhouse':        '0',      # dice Do (con Mib, Fa# y Sib escritos delante)
 }
 
 

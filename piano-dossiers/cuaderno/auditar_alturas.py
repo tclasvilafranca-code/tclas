@@ -111,6 +111,16 @@ MIRADAS = {
     # El mismo archivo en la carpeta de Jaume (sin extension): misma lectura.
     'Heart-and-soul': ['C4', 'C4', 'C4'],
 
+    # Bella Ciao a cuatro manos (Jaume): el lector devuelve un D5 de mas, que es el
+    # Mi bemol de la armadura por encima de la quinta linea. Ampliado a 300 ppp
+    # el c. 1 de la derecha del Piano 1 son cuatro negras: Re4 Sol4 La4 Sib4.
+    'Bella-ciao-4 manos': ['D4', 'G4', 'A4', 'Bb4'],
+
+    # Jailhouse Rock (Jaume): el lector devuelve C5 y E4, y ninguna es la nota. Ampliado
+    # a 300 ppp: el c. 1 son un silencio de blanca, un silencio de corchea y un MI
+    # BEMOL4 de negra con puntillo, con el bemol escrito delante de la cabeza.
+    'Jailhouse Elvis Presley': ['Eb4'],
+
     # La primera nota cuelga de DOS lineas adicionales y va pegada a la cifra
     # de compas, asi que el descuento de cabecera se la come — el mismo caso
     # que *Eso que tu me das*. Ampliado se ve el La3 (negra), el Mi4 (negra con

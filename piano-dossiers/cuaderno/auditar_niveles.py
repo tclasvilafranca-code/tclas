@@ -25,7 +25,7 @@ import hoja_piano as hp
 
 PREFIJOS = ['arnau', 'lu', 'jm', 'ed', 'me', 'is', 'jp', 'nl', 'ai', 'dilan', 'eva']
 
-RECURSOS = ('lig', 'art', 'tresillo', 'matiz', 'cresc', 'dim', 'pedal')
+RECURSOS = ('lig', 'art', 'tresillo', 'matiz', 'cresc', 'dim', 'pedal', 'gracia')
 
 
 def _eventos(cfg):

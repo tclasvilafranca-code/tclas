@@ -69,6 +69,7 @@ REQUISITO = {
     'matiz': ('recursos', 'matiz'),
     'regulador': ('recursos', 'cresc'),
     'pedal': ('recursos', 'pedal'),
+    'gracia': ('recursos', 'gracia'),
 }
 
 # recurso -> (patron en el texto, como se detecta en los eventos)
@@ -153,6 +154,10 @@ VOCABULARIO = {
                 r'|marcas? de pedal|raya del pedal|\bPed\.'),
         evento=lambda e: bool(e.get('pedal')),
         arreglo="pedal=<n_eventos>"),
+    'gracia': dict(
+        patron=r'nota de adorno|notas de adorno|acciaccatura|apoyatura|nota de gracia',
+        evento=lambda e: bool(e.get('gracia')),
+        arreglo="gracia='<pitch>' en la nota principal"),
 }
 
 

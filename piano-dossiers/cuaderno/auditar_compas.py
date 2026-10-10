@@ -386,6 +386,7 @@ LEIDO = {
     'jau_16_shallow':          (4, 4),
     'jau_17_gladiator':        (4, 4),
     'jau_18_golpe':            (2, 2),
+    'jau_19_toreador':         (4, 4),
 }
 
 

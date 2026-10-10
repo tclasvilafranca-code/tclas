@@ -226,6 +226,34 @@ def ledger_lines_needed(staff_bottom_y, staff_top_y, cy, gap):
             y += gap
     return lines
 
+def draw_gracia(c, gx, cy, gap, staff_bottom_y, staff_top_y):
+    """Nota de adorno (acciaccatura): una corchea pequeña, de plica arriba y con
+       una raya cruzada, que se toca justo antes de la nota principal y no
+       cuenta en el compás. Va al 65 % del tamaño normal."""
+    k = 0.65
+    for ly in ledger_lines_needed(staff_bottom_y, staff_top_y, cy, gap):
+        c.setStrokeColor(GRAY)
+        c.setLineWidth(0.7)
+        c.line(gx - gap * 0.6, ly, gx + gap * 0.6, ly)
+    draw_notehead(c, gx, cy, gap * k, filled=True)
+    rx = gap * 0.62 * k
+    sx = gx + rx - 0.4
+    top = cy + gap * 2.9
+    c.setStrokeColor(INK)
+    c.setLineWidth(0.8)
+    c.line(sx, cy, sx, top)
+    # banderola de corchea
+    c.setLineWidth(1.0)
+    p = c.beginPath()
+    p.moveTo(sx, top)
+    p.curveTo(sx + gap * 0.2, top - gap * 0.7, sx + gap * 1.0, top - gap * 1.0,
+              sx + gap * 0.7, top - gap * 2.0)
+    c.drawPath(p, stroke=1, fill=0)
+    # la raya que cruza la plica
+    c.setLineWidth(0.8)
+    c.line(sx - gap * 0.55, top - gap * 1.4, sx + gap * 0.9, top - gap * 0.4)
+
+
 def draw_rest(c, cx, staff_bottom_y, staff_top_y, gap, dur='q'):
     """Draws a rest symbol centred vertically in the staff.
 
@@ -662,6 +690,7 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
          matiz: 'p' | 'mf' | 'f' ... -- se imprime bajo el pentagrama
          cresc / dim: nº de eventos que abarca el regulador
          pedal: nº de eventos que abarca la marca de pedal
+         gracia: pitch de una nota de adorno (acciaccatura) que va justo antes
        repetir: 'abre' | 'cierra' | 'ambas' -- barras de repeticion
        casilla: '1' | '2' -- casilla de primera / segunda vez
        ottava: True -- 8va sobre el sistema
@@ -841,6 +870,9 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
                                     beam_to=True if suppress_flag else None, clef=clef,
                                     stem_dir=forced_dir, stem_end_y=stem_end)
             note_anchors.append((px, cy, sd))
+            if e.get('gracia'):
+                draw_gracia(c, px - gap * 1.5, note_y(bot, gap, e['gracia'], clef=clef),
+                            gap, bot, top)
             if beam_id is not None:
                 beam_groups.setdefault(beam_id, []).append((px, cy, sd, e['dur']))
 

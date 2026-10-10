@@ -80,7 +80,7 @@ NIVELES = {
         silencios={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e', 's'},
         max_notas_acorde=4,
         max_corcheas_seguidas=16,
-        recursos={'lig', 'matiz', 'art', 'cresc', 'dim', 'tresillo', 'pedal'},
+        recursos={'lig', 'matiz', 'art', 'cresc', 'dim', 'tresillo', 'pedal', 'gracia'},
         desde={'s': 6},
         nota='Primeras semicorcheas, por parejas y en pasajes cortos, no antes '
              'de la pieza 6. Articulación y acordes de cuatro notas.',
@@ -95,7 +95,7 @@ NIVELES = {
         silencios={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's'},
         max_notas_acorde=4,
         max_corcheas_seguidas=24,
-        recursos={'lig', 'matiz', 'art', 'tresillo', 'cresc', 'dim', 'pedal'},
+        recursos={'lig', 'matiz', 'art', 'tresillo', 'cresc', 'dim', 'pedal', 'gracia'},
         desde={},
         nota='Grupos de cuatro semicorcheas, tresillos, staccato y matices '
              'impresos. Las dos manos en movimiento a la vez. Y el DOBLE '
@@ -110,7 +110,7 @@ NIVELES = {
         silencios={'w.', 'w', 'h.', 'h', 'q.', 'q', 'e.', 'e', 's'},
         max_notas_acorde=5,
         max_corcheas_seguidas=99,
-        recursos={'lig', 'matiz', 'art', 'tresillo', 'cresc', 'dim', 'pedal'},
+        recursos={'lig', 'matiz', 'art', 'tresillo', 'cresc', 'dim', 'pedal', 'gracia'},
         desde={},
         nota='Todo: semicorcheas continuas, tresillos habituales, reguladores '
              'y pedal dibujados.',

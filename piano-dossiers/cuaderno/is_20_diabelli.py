@@ -13,7 +13,7 @@
        octava más alto de lo escrito.
      - La derecha y la izquierda se mueven con dibujos parecidos: corcheas
        con silencios de por medio, en staccato.
-     - Hay ligaduras, algún adorno (apoyatura) y acentos (>).
+     - Hay ligaduras, algún adorno (sin medir: la partitura no estaba a mano al revisar) y acentos (>).
      - Hay una repetición hacia el compás 15, y la pieza termina con un
        acorde con calderón.
 

@@ -14,7 +14,8 @@
        semicorcheas: pasa el mismo dibujo a 3/4 y a corcheas.
      - La UNICA semicorchea de toda la pieza esta en el c. 20, como nota corta
        de una figura larga-corta.
-     - En el ultimo compas hay notas de adorno (pequenas, sin valor propio).
+     - La semicorchea del c. 20 se ata a las notas largas de los cc. 21 y 22 (medido
+       de nuevo para el cuaderno de Jaume: no hay adornos pequenos).
      - La izquierda, cuando entra, toca acordes arpegiados que a veces suben
        por encima de donde está la melodía.
 

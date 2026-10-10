@@ -377,6 +377,7 @@ LEIDO = {
     'jau_07_jailhouse':        (4, 4),   # Jailhouse Elvis Presley · leido 4/4
     'jau_08_hijoluna':         (6, 8),   # Hijo de la luna Mecano · leido 6/8
     'jau_09_titanic':          (2, 4),   # Titanic · leido 2/4
+    'jau_10_submarino':        (4, 4),   # El submarino amarillo · leido 4/4
 }
 
 

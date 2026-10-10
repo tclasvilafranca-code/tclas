@@ -195,6 +195,10 @@ CANCION = dict(
             intro='Veinte minutos al día. Se estudia por acordes: primero las letras, luego las '
                   'notas, y las semicorcheas solo al final.',
             bloques=[
+                reto('Tocar el c. 1 contando en semicorcheas, sin que las dos primeras se aprieten '
+                     'contra la tercera.',
+                     'Cuenta 1-2-3-4 por tiempo en voz alta y marca solo el golpe con el pie. Si '
+                     'la tercera nota llega antes de tiempo, vuelve al principio del compás.'),
                 plan((5, 'Las letras del cifrado, con la izquierda, diciéndolas en voz alta'),
                      (5, 'Las octavas de los cc. 1-4, sin la derecha'),
                      (6, 'La derecha del c. 1 contando en semicorcheas'),

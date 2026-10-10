@@ -190,7 +190,8 @@
 > Casos ya resueltos así (sirven de ejemplo de hasta dónde llega la norma):
 > semicorchea y su silencio, silencios con puntillo, ligaduras, staccato,
 > acento, tenuto, calderón, matices, reguladores, pedal, tresillos, barras de
-> repetición, casillas de 1ª/2ª vez y 8va.
+> repetición, casillas de 1ª/2ª vez y 8va, nota de adorno (`gracia='<pitch>'`, entró con el
+> Toreador de Jaume: una corchea pequeña con raya, sin valor en el compás).
 >
 > **Cómo se detecta lo que falta:** `python3 cuaderno/auditar_vocabulario.py`
 > compara lo que los textos de las piezas DICEN que hay en la partitura con lo

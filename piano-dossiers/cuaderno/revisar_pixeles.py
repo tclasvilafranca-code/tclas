@@ -45,11 +45,18 @@ MINIMO_FILA = 3             # pixeles de tinta para que una fila cuente
 
 def _es_nuestra(arr):
     """La banda azul marino de 6 pt pegada al borde superior."""
-    banda = arr[:int(4 * PT), :]
-    if banda.size == 0:
+    # La banda no esta pegada al borde: las hojas actuales dejan unos 6 pt de
+    # papel blanco por encima (a 110 ppp, la banda cae en las filas 14-21).
+    # Antes se miraban solo los primeros 4 pt, el detector no veia ninguna banda
+    # y TODAS las paginas contaban como "de partitura": el resultado era un
+    # "PIXELES OK" vacio. Ahora se busca la banda en los primeros 20 pt.
+    zona = arr[:int(20 * PT), :]
+    if zona.size == 0:
         return False
-    # La banda es continua y ocupa el ancho entero: mas del 90 % oscuro.
-    return (banda < OSCURO).mean() > 0.9
+    # La banda es continua y ocupa el ancho entero: filas con mas del 90 %
+    # oscuro, y al menos tres seguidas.
+    filas = (zona < OSCURO).mean(axis=1) > 0.9
+    return int(filas.sum()) >= 3
 
 
 def revisar(pdf):
@@ -67,7 +74,7 @@ def revisar(pdf):
         # La banda azul marino ocupa el ancho entero a proposito: si se mide,
         # todas las paginas parecen salirse por la derecha por 1,3 pt.
         tinta = arr < OSCURO
-        tinta[:int(10 * PT), :] = False
+        tinta[:int(16 * PT), :] = False       # la banda cae hacia los 9-14 pt
         filas = np.where(tinta.sum(axis=1) >= MINIMO_FILA)[0]
         cols = np.where(tinta.sum(axis=0) >= MINIMO_FILA)[0]
         if not len(filas):

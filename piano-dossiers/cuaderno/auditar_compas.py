@@ -384,6 +384,7 @@ LEIDO = {
     'jau_14_whatwasi':         (4, 4),
     'jau_15_mammamia':         (4, 4),
     'jau_16_shallow':          (4, 4),
+    'jau_17_gladiator':        (4, 4),
 }
 
 

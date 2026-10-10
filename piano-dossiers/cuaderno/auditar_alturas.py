@@ -178,6 +178,7 @@ MIRADAS = {
     # c. 2: Si4 (negra con doble puntillo), Mi4 (semicorchea), Si4 (negra con
     # doble puntillo), Sol4 (semicorchea).
     'Gladiator.pdf': ['B4', 'E4', 'B4', 'G4'],
+    'Gladiator II Hans Zinmer': ['B4', 'E4', 'B4', 'G4'],
 
     # El lector DUPLICA cabezas en esta edicion: devuelve diecisiete notas para
     # un compas que tiene doce, con los Do5 y los Mi5 repetidos de dos en dos.

@@ -97,6 +97,7 @@ MIRADAS = {
     'What-was-i-made-for-billie-eilish': (True, 'semicorcheas en el c. 4 y en varios compases más (barras dobles muy claras en vectorial) · ligaduras de unión'),
     'Mama Mia': (True, 'semicorcheas (dos, c. 21 y alguna más); el resto corcheas · apaisada, vectorial'),
     'SHALLOW.': (True, 'semicorcheas en el c. 20 y en los compases que repiten ese final · el resto corcheas'),
+    'El Golpe': (False, 'negras, blancas y redondas · ni una corchea ni una barra (imagen a 72 ppp, mirada a 150 y 250 ppp)'),
 }
 
 

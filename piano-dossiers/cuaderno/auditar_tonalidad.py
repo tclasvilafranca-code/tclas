@@ -401,6 +401,7 @@ LEIDO = {
     'jau_15_mammamia':         '0',      
     'jau_16_shallow':          '1 SOST', 
     'jau_17_gladiator':        '1 SOST', 
+    'jau_18_golpe':            '0',      
 }
 
 

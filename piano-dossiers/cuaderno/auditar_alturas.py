@@ -121,6 +121,11 @@ MIRADAS = {
     # BEMOL4 de negra con puntillo, con el bemol escrito delante de la cabeza.
     'Jailhouse Elvis Presley': ['Eb4'],
 
+    # Largo de Dvorak (Jaume): el lector devuelve E4 G4 E5 G4. El E5 sobra: es el eco
+    # de la ligadura de frase. Medido cabeza a cabeza a 250 ppp, el c. 1 de la derecha
+    # es Mi4 (negra con puntillo), Sol4 (corchea) y Sol4 (blanca).
+    'Largo-Sinfonia Dvorak': ['E4', 'G4', 'G4'],
+
     # La primera nota cuelga de DOS lineas adicionales y va pegada a la cifra
     # de compas, asi que el descuento de cabecera se la come — el mismo caso
     # que *Eso que tu me das*. Ampliado se ve el La3 (negra), el Mi4 (negra con

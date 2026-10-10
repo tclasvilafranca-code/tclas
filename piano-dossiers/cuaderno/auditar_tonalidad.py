@@ -385,6 +385,8 @@ LEIDO = {
     'ai_18_preludio':          '0',        # dice Do mayor
     'ai_19_acomme':            '1 SOST',   # dice Mi menor
     'jau_01_himno':            '0',      # dice Do mayor
+    'jau_02_romance':          '0',      # dice Do mayor
+    'jau_03_bonnie':           '0',      # dice Do mayor (lleva un Fa sostenido suelto)
 }
 
 

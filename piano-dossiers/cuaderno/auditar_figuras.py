@@ -93,6 +93,7 @@ MIRADAS = {
     'LAS CUATRO ESTACIONES.pdf': (False, 'corcheas · una sola barra'),
     'BELLA Y BESTIA .pdf': (False, 'corcheas · una sola barra'),
     'Himno de la alegria': (False, 'negras, blancas, redondas y dos parejas de corcheas (cc. 10-11) · ni una barra doble'),
+    'MyBonnie.pdf': (False, 'negras, blancas y blancas con puntillo · ni una barra doble ni una corchea'),
 }
 
 

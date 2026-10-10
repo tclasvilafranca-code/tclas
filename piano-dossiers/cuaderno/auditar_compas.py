@@ -369,6 +369,8 @@ LEIDO = {
     'ai_18_preludio':          (4, 4),
     'ai_19_acomme':            (4, 4),
     'jau_01_himno':            (4, 4),   # Himno de la alegria · leido 4/4 (C)
+    'jau_02_romance':          (2, 2),   # Romance Diabelli 4 manos · leido ¢
+    'jau_03_bonnie':           (3, 4),   # MyBonnie · leido 3/4
 }
 
 

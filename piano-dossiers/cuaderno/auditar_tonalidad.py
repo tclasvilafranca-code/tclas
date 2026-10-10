@@ -403,6 +403,7 @@ LEIDO = {
     'jau_17_gladiator':        '1 SOST', 
     'jau_18_golpe':            '0',      
     'jau_19_toreador':         '1 BEM',  
+    'jau_20_unbeso':           '1 BEM',  
 }
 
 

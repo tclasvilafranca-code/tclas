@@ -387,6 +387,8 @@ LEIDO = {
     'jau_01_himno':            '0',      # dice Do mayor
     'jau_02_romance':          '0',      # dice Do mayor
     'jau_03_bonnie':           '0',      # dice Do mayor (lleva un Fa sostenido suelto)
+    'jau_04_heart':            '0',      # dice Do mayor
+    'jau_05_greensleeves':     '0',      # dice La menor
 }
 
 

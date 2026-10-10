@@ -108,6 +108,8 @@ MIRADAS = {
     # tres cabezas del c. 1 estan en la MISMA linea adicional, la del do
     # central: negra, negra y blanca.
     'Heart and Soul.pdf': ['C4', 'C4', 'C4'],
+    # El mismo archivo en la carpeta de Jaume (sin extension): misma lectura.
+    'Heart-and-soul': ['C4', 'C4', 'C4'],
 
     # La primera nota cuelga de DOS lineas adicionales y va pegada a la cifra
     # de compas, asi que el descuento de cabecera se la come — el mismo caso

@@ -185,6 +185,12 @@ EXCEPCIONES = {
     ('ed_19_toreador', 's'): 'la misma edición del Toreador, con la misma semicorchea',
     ('ed_19_toreador', 'e.'): 'la corchea con puntillo de ese mismo ritmo, impresa',
     ('me_25_toreador', 's'): 'la misma edición del Toreador, con la misma semicorchea',
+
+    # Alan (escalon 3): su Up (pieza 5) lleva grupos de corchea y semicorcheas
+    # desde el c. 18, medidos a 230 ppp sobre el PDF (barras dobles). Es su
+    # partitura y se dibuja, aunque el escalon admita la semicorchea a partir
+    # de la pieza 6.
+    ('al_05_up', 's'): 'su partitura lleva grupos con semicorcheas desde el c. 18',
 }
 
 # Rachas de notas cortas por encima del tope del escalon que SI se aceptan,

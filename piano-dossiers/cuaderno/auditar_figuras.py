@@ -103,6 +103,8 @@ MIRADAS = {
     'La Primavera. Vivaldi': (False, 'negras, blancas con puntillo y corcheas · una sola barra (imagen a 88 ppp, mirada a 110 y 220 ppp)'),
     'Para Elisa Beethoven': (True, 'corcheas, con UNA semicorchea (c. 20) que se ata a las notas largas de los dos compases siguientes'),
     'TETRIX.': (False, 'negras, corcheas, negras con puntillo, blancas y redondas · una sola barra (imagen a 52 ppp, mirada a 200 y 250 ppp)'),
+    'UP.': (True, 'corcheas y, desde el c. 18, grupos de corchea y semicorcheas (barras dobles a 230 ppp) · imagen a 55 ppp'),
+    'Boig per tu, Sau.': (False, 'corcheas, negras con puntillo y acordes largos · imagen a 86 ppp, mirada a 220 ppp: ni una barra doble'),
 }
 
 

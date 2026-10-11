@@ -411,6 +411,9 @@ LEIDO = {
     'al_02_romance':           '0',      
     'al_03_heart':             '0',      
     'al_04_tetris':            '0',      
+    'al_05_up':                '1 BEM',  
+    'al_06_boig':              '0',      
+    'al_07_whitechristmas':    '0',      
 }
 
 

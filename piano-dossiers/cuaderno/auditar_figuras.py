@@ -76,8 +76,8 @@ MIRADAS = {
     'Grandfather.pdf': (False, 'la misma edicion Gradimi: sin barras'),
 
     # --- las dos copias de Lovely (arr. Amy Kieran)
-    '-LOVELY.pdf': (False, 'corcheas · ocho por compas, una sola barra'),
-    'LOVELY.': (False, 'la misma edicion: corcheas'),
+    '-LOVELY.pdf': (True, 'corcheas casi todo el rato; dos semicorcheas pegadas en los cc. 35, 36, 39 y 40 (imagen a 54 ppp, mirada a 200 ppp)'),
+    'LOVELY.': (True, 'la misma edicion: dos semicorcheas pegadas en los cc. 35, 36, 39 y 40'),
 
     # --- las dos copias del Flying Theme
     'Como entrenar a tu dragon.': (False, 'corcheas · una sola barra por grupo en toda la pieza'),

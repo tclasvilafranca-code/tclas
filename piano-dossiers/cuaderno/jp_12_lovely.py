@@ -7,7 +7,8 @@
      - UN SOSTENIDO detrás de la clave, y la música descansa en Mi: Mi menor.
      - 4/4, y pone "♩ = 115".
      - La derecha va en CORCHEAS SEGUIDAS desde el primer compás y casi sin
-       parar: es una pieza de resistencia, no de dificultad.
+       parar: es una pieza de resistencia, no de dificultad. Las únicas figuras más
+       cortas son dos semicorcheas pegadas en los cc. 35, 36, 39 y 40 (mirado a 200 ppp).
      - La izquierda hace acordes de redonda, uno por compás, sosteniendo.
      - Los dos primeros compases la izquierda calla (silencios de redonda).
      - En el c. 11 hay barra de repetición y entra la letra.
@@ -113,13 +114,11 @@ CANCION = dict(
                                   n('D4', 'e'), n('F#4', 'e'), n('A4', 'e'), n('F#4', 'e'),
                                   n('D4', 'e'), n('F#4', 'e'), n('A4', 'e'), n('F#4', 'e')],
                           bars=2, key_sig='Mi menor'),
-                     dict(cap='b) y con el acorde cambiando, que es lo que hace la pieza · el dedo '
-                              'que se mueve es solo uno, los otros se quedan',
-                          events=[n('C4', 'e'), n('E4', 'e'), n('G4', 'e'), n('E4', 'e'),
-                                  n('C4', 'e'), n('E4', 'e'), n('G4', 'e'), n('E4', 'e'),
-                                  n('B3', 'e'), n('E4', 'e'), n('G4', 'e'), n('E4', 'e'),
-                                  n('B3', 'e'), n('E4', 'e'), n('G4', 'e'), n('E4', 'e')],
-                          bars=2, key_sig='Mi menor', show_time=False),
+                     dict(cap='b) el c. 35 de tu partitura · dos semicorcheas pegadas · el ritmo es el suyo, '
+                              'las notas andamio',
+                          events=[dict(n('B4'), lig=True), n('B4', 'e'), n('A4', 's'),
+                                  n('G4', 's'), n('F#4'), n('E4')],
+                          bars=1, key_sig='Mi menor', show_time=False),
                  ]),
             dict(num=2, titulo='La izquierda: un acorde y aguantar', clef='bass',
                  pista='la FORMA es literal (una redonda por compás); las notas, andamio en Mi menor',

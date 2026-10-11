@@ -5,6 +5,8 @@
    2 páginas, 44 compases, con letra; el mismo archivo que la pieza 12 de
    Josep, byte a byte):
 
+     - Las únicas figuras más cortas que la corchea son dos semicorcheas pegadas en los
+       cc. 35, 36, 39 y 40 (mirado a 200 ppp).
      - Un sostenido detrás de la clave, y la música descansa en Mi: Mi menor.
      - 4/4, y pone "♩ = 115".
      - La derecha va en corcheas seguidas desde el primer compás y casi sin
@@ -106,12 +108,11 @@ CANCION = dict(
                                   n('A4', 'e'), n('C5', 'e'), n('E5', 'e'), n('C5', 'e'),
                                   n('A4', 'e'), n('F#4', 'e'), n('A4', 'e'), n('C5', 'e')],
                           bars=2, key_sig=MIm),
-                     dict(cap='b) y con el acorde cambiando otra vez, un peldaño distinto',
-                          events=encajar([n('G3', 'e'), n('B3', 'e'), n('D4', 'e'), n('B3', 'e'),
-                                          n('G3', 'e'), n('E4', 'e'), n('G3', 'e'), n('B3', 'e'),
-                                          n('F#3', 'e'), n('A3', 'e'), n('D4', 'e'), n('A3', 'e'),
-                                          n('F#3', 'e'), n('B3', 'e'), n('F#3', 'e'), n('A3', 'e')], 'treble'),
-                          bars=2, key_sig=MIm, show_time=False),
+                     dict(cap='b) el c. 35 de tu partitura · dos semicorcheas pegadas · el ritmo es el suyo, '
+                              'las notas andamio',
+                          events=[dict(n('G4'), lig=True), n('G4', 'e'), n('F#4', 's'),
+                                  n('E4', 's'), n('D4'), n('B3')],
+                          bars=1, key_sig=MIm, show_time=False),
                  ]),
             dict(num=2, titulo='La izquierda: un acorde y aguantar', clef='bass',
                  pista='la FORMA es literal (una redonda por compás); las notas, andamio en Mi menor',

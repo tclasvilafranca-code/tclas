@@ -419,6 +419,7 @@ LEIDO = {
     'al_10_bellaciao':         '2 BEM',  
     'al_11_eyeofthetiger':     '0',      
     'al_12_cantstop':          '0',      
+    'al_13_lovely':            '1 SOST', 
 }
 
 

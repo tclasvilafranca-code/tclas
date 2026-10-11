@@ -60,6 +60,10 @@ DUETOS = {
     'Jaume_02_RomanceDiabelli_CUADERNO.pdf',
     'Jaume_06_BellaCiao_CUADERNO.pdf',
     'Jaume_12_ItsBeginningToLook_CUADERNO.pdf',
+    'Alan_02_RomanceDiabelli_CUADERNO.pdf',
+    'Alan_10_BellaCiao_CUADERNO.pdf',
+    'Alan_15_Beginner_CUADERNO.pdf',
+    'Alan_22_Scherzo_CUADERNO.pdf',
 }
 
 INSERTADAS = []          # (album, pieza) donde se ha metido la hoja de pauta

@@ -76,6 +76,7 @@ ALBUMES = [
     ('José María', 'jm_[0-9]*.py'),
     ('Josep',      'jp_[0-9]*.py'),
     ('Jaume',      'jau_[0-9]*.py'),
+    ('Alan',       'al_[0-9]*.py'),
 ]
 
 

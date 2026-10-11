@@ -92,7 +92,7 @@ TAREAS = [
 # comparten pieza no se lleven la misma tarea la misma semana.
 # Cada alumno arranca la rotacion en un punto distinto: si no, dos alumnos
 # que trabajan la pieza 1 la misma semana se llevan la misma tarea.
-ARRANQUE = {'Dilan': 0, 'Eva': 5, 'José María': 3, 'Josep': 8, 'Jaume': 5}
+ARRANQUE = {'Dilan': 0, 'Eva': 5, 'José María': 3, 'Josep': 8, 'Jaume': 5, 'Alan': 2}
 
 
 def tarea(alumno, num):

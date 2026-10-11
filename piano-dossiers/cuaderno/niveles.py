@@ -134,6 +134,7 @@ ESCALON = {
     'isaac': 3,          # nivel medio "con cana": sube mas rapido, techo mas bajo
     'nel': 3,            # doce anos, mismo repertorio que Josep
     'josep': 4,          # la edad de Jose Maria y mas anos de clase; le gustan los retos
+    'alan': 3,           # doce anos, con base y constante: el escalon de Nel
     'jaume': 4,          # unos 60 anos, nivel medio y base musical: "se puede apretar"
     'aída': 4,           # unos 40 anos y piano de antes: el nivel de Josep, pero el
     'aida': 4,           # album esta ordenado para asentar bases antes de correr

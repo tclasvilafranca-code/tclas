@@ -102,6 +102,7 @@ MIRADAS = {
     'Un beso y una flor Nino Bravo': (True, 'semicorcheas sueltas mezcladas con corcheas (c. 1) · y tresillos en la primera casilla'),
     'La Primavera. Vivaldi': (False, 'negras, blancas con puntillo y corcheas · una sola barra (imagen a 88 ppp, mirada a 110 y 220 ppp)'),
     'Para Elisa Beethoven': (True, 'corcheas, con UNA semicorchea (c. 20) que se ata a las notas largas de los dos compases siguientes'),
+    'TETRIX.': (False, 'negras, corcheas, negras con puntillo, blancas y redondas · una sola barra (imagen a 52 ppp, mirada a 200 y 250 ppp)'),
 }
 
 

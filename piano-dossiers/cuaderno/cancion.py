@@ -96,6 +96,9 @@ CURVA = {
     # Jaume: unos 60 años, nivel medio y base musical. Como Josep: empieza
     # un escalon por encima y sube a buen ritmo (la carpeta trae 23 piezas).
     'jaume':      dict(base=1, cada=6,  tope=3),
+    # Alan: doce anos, ya tiene base y se esfuerza. Como Nel: empieza dos
+    # escalones por encima del minimo y sube al ritmo de los avanzados.
+    'alan':       dict(base=2, cada=6,  tope=3),
     # Dilan y Eva: los avanzados. Empiezan donde los demas acaban.
     'dilan':      dict(base=2, cada=6,  tope=3),
     'eva':        dict(base=2, cada=6,  tope=3),

@@ -110,6 +110,7 @@ MIRADAS = {
     'Heart and Soul.pdf': ['C4', 'C4', 'C4'],
     # El mismo archivo en la carpeta de Jaume (sin extension): misma lectura.
     'Heart-and-soul': ['C4', 'C4', 'C4'],
+    'Heart-and-soul-': ['C4', 'C4', 'C4'],
 
     # Bella Ciao a cuatro manos (Jaume): el lector devuelve un D5 de mas, que es el
     # Mi bemol de la armadura por encima de la quinta linea. Ampliado a 300 ppp

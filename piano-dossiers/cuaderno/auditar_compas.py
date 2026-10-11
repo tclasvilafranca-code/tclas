@@ -391,6 +391,10 @@ LEIDO = {
     'jau_21_sweetchild':       (4, 4),
     'jau_22_primavera':        (4, 4),
     'jau_23_elisa':            (3, 4),
+    'al_01_counting':          (4, 4),
+    'al_02_romance':           (2, 2),
+    'al_03_heart':             (4, 4),
+    'al_04_tetris':            (4, 4),
 }
 
 

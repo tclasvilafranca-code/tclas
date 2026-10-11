@@ -407,6 +407,10 @@ LEIDO = {
     'jau_21_sweetchild':       '2 BEM',  
     'jau_22_primavera':        '0',      
     'jau_23_elisa':            '0',      
+    'al_01_counting':          '0',      
+    'al_02_romance':           '0',      
+    'al_03_heart':             '0',      
+    'al_04_tetris':            '0',      
 }
 
 

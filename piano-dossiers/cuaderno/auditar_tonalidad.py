@@ -415,6 +415,7 @@ LEIDO = {
     'al_06_boig':              '0',      
     'al_07_whitechristmas':    '0',      
     'al_08_santaclaus':        '0',      
+    'al_09_haveyourself':      '0',      
 }
 
 

@@ -63,6 +63,10 @@ ES_ANDAMIO = re.compile(r'andamio', re.I)
 # un arranque que el lector no sabe recortar) y lo que se vio al ampliarlas.
 # Mirarlas y no anotar el resultado seria mirarlas para nada.
 MIRADAS = {
+    # La primera nota cuelga de dos lineas adicionales y el lector no la ve. Mirada a 600 ppp:
+    # la cabeza va DEBAJO de la linea adicional del La, asi que es un Sol3.
+    'Ihave-a-dream-Abba': ['G3', 'E4', 'D4', 'F4'],
+
     # El lector se deja la PRIMERA nota de este compas: esta edicion pega la
     # cifra de compas a la musica y el salto de cabecera se la come. Se miro
     # ampliada del todo (26 ago 2026) y el compas 1 es Do5 · Sol4 · Do5 · Sol4

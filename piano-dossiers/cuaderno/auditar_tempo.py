@@ -45,6 +45,7 @@ IMPRESO = re.compile(r'[=＝]\s*(\d{2,3})')
 # al ampliarlas. Igual que `auditar_figuras.MIRADAS`: mirarlas y no anotar el
 # resultado seria mirarlas para nada.
 MIRADAS = {
+    'Ihave-a-dream-Abba': [120],                   # pone "TEMPO-120", sin el signo
     'i-have-a-dream-abba-children-song.pdf': [120],   # pone "TEMPO-120", sin el signo
     'i-have-a-dream-abba-.pdf': [120],
     'I Have a Dream.pdf': [120],                    # la copia de Eduard, mismo caso

@@ -426,6 +426,7 @@ LEIDO = {
     'ma_10_haveyourself':      (4, 4),
     'ma_11_sonatinasol':       (4, 4),
     'ma_12_submarino':         (4, 4),
+    'ma_13_dream':             (4, 4),   # Ihave-a-dream-Abba · leido 4/4
 }
 
 

@@ -114,6 +114,7 @@ MIRADAS = {
     'CANT_STOP_vertical.pdf': (False, 'corcheas, negras, negra con puntillo y muchos silencios · imagen a 79 ppp, mirada a 200 ppp: ni una barra doble'),
     'EYE OF THE TIGER.': (True, 'semicorcheas en el c. 5 y corcheas con puntillo desde el c. 1 · imagen a 54 ppp, mirada a 220 ppp'),
     'SANTA CLAUS IS COMING TO TOWN.pdf': (False, 'negras, blancas, corcheas, negras con puntillo y silencios · imagen a 53 ppp, mirada a 220 ppp: ni una barra doble'),
+    'Ihave-a-dream-Abba': (True, 'una semicorchea (La4) en el c. 9; el resto, corcheas con puntillo y largas'),
 }
 
 

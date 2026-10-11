@@ -69,6 +69,11 @@ EXCEPCIONES = {
                            'que la toca la izquierda, que es el mismo caso de My Bonnie',
     ('ai_13_carol', 'F4'): 'la nota siguiente de esa misma bajada de la izquierda, por el '
                            'mismo motivo',
+    # El Sol3 de la primera nota de I Have a Dream: la cabeza va DEBAJO de la linea
+    # adicional del La, pegada a ella (mirado a 600 ppp). Esta impresa asi en su
+    # edicion y es el ejemplo de "una nota que cuelga", asi que se queda.
+    ('ma_13_dream', 'G3'): 'el Sol3 de la entrada, impreso asi en SU edicion: cuelga bajo la '
+                           'linea adicional del La; la ficha lo explica como "la nota grave"',
     ('ai_10_beginning', 'E6'): 'es la nota mas aguda del c. 4, y en SU edicion esta impresa '
                                'igual, con tres lineas adicionales. Bajarla una octava seria '
                                'contarle otra pieza; el ejercicio es justo leer esa cima',

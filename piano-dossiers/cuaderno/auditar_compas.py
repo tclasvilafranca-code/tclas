@@ -400,6 +400,7 @@ LEIDO = {
     'al_07_whitechristmas':    (4, 4),
     'al_08_santaclaus':        (4, 4),
     'al_09_haveyourself':      (4, 4),
+    'al_10_bellaciao':         (4, 4),
 }
 
 

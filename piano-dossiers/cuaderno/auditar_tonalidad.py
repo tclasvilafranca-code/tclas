@@ -440,6 +440,7 @@ LEIDO = {
     'ma_08_wewish':            '1 SOST', 
     'ma_09_blancanavidad':     '0',      
     'ma_10_haveyourself':      '0',      
+    'ma_11_sonatinasol':       '1 SOST', 
 }
 
 

@@ -105,6 +105,7 @@ MIRADAS = {
     'TETRIX.': (False, 'negras, corcheas, negras con puntillo, blancas y redondas · una sola barra (imagen a 52 ppp, mirada a 200 y 250 ppp)'),
     'UP.': (True, 'corcheas y, desde el c. 18, grupos de corchea y semicorcheas (barras dobles a 230 ppp) · imagen a 55 ppp'),
     'Boig per tu, Sau.': (False, 'corcheas, negras con puntillo y acordes largos · imagen a 86 ppp, mirada a 220 ppp: ni una barra doble'),
+    'Sonatina-sol-maggiore': (False, 'negras y blancas · vectorial; las barras dobles medidas no son de semicorchea (el dibujo del c. 14 lo confirma)'),
     'sonatina-per-bambini': (False, 'negras, blancas y parejas de corcheas · vectorial: las barras dobles medidas son las vigas de las corcheas, ninguna de semicorchea'),
     'INTERSTELLAR_5p.pdf': (False, 'corcheas, negras, blancas y blancas con puntillo · vectorial, sin barras dobles'),
     'Sherzo 4 manos': (False, 'negras, corcheas y blancas · las unicas barras dobles son las de las dos notas de adorno del c. 14 (y del 30) · mirada a 200 ppp'),

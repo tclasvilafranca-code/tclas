@@ -437,6 +437,7 @@ LEIDO = {
     'ma_05_counting':          '0',      
     'ma_06_greensleeves':      '0',      
     'ma_07_silentnight':       '0',      
+    'ma_08_wewish':            '1 SOST', 
 }
 
 

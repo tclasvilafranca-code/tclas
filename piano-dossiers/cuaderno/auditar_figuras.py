@@ -105,6 +105,7 @@ MIRADAS = {
     'TETRIX.': (False, 'negras, corcheas, negras con puntillo, blancas y redondas · una sola barra (imagen a 52 ppp, mirada a 200 y 250 ppp)'),
     'UP.': (True, 'corcheas y, desde el c. 18, grupos de corchea y semicorcheas (barras dobles a 230 ppp) · imagen a 55 ppp'),
     'Boig per tu, Sau.': (False, 'corcheas, negras con puntillo y acordes largos · imagen a 86 ppp, mirada a 220 ppp: ni una barra doble'),
+    'VIVA_LA_VIDA_2p.pdf': (False, 'corcheas con silencios, negras, blancas con puntillo y redondas · imagen a 56 ppp, mirada a 200 ppp: ni una barra doble'),
     'A THOUSAND YEARS.': (False, 'negras con puntillo, negras, corcheas de tres en tres y blancas con puntillo · imagen a 55 ppp, mirada a 200 ppp: ni una barra doble'),
     'CANT_STOP_vertical.pdf': (False, 'corcheas, negras, negra con puntillo y muchos silencios · imagen a 79 ppp, mirada a 200 ppp: ni una barra doble'),
     'EYE OF THE TIGER.': (True, 'semicorcheas en el c. 5 y corcheas con puntillo desde el c. 1 · imagen a 54 ppp, mirada a 220 ppp'),

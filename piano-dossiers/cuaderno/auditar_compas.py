@@ -407,6 +407,7 @@ LEIDO = {
     'al_14_elisa':             (3, 4),
     'al_15_beginner':          (3, 4),
     'al_16_thousandyears':     (6, 8),
+    'al_17_vivalavida':        (4, 4),
 }
 
 

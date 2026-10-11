@@ -410,6 +410,7 @@ LEIDO = {
     'al_17_vivalavida':        (4, 4),
     'al_18_someoneyouloved':   (4, 4),
     'al_19_perfect':           (12, 8),
+    'al_20_whatwasi':          (4, 4),
 }
 
 

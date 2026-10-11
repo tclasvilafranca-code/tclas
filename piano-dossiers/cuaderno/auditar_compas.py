@@ -413,6 +413,7 @@ LEIDO = {
     'al_20_whatwasi':          (4, 4),
     'al_21_shallow':           (4, 4),
     'al_22_scherzo':           (3, 4),
+    'al_23_interstellar':      (3, 4),
 }
 
 

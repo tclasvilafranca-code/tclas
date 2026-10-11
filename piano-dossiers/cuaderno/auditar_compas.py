@@ -425,6 +425,7 @@ LEIDO = {
     'ma_09_blancanavidad':     (4, 4),
     'ma_10_haveyourself':      (4, 4),
     'ma_11_sonatinasol':       (4, 4),
+    'ma_12_submarino':         (4, 4),
 }
 
 

@@ -7,11 +7,11 @@
    los justifica:
 
      - **`cifrado`** solo donde la edición imprime de verdad las letras de
-       acorde: Greensleeves (6), Blanca Navidad (9), Perfect (21) y What Was I
-       Made For? (22). Comprobado sobre el PDF.
+       acorde: Greensleeves (6), Blanca Navidad (9), What Was I Made For? (19) y
+       Perfect (21). Comprobado sobre el PDF.
      - **`cuatro_manos`** solo en los seis duetos: Sonatina per bambini (1),
-       Romance (3), The Beginner (4), Sonatina Sol maggiore (11), Scherzo (15)
-       y Bella Ciao (16).
+       Romance (3), The Beginner (4), Sonatina Sol maggiore (11), Bella Ciao
+       (14) y Scherzo (15).
 
    Cada receta con esos bloques se usa dos veces, con diez hojas de distancia o
    más. Las otras ocho se reparten en parejas separadas por doce o más, salvo G
@@ -48,11 +48,11 @@ RECETAS = {
 
 #        pieza:  1     2    3     4     5    6     7    8    9     10   11    12
 ORDEN = ['D1', 'A', 'D2', 'D3', 'B', 'C1', 'C', 'D', 'C2', 'E', 'D1', 'F',
-#                13   14   15    16    17   18   19   20   21    22    23   24
-         'G', 'H', 'D2', 'D3', 'A', 'B', 'C', 'D', 'C3', 'C2', 'E', 'F']
+#                13   14    15    16   17   18   19    20   21    22   23   24
+         'G', 'D3', 'D2', 'H', 'A', 'B', 'C3', 'C', 'C2', 'D', 'E', 'F']
 
-CON_CIFRADO = {6, 9, 21, 22}
-A_CUATRO_MANOS = {1, 3, 4, 11, 15, 16}
+CON_CIFRADO = {6, 9, 19, 21}
+A_CUATRO_MANOS = {1, 3, 4, 11, 14, 15}
 
 
 def receta(num_pieza):

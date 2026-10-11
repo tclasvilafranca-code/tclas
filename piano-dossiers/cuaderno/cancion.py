@@ -99,6 +99,10 @@ CURVA = {
     # Alan: doce anos, ya tiene base y se esfuerza. Como Nel: empieza dos
     # escalones por encima del minimo y sube al ritmo de los avanzados.
     'alan':       dict(base=2, cada=6,  tope=3),
+    # Martina: diez a doce anos, empieza de cero (lo que sabe lo vio en YouTube).
+    # Sube un escalon cada seis piezas desde el primero, hasta el tercero, porque
+    # su carpeta (24 piezas) acaba en Interstellar, Shallow y Perfect.
+    'martina':    dict(base=0, cada=6,  tope=3),
     # Dilan y Eva: los avanzados. Empiezan donde los demas acaban.
     'dilan':      dict(base=2, cada=6,  tope=3),
     'eva':        dict(base=2, cada=6,  tope=3),

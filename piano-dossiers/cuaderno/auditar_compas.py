@@ -414,6 +414,9 @@ LEIDO = {
     'al_21_shallow':           (4, 4),
     'al_22_scherzo':           (3, 4),
     'al_23_interstellar':      (3, 4),
+    'ma_01_bambini':           (4, 4),
+    'ma_02_heart':             (4, 4),
+    'ma_03_romance':           (2, 2),
 }
 
 

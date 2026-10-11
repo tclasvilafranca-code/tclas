@@ -30,7 +30,7 @@ sys.path.insert(0, os.path.join(HERE, '..', 'engine'))
 ALUMNOS = [('arnau', 'arnau'), ('luisa', 'lu'), ('josemaria', 'jm'),
            ('eduard', 'ed'), ('merce', 'me'), ('isaac', 'is'),
            ('josep', 'jp'), ('nel', 'nl'), ('dilan', 'dilan'), ('eva', 'eva'),
-           ('jaume', 'jau'), ('alan', 'al')]
+           ('jaume', 'jau'), ('alan', 'al'), ('martina', 'ma')]
 
 # Como se escribe en el indice cada tonalidad. `None` en la pieza significa
 # "detras de la clave no hay nada", y eso en el indice puede decirse de las dos

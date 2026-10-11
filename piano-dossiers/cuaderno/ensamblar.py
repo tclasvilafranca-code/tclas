@@ -64,6 +64,12 @@ DUETOS = {
     'Alan_10_BellaCiao_CUADERNO.pdf',
     'Alan_15_Beginner_CUADERNO.pdf',
     'Alan_22_Scherzo_CUADERNO.pdf',
+    'Martina_01_SonatinaBambini_CUADERNO.pdf',
+    'Martina_03_RomanceDiabelli_CUADERNO.pdf',
+    'Martina_04_Beginner_CUADERNO.pdf',
+    'Martina_11_SonatinaSolMaggiore_CUADERNO.pdf',
+    'Martina_15_Scherzo_CUADERNO.pdf',
+    'Martina_16_BellaCiao_CUADERNO.pdf',
 }
 
 INSERTADAS = []          # (album, pieza) donde se ha metido la hoja de pauta

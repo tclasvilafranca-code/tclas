@@ -430,6 +430,9 @@ LEIDO = {
     'al_21_shallow':           '1 SOST', 
     'al_22_scherzo':           '0',      
     'al_23_interstellar':      '0',      
+    'ma_01_bambini':           '0',      
+    'ma_02_heart':             '0',      
+    'ma_03_romance':           '0',      
 }
 
 

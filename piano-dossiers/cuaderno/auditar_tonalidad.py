@@ -425,6 +425,7 @@ LEIDO = {
     'al_16_thousandyears':     '0',      
     'al_17_vivalavida':        '0',      
     'al_18_someoneyouloved':   '0',      
+    'al_19_perfect':           '1 SOST', 
 }
 
 

@@ -451,6 +451,7 @@ LEIDO = {
     'ma_19_whatwasi':          '0',      # dice Do mayor
     'ma_20_elisa':             '0',      # La menor, sin armadura
     'ma_21_perfect':           '1 SOST', # dice Sol mayor
+    'ma_22_shallow':           '1 SOST', # dice Mi menor (un sostenido)
 }
 
 

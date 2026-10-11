@@ -435,6 +435,7 @@ LEIDO = {
     'ma_19_whatwasi':          (4, 4),   # What Was I Made For? · leido 4/4
     'ma_20_elisa':             (3, 4),   # Para Elisa Beethoven · leido 3/4
     'ma_21_perfect':           (12, 8),   # Perfect · leido 12/8
+    'ma_22_shallow':           (4, 4),   # SHALLOW. · leido 4/4
 }
 
 

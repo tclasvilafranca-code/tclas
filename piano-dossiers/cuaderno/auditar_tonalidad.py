@@ -446,6 +446,7 @@ LEIDO = {
     'ma_14_bellaciao':         '2 BEM',  # dice Sol menor (dos bemoles)
     'ma_15_scherzo':           '0',      # Do mayor en el Scherzo
     'ma_16_titanic':           '0',      # dice Do mayor
+    'ma_17_lovely':            '1 SOST', # dice Mi menor (un sostenido)
 }
 
 

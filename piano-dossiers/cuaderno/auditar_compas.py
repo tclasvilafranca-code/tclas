@@ -431,6 +431,7 @@ LEIDO = {
     'ma_15_scherzo':           (3, 4),   # Sherzo 4 manos · leido 3/4
     'ma_16_titanic':           (2, 4),   # Titanic · leido 2/4
     'ma_17_lovely':            (4, 4),   # LOVELY. · leido 4/4
+    'ma_18_interstellar':      (3, 4),   # Interstellar · leido 3/4
 }
 
 

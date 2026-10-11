@@ -443,6 +443,7 @@ LEIDO = {
     'ma_11_sonatinasol':       '1 SOST', 
     'ma_12_submarino':         '1 SOST', 
     'ma_13_dream':             '0',      # Ihave-a-dream-Abba · detras de la clave no hay nada
+    'ma_14_bellaciao':         '2 BEM',  # dice Sol menor (dos bemoles)
 }
 
 

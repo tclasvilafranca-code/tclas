@@ -405,6 +405,7 @@ LEIDO = {
     'al_12_cantstop':          (4, 4),
     'al_13_lovely':            (4, 4),
     'al_14_elisa':             (3, 4),
+    'al_15_beginner':          (3, 4),
 }
 
 

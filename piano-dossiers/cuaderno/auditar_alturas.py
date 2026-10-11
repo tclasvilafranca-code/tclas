@@ -116,6 +116,9 @@ MIRADAS = {
     # Mi bemol de la armadura por encima de la quinta linea. Ampliado a 300 ppp
     # el c. 1 de la derecha del Piano 1 son cuatro negras: Re4 Sol4 La4 Sib4.
     'Bella-ciao-4 manos': ['D4', 'G4', 'A4', 'Bb4'],
+    # The Beginner (Alan): el 8va va solo encima del pentagrama de arriba del Primo; las alturas
+    # medidas a 250 ppp, tal como están escritas: Mi5 Mi5 Mi5 (negras).
+    'The Beginer le debut': ['E5', 'E5', 'E5'],
 
     # Can't Stop the Feeling (Alan): la página viene con la música girada 90 grados
     # (se endereza en CANT_STOP_vertical.pdf) y el lector devuelve un Si4 que no es

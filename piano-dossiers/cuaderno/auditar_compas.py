@@ -402,6 +402,7 @@ LEIDO = {
     'al_09_haveyourself':      (4, 4),
     'al_10_bellaciao':         (4, 4),
     'al_11_eyeofthetiger':     (4, 4),
+    'al_12_cantstop':          (4, 4),
 }
 
 

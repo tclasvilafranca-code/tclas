@@ -117,6 +117,12 @@ MIRADAS = {
     # el c. 1 de la derecha del Piano 1 son cuatro negras: Re4 Sol4 La4 Sib4.
     'Bella-ciao-4 manos': ['D4', 'G4', 'A4', 'Bb4'],
 
+    # Can't Stop the Feeling (Alan): la página viene con la música girada 90 grados
+    # (se endereza en CANT_STOP_vertical.pdf) y el lector devuelve un Si4 que no es
+    # una nota. Ampliado a 200 ppp, c. 1: silencio de blanca, silencio de corchea y
+    # Mi4 · Re4 · Do4 (corcheas); c. 2: Mi4 · Mi4, dos silencios de negra, Do4 · Do4.
+    'CANT_STOP_vertical.pdf': ['E4', 'D4', 'C4', 'E4', 'E4', 'C4', 'C4'],
+
     # Jailhouse Rock (Jaume): el lector devuelve C5 y E4, y ninguna es la nota. Ampliado
     # a 300 ppp: el c. 1 son un silencio de blanca, un silencio de corchea y un MI
     # BEMOL4 de negra con puntillo, con el bemol escrito delante de la cabeza.

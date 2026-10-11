@@ -428,6 +428,7 @@ LEIDO = {
     'ma_12_submarino':         (4, 4),
     'ma_13_dream':             (4, 4),   # Ihave-a-dream-Abba · leido 4/4
     'ma_14_bellaciao':         (4, 4),   # Bella Ciao 4 mains · leido 4/4
+    'ma_15_scherzo':           (3, 4),   # Sherzo 4 manos · leido 3/4
 }
 
 

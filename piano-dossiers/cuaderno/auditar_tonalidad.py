@@ -445,6 +445,7 @@ LEIDO = {
     'ma_13_dream':             '0',      # Ihave-a-dream-Abba · detras de la clave no hay nada
     'ma_14_bellaciao':         '2 BEM',  # dice Sol menor (dos bemoles)
     'ma_15_scherzo':           '0',      # Do mayor en el Scherzo
+    'ma_16_titanic':           '0',      # dice Do mayor
 }
 
 

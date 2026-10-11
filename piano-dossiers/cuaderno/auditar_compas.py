@@ -436,6 +436,7 @@ LEIDO = {
     'ma_20_elisa':             (3, 4),   # Para Elisa Beethoven · leido 3/4
     'ma_21_perfect':           (12, 8),   # Perfect · leido 12/8
     'ma_22_shallow':           (4, 4),   # SHALLOW. · leido 4/4
+    'ma_23_merry':             (3, 4),   # Merry-go-round-of-life · leido 3/4
 }
 
 

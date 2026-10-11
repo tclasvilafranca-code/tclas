@@ -452,6 +452,7 @@ LEIDO = {
     'ma_20_elisa':             '0',      # La menor, sin armadura
     'ma_21_perfect':           '1 SOST', # dice Sol mayor
     'ma_22_shallow':           '1 SOST', # dice Mi menor (un sostenido)
+    'ma_23_merry':             '2 BEM',  # dice Si bemol mayor (dos bemoles)
 }
 
 

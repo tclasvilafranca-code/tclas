@@ -254,6 +254,31 @@ def draw_gracia(c, gx, cy, gap, staff_bottom_y, staff_top_y):
     c.line(sx - gap * 0.55, top - gap * 1.4, sx + gap * 0.9, top - gap * 0.4)
 
 
+def draw_gracia_doble(c, gx, cys, gap, staff_bottom_y, staff_top_y):
+    """Dos notas de adorno seguidas (semicorcheas pequeñas unidas por dos barras),
+       que se tocan justo antes de la nota principal y no cuentan en el compás.
+       `gx` es la x de la primera; la segunda va a gap*1.15 a su derecha. Entró con
+       el Scherzo de Diabelli (c. 14), que las trae impresas."""
+    k = 0.65
+    xs = [gx, gx + gap * 1.35]
+    top = max(cys) + gap * 2.9
+    for x, cy in zip(xs, cys):
+        for ly in ledger_lines_needed(staff_bottom_y, staff_top_y, cy, gap):
+            c.setStrokeColor(GRAY)
+            c.setLineWidth(0.7)
+            c.line(x - gap * 0.6, ly, x + gap * 0.6, ly)
+        draw_notehead(c, x, cy, gap * k, filled=True)
+    rx = gap * 0.62 * k
+    c.setStrokeColor(INK)
+    c.setLineWidth(0.8)
+    for x, cy in zip(xs, cys):
+        c.line(x + rx - 0.4, cy, x + rx - 0.4, top)
+    # las dos barras, de plica a plica
+    c.setLineWidth(1.1)
+    for off in (0.0, gap * 0.55):
+        c.line(xs[0] + rx - 0.4, top - off, xs[1] + rx - 0.4, top - off)
+
+
 def draw_rest(c, cx, staff_bottom_y, staff_top_y, gap, dur='q'):
     """Draws a rest symbol centred vertically in the staff.
 
@@ -658,6 +683,14 @@ def ottava_y(gap, events, clef='treble'):
         # la plica sube desde la nota mas aguda cuando el grupo esta bajo
         if (e.get('dur') or '').rstrip('.') != 'w' and sum(cys) / len(cys) <= 2 * gap:
             alto = max(alto, max(cys) + gap * 3.4)
+        # el punto de staccato o el acento van ENCIMA de la cabeza: sin esto el
+        # 8va los pisaba (el Scherzo de Diabelli lleva los dos bajo un 8va)
+        if e.get('art') and max(cys) + gap * 0.5 >= top_line - gap:
+            alto = max(alto, max(cys) + gap * 1.5)
+        g = e.get('gracia')
+        if g:
+            gs = list(g) if isinstance(g, (list, tuple)) else [g]
+            alto = max(alto, max(note_y(0, gap, q, clef=clef) for q in gs) + gap * 3.0)
     return (alto - top_line) + gap * 0.5
 
 
@@ -690,7 +723,7 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
          matiz: 'p' | 'mf' | 'f' ... -- se imprime bajo el pentagrama
          cresc / dim: nº de eventos que abarca el regulador
          pedal: nº de eventos que abarca la marca de pedal
-         gracia: pitch de una nota de adorno (acciaccatura) que va justo antes
+         gracia: pitch de una nota de adorno (acciaccatura), o una lista de DOS pitches para dos adornos seguidos que va justo antes
        repetir: 'abre' | 'cierra' | 'ambas' -- barras de repeticion
        casilla: '1' | '2' -- casilla de primera / segunda vez
        ottava: True -- 8va sobre el sistema
@@ -871,8 +904,13 @@ def draw_system(c, x, top_y, width, gap, events, clef='treble', time_sig=(4, 4),
                                     stem_dir=forced_dir, stem_end_y=stem_end)
             note_anchors.append((px, cy, sd))
             if e.get('gracia'):
-                draw_gracia(c, px - gap * 1.5, note_y(bot, gap, e['gracia'], clef=clef),
-                            gap, bot, top)
+                if isinstance(e['gracia'], (list, tuple)):
+                    draw_gracia_doble(c, px - gap * 2.9,
+                                      [note_y(bot, gap, g, clef=clef) for g in e['gracia']],
+                                      gap, bot, top)
+                else:
+                    draw_gracia(c, px - gap * 1.5, note_y(bot, gap, e['gracia'], clef=clef),
+                                gap, bot, top)
             if beam_id is not None:
                 beam_groups.setdefault(beam_id, []).append((px, cy, sd, e['dur']))
 

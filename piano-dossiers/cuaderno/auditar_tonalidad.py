@@ -428,6 +428,7 @@ LEIDO = {
     'al_19_perfect':           '1 SOST', 
     'al_20_whatwasi':          '0',      
     'al_21_shallow':           '1 SOST', 
+    'al_22_scherzo':           '0',      
 }
 
 

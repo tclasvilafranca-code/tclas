@@ -448,6 +448,7 @@ LEIDO = {
     'ma_16_titanic':           '0',      # dice Do mayor
     'ma_17_lovely':            '1 SOST', # dice Mi menor (un sostenido)
     'ma_18_interstellar':      '0',      # sin armadura
+    'ma_19_whatwasi':          '0',      # dice Do mayor
 }
 
 

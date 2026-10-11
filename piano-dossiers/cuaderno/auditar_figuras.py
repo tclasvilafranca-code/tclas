@@ -105,6 +105,7 @@ MIRADAS = {
     'TETRIX.': (False, 'negras, corcheas, negras con puntillo, blancas y redondas · una sola barra (imagen a 52 ppp, mirada a 200 y 250 ppp)'),
     'UP.': (True, 'corcheas y, desde el c. 18, grupos de corchea y semicorcheas (barras dobles a 230 ppp) · imagen a 55 ppp'),
     'Boig per tu, Sau.': (False, 'corcheas, negras con puntillo y acordes largos · imagen a 86 ppp, mirada a 220 ppp: ni una barra doble'),
+    'SANTA CLAUS IS COMING TO TOWN.pdf': (False, 'negras, blancas, corcheas, negras con puntillo y silencios · imagen a 53 ppp, mirada a 220 ppp: ni una barra doble'),
 }
 
 

@@ -57,6 +57,7 @@ MIRADAS = {
     'Jailhouse Elvis Presley.pdf': [150],           # "♩ = 150  Swing"
     'Petite chanson.(4 MANOS)': [80],               # "♩ = 80 andante"
     'petite chanson.(4 manos)': [80],
+    'SANTA CLAUS IS COMING TO TOWN.pdf': [130],     # "♩ = 130" arriba a la izquierda (imagen a 53 ppp)
     'heart-and-soul-.pdf': [110],                   # "♩ = 110 Swing"
     '-LOVELY.pdf': [115],
     'LOVELY.': [115],

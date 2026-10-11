@@ -417,6 +417,9 @@ LEIDO = {
     'ma_01_bambini':           (4, 4),
     'ma_02_heart':             (4, 4),
     'ma_03_romance':           (2, 2),
+    'ma_04_beginner':          (3, 4),
+    'ma_05_counting':          (4, 4),
+    'ma_06_greensleeves':      (3, 4),
 }
 
 

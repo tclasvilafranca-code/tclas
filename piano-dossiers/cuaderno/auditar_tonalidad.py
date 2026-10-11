@@ -438,6 +438,8 @@ LEIDO = {
     'ma_06_greensleeves':      '0',      
     'ma_07_silentnight':       '0',      
     'ma_08_wewish':            '1 SOST', 
+    'ma_09_blancanavidad':     '0',      
+    'ma_10_haveyourself':      '0',      
 }
 
 

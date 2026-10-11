@@ -406,6 +406,7 @@ LEIDO = {
     'al_13_lovely':            (4, 4),
     'al_14_elisa':             (3, 4),
     'al_15_beginner':          (3, 4),
+    'al_16_thousandyears':     (6, 8),
 }
 
 

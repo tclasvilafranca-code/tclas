@@ -422,6 +422,7 @@ LEIDO = {
     'al_13_lovely':            '1 SOST', 
     'al_14_elisa':             '0',      
     'al_15_beginner':          '0',      
+    'al_16_thousandyears':     '0',      
 }
 
 

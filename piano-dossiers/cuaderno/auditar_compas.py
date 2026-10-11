@@ -420,6 +420,7 @@ LEIDO = {
     'ma_04_beginner':          (3, 4),
     'ma_05_counting':          (4, 4),
     'ma_06_greensleeves':      (3, 4),
+    'ma_07_silentnight':       (3, 4),
 }
 
 

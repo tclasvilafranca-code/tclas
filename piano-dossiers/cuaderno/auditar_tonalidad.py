@@ -420,6 +420,7 @@ LEIDO = {
     'al_11_eyeofthetiger':     '0',      
     'al_12_cantstop':          '0',      
     'al_13_lovely':            '1 SOST', 
+    'al_14_elisa':             '0',      
 }
 
 

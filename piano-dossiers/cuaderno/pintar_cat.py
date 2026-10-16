@@ -18,7 +18,7 @@ import notation as nt                                           # noqa: E402
 from reportlab.lib.colors import black, white                  # noqa: E402
 from reportlab.pdfbase.pdfmetrics import stringWidth           # noqa: E402
 
-import pekes_mascota as pm                                     # noqa: E402
+from mussol import mussol                                       # noqa: E402
 from dibujo_mano import (W, H, ManoCanvas, trazo, texto, letras_huecas, caja, marco,  # noqa: E402
                          estrella, cabeza, negra_deco, pareja_deco, pareja_plana, corchete,
                          sol, nube, arcoiris, pentagrama, cabeza_redonda, rayita,
@@ -28,9 +28,9 @@ OUT = os.path.join(HERE, '..', 'output', 'Pintar_Catala_BN.pdf')
 SK, HA = 'Sketch', 'Hand'
 
 # (nom, altura, color amb què es pinta la tecla)
-NOTES = [('DO', 'C4', 'ROIG'), ('RE', 'D4', 'TARONJA'), ('MI', 'E4', 'GROC'),
+NOTES = [('DO', 'C4', 'VERMELL'), ('RE', 'D4', 'TARONJA'), ('MI', 'E4', 'GROC'),
          ('FA', 'F4', 'VERD'), ('SOL', 'G4', 'BLAU'), ('LA', 'A4', 'MORAT'),
-         ('SI', 'B4', 'GRIS'), ('DO', 'C5', 'ROIG')]
+         ('SI', 'B4', 'GRIS'), ('DO', 'C5', 'VERMELL')]
 
 
 def nom_peu(c, extra=''):
@@ -107,7 +107,7 @@ def full_piano(c):
 
     pasos = [('1', 'Pinta de BLAU els grups de DUES tecles negres.'),
              ('2', 'Pinta de VERD els grups de TRES tecles negres.'),
-             ('3', 'Pinta de ROIG totes les tecles DO (a l’esquerra de les dues negres).'),
+             ('3', 'Pinta de VERMELL totes les tecles DO (a l’esquerra de les dues negres).'),
              ('4', 'Escriu a cada casella el nom de la nota.')]
     yy = 468
     for n_, t in pasos:
@@ -147,12 +147,7 @@ def full_piano(c):
     texto(c, 100, 97, 'El truc d’en Mussol Misol', 16, HA)
     texto(c, 100, 80, 'Al piano les tecles negres van en grups de DUES i de TRES.', 13, HA)
     texto(c, 100, 64, 'El DO és sempre la tecla blanca just ABANS de les dues negres.', 13, HA)
-    c.saveState()
-    c.setLineWidth(1)
-    c.amp = 0.35
-    pm.musol_misol(c, 70, 78, 15, 'normal')
-    c.amp = 0.9
-    c.restoreState()
+    mussol(c, 70, 86, 0.2)
     estrella(c, 700, 92, 14)
     estrella(c, 752, 70, 10, 0.4)
     negra_deco(c, 790, 60, 0.9)
@@ -255,10 +250,7 @@ def full_ritme(c):
     letras_huecas(c, 0, 0, 'PINTA EL RITME', 40, semilla=2)
     c.restoreState()
     sol(c, 80, 520, 22)
-    c.saveState()
-    c.amp = 0.35
-    pm.musol_misol(c, W - 62, 492, 26, 'saluda')
-    c.restoreState()
+    mussol(c, W - 62, 496, 0.22)
     texto(c, W / 2, 486, 'Tria un color per a cada figura, pinta’n la rodona i després les figures de sota.',
           15, HA, 'c')
 
@@ -319,10 +311,7 @@ def full_mussol(c):
     subrayado_ondulado(c, 330, 512, 482)
 
     # el mussol, gran, a l'esquerra
-    c.saveState()
-    c.amp = 0.5
-    pm.musol_misol(c, 205, 262, 112, 'saluda')
-    c.restoreState()
+    mussol(c, 205, 262, 1.2)
     estrella(c, 60, 420, 15)
     estrella(c, 342, 330, 11, 0.3)
     negra_deco(c, 62, 130, 1.1, corchea=True)

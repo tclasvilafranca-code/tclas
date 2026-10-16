@@ -18,3 +18,6 @@ cuaderno/arranques/
 
 # Los PDF de los juegos se generan, como los albumes
 output/juegos/
+
+# copias de entrega (llevan partituras con copyright dentro)
+cuaderno/entrega/

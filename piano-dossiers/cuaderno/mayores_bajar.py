@@ -3,7 +3,7 @@
    students/eva_sc/source/ (gitignored). Uso: python3 mayores_bajar.py"""
 import base64, glob, json, os, re, sys
 TR = '/root/.claude/projects/-home-user-tclas/34206757-a690-5241-b1bf-4ebbff352a1e/tool-results'
-DST = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'students', 'eva_sc', 'source')
+DST = os.environ.get('DESTINO') or os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'students', 'eva_sc', 'source')
 os.makedirs(DST, exist_ok=True)
 DESDE = int(sys.argv[1]) if len(sys.argv) > 1 else 0
 for f in sorted(glob.glob(TR + '/mcp-Google_Drive-download_file_content-*.txt')):

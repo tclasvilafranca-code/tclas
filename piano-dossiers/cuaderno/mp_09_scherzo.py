@@ -25,21 +25,23 @@ SPEC = dict(
                    ('B', 17, 32, 'Scherzo, 2.ª parte (se repite) y Fine', OCRE),
                    ('T', 33, 48, 'Trio, con tres bemoles (se repite)', VERDE)],
         ideas=[('PRIMO', 'La melodía, arriba',
-                'Va con 8va (suena una octava más aguda) y muchas notas llevan una marca de '
-                'picado.'),
+                'Los dos pentagramas del Primo llevan las mismas notas; el de arriba va con 8va. '
+                'Muchas notas llevan marca de picado.'),
                ('SECONDO', 'Bajo y acordes',
-                'Abajo hay un bajo y, después, dos acordes por compás.'),
+                'Cada compás: una nota grave en el 1 (Do, Si, Fa, Sol...) y dos acordes cortos '
+                'en el 2 y el 3.'),
                ('EL RECORRIDO', 'Scherzo, Trio, D.C.',
-                'Scherzo, Trio y otra vez el Scherzo hasta "Fine" (D.C. al Fine).'),
-               ('LOS MATICES', 'p · f · < >',
-                'Cambios de golpe entre p y f, reguladores y acentos (>).')],
+                'Cc. 1-16 dos veces, cc. 17-32 dos veces, Trio (cc. 33-48) dos veces y D.C. al '
+                'Fine.'),
+               ('LOS MATICES', 'p · f · < > · acentos',
+                'p al empezar, f en los cc. 9 y 25; en el Trio, p y f (cc. 33 y 37, 41 y 46).')],
         especial=[
             'Pone "Allegro" y el compás es 3/4: tres negras por compás.',
             'Es a cuatro manos: Primo arriba y Secondo abajo.',
-            'Barras de repetición: al final del c. 16 (vuelve al c. 1) y entre los cc. 17 y 32.',
+            'Barras de repetición: al final del c. 16 y entre los cc. 17 y 32; Trio, cc. 33-48.',
             'En el c. 32 pone "Fine" y en el c. 48 "Scherzo D.C. al Fine".',
-            'El Trio (cc. 33-48) cambia la armadura a tres bemoles.',
-            'Notitas de adorno (cc. 14 y 30) y mi bemol en el Scherzo (c. 19).'],
+            'El Trio cambia la armadura a tres bemoles (si♭, mi♭ y la♭).',
+            'Notitas de adorno (cc. 14 y 30) y mi bemol en el Scherzo (cc. 19 y 22).'],
         reto='Tocar el recorrido sin perderos: Scherzo con sus repeticiones, Trio y vuelta al '
              'principio hasta "Fine".',
         truco='Antes de tocar, seguid el camino con el dedo sobre la partitura, diciendo en voz '
@@ -106,26 +108,43 @@ SPEC = dict(
         B(6, 'cc. 41-48', 'Final del Trio y D.C.', (5, 5),
           D('cadena', 'Después del Trio', [('c. 48 :|', False), ('D.C.', False),
                                            ('c. 1 → Fine', True)]),
-          [('SECONDO', 'Acordes con mi bemol y un regulador antes del f del c. 45.'),
-           ('PRIMO', 'p y luego < f. Acaba en nota larga ligada y silencios.'),
+          [('SECONDO', 'Acordes con mi bemol y un regulador antes del f del c. 46.'),
+           ('PRIMO', 'p, regulador < (cc. 44-45) y f en el c. 46. Acaba en nota larga y silencios.'),
            ('JUNTAS', '"Scherzo D.C. al Fine": volved al c. 1 y tocad hasta "Fine".'),
            ('A TEMPO', 'Toda la pieza con su recorrido, sin parar.')]),
     ],
     cortes={1: [315.0, 569.2], 2: [271.0, 522.5]}, corte_titulo=86.3,
     fin={1: 802, 2: 790},
     burb={
-        0: [('arriba', 330, 'AMB', 'Allegro, 3/4, en p. Cuenta "uno-dos-tres". El pentagrama de '
-                                   'arriba del Primo va con 8va.', 0.25)],
-        1: [('arriba', 330, 'OJO', 'Barra de repetición al final del c. 16: volved al c. 1.',
-             0.95)],
-        2: [('arriba', 330, 'OJO', 'Barra |: en el c. 17: aquí empieza la repetición.', 0.03)],
-        3: [('arriba', 330, 'OJO', 'c. 32: barra :| y "Fine". Tras repetir, pasáis al Trio.',
-             0.9)],
-        4: [('arriba', 330, 'AMB', 'Trio: tres bemoles y |: en el c. 33. En el c. 37, f.', 0.1)],
-        5: [('arriba', 330, 'OJO', '"Scherzo D.C. al Fine": volved al c. 1 y tocad hasta '
-                                   '"Fine" (c. 32).', 0.85)],
+        0: [('arriba', 200, 'AMB', 'Allegro, 3/4, en p: cuenta "uno-dos-tres".', 77),
+            ('arriba', 270, 'PRIMO', 'Reguladores < > en los cc. 2-4 y marcas de picado sobre '
+                                     'muchas notas: ligeras.', 230),
+            ('abajo', 330, 'SEC', 'Bajo (Do) en el 1 y dos acordes cortos en el 2 y el 3, en p. '
+                                  'Los acordes no pesan.', 139)],
+        1: [('arriba', 250, 'PRIMO', 'f en el c. 9 y acentos (>) en los cc. 11-12: tócalos con '
+                                     'peso.', 205),
+            ('arriba', 270, 'PRIMO', 'c. 14: dos notitas de adorno, pequeñas y pegadas a la '
+                                     'principal.', 403),
+            ('abajo', 520, 'OJO', 'Barra :| al final del c. 16: volved al c. 1. Ojo: en el c. 13 '
+                                  'el bajo baja a un fa sostenido (♯).', 559)],
+        2: [('arriba', 150, 'OJO', '|: en el c. 17: aquí empieza la repetición.', 62),
+            ('arriba', 330, 'PRIMO', 'Notas largas con acento (>) en los cc. 18 y 20 y mi bemol '
+                                     '(♭) en los cc. 19 y 22. Regulador < al final.', 194)],
+        3: [('arriba', 330, 'AMB', 'f en el c. 25 y reguladores > en los cc. 27-28: baja el '
+                                   'sonido dentro del compás.', 66),
+            ('abajo', 520, 'OJO', 'c. 32: barra :| y "Fine". Se repiten los cc. 17-32 y después '
+                                  'pasáis al Trio.', 551)],
+        4: [('arriba', 270, 'AMB', 'Trio: tres bemoles (si♭, mi♭, la♭) y |: en el c. 33. '
+                                   'Empieza en p, ligado.', 52),
+            ('arriba', 260, 'PRIMO', 'f en el c. 37 y acento (^) en los fa♯: el Primo canta '
+                                     'fuerte.', 321)],
+        5: [('arriba', 540, 'OJO', '"Scherzo D.C. al Fine" tras el c. 48: volved al c. 1 y '
+                                   'tocad hasta "Fine" (c. 32). Antes: f en el c. 46.', 506)],
     },
-    marcas=[],
+    marcas=[(1, 562, 445, 14, 185, 2, 1, 'caja'), (1, 62, 688, 14, 185, 3, 1, 'caja'),
+            (2, 551, 150, 16, 192, 4, 1, 'caja'), (2, 510, 152, 36, 14, 4, 2, 'caja'),
+            (2, 52, 397, 56, 182, 5, 1, 'caja'),
+            (2, 506, 647, 128, 15, 6, 1, 'caja'), (2, 560, 650, 14, 205, 6, 2, 'caja')],
     pie_pauta='la clave la pones tú · copia un compás o escribe la escala de Do mayor')
 
 if __name__ == '__main__':

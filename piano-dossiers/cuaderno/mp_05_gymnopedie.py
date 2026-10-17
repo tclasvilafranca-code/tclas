@@ -206,10 +206,10 @@ SPEC = dict(
             ('arriba', 270, 'AMB', 'c. 40: pp y la derecha se calla. Cuenta hasta el c. 44.', 487)],
         9: [('arriba', 300, 'AMB', 'f en el c. 48. La misma nota larga va ligada hasta el c. 51.',
              282)],
-        11: [('arriba', 300, 'DER', 'Ligadas en los cc. 58-60 y p en el c. 61, con un becuadro en '
+        11: [('arriba', 380, 'DER', 'Ligadas en los cc. 58-60 y p en el c. 61, con un becuadro en '
                                     'la melodía.', 372)],
-        14: [('arriba', 300, 'AMB', 'Final: dos acordes largos. Deja que suenen y cuenta los '
-                                    'tres tiempos.', 380)],
+        14: [('arriba', 470, 'AMB', 'Final: dos acordes largos. Deja que suenen y cuenta los '
+                                    'tres tiempos.', 480)],
     },
     marcas=[(1, 485, 180, 70, 30, 1, 1, 'caja'), (1, 399.5, 327.5, 17, 17, 2, 1, 'caja'),
             (1, 284, 443, 22, 16, 2, 2, 'caja'), (2, 282.5, 671, 19, 18, 6, 1, 'caja'),

@@ -38,7 +38,7 @@ SPEC = dict(
                 'mp cc. 2, 27, 49 · mf cc. 11, 35, 67, 83 · f cc. 19, 43, 91 · p cc. 51, 74, 99.')],
         especial=[
             'Pone "Rubato" con la negra a 120, y el compás es 3/4: tres negras por compás.',
-            'Tres bemoles en la armadura (si♭, mi♭ y la♭); acaba en un acorde de Do menor.',
+            'Tres bemoles en la armadura (si, mi y la bemol); acaba en un acorde de Do menor.',
             'El c. 1 es un compás de silencio: cuéntalo.',
             'Dobles barras tras los cc. 26, 50 y 74: cambia la textura.',
             'Becuadros en la melodía y en los acordes; semicorcheas ligadas en el c. 5.',
@@ -57,7 +57,7 @@ SPEC = dict(
         sub='Cada mano sola, por bloques. Después juntas y despacio.',
         izq=[('Nota larga y dos acordes', 'Cc. 2-50: una nota grave larga en el 1 y dos acordes '
                                           'cortos en el 2 y el 3. Cuenta "uno-dos-tres".'),
-             ('Cambiar de nota grave', 'La nota grave cambia cada dos compases (Mi♭, Re, Fa, '
+             ('Cambiar de nota grave', 'La nota grave cambia cada dos compases (Mi bemol, Re, Fa, '
                                        'Do...). Mira la que viene y coloca ya la mano.'),
              ('El arpegio', 'Desde el c. 51, seis corcheas ligadas por compás. Un compás, '
                             'despacio, diez veces seguidas.'),

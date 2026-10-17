@@ -25,8 +25,7 @@ SPEC = dict(
                    ('B', 17, 32, 'Scherzo, 2.ª parte (se repite) y Fine', OCRE),
                    ('T', 33, 48, 'Trio, con tres bemoles (se repite)', VERDE)],
         ideas=[('PRIMO', 'La melodía, arriba',
-                'Los dos pentagramas del Primo llevan las mismas notas; el de arriba va con 8va. '
-                'Muchas notas llevan marca de picado.'),
+                'Los dos pentagramas del Primo llevan las mismas notas; el de arriba, con 8va.'),
                ('SECONDO', 'Bajo y acordes',
                 'Cada compás: una nota grave en el 1 (Do, Si, Fa, Sol...) y dos acordes cortos '
                 'en el 2 y el 3.'),
@@ -40,7 +39,7 @@ SPEC = dict(
             'Es a cuatro manos: Primo arriba y Secondo abajo.',
             'Barras de repetición: al final del c. 16 y entre los cc. 17 y 32; Trio, cc. 33-48.',
             'En el c. 32 pone "Fine" y en el c. 48 "Scherzo D.C. al Fine".',
-            'El Trio cambia la armadura a tres bemoles (si♭, mi♭ y la♭).',
+            'El Trio cambia la armadura a tres bemoles (si, mi y la bemol).',
             'Notitas de adorno (cc. 14 y 30) y mi bemol en el Scherzo (cc. 19 y 22).'],
         reto='Tocar el recorrido sin perderos: Scherzo con sus repeticiones, Trio y vuelta al '
              'principio hasta "Fine".',
@@ -129,12 +128,12 @@ SPEC = dict(
                                   'el bajo baja a un fa sostenido (♯).', 559)],
         2: [('arriba', 150, 'OJO', '|: en el c. 17: aquí empieza la repetición.', 62),
             ('arriba', 330, 'PRIMO', 'Notas largas con acento (>) en los cc. 18 y 20 y mi bemol '
-                                     '(♭) en los cc. 19 y 22. Regulador < al final.', 194)],
+                                     'en los cc. 19 y 22. Regulador < al final.', 194)],
         3: [('arriba', 330, 'AMB', 'f en el c. 25 y reguladores > en los cc. 27-28: baja el '
                                    'sonido dentro del compás.', 66),
             ('abajo', 520, 'OJO', 'c. 32: barra :| y "Fine". Se repiten los cc. 17-32 y después '
                                   'pasáis al Trio.', 551)],
-        4: [('arriba', 270, 'AMB', 'Trio: tres bemoles (si♭, mi♭, la♭) y |: en el c. 33. '
+        4: [('arriba', 270, 'AMB', 'Trio: tres bemoles (si, mi y la bemol) y |: en el c. 33. '
                                    'Empieza en p, ligado.', 52),
             ('arriba', 260, 'PRIMO', 'f en el c. 37 y acento (^) en los fa♯: el Primo canta '
                                      'fuerte.', 321)],

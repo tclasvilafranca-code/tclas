@@ -310,7 +310,7 @@ def t16_jocs(c):
     pal = ['CORXERA', 'TA', 'TITI', 'PICA', 'TEMPS', 'MANS']
     dibuixa_sopa(c, x2 + 14, yt - 54, sopa(pal, 8, seed=53), 19, 13.5)
     llista_paraules(c, x2 + 14 + 8 * 19 + 18, yt - 70, pal, 11.5, 24)
-    h = 150
+    h = 164
     yt = pila.pren(h)
     panell(c, M, yt, pw, h, 'UNEIX AMB UNA LÍNIA', n=4)
     consigna(c, M + 14, yt - 40, 'Cada figura amb com es diu.', pw - 28)
@@ -511,10 +511,10 @@ def t19_teoria(c):
     h = 216
     panell(c, M, yt, CW, h, 'LA LLIGADURA')
     par(c, M + 16, yt - 46, 'Una línia corba que uneix DUES NOTES IGUALS: sona una sola vegada, i dura els temps de les dues.', 11.8, CW - 32, 15, SANSB, NAVY)
-    sist(c, M + 16, yt - 100, 440, 7.5, 'E4:q E4:q~ E4:q E4:q | D4:h~ D4:q C4:q', 'treble', (4, 4))
-    txt(c, M + 16, yt - 148, 'negra + negra lligades = 2 temps', 11.5, SANS, INK)
-    txt(c, M + 16, yt - 166, 'blanca + negra lligades = 3 temps', 11.5, SANS, INK)
-    txt(c, M + 16, yt - 184, 'Només es lliguen notes del mateix so!', 11.5, SANSB, OCRE)
+    sist(c, M + 16, yt - 96, 440, 7.5, 'E4:q E4:q~ E4:q E4:q | D4:h~ D4:q C4:q', 'treble', (4, 4))
+    txt(c, M + 16, yt - 164, 'negra + negra lligades = 2 temps', 11.5, SANS, INK)
+    txt(c, M + 16, yt - 182, 'blanca + negra lligades = 3 temps', 11.5, SANS, INK)
+    txt(c, M + 16, yt - 200, 'Només es lliguen notes del mateix so!', 11.5, SANSB, OCRE)
     franja(c, M, Y(738), CW, 48, 'SABIES QUE?', 'Una blanca amb puntet és igual que una blanca lligada a una negra: tres temps!', 12)
     c.showPage()
 

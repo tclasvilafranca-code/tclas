@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """El Quadern del Pianista · PEKES — muntatge del llibre.
 
-   python3 nens_llibre.py            -> ../output/Quadern_Pekes.pdf  (tot el que hi ha fet: tanda 1 = portada + capítols 1-3)
+   python3 nens_llibre.py            -> ../output/Quadern_Pekes.pdf  (el llibre sencer: 34 temes + annexos)
    python3 nens_llibre.py --prova    -> només una prova ràpida de les 4 primeres pàgines
 
    Cada tema ocupa 2 pàgines: `tN_teoria` i `tN_jocs` (ho dicta nens_pla.py).
@@ -17,13 +17,29 @@ import nens_front as front                                       # noqa: E402
 import nens_t01 as c1                                            # noqa: E402
 import nens_t02 as c2                                            # noqa: E402
 import nens_t03 as c3                                            # noqa: E402
+import nens_t04 as c4                                            # noqa: E402
+import nens_t05 as c5                                            # noqa: E402
+import nens_t06 as c6                                            # noqa: E402
+import nens_t07 as c7                                            # noqa: E402
+import nens_annex as an                                          # noqa: E402
 
 OUT = os.path.join(HERE, '..', 'output', 'Quadern_Pekes.pdf')
 
+MODULS = {range(1, 5): c1, range(5, 8): c2, range(8, 14): c3, range(14, 20): c4, range(20, 24): c5, range(24, 31): c6,
+          range(31, 35): c7}
+
+
+def _mod(n):
+    for r, m in MODULS.items():
+        if n in r:
+            return m
+
+
 PAGINES = [front.portada, front.presentacio, front.com_sus, front.index]
-for n in range(1, 14):
-    mod = c1 if n <= 4 else (c2 if n <= 7 else c3)
-    PAGINES += [getattr(mod, 't%d_teoria' % n), getattr(mod, 't%d_jocs' % n)]
+for n in range(1, 35):
+    PAGINES += [getattr(_mod(n), 't%d_teoria' % n), getattr(_mod(n), 't%d_jocs' % n)]
+PAGINES += [lambda c: an.glossari(c, 0), lambda c: an.glossari(c, 1), an.teclat_retallar, an.targetes,
+            an.pautes_1, an.pautes_2, lambda c: an.banc_jocs(c, 0), lambda c: an.banc_jocs(c, 1)]
 
 
 def main(sortida=OUT, prova=False):

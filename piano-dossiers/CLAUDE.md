@@ -1201,3 +1201,9 @@ según su nivel, no las mismas 20 de este álbum. El flujo recomendado por alumn
    cada alumno reciba contenido realmente propio si eso importa en tu caso de
    uso; si no importa (dosieres para alumnos distintos, sin relación entre
    ellos), puedes omitir este paso.
+
+## Quadern del Pianista · PEKES (llibre infantil, català, 6-10 anys)
+- Estil TCLAS adaptat: `cuaderno/nens_tclas.py` (components) + `cuaderno/nens_prova.py` (mostra v2). Fonts a `assets/fonts_nens/` (Andika cos ≥11,5 pt, Quicksand etiquetes, DejaVu Serif títols). Res per sota de 9,5 pt.
+- Panells amb vora 1,7 pt + ombra + pestanya; caixes amb icona (RECORDA ★, SABIES QUE? ?, ESCOLTO ♪); en Mussol Misol guia a cada pàgina.
+- Cada tema = 1 full de teoria (visual/esquemàtic) + 1 full de jocs (sopa de lletres, crucigrama, unir, pintar, dibuixar…). Sense "Gran final", sense alteracions de moment, mà esquerra/clau de fa des del principi, corxera normal.
+- PENDENT (després d'aprovar la mostra): afegir puntet + lligadura, dits i postura, Do central, sumar figures al compàs, direcció de la melodia, gimnàstica de dits, dues mans juntes, 4 primeres cançons, llegir a primer cop d'ull, acord de Do, com estudio una cançó, frase i calderó, annexos (glossari, targetes, pautes en blanc, banc de jocs per a la profe). Rojo = VERMELL.

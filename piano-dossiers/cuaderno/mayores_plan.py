@@ -147,14 +147,13 @@ def main():
                intro='Cinco minutos antes de abrir la partitura. Arriba se TOCA y abajo se LEE EN '
                      'VOZ ALTA, sin tocar nada. Son notas de La menor, que es la tonalidad de la '
                      'pieza, y conviene empezar despacio: la pieza va en semicorcheas.')
-    build_taller(c, tal)
-    g.pagina_manos(c, 3)
-    g.paginas_bloques(c, 4)
+    g.pagina_manos(c, 2)
+    g.paginas_bloques(c, 3)
     c.save()
-    an.OFFSET = 5
+    an.OFFSET = 4
     anot = os.path.join(OUT, 'DEMO_Partitura_por_bloques.pdf')
     npag = an.main(anot)
-    ult = 5 + npag
+    ult = 4 + npag
     pau = os.path.join(OUT, '_pauta.pdf')
     c = canvas.Canvas(pau, pagesize=(W, H))
     build_pauta(c, dict(kicker=kicker, page_num=ult + 1, titulo_pauta='Para escribir',

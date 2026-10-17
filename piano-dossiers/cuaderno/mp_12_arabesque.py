@@ -49,8 +49,7 @@ SPEC = dict(
              'Primo y semicorcheas en el Secondo.',
         truco='Estudiad por turnos y contad "uno-dos" en voz alta. Antes de tocar, recorred con '
               'el dedo: 19 → 34 → 19 → 35 → 36.',
-        sabias='Burgmüller escribió 25 estudios fáciles, op. 100, para alumnos; esta pieza es el '
-               'n.º 2. (Dato de memoria, sin verificar.)',
+        sabias='Burgmüller escribió 25 estudios fáciles y progresivos, op. 100, pensados para alumnos. La «Arabesque» es el n.º 2.',
         qr_texto='Escúchala y cuenta "uno-dos": ¿notas el carácter juguetón?', ts=(2, 4)),
     manos=dict(
         titulo='Secondo y Primo', sub='Cada parte se aprende sola. Luego, juntas y despacio.',

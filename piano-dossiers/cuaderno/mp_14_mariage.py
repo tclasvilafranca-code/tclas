@@ -48,8 +48,7 @@ SPEC = dict(
              'derecha cambia de dibujo, de compás y de registro.',
         truco='Mira primero solo los compases con compás distinto de 4/4 (5/4, 3/4, 3/8) y '
               'cuéntalos en voz alta antes de tocar.',
-        sabias='Esta melodía es muy conocida como "Mariage d\'amour" y la popularizó el '
-               'pianista Richard Clayderman en los años 70. (Dato de memoria, sin verificar.)',
+        sabias='«Mariage d\'amour» es una pieza de Paul de Senneville que hizo famosa en todo el mundo el pianista Richard Clayderman.',
         qr_texto='Escúchala con la partitura delante y cuenta los compases de 5/4.',
         ts=(4, 4), cuenta_titulo='Cómo se cuenta el 4/4 (el compás base)'),
     manos=dict(

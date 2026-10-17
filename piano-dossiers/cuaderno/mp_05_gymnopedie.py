@@ -81,8 +81,7 @@ SPEC = dict(
              'segundo tiempo y que la melodía cante por encima.',
         truco='Cuenta 1-2-3 en voz baja. Primero la izquierda sola, mirando la partitura; luego '
               'añade solo la primera nota larga de cada frase de la derecha.',
-        sabias='Satie compuso las tres Gymnopédies hacia 1888 y esta es la primera, la más '
-               'conocida. (Dato de memoria, sin verificar.)',
+        sabias='Satie compuso las tres Gymnopédies en 1888. El nombre viene de las Gymnopedias, fiestas de la antigua Esparta con danzas y cantos. Esta es la primera y la más conocida.',
         qr_texto='Escúchala siguiendo la partitura con el dedo: cuenta los tres tiempos.',
         ts=(3, 4),
         cuenta_pie='Un compás de 3/4 en negras: tres golpes iguales, lentos. Aquí solo el ritmo; '

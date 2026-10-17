@@ -46,9 +46,7 @@ SPEC = dict(
              'repetición y qué casilla toca cada vez.',
         truco='Antes de tocar, recorre la partitura con el dedo: 1-6, luego 7-26, vuelta al 7, '
               'hasta el 25 y salto a la casilla 2 (c. 27).',
-        sabias='La partitura dice: música de Louiguy, letra en inglés de Mack David y letra '
-               'original en francés de Édith Piaf. Piaf la hizo famosa hacia 1946-47. (Fecha de '
-               'memoria, sin verificar.)',
+        sabias='La música es de Louiguy, escrita en 1945, y la letra original en francés es de Édith Piaf, que la grabó en 1947. Mack David hizo la letra en inglés.',
         qr_texto='Escúchala con la partitura delante: marca las fermatas y el rit.',
         ts=(4, 4)),
     manos=dict(

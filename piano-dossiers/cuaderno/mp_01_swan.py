@@ -50,9 +50,7 @@ SPEC = dict(
              'compás se te escapa, lo normal es que la izquierda no esté de memoria.',
         truco='Estudia la izquierda sola hasta tocarla mirando la derecha de la partitura. Luego '
               'añade solo la primera nota larga de cada frase, y no la segunda hasta que salga.',
-        sabias='El cisne es una pieza de "El carnaval de los animales" (1886), escrita para '
-               'violonchelo y piano. Saint-Saëns no quiso publicar casi nada de esa obra en vida, '
-               'pero sí esta pieza.',
+        sabias='El cisne es el n.º 13 de «El carnaval de los animales» (1886), escrito para violonchelo y dos pianos. Saint-Saëns no quiso que esa obra se publicara en vida, salvo esta pieza.',
         qr_texto='Escúchala con la partitura delante: sigue las ligaduras con el dedo.',
         ts=(3, 4)),
     manos=dict(

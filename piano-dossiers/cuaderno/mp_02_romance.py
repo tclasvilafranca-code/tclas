@@ -43,9 +43,7 @@ SPEC = dict(
              'cresc. y entrar juntas después de cada nota larga.',
         truco='Antes de empezar, contad en voz alta "uno-dos" las dos y mirad la primera nota del '
               'otro. Al final de cada frase, respirad a la vez.',
-        sabias='Diabelli fue editor de música en Viena y es muy conocido por un vals suyo sobre el '
-               'que Beethoven escribió 33 variaciones. Esta sonatina forma parte de seis sonatas a '
-               'cuatro manos para estudiar.',
+        sabias='Diabelli (1781-1858) fue editor de música en Viena. Beethoven escribió sus 33 variaciones, op. 120, sobre un vals suyo. Esta pieza es de sus seis sonatas a cuatro manos, op. 163.',
         qr_texto='Escúchala y fíjate en cómo el Secondo sostiene al Primo.', ts=(2, 2),
         cuenta_pie='Un compás de 2/2: dos golpes de blanca, cada uno con cuatro corcheas. Aquí '
                    'solo el ritmo, sobre una nota cualquiera.',

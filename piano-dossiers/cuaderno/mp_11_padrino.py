@@ -48,8 +48,7 @@ SPEC = dict(
              'se te escape la mano.',
         truco='Estudia por letras, una por día: A (cc. 1-9), A\' (cc. 10-17), B (cc. 18-21)... '
               'Los tresillos, solos y despacio, diciendo "tre-si-llo".',
-        sabias='La música de El Padrino (1972) es de Nino Rota, que compuso muchas bandas sonoras '
-               'de cine italiano. (Dato de memoria, sin verificar.)',
+        sabias='Nino Rota compuso la música de «El Padrino» (1972), y también la de muchas películas de Fellini.',
         qr_texto='Escúchalo con la partitura delante: ¿notas dónde acelera?', ts=(4, 4)),
     manos=dict(
         izq=[('Calla y entra', 'En los cc. 1 y 10 la izquierda no toca. Del c. 2: bajo y acordes '

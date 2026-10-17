@@ -42,9 +42,7 @@ SPEC = dict(
              'Secondo suena fuerte, el Primo no se oye.',
         truco='Estudiad por turnos: una toca y la otra cuenta "uno-dos" en voz alta. Después '
               'cambiad. Solo cuando las dos sepáis las dos partes, juntas.',
-        sabias='Diabelli escribió estos "28 estudios melódicos" para que los alumnos aprendieran '
-               'a tocar a dos manos con un compañero: cada pieza trae la parte del alumno y la del '
-               'profesor.',
+        sabias='Es la n.º 3 de las 28 piezas melódicas a cuatro manos, op. 149, de Diabelli (1781-1858), el editor vienés del vals sobre el que Beethoven escribió sus 33 variaciones.',
         qr_texto='Escúchalo y sigue tu parte con el dedo: ¿dónde respira el Primo?', ts=(2, 4)),
     manos=dict(
         titulo='Secondo y Primo', sub='Cada parte se aprende sola. Luego, juntas y despacio.',

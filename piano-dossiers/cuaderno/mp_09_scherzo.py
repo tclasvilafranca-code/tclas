@@ -45,8 +45,7 @@ SPEC = dict(
              'principio hasta "Fine".',
         truco='Antes de tocar, seguid el camino con el dedo sobre la partitura, diciendo en voz '
               'alta dónde se vuelve y dónde se acaba.',
-        sabias='(No verificado) Scherzo significa "broma" en italiano; es una pieza viva y '
-               'ligera. Diabelli escribió estas piezas melódicas para estudiar a cuatro manos.',
+        sabias='«Scherzo» significa «broma» en italiano. Es una pieza viva y ligera, de las 28 piezas melódicas a cuatro manos, op. 149, de Diabelli.',
         qr_texto='Escúchalo y sigue el camino: Scherzo, Trio y vuelta al Scherzo.', ts=(3, 4),
         cuenta_pie='Un compás de 3/4: tres golpes, cada uno con dos corcheas. Aquí solo el '
                    'ritmo, sobre una nota cualquiera.'),

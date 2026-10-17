@@ -44,9 +44,7 @@ SPEC = dict(
              'acordarse de por dónde se va en las repeticiones y las casillas.',
         truco='Antes de tocar, recorre la partitura con el dedo siguiendo las repeticiones: '
               '5 → 29 → 5 → 29 → 5 → 30-32 → 33. Cuando lo sepas, toca.',
-        sabias='Leonard Cohen publicó "Hallelujah" en 1984 y la canción se hizo famosa con la '
-               'versión de Jeff Buckley (1994). Se ha cantado en miles de versiones. (Dato de '
-               'memoria, sin verificar.)',
+        sabias='Leonard Cohen publicó «Hallelujah» en 1984, en el disco «Various Positions». Se hizo famosa con la versión de Jeff Buckley, de 1994.',
         qr_texto='Escúchala despacio y cuenta "uno-dos" con la cabeza: es un 6/8 lento.',
         ts=(6, 8)),
     manos=dict(

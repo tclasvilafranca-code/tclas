@@ -47,8 +47,7 @@ SPEC = dict(
              'con libertad.',
         truco='Los cc. 33-48 llevan en la izquierda lo mismo que los cc. 9-24: aprende uno y '
               'tendrás el otro. Estudia por sistemas, no compás a compás.',
-        sabias='(No verificado) La partitura dice que es de la película «Amélie». «La dispute» '
-               'significa «la disputa» en francés.',
+        sabias='«La dispute» (en francés, «la disputa») es de Yann Tiersen y suena en la película «Amélie» (2001).',
         qr_texto='Escúchala y fíjate en cómo la melodía respira con el rubato.', ts=(3, 4),
         cuenta_pie='Un compás de 3/4: tres golpes, cada uno con dos corcheas. Aquí solo el '
                    'ritmo, sobre una nota cualquiera.'),

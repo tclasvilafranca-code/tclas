@@ -50,8 +50,7 @@ SPEC = dict(
              'perderse en el recorrido (segno, casillas, D.S. y Coda).',
         truco='Antes de tocar, sigue el recorrido con el dedo y dilo en voz alta. La partitura no '
               'imprime "To Coda": acuerda con tu profesora dónde se salta.',
-        sabias='Elton John publicó "Your Song" en 1970, con letra de su compañero Bernie Taupin, '
-               'y fue su primer gran éxito. (Dato de memoria, sin verificar.)',
+        sabias='Elton John publicó «Your Song» en 1970, con letra de su compañero Bernie Taupin. Fue su primer gran éxito.',
         qr_texto='Escúchala con la partitura delante: sigue las repeticiones con el dedo.',
         ts=(4, 4)),
     manos=dict(

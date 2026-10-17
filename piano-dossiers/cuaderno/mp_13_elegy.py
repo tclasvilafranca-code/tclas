@@ -42,8 +42,7 @@ SPEC = dict(
              'de tiempos por compás. Cuenta siempre en negras.',
         truco='Antes de tocar, repasa solo los compases con compás distinto de 4/4 (cc. 1-3, 7, '
               '9, 25 y 26) y cuenta sus negras en voz alta.',
-        sabias='Ludovico Einaudi es un compositor y pianista italiano. Esta pieza es de 2016 y '
-               'está inspirada en el Ártico. (Dato de memoria, sin verificar.)',
+        sabias='Einaudi la tocó en 2016 sobre una plataforma flotante junto a un glaciar de Svalbard, en el Ártico, en una campaña de Greenpeace.',
         qr_texto='Escúchala con la partitura delante: fíjate en cuándo cambia el compás.',
         ts=(4, 4), cuenta_titulo='Cómo se cuenta el 4/4 (el compás más habitual)',
         cuenta_pie='Un compás de 4/4 contado en corcheas. En esta pieza cada golpe se reparte '

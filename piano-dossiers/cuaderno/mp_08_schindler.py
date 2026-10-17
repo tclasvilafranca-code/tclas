@@ -46,8 +46,7 @@ SPEC = dict(
              'sueltas, y seguir todos los cambios de tempo y de matiz.',
         truco='Marca con lápiz en tu partitura cada rit., rall. y a tempo, y ensaya cada cambio '
               'suelto, con dos compases antes y dos después.',
-        sabias='La música es de John Williams para la película "La lista de Schindler" (1993) de '
-               'Steven Spielberg. (Dato de memoria, sin verificar.)',
+        sabias='John Williams compuso el tema para «La lista de Schindler» (1993), de Steven Spielberg, y ganó el Óscar a la mejor banda sonora. En la película, el violín lo toca Itzhak Perlman.',
         qr_texto='Escúchala con la partitura delante y sigue los rit. y los a tempo.',
         ts=(4, 4)),
     manos=dict(

@@ -1,0 +1,676 @@
+# -*- coding: utf-8 -*-
+"""Motor de los dosieres para alumnos de 12-20 anos (30 min de clase).
+
+   Una PIEZA se describe con un dict (`mp_NN_*.py`) y este modulo monta sus paginas:
+     ficha · manos · guia por bloques · partitura recolocada con burbujas · pauta
+
+   La partitura de Drive NO se toca: se detectan los sistemas sobre el PDF, se corta en las
+   filas en blanco que hay entre ellos y se vuelve a montar (vectorial, sin reescalar de
+   forma apreciable) con aire para las burbujas. Todo lo que afirma el dosier se MIDE antes.
+"""
+import io
+import os
+import sys
+import subprocess
+import tempfile
+sys.path.insert(0, os.path.dirname(__file__))
+import numpy as np
+from PIL import Image
+import segno
+from reportlab.pdfgen import canvas
+from reportlab.lib.colors import HexColor, Color
+from reportlab.pdfbase.pdfmetrics import stringWidth
+from pypdf import PdfReader, PdfWriter
+from portada import (W, H, MARGIN, CONTENT_W, NAVY, NAVY_SOFT, CREAM, INK, MUTED, _wrap)
+from ficha_info import PANEL, build_ficha
+from hoja_pauta import build_pauta
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+SRCDIR = os.path.join(HERE, '..', 'students', 'eva_sc', 'source')
+OUT = os.path.join(HERE, 'entrega')
+PAGE_W, PAGE_H = 595.276, 841.89
+OCRE = HexColor('#8C6A3F')
+AZUL = HexColor('#3E6E8F')
+VERDE = HexColor('#4F7A5A')
+ROJO = HexColor('#A0453A')
+MORADO = HexColor('#6B5B95')
+BLANCO = HexColor('#FFFFFF')
+GRIS = HexColor('#D9D2BF')
+COLORES_BLOQUE = [AZUL, OCRE, ROJO, VERDE, MORADO, HexColor('#B0723A'), HexColor('#3C7C7A'),
+                  HexColor('#8A4A6B'), HexColor('#5A6B8C')]
+
+
+# ------------------------------------------------------------ deteccion
+def _gris(pdf, pag, dpi=144):
+    with tempfile.TemporaryDirectory() as d:
+        subprocess.run(['pdftoppm', '-r', str(dpi), '-gray', '-png', '-f', str(pag), '-l', str(pag),
+                        pdf, os.path.join(d, 'p')], check=True)
+        f = [x for x in os.listdir(d) if x.endswith('.png')][0]
+        return np.array(Image.open(os.path.join(d, f)).convert('L'))
+
+
+def bandas(pdf, minblank=7.0):
+    """Bandas de tinta separadas por filas en blanco (>= minblank pt), por pagina.
+       -> [dict(pag, ancho, alto, bandas=[dict(ya, yb, left)])]; todo en pt."""
+    out = []
+    n = len(PdfReader(pdf).pages)
+    for p in range(1, n + 1):
+        arr = _gris(pdf, p)
+        h, w = arr.shape
+        tinta = arr[:, 20:w - 20] < 170
+        filas = tinta.any(1)
+        bs, ini, blanco = [], None, 0
+        for r in range(h):
+            if filas[r]:
+                if ini is None:
+                    ini = r
+                blanco = 0
+                fin = r
+            elif ini is not None:
+                blanco += 1
+                if blanco / 2 >= minblank:
+                    bs.append((ini, fin))
+                    ini = None
+        if ini is not None:
+            bs.append((ini, fin))
+        res = []
+        for (a, b) in bs:
+            cols = np.where(tinta[a:b + 1].any(0))[0]
+            res.append(dict(ya=a / 2, yb=(b + 1) / 2, left=(cols.min() + 20) / 2 if len(cols) else 20))
+        out.append(dict(pag=p, ancho=w / 2, alto=h / 2, bandas=res))
+    return out
+
+
+def _tinta(pdf, pag):
+    arr = _gris(pdf, pag)
+    h, w = arr.shape
+    return arr[:, 20:w - 20] < 170, w / 2, h / 2
+
+
+def huecos(pdf, salida_png=None, minimo=3.0):
+    """AYUDA para escribir `cortes`: dibuja cada pagina con las filas en blanco (>= minimo pt)
+       numeradas por su y (pt). Devuelve la lista [(pag, y_centro, largo)]."""
+    from PIL import ImageDraw
+    res = []
+    for p in range(1, len(PdfReader(pdf).pages) + 1):
+        t, w, h = _tinta(pdf, p)
+        filas = t.any(1)
+        im = Image.fromarray((255 - t.astype('uint8') * 255)).convert('RGB')
+        d = ImageDraw.Draw(im)
+        ini = None
+        for r in range(len(filas) + 1):
+            v = filas[r] if r < len(filas) else True
+            if not v and ini is None:
+                ini = r
+            if v and ini is not None:
+                if (r - ini) / 2 >= minimo:
+                    yc = (ini + r) / 2 / 2
+                    res.append((p, round(yc, 1), round((r - ini) / 2, 1)))
+                    d.line([(0, (ini + r) // 2), (60, (ini + r) // 2)], fill=(220, 0, 0), width=2)
+                    d.text((64, (ini + r) // 2 - 5), '%d' % round(yc), fill=(220, 0, 0))
+                ini = None
+        if salida_png:
+            im.resize((int(im.width * 0.7), int(im.height * 0.7))).save(salida_png % p)
+    return res
+
+
+def tiras_por_cortes(pdf, cortes, corte_titulo=None, pie=()):
+    """cortes: {pag: [y, ...]} separadores (pt) entre sistemas consecutivos de esa pagina.
+       corte_titulo: y en la pagina 1 por encima del cual solo hay titulo/autor.
+       -> (P, tiras) con P[i]['ancho'] y tiras [dict(pag, ya, yb, sid, sys)]"""
+    P, tiras, gid = [], [], 0
+    for p in range(1, len(PdfReader(pdf).pages) + 1):
+        t, w, h = _tinta(pdf, p)
+        P.append(dict(pag=p, ancho=w, alto=h))
+        cs = list(cortes.get(p, []))
+        filas = t.any(1)
+        ink = np.where(filas)[0]
+        if not len(ink):
+            continue
+        tope = h - (0 if p in pie else 62)
+        util = [r for r in ink if r / 2 <= tope]
+        ini = max(0, ink.min() / 2 - 4)
+        fin = min(h, (max(util) / 2 + 6) if util else h)
+        lim = [ini] + cs + [fin]
+        if p == 1 and corte_titulo:
+            tiras.append(dict(pag=1, ya=ini, yb=corte_titulo, sid=None, sys=None))
+            lim = [corte_titulo] + cs + [fin]
+        for a, b in zip(lim, lim[1:]):
+            sub = t[int(a * 2):int(b * 2)]
+            fi = np.where(sub.any(1))[0]
+            co = np.where(sub.any(0))[0]
+            if not len(fi):
+                continue
+            sysd = dict(top=a + fi.min() / 2, bot=a + (fi.max() + 1) / 2, left=(co.min() + 20) / 2)
+            tiras.append(dict(pag=p, ya=a, yb=b, sid=gid, sys=sysd))
+            gid += 1
+    return P, tiras
+
+
+# ------------------------------------------------------------ dibujo
+def _lin(txt, w, font, size):
+    out, cur = [], ''
+    for pal in txt.split():
+        t = (cur + ' ' + pal).strip()
+        if stringWidth(t, font, size) > w and cur:
+            out.append(cur)
+            cur = pal
+        else:
+            cur = t
+    if cur:
+        out.append(cur)
+    return out
+
+
+LEAD = {'IZQ': (OCRE, 'MANO IZQUIERDA'), 'DER': (AZUL, 'MANO DERECHA'),
+        'AMB': (NAVY, 'LAS DOS'), 'OJO': (ROJO, 'OJO'),
+        'PRIMO': (AZUL, 'PRIMO'), 'SEC': (OCRE, 'SECONDO'), 'ESC': (VERDE, 'ESCUCHA')}
+
+
+def burbuja(c, x, y, w, tipo, txt, cola='arriba', cx=None):
+    """Burbuja: (x, y) esquina superior izquierda (y desde arriba)."""
+    col, lead = LEAD[tipo]
+    size = 6.9
+    lin = _lin(txt, w - 14, 'DejaVuSans', size)
+    h = 12 + 9.2 * (len(lin) + 1)
+    x0, y0 = x, PAGE_H - y - h
+    cx = cx if cx is not None else x + 16
+    c.setFillColor(BLANCO)
+    c.setStrokeColor(col)
+    c.setLineWidth(0.9)
+    c.roundRect(x0, y0, w, h, 5, fill=1, stroke=1)
+    yb = y0 + h if cola == 'arriba' else y0
+    ys = yb + 6 if cola == 'arriba' else yb - 6
+    p = c.beginPath()
+    p.moveTo(cx - 4, yb)
+    p.lineTo(cx, ys)
+    p.lineTo(cx + 4, yb)
+    c.setFillColor(BLANCO)
+    c.drawPath(p, fill=1, stroke=0)
+    c.setStrokeColor(col)
+    c.line(cx - 4, yb, cx, ys)
+    c.line(cx + 4, yb, cx, ys)
+    c.setStrokeColor(BLANCO)
+    c.setLineWidth(1.4)
+    c.line(cx - 3.2, yb, cx + 3.2, yb)
+    c.setFont('DejaVuSans-Bold', 6.3)
+    c.setFillColor(col)
+    c.drawString(x0 + 7, PAGE_H - y - 10.5, lead)
+    c.setFont('DejaVuSans', size)
+    c.setFillColor(NAVY)
+    yy = PAGE_H - y - 10.5 - 9.4
+    for l in lin:
+        c.drawString(x0 + 7, yy, l)
+        yy -= 9.2
+    return h
+
+
+def alto_burbuja(w, txt):
+    return 12 + 9.2 * (len(_lin(txt, w - 14, 'DejaVuSans', 6.9)) + 1)
+
+
+def marca(c, x, y, w, h, col, n, tipo='caja'):
+    c.setStrokeColor(Color(col.red, col.green, col.blue, alpha=0.9))
+    c.setLineWidth(1.0)
+    x0, y0 = x - w / 2, PAGE_H - y - h / 2
+    if tipo == 'ovalo':
+        c.ellipse(x0, y0, x0 + w, y0 + h, stroke=1, fill=0)
+    else:
+        c.roundRect(x0, y0, w, h, 3, stroke=1, fill=0)
+    cx, cy = x0 + w, y0 + h
+    c.setFillColor(col)
+    c.circle(cx, cy, 4.4, fill=1, stroke=0)
+    c.setFillColor(BLANCO)
+    c.setFont('DejaVuSans-Bold', 6)
+    c.drawCentredString(cx, cy - 2.1, str(n))
+
+
+def margen(c, x, num, etq, col, top, bot):
+    t, b = PAGE_H - top, PAGE_H - bot
+    c.setStrokeColor(col)
+    c.setLineWidth(1.3)
+    c.line(x, b, x, t)
+    c.line(x, t, x + 4, t)
+    c.line(x, b, x + 4, b)
+    c.setFillColor(col)
+    c.circle(x - 8.5, t - 9, 7, fill=1, stroke=0)
+    c.setFillColor(BLANCO)
+    c.setFont('DejaVuSerif-Bold', 9)
+    c.drawCentredString(x - 8.5, t - 12.1, str(num))
+    c.saveState()
+    c.setFillColor(col)
+    c.setFont('DejaVuSans-Bold', 6.2)
+    c.translate(x - 5.5, t - 20)
+    c.rotate(-90)
+    c.drawString(0, 0, etq)
+    c.restoreState()
+
+
+# ------------------------------------------------------------ score
+GAP = 6
+
+
+def disponer(tiras, burb, esc_pag):
+    """Reparte tiras (+ su banda de burbujas) en paginas nuevas -> [[(tira, y0, ban_a, ban_b)]]"""
+    paginas, cur, y = [], [], 30
+    cap = 30 + (842 - 30 - 34)
+    for t in tiras:
+        s = esc_pag[t['pag']]
+        bs = burb.get(t['sid'], []) if t['sid'] is not None else []
+        aa = max([alto_burbuja(w, tx) for (st, w, tp, tx, cx) in bs if st == 'arriba'] or [0])
+        ab = max([alto_burbuja(w, tx) for (st, w, tp, tx, cx) in bs if st == 'abajo'] or [0])
+        ban_a = aa + 9 if aa else 0
+        ban_b = ab + 9 if ab else 0
+        total = ban_a + (t['yb'] - t['ya']) * s + ban_b + GAP
+        if cur and y + total > cap:
+            paginas.append(cur)
+            cur, y = [], 30
+        cur.append((t, y + ban_a, ban_a, ban_b))
+        y += total
+    paginas.append(cur)
+    return paginas
+
+
+def montar_partitura(spec, salida, num0):
+    """PDF con la partitura recolocada y anotada. Devuelve (n_paginas, tiras)."""
+    import pymupdf
+    pdf = os.path.join(SRCDIR, spec['pdf'])
+    P, tiras = tiras_por_cortes(pdf, spec['cortes'], spec.get('corte_titulo'), spec.get('pie', ()))
+    esc = {i: PAGE_W / pg['ancho'] for i, pg in enumerate(P, 1)}
+    pags = disponer(tiras, spec.get('burb', {}), esc)
+    src = pymupdf.open(pdf)
+    nuevo = pymupdf.open()
+    for lista in pags:
+        pg = nuevo.new_page(width=PAGE_W, height=PAGE_H)
+        for (t, y0, ba, bb) in lista:
+            s = esc[t['pag']]
+            ancho_src = P[t['pag'] - 1]['ancho']
+            pg.show_pdf_page(pymupdf.Rect(0, y0, PAGE_W, y0 + (t['yb'] - t['ya']) * s), src,
+                             t['pag'] - 1, clip=pymupdf.Rect(0, t['ya'], ancho_src, t['yb']))
+    tmp = salida + '.base.pdf'
+    nuevo.save(tmp)
+    base = PdfReader(tmp)
+    wr = PdfWriter()
+    for i, lista in enumerate(pags):
+        buf = io.BytesIO()
+        c = canvas.Canvas(buf, pagesize=(PAGE_W, PAGE_H))
+        _anotar(c, spec, lista, esc, P, num0 + i)
+        c.save()
+        buf.seek(0)
+        pg = base.pages[i]
+        pg.merge_page(PdfReader(buf).pages[0])
+        wr.add_page(pg)
+    with open(salida, 'wb') as f:
+        wr.write(f)
+    os.remove(tmp)
+    return len(pags)
+
+
+def _bloque_de(spec, sid):
+    for b in spec['bloques']:
+        if b['sist'][0] <= sid <= b['sist'][1]:
+            return b
+    return None
+
+
+def _anotar(c, spec, lista, esc, P, n):
+    segs = []
+    for (t, y0, ba, bb) in lista:
+        if t['sid'] is None:
+            continue
+        s = esc[t['pag']]
+        g = t['sys']
+        b = _bloque_de(spec, t['sid'])
+        top = max(y0 + (g['top'] - 2 - t['ya']) * s, y0 - 2)
+        bot = min(y0 + (g['bot'] + 4 - t['ya']) * s, y0 + (t['yb'] - t['ya']) * s)
+        xb = max(14.0, g['left'] * s - 9)
+        if segs and segs[-1][0] is b and abs(segs[-1][2] - top) < 45 and abs(segs[-1][4] - xb) < 3:
+            segs[-1][2] = bot
+        else:
+            segs.append([b, top, bot, t['sid'] == b['sist'][0], xb, t['pag']])
+    for b, top, bot, primero, xb, pg_o in segs:
+        col = b['color']
+        x_ini = xb + 3
+        c.setFillColor(Color(col.red, col.green, col.blue, alpha=0.055))
+        c.roundRect(x_ini, PAGE_H - bot, PAGE_W - 22 - x_ini, bot - top, 4, fill=1, stroke=0)
+        margen(c, xb, b['num'], b['cc'] if primero else 'sigue', col, top, bot)
+    for (pg_o, x, y, w, h, bn, k, tipo) in spec.get('marcas', []):
+        for (t, y0, ba, bb) in lista:
+            if t['pag'] == pg_o and t['ya'] <= y <= t['yb']:
+                s = esc[pg_o]
+                col = [q for q in spec['bloques'] if q['num'] == bn][0]['color']
+                marca(c, x * s, y0 + (y - t['ya']) * s, w, h, col, k, tipo)
+    for (t, y0, ba, bb) in lista:
+        bs = spec.get('burb', {}).get(t['sid'], []) if t['sid'] is not None else []
+        s = esc[t['pag']]
+        xa = xb_ = 24
+        for (st, w, tp, tx, cx) in bs:
+            cxx = cx * s
+            if st == 'arriba':
+                burbuja(c, xa, y0 - ba + 4, w, tp, tx, 'abajo', min(max(cxx, xa + 12), xa + w - 12))
+                xa += w + 10
+            else:
+                burbuja(c, xb_, y0 + (t['yb'] - t['ya']) * s + 10, w, tp, tx, 'arriba',
+                        min(max(cxx, xb_ + 12), xb_ + w - 12))
+                xb_ += w + 10
+    c.setFont('DejaVuSans', 6.4)
+    c.setFillColor(MUTED)
+    c.drawString(34, 22, spec.get('credito', ''))
+    c.drawRightString(561, 22, str(n))
+
+
+# ------------------------------------------------------------ paginas de estudio
+def marco(c, kicker, derecha, n):
+    c.setFillColor(CREAM)
+    c.rect(0, 0, W, H, fill=1, stroke=0)
+    c.setFillColor(NAVY)
+    c.rect(18, H - 24, W - 36, 6, fill=1, stroke=0)
+    c.setFont('DejaVuSans-Bold', 8.4)
+    c.setFillColor(NAVY_SOFT)
+    c.drawString(MARGIN, H - 44, kicker.upper())
+    c.setFont('DejaVuSans', 8.4)
+    c.setFillColor(MUTED)
+    c.drawRightString(W - MARGIN, H - 44, derecha)
+    c.setFont('DejaVuSans', 7.4)
+    c.drawCentredString(W / 2, 26, 'El Cuaderno del Pianista  ·  T-Clas')
+    c.drawRightString(W - MARGIN, 26, str(n))
+
+
+def titulo_pag(c, t, sub):
+    y = H - 76
+    c.setFont('DejaVuSerif-Bold', 24)
+    c.setFillColor(NAVY)
+    c.drawString(MARGIN, y, t)
+    return _wrap(c, sub, MARGIN, y - 16, 'DejaVuSans', 9.4, CONTENT_W, 12.6, MUTED)
+
+
+def _columna(c, x, y, ancho, tit, color, pasos):
+    c.setFillColor(color)
+    c.roundRect(x, y - 30, ancho, 30, 5, fill=1, stroke=0)
+    c.setFillColor(BLANCO)
+    c.setFont('DejaVuSerif-Bold', 13)
+    c.drawString(x + 14, y - 20, tit)
+    y -= 44
+    for i, (t, txt) in enumerate(pasos, 1):
+        alto = 118
+        c.setFillColor(PANEL)
+        c.roundRect(x, y - alto, ancho, alto, 5, fill=1, stroke=0)
+        c.setFillColor(color)
+        c.rect(x, y - alto, 3, alto, fill=1, stroke=0)
+        c.setFont('DejaVuSerif-Bold', 34)
+        c.setFillColor(GRIS)
+        c.drawString(x + 14, y - 38, str(i))
+        c.setFont('DejaVuSerif-Bold', 10.5)
+        c.setFillColor(NAVY)
+        c.drawString(x + 42, y - 30, t)
+        _wrap(c, txt, x + 14, y - 54, 'DejaVuSans', 8.6, ancho - 28, 11.8, INK)
+        y -= alto + 10
+    return y
+
+
+def pagina_manos(c, spec, n):
+    m = spec['manos']
+    marco(c, spec['kicker'], 'Cómo estudiarla', n)
+    y = titulo_pag(c, m.get('titulo', 'Mano izquierda y mano derecha'),
+                   m.get('sub', 'Cada mano se aprende sola. Las dos juntas llegan al final, '
+                                'despacio.'))
+    y -= 18
+    ancho = (CONTENT_W - 16) / 2
+    ya = _columna(c, MARGIN, y, ancho, m.get('tit_izq', 'MANO IZQUIERDA'), OCRE, m['izq'])
+    _columna(c, MARGIN + ancho + 16, y, ancho, m.get('tit_der', 'MANO DERECHA'), AZUL, m['der'])
+    y = ya - 4
+    tec = m.get('tecnica', ['Muñeca suelta y hombros bajos: si te cansas, estás apretando.',
+                            'Dedos curvos, cerca de las teclas, sonido ligero y parejo.',
+                            'Cuenta en voz alta los golpes y no pares cuando cambie algo.'])
+    h = 30 + 13 * len(tec)
+    c.setFillColor(PANEL)
+    c.roundRect(MARGIN, y - h, CONTENT_W, h, 5, fill=1, stroke=0)
+    c.setFillColor(NAVY)
+    c.rect(MARGIN, y - h, 3, h, fill=1, stroke=0)
+    c.setFont('DejaVuSans-Bold', 8)
+    c.drawString(MARGIN + 16, y - 16, 'LA TÉCNICA, EN %s' % {2: 'DOS', 3: 'TRES', 4: 'CUATRO'}.get(
+        len(tec), str(len(tec))) + (' FRASES' if len(tec) > 1 else ' FRASE'))
+    yy = y - 31
+    for s in tec:
+        c.setFillColor(NAVY)
+        c.circle(MARGIN + 19, yy + 3, 1.8, fill=1, stroke=0)
+        c.setFillColor(INK)
+        c.setFont('DejaVuSans', 8.6)
+        c.drawString(MARGIN + 28, yy, s)
+        yy -= 13
+    c.showPage()
+
+
+# diagramas de la guia ------------------------------------------------------
+def dots(c, x, y, n, col, r=2.1, sep=5.6):
+    c.setFillColor(col)
+    for i in range(n):
+        c.circle(x + i * sep, y, r, fill=1, stroke=0)
+
+
+def grupos(c, x, y, ng, por, col, rot=None, r=2.0, sep=5.0, hueco=7, h=11):
+    for g in range(ng):
+        w = (por - 1) * sep + 10
+        c.setFillColor(BLANCO)
+        c.setStrokeColor(col)
+        c.setLineWidth(0.8)
+        c.roundRect(x, y - h / 2, w, h, 3, fill=1, stroke=1)
+        dots(c, x + 5, y, por, col, r, sep)
+        if rot:
+            c.setFont('DejaVuSans', 6)
+            c.setFillColor(MUTED)
+            c.drawCentredString(x + w / 2, y - h / 2 - 7, rot[g] if isinstance(rot, list) else rot)
+        x += w + hueco
+    return x
+
+
+def chip(c, x, y, txt, col, size=7.4, relleno=False):
+    w = stringWidth(txt, 'DejaVuSans-Bold', size) + 12
+    if relleno:
+        c.setFillColor(col)
+        c.roundRect(x, y - 7, w, 14, 7, fill=1, stroke=0)
+        c.setFillColor(BLANCO)
+    else:
+        c.setFillColor(BLANCO)
+        c.setStrokeColor(col)
+        c.setLineWidth(0.9)
+        c.roundRect(x, y - 7, w, 14, 7, fill=1, stroke=1)
+        c.setFillColor(col)
+    c.setFont('DejaVuSans-Bold', size)
+    c.drawString(x + 6, y - 2.4, txt)
+    return x + w
+
+
+def flecha(c, x, y, col, largo=12):
+    c.setStrokeColor(col)
+    c.setFillColor(col)
+    c.setLineWidth(1)
+    c.line(x, y, x + largo - 3, y)
+    p = c.beginPath()
+    p.moveTo(x + largo, y)
+    p.lineTo(x + largo - 4, y + 2.6)
+    p.lineTo(x + largo - 4, y - 2.6)
+    p.close()
+    c.drawPath(p, fill=1, stroke=0)
+    return x + largo + 4
+
+
+def etq(c, x, y, txt, col=MUTED, size=6.6):
+    c.setFont('DejaVuSans-Bold', size)
+    c.setFillColor(col)
+    c.drawString(x, y, txt)
+
+
+def diagrama(c, x, y, col, d):
+    """d = (tipo, titulo, datos). Tipos: grupos, cadena, capas, cuenta, nota."""
+    tipo, tit, dat = d
+    etq(c, x, y + 13, tit.upper())
+    if tipo == 'grupos':               # (n_grupos, por_grupo, [etiquetas])
+        ng, por, rot = dat
+        grupos(c, x, y - 4, ng, por, col, rot)
+    elif tipo == 'cadena':             # [(texto, relleno)]
+        xx = x
+        for k, (t, r) in enumerate(dat):
+            xx = chip(c, xx, y - 1, t, col, 7, relleno=r)
+            if k < len(dat) - 1:
+                xx = flecha(c, xx + 2, y - 1, col, 9)
+    elif tipo == 'fichas':             # [texto] sin flechas
+        xx = x
+        for t in dat:
+            xx = chip(c, xx, y - 1, t, col, 7) + 3
+    elif tipo == 'capas':              # [(etiqueta, 'barras'|'puntos', color)]
+        for i, (t, k, cc) in enumerate(dat):
+            yy = y - 1 - i * 10
+            c.setFont('DejaVuSans', 6)
+            c.setFillColor(MUTED)
+            c.drawString(x, yy - 2, t)
+            xx = x + 84
+            for q in range(4):
+                if k == 'barras':
+                    c.setFillColor(cc)
+                    c.roundRect(xx + q * 40, yy - 3, 34, 6, 3, fill=1, stroke=0)
+                else:
+                    dots(c, xx + q * 40, yy, 6, cc, 1.6, 5.4)
+    elif tipo == 'cuenta':             # [(rotulo, n_grupos, por_grupo)]
+        xx = x
+        for t, ng, por in dat:
+            c.setFont('DejaVuSans-Bold', 6.4)
+            c.setFillColor(col)
+            c.drawString(xx, y - 14, t)
+            xx = grupos(c, xx, y - 2, ng, por, col, None, 2.0, 5.0, 4, 10) + 10
+    elif tipo == 'nota':               # texto corto en una linea, con chip
+        c.setFont('DejaVuSans', 7.4)
+        c.setFillColor(INK)
+        c.drawString(x, y - 3, dat)
+
+
+COL_PASO = {'IZQUIERDA': OCRE, 'DERECHA': AZUL, 'JUNTAS': NAVY, 'A TEMPO': VERDE, 'OJO': ROJO,
+            'PRIMO': AZUL, 'SECONDO': OCRE, 'LOS DOS': NAVY}
+
+
+def tarjeta(c, y, b):
+    col = b['color']
+    alto = 142
+    c.setFillColor(PANEL)
+    c.roundRect(MARGIN, y - alto, CONTENT_W, alto, 5, fill=1, stroke=0)
+    c.setFillColor(col)
+    c.rect(MARGIN, y - alto, 4, alto, fill=1, stroke=0)
+    c.circle(MARGIN + 24, y - 20, 11, fill=1, stroke=0)
+    c.setFillColor(BLANCO)
+    c.setFont('DejaVuSerif-Bold', 13)
+    c.drawCentredString(MARGIN + 24, y - 24.5, str(b['num']))
+    c.setFillColor(NAVY)
+    c.setFont('DejaVuSerif-Bold', 12)
+    c.drawString(MARGIN + 44, y - 24, b['cc'])
+    c.setFont('DejaVuSans', 10)
+    c.setFillColor(INK)
+    c.drawString(MARGIN + 44 + stringWidth(b['cc'], 'DejaVuSerif-Bold', 12) + 10, y - 24, b['nombre'])
+    diagrama(c, MARGIN + 16, y - 56, col, b['diag'])
+    pasos = b['pasos']
+    ancho = (CONTENT_W - 32 - 3 * 10) / 4
+    for i, (p, t) in enumerate(pasos):
+        x = MARGIN + 16 + i * (ancho + 10)
+        c.setFillColor(COL_PASO.get(p, NAVY))
+        c.rect(x, y - 84, ancho, 2, fill=1, stroke=0)
+        c.setFont('DejaVuSans-Bold', 7)
+        c.drawString(x, y - 96, p)
+        _wrap(c, t, x, y - 108, 'DejaVuSans', 7.8, ancho, 9.8, INK)
+    return y - alto - 10
+
+
+LISTA_DEF = ['Toco de memoria la mano izquierda de los primeros bloques.',
+             'Cuento los golpes y no me pierdo cuando algo cambia.',
+             'Sé por dónde voy en la partitura, también en las repeticiones.',
+             'Toco la pieza entera, de principio a fin, sin parar.',
+             'La grabo con el móvil y la escucho.']
+
+
+def paginas_guia(c, spec, n0):
+    bl = spec['bloques']
+    k = 0
+    pagina = 0
+    while k < len(bl) or pagina == 0:
+        marco(c, spec['kicker'], 'Guía por bloques', n0 + pagina)
+        if pagina == 0:
+            y = titulo_pag(c, 'Cómo tocar cada bloque',
+                           spec.get('sub_guia', 'Cada bloque, en el mismo orden: izquierda, derecha, '
+                                                'juntas y a tempo.')) - 14
+        else:
+            y = H - 76
+        for b in bl[k:k + 4]:
+            y = tarjeta(c, y, b)
+            k += 1
+        if k >= len(bl):
+            items = spec.get('lista', LISTA_DEF)
+            h = 40 + 22 * len(items)
+            if y - h > 48:
+                y -= 14
+                c.setFillColor(PANEL)
+                c.roundRect(MARGIN, y - h, CONTENT_W, h, 5, fill=1, stroke=0)
+                c.setFillColor(NAVY)
+                c.rect(MARGIN, y - h, 3, h, fill=1, stroke=0)
+                c.setFont('DejaVuSans-Bold', 8.4)
+                c.drawString(MARGIN + 18, y - 22, 'ANTES DE DECIR «YA LA SÉ»')
+                yy = y - 46
+                for t in items:
+                    c.setStrokeColor(NAVY)
+                    c.setLineWidth(1)
+                    c.roundRect(MARGIN + 18, yy - 3, 11, 11, 2, fill=0, stroke=1)
+                    c.setFillColor(INK)
+                    c.setFont('DejaVuSans', 9.4)
+                    c.drawString(MARGIN + 38, yy, t)
+                    yy -= 22
+        c.showPage()
+        pagina += 1
+    return pagina
+
+
+# ------------------------------------------------------------ pieza completa
+def _qr(url, ruta):
+    segno.make(url, error='m').save(ruta, scale=10, border=2, dark='#1A2332', light='#F3F1EA')
+
+
+def construir_pieza(spec, num_pag0):
+    """-> (PdfWriter con las paginas, n_paginas). num_pag0: numero de la primera pagina."""
+    os.makedirs(OUT, exist_ok=True)
+    slug = spec['slug']
+    kicker = spec['kicker']
+    # 1) ficha
+    qr = os.path.join(OUT, '_qr_%s.png' % slug)
+    _qr(spec['yt'], qr)
+    cfg = dict(spec['ficha'])
+    cfg.update(kicker=kicker, page_num=num_pag0, time_sig=spec['time_sig'],
+               qr=dict(cfg['qr'], png=qr))
+    cfg['titulo'] = spec['titulo']
+    cfg['autor'] = spec['autor']
+    f1 = os.path.join(OUT, '_f_%s.pdf' % slug)
+    c = canvas.Canvas(f1, pagesize=(W, H))
+    build_ficha(c, cfg)
+    c.save()
+    os.remove(qr)
+    # 2) manos + guia
+    f2 = os.path.join(OUT, '_g_%s.pdf' % slug)
+    c = canvas.Canvas(f2, pagesize=(W, H))
+    pagina_manos(c, spec, num_pag0 + 1)
+    ng = paginas_guia(c, spec, num_pag0 + 2)
+    c.save()
+    # 3) partitura
+    f3 = os.path.join(OUT, '_s_%s.pdf' % slug)
+    ns = montar_partitura(spec, f3, num_pag0 + 2 + ng)
+    total = 1 + 1 + ng + ns
+    # 4) pauta (una, o dos si hace falta que la pieza ocupe un numero PAR de hojas)
+    npau = 1 if (total + 1) % 2 == 0 else 2
+    f4 = os.path.join(OUT, '_p_%s.pdf' % slug)
+    c = canvas.Canvas(f4, pagesize=(W, H))
+    for i in range(npau):
+        build_pauta(c, dict(kicker=kicker, page_num=num_pag0 + total + i,
+                            titulo_pauta='Para escribir',
+                            pie_pauta=spec.get('pie_pauta', 'la clave la pones tú · copia un compás '
+                                                            'o inventa algo')))
+    c.save()
+    wr = PdfWriter()
+    for f in (f1, f2, f3, f4):
+        for p in PdfReader(f).pages:
+            wr.add_page(p)
+        os.remove(f)
+    return wr, total + npau

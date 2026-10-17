@@ -629,3 +629,167 @@ def clau_llarga(c, x1, y1, x2, y2):
     c.line(x1, y1, x2, y2)
     c.setFillColor(NAVY)
     c.circle(x2, y2, 2.6, stroke=0, fill=1)
+
+
+# ------------------------------------------------------------------ icones per al ritme i la música
+def cor(c, cx, cy, s=1.0, color=True):
+    """Cor (el pols del cos)."""
+    fil = HexColor('#E4392B') if color else HexColor('#E3DED0')
+    trac(c, 2.0, NAVY)
+    c.setFillColor(fil)
+    p = c.beginPath()
+    p.moveTo(cx, cy - 26 * s)
+    p.curveTo(cx - 48 * s, cy + 2 * s, cx - 30 * s, cy + 34 * s, cx, cy + 14 * s)
+    p.curveTo(cx + 30 * s, cy + 34 * s, cx + 48 * s, cy + 2 * s, cx, cy - 26 * s)
+    p.close()
+    c.drawPath(p, stroke=1, fill=1)
+    c.setFillColor(white)
+    c.ellipse(cx - 24 * s, cy + 8 * s, cx - 14 * s, cy + 20 * s, stroke=0, fill=1)
+
+
+def rellotge(c, cx, cy, s=1.0, color=True):
+    trac(c, 2.0, NAVY)
+    c.setFillColor(HexColor('#F6D9A0') if color else HexColor('#EDE9DE'))
+    c.circle(cx, cy, 30 * s, stroke=1, fill=1)
+    c.setFillColor(white)
+    c.circle(cx, cy, 25 * s, stroke=1, fill=1)
+    trac(c, 1.2, NAVY)
+    for k in range(12):
+        a = math.radians(k * 30)
+        r1, r2 = (21 if k % 3 == 0 else 22.5) * s, 25 * s
+        c.line(cx + r1 * math.sin(a), cy + r1 * math.cos(a), cx + r2 * math.sin(a), cy + r2 * math.cos(a))
+    trac(c, 2.4, NAVY)
+    c.line(cx, cy, cx + 12 * s * math.sin(math.radians(60)), cy + 12 * s * math.cos(math.radians(60)))
+    trac(c, 1.6, NAVY)
+    c.line(cx, cy, cx, cy + 19 * s)
+    c.setFillColor(NAVY)
+    c.circle(cx, cy, 2.4 * s, stroke=0, fill=1)
+
+
+def petjades(c, cx, cy, s=1.0, color=True):
+    """Dues petjades de sabata (caminar al ritme del pols)."""
+    trac(c, 1.8, NAVY)
+    c.setFillColor(HexColor('#8A5A3C') if color else HexColor('#CFC9B7'))
+    for (dx, dy, ang) in ((-13, -14, 10), (13, 12, -10)):
+        c.saveState()
+        c.translate(cx + dx * s, cy + dy * s)
+        c.rotate(ang)
+        sol = c.beginPath()
+        sol.moveTo(0, 20 * s)
+        sol.curveTo(9 * s, 20 * s, 11 * s, 8 * s, 8 * s, 0)
+        sol.curveTo(6 * s, -6 * s, 6 * s, -8 * s, 6 * s, -10 * s)
+        sol.lineTo(-6 * s, -10 * s)
+        sol.curveTo(-6 * s, -8 * s, -6 * s, -6 * s, -8 * s, 0)
+        sol.curveTo(-11 * s, 8 * s, -9 * s, 20 * s, 0, 20 * s)
+        sol.close()
+        c.drawPath(sol, stroke=1, fill=1)
+        c.ellipse(-6 * s, -22 * s, 6 * s, -13 * s, stroke=1, fill=1)
+        c.restoreState()
+
+
+def metronom(c, cx, yb, s=1.0, color=True):
+    """Metrònom de piràmide amb el pèndol. Alt ~ 118·s, ample ~ 60·s (la base)."""
+    fusta, fusta2 = (HexColor('#C98B57'), HexColor('#9B5E34')) if color else (HexColor('#EDE9DE'), HexColor('#CFC9B7'))
+    p = c.beginPath()
+    p.moveTo(cx - 30 * s, yb)
+    p.lineTo(cx + 30 * s, yb)
+    p.lineTo(cx + 12 * s, yb + 108 * s)
+    p.lineTo(cx - 12 * s, yb + 108 * s)
+    p.close()
+    c.setFillColor(fusta)
+    c.drawPath(p, stroke=0, fill=1)
+    _grad(c, p, cx - 30 * s, yb, cx + 30 * s, yb, fusta, fusta2)
+    trac(c, 2.0, NAVY)
+    c.drawPath(p, stroke=1, fill=0)
+    # escala
+    c.setFillColor(white)
+    c.roundRect(cx - 8 * s, yb + 20 * s, 16 * s, 70 * s, 3, stroke=1, fill=1)
+    trac(c, 0.9, NAVY_SOFT)
+    for k in range(8):
+        c.line(cx - 6 * s, yb + 26 * s + k * 8 * s, cx - 1 * s, yb + 26 * s + k * 8 * s)
+    # pèndol (inclinat)
+    trac(c, 2.4, NAVY)
+    c.line(cx, yb + 6 * s, cx + 20 * s, yb + 112 * s)
+    c.setFillColor(HexColor('#E7BE46') if color else HexColor('#BDB7A8'))
+    c.roundRect(cx + 8 * s, yb + 70 * s, 11 * s, 12 * s, 2, stroke=1, fill=1)
+    c.setFillColor(NAVY)
+    c.circle(cx, yb + 6 * s, 3 * s, stroke=0, fill=1)
+
+
+def tortuga(c, cx, cy, s=1.0, color=True):
+    """Tortuga de costat, cap a la dreta. Ample ~ 100·s."""
+    verd, verd2, pell = ((HexColor('#7DB84A'), HexColor('#4F8A2E'), HexColor('#B9D98F')) if color
+                         else (HexColor('#DDD8C8'), HexColor('#B5AE9B'), HexColor('#EFEBDF')))
+    trac(c, 2.0, NAVY)
+    c.setFillColor(pell)
+    for dx in (-26, 18):
+        c.roundRect(cx + dx * s - 8 * s, cy - 32 * s, 16 * s, 20 * s, 6 * s, stroke=1, fill=1)
+    c.ellipse(cx + 34 * s, cy - 2 * s, cx + 62 * s, cy + 18 * s, stroke=1, fill=1)
+    c.circle(cx + 56 * s, cy + 8 * s, 1.8 * s, stroke=0, fill=0)
+    c.setFillColor(NAVY)
+    c.circle(cx + 54 * s, cy + 11 * s, 2.0 * s, stroke=0, fill=1)
+    c.setFillColor(pell)
+    trac(c, 2.0, NAVY)
+    c.ellipse(cx - 56 * s, cy - 14 * s, cx - 38 * s, cy - 2 * s, stroke=1, fill=1)
+    # closca
+    cl = c.beginPath()
+    cl.moveTo(cx - 44 * s, cy - 10 * s)
+    cl.curveTo(cx - 44 * s, cy + 44 * s, cx + 40 * s, cy + 44 * s, cx + 40 * s, cy - 10 * s)
+    cl.close()
+    c.setFillColor(verd)
+    c.drawPath(cl, stroke=0, fill=1)
+    _grad(c, cl, cx - 44 * s, cy + 40 * s, cx + 40 * s, cy - 10 * s, verd, verd2)
+    trac(c, 2.0, NAVY)
+    c.drawPath(cl, stroke=1, fill=0)
+    trac(c, 1.5, NAVY)
+    for (a, b, c2, d) in ((-8, 0, -10, 34), (-30, 0, -26, 24), (14, 0, 12, 28)):
+        c.line(cx + a * s, cy - 10 * s + 2, cx + c2 * s, cy - 10 * s + d * s)
+    c.line(cx - 36 * s, cy + 12 * s, cx + 34 * s, cy + 12 * s)
+    c.setFillColor(pell)
+    trac(c, 2.0, NAVY)
+    c.roundRect(cx - 46 * s, cy - 14 * s, 90 * s, 7 * s, 3, stroke=1, fill=1)
+
+
+def coet(c, cx, cy, s=1.0, color=True, ang=-30):
+    """Coet (per a «ràpid»). Alt ~ 110·s."""
+    c.saveState()
+    c.translate(cx, cy)
+    c.rotate(ang)
+    cos, tap, finest, flama = ((white, HexColor('#E4392B'), HexColor('#6FB1E0'), HexColor('#F28C0E')) if color
+                               else (white, HexColor('#B5AE9B'), HexColor('#D9D3C3'), HexColor('#BDB7A8')))
+    trac(c, 2.0, NAVY)
+    c.setFillColor(flama)
+    fl = c.beginPath()
+    fl.moveTo(-8 * s, -34 * s)
+    fl.curveTo(-10 * s, -56 * s, 0, -66 * s, 0, -72 * s)
+    fl.curveTo(0, -66 * s, 10 * s, -56 * s, 8 * s, -34 * s)
+    fl.close()
+    c.drawPath(fl, stroke=1, fill=1)
+    c.setFillColor(tap)
+    for sg in (-1, 1):
+        fn = c.beginPath()
+        fn.moveTo(sg * 14 * s, -18 * s)
+        fn.lineTo(sg * 30 * s, -42 * s)
+        fn.lineTo(sg * 14 * s, -32 * s)
+        fn.close()
+        c.drawPath(fn, stroke=1, fill=1)
+    body = c.beginPath()
+    body.moveTo(-16 * s, -34 * s)
+    body.curveTo(-22 * s, 10 * s, -12 * s, 40 * s, 0, 54 * s)
+    body.curveTo(12 * s, 40 * s, 22 * s, 10 * s, 16 * s, -34 * s)
+    body.close()
+    c.setFillColor(cos)
+    c.drawPath(body, stroke=0, fill=1)
+    _grad(c, body, -20 * s, 0, 20 * s, 0, white, HexColor('#DCD5C2'))
+    trac(c, 2.0, NAVY)
+    c.drawPath(body, stroke=1, fill=0)
+    c.setFillColor(tap)
+    cap = c.beginPath()
+    cap.moveTo(-12 * s, 28 * s)
+    cap.curveTo(-8 * s, 42 * s, -4 * s, 48 * s, 0, 54 * s)
+    cap.curveTo(4 * s, 48 * s, 8 * s, 42 * s, 12 * s, 28 * s)
+    cap.close()
+    c.drawPath(cap, stroke=1, fill=1)
+    c.setFillColor(finest)
+    c.circle(0, 8 * s, 8 * s, stroke=1, fill=1)
+    c.restoreState()

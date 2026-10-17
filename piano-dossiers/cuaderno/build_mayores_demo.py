@@ -54,20 +54,22 @@ CFG = dict(
     armonia=dict(
         titulo='Los acordes, de un vistazo',
         tarjetas=[
-            ('CC. 1-2', 'Am/E · G/D · Am/C · D',
-             'Acordes con otra nota en el bajo: Am/E es La menor con el Mi abajo. Los bajos '
-             'son Mi, Re, Do: bajan por grados.'),
-            ('CC. 3-8', 'Am · F · G · Esus4 · E',
-             'La armonía que más se repite: Am, F, G, Am, y la cadencia Esus4 → E → Am al '
-             'final del c. 7.'),
-            ('CC. 9-12', 'F · G · Am · Esus4 · E',
-             'Repite el camino de los cc. 3-8: F, G, Am y la misma cadencia Esus4 → E → Am.'),
-            ('CC. 13-28', 'Am/E · G/D · Am/C · D',
-             'La entrada vuelve en los cc. 13-14 y en todo el final. Lo que aprendes en los '
-             'dos primeros compases se usa varias veces.'),
+            ('CC. 1-2', 'Bajo: Mi · Re · Do',
+             'La menor, Sol mayor y La menor en inversión (la nota grave no es la fundamental), '
+             'y Re mayor. En tu partitura: Am/E, G/D, Am/C, D.'),
+            ('CC. 3-8', 'La m · Fa · Sol · Mi',
+             'La menor, Fa mayor, Sol mayor y la cadencia: Mi con cuarta suspendida → Mi mayor → '
+             'La menor (dominante → tónica). En tu partitura: Esus4, E, Am.'),
+            ('CC. 9-12', 'El mismo camino',
+             'Repite Fa, Sol, La menor y la misma cadencia sobre la dominante. El 9/8 y el 6/8 '
+             'acortan el camino de vuelta.'),
+            ('CC. 13-28', 'Vuelve la entrada',
+             'Los mismos acordes de los cc. 1-2 en los cc. 13-14 y en todo el final: lo que '
+             'aprendes al principio se usa varias veces.'),
         ],
-        pie='Los nombres de los acordes están escritos encima de tu partitura. Si sabes '
-            'leerlos, sabes qué viene antes de tocarlo.',
+        pie='Encima de la partitura los acordes vienen en cifrado americano (A = La, C = Do, '
+            'D = Re, E = Mi, F = Fa, G = Sol; "m" = menor; la barra indica la nota del bajo). '
+            'Aquí los llamamos como siempre.',
     ),
     titulo_ritmos='Cómo se cuenta el 12/8',
     pie_ritmos='Un compás de 12/8: cuatro golpes de tres corcheas (1 2 3 · 4 5 6 · 7 8 9 · '
@@ -82,7 +84,7 @@ CFG = dict(
         'Hay semicorcheas de principio a fin: seis por cada golpe.',
         'La izquierda lleva "con Ped." (pedal) al principio.',
         'La repetición empieza en el c. 15, con 1ª casilla (c. 23) y 2ª casilla (c. 25).',
-        'En los cc. 15-16 la izquierda va escrita con 8va: suena una octava más grave.',
+        'En los cc. 15-16 la izquierda va escrita con 8va (ottava bassa): suena una octava más grave.',
     ],
     reto='Los cambios de 12/8 a 9/8 y a 6/8. Las semicorcheas no se frenan: lo que cambia es '
          'cuántas caben antes de volver a empezar. Si cuentas "uno" en cada golpe sin '

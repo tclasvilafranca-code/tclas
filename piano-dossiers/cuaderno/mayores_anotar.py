@@ -47,64 +47,84 @@ def bloque_de(compas):
             return b
 
 
-def pill(c, x, y, txt, col, size=7.6):
-    w = stringWidth(txt, 'DejaVuSans-Bold', size) + 14
+def marca(c, x, y, w, h, col, n, tipo='caja'):
+    """Marca fina alrededor de lo importante; (x, y) es el centro, y desde arriba.
+       Solo contorno: no tapa nada. El numero va en la esquina, fuera de la musica."""
+    c.setStrokeColor(Color(col.red, col.green, col.blue, alpha=0.9))
+    c.setLineWidth(1.0)
+    x0, y0 = x - w / 2, PAGE_H - y - h / 2
+    if tipo == 'ovalo':
+        c.ellipse(x0, y0, x0 + w, y0 + h, stroke=1, fill=0)
+    else:
+        c.roundRect(x0, y0, w, h, 3, stroke=1, fill=0)
+    cx, cy = x0 + w, y0 + h
     c.setFillColor(col)
-    c.roundRect(x, y, w, 13.5, 6.7, fill=1, stroke=0)
+    c.circle(cx, cy, 4.4, fill=1, stroke=0)
     c.setFillColor(HexColor('#FFFFFF'))
-    c.setFont('DejaVuSans-Bold', size)
-    c.drawString(x + 7, y + 3.9, txt)
-    return w
+    c.setFont('DejaVuSans-Bold', 6)
+    c.drawCentredString(cx, cy - 2.1, str(n))
 
 
-def anillo(c, x, y, rx, ry, col, n=None):
-    """Anillo a lapiz alrededor de algo importante (coordenadas desde arriba)."""
+def margen(c, bloque, top, bot, primero):
+    """Parentesis fino en el margen izquierdo + ficha con el numero del bloque."""
+    num, c1, c2, nombre, col = bloque
+    t, b = PAGE_H - top, PAGE_H - bot
     c.setStrokeColor(col)
-    c.setLineWidth(1.5)
-    c.ellipse(x - rx, PAGE_H - y - ry, x + rx, PAGE_H - y + ry, stroke=1, fill=0)
-    if n is not None:
-        c.setFillColor(col)
-        c.circle(x + rx, PAGE_H - y + ry, 5.2, fill=1, stroke=0)
-        c.setFillColor(HexColor('#FFFFFF'))
-        c.setFont('DejaVuSans-Bold', 6.6)
-        c.drawCentredString(x + rx, PAGE_H - y + ry - 2.3, str(n))
+    c.setLineWidth(1.3)
+    c.line(28, b, 28, t)
+    c.line(28, t, 32, t)
+    c.line(28, b, 32, b)
+    c.setFillColor(col)
+    c.circle(19.5, t - 9, 7, fill=1, stroke=0)
+    c.setFillColor(HexColor('#FFFFFF'))
+    c.setFont('DejaVuSerif-Bold', 9)
+    c.drawCentredString(19.5, t - 12.1, str(num))
+    c.saveState()
+    c.setFillColor(col)
+    c.setFont('DejaVuSans-Bold', 6.2)
+    etq = 'cc. %d-%d' % (c1, c2) if primero else 'sigue'
+    c.translate(22.5, t - 20)
+    c.rotate(-90)
+    c.drawString(0, 0, etq)
+    c.restoreState()
 
 
 def capa(pag, marcas):
     buf = io.BytesIO()
     c = canvas.Canvas(buf, pagesize=(595.276, PAGE_H))
-    visto = set()
+    segmentos = []                      # (bloque, top, bot, primero)
     for (t, b_), (c1, c2) in zip(SIST[pag], COMPASES[pag]):
         b = bloque_de(c1)
+        top = t - (34 if (pag, c1) in ((3, 23), (3, 25)) else 24)
+        bot = b_ + 8
+        if segmentos and segmentos[-1][0] is b:
+            segmentos[-1][2] = bot
+        else:
+            segmentos.append([b, top, bot, c1 == b[1]])
+    for b, top, bot, primero in segmentos:
         col = b[4]
-        top, bot = t - (34 if (pag, c1) in ((3, 23), (3, 25)) else 26), b_ + 8
-        c.setFillColor(Color(col.red, col.green, col.blue, alpha=0.10))
-        c.roundRect(22, PAGE_H - bot, 551, bot - top, 5, fill=1, stroke=0)
-        c.setFillColor(col)
-        c.rect(14, PAGE_H - bot, 4.5, bot - top, fill=1, stroke=0)
-        if b[0] not in visto:
-            visto.add(b[0])
-            etq = 'BLOQUE %d · cc. %d-%d · %s' % (b[0], b[1], b[2], b[3])
-            if c1 != b[1]:
-                etq = 'BLOQUE %d (sigue) · %s' % (b[0], b[3])
-            w = stringWidth(etq, 'DejaVuSans-Bold', 7.6) + 14
-            pill(c, 90 if (pag, c1) == (3, 23) else 573 - w, PAGE_H - bot - 6.5, etq, col)
-    for (x, y, rx, ry, bn, n) in marcas.get(pag, []):
-        anillo(c, x, y, rx, ry, [b for b in BLOQUES if b[0] == bn][0][4], n)
+        c.setFillColor(Color(col.red, col.green, col.blue, alpha=0.055))
+        c.roundRect(31, PAGE_H - bot, 543, bot - top, 4, fill=1, stroke=0)
+        margen(c, b, top, bot, primero)
+    for (x, y, w, h, bn, n, tipo) in marcas.get(pag, []):
+        marca(c, x, y, w, h, [b for b in BLOQUES if b[0] == bn][0][4], n, tipo)
     c.save()
     buf.seek(0)
     return PdfReader(buf).pages[0]
 
 
-# anillos: (x, y_desde_arriba, rx, ry, bloque, numero)
+# marcas: (x, y, ancho, alto, bloque, numero, tipo): centro en pt desde arriba
 MARCAS = {
-    1: [(139, 171, 36, 8, 1, 1), (122, 257, 12, 9, 1, 2),
-        (125, 337, 55, 9, 2, 1), (70, 414, 10, 9, 2, 2),
-        (76, 518, 15, 22, 3, 1), (351, 515, 15, 22, 3, 2), (545, 515, 15, 22, 3, 3),
-        (122, 639, 32, 8, 4, 1)],
-    2: [(344, 90, 15, 22, 4, 2), (72, 216, 15, 22, 4, 3), (252, 216, 15, 22, 4, 4),
-        (47, 533, 9, 30, 6, 1), (76, 620, 13, 8, 6, 2)],
-    3: [(75, 361, 12, 9, 7, 1), (80, 500, 12, 9, 7, 2), (557, 711, 7, 40, 7, 3)],
+    1: [(139, 171, 66, 14, 1, 1, 'caja'), (122, 257, 26, 16, 1, 2, 'ovalo'),
+        (131, 336, 120, 14, 2, 1, 'caja'), (70, 414, 20, 17, 2, 2, 'ovalo'),
+        (76, 517, 17, 26, 3, 1, 'caja'), (351, 516, 17, 26, 3, 2, 'caja'),
+        (545, 516, 19, 26, 3, 3, 'caja'),
+        (111, 639, 80, 14, 4, 1, 'caja')],
+    2: [(344, 93, 17, 26, 4, 2, 'caja'), (72, 227, 17, 26, 4, 3, 'caja'),
+        (252, 227, 19, 26, 4, 4, 'caja'),
+        (50, 564, 12, 76, 6, 1, 'caja'), (76, 621, 24, 14, 6, 2, 'ovalo')],
+    3: [(72, 359, 15, 14, 7, 1, 'caja'), (75, 507, 15, 14, 7, 2, 'caja'),
+        (555, 715, 14, 82, 7, 3, 'caja')],
 }
 
 

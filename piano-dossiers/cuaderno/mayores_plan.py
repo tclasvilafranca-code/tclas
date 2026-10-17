@@ -17,8 +17,8 @@ OUT = os.path.join(HERE, 'entrega')
 
 # (bloque, compases, que se trabaja, en clase, en casa, marcas con anillo)
 FILAS = [
-    (1, 'cc. 1-2', 'La entrada, "Con moto": los acordes Am/E, G/D, Am/C y D, con pedal. Una '
-                   'figura de semicorcheas que se repite.',
+    (1, 'cc. 1-2', 'La entrada, "Con moto": La menor, Sol mayor y La menor en inversión, y Re mayor, '
+                   'con pedal. Una figura de semicorcheas que se repite.',
      'Izquierda sola, luego derecha sola; juntas a media velocidad.',
      'Izquierda de memoria, 5 minutos al día.', '① tempo  ② mf'),
     (2, 'cc. 3-4', 'Più mosso (corchea = 180). La izquierda dibuja seis semicorcheas por '
@@ -29,17 +29,17 @@ FILAS = [
                    'frenan: cambia cuántas caben antes de volver a empezar.',
      'Cuenta en voz alta 1-2-3 / 1-2-3 / 1-2-3 y 1-2-3 / 1-2-3 mientras tocas la izquierda.',
      'Los dos compases en bucle, con metrónomo y contando.', '① 9/8  ② 6/8  ③ vuelve 12/8'),
-    (4, 'cc. 7-12', 'La cadencia Esus4 → E → Am (c. 7-8) y la vuelta de 9-12, que repite el '
-                    'camino de 3-8 con otro 9/8 y otro 6/8.',
+    (4, 'cc. 7-12', 'La cadencia sobre la dominante (Mi con cuarta suspendida → Mi mayor → La menor, '
+                    'cc. 7-8) y la vuelta de 9-12, que repite el camino de 3-8 con otro 9/8 y otro 6/8.',
      'Leer los cc. 9-12 como "el bloque 3 con otras notas": solo cambian las alturas.',
      'Cada compás con su cuenta; después, de corrido hasta el c. 12.',
-     '① Esus4  ② 9/8  ③ 6/8  ④ 12/8'),
+     '① cadencia  ② 9/8  ③ 6/8  ④ 12/8'),
     (5, 'cc. 13-14', 'Vuelve la entrada: es el bloque 1. No es material nuevo.',
      'Tocarla de memoria, sin partitura.', 'Dos pasadas seguidas sin parar.', '—'),
     (6, 'cc. 15-22', 'Empieza la repetición (barra con puntos). La izquierda va escrita con '
-                     '8va en los cc. 15-16 y entran acordes nuevos: C, E⁵ y D⁵.',
+                     '8va en los cc. 15-16 y entran acordes nuevos: Do mayor y quintas vacías de Mi y de Re (sin tercera).',
      'Primero la izquierda con el 8va (suena una octava más grave); después la derecha.',
-     'Un sistema por día: cc. 15-16, 17-18, 19-20, 21-22.', '① barra de repetición  ② 8va'),
+     'Un sistema por día: cc. 15-16, 17-18, 19-20, 21-22.', '① repetición  ② 8va (ottava bassa)'),
     (7, 'cc. 23-28', 'Casilla 1ª (cc. 23-24) la primera vez; la segunda vez se salta a la '
                      'casilla 2ª (cc. 25-26). Final en doble barra (cc. 27-28).',
      'Dibujar el recorrido con el dedo sobre la partitura: ¿por dónde pasas la 2ª vez?',
@@ -64,7 +64,7 @@ def pagina(c, n):
     c.setFillColor(NAVY)
     c.drawString(MARGIN, y, 'Cómo dividir la pieza')
     y -= 15
-    y = _wrap(c, 'Siete bloques, marcados con colores sobre la partitura de las páginas siguientes. '
+    y = _wrap(c, 'Siete bloques, marcados con un color y un número sobre la partitura de las páginas siguientes. '
                  'En clase se trabaja el bloque; en casa se repasa con la misma tabla. Orden de '
                  'siempre: izquierda sola, derecha sola, juntas despacio, y solo al final a tempo.',
               MARGIN, y, 'DejaVuSans', 8.6, CONTENT_W, 11.6, MUTED)
@@ -122,8 +122,8 @@ def pagina(c, n):
     c.setFont('DejaVuSans-Bold', 7.6)
     c.setFillColor(NAVY_SOFT)
     c.drawString(MARGIN + 12, y - 14, 'CÓMO LEER LA PARTITURA ANOTADA')
-    _wrap(c, 'La banda de color y la etiqueta de abajo a la derecha dicen en qué bloque estás. '
-             'Los óvalos con número son las cosas que hay que mirar antes de tocar: el compás, '
+    _wrap(c, 'La ficha numerada y el paréntesis del margen izquierdo dicen en qué bloque estás. '
+             'Los recuadros con número son las cosas que hay que mirar antes de tocar: el compás, '
              'el tempo, el matiz, el 8va, las repeticiones. Tacha el número con lápiz cuando lo '
              'tengas.', MARGIN + 12, y - 25, 'DejaVuSans', 8, CONTENT_W - 24, 10.6, INK)
     c.setFont('DejaVuSans', 7.4)

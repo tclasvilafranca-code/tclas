@@ -111,7 +111,10 @@ def pagina(c, kicker, titol, dreta, intro, num, color=False):
     c.rect(0, H - 9, W, 9, stroke=0, fill=1)
     txt(c, M, Y(32), kicker, 9.2, ETQ, OCRE)
     txt(c, W - M, Y(32), dreta, 9.2, ETQ, MUTED, 'r')
-    txt(c, M, Y(68), titol, 34, SERIFB, NAVY)
+    ts_ = 34
+    while stringWidth(titol, SERIFB, ts_) > CW and ts_ > 20:
+        ts_ -= 1
+    txt(c, M, Y(68), titol, ts_, SERIFB, NAVY)
     trac(c, 3, OCRE)
     c.line(M, Y(77), M + 46, Y(77))
     par(c, M, Y(96), intro, 12, CW, 15.5, SANS, NAVY_SOFT)
@@ -312,7 +315,8 @@ def pauta(c, x, ytop, w, gap, clau='treble', final=True, lw=1.0):
     for i in range(5):
         c.line(x, ytop - i * gap, x + w, ytop - i * gap)
     yb = ytop - 4 * gap
-    nt.draw_clef(c, x + 3, yb, gap, clau)
+    if clau:
+        nt.draw_clef(c, x + 3, yb, gap, clau)
     if final:
         trac(c, 1.1, NAVY)
         c.line(x + w, ytop, x + w, yb)
@@ -323,12 +327,16 @@ def cap(c, cx, cy, gap, dur, fill=white):
     """Cap de nota net: negra plena, blanca buida, rodona buida i inclinada."""
     trac(c, 1.2, NAVY)
     if dur == 'w':
+        lw_ = max(1.2, gap * 0.13)
+        trac(c, lw_, NAVY)
+        c.setFillColor(fill)
+        c.ellipse(cx - gap * 0.86, cy - gap * 0.58, cx + gap * 0.86, cy + gap * 0.58, stroke=1, fill=1)
         c.saveState()
         c.translate(cx, cy)
-        c.setFillColor(fill)
-        c.ellipse(-gap * 0.82, -gap * 0.56, gap * 0.82, gap * 0.56, stroke=1, fill=1)
-        c.rotate(-30)
-        c.ellipse(-gap * 0.24, -gap * 0.46, gap * 0.24, gap * 0.46, stroke=1, fill=0)
+        c.rotate(-38)
+        trac(c, max(0.8, lw_ * 0.7), NAVY)
+        c.setFillColor(white)
+        c.ellipse(-gap * 0.27, -gap * 0.47, gap * 0.27, gap * 0.47, stroke=1, fill=1)
         c.restoreState()
         return
     c.saveState()
@@ -464,3 +472,32 @@ def pagina_tema(c, n, titol, intro, tipus, color=False, mapa_on=True):
         items, act = pla.pagines_cap(n)
         mapa(c, Y(124), items, act)
     return num
+
+
+def gran_pauta(c, x, ytop, w, gap, claus=True, brace=True, lw=1.2):
+    """Pentagrama gran: clau de sol a dalt i clau de fa a baix, tocant-se (el DO central queda entremig).
+       Retorna les y de les línies: tt (dalt del de sol), tb (baix del de sol), bt (dalt del de fa), bb (baix del de fa)."""
+    tb = ytop - 4 * gap
+    bt = tb - 2 * gap
+    bb = bt - 4 * gap
+    trac(c, lw, NAVY_SOFT)
+    for i in range(5):
+        c.line(x, ytop - i * gap, x + w, ytop - i * gap)
+        c.line(x, bt - i * gap, x + w, bt - i * gap)
+    trac(c, 1.3, NAVY)
+    c.line(x, ytop, x, bb)
+    c.line(x + w, ytop, x + w, bb)
+    if claus:
+        nt.draw_clef(c, x + 4, tb, gap, 'treble')
+        nt.draw_clef(c, x + 4, bb, gap, 'bass')
+    if brace:
+        yt_, yb_ = ytop, bb
+        ym = (yt_ + yb_) / 2.0
+        bx = x - 6
+        trac(c, 2.6, NAVY)
+        p = c.beginPath()
+        p.moveTo(bx + 5, yt_)
+        p.curveTo(bx - 7, yt_ - (yt_ - ym) * 0.25, bx + 6, ym + (yt_ - ym) * 0.35, bx - 8, ym)
+        p.curveTo(bx + 6, ym - (yt_ - ym) * 0.35, bx - 7, yb_ + (yt_ - ym) * 0.25, bx + 5, yb_)
+        c.drawPath(p, stroke=1, fill=0)
+    return dict(tt=ytop, tb=tb, bt=bt, bb=bb)

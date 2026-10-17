@@ -14,7 +14,7 @@ from nens_dib import (piano, mecanisme, nen_assegut, os_, ocell, ona, ma_real, m
 def t1_teoria(c):
     pagina_tema(c, 1, 'El piano i les seves parts', 'El piano és un instrument enorme i ple de secrets. Mirem què hi ha a fora i a dins.', 'teoria')
     guia(c, M, Y(142), CW, 'Aquest és el piano! Té moltes peces, però només cal que en recordis cinc. '
-         'I quan toques una tecla, a dins passa una cosa màgica…', color=True, size=12.5, h=80)
+         'I quan toques una tecla, a dins passa una cosa màgica…', color=False, size=12.5, h=80)
     # parts
     yt = Y(240)
     h = 240
@@ -86,7 +86,7 @@ def t1_jocs(c):
     pila = Pila(Y(204))
     pw, x2 = meitats()
     # 1 · escriu el nom de cada part
-    h = 162
+    h = 168
     yt = pila.pren(h)
     y0 = joc(c, M, yt, CW, h, 1, 'ESCRIU EL NOM DE CADA PART', 'Mira els números del piano i escriu el nom de cada part.')
     px, pyb, ps = M + 86, yt - h + 12, 0.46
@@ -98,12 +98,12 @@ def t1_jocs(c):
     bx0 = M + 190
     txt(c, bx0 + 190, yt - 62, 'PARAULES PER TRIAR', 9.2, ETQ, OCRE)
     for k in range(5):
-        yy = yt - 74 - k * 19
+        yy = yt - 76 - k * 19
         bola(c, bx0 + 12, yy + 4, k + 1, 8.6, size=9.6)
         linia(c, bx0 + 30, yy, 130)
     for k, p_ in enumerate(['PEDALS', 'ATRIL', 'TECLAT', 'CORDES', 'TAPA']):
-        rr(c, bx0 + 190, yt - 86 - k * 19, 100, 16, 8, fill=WARM, lw=1.1, col=OCRE)
-        txt(c, bx0 + 240, yt - 81.5 - k * 19, p_, 10.2, SANSB, NAVY, 'c')
+        rr(c, bx0 + 190, yt - 88 - k * 19, 100, 16, 8, fill=WARM, lw=1.1, col=OCRE)
+        txt(c, bx0 + 240, yt - 83.5 - k * 19, p_, 10.2, SANSB, NAVY, 'c')
     # 2 · sopa de lletres  /  3 · ordena els passos
     h = 214
     yt = pila.pren(h)
@@ -136,7 +136,7 @@ def t1_jocs(c):
 def t2_teoria(c):
     pagina_tema(c, 2, 'Com m’assec i els meus dits', 'Abans de tocar ens posem còmodes: així l’esquena i les mans no es cansen.', 'teoria')
     guia(c, M, Y(142), CW, 'Un pianista és com un esportista: ha de seure bé! Mira el nen del dibuix i fixa’t en cinc coses. '
-         'Després, coneixerem els deu dits.', color=True, size=12.5, h=80)
+         'Després, coneixerem els deu dits.', color=False, size=12.5, h=80)
     yt = Y(240)
     h = 262
     panell(c, M, yt, CW, h, 'ASSEGUT AL PIANO')
@@ -223,7 +223,7 @@ def t2_jocs(c):
 def t3_teoria(c):
     pagina_tema(c, 3, 'Greu i agut', 'Hi ha sons gruixuts com un ós i sons fins com un ocell.', 'teoria')
     guia(c, M, Y(142), CW, 'Recorre el teclat amb el dit! Cap a l’esquerra els sons són GREUS i cap a la dreta són AGUTS. '
-         'Mira com vibren!', color=True, size=12.5, h=80)
+         'Mira com vibren!', color=False, size=12.5, h=80)
     yt = Y(240)
     h = 290
     panell(c, M, yt, CW, h, 'DE L’ESQUERRA A LA DRETA')

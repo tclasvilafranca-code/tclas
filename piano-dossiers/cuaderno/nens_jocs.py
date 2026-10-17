@@ -90,13 +90,13 @@ def crucigrama(c, x, ytop, spec, cs=21):
     cel = {}
     nums = {}
     for (p, r, k, d, nm) in spec:
-        nums[(r, k)] = nm
+        nums[(r, k)] = (nums[(r, k)] + '/' + str(nm)) if (r, k) in nums else str(nm)
         for i, ch in enumerate(p):
             cel[(r + (i if d == 'v' else 0), k + (i if d == 'h' else 0))] = ch
     for (r, k) in cel:
         rr(c, x + k * cs, ytop - (r + 1) * cs, cs, cs, 0, fill=white, lw=1.5, col=NAVY)
         if (r, k) in nums:
-            txt(c, x + k * cs + 2.5, ytop - r * cs - 9, str(nums[(r, k)]), 8.5, SANSB, OCRE)
+            txt(c, x + k * cs + 2.5, ytop - r * cs - 9, nums[(r, k)], 8, SANSB, OCRE)
     return cel
 
 

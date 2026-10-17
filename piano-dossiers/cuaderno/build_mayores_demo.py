@@ -82,7 +82,6 @@ CFG = dict(
         'Pone "Con moto" y, en el c. 3, "Più mosso" con la corchea a 180.',
         'El compás cambia: 12/8 casi siempre, y 9/8 y 6/8 en los cc. 5-6 y 10-11.',
         'Hay semicorcheas de principio a fin: seis por cada golpe.',
-        'La izquierda lleva "con Ped." (pedal) al principio.',
         'La repetición empieza en el c. 15, con 1ª casilla (c. 23) y 2ª casilla (c. 25).',
         'En los cc. 15-16 la izquierda va escrita con 8va (ottava bassa): suena una octava más grave.',
     ],

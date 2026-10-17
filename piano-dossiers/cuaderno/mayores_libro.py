@@ -1,0 +1,244 @@
+# -*- coding: utf-8 -*-
+"""Libro completo del dosier de Eva (Sant Cugat, 30 min de clase): portada, como usarlo,
+   calendario/indice, registro y las piezas de menos a mas dificultad, numeradas seguidas."""
+import glob
+import importlib
+import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from reportlab.pdfgen import canvas
+from pypdf import PdfReader, PdfWriter
+from mayores_motor import *                                        # noqa: F401,F403
+from portada import build_cover, _wrap
+
+ASSETS = os.path.join(HERE, '..', 'assets')
+FRONT = 4                                                          # portada + 3 hojas
+DIFIC = {1: 1, 2: 1, 3: 2, 4: 2, 5: 2, 6: 3, 7: 3, 8: 3, 9: 3, 10: 3, 11: 4, 12: 4, 13: 4,
+         14: 4, 15: 5}
+if ALUMNA != 'eva':
+    DIFIC = {1: 1, 2: 1, 3: 1, 4: 2, 5: 2, 6: 2, 7: 2, 8: 3, 9: 3, 10: 3, 11: 3, 12: 4, 13: 4,
+             14: 4, 15: 5}
+AUTOR_CORTO = {}
+
+
+def corta(t, n):
+    if len(t) <= n:
+        return t
+    return t[:n].rsplit(' ', 1)[0].rstrip(' ·,') + '…'
+
+
+def cargar():
+    specs = []
+    for f in sorted(glob.glob(os.path.join(HERE, ('mp' if ALUMNA == 'eva' else 'ms') + '_[0-9][0-9]_*.py'))):
+        mod = importlib.import_module(os.path.basename(f)[:-3])
+        if hasattr(mod, 'SPEC'):
+            specs.append(mod.SPEC)
+    specs.sort(key=lambda s: s['num'])
+    return specs
+
+
+def _marco(c, n, derecha):
+    marco_pag(c, n, derecha)
+
+
+def marco_pag(c, n, derecha):
+    c.setFillColor(CREAM)
+    c.rect(0, 0, W, H, fill=1, stroke=0)
+    c.setFillColor(NAVY)
+    c.rect(18, H - 24, W - 36, 6, fill=1, stroke=0)
+    c.setFont('DejaVuSans-Bold', 8.4)
+    c.setFillColor(NAVY_SOFT)
+    c.drawString(MARGIN, H - 44, 'DOSIER DE ' + ALUMNA.upper() + ' · CURSO NOVIEMBRE - JULIO')
+    c.setFont('DejaVuSans', 8.4)
+    c.setFillColor(MUTED)
+    c.drawRightString(W - MARGIN, H - 44, derecha)
+    c.setFont('DejaVuSans', 7.4)
+    c.drawCentredString(W / 2, 26, 'El Cuaderno del Pianista  ·  T-Clas')
+    c.drawRightString(W - MARGIN, 26, str(n))
+
+
+def pag_como(c, n):
+    marco_pag(c, n, 'Cómo usar el dosier')
+    y = titulo_pag(c, 'Cómo usar este dosier',
+                   'Pensado para clases de media hora: una pieza cada dos semanas, de la más '
+                   'fácil a la más difícil.')
+    y -= 16
+    # esquema de cada pieza
+    c.setFont('DejaVuSans-Bold', 8.4)
+    c.setFillColor(NAVY_SOFT)
+    c.drawString(MARGIN, y, 'LAS HOJAS DE CADA PIEZA')
+    y -= 12
+    items = [('1', 'Ficha de la partitura', 'Los datos medidos (tonalidad, compás, tempo), el mapa de la '
+                                             'pieza, el reto, el truco y un QR para escucharla.'),
+             ('2', 'Manos', 'Cuatro pasos para la mano izquierda y cuatro para la derecha, y la '
+                            'técnica en tres frases.'),
+             ('3', 'Guía por bloques', 'La pieza partida en bloques: qué tocar, en qué orden y '
+                                       'cómo juntar las manos.'),
+             ('4', 'La partitura', 'Tu partitura con los bloques en color y burbujas que explican '
+                                   'qué practicar en cada sitio.'),
+             ('5', 'Papel pautado', 'Para copiar un compás, escribir la escala o inventar.')]
+    for k, t, d in items:
+        c.setFillColor(PANEL)
+        c.roundRect(MARGIN, y - 34, CONTENT_W, 34, 4, fill=1, stroke=0)
+        c.setFillColor(NAVY)
+        c.circle(MARGIN + 18, y - 17, 9, fill=1, stroke=0)
+        c.setFillColor(BLANCO)
+        c.setFont('DejaVuSerif-Bold', 10)
+        c.drawCentredString(MARGIN + 18, y - 20.6, k)
+        c.setFillColor(NAVY)
+        c.setFont('DejaVuSerif-Bold', 10)
+        c.drawString(MARGIN + 38, y - 14, t)
+        _wrap(c, d, MARGIN + 38, y - 25, 'DejaVuSans', 8, CONTENT_W - 50, 10, INK)
+        y -= 40
+    y -= 8
+    c.setFont('DejaVuSans-Bold', 8.4)
+    c.setFillColor(NAVY_SOFT)
+    c.drawString(MARGIN, y, 'UNA CLASE DE 30 MINUTOS')
+    y -= 12
+    partes = [('5′', 'Calentar', 'La mano izquierda del bloque de hoy, sola y despacio.', AZUL),
+              ('10′', 'Bloque nuevo', 'Izquierda, derecha y juntas, siguiendo la guía de bloques.',
+               OCRE),
+              ('10′', 'Tocar lo ya sabido', 'Los bloques anteriores y, si se puede, la pieza entera.',
+               VERDE),
+              ('5′', 'Deberes', 'Una sola tarea para casa: la que marca la tarjeta del bloque.',
+               ROJO)]
+    x = MARGIN
+    ancho = (CONTENT_W - 3 * 8) / 4
+    for t, tit, txt, col in partes:
+        c.setFillColor(PANEL)
+        c.roundRect(x, y - 86, ancho, 86, 5, fill=1, stroke=0)
+        c.setFillColor(col)
+        c.rect(x, y - 86, ancho, 3, fill=1, stroke=0)
+        c.setFont('DejaVuSerif-Bold', 20)
+        c.drawString(x + 10, y - 30, t)
+        c.setFont('DejaVuSerif-Bold', 9.4)
+        c.setFillColor(NAVY)
+        c.drawString(x + 10, y - 46, tit)
+        _wrap(c, txt, x + 10, y - 58, 'DejaVuSans', 7.6, ancho - 18, 9.6, INK)
+        x += ancho + 8
+    y -= 104
+    c.setFont('DejaVuSans-Bold', 8.4)
+    c.setFillColor(NAVY_SOFT)
+    c.drawString(MARGIN, y, 'CÓMO LEER LA PARTITURA ANOTADA')
+    y -= 12
+    h = 74
+    c.setFillColor(PANEL)
+    c.roundRect(MARGIN, y - h, CONTENT_W, h, 5, fill=1, stroke=0)
+    c.setFillColor(NAVY)
+    c.rect(MARGIN, y - h, 3, h, fill=1, stroke=0)
+    txt = ('El paréntesis de color del margen izquierdo y su número dicen en qué bloque estás. '
+           'Las burbujas explican qué practicar: «mano izquierda» y «mano derecha» (color ocre y '
+           'azul), «las dos», «ojo» (algo que no hay que pasar por alto) y, en los dúos, «Primo» y '
+           '«Secondo». Los recuadros finos con número rodean lo importante: tachad el número con '
+           'lápiz cuando lo tengáis. Los acordes se llaman como siempre (La menor, Sol mayor…); '
+           'encima de algunas partituras vienen en cifrado americano (A = La, B = Si, C = Do, '
+           'D = Re, E = Mi, F = Fa, G = Sol).')
+    _wrap(c, txt, MARGIN + 14, y - 14, 'DejaVuSans', 8.2, CONTENT_W - 28, 11, INK)
+    c.showPage()
+
+
+def pag_calendario(c, n, specs, inicio):
+    marco_pag(c, n, 'El curso de un vistazo')
+    y = titulo_pag(c, 'El curso de un vistazo',
+                   'Quince piezas de noviembre a julio, de menos a más dificultad. Una pieza cada '
+                   'dos semanas; las más largas pueden llevar un poco más.')
+    y -= 14
+    xs = [MARGIN, MARGIN + 26, MARGIN + 215, MARGIN + 340, MARGIN + 438]
+    for x, t in zip(xs, ['Nº', 'PIEZA', 'CUÁNDO', 'NIVEL', 'PÁG.']):
+        c.setFont('DejaVuSans-Bold', 7)
+        c.setFillColor(MUTED)
+        c.drawString(x, y, t)
+    y -= 8
+    for s in specs:
+        h = 33
+        c.setFillColor(PANEL)
+        c.roundRect(MARGIN, y - h, CONTENT_W, h, 4, fill=1, stroke=0)
+        col = COLORES_BLOQUE[(s['num'] - 1) % len(COLORES_BLOQUE)]
+        c.setFillColor(col)
+        c.rect(MARGIN, y - h, 3, h, fill=1, stroke=0)
+        c.setFont('DejaVuSerif-Bold', 11)
+        c.setFillColor(NAVY)
+        c.drawString(xs[0] + 6, y - 20, str(s['num']))
+        c.setFont('DejaVuSerif-Bold', 9.6)
+        c.drawString(xs[1], y - 14, corta(s['titulo'], 34))
+        c.setFont('DejaVuSans', 7)
+        c.setFillColor(MUTED)
+        c.drawString(xs[1], y - 25, corta(s['autor'], 56))
+        c.setFont('DejaVuSans', 8)
+        c.setFillColor(INK)
+        c.drawString(xs[2], y - 20, s['mes'].split(' (')[0])
+        d = DIFIC.get(s['num'], 3)
+        for k in range(5):
+            c.setFillColor(NAVY if k < d else GRIS)
+            c.circle(xs[3] + 4 + k * 11, y - 18, 3.6, fill=1, stroke=0)
+        c.setFont('DejaVuSerif-Bold', 9)
+        c.setFillColor(NAVY)
+        c.drawString(xs[4], y - 20, str(inicio[s['num']]))
+        y -= h + 4
+    c.showPage()
+
+
+def pag_registro(c, n, specs):
+    marco_pag(c, n, 'Mi registro')
+    y = titulo_pag(c, 'Mi registro',
+                   'Marca cada pieza cuando la tengas: por bloques, entera y a tempo.')
+    y -= 14
+    xs = [MARGIN + 190, MARGIN + 250, MARGIN + 310, MARGIN + 370, MARGIN + 430]
+    for x, t in zip(xs, ['Bloques', 'Entera', 'A tempo', 'Grabada', 'Fecha']):
+        c.setFont('DejaVuSans-Bold', 6.6)
+        c.setFillColor(MUTED)
+        c.drawString(x, y, t)
+    y -= 8
+    for s in specs:
+        h = 30
+        c.setFillColor(PANEL)
+        c.roundRect(MARGIN, y - h, CONTENT_W, h, 4, fill=1, stroke=0)
+        c.setFont('DejaVuSerif-Bold', 9)
+        c.setFillColor(NAVY)
+        c.drawString(MARGIN + 10, y - 19, '%d · %s' % (s['num'], corta(s['titulo'], 31)))
+        for x in xs[:4]:
+            c.setStrokeColor(NAVY)
+            c.setLineWidth(0.9)
+            c.roundRect(x + 8, y - 21, 12, 12, 2, fill=0, stroke=1)
+        c.setStrokeColor(GRIS)
+        c.line(xs[4], y - 20, xs[4] + 52, y - 20)
+        y -= h + 4
+    c.showPage()
+
+
+def construir(salida, solo=None):
+    specs = cargar()
+    if solo:
+        specs = [s for s in specs if s['num'] in solo]
+    partes, inicio, pag = [], {}, FRONT + 1
+    for s in specs:
+        wr, n = construir_pieza(s, pag)
+        inicio[s['num']] = pag
+        partes.append(wr)
+        pag += n
+        print('pieza', s['num'], s['slug'], n, 'páginas')
+    f = os.path.join(OUT, '_front.pdf')
+    c = canvas.Canvas(f, pagesize=(W, H))
+    build_cover(c, os.path.join(ASSETS, 'asset_logo_tclas_v2.png'), ALUMNA.capitalize(),
+                'Quince piezas · de menos a más · 30 minutos por clase',
+                'Curso de noviembre a julio')
+    pag_como(c, 2)
+    pag_calendario(c, 3, specs, inicio)
+    pag_registro(c, 4, specs)
+    c.save()
+    wr = PdfWriter()
+    for p in PdfReader(f).pages:
+        wr.add_page(p)
+    os.remove(f)
+    for w in partes:
+        for p in w.pages:
+            wr.add_page(p)
+    with open(salida, 'wb') as fh:
+        wr.write(fh)
+    return pag - 1
+
+
+if __name__ == '__main__':
+    solo = [int(x) for x in sys.argv[1:]] or None
+    out = os.path.join(OUT, 'DOSIER_%s_completo.pdf' % ALUMNA.upper())
+    print(construir(out, solo), 'paginas ->', out)

@@ -134,9 +134,10 @@ def main():
     ficha.main()
     tmp = os.path.join(OUT, '_plan.pdf')
     c = canvas.Canvas(tmp, pagesize=(W, H))
-    y = pagina(c, 3)
+    import mayores_guia as g
+    g.pagina_manos(c, 3)
+    g.paginas_bloques(c, 4)
     c.save()
-    print('y final plan', y)
     anot = os.path.join(OUT, 'DEMO_Partitura_por_bloques.pdf')
     an.main(anot)
     wr = PdfWriter()

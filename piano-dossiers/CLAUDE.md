@@ -1202,6 +1202,32 @@ según su nivel, no las mismas 20 de este álbum. El flujo recomendado por alumn
    uso; si no importa (dosieres para alumnos distintos, sin relación entre
    ellos), puedes omitir este paso.
 
+## 🔒 NORMA: dosieres de 12-20 años, SANT CUGAT (media hora de clase)
+
+> Decisión del cliente, **de memoria permanente**. Hazlo todo **como Mozart con un máster en pedagogía
+> musical y diseñador de libros de piano a la vez**: contenido exacto y en el orden en que se aprende,
+> explicación simple para el alumno y a la vez útil para la profesora, y un diseño fino de editorial.
+>
+> - **Todos los alumnos de la carpeta SANT CUGAT (NORA, FOIX, ELSA, LOLA, EVA, Alba, Txell, Sharifa, ABRIL,
+>   HERA…) hacen MEDIA HORA de clase.** Una pieza cada 2-3 semanas; nada que no quepa en 30 minutos.
+> - Se construye **a partir de las partituras de Drive** (no teoría genérica). Primero se mide, luego se escribe.
+> - **Nomenclatura clásica, en castellano**: La menor, Sol mayor, segunda inversión, dominante → tónica, cuarta
+>   suspendida, quinta vacía. NUNCA solo cifrado americano (Am, G/D, Esus4); si la partitura lo imprime, se
+>   traduce una vez en la ficha (A = La…).
+> - **Esquema de cada pieza (la demo "The Heart Asks Pleasure First")**: ① ficha de la partitura (datos medidos,
+>   mapa, acordes, lo especial, reto, truco, ¿sabías que?, QR) → ② mano izquierda y mano derecha (4 pasos cada
+>   una + técnica en 3 frases) → ③ guía por bloques (tarjeta por bloque con dibujo + izquierda/derecha/juntas/
+>   a tempo) → ④ la partitura RECOLOCADA por sistemas (vectorial, sin reescalar) con paréntesis de bloque,
+>   marcas finas y burbujas de texto (mano izquierda / derecha / ojo / las dos) → ⑤ papel pautado al final.
+>   Sin hoja "dedos y ojos". Sin pedal, sin tecnicismos, sin dedos impresos.
+> - Las burbujas NUNCA tapan notas: la partitura se corta por sistemas (en filas en blanco medidas) y se
+>   vuelve a montar con aire (`mayores_anotar.py`, PyMuPDF `show_pdf_page`).
+> - Orden de los dosieres de un alumno: **de menos a más dificultad**, con calendario noviembre-julio.
+> - Los consejos de estudio son propuestas; los datos de la partitura (compás, tonalidad, tempo, figura más
+>   corta, repeticiones, casillas) se MIDEN. El "¿Sabías que?" se avisa como no verificado.
+> - Código: `cuaderno/build_mayores_demo.py` (ficha), `mayores_guia.py` (manos y guía), `mayores_anotar.py`
+>   (partitura anotada), `mayores_plan.py` (montaje). Las partituras NO se versionan (`students/*/source/`).
+
 ## Quadern del Pianista · PEKES (llibre infantil, català, 6-10 anys)
 - Estil TCLAS adaptat: `cuaderno/nens_tclas.py` (components) + `cuaderno/nens_prova.py` (mostra v2). Fonts a `assets/fonts_nens/` (Andika cos ≥11,5 pt, Quicksand etiquetes, DejaVu Serif títols). Res per sota de 9,5 pt.
 - Panells amb vora 1,7 pt + ombra + pestanya; caixes amb icona (RECORDA ★, SABIES QUE? ?, ESCOLTO ♪); en Mussol Misol guia a cada pàgina.

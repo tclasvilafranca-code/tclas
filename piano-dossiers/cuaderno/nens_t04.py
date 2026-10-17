@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Capítol 4 · El ritme — temes 14 a 19 (teoria + jocs)."""
 from nens_t03 import *                                            # noqa: F401,F403
+from nens_jocs2 import p_cruci, p_cami, p_intrus, p_mosaic, p_laberint, HEART, HOUSE
 from nens_t01 import pagina_jocs
 from nens_tclas import figura
 from nens_dib import cor, rellotge, petjades, metronom
@@ -106,11 +107,7 @@ def t14_jocs(c):
             rellotge(c_, xr + 40, yy, 0.6, color=False)
     uneix(c, M + 14, yt - 84, pw - 28, ['el cor', 'el rellotge', 'el metrònom'], ['', '', ''], fila=46, ampl_esq=92, ampl_dre=84, fs=12.5,
           dibuix_dre=dib, serif=False)
-    panell(c, x2, yt, pw, h, 'SOPA DE LLETRES', n=3)
-    consigna(c, x2 + 14, yt - 40, 'Troba 6 paraules (→ i ↓).', pw - 28)
-    pal = ['POLS', 'COR', 'TIC', 'TAC', 'FORT', 'PICA']
-    dibuixa_sopa(c, x2 + 14, yt - 54, sopa(pal, 8, seed=41), 19, 13.5)
-    llista_paraules(c, x2 + 14 + 8 * 19 + 18, yt - 70, pal, 12, 24)
+    p_laberint(c, x2, yt, pw, h, 3, 'EL LABERINT DEL POLS', 'Segueix el pols fins a la sortida!', 21)
     h = 176
     yt = pila.pren(h)
     panell(c, M, yt, pw, h, 'COMPLETA', n=4)
@@ -305,11 +302,7 @@ def t16_jocs(c):
         txt(c, M + 100, yy, b, 14, SANSB, OCRE)
         rr(c, M + 122, yy - 10, 32, 24, 5, fill=white, lw=1.5, col=NAVY)
         txt(c, M + 164, yy, 'corxeres', 12.5, SANS, INK)
-    panell(c, x2, yt, pw, h, 'SOPA DE LLETRES', n=3)
-    consigna(c, x2 + 14, yt - 40, 'Troba 6 paraules (→ i ↓).', pw - 28)
-    pal = ['CORXERA', 'TA', 'TITI', 'PICA', 'TEMPS', 'MANS']
-    dibuixa_sopa(c, x2 + 14, yt - 54, sopa(pal, 8, seed=53), 19, 13.5)
-    llista_paraules(c, x2 + 14 + 8 * 19 + 18, yt - 70, pal, 11.5, 24)
+    p_cruci(c, x2, yt, pw, h, 3, [('NEGRA', 0, 4, 'v', 1), ('CORXERA', 1, 0, 'h', 2), ('RODONA', 1, 2, 'v', 3)], [('1 ↓', 'Figura d’un temps.'), ('2 →', 'La figura més ràpida.'), ('3 ↓', 'Figura de 4 temps.')], 14)
     h = 164
     yt = pila.pren(h)
     panell(c, M, yt, pw, h, 'UNEIX AMB UNA LÍNIA', n=4)

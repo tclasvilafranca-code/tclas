@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Capítol 8 · Expressem la música — temes 31 a 34 (teoria + jocs)."""
 from nens_t06 import *                                            # noqa: F401,F403
+from nens_jocs2 import p_cruci, p_cami, p_intrus, p_mosaic, p_laberint, HEART, HOUSE
 from nens_t01 import pagina_jocs
 from nens_tclas import pauta, cap
 from nens_dib import tortuga, coet, petjades
@@ -317,7 +318,7 @@ def t34_teoria(c):
     arc_frase(c, xs[4][0], xs[7][0], yt - 70, True, 14)
     txt(c, (xs[0][0] + xs[3][0]) / 2, yt - 46, 'frase 1', 11, SANSB, OCRE, 'c')
     txt(c, (xs[4][0] + xs[7][0]) / 2, yt - 46, 'frase 2', 11, SANSB, OCRE, 'c')
-    txt(c, M + 16, yt - h + 14, 'Una frase és com una frase del llenguatge: té un principi, un final i un moment per agafar aire.', 11.5, SANS, INK)
+    txt(c, M + 16, yt - h + 14, 'Una frase musical, com una de parlada, té principi, final i un moment per respirar.', 11.5, SANS, INK)
     yt = Y(584)
     h = 130
     panell(c, M, yt, CW, h, 'EL CALDERÓ')
@@ -369,10 +370,7 @@ def t34_jocs(c):
     panell(c, M, yt, pw, h, 'POSA LES FRASES', n=2)
     consigna(c, M + 14, yt - 40, 'Dibuixa un arc per cada frase.', pw - 28)
     notes_linia(c, M + 14, yt - 96, pw - 28, 6.8, ['C4', 'D4', 'E4', 'F4', 'G4', 'F4', 'E4', 'D4'], None, 'treble', dx0=44)
-    panell(c, x2, yt, pw, h, 'SOPA DE LLETRES', n=3)
-    consigna(c, x2 + 14, yt - 40, 'Troba 5 paraules.', pw - 28)
-    pal = ['FRASE', 'REPETIR', 'CALDERO', 'ARC', 'RESPIRA']
-    dibuixa_sopa(c, x2 + 14, yt - 52, sopa(pal, 8, seed=111), 15.5, 11.5)
+    p_cruci(c, x2, yt, pw, h, 3, [('FRASE', 1, 0, 'h', 2), ('CALDERO', 0, 2, 'v', 1), ('ECO', 1, 4, 'v', 3)], [('1 ↓', 'Signe que allarga la nota.'), ('2 →', 'Un tros de música amb sentit.'), ('3 ↓', 'Repeteix el que sents.')], 16)
     h = 170
     yt = pila.pren(h)
     panell(c, M, yt, pw, h, 'VERITAT O FALS?', n=4)

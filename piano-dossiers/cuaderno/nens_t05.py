@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Capítols 5 i 6 · Els silencis i Les plicas — temes 20 a 23 (teoria + jocs)."""
 from nens_t04 import *                                            # noqa: F401,F403
+from nens_jocs2 import p_cruci, p_cami, p_intrus, p_mosaic, p_laberint, HEART, HOUSE
 from nens_t01 import pagina_jocs
 from nens_tclas import pauta, cap
 import notation as nt
@@ -206,10 +207,7 @@ def t21_jocs(c):
         yy = yt - 80 - k * 33
         sist(c, M + 14, yy, 150, 4.6, t, 'treble', (4, 4), show_clef=False, show_time=False)
         rr(c, M + pw - 48, yy - 19, 28, 24, 12, fill=white, lw=1.5, col=NAVY)
-    panell(c, x2, yt, pw, h, 'SOPA DE LLETRES', n=3)
-    consigna(c, x2 + 14, yt - 40, 'Troba 6 paraules (→ i ↓).', pw - 28)
-    pal = ['SILENCI', 'NEGRA', 'CORXERA', 'BLANCA', 'RODONA', 'TEMPS']
-    dibuixa_sopa(c, x2 + 14, yt - 54, sopa(pal, 9, seed=17), 17, 12.5)
+    p_intrus(c, x2, yt, pw, h, 3, [['rodona', 'blanca', 'negra', 'pedal'], ['shh', 'silenci', 'no sona', 'ti-ti'], ['1 temps', '2 temps', '4 temps', 'ràpid']], consigna_t='Encercla el que no hi pinta.')
     h = 120
     yt = pila.pren(h)
     panell(c, M, yt, pw, h, 'VERITAT O FALS?', n=4)

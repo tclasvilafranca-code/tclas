@@ -184,7 +184,7 @@ def com_sus(c):
         c.circle(lx + 14, yy - 6, 13, stroke=0, fill=1)
         txt(c, lx + 14, yy - 11, ICONES[e], 13, SYM, white, 'c')
         txt(c, lx + 36, yy - 3, e, 11.5, ETQ, OCRE)
-        yy = par(c, lx + 36, yy - 18, t, 10.8, 126, 13.5, SANS, INK) - 14
+        yy = par(c, lx + 36, yy - 18, t, 10.8, 108, 13.5, SANS, INK) - 14
     yy -= 6
     txt(c, lx, yy, 'EL MAPA', 9.6, ETQ, OCRE)
     xip_w = 70
@@ -213,36 +213,46 @@ def com_sus(c):
 
 # ======================================================================== 4 · índex
 def index(c):
-    pagina(c, 'PEKES  ·  BENVINGUDA', 'Què hi ha aquí dins', 'Índex', 'Vuit capítols, trenta-quatre temes i un munt de jocs.', 4)
+    pagina(c, 'PEKES  ·  BENVINGUDA', 'Què hi ha aquí dins', 'Índex', 'Vuit capítols, trenta-quatre temes, repassos i un munt de jocs.', 4)
     colw = (CW - 24) / 2.0
     cols = [[1, 2, 3, 4], [5, 6, 7, 8]]
     for ci, caps in enumerate(cols):
         x = M + ci * (colw + 24)
-        y = Y(128)
+        y = Y(124)
         for cap_ in caps:
-            hexc = HexColor(COLORS7[(cap_ - 1) % 7])
             rr(c, x, y - 22, colw, 26, 7, fill=NAVY, lw=0)
             c.setFillColor(HexColor(COLORS7[(cap_ - 1) % 7]))
             c.circle(x + 15, y - 9, 10, stroke=0, fill=1)
             txt(c, x + 15, y - 13.4, str(cap_), 12, SANSB, INK if (cap_ - 1) % 7 == 2 else white, 'c')
             txt(c, x + 34, y - 13, pla.CAPITOLS[cap_].upper(), 10.3, ETQ, white)
-            y -= 36
-            for t in pla.temes_del_cap(cap_):
-                txt(c, x + 8, y, str(t['n']), 10, SANSB, OCRE)
-                txt(c, x + 30, y, t['titol'], 11.2, SANS, INK)
-                txt(c, x + colw - 4, y, str(t['pag']), 11.2, SANSB, NAVY, 'r')
-                tw = stringWidth(t['titol'], SANS, 11.2)
+            y -= 34
+            files = []
+            for kind, key in pla.SEQ:
+                if kind == 'tema' and pla.TEMES[key]['cap'] == cap_:
+                    files.append((str(key), pla.TEMES[key]['titol'], pla.TEMES[key]['pag'], False))
+                elif kind == 'extra' and pla.EXTRA[key]['cap'] == cap_:
+                    files.append(('+', pla.EXTRA[key]['titol'], pla.EXTRA[key]['pag'], True))
+                elif kind == 'repas' and key == cap_:
+                    files.append(('★', pla.REPAS[key]['titol'], pla.REPAS[key]['pag'], True))
+            for (n_, t_, p_, esp) in files:
+                txt(c, x + 8, y, n_, 10, SANSB if n_ != '★' else SYM, OCRE)
+                txt(c, x + 30, y, t_, 11, SANS if not esp else SANSB, INK)
+                txt(c, x + colw - 4, y, str(p_), 11, SANSB, NAVY, 'r')
+                tw = stringWidth(t_, SANS if not esp else SANSB, 11)
                 trac(c, 0.8, RULE, (1, 3))
                 c.line(x + 34 + tw, y + 3, x + colw - 24, y + 3)
                 c.setDash()
-                y -= 19
-            y -= 12
+                y -= 16
+            y -= 10
         if ci == 1:
             rr(c, x, y - 22, colw, 26, 7, fill=OCRE, lw=0)
-            txt(c, x + 34, y - 13, 'ANNEXOS', 10.3, ETQ, white)
-            y -= 36
-            for (t, p_, k) in pla.ANNEX_PAG:
-                txt(c, x + 30, y, t, 11.2, SANS, INK)
-                txt(c, x + colw - 4, y, str(p_), 11.2, SANSB, NAVY, 'r')
-                y -= 19
+            txt(c, x + 34, y - 13, 'ANNEX', 10.3, ETQ, white)
+            y -= 34
+            for (t_, p_, k_) in pla.ANNEX_PAG:
+                txt(c, x + 30, y, t_, 11, SANS, INK)
+                txt(c, x + colw - 4, y, str(p_), 11, SANSB, NAVY, 'r')
+                y -= 16
+    txt(c, M, 54, '+  pàgines extra de pràctica', 9.5, SANS, MUTED)
+    txt(c, M + 150, 54, '★', 9.5, SYM, MUTED)
+    txt(c, M + 162, 54, 'repàs del capítol', 9.5, SANS, MUTED)
     c.showPage()

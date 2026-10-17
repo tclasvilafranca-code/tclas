@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Capítol 7 · Toquem! — temes 24 a 30 (teoria + jocs)."""
 from nens_t05 import *                                            # noqa: F401,F403
+from nens_jocs2 import p_cruci, p_cami, p_intrus, p_mosaic, p_laberint, HEART, HOUSE
 from nens_t01 import pagina_jocs
 from nens_tclas import pauta, cap, gran_pauta
 import notation as nt
@@ -97,11 +98,7 @@ def t24_jocs(c):
         rr(c, xx, yy - 2, 62, 24, 12, fill=HexColor(COL[nm]) if False else WARM, lw=1.5, col=NAVY)
         txt(c, xx + 31, yy + 5, nm, 12.5, SERIFB, NAVY, 'c')
         rr(c, xx + 16, yy - 32, 30, 24, 6, fill=white, lw=1.5, col=NAVY)
-    panell(c, x2, yt, pw, h, 'SOPA DE LLETRES', n=2)
-    consigna(c, x2 + 14, yt - 40, 'Troba 5 paraules (→ i ↓).', pw - 28)
-    pal = ['MA', 'DIT', 'POLZE', 'TECLA', 'DO']
-    dibuixa_sopa(c, x2 + 14, yt - 52, sopa(pal, 7, seed=61), 19, 13.5)
-    llista_paraules(c, x2 + 14 + 7 * 19 + 18, yt - 66, pal, 12, 24)
+    p_cruci(c, x2, yt, pw, h, 2, [('DITS', 2, 0, 'h', 1), ('TECLA', 2, 2, 'v', 2), ('DO', 2, 0, 'v', 3)], [('1 →', 'Cada mà en té cinc.'), ('2 ↓', 'Es prem per fer sonar la nota.'), ('3 ↓', 'La nota del polze de la mà dreta.')], 21)
     h = 178
     yt = pila.pren(h)
     panell(c, M, yt, CW, h, 'LLEGEIX I TOCA', n=3)
@@ -308,11 +305,7 @@ def t27_jocs(c):
     par(c, x2 + 14, yt - 150, 'Pista: és una blanca i viu a la ratlleta addicional.', 11.2, pw - 28, 13.5, SANS, MUTED)
     h = 214
     yt = pila.pren(h)
-    panell(c, M, yt, pw, h, 'SOPA DE LLETRES', n=3)
-    consigna(c, M + 14, yt - 40, 'Troba 6 paraules (→ i ↓).', pw - 28)
-    pal = ['MARY', 'ODA', 'BUNS', 'LLUNA', 'CANÇO', 'LAMB']
-    dibuixa_sopa(c, M + 14, yt - 54, sopa(pal, 8, seed=71), 19, 13.5)
-    llista_paraules(c, M + 14 + 8 * 19 + 18, yt - 70, ['MARY', 'ODA', 'BUNS', 'LLUNA', 'CANÇÓ', 'LAMB'], 12, 24)
+    p_mosaic(c, M, yt, pw, h, 3, HEART)
     panell(c, x2, yt, pw, h, 'VERITAT O FALS?', n=4)
     capcalera_vf(c, x2 + 14, yt - 34, pw - 14)
     veritat_fals(c, x2 + 14, yt - 50, pw - 14, ['Beethoven va escriure l’Oda a l’alegria.', 'Mary tenia un cavall.', 'Hot Cross Buns té corxeres.'], 11.8, 14)
@@ -452,11 +445,7 @@ def t29_jocs(c):
     panell(c, M, yt, pw, h, 'VERITAT O FALS?', n=4)
     capcalera_vf(c, M + 14, yt - 34, pw - 14)
     veritat_fals(c, M + 14, yt - 50, pw - 14, ['Un acord són tres notes alhora.', 'L’acord de DO porta SI.', 'Es toca amb els dits 1, 3 i 5.'], 11.8, 14)
-    panell(c, x2, yt, pw, h, 'SOPA DE LLETRES', n=5)
-    consigna(c, x2 + 14, yt - 40, 'Troba 4 paraules.', pw - 28)
-    pal = ['ACORD', 'DO', 'MI', 'SOL']
-    dibuixa_sopa(c, x2 + 14, yt - 52, sopa(pal, 6, seed=91), 16, 12)
-    llista_paraules(c, x2 + 14 + 6 * 16 + 14, yt - 66, pal, 12, 22)
+    p_intrus(c, x2, yt, pw, h, 5, [['DO', 'MI', 'SOL', 'RE'], ['1', '3', '5', '2']], consigna_t='Encercla el que no és de l’acord de DO.')
     c.showPage()
 
 
@@ -522,11 +511,7 @@ def t30_jocs(c):
     panell(c, M, yt, pw, h, 'VERITAT O FALS?', n=2)
     capcalera_vf(c, M + 14, yt - 34, pw - 14)
     veritat_fals(c, M + 14, yt - 50, pw - 14, ['Cal tocar de pressa des del primer dia.', 'Equivocar-se és normal.', 'És millor estudiar una mica cada dia.'], 11.8, 14)
-    panell(c, x2, yt, pw, h, 'SOPA DE LLETRES', n=3)
-    consigna(c, x2 + 14, yt - 40, 'Troba 5 paraules.', pw - 28)
-    pal = ['MIRO', 'CANTO', 'TOCO', 'POC', 'MANS']
-    dibuixa_sopa(c, x2 + 14, yt - 52, sopa(pal, 7, seed=101), 17, 12.5)
-    llista_paraules(c, x2 + 14 + 7 * 17 + 14, yt - 66, pal, 12, 22)
+    p_cruci(c, x2, yt, pw, h, 3, [('ESTUDIAR', 0, 0, 'h', 1), ('TOCO', 0, 2, 'v', 2), ('DOS', 0, 4, 'v', 3)], [('1 →', 'Aprendre una cançó.'), ('2 ↓', 'Jo … les tecles.'), ('3 ↓', 'Les mans són…')], 13)
     h = 160
     yt = pila.pren(h)
     panell(c, M, yt, CW, h, 'EL MEU TRUC', n=4)

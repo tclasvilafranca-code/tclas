@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Capítol 3 · Les notes i els seus colors — temes 8 a 13 (teoria + jocs). Les pàgines de notes van a COLOR."""
 from nens_t02 import *                                            # noqa: F401,F403
+from nens_jocs2 import p_cruci, p_cami, p_intrus, p_mosaic, p_laberint, HEART, HOUSE
 from nens_t01 import pagina_jocs
 from nens_tclas import (pill_dit, ORDRE, cap, nota, gran_pauta)
 import nens_tclas as _nt
@@ -205,11 +206,7 @@ def t9_jocs(c):
                 txt(c, xx + 20, yy - 3.6, nm, 11.5, SANSB, NAVY, 'c')
             else:
                 rr(c, xx, yy - 11, 40, 26, 6, fill=white, lw=1.6, col=NAVY, dash=(3, 2))
-    panell(c, x2, yt, pw, h, 'SOPA DE LLETRES', n=3)
-    consigna(c, x2 + 14, yt - 40, 'Troba 6 paraules (→ i ↓).', pw - 28)
-    pal = ['FA', 'SOL', 'DO', 'RE', 'MI', 'NOTA']
-    dibuixa_sopa(c, x2 + 14, yt - 54, sopa(pal, 8, seed=21), 19, 13.5)
-    llista_paraules(c, x2 + 14 + 8 * 19 + 18, yt - 70, pal, 12, 24)
+    p_cami(c, x2, yt, pw, h, 3, [(0, 0, 'DO'), (0, 1, 'RE'), (1, 1, 'MI'), (1, 2, 'FA'), (2, 2, 'SOL')])
     h = 210
     yt = pila.pren(h)
     panell(c, M, yt, pw, h, 'UNEIX AMB UNA LÍNIA', n=4)

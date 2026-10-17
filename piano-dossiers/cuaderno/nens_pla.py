@@ -54,14 +54,38 @@ _T = [
     (33, 8, 'Lligat i picat', 'LLIGAT I PICAT', 2),
     (34, 8, 'Repeticions, frases i calderó', 'FRASES', 2),
 ]
-ANNEXOS = [('Glossari d’en Mussol', 2), ('Targetes i teclat per retallar', 2),
-           ('Pautes en blanc', 2), ('Banc de jocs per a la profe', 2)]
+# (clau, títol, pàgines) — pàgines extra dins de cada capítol, i repàs de cada capítol
+EXTRES = {
+    'dits': (1, 'Gimnàstica de dits', 1),
+    'llegim': (3, 'Llegim notes', 2),
+    'lletres': (3, 'Les notes amb lletres', 1),
+    'ritmes': (4, 'Piquem ritmes', 2),
+    'mescancons': (7, 'Més cançons', 1),
+    'exmans': (7, 'Exercicis per a les mans', 2),
+    'peca': (8, 'Una peça amb tot', 1),
+}
+ORDRE_EXTRES = {1: ['dits'], 3: ['llegim', 'lletres'], 4: ['ritmes'], 7: ['mescancons', 'exmans'], 8: ['peca']}
+ANNEXOS = [('Pautes en blanc', 2)]
 
 TEMES = {}
+EXTRA = {}
+REPAS = {}
+SEQ = []                       # ordre del llibre: ('tema', n) / ('extra', clau) / ('repas', cap) / ('annex', k)
 _p = 5
-for (n, cap, titol, pill, pags) in _T:
-    TEMES[n] = dict(n=n, cap=cap, titol=titol, pill=pill, pags=pags, pag=_p)
-    _p += pags
+for cap in range(1, 9):
+    for (n, cp, titol, pill, pags) in _T:
+        if cp == cap:
+            TEMES[n] = dict(n=n, cap=cap, titol=titol, pill=pill, pags=pags, pag=_p)
+            SEQ.append(('tema', n))
+            _p += pags
+    for k in ORDRE_EXTRES.get(cap, []):
+        cp, titol, pags = EXTRES[k]
+        EXTRA[k] = dict(cap=cp, titol=titol, pags=pags, pag=_p)
+        SEQ.append(('extra', k))
+        _p += pags
+    REPAS[cap] = dict(cap=cap, titol='Repàs del capítol %d' % cap, pag=_p)
+    SEQ.append(('repas', cap))
+    _p += 1
 ANNEX_PAG = []
 for (t, k) in ANNEXOS:
     ANNEX_PAG.append((t, _p, k))
@@ -85,5 +109,9 @@ def kicker(n):
     return 'PEKES  ·  CAPÍTOL %d  ·  %s' % (t['cap'], CAPITOLS[t['cap']].upper())
 
 
+def kicker_cap(cap):
+    return 'PEKES  ·  CAPÍTOL %d  ·  %s' % (cap, CAPITOLS[cap].upper())
+
+
 if __name__ == '__main__':
-    print(TOTAL, TEMES[8]['pag'], TEMES[27]['pag'], TEMES[34]['pag'])
+    print(TOTAL, TEMES[8]['pag'], TEMES[27]['pag'], TEMES[34]['pag'], EXTRA, REPAS[8])

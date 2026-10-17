@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Capítol 2 · El pentagrama — temes 5 a 7 (teoria + jocs)."""
 from nens_t01 import *                                            # noqa: F401,F403
+from nens_jocs2 import p_cruci, p_cami, p_intrus, p_mosaic, p_laberint, HEART, HOUSE
 from nens_t01 import pagina_jocs
 from nens_tclas import gran_pauta, cap, pauta, nt
 import nens_tclas as _nt
@@ -99,12 +100,7 @@ def t5_jocs(c):
         for j, l in enumerate(('L', 'E')):
             rr(c, gx + 78 + j * 22, gy - 2 * g - 9, 19, 19, 9.5, fill=white, lw=1.4, col=NAVY)
             txt(c, gx + 78 + j * 22 + 9.5, gy - 2 * g - 3.6, l, 10.5, SANSB, NAVY_SOFT, 'c')
-    panell(c, x2, yt, pw, h, 'SOPA DE LLETRES', n=3)
-    consigna(c, x2 + 14, yt - 40, 'Troba 6 paraules (→ i ↓).', pw - 28)
-    pal = ['LINIA', 'ESPAI', 'NOTA', 'CLAU', 'PAUTA', 'CINC']
-    g_ = sopa(pal, 8, seed=4)
-    dibuixa_sopa(c, x2 + 14, yt - 54, g_, 19, 13.5)
-    llista_paraules(c, x2 + 14 + 8 * 19 + 18, yt - 70, ['LÍNIA', 'ESPAI', 'NOTA', 'CLAU', 'PAUTA', 'CINC'], 12, 24)
+    p_cruci(c, x2, yt, pw, h, 3, [('ESPAI', 0, 1, 'v', 1), ('NOTA', 1, 4, 'v', 2), ('LINIA', 4, 0, 'h', 3)], [('1 ↓', 'Entre dues línies hi ha un…'), ('2 ↓', 'Viu a una línia o a un espai.'), ('3 →', 'El pentagrama en té cinc.')], 20)
     # 4 · dibuixa / 5 · V/F
     h = 168
     yt = pila.pren(h)

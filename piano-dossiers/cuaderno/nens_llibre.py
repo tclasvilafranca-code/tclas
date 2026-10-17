@@ -22,6 +22,7 @@ import nens_t05 as c5                                            # noqa: E402
 import nens_t06 as c6                                            # noqa: E402
 import nens_t07 as c7                                            # noqa: E402
 import nens_annex as an                                          # noqa: E402
+import nens_x01 as x1                                            # noqa: E402
 
 OUT = os.path.join(HERE, '..', 'output', 'Quadern_Pekes.pdf')
 
@@ -36,10 +37,14 @@ def _mod(n):
 
 
 PAGINES = [front.portada, front.presentacio, front.com_sus, front.index]
-for n in range(1, 35):
-    PAGINES += [getattr(_mod(n), 't%d_teoria' % n), getattr(_mod(n), 't%d_jocs' % n)]
-PAGINES += [lambda c: an.glossari(c, 0), lambda c: an.glossari(c, 1), an.teclat_retallar, an.targetes,
-            an.pautes_1, an.pautes_2, lambda c: an.banc_jocs(c, 0), lambda c: an.banc_jocs(c, 1)]
+for kind, key in pla.SEQ:
+    if kind == 'tema':
+        PAGINES += [getattr(_mod(key), 't%d_teoria' % key), getattr(_mod(key), 't%d_jocs' % key)]
+    elif kind == 'extra':
+        PAGINES += [getattr(x1, 'x_' + key)]
+    else:
+        PAGINES += [getattr(x1, 'repas%d' % key)]
+PAGINES += [an.pautes_1, an.pautes_2]
 
 
 def main(sortida=OUT, prova=False):

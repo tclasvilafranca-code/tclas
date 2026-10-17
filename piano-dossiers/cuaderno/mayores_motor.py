@@ -114,7 +114,7 @@ def huecos(pdf, salida_png=None, minimo=3.0):
     return res
 
 
-def tiras_por_cortes(pdf, cortes, corte_titulo=None, pie=()):
+def tiras_por_cortes(pdf, cortes, corte_titulo=None, pie=(), inicio=None, fin_=None):
     """cortes: {pag: [y, ...]} separadores (pt) entre sistemas consecutivos de esa pagina.
        corte_titulo: y en la pagina 1 por encima del cual solo hay titulo/autor.
        -> (P, tiras) con P[i]['ancho'] y tiras [dict(pag, ya, yb, sid, sys)]"""
@@ -129,8 +129,10 @@ def tiras_por_cortes(pdf, cortes, corte_titulo=None, pie=()):
             continue
         tope = h - (0 if p in pie else 62)
         util = [r for r in ink if r / 2 <= tope]
-        ini = max(0, ink.min() / 2 - 4)
+        ini = (inicio or {}).get(p, max(0, ink.min() / 2 - 4))
         fin = min(h, (max(util) / 2 + 6) if util else h)
+        if fin_ and p in fin_:
+            fin = fin_[p]
         lim = [ini] + cs + [fin]
         if p == 1 and corte_titulo:
             tiras.append(dict(pag=1, ya=ini, yb=corte_titulo, sid=None, sys=None))
@@ -248,6 +250,7 @@ def margen(c, x, num, etq, col, top, bot):
 
 # ------------------------------------------------------------ score
 GAP = 6
+DX = 20.0
 
 
 def disponer(tiras, burb, esc_pag):
@@ -275,8 +278,9 @@ def montar_partitura(spec, salida, num0):
     """PDF con la partitura recolocada y anotada. Devuelve (n_paginas, tiras)."""
     import pymupdf
     pdf = os.path.join(SRCDIR, spec['pdf'])
-    P, tiras = tiras_por_cortes(pdf, spec['cortes'], spec.get('corte_titulo'), spec.get('pie', ()))
-    esc = {i: PAGE_W / pg['ancho'] for i, pg in enumerate(P, 1)}
+    P, tiras = tiras_por_cortes(pdf, spec['cortes'], spec.get('corte_titulo'), spec.get('pie', ()),
+                                  spec.get('inicio'), spec.get('fin'))
+    esc = {i: (PAGE_W - 24) / pg['ancho'] for i, pg in enumerate(P, 1)}
     pags = disponer(tiras, spec.get('burb', {}), esc)
     src = pymupdf.open(pdf)
     nuevo = pymupdf.open()
@@ -285,7 +289,7 @@ def montar_partitura(spec, salida, num0):
         for (t, y0, ba, bb) in lista:
             s = esc[t['pag']]
             ancho_src = P[t['pag'] - 1]['ancho']
-            pg.show_pdf_page(pymupdf.Rect(0, y0, PAGE_W, y0 + (t['yb'] - t['ya']) * s), src,
+            pg.show_pdf_page(pymupdf.Rect(DX, y0, DX + ancho_src * s, y0 + (t['yb'] - t['ya']) * s), src,
                              t['pag'] - 1, clip=pymupdf.Rect(0, t['ya'], ancho_src, t['yb']))
     tmp = salida + '.base.pdf'
     nuevo.save(tmp)
@@ -323,7 +327,7 @@ def _anotar(c, spec, lista, esc, P, n):
         b = _bloque_de(spec, t['sid'])
         top = max(y0 + (g['top'] - 2 - t['ya']) * s, y0 - 2)
         bot = min(y0 + (g['bot'] + 4 - t['ya']) * s, y0 + (t['yb'] - t['ya']) * s)
-        xb = max(14.0, g['left'] * s - 9)
+        xb = max(11.0, DX + g['left'] * s - 9)
         if segs and segs[-1][0] is b and abs(segs[-1][2] - top) < 45 and abs(segs[-1][4] - xb) < 3:
             segs[-1][2] = bot
         else:
@@ -339,13 +343,17 @@ def _anotar(c, spec, lista, esc, P, n):
             if t['pag'] == pg_o and t['ya'] <= y <= t['yb']:
                 s = esc[pg_o]
                 col = [q for q in spec['bloques'] if q['num'] == bn][0]['color']
-                marca(c, x * s, y0 + (y - t['ya']) * s, w, h, col, k, tipo)
+                marca(c, DX + x * s, y0 + (y - t['ya']) * s, w, h, col, k, tipo)
     for (t, y0, ba, bb) in lista:
         bs = spec.get('burb', {}).get(t['sid'], []) if t['sid'] is not None else []
         s = esc[t['pag']]
         xa = xb_ = 24
         for (st, w, tp, tx, cx) in bs:
-            cxx = cx * s
+            if cx <= 1.0:
+                g = t['sys']
+                cx = g['left'] + cx * (P[t['pag'] - 1]['ancho'] - 30 - g['left'])
+                cx = cx
+            cxx = DX + cx * s
             if st == 'arriba':
                 burbuja(c, xa, y0 - ba + 4, w, tp, tx, 'abajo', min(max(cxx, xa + 12), xa + w - 12))
                 xa += w + 10
@@ -519,7 +527,9 @@ def diagrama(c, x, y, col, d):
         for t in dat:
             xx = chip(c, xx, y - 1, t, col, 7) + 3
     elif tipo == 'capas':              # [(etiqueta, 'barras'|'puntos', color)]
-        for i, (t, k, cc) in enumerate(dat):
+        for i, it in enumerate(dat):
+            t, k, cc = it[:3]
+            nd = it[3] if len(it) > 3 else 6
             yy = y - 1 - i * 10
             c.setFont('DejaVuSans', 6)
             c.setFillColor(MUTED)
@@ -530,7 +540,7 @@ def diagrama(c, x, y, col, d):
                     c.setFillColor(cc)
                     c.roundRect(xx + q * 40, yy - 3, 34, 6, 3, fill=1, stroke=0)
                 else:
-                    dots(c, xx + q * 40, yy, 6, cc, 1.6, 5.4)
+                    dots(c, xx + q * 40, yy, nd, cc, 1.6, min(5.4, 30.0 / max(nd - 1, 1)))
     elif tipo == 'cuenta':             # [(rotulo, n_grupos, por_grupo)]
         xx = x
         for t, ng, por in dat:
@@ -674,3 +684,44 @@ def construir_pieza(spec, num_pag0):
             wr.add_page(p)
         os.remove(f)
     return wr, total + npau
+
+
+# ------------------------------------------------------------ ayudas para escribir piezas
+def B(num, cc, nombre, sist, diag, pasos):
+    return dict(num=num, cc=cc, nombre=nombre, sist=sist, diag=diag, pasos=pasos,
+                color=COLORES_BLOQUE[(num - 1) % len(COLORES_BLOQUE)])
+
+
+def cuenta_compas(ts, pitch='B4'):
+    """Un compas del metro dado, contado en golpes. 3/4 y 4/4 y 2/4 en corcheas (2 por golpe);
+       6/8, 9/8, 12/8 en grupos de tres corcheas. Solo teoria del compas, no alturas medidas."""
+    n, d = ts
+    ev = []
+    if d == 8:
+        for g in range(n // 3):
+            ev += [{'pitch': pitch, 'dur': 'e', 'beam': g} for _ in range(3)]
+    else:
+        for g in range(n):
+            ev += [{'pitch': pitch, 'dur': 'e', 'beam': g} for _ in range(2)]
+    return ev
+
+
+def FICHA(datos, secciones, total, ideas, especial, reto, truco, sabias, qr_texto, ts,
+          ideas_titulo='La pieza en cuatro ideas', ideas_pie='', cuenta_titulo=None,
+          cuenta_pie=None, cuenta_rotulo=None, clave='treble', ritmos=None):
+    cuenta_titulo = cuenta_titulo or 'Cómo se cuenta el %d/%d' % ts
+    if cuenta_pie is None:
+        cuenta_pie = ('Un compás de %d/%d contado en corcheas. Aquí solo el ritmo, sobre una nota '
+                      'cualquiera: las alturas, en tu partitura.' % ts)
+    return dict(
+        datos=datos, total_compases=total, secciones=secciones,
+        armonia=dict(titulo=ideas_titulo, tarjetas=ideas, pie=ideas_pie),
+        titulo_ritmos=cuenta_titulo, pie_ritmos=cuenta_pie,
+        ritmos=ritmos or [(cuenta_rotulo or 'LA CUENTA', '%d/%d' % ts, cuenta_compas(ts), OCRE,
+                           clave, None)],
+        especial=especial, reto=reto, truco=truco, sabias=sabias,
+        qr=dict(titulo='Escúchala', texto=qr_texto))
+
+
+def D(t, *a):
+    return (t, *a)

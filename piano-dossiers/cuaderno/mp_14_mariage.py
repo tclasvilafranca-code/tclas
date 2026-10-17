@@ -20,7 +20,7 @@ SPEC = dict(
         datos=[('Tonalidad', 'Sol menor'), ('Compás', '4/4 con 5/4'), ('Tempo', '♩ = 78'),
                ('Figura corta', 'Semicorchea'), ('Compases', '83')],
         total=83,
-        secciones=[('A', 1, 11, 'Primer tema · sin 8va', AZUL),
+        secciones=[('A', 1, 11, 'Primer tema', AZUL),
                    ('B', 12, 28, 'Con 8va y calderón', OCRE),
                    ('C', 29, 54, 'Tema, adornos y bajada', AZUL),
                    ('D', 55, 68, 'Notas altas y 3/8', OCRE),

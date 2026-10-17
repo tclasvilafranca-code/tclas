@@ -131,24 +131,48 @@ def pagina(c, n):
 
 def main():
     os.makedirs(OUT, exist_ok=True)
+    import mayores_guia as g
+    from cancion import _mezcla_compases
+    from hoja_taller import build_taller
+    from hoja_pauta import build_pauta
+    ficha.CFG['page_num'] = 1
     ficha.main()
+    kicker = 'Demo · pieza 1 · The Heart Asks Pleasure First'
     tmp = os.path.join(OUT, '_plan.pdf')
     c = canvas.Canvas(tmp, pagesize=(W, H))
-    import mayores_guia as g
+    tal = dict(kicker=kicker, page_num=2, time_sig=(12, 8), key_sig=None, gap=6.6, semilla=31,
+               nivel_lectura=1, titulo='Dedos y ojos', esquina='Antes de la partitura',
+               compases_extra=_mezcla_compases((12, 8), 5031),
+               compases_extra_leer=_mezcla_compases((12, 8), 6031),
+               intro='Cinco minutos antes de abrir la partitura. Arriba se TOCA y abajo se LEE EN '
+                     'VOZ ALTA, sin tocar nada. Son notas de La menor, que es la tonalidad de la '
+                     'pieza, y conviene empezar despacio: la pieza va en semicorcheas.')
+    build_taller(c, tal)
     g.pagina_manos(c, 3)
     g.paginas_bloques(c, 4)
     c.save()
+    an.OFFSET = 5
     anot = os.path.join(OUT, 'DEMO_Partitura_por_bloques.pdf')
-    an.main(anot)
+    npag = an.main(anot)
+    ult = 5 + npag
+    pau = os.path.join(OUT, '_pauta.pdf')
+    c = canvas.Canvas(pau, pagesize=(W, H))
+    build_pauta(c, dict(kicker=kicker, page_num=ult + 1, titulo_pauta='Para escribir',
+                        pie_pauta='la clave la pones tú · copia un compás, escribe la escala de '
+                                  'La menor o inventa algo'))
+    c.save()
     wr = PdfWriter()
-    for f in ('DEMO_Ficha_Heart.pdf', '_plan.pdf', 'DEMO_Partitura_por_bloques.pdf'):
-        for p in PdfReader(os.path.join(OUT, f)).pages:
-            wr.add_page(p)
+    orden = [('DEMO_Ficha_Heart.pdf', None), ('_plan.pdf', None), (anot, 'abs'), (pau, 'abs')]
+    for f, ab in orden:
+        ruta = f if ab else os.path.join(OUT, f)
+        for pg in PdfReader(ruta).pages:
+            wr.add_page(pg)
     dst = os.path.join(OUT, 'DEMO_Dosier_Heart.pdf')
-    with open(dst, 'wb') as f:
-        wr.write(f)
+    with open(dst, 'wb') as fh:
+        wr.write(fh)
     os.remove(tmp)
-    print(dst)
+    os.remove(pau)
+    print(dst, len(wr.pages), 'paginas')
 
 
 if __name__ == '__main__':

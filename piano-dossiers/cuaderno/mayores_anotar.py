@@ -18,6 +18,7 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 HERE = os.path.dirname(__file__)
 SRC = os.path.join(HERE, '..', 'students', 'demo', 'source', 'Heart-Asks-Pleasure-First.pdf')
 PAGE_H = 841.89
+OFFSET = 0
 
 # (alto_arriba, alto_abajo) de cada sistema en pt DESDE ARRIBA, medidos sobre el PDF a 144 dpi
 SIST = {
@@ -316,7 +317,7 @@ def _anotar(c, lista, n, total):
     c.setFillColor(HexColor('#7C838F'))
     c.drawString(34, 22, "Partitura: Michael Nyman, transcripción de David Jůna (DJ's Sheet Music "
                          "Archive). Anotaciones: T-Clas.")
-    c.drawRightString(561, 22, str(n))
+    c.drawRightString(561, 22, str(n + OFFSET))
 
 
 def main(salida):

@@ -134,7 +134,7 @@ SPEC = dict(
            ('JUNTAS', 'Un sistema cada día; luego todo seguido.'),
            ('A TEMPO', 'Calderón en el c. 72 y en la nota final: alarga y escucha.')]),
     ],
-    cortes={1: [227.8, 366.2, 504.5, 644.2], 2: [162.2, 289.5, 410, 530.5, 655.2],
+    cortes={1: [227.8, 366.2, 504.5, 644.2], 2: [162.2, 289.5, 403.5, 530.5, 655.2],
             3: [162.2, 285, 409, 532, 652], 4: [159, 292, 409, 536, 654],
             5: [165, 292, 411, 530, 653], 6: [165, 286, 409, 532, 644]},
     corte_titulo=97.2,
@@ -164,7 +164,7 @@ SPEC = dict(
         29: [('arriba', 330, 'OJO', 'c. 72: calderón sobre un acorde en arpegio (línea '
                                     'ondulada). Alárgalo.', 0.75)],
         34: [('arriba', 330, 'AMB', 'c. 81: p y mp, con silencios. Calderón en el acorde final: '
-                                    'déjalo sonar.', 0.5)],
+                                    'déjalo sonar.', 0.25)],
     },
     marcas=[],
     pie_pauta='la clave la pones tú · copia un compás o escribe la escala de Sol menor')

@@ -113,7 +113,7 @@ SPEC = dict(
            ('JUNTAS', '"Scherzo D.C. al Fine": volved al c. 1 y tocad hasta "Fine".'),
            ('A TEMPO', 'Toda la pieza con su recorrido, sin parar.')]),
     ],
-    cortes={1: [315.0, 569.2], 2: [271.0, 522.5]}, corte_titulo=86.3,
+    cortes={1: [315.0, 569.2], 2: [271.0, 522.5]}, corte_titulo=86.9,
     fin={1: 802, 2: 790},
     burb={
         0: [('arriba', 200, 'AMB', 'Allegro, 3/4, en p: cuenta "uno-dos-tres".', 77),

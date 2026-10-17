@@ -132,10 +132,11 @@ def caixa(c, x, y, w, h, etiqueta, text, size=10, fons=WARM, filet=OCRE):
     par(c, x + 14, y + h - 30, text, size, w - 28, size * 1.38)
 
 
-def guia(c, x, y, ample, text, color=False, s=0.5, size=10.5, alt=None):
-    """En Mussol Misol fent de guia: la seva figura a l'esquerra i el globus de conversa."""
-    h = alt or (alt_par(text, size, ample - 70) + 34)
-    mussol(c, x + 34, y + h / 2 - 4, s, color=color, lw=2.6)
+def guia(c, x, ytop, ample, text, color=False, size=10, h=None):
+    """En Mussol Misol fent de guia: figura a l'esquerra i globus de conversa. `ytop` = vora de dalt."""
+    h = h or max(80, alt_par(text, size, ample - 104) + 40)
+    y = ytop - h
+    mussol(c, x + 36, y + h / 2 - 2, 0.34, color=color, lw=2.6)
     bx = x + 78
     rr(c, bx, y, ample - 78, h, 8, fill=white, lw=1.1, col=NAVY)
     c.setFillColor(white)
@@ -144,9 +145,14 @@ def guia(c, x, y, ample, text, color=False, s=0.5, size=10.5, alt=None):
     c.setStrokeColor(white)
     c.setLineWidth(2)
     c.line(bx + 1, y + h / 2 + 6, bx + 1, y + h / 2 - 6)
-    txt(c, bx + 14, y + h - 16, 'EN MUSSOL MISOL DIU', 6.8, SANSB, OCRE)
-    par(c, bx + 14, y + h - 31, text, size, ample - 78 - 28, size * 1.38)
+    txt(c, bx + 14, y + h - 17, 'EN MUSSOL MISOL DIU', 6.8, SANSB, OCRE)
+    par(c, bx + 14, y + h - 33, text, size, ample - 78 - 28, size * 1.4)
     return h
+
+
+def caixa_t(c, x, ytop, w, h, etiqueta, text, size=10):
+    """Com `caixa` però donant la vora de DALT (ytop)."""
+    caixa(c, x, ytop - h, w, h, etiqueta, text, size)
 
 
 def quadrat(c, x, y, n, mida=17):
@@ -156,7 +162,7 @@ def quadrat(c, x, y, n, mida=17):
 
 
 def bloc(c, y, n, titol, pista=None, x=M):
-    quadrat(c, x, y - 4)
+    quadrat(c, x, y - 4, n)
     txt(c, x + 25, y, titol, 12.5, SANSB, NAVY)
     if pista:
         txt(c, x + 25, y - 13, pista, 8.2, SANS, MUTED)
@@ -272,3 +278,38 @@ def ma(c, cx, cy, s=1.0, esq=False, dits=True, fill=white):
 def xip(c, x, y, w, text, fill=white, col=INK, h=17, size=8):
     rr(c, x, y, w, h, 8, fill=fill, lw=0.8, col=NAVY_SOFT)
     txt(c, x + w / 2, y + h * 0.3, text, size, SANSB, col, 'c')
+
+
+# ------------------------------------------------------------------ figures de ritme
+def banderola(c, x, y, s, fill=white):
+    pts = []
+    a, b, c2, d = (x, y), (x + 9 * s, y - 7 * s), (x + 17 * s, y - 12 * s), (x + 10 * s, y - 25 * s)
+    for t in [i / 8.0 for i in range(9)]:
+        u = 1 - t
+        pts.append((u ** 3 * a[0] + 3 * u * u * t * b[0] + 3 * u * t * t * c2[0] + t ** 3 * d[0],
+                    u ** 3 * a[1] + 3 * u * u * t * b[1] + 3 * u * t * t * c2[1] + t ** 3 * d[1]))
+    a, b, c2, d = (x + 10 * s, y - 25 * s), (x + 12 * s, y - 14 * s), (x + 5 * s, y - 9 * s), (x, y - 8 * s)
+    for t in [i / 8.0 for i in range(1, 9)]:
+        u = 1 - t
+        pts.append((u ** 3 * a[0] + 3 * u * u * t * b[0] + 3 * u * t * t * c2[0] + t ** 3 * d[0],
+                    u ** 3 * a[1] + 3 * u * u * t * b[1] + 3 * u * t * t * c2[1] + t ** 3 * d[1]))
+    trac(c, 1.0, NAVY)
+    c.setFillColor(NAVY)
+    c.poly(pts, 1, 1)
+
+
+def figura(c, tipus, cx, cy, gap=6.0):
+    """Figures soltes (cap + plica): 'w' rodona, 'h' blanca, 'q' negra, 'e' corxera."""
+    if tipus == 'ee':
+        cap(c, cx, cy, gap, 'q')
+        cap(c, cx + gap * 3.6, cy, gap, 'q')
+        trac(c, 1.3, NAVY)
+        top = cy + gap * 3.3
+        c.line(cx + gap * 3.6 + gap * 0.74, cy + gap * 0.1, cx + gap * 3.6 + gap * 0.74, top)
+        c.setFillColor(NAVY)
+        c.poly([(cx + gap * 0.74, top), (cx + gap * 3.6 + gap * 0.74, top), (cx + gap * 3.6 + gap * 0.74, top - gap * 0.75),
+                (cx + gap * 0.74, top - gap * 0.75)], 1, 1)
+        return
+    cap(c, cx, cy, gap, 'w' if tipus == 'w' else ('h' if tipus == 'h' else 'q'))
+    if tipus == 'e':
+        banderola(c, cx + gap * 0.74, cy + gap * 3.3, gap / 6.0)

@@ -15,6 +15,9 @@ ASSETS = os.path.join(HERE, '..', 'assets')
 FRONT = 4                                                          # portada + 3 hojas
 DIFIC = {1: 1, 2: 1, 3: 2, 4: 2, 5: 2, 6: 3, 7: 3, 8: 3, 9: 3, 10: 3, 11: 4, 12: 4, 13: 4,
          14: 4, 15: 5}
+if ALUMNA != 'eva':
+    DIFIC = {1: 1, 2: 1, 3: 1, 4: 2, 5: 2, 6: 2, 7: 2, 8: 3, 9: 3, 10: 3, 11: 3, 12: 4, 13: 4,
+             14: 4, 15: 5}
 AUTOR_CORTO = {}
 
 
@@ -26,7 +29,7 @@ def corta(t, n):
 
 def cargar():
     specs = []
-    for f in sorted(glob.glob(os.path.join(HERE, 'mp_[0-9][0-9]_*.py'))):
+    for f in sorted(glob.glob(os.path.join(HERE, ('mp' if ALUMNA == 'eva' else 'ms') + '_[0-9][0-9]_*.py'))):
         mod = importlib.import_module(os.path.basename(f)[:-3])
         if hasattr(mod, 'SPEC'):
             specs.append(mod.SPEC)
@@ -45,7 +48,7 @@ def marco_pag(c, n, derecha):
     c.rect(18, H - 24, W - 36, 6, fill=1, stroke=0)
     c.setFont('DejaVuSans-Bold', 8.4)
     c.setFillColor(NAVY_SOFT)
-    c.drawString(MARGIN, H - 44, 'DOSIER DE EVA · CURSO NOVIEMBRE - JULIO')
+    c.drawString(MARGIN, H - 44, 'DOSIER DE ' + ALUMNA.upper() + ' · CURSO NOVIEMBRE - JULIO')
     c.setFont('DejaVuSans', 8.4)
     c.setFillColor(MUTED)
     c.drawRightString(W - MARGIN, H - 44, derecha)
@@ -216,7 +219,7 @@ def construir(salida, solo=None):
         print('pieza', s['num'], s['slug'], n, 'páginas')
     f = os.path.join(OUT, '_front.pdf')
     c = canvas.Canvas(f, pagesize=(W, H))
-    build_cover(c, os.path.join(ASSETS, 'asset_logo_tclas_v2.png'), 'Eva',
+    build_cover(c, os.path.join(ASSETS, 'asset_logo_tclas_v2.png'), ALUMNA.capitalize(),
                 'Quince piezas · de menos a más · 30 minutos por clase',
                 'Curso de noviembre a julio')
     pag_como(c, 2)
@@ -237,5 +240,5 @@ def construir(salida, solo=None):
 
 if __name__ == '__main__':
     solo = [int(x) for x in sys.argv[1:]] or None
-    out = os.path.join(OUT, 'DOSIER_EVA_completo.pdf')
+    out = os.path.join(OUT, 'DOSIER_%s_completo.pdf' % ALUMNA.upper())
     print(construir(out, solo), 'paginas ->', out)

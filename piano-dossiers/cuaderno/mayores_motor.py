@@ -26,7 +26,8 @@ from ficha_info import PANEL, build_ficha
 from hoja_pauta import build_pauta
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SRCDIR = os.path.join(HERE, '..', 'students', 'eva_sc', 'source')
+ALUMNA = os.environ.get('ALUMNA', 'eva')
+SRCDIR = os.path.join(HERE, '..', 'students', 'eva_sc' if ALUMNA == 'eva' else ALUMNA, 'source')
 OUT = os.path.join(HERE, 'entrega')
 PAGE_W, PAGE_H = 595.276, 841.89
 OCRE = HexColor('#8C6A3F')

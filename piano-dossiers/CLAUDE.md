@@ -94,6 +94,25 @@
 > armadura y la figura se dan por supuestos porque se ven en un segundo. Los
 > tres fallos gordos de este cuaderno estuvieron ahí.
 
+> ## 🔒 NORMA DEL PROYECTO: cada álbum se edita como Mozart y un diseñador gráfico profesional a la vez
+>
+> Decisión del cliente, y vale para TODO lo que se cree a partir de ahora (álbumes, fichas,
+> hojas de pintar, el libro de Pekes). Dos cabezas trabajando juntas:
+>
+> - **La de Mozart:** sabiduría de maestro. Contenido en el orden en que se aprende, una idea
+>   por vez, nada que sobre y nada esencial que falte, ejemplos exactos (lo que no se ha
+>   medido, no se escribe). Que la práctica sirva de verdad para ensayar la teoría.
+> - **La del diseñador gráfico profesional:** retícula y márgenes constantes, jerarquía
+>   tipográfica clara, ritmo y equilibrio de la página (ni vacía ni apretada), un mismo
+>   sistema de componentes, esquemas antes que párrafos, y un resultado sublime a la vista.
+>
+> Resultado exigido: **sublime a nivel estético y perfecto a nivel práctico** (se imprime bien,
+> se lee a la primera, cabe todo, nada se solapa). Para los niños (Pekes, 6-10 años): el mismo
+> estilo TCLAS de los álbumes de adultos —barra azul noche, serif en títulos, cajas crema con
+> filete ocre, DejaVu— adaptado a lo infantil sin ser de bebés: más esquemático, con el
+> Mussol Misol de guía en cada página, en blanco y negro salvo las páginas que ganan con color
+> (las de las notas y sus colores). Antes de diseñar nada se acuerda la ESTRUCTURA del contenido.
+
 > ## 🔒 NORMA DEL PROYECTO: las piezas a cuatro manos se ven abiertas de un vistazo
 >
 > Decisión del cliente, y vale para **todos los alumnos**. Entre dos personas

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-"""Pieza 2 · Silent Night (Gruber), version facil de sheetmusic-free.com. MEDIDO sobre el PDF
-   (2 paginas A4, 7 sistemas): sin armadura (Do mayor), 3/4, «Gently», mp; 26 compases impresos
-   (cc. 1-22 y las casillas: 1.ª cc. 23-24 con barra de repeticion hacia el c. 1, 2.ª cc. 25-26);
-   dos letras (2 versos); calderon en el c. 20 (ambas manos) y en el ultimo; «rit. e dim.» en la
-   casilla 2; figura mas corta: corchea. Alteraciones solo en la izquierda: Si bemol (c. 8),
-   Fa# (cc. 10, 14, 20), Sol# (c. 18), La bemol y Sol becuadro (c. 19), La becuadro (c. 20)."""
+"""Peça 2 · Silent Night (Gruber), versió fàcil de sheetmusic-free.com. MESURAT sobre el PDF
+   (2 pàgines A4, 7 sistemes): sense armadura (Do major), 3/4, «Gently», mp; 26 compassos
+   impresos (cc. 1-22 i les caselles: 1.a cc. 23-24 amb barra de repetició cap al c. 1, 2.a
+   cc. 25-26); dues lletres (2 versos); calderó al c. 20 (dues mans) i a l'últim; «rit. e dim.» a
+   la casella 2; figura més curta: corxera. Alteracions només a l'esquerra: Si bemoll (c. 8),
+   Fa# (cc. 10, 14, 20), Sol# (c. 18), La bemoll i Sol becaire (c. 19), La becaire (c. 20)."""
 import os
 import sys
 sys.path.insert(0, os.path.dirname(__file__))
@@ -12,152 +12,168 @@ from mayores_motor import *                                        # noqa: F401,
 
 SPEC = dict(
     num=2, slug='silent_night', pdf='silent_night.pdf', time_sig=(3, 4),
-    titulo='Silent Night', autor='Franz X. Gruber (música) · Joseph Mohr (letra) · versión fácil',
-    kicker='Sharifa · pieza 2 · Silent Night', mes='Noviembre · 2.ª quincena',
+    titulo='Silent Night', autor='Franz X. Gruber (música) · Joseph Mohr (lletra) · versió fàcil',
+    kicker='Sharifa · peça 2 · Silent Night', mes='Novembre · 2.a quinzena',
     yt='https://www.youtube.com/results?search_query=silent+night+piano+easy',
-    credito='Partitura: F. X. Gruber, versión fácil (sheetmusic-free.com). Anotaciones: T-Clas.',
+    credito='Partitura: F. X. Gruber, versió fàcil (sheetmusic-free.com). Anotacions: T-Clas.',
     ficha=FICHA(
-        datos=[('Tonalidad', 'Do mayor'), ('Compás', '3/4'), ('Tempo', 'Gently · mp'),
-               ('Figura corta', 'Corchea'), ('Compases', '26')],
+        datos=[('Tonalitat', 'Do major'), ('Compàs', '3/4'), ('Tempo', 'Gently · mp'),
+               ('Figura curta', 'Corxera'), ('Compassos', '26')],
         total=26,
         secciones=[('A', 1, 8, 'Silent night… all is bright', AZUL),
                    ('B', 9, 16, 'Round yon Virgin…', OCRE),
                    ('C', 17, 22, 'Sleep in heavenly peace', AZUL),
-                   ('D', 23, 26, 'Casillas 1 y 2', OCRE)],
-        ideas=[('LA MELODÍA', 'Ritmo de nana',
-                'Negra con puntillo, corchea y negra: un balanceo que vuelve en muchas frases.'),
-               ('LA IZQUIERDA', 'Camina en negras',
-                'Tres negras, o una negra y una blanca. Al final, notas largas.'),
-               ('LAS ALTERACIONES', 'Solo en la izquierda',
-                'Si♭ (c. 8), Fa♯ (cc. 10, 14, 20), Sol♯ (c. 18) y La♭ (c. 19).'),
-               ('EL FINAL', 'Calderones y rit.',
-                'Calderón en el c. 20 y en el último. En la casilla 2: rit. e dim.')],
-        ideas_pie='Cifrados de la partitura: C = Do, F = Fa, G = Sol, E = Mi, Am = La menor, '
-                  'Bm = Si menor. G/B = Sol con Si en el bajo (inversión). dim = disminuido; '
-                  '7 = con séptima.',
+                   ('D', 23, 26, 'Caselles 1 i 2', OCRE)],
+        ideas=[('LA MELODIA', 'Ritme de bressol',
+                'Negra amb puntet, corxera i negra: un balanceig que torna a moltes frases.'),
+               ("L'ESQUERRA", 'Camina en negres',
+                'Tres negres, o una negra i una blanca. Al final, notes llargues.'),
+               ('LES ALTERACIONS', "Només a l'esquerra",
+                'Si♭ (c. 8), Fa♯ (cc. 10, 14, 20), Sol♯ (c. 18) i La♭ (c. 19).'),
+               ('EL FINAL', 'Calderons i rit.',
+                "Calderó al c. 20 i a l'últim. A la casella 2: rit. e dim.")],
+        ideas_titulo='La peça en quatre idees',
+        ideas_pie='Xifrats de la partitura: C = Do, F = Fa, G = Sol, E = Mi, Am = La menor, '
+                  'Bm = Si menor. G/B = Sol amb Si al baix (inversió). dim = disminuït; '
+                  '7 = amb sèptima.',
         especial=[
-            'Sin armadura: Do mayor. Pone «Gently» (suave) y mp.',
-            'Dos letras: la de arriba, 1.ª vez; la de abajo, 2.ª vez.',
-            'Repetición: al final del c. 24 vuelves al c. 1. La 2.ª vez saltas a la casilla 2 '
+            'Sense armadura: Do major. Posa «Gently» (suau) i mp.',
+            'Dues lletres: la de dalt, 1.a vegada; la de baix, 2.a vegada.',
+            'Repetició: al final del c. 24 tornes al c. 1. La 2.a vegada saltes a la casella 2 '
             '(cc. 25-26).',
-            'Calderón en el c. 20 (las dos manos) y en el último compás.',
-            'La casilla 2 lleva «rit. e dim.»: más lenta y más suave.',
-            'Las alteraciones están en la izquierda: míralas antes de tocar.'],
-        reto='Que la melodía cante ligada mientras la izquierda camina pareja, también en los '
-             'cc. 19-20.',
-        truco='Toca la izquierda sola hasta que salga mirando la derecha. Luego añade la melodía '
-              'frase a frase.',
-        sabias='«Stille Nacht» se estrenó en la Nochebuena de 1818 en la iglesia de San Nicolás de '
-               'Oberndorf, en Austria. La letra es del sacerdote Joseph Mohr y la música, del '
-               'maestro Franz Xaver Gruber.',
-        qr_texto='Escúchala y sigue la partitura con el dedo.',
+            "Calderó al c. 20 (les dues mans) i a l'últim compàs.",
+            'La casella 2 porta «rit. e dim.»: més lenta i més suau.',
+            "Les alteracions són a l'esquerra: mira-les abans de tocar."],
+        reto="Fes que la melodia canti lligada mentre l'esquerra camina regular, també als "
+             "cc. 19-20. Repte acceptat?",
+        truco="Toca l'esquerra sola fins que et surti mirant la dreta. Després afegeix la "
+              "melodia frase a frase.",
+        sabias="«Stille Nacht» es va estrenar la nit de Nadal de 1818 a l'església de Sant "
+               "Nicolau d'Oberndorf, a Àustria. La lletra és del sacerdot Joseph Mohr i la "
+               "música, del mestre Franz Xaver Gruber.",
+        qr_texto='Escolta-la i segueix la partitura amb el dit.',
         ts=(3, 4),
-        cuenta_titulo='Cómo se cuenta el c. 1',
-        cuenta_pie='Negra con puntillo, corchea y negra: «1, 2, y, 3». Aquí solo el ritmo; las '
-                   'notas, en tu partitura.',
-        ritmos=[('LA CUENTA', '3/4 · balanceo de nana',
+        cuenta_titulo='Com es compta el c. 1',
+        cuenta_pie='Negra amb puntet, corxera i negra: «1, 2, i, 3». Aquí només el ritme; les '
+                   'notes, a la teva partitura.',
+        ritmos=[('EL COMPTE', '3/4 · balanceig de bressol',
                  [{'pitch': 'B4', 'dur': 'q.'}, {'pitch': 'B4', 'dur': 'e'},
                   {'pitch': 'B4', 'dur': 'q'}], OCRE, 'treble', None)]),
     manos=dict(
-        izq=[('Tres pulsos', 'Casi todo son negras. Toca los cc. 1-4 y cuenta 1-2-3.'),
-             ('Bajar de paso', 'En los cc. 5 y 6 baja de paso: Si-La-Sol y Fa-Mi-Re. Dilo en '
-                               'voz alta.'),
-             ('Las alteraciones', 'Si♭ (c. 8), Fa♯ (cc. 10, 14) y Sol♯ (c. 18). Dilas antes de '
-                                  'tocar.'),
-             ('Los cc. 19-20', 'Seis notas con alteraciones, una por pulso. Acaban en el Do '
-                               'central, con calderón.')],
-        der=[('Cántala', 'Es una nana. Cántala por dentro y respira donde acaba cada frase.'),
-             ('El balanceo', 'Cuenta «1, 2, y, 3»: la corchea cae en el «y» y la negra, en el '
-                             '3.'),
-             ('Notas largas', 'Los cc. 2, 4, 6, 12 y 16 son una blanca con puntillo: tres tiempos '
-                              'enteros.'),
-             ('Calderón y rit.', 'En el c. 20 y al final alarga la nota. En la casilla 2, más '
-                                 'lenta y más suave.')],
-        tecnica=['Brazo suelto: la melodía se canta, no se golpea.',
-                 'La izquierda, siempre más suave que la melodía.',
-                 'Cuenta 1-2-3 despacio: es una nana.']),
+        izq=[('Tres pulsos', 'Gairebé tot són negres. Toca els cc. 1-4 i compta 1-2-3.'),
+             ('Baixar de pas', 'Als cc. 5 i 6 baixa de pas: Si-La-Sol i Fa-Mi-Re. Digues-ho '
+                               'en veu alta.'),
+             ('Les alteracions', 'Si♭ (c. 8), Fa♯ (cc. 10, 14) i Sol♯ (c. 18). Digues-les '
+                                 'abans de tocar.'),
+             ('Els cc. 19-20', 'Sis notes amb alteracions, una per pols. Acaben al Do '
+                               'central, amb calderó.')],
+        der=[('Canta-la', 'És una cançó de bressol. Canta-la per dins i respira on acaba '
+                          'cada frase.'),
+             ('El balanceig', 'Compta «1, 2, i, 3»: la corxera cau a la «i» i la negra, al '
+                              '3.'),
+             ('Notes llargues', 'Els cc. 2, 4, 6, 12 i 16 són una blanca amb puntet: tres '
+                                'temps sencers.'),
+             ('Calderó i rit.', 'Al c. 20 i al final allarga la nota. A la casella 2, més '
+                                'lenta i més suau.')],
+        tecnica=['Braç solt: la melodia es canta, no es toca a cops.',
+                 "L'esquerra, sempre més fluixa que la melodia.",
+                 'Compta 1-2-3 a poc a poc: és una cançó de bressol.']),
     bloques=[
-        B(1, 'cc. 1-3', 'La nana', (0, 0),
-          D('cadena', 'El ritmo de la melodía (c. 1)',
-            [('negra con puntillo', False), ('corchea', False), ('negra', True)]),
-          [('IZQUIERDA', 'Cc. 1 y 3: Do y Mi (blanca). C. 2: Do-La-Sol.'),
-           ('DERECHA', 'Sol con puntillo, La y Sol. Luego una nota larga, ligada.'),
-           ('JUNTAS', 'Un compás cada vez; después los tres.'),
-           ('A TEMPO', 'Gently: despacio y suave (mp).')]),
-        B(2, 'cc. 4-7', 'Tres acordes nuevos', (1, 1),
-          D('cadena', 'Acordes de los cc. 5 y 7 (con otra nota en el bajo)',
-            [('Sol / Si abajo', False), ('La menor / Do abajo', True)]),
-          [('IZQUIERDA', 'Do-La-Sol, Si-La-Sol, Fa-Mi-Re y Do-Mi-Sol.'),
-           ('DERECHA', 'C. 4: Mi largo. Cc. 5-7: blanca y negra, nota larga, blanca y negra.'),
-           ('JUNTAS', 'Los cuatro compases en bucle, contando 1-2-3.'),
-           ('OJO', 'Sol/Si y La menor/Do: el mismo acorde con otra nota abajo (inversión).')]),
-        B(3, 'cc. 8-10', 'Primeras alteraciones', (2, 2),
-          D('cadena', 'Acordes del bloque',
+        B(1, 'cc. 1-3', 'La cançó de bressol', (0, 0),
+          D('cadena', 'El ritme de la melodia (c. 1)',
+            [('negra amb puntet', False), ('corxera', False), ('negra', True)]),
+          [('IZQUIERDA', 'Cc. 1 i 3: Do i Mi (blanca). C. 2: Do-La-Sol.'),
+           ('DERECHA', 'Sol amb puntet, La i Sol. Després una nota llarga, lligada.'),
+           ('JUNTAS', 'Un compàs cada cop; després els tres.'),
+           ('A TEMPO', 'Gently: a poc a poc i suau (mp).')]),
+        B(2, 'cc. 4-7', 'Dos acords amb inversió', (1, 1),
+          D('cadena', 'Acords dels cc. 5 i 7 (amb una altra nota al baix)',
+            [('Sol / Si baix', False), ('La menor / Do baix', True)]),
+          [('IZQUIERDA', 'Do-La-Sol, Si-La-Sol, Fa-Mi-Re i Do-Mi-Sol.'),
+           ('DERECHA', 'C. 4: Mi llarg. Cc. 5-7: blanca i negra, nota llarga, blanca i negra.'),
+           ('JUNTAS', 'Els quatre compassos en bucle, comptant 1-2-3.'),
+           ('OJO', 'Sol/Si i La menor/Do: el mateix acord amb una altra nota al baix '
+                   '(inversió).')]),
+        B(3, 'cc. 8-10', 'Primeres alteracions', (2, 2),
+          D('cadena', 'Acords del bloc',
             [('Do7 / Si♭', False), ('Fa', False), ('Fa♯ dim.', True)]),
-          [('IZQUIERDA', 'Si♭ en el c. 8 y Fa♯ en el c. 10. Dilas en voz alta.'),
-           ('DERECHA', 'C. 10: negra con puntillo, corchea y negra, ligadas.'),
-           ('JUNTAS', 'Cc. 8-9 primero; después el 10.'),
-           ('OJO', 'Cada alteración vale solo en su compás.')]),
-        B(4, 'cc. 11-14', 'Vuelve la melodía', (3, 3),
-          D('cadena', 'La melodía repite',
+          [('IZQUIERDA', 'Si♭ al c. 8 i Fa♯ al c. 10. Digues-ho en veu alta.'),
+           ('DERECHA', 'C. 10: negra amb puntet, corxera i negra, lligades.'),
+           ('JUNTAS', 'Primer els cc. 8-9; després el 10.'),
+           ('OJO', 'Cada alteració val només al seu compàs.')]),
+        B(4, 'cc. 11-14', 'Torna la melodia', (3, 3),
+          D('cadena', 'La melodia es repeteix',
             [('c. 11 = c. 1', False), ('c. 12 = c. 2', False), ('cc. 13-14 = 9-10', True)]),
-          [('IZQUIERDA', 'C. 11 empieza en Mi. C. 12 es como el c. 2. Fa♯ en el c. 14.'),
-           ('DERECHA', 'La melodía de los cc. 1-2 y 9-10: ya la sabes.'),
-           ('JUNTAS', 'Los cuatro compases en bucle.'),
-           ('OJO', 'El Fa♯ del c. 14 es el mismo del c. 10.')]),
-        B(5, 'cc. 15-18', 'Sube con Si menor', (4, 4),
-          D('cadena', 'Acordes del bloque',
-            [('Do', False), ('Si menor', False), ('Mi / Sol♯ abajo', True)]),
-          [('IZQUIERDA', 'C. 15 como el c. 11. C. 17: Si-La-Sol. C. 18: Sol♯ y Si.'),
-           ('DERECHA', 'Cc. 15-16 repiten el principio. En el c. 18 sube: «heav-».'),
-           ('JUNTAS', 'Dos compases cada vez: 15-16 y 17-18.'),
-           ('OJO', 'Sol♯ (c. 18): sostenido solo en ese compás.')]),
-        B(6, 'cc. 19-22', 'Calderón y pausa', (5, 5),
-          D('cadena', 'La izquierda, cc. 19-20',
+          [('IZQUIERDA', 'El c. 11 comença en Mi. El c. 12 és com el c. 2. Fa♯ al c. 14.'),
+           ('DERECHA', 'La melodia dels cc. 1-2 i 9-10: ja la saps.'),
+           ('JUNTAS', 'Els quatre compassos en bucle.'),
+           ('OJO', 'El Fa♯ del c. 14 és el mateix del c. 10.')]),
+        B(5, 'cc. 15-18', 'Puja amb Si menor', (4, 4),
+          D('cadena', 'Acords del bloc',
+            [('Do', False), ('Si menor', False), ('Mi / Sol♯ baix', True)]),
+          [('IZQUIERDA', "C. 15 com l'11. C. 17: Si-La-Sol. C. 18: Sol♯ i Si."),
+           ('DERECHA', 'Cc. 15-16 repeteixen el principi. Al c. 18 puja: «heav-».'),
+           ('JUNTAS', 'Dos compassos cada cop: 15-16 i 17-18.'),
+           ('OJO', 'Sol♯ (c. 18): sostingut només en aquest compàs.')]),
+        B(6, 'cc. 19-22', 'Calderó i pausa', (5, 5),
+          D('cadena', "L'esquerra, cc. 19-20",
             [('La', False), ('La♭', False), ('Sol', False), ('Fa♯', False), ('La', False),
              ('Do', True)]),
-          [('IZQUIERDA', 'Cc. 19-20: seis notas con alteraciones. Cc. 21-22: Sol y Fa largos.'),
-           ('DERECHA', 'Cc. 19-20: dos notas largas ligadas. C. 21: tres negras. C. 22: nana.'),
-           ('JUNTAS', 'Cc. 19-20 en bucle, despacio.'),
-           ('OJO', 'Calderón (c. 20): la nota dura más de lo escrito.')]),
-        B(7, 'cc. 23-26', 'Casillas y final', (6, 6),
-          D('cadena', 'El recorrido',
-            [('cc. 1-22', False), ('casilla 1', False), ('↩ c. 1', False), ('cc. 1-22', False),
-             ('casilla 2', True)]),
-          [('IZQUIERDA', 'Casilla 1: Sol-Si-La, Sol-Fa-Re. Casilla 2: Mi-Fa-Re y Do largo.'),
-           ('DERECHA', 'Do largo ligado. En la casilla 2, al final, nota aguda con calderón.'),
-           ('JUNTAS', 'Toca la pieza con repetición: 1.ª vez casilla 1, 2.ª vez casilla 2.'),
-           ('A TEMPO', 'rit. e dim.: más lenta y más suave hasta el calderón.')]),
+          [('IZQUIERDA', 'Cc. 19-20: sis notes amb alteracions. Cc. 21-22: Sol i Fa llargs.'),
+           ('DERECHA', 'Cc. 19-20: dues notes llargues lligades. C. 21: tres negres. C. 22: '
+                       'bressol.'),
+           ('JUNTAS', 'Cc. 19-20 en bucle, a poc a poc.'),
+           ('OJO', 'Calderó (c. 20): la nota dura més del que està escrit.')]),
+        B(7, 'cc. 23-26', 'Caselles i final', (6, 6),
+          D('cadena', 'El recorregut',
+            [('cc. 1-22', False), ('casella 1', False), ('↩ c. 1', False), ('cc. 1-22', False),
+             ('casella 2', True)]),
+          [('IZQUIERDA', 'Casella 1: Sol-Si-La, Sol-Fa-Re. Casella 2: Mi-Fa-Re i Do llarg.'),
+           ('DERECHA', 'Do llarg lligat. A la casella 2, al final, nota aguda amb calderó.'),
+           ('JUNTAS', 'Toca la peça amb repetició: 1.a vegada casella 1, 2.a vegada casella 2.'),
+           ('A TEMPO', 'rit. e dim.: més lenta i més suau fins al calderó.')]),
     ],
+    lista=['Toco la melodia lligada i cantant per dins.',
+           "L'esquerra em surt sense mirar, també als cc. 19-20.",
+           'Sé quan torno al c. 1 i quan salto a la casella 2.',
+           'Faig bé els dos calderons.',
+           "La gravo amb el mòbil i me l'escolto."],
     inicio={1: 71.5},
     cortes={1: [238, 320, 473, 545], 2: [186, 225, 384, 416, 586, 610]},
     burb={
-        0: [('arriba', 262, 'AMB', 'Gently y mp: suave y despacio. Compás de 3/4: cuenta '
+        0: [('arriba', 262, 'AMB', 'Gently i mp: suau i a poc a poc. Compàs de 3/4: compta '
                                    '1-2-3.', 0.06),
-            ('arriba', 262, 'IZQ', 'Cc. 1 y 3: Do y Mi (blanca). C. 2: tres negras, Do-La-Sol.',
-             0.45)],
-        1: [('arriba', 262, 'IZQ', 'Cc. 5 y 6 bajan de paso: Si-La-Sol y Fa-Mi-Re. Dilo en voz '
-                                   'alta.', 0.4),
-            ('arriba', 262, 'OJO', 'Sol/Si y La menor/Do: el mismo acorde con otra nota en el '
-                                   'bajo (inversión).', 0.85)],
-        2: [('arriba', 262, 'IZQ', 'Si♭ (c. 8) y Fa♯ (c. 10): alteraciones, valen solo en su '
-                                   'compás.', 0.03),
-            ('arriba', 262, 'DER', 'C. 10: negra con puntillo, corchea y negra: el ritmo del c. '
+            ('arriba', 262, 'IZQ', 'Cc. 1 i 3: Do i Mi (blanca). C. 2: tres negres, '
+                                   'Do-La-Sol.', 0.45)],
+        1: [('arriba', 262, 'IZQ', 'Cc. 5 i 6 baixen de pas: Si-La-Sol i Fa-Mi-Re. Digues-ho '
+                                   'en veu alta.', 0.4),
+            ('arriba', 262, 'OJO', 'Sol/Si i La menor/Do: el mateix acord amb una altra nota '
+                                   'al baix. Això és una inversió!', 0.85)],
+        2: [('arriba', 262, 'IZQ', 'Si♭ (c. 8) i Fa♯ (c. 10): alteracions, valen només al seu '
+                                   'compàs.', 0.03),
+            ('arriba', 262, 'DER', 'C. 10: negra amb puntet, corxera i negra: el ritme del c. '
                                    '1.', 0.8)],
-        3: [('arriba', 262, 'IZQ', 'C. 11 empieza en Mi, no en Do. Fa♯ en el c. 14.', 0.04),
-            ('arriba', 262, 'DER', 'La melodía repite los cc. 1-2 y 9-10: ya la sabes.', 0.5)],
-        4: [('arriba', 520, 'AMB', 'C. 18: la melodía sube («heav-») y la izquierda lleva un '
-                                   'Sol♯, sostenido solo en este compás.', 0.85)],
-        5: [('arriba', 520, 'IZQ', 'Cc. 19-20: seis notas con alteraciones hasta el Do central. '
-                                   'Calderón en el c. 20: alarga la nota, tú decides cuánto.',
-             0.3)],
-        6: [('arriba', 520, 'OJO', 'Al final de la casilla 1 hay una repetición: vuelves al c. 1. '
-                                   'La 2.ª vez saltas a la casilla 2.', 0.4),
-            ('abajo', 520, 'AMB', 'rit. e dim.: cada vez más lenta y más suave. El último '
-                                  'compás lleva calderón.', 0.9)],
+        3: [('arriba', 262, 'IZQ', 'C. 11 comença en Mi, no en Do. Fa♯ al c. 14.', 0.04),
+            ('arriba', 262, 'DER', 'La melodia repeteix els cc. 1-2 i 9-10: ja la saps.', 0.5)],
+        4: [('arriba', 520, 'AMB', "C. 18: la melodia puja («heav-») i l'esquerra porta un "
+                                   "Sol♯, sostingut només en aquest compàs.", 0.85)],
+        5: [('arriba', 520, 'OJO', 'Cc. 19-20: sis notes amb alteracions fins al Do central. '
+                                   "Calderó al c. 20: allarga-la tant com vulguis!", 0.3)],
+        6: [('arriba', 520, 'OJO', "Al final de la casella 1 hi ha una repetició: tornes al c. "
+                                   "1. La 2.a vegada, salta a la casella 2. No et perdis!",
+             0.4),
+            ('abajo', 520, 'AMB', "rit. e dim.: cada cop més lenta i més suau. L'últim compàs "
+                                  "porta calderó.", 0.9)],
     },
+    misol=dict(
+        manos="Taral·leja-la abans de tocar: si la sents al cap, els dits ja saben cap on "
+              "anar.",
+        guia="Les alteracions fan por, però són poques i sempre a l'esquerra. Subratlla-les "
+             "amb llapis!",
+        pauta="Copia el ritme del bressol (negra amb puntet, corxera, negra) i inventa una "
+              "melodia nova!"),
     marcas=[],
-    pie_pauta='la clave la pones tú · copia un compás o escribe la escala de Do mayor')
+    pie_pauta="la clau la poses tu · copia un compàs o escriu l'escala de Do major")
 
 if __name__ == '__main__':
     wr, n = construir_pieza(SPEC, 1)

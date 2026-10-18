@@ -67,15 +67,19 @@ def build_pauta(c, cfg):
 
     gap = cfg.get('gap_pauta', GAP)
     paso = gap * (4 + AIRE)
-    n = int((y - SUELO) // paso)
+    suelo = SUELO + (66 if cfg.get('misol') else 0)
+    n = int((y - suelo) // paso)
     # el sobrante se reparte entre todos, para que la hoja quede cuadrada por
     # arriba y por abajo en vez de dejar un hueco muerto al pie
-    extra = (y - SUELO - n * paso) / n if n else 0
+    extra = (y - suelo - n * paso) / n if n else 0
 
     for i in range(n):
         draw_staff(c, MARGIN, y, CONTENT_W, gap=gap)
         y -= paso + extra
 
+    if cfg.get('misol'):
+        import tema_ca
+        tema_ca.caixa_misol(c, MARGIN, SUELO + 62, CONTENT_W, cfg['misol'], pose='happy', alto_buho=42)
     c.setFont('DejaVuSans', 7.4)
     c.setFillColor(MUTED)
     c.drawCentredString(W / 2, 26, 'El Cuaderno del Pianista  ·  T-Clas')

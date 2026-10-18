@@ -95,7 +95,7 @@ def _wrap(c, text, x, y, font, size, max_w, leading, color):
     return y
 
 
-def build_cover(c, logo_path, alumno, subtitulo, curso):
+def build_cover(c, logo_path, alumno, subtitulo, curso, extra=None):
     """Portada: fondo crema, logo grande centrado, titulo y alumno."""
     c.setFillColor(CREAM)
     c.rect(0, 0, W, H, fill=1, stroke=0)
@@ -137,6 +137,8 @@ def build_cover(c, logo_path, alumno, subtitulo, curso):
     c.drawCentredString(W / 2, y, subtitulo)
     y -= 15
     c.drawCentredString(W / 2, y, curso)
+    if extra:
+        extra(c)
 
     c.setFont('DejaVuSans', 8)
     c.setFillColor(MUTED)

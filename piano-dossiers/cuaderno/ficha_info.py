@@ -347,7 +347,7 @@ def build_ficha(c, cfg):
     c.drawRightString(W - MARGIN, y, 'Ficha de la partitura')
     y -= 30
 
-    tsize = _fit(cfg['titulo'], 'DejaVuSerif-Bold', 26, CONTENT_W)
+    tsize = _fit(cfg['titulo'], 'DejaVuSerif-Bold', 26, CONTENT_W - (62 if cfg.get('misol_buho') else 0))
     c.setFont('DejaVuSerif-Bold', tsize)
     c.setFillColor(NAVY)
     c.drawString(MARGIN, y, cfg['titulo'])
@@ -357,6 +357,9 @@ def build_ficha(c, cfg):
     c.drawString(MARGIN, y, cfg['autor'])
     y -= 20
 
+    if cfg.get('misol_buho'):
+        import tema_ca
+        tema_ca.buho(c, W - MARGIN - 50, y - 6, 46, 'happy')
     y = _fact_strip(c, y, cfg['datos'])
 
     # El mapa solo se dibuja si el numero de compases esta VERIFICADO. En

@@ -21,7 +21,11 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.colors import HexColor, Color
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from pypdf import PdfReader, PdfWriter
+import tema_ca
+tema_ca.instalar()
 from portada import (W, H, MARGIN, CONTENT_W, NAVY, NAVY_SOFT, CREAM, INK, MUTED, _wrap)
+import ficha_info as _fi
+tema_ca.post_imports()
 from ficha_info import PANEL, build_ficha
 from hoja_pauta import build_pauta
 
@@ -39,6 +43,10 @@ BLANCO = HexColor('#FFFFFF')
 GRIS = HexColor('#D9D2BF')
 COLORES_BLOQUE = [AZUL, OCRE, ROJO, VERDE, MORADO, HexColor('#B0723A'), HexColor('#3C7C7A'),
                   HexColor('#8A4A6B'), HexColor('#5A6B8C')]
+if tema_ca.ACTIU:
+    OCRE, AZUL, VERDE, ROJO, MORADO, GRIS = [HexColor(tema_ca.PAL[k]) for k in
+                                             ('OCRE', 'AZUL', 'VERDE', 'ROJO', 'MORADO', 'GRIS')]
+    COLORES_BLOQUE = [HexColor(x) for x in tema_ca.BLOQUES]
 
 
 # ------------------------------------------------------------ deteccion
@@ -198,7 +206,11 @@ def burbuja(c, x, y, w, tipo, txt, cola='arriba', cx=None):
     c.line(cx - 3.2, yb, cx + 3.2, yb)
     c.setFont('DejaVuSans-Bold', 6.3)
     c.setFillColor(col)
-    c.drawString(x0 + 7, PAGE_H - y - 10.5, lead)
+    if tema_ca.ACTIU and tipo == 'OJO':
+        tema_ca.buho(c, x0 + 5, PAGE_H - y - 12.5, 12, 'happy')
+        c.drawString(x0 + 21, PAGE_H - y - 10.5, lead)
+    else:
+        c.drawString(x0 + 7, PAGE_H - y - 10.5, lead)
     c.setFont('DejaVuSans', size)
     c.setFillColor(NAVY)
     yy = PAGE_H - y - 10.5 - 9.4
@@ -401,7 +413,7 @@ def _columna(c, x, y, ancho, tit, color, pasos):
     c.drawString(x + 14, y - 20, tit)
     y -= 44
     for i, (t, txt) in enumerate(pasos, 1):
-        alto = 118
+        alto = 104 if tema_ca.ACTIU else 118
         c.setFillColor(PANEL)
         c.roundRect(x, y - alto, ancho, alto, 5, fill=1, stroke=0)
         c.setFillColor(color)
@@ -447,7 +459,19 @@ def pagina_manos(c, spec, n):
         c.setFont('DejaVuSans', 8.6)
         c.drawString(MARGIN + 28, yy, s)
         yy -= 13
+    tip = (spec.get('misol') or {}).get('manos', MISOL_DEF['manos'])
+    if tema_ca.ACTIU and tip and y - h - 14 - tema_ca.alto_caixa_misol(CONTENT_W, tip) > 48:
+        tema_ca.caixa_misol(c, MARGIN, y - h - 14, CONTENT_W, tip, pose='normal')
     c.showPage()
+
+
+MISOL_DEF = dict(
+    manos="Tens pressa? Ni cas! Una mà cada cop, molt a poc a poc: el cervell necessita temps per "
+          "ensenyar als dits el camí.",
+    guia="Quan un bloc et surti tres cops seguits sense fallar, ja el tens. Si falles, torna "
+         "enrere un compàs, no al principi!",
+    pauta="Aquí ets tu la compositora! Copia un compàs que t'agradi o inventa'n un de nou. "
+          "Cada nota que escrius és música teva.")
 
 
 # diagramas de la guia ------------------------------------------------------
@@ -631,6 +655,9 @@ def paginas_guia(c, spec, n0):
                     c.setFont('DejaVuSans', 9.4)
                     c.drawString(MARGIN + 38, yy, t)
                     yy -= 22
+                tip = (spec.get('misol') or {}).get('guia', MISOL_DEF['guia'])
+                if tema_ca.ACTIU and tip and yy - 14 - tema_ca.alto_caixa_misol(CONTENT_W, tip) > 44:
+                    tema_ca.caixa_misol(c, MARGIN, yy - 8, CONTENT_W, tip, pose='happy')
         c.showPage()
         pagina += 1
     return pagina
@@ -654,6 +681,7 @@ def construir_pieza(spec, num_pag0):
                qr=dict(cfg['qr'], png=qr))
     cfg['titulo'] = spec['titulo']
     cfg['autor'] = spec['autor']
+    cfg['misol_buho'] = tema_ca.ACTIU
     f1 = os.path.join(OUT, '_f_%s.pdf' % slug)
     c = canvas.Canvas(f1, pagesize=(W, H))
     build_ficha(c, cfg)
@@ -676,6 +704,8 @@ def construir_pieza(spec, num_pag0):
     for i in range(npau):
         build_pauta(c, dict(kicker=kicker, page_num=num_pag0 + total + i,
                             titulo_pauta='Para escribir',
+                            misol=((spec.get('misol') or {}).get('pauta', MISOL_DEF['pauta'])
+                                   if tema_ca.ACTIU and i == npau - 1 else None),
                             pie_pauta=spec.get('pie_pauta', 'la clave la pones tú · copia un compás '
                                                             'o inventa algo')))
     c.save()

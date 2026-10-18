@@ -32,9 +32,9 @@ SPEC = dict(
                ('DERECHA', 'Notas atadas',
                 'Muchas notas se atan por encima de la barra y caen entre pulsos. Eso es el '
                 'ragtime: tiempo «roto».'),
-               ('LOS ACORDES', 'Do · Do7 · Fa · Sol7',
-                'Do mayor; Do con séptima (el si♭ del c. 10); Fa mayor (c. 11); Sol con séptima '
-                '(c. 8).'),
+               ('LOS ACORDES', 'Do · Fa · Sol',
+                'Do mayor; Do con séptima (el si♭ del c. 10); Fa mayor (c. 11); Sol con séptima, '
+                'la dominante (c. 8).'),
                ('LOS MATICES', 'p ↔ f',
                 'p en el c. 1, f en el c. 8 y luego p y f cada cuatro compases: cc. 12, 16, 20, '
                 '24 y 28.')],
@@ -116,9 +116,9 @@ SPEC = dict(
            ('OJO', 'C. 16: p, otra vez re, re♯. En el c. 17 vuelve el tema.')]),
         B(5, 'cc. 18-21', 'Aparece el fa♯', (4, 4),
           D('cadena', 'La izquierda, compás a compás',
-            [('Do7', False), ('Fa', False), ('Do', False), ('Re', True)]),
+            [('Do con si♭', False), ('Fa', False), ('Do', False), ('Re', True)]),
           [('IZQUIERDA', 'Do con si♭, Fa y Do. En el c. 21: Re grave y acorde con fa♯.'),
-           ('DERECHA', 'Como el c. 9. Luego la, sol con f; y fa♯, la, do, mi en el c. 21.'),
+           ('DERECHA', 'Como los cc. 10-11. Luego la, sol con f; y fa♯, la, do, mi en el c. 21.'),
            ('JUNTAS', 'Haz el c. 21 solo: es nuevo. Después, de c. 18 a 21.'),
            ('OJO', 'El fa♯ del c. 21 está en las dos manos: léelo antes de tocar.')]),
         B(6, 'cc. 22-26', 'Vuelve el tema', (5, 5),
@@ -147,13 +147,13 @@ SPEC = dict(
     cortes={1: [259.5, 293.5, 417.4, 442.9, 574.0, 592.0],
             2: [180.5, 196.5, 326.9, 345.4, 474.5, 489.5, 608.0, 619.5]},
     corte_titulo=154.8,
-    fin={1: 717.8},
+    fin={1: 717.8, 2: 750.0},
     burb={
         0: [('abajo', 262, 'DER', '8va en los cc. 1-2: suenan una octava más agudos de lo escrito. '
                                   'El la del c. 1 se ata al c. 2.', 0.3),
             ('abajo', 262, 'IZQ', 'La izquierda no toca hasta el c. 8: cuenta «uno-dos» con ella.',
              0.6)],
-        1: [('arriba', 300, 'OJO', 'Calderón sobre el silencio del c. 8: espera y sigue con p, '
+        1: [('arriba', 470, 'OJO', 'Calderón sobre el silencio del c. 8: espera y sigue con p, '
                                    're, re♯.', 0.85),
             ('abajo', 262, 'IZQ', 'Entra con un Sol grave (acento) a la vez que el acorde.',
              0.9)],
@@ -161,14 +161,14 @@ SPEC = dict(
                                   'séptima); en el c. 11, Fa.', 0.4)],
         3: [('abajo', 300, 'IZQ', 'C. 14: Sol grave largo. C. 15: do y sol cortos (staccato).',
              0.5)],
-        4: [('arriba', 300, 'OJO', 'Fa♯ en el c. 21: nuevo en las dos manos. A la izquierda, '
+        4: [('arriba', 480, 'OJO', 'Fa♯ en el c. 21: nuevo en las dos manos. A la izquierda, '
                                    'Re mayor.', 0.9)],
         5: [('abajo', 300, 'IZQ', 'Cc. 24-25: la, si, do suben hasta el tema.', 0.45)],
         6: [('arriba', 300, 'AMB', 'Cc. 27-30 = cc. 11-14: ya lo sabes. El f está en el c. 28.',
              0.3)],
-        7: [('abajo', 300, 'IZQ', 'La nota de arriba baja: si♭ (c. 34), la (c. 35), la♭ y sol '
+        7: [('abajo', 440, 'IZQ', 'La nota de arriba baja: si♭ (c. 34), la (c. 35), la♭ y sol '
                                   '(cc. 36-37).', 0.7)],
-        8: [('abajo', 300, 'AMB', 'Final corto: do, sol y do grave. El último compás es solo la '
+        8: [('abajo', 440, 'AMB', 'Final corto: do, sol y do grave. El último compás es solo la '
                                   'izquierda.', 0.7)],
     },
     marcas=[],

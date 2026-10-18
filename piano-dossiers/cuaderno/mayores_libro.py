@@ -10,6 +10,7 @@ from reportlab.pdfgen import canvas
 from pypdf import PdfReader, PdfWriter
 from mayores_motor import *                                        # noqa: F401,F403
 from portada import build_cover, _wrap
+import tema_ca
 
 ASSETS = os.path.join(HERE, '..', 'assets')
 FRONT = 4                                                          # portada + 3 hojas
@@ -55,6 +56,11 @@ def marco_pag(c, n, derecha):
     c.setFont('DejaVuSans', 7.4)
     c.drawCentredString(W / 2, 26, 'El Cuaderno del Pianista  ·  T-Clas')
     c.drawRightString(W - MARGIN, 26, str(n))
+
+
+def misol_pie(c, y, txt, pose='normal', alto_buho=62.0):
+    if tema_ca.ACTIU and y - tema_ca.alto_caixa_misol(CONTENT_W, txt, alto_buho) > 44:
+        tema_ca.caixa_misol(c, MARGIN, y, CONTENT_W, txt, pose, alto_buho)
 
 
 def pag_como(c, n):
@@ -134,6 +140,8 @@ def pag_como(c, n):
            'encima de algunas partituras vienen en cifrado americano (A = La, B = Si, C = Do, '
            'D = Re, E = Mi, F = Fa, G = Sol).')
     _wrap(c, txt, MARGIN + 14, y - 14, 'DejaVuSans', 8.2, CONTENT_W - 28, 11, INK)
+    misol_pie(c, y - h - 22, "Hola! Soc en Mussol Misol i et faré companyia a cada peça. Si un "
+              "consell em ve al cap, el trobaràs en aquest quadre. Fes cas a l'ocell!", 'normal')
     c.showPage()
 
 
@@ -163,7 +171,7 @@ def pag_calendario(c, n, specs, inicio):
         c.drawString(xs[1], y - 14, corta(s['titulo'], 34))
         c.setFont('DejaVuSans', 7)
         c.setFillColor(MUTED)
-        c.drawString(xs[1], y - 25, corta(s['autor'], 56))
+        c.drawString(xs[1], y - 25, corta(s['autor'], 38))
         c.setFont('DejaVuSans', 8)
         c.setFillColor(INK)
         c.drawString(xs[2], y - 20, s['mes'].split(' (')[0])
@@ -175,6 +183,9 @@ def pag_calendario(c, n, specs, inicio):
         c.setFillColor(NAVY)
         c.drawString(xs[4], y - 20, str(inicio[s['num']]))
         y -= h + 4
+    misol_pie(c, y - 6, "Cada peça és una petita aventura: una cada dues setmanes. Les més "
+              "llargues poden portar una mica més, i no passa res. Poc a poc, i sense pressa!",
+              'happy', 52.0)
     c.showPage()
 
 
@@ -203,6 +214,8 @@ def pag_registro(c, n, specs):
         c.setStrokeColor(GRIS)
         c.line(xs[4], y - 20, xs[4] + 52, y - 20)
         y -= h + 4
+    misol_pie(c, y - 6, "Cada vegada que acabis una peça, marca-la aquí. Quan tinguis les quinze, "
+              "farem una festa! (D'acord, una festa de música.)", 'happy', 52.0)
     c.showPage()
 
 
@@ -221,7 +234,12 @@ def construir(salida, solo=None):
     c = canvas.Canvas(f, pagesize=(W, H))
     build_cover(c, os.path.join(ASSETS, 'asset_logo_tclas_v2.png'), ALUMNA.capitalize(),
                 'Quince piezas · de menos a más · 30 minutos por clase',
-                'Curso de noviembre a julio')
+                'Curso de noviembre a julio',
+                extra=(lambda cc: tema_ca.caixa_misol(
+                    cc, MARGIN + 30, 232, CONTENT_W - 60, "Hola, Sharifa! Soc en Mussol Misol. Aquest "
+                    "quadern té quinze peces, de les més fàcils a les més difícils. Jo seré al teu "
+                    "costat, i de tant en tant et donaré algun truc.", 'happy', 84.0))
+                if tema_ca.ACTIU else None)
     pag_como(c, 2)
     pag_calendario(c, 3, specs, inicio)
     pag_registro(c, 4, specs)

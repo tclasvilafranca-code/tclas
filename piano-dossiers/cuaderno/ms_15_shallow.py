@@ -30,7 +30,7 @@ SPEC = dict(
         ideas=[('IZQUIERDA', 'Dos notas a la vez',
                 'Casi siempre una quinta vacía (sol-re, la-mi, mi-si): dos notas que suenan '
                 'huecas y limpias.'),
-               ('DERECHA', 'La misma nota, varias veces',
+               ('DERECHA', 'Nota repetida',
                 'Repite una nota (do, sol, fa♯) en corcheas y luego da un paso. Hay que contar '
                 'bien.'),
                ('EL RITMO', 'Notas atadas',
@@ -155,7 +155,7 @@ SPEC = dict(
                                   'quieta.', 0.3)],
         2: [('arriba', 300, 'DER', 'Melodía más grave: sol, la, si. En el c. 11 sube a re.',
              0.5)],
-        3: [('abajo', 300, 'OJO', 'Doble barra tras el c. 16: acaba la estrofa. Respira.', 0.9)],
+        3: [('abajo', 500, 'OJO', 'Doble barra tras el c. 16: acaba la estrofa. Respira.', 0.97)],
         4: [('arriba', 262, 'DER', 'La melodía sube: do agudo repetido. El c. 19 llega al re, la '
                                    'nota más aguda.', 0.35),
             ('abajo', 262, 'IZQ', 'Parejas nuevas: la-mi (c. 17), fa♯-re (c. 18).', 0.2)],

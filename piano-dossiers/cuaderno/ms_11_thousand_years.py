@@ -31,7 +31,7 @@ SPEC = dict(
                 'L\'esquerra, una nota llarga.'),
                ('ESQUERRA', 'Acords de tres notes',
                 'Des del c. 9 l\'esquerra toca acords, quasi sempre un per compàs.'),
-               ('DRETA', 'Melodia de notes llargues',
+               ('DRETA', 'Notes llargues',
                 'Notes llargues amb puntet i grups de tres corxeres que baixen.'),
                ('EL MÉS ALT', 'Cc. 22-24',
                 'Les notes més agudes són en aquests compassos, amb ratlletes damunt del '
@@ -49,7 +49,7 @@ SPEC = dict(
         truco='Aprèn-te la introducció (cc. 1-8) de memòria: són dues notes, i et deixa mirar la mà '
               'esquerra quan comença la melodia.',
         sabias='«A Thousand Years» (2011) la van escriure Christina Perri i David Hodges per a la '
-               'banda sonora de la pel·lícula «Crepuscle: Albada, part 1».',
+               'banda sonora de la pel·lícula «The Twilight Saga: Breaking Dawn – Part 1».',
         qr_texto='Escolta-la amb la partitura al davant i compta dos temps per compàs.',
         ts=(6, 8), cuenta_titulo='Com es compta el 6/8',
         cuenta_pie='Un compàs de 6/8: dos temps, cadascun amb tres corxeres. Aquí només el ritme, '

@@ -14,126 +14,132 @@ from mayores_motor import *                                        # noqa: F401,
 
 SPEC = dict(
     num=7, slug='boig_per_tu', pdf='boig_per_t.pdf', time_sig=(4, 4),
-    titulo='Boig per tu', autor='Sau · canción catalana · arreglo de Pilar Sanz',
-    kicker='Sharifa · pieza 7 · Boig per tu', mes='Marzo · 1.ª quincena',
+    titulo='Boig per tu', autor='Sau · cançó catalana · arranjament de Pilar Sanz',
+    kicker='Sharifa · peça 7 · Boig per tu', mes='Març · 1.a quinzena',
     yt='https://www.youtube.com/results?search_query=sau+boig+per+tu',
-    credito='Partitura: Sau, «Boig per tu», arranj. Pilar Sanz. Anotaciones: T-Clas.',
+    credito='Partitura: Sau, «Boig per tu», arranj. Pilar Sanz. Anotacions: T-Clas.',
     ficha=FICHA(
-        datos=[('Tonalidad', 'Sol mayor'), ('Compás', '4/4'), ('Tempo', 'Sin indicar'),
-               ('Figura corta', 'Corchea'), ('Compases', '26')],
+        datos=[('Tonalitat', 'Sol major'), ('Compàs', '4/4'), ('Tempo', 'Sense indicar'),
+               ('Figura curta', 'Corxera'), ('Compassos', '26')],
         total=26,
-        secciones=[('A', 1, 8, 'La frase y su cierre', AZUL), ('B', 9, 15, 'Vuelve', OCRE),
-                   ('C', 16, 23, 'Parte nueva · Fa♯', AZUL), ('D', 24, 26, 'Final', OCRE)],
-        ideas=[('IZQUIERDA', 'Dos notas largas',
-                'Una redonda de dos notas por compás: Sol-Si, Sol-Do o La-Do. Casi no se mueve.'),
-               ('DERECHA', 'Entra en el «y»',
-                'Empieza con un silencio de negra con puntillo y entra en el «y» del 2.º tiempo.'),
-               ('EL RITMO', 'Notas largas y ligadas',
-                'Negras con puntillo, notas ligadas y una negra que empieza a mitad de tiempo.'),
+        secciones=[('A', 1, 8, 'La frase i el tancament', AZUL), ('B', 9, 15, 'Torna', OCRE),
+                   ('C', 16, 23, 'Part nova · Fa♯', AZUL), ('D', 24, 26, 'Final', OCRE)],
+        ideas=[('ESQUERRA', 'Dues notes llargues',
+                'Una rodona de dues notes per compàs: Sol-Si, Sol-Do o La-Do. Gairebé no es '
+                'mou.'),
+               ('DRETA', 'Entra a la «i»',
+                "Comença amb un silenci de negra amb puntet i entra a la «i» del 2n temps."),
+               ('EL RITME', 'Notes llargues i lligades',
+                "Negres amb puntet, notes lligades i una negra que comença a mig temps."),
                ('EL FA♯', 'Una tecla negra',
-                'No hay armadura: el Fa♯ va escrito cada vez (cc. 8, 17, 18, 21 y 22).')],
+                "No hi ha armadura: el Fa♯ va escrit cada vegada (cc. 8, 17, 18, 21 i 22).")],
         especial=[
-            'No lleva armadura ni tempo. Empieza y acaba con el acorde de Sol: Sol mayor.',
-            'Compás de 4/4: cuatro negras por compás.',
-            'La derecha entra en el «y» del 2: silencio de negra con puntillo y corchea.',
-            'Fa♯ escrito en los cc. 8, 17, 18, 21 y 22. En el c. 7 el Fa es natural.',
-            'No hay repeticiones ni casillas: se toca de seguido, hasta el c. 26.',
-            'La izquierda cambia más en los cc. 7 y 8: dos acordes y luego cuatro negras.'],
-        reto='Entrar en el «y» del 2 y mantener la negra que empieza a mitad de tiempo, sin '
-             'atropellar.',
-        truco='Canta la melodía en voz baja con la letra que conozcas: el ritmo de la canción '
-              'es el de tu mano derecha.',
-        sabias='«Boig per tu» significa «loco por ti». Es una de las canciones más conocidas de '
-               'Sau, un grupo catalán de pop de los años 90; la escribió su cantante, Carles '
-               'Sabater.',
-        qr_texto='Escúchala y marca el pulso: ¿cuándo entra la melodía?', ts=(4, 4)),
+            "No porta armadura ni tempo. Comença i acaba amb l'acord de Sol: Sol major.",
+            'Compàs de 4/4: quatre negres per compàs.',
+            'La dreta entra a la «i» del 2: silenci de negra amb puntet i corxera.',
+            'Fa♯ escrit als cc. 8, 17, 18, 21 i 22. Al c. 7 el Fa és natural.',
+            "No hi ha repeticions ni cases: es toca seguit, fins al c. 26.",
+            "L'esquerra canvia més als cc. 7 i 8: dos acords i després quatre negres."],
+        reto="Entrar a la «i» del 2 i mantenir la negra que comença a mig temps, sense "
+             'atropellar. Pots?',
+        truco="Canta la melodia en veu baixa amb la lletra que coneguis: el ritme de la cançó és "
+              'el de la teva mà dreta.',
+        sabias="«Boig per tu» és una de les cançons més conegudes de Sau, un grup català de pop "
+               'dels anys 90. La va escriure el seu cantant, Carles Sabater.',
+        qr_texto='Escolta-la i marca el pols: quan entra la melodia?', ts=(4, 4)),
     manos=dict(
-        izq=[('Dos notas, una redonda', 'Toca Sol-Si y aguanta cuatro tiempos. Luego Sol-Do y '
-                                        'La-Do. Cuenta 1-2-3-4.'),
-             ('El orden', 'Cc. 1-4: Sol-Si, Sol-Do, Sol-Si, Sol-Do. Repítelo hasta que salga '
-                          'sin mirar.'),
-             ('Los cc. 7 y 8', 'C. 7: dos acordes de dos tiempos, Fa-Do y Sol-Do. C. 8: '
-                               'cuatro negras, La-Do.'),
-             ('De memoria', 'Aprende la izquierda de memoria: casi todo se repite.')],
-        der=[('Cantar antes', 'Canta o tararea la melodía de los cc. 1-4 antes de tocarla.'),
-             ('Entrar en el «y»', 'Silencio de negra con puntillo y entras en el «y» del 2: '
-                                  'Sol-Si-Do-Re.'),
-             ('Las notas largas', 'C. 2: Re largo, Mi ligado y Sol largo. Respira en las notas '
-                                  'largas.'),
-             ('Con la izquierda', 'Junta cuatro compases cada vez. Si te pierdes, vuelve a una '
-                                  'sola mano.')],
-        tecnica=['Muñeca suelta y dedos curvos: acordes sin apretar.',
-                 'La izquierda suena suave y la derecha canta por encima.',
-                 'Cuenta 1-2-3-4 en voz alta, también en los silencios.']),
+        izq=[('Dues notes, una rodona', 'Toca Sol-Si i aguanta quatre temps. Després Sol-Do i '
+                                        'La-Do. Compta 1-2-3-4.'),
+             ("L'ordre", 'Cc. 1-4: Sol-Si, Sol-Do, Sol-Si, Sol-Do. Repeteix-ho fins que et '
+                         'surti sense mirar.'),
+             ('Els cc. 7 i 8', 'C. 7: dos acords de dos temps, Fa-Do i Sol-Do. C. 8: quatre '
+                               'negres, La-Do.'),
+             ('De memòria', "Aprèn l'esquerra de memòria: gairebé tot es repeteix.")],
+        der=[('Cantar abans', 'Canta o taral·leja la melodia dels cc. 1-4 abans de tocar-la.'),
+             ('Entrar a la «i»', 'Silenci de negra amb puntet i entres a la «i» del 2: '
+                                 'Sol-Si-Do-Re.'),
+             ('Les notes llargues', 'C. 2: Re llarg, Mi lligat i Sol llarg. Respira a les '
+                                    'notes llargues.'),
+             ("Amb l'esquerra", 'Ajunta quatre compassos cada vegada. Si et perds, torna a una '
+                                'sola mà.')],
+        tecnica=['Canell solt i dits corbats: acords sense prémer.',
+                 "L'esquerra sona suau i la dreta canta per sobre.",
+                 'Compta 1-2-3-4 en veu alta, també als silencis.']),
     bloques=[
         B(1, 'cc. 1-5', 'La frase', (0, 0),
-          D('cadena', 'Las notas del c. 1',
-            [('silencio', False), ('Sol', False), ('Si', False), ('Do', False), ('Re', True)]),
-          [('IZQUIERDA', 'Sol-Si, Sol-Do, Sol-Si, Sol-Do: una redonda por compás.'),
-           ('DERECHA', 'Entras en el «y» del 2: Sol-Si-Do-Re. C. 2: Re largo, Mi ligado, Sol.'),
-           ('JUNTAS', 'Los cc. 1-2 en bucle y luego los cc. 3-4: son iguales.'),
-           ('OJO', 'El c. 5 cambia: La-Do en la izquierda y Do-Do-Do-Si en la derecha.')]),
-        B(2, 'cc. 6-10', 'El cierre y la vuelta', (1, 1),
-          D('cadena', 'La frase se cierra',
-            [('c. 7', False), ('c. 8 · acorde con Fa♯', False), ('c. 9 · vuelve el inicio', True)]),
-          [('IZQUIERDA', 'C. 6: Sol-Do larga. C. 7: Fa-Do y Sol-Do. C. 8: cuatro negras, La-Do.'),
-           ('DERECHA', 'C. 6: La, Sol ligado, Mi-Sol. C. 7: dos notas a la vez. C. 8: acorde '
-                       'y silencio.'),
-           ('JUNTAS', 'Los cc. 5-8 como una sola frase; descansa en el silencio del c. 8.'),
-           ('OJO', 'En el c. 8 aparece el Fa♯: una tecla negra. Los cc. 9-10 son los cc. 1-2.')]),
-        B(3, 'cc. 11-15', 'Vuelve la frase', (2, 2),
-          D('cadena', 'Es el principio',
+          D('cadena', 'Les notes del c. 1',
+            [('silenci', False), ('Sol', False), ('Si', False), ('Do', False), ('Re', True)]),
+          [('IZQUIERDA', 'Sol-Si, Sol-Do, Sol-Si, Sol-Do: una rodona per compàs.'),
+           ('DERECHA', 'Entres a la «i» del 2: Sol-Si-Do-Re. C. 2: Re llarg, Mi lligat, Sol.'),
+           ('JUNTAS', 'Els cc. 1-2 en bucle i després els cc. 3-4: són iguals.'),
+           ('OJO', 'El c. 5 canvia: La-Do a l\'esquerra i Do-Do-Do-Si a la dreta. Atenció!')]),
+        B(2, 'cc. 6-10', 'El tancament i la tornada', (1, 1),
+          D('cadena', 'La frase es tanca',
+            [('c. 7', False), ('c. 8 · acord amb Fa♯', False), ('c. 9 · torna el principi', True)]),
+          [('IZQUIERDA', 'C. 6: Sol-Do llarg. C. 7: Fa-Do i Sol-Do. C. 8: quatre negres, La-Do.'),
+           ('DERECHA', 'C. 6: La, Sol lligat, Mi-Sol. C. 7: dues notes alhora. C. 8: acord i '
+                       'silenci.'),
+           ('JUNTAS', 'Els cc. 5-8 com una sola frase; descansa al silenci del c. 8.'),
+           ('OJO', 'Al c. 8 apareix el Fa♯: una tecla negra. Els cc. 9-10 són els cc. 1-2.')]),
+        B(3, 'cc. 11-15', 'Torna la frase', (2, 2),
+          D('cadena', "És el principi",
             [('cc. 11-12 = 1-2', False), ('c. 13 = 5', False), ('c. 14 = 6', False),
-             ('c. 15 · Sol largo', True)]),
-          [('IZQUIERDA', 'Sol-Si, Sol-Do, La-Do, Sol-Do y Sol-Si: una redonda por compás.'),
-           ('DERECHA', 'Repite los cc. 1, 2, 5 y 6. El c. 15 acaba en Sol largo.'),
-           ('JUNTAS', 'Si sabes los cc. 1-6, ya sabes estos.'),
-           ('OJO', 'El c. 15 es una redonda: cuéntala entera, 1-2-3-4.')]),
-        B(4, 'cc. 16-20', 'La parte nueva', (3, 3),
-          D('cadena', 'Los pasos de la derecha',
+             ('c. 15 · Sol llarg', True)]),
+          [('IZQUIERDA', 'Sol-Si, Sol-Do, La-Do, Sol-Do i Sol-Si: una rodona per compàs.'),
+           ('DERECHA', 'Repeteix els cc. 1, 2, 5 i 6. El c. 15 acaba en Sol llarg.'),
+           ('JUNTAS', 'Si saps els cc. 1-6, ja saps aquests.'),
+           ('OJO', "El c. 15 és una rodona: compta-la sencera, 1-2-3-4!")]),
+        B(4, 'cc. 16-20', 'La part nova', (3, 3),
+          D('cadena', 'Els passos de la dreta',
             [('Re-Si-Re-Si-Re', False), ('Mi-Mi-Fa♯', False), ('Sol-Fa♯-Mi-Re-Mi', False),
-             ('Re largo', True)]),
-          [('IZQUIERDA', 'Sol-Si en el c. 16, Sol-Do en los cc. 17-18 y Sol-Si en los cc. 19-20.'),
-           ('DERECHA', 'Pasos pequeños: Re-Si-Re-Si-Re. Fa♯ en los cc. 17 y 18.'),
-           ('JUNTAS', 'Los cc. 16-19 y luego el c. 20, que repite el 16.'),
-           ('OJO', 'Mi-Fa♯-Sol sube y Sol-Fa♯-Mi baja: la tecla negra va entre medias.')]),
-        B(5, 'cc. 21-23', 'Otra vez', (4, 4),
-          D('cadena', 'Igual que antes',
-            [('c. 21 = 17', False), ('c. 22 = 18', False), ('c. 23 · cierre', True)]),
-          [('IZQUIERDA', 'Sol-Do en los cc. 21-22 y Sol-Si en el c. 23.'),
-           ('DERECHA', 'Cc. 21-22 como 17-18. C. 23: Re largo, Sol, La, Re largo.'),
-           ('JUNTAS', 'Los tres compases seguidos, sin parar.'),
-           ('OJO', 'El c. 23 prepara el final: Sol-La y vuelve al Re.')]),
+             ('Re llarg', True)]),
+          [('IZQUIERDA', 'Sol-Si al c. 16, Sol-Do als cc. 17-18 i Sol-Si als cc. 19-20.'),
+           ('DERECHA', 'Passos petits: Re-Si-Re-Si-Re. Fa♯ als cc. 17 i 18.'),
+           ('JUNTAS', 'Els cc. 16-19 i després el c. 20, que repeteix el 16.'),
+           ('OJO', 'Mi-Fa♯-Sol puja i Sol-Fa♯-Mi baixa: la tecla negra va enmig.')]),
+        B(5, 'cc. 21-23', 'Un altre cop', (4, 4),
+          D('cadena', 'Igual que abans',
+            [('c. 21 = 17', False), ('c. 22 = 18', False), ('c. 23 · tancament', True)]),
+          [('IZQUIERDA', 'Sol-Do als cc. 21-22 i Sol-Si al c. 23.'),
+           ('DERECHA', 'Cc. 21-22 com 17-18. C. 23: Re llarg, Sol, La, Re llarg.'),
+           ('JUNTAS', 'Els tres compassos seguits, sense parar.'),
+           ('OJO', 'El c. 23 prepara el final: Sol-La i torna al Re.')]),
         B(6, 'cc. 24-26', 'El final', (5, 5),
-          D('cadena', 'Como los cc. 5-6',
-            [('c. 24 = 5', False), ('c. 25 = 6', False), ('c. 26 · Sol largo', True)]),
-          [('IZQUIERDA', 'La-Do en el c. 24, Sol-Do en el 25 y Sol-Si en el 26, todas largas.'),
-           ('DERECHA', 'Casi igual que los cc. 5-6. El c. 26 es un Sol largo.'),
-           ('JUNTAS', 'Los tres compases seguidos.'),
-           ('A TEMPO', 'La pieza entera, sin parar, una vez al día.')]),
+          D('cadena', 'Com els cc. 5-6',
+            [('c. 24 = 5', False), ('c. 25 = 6', False), ('c. 26 · Sol llarg', True)]),
+          [('IZQUIERDA', 'La-Do al c. 24, Sol-Do al 25 i Sol-Si al 26, totes llargues.'),
+           ('DERECHA', 'Gairebé igual que els cc. 5-6. El c. 26 és un Sol llarg.'),
+           ('JUNTAS', 'Els tres compassos seguits.'),
+           ('A TEMPO', 'La peça sencera, sense parar, un cop al dia.')]),
     ],
     cortes={1: [209.8, 336.0, 452.5, 560.5, 668.5]},
     corte_titulo=100.2,
     burb={
-        0: [('arriba', 300, 'DER', 'Entras en el «y» del 2.º tiempo: Sol-Si-Do-Re. Cuenta '
-                                   '1-2-3-4 antes de entrar.', 0.15),
-            ('abajo', 300, 'IZQ', 'Sol-Si, Sol-Do, Sol-Si, Sol-Do: una redonda por compás.',
+        0: [('arriba', 300, 'DER', 'Entres a la «i» del 2n temps: Sol-Si-Do-Re. Compta '
+                                   '1-2-3-4 abans d\'entrar.', 0.15),
+            ('abajo', 300, 'IZQ', 'Sol-Si, Sol-Do, Sol-Si, Sol-Do: una rodona per compàs.',
              0.2)],
-        1: [('arriba', 330, 'OJO', 'C. 7: dos acordes de dos tiempos. C. 8: cuatro negras a la '
-                                   'izquierda y un acorde con Fa♯.', 0.6),
-            ('abajo', 300, 'AMB', 'Los cc. 9-10 repiten los cc. 1-2: ya los conoces.', 0.85)],
-        2: [('arriba', 300, 'AMB', 'Los cc. 11-12 son otra vez el inicio y los cc. 13-14 repiten '
-                                   'los cc. 5-6.', 0.2)],
-        3: [('arriba', 300, 'DER', 'Parte nueva: Re-Si-Re-Si-Re, pasos pequeños, sin saltos.',
+        1: [('arriba', 330, 'OJO', "C. 7: dos acords de dos temps. C. 8: quatre negres a "
+                                   "l'esquerra i un acord amb Fa♯. Mira bé!", 0.6),
+            ('abajo', 300, 'AMB', 'Els cc. 9-10 repeteixen els cc. 1-2: ja els coneixes.', 0.85)],
+        2: [('arriba', 300, 'AMB', 'Els cc. 11-12 són un altre cop el principi i els cc. 13-14 '
+                                   'repeteixen els cc. 5-6.', 0.2)],
+        3: [('arriba', 300, 'DER', 'Part nova: Re-Si-Re-Si-Re, passos petits, sense salts.',
              0.15),
-            ('abajo', 300, 'OJO', 'Fa♯ en los cc. 17 y 18: la tecla negra a la derecha del Fa.',
-             0.45)],
-        4: [('arriba', 300, 'OJO', 'Los cc. 21-22 repiten los cc. 17-18: otra vez el Fa♯.', 0.3)],
-        5: [('arriba', 330, 'AMB', 'Final: se parece a los cc. 5-6. El último Sol dura los '
-                                   'cuatro tiempos: no sueltes antes.', 0.9)],
+            ('abajo', 300, 'OJO', 'Fa♯ als cc. 17 i 18: la tecla negra a la dreta del Fa. '
+                                  'No la oblidis!', 0.45)],
+        4: [('arriba', 300, 'OJO', 'Els cc. 21-22 repeteixen els cc. 17-18: un altre cop el '
+                                   'Fa♯. Ja el coneixes!', 0.3)],
+        5: [('arriba', 330, 'OJO', "Final: s'assembla als cc. 5-6. L'últim Sol dura els quatre "
+                                   'temps: no el deixis anar abans!', 0.9)],
     },
     marcas=[],
-    pie_pauta='la clave la pones tú · copia el c. 1 o escribe la escala de Sol mayor')
+    misol=dict(manos="Truc: gairebé tot es repeteix. Aprèn els cc. 1-2 i ja en tens mitja peça!",
+               guia="Ànim! Si canviar de bloc et costa, canta la lletra baixet: el ritme "
+                    "ja el portes al cap.",
+               pauta="Copia el c. 1 (Sol-Si-Do-Re) i inventa't un compàs nou en Sol major. "
+                     "Pot ser el teu final!"),
+    pie_pauta="la clau la poses tu · copia el c. 1 o escriu l'escala de Sol major")
 
 if __name__ == '__main__':
     wr, n = construir_pieza(SPEC, 1)

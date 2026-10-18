@@ -12,147 +12,152 @@ from mayores_motor import *                                        # noqa: F401,
 
 SPEC = dict(
     num=5, slug='counting_stars', pdf='counting_stars.pdf', time_sig=(4, 4),
-    titulo='Counting Stars', autor='OneRepublic · Easy Version, arreglo de Becky Messer',
-    kicker='Sharifa · pieza 5 · Counting Stars', mes='Febrero · 1.ª quincena',
+    titulo='Counting Stars', autor='OneRepublic · Easy Version, arranjament de Becky Messer',
+    kicker='Sharifa · peça 5 · Counting Stars', mes='Febrer · 1.a quinzena',
     yt='https://www.youtube.com/results?search_query=onerepublic+counting+stars+piano+easy',
     credito='Partitura: OneRepublic, arr. Becky Messer, Easy Version (Musescore.com). '
-            'Anotaciones: T-Clas.',
+            'Anotacions: T-Clas.',
     ficha=FICHA(
-        datos=[('Tonalidad', 'La menor'), ('Compás', '4/4'), ('Tempo', 'Sin indicar'),
-               ('Figura corta', 'Semicorchea'), ('Compases', '55')],
+        datos=[('Tonalitat', 'La menor'), ('Compàs', '4/4'), ('Tempo', 'Sense indicar'),
+               ('Figura curta', 'Semicorxera'), ('Compassos', '55')],
         total=55,
-        secciones=[('A', 1, 9, 'La entrada', AZUL), ('B', 10, 21, 'La estrofa', OCRE),
-                   ('C', 22, 33, 'Casillas 1.ª y 2.ª', AZUL), ('D', 34, 42, 'La parte nueva', OCRE),
-                   ('E', 43, 55, 'Vuelve y final', AZUL)],
-        ideas=[('IZQUIERDA', 'Acordes que giran',
-                'Dos notas largas a la vez, una vuelta por cuatro compases: La-Mi, Do-Sol, Sol-Re, '
-                'Fa-Do (quintas vacías).'),
-               ('DERECHA', 'Una frase que vuelve',
-                'Cuatro compases cortos (Re-Mi-Sol-Mi...) que se repiten casi iguales a lo '
-                'largo de la pieza.'),
-               ('EL RITMO', 'Negras y corcheas',
-                'Hay silencios de corchea al empezar el compás y, pocas veces, notas muy '
-                'rápidas (semicorcheas).'),
-               ('EL RECORRIDO', 'Repeticiones',
-                'Hay cuatro barras de repetición y una casilla 1.ª y 2.ª. Hay que saber '
-                'por dónde vas.')],
+        secciones=[('A', 1, 9, "L'entrada", AZUL), ('B', 10, 21, "L'estrofa", OCRE),
+                   ('C', 22, 33, 'Cases 1.a i 2.a', AZUL), ('D', 34, 42, 'La part nova', OCRE),
+                   ('E', 43, 55, 'Torna i final', AZUL)],
+        ideas=[('ESQUERRA', 'Acords que giren',
+                'Dues notes llargues alhora, una volta cada quatre compassos: La-Mi, Do-Sol, '
+                'Sol-Re, Fa-Do (quintes buides).'),
+               ('DRETA', 'Una frase que torna',
+                'Quatre compassos curts (Re-Mi-Sol-Mi...) que es repeteixen gairebé iguals.'),
+               ('EL RITME', 'Negres i corxeres',
+                "Silencis de corxera a l'inici del compàs i, poques vegades, notes molt ràpides "
+                '(semicorxeres).'),
+               ('EL RECORREGUT', 'Repeticions',
+                'Quatre barres de repetició i una casella 1.a i 2.a. Cal saber per on vas.')],
         especial=[
-            'No lleva armadura ni tempo: no hay sostenidos ni bemoles escritos.',
-            'Compás de 4/4: cuatro negras por compás.',
-            'Repeticiones: cc. 1-4, cc. 6-9, cc. 43-46 y la grande, del c. 10 al c. 29.',
-            'Casillas: la 1.ª vez toca los cc. 22-29; la 2.ª vez salta a los cc. 30-33.',
-            'Semicorcheas en los cc. 10, 14 y 34-39: son lo único rápido de la pieza.',
-            'En los cc. 30-33 la derecha calla y toca solo la izquierda.'],
-        reto='Los cuatro acordes de la izquierda siempre a tiempo, mientras la derecha cambia de '
-             'ritmo y de lugar.',
-        truco='Aprende la izquierda de memoria: son solo cuatro acordes y siempre el mismo '
-              'orden. Así miras solo la derecha.',
-        sabias='«Counting Stars» es de 2013, del álbum Native de OneRepublic. La escribió Ryan '
-               'Tedder, cantante del grupo, y llegó al número 2 de la lista Billboard Hot 100 '
-               'de Estados Unidos.',
-        qr_texto='Escúchala y cuenta 1-2-3-4: ¿cuándo cambia el acorde?', ts=(4, 4)),
+            'No porta armadura ni tempo: no hi ha sostinguts ni bemolls escrits.',
+            'Compàs de 4/4: quatre negres per compàs.',
+            'Repeticions: cc. 1-4, cc. 6-9, cc. 43-46 i la gran, del c. 10 al c. 29.',
+            'Cases: la 1.a vegada toca els cc. 22-29; la 2.a salta als cc. 30-33.',
+            "Semicorxeres als cc. 10, 14 i 34-39: és l'únic ràpid de la peça.",
+            "Als cc. 30-33 la dreta calla i només toca l'esquerra."],
+        reto="Els quatre acords de l'esquerra sempre a temps, mentre la dreta canvia de ritme. "
+             'Ho aconseguiràs?',
+        truco="Aprèn l'esquerra de memòria: són només quatre acords, sempre en el mateix ordre. "
+              'Així només has de mirar la dreta.',
+        sabias="«Counting Stars» és del 2013, de l'àlbum Native d'OneRepublic. La va escriure Ryan "
+               'Tedder, el cantant del grup, i va arribar al número 2 de la llista Billboard Hot '
+               '100 dels Estats Units.',
+        qr_texto="Escolta-la i compta 1-2-3-4: quan canvia l'acord?", ts=(4, 4)),
     manos=dict(
-        izq=[('Los cuatro acordes', 'Un acorde por compás, dos notas a la vez: La-Mi, Do-Sol, '
-                                    'Sol-Re, Fa-Do. Cuenta 1-2-3-4 en cada uno.'),
-             ('La vuelta entera', 'Toca los cuatro acordes seguidos, cuatro veces, sin parar. '
-                                  'Siempre el mismo orden.'),
-             ('De memoria', 'Repite la vuelta mirando la partitura de la derecha. La izquierda '
-                            'tiene que salir sola.'),
-             ('Cuando cambia', 'Cc. 34-37: una sola nota larga, La aguda y La grave. En el c. 21 '
-                               'entran dos corcheas al final.')],
-        der=[('Una frase', 'Aprende los cc. 1-4: Re-Mi-Sol-Mi y corcheas que bajan. Es la frase '
-                           'que más vuelve.'),
-             ('Las corcheas', 'Cuenta «1-y-2-y». En el c. 3 empieza un silencio de corchea: '
-                              'cuéntalo, no lo saltes.'),
-             ('Lo nuevo', 'Cc. 10-13: ritmo con puntillo. Cc. 18-21: notas repetidas. Cc. 34-39: '
-                          'notas rápidas.'),
-             ('Con la izquierda', 'Junta cada frase con su acorde. Si te pierdes, vuelve a una '
-                                  'sola mano.')],
-        tecnica=['Muñeca suelta y dedos curvos: acordes sin apretar.',
-                 'La izquierda suena suave y la derecha canta por encima.',
-                 'Cuenta en voz alta y no pares si te equivocas: sigue.']),
+        izq=[('Els quatre acords', 'Un acord per compàs, dues notes alhora: La-Mi, Do-Sol, '
+                                   'Sol-Re, Fa-Do. Compta 1-2-3-4 a cada un.'),
+             ('Tota la volta', 'Toca els quatre acords seguits, quatre vegades, sense parar. '
+                               'Sempre en el mateix ordre.'),
+             ('De memòria', "Repeteix la volta mirant la partitura de la dreta. L'esquerra ha de "
+                            'sortir sola.'),
+             ('Quan canvia', 'Cc. 34-37: una sola nota llarga, La aguda i La greu. Al c. 21 '
+                             'entren dues corxeres al final.')],
+        der=[('Una frase', 'Aprèn els cc. 1-4: Re-Mi-Sol-Mi i corxeres que baixen. És la frase '
+                           'que més torna.'),
+             ('Les corxeres', 'Compta «1-i-2-i». Al c. 3 comença un silenci de corxera: '
+                              "compta'l, no te'l saltis."),
+             ('El que és nou', 'Cc. 10-13: ritme amb puntet. Cc. 18-21: notes repetides. Cc. '
+                               '34-39: notes ràpides.'),
+             ("Amb l'esquerra", 'Ajunta cada frase amb el seu acord. Si et perds, torna a una '
+                                'sola mà.')],
+        tecnica=['Canell solt i dits corbats: acords sense prémer.',
+                 "L'esquerra sona suau i la dreta canta per sobre.",
+                 "Compta en veu alta i no paris si t'equivoques: continua."]),
     bloques=[
-        B(1, 'cc. 1-5', 'El motivo', (0, 0),
-          D('cadena', 'Los acordes de la izquierda',
+        B(1, 'cc. 1-5', 'El motiu', (0, 0),
+          D('cadena', "Els acords de l'esquerra",
             [('La menor', False), ('Do', False), ('Sol', False), ('Fa', True)]),
-          [('IZQUIERDA', 'La-Mi, Do-Sol, Sol-Re, Fa-Do: un acorde por compás, notas largas.'),
-           ('DERECHA', 'Re-Mi-Sol-Mi y luego corcheas que bajan. Es la frase más repetida.'),
-           ('JUNTAS', 'Los cuatro compases juntos. Se tocan dos veces (barra del c. 4).'),
-           ('OJO', 'El c. 5 es solo la nota larga que cierra: déjala sonar.')]),
-        B(2, 'cc. 6-9', 'Silencio y corcheas', (1, 1),
-          D('cadena', 'Un compás del c. 6',
-            [('negra', False), ('silencio de corchea', False), ('corcheas', False),
+          [('IZQUIERDA', 'La-Mi, Do-Sol, Sol-Re, Fa-Do: un acord per compàs, notes llargues.'),
+           ('DERECHA', 'Re-Mi-Sol-Mi i després corxeres que baixen. És la frase més repetida.'),
+           ('JUNTAS', 'Els quatre compassos junts. Es toquen dues vegades (barra del c. 4).'),
+           ('OJO', 'El c. 5 és només la nota llarga que tanca: deixa-la sonar!')]),
+        B(2, 'cc. 6-9', 'Silenci i corxeres', (1, 1),
+          D('cadena', 'Un compàs del c. 6',
+            [('negra', False), ('silenci de corxera', False), ('corxeres', False),
              ('negra', True)]),
-          [('IZQUIERDA', 'Los mismos cuatro acordes: La menor, Do, Sol, Fa.'),
-           ('DERECHA', 'Mi repetido con un silencio de corchea. En los cc. 8-9: Mi-Re-Do-La.'),
-           ('JUNTAS', 'Cuatro compases juntos. Se tocan dos veces (barra del c. 9).'),
-           ('OJO', 'El silencio de corchea dura: cuéntalo en voz alta.')]),
-        B(3, 'cc. 10-17', 'La estrofa', (2, 3),
-          D('cadena', 'Un ritmo nuevo',
-            [('negra', False), ('corchea con puntillo', False), ('semicorchea', True)]),
-          [('IZQUIERDA', 'Los cuatro acordes de siempre, un compás cada uno.'),
-           ('DERECHA', 'En el c. 10: corchea con puntillo y semicorchea. Despacio.'),
-           ('JUNTAS', 'Los cc. 10-13 y los cc. 14-17 son iguales: aprendes cuatro y valen ocho.'),
-           ('OJO', 'Ligadura de los cc. 12-13: la corchea se toca una vez y se alarga.')]),
-        B(4, 'cc. 18-21', 'Notas repetidas', (4, 4),
-          D('cadena', 'La derecha en los cc. 18-19',
-            [('silencio', False), ('La-Sol', False), ('La', False), ('La-Sol', True)]),
-          [('IZQUIERDA', 'Fa-Do largo en los cc. 18-20 (los dos primeros ligados). No lo repitas.'),
-           ('DERECHA', 'La-Sol y La repetidos. En el c. 20 baja: La, Sol, Mi-Re, Do.'),
-           ('JUNTAS', 'La izquierda aguanta y la derecha lleva el ritmo.'),
-           ('OJO', 'En el c. 21 la izquierda entra con dos corcheas, La-Sol, al final.')]),
-        B(5, 'cc. 22-33', 'Primera y segunda vez', (5, 6),
-          D('cadena', 'El recorrido',
-            [('22-29 (1.ª)', False), ('↩ al c. 10', True), ('10-21', False),
-             ('30-33 (2.ª)', True)]),
-          [('IZQUIERDA', 'Cc. 22-29: los cuatro acordes. Cc. 30-33: una sola nota, La grave y '
+          [('IZQUIERDA', 'Els mateixos quatre acords: La menor, Do, Sol, Fa.'),
+           ('DERECHA', 'Mi repetit amb un silenci de corxera. Als cc. 8-9: Mi-Re-Do-La.'),
+           ('JUNTAS', 'Quatre compassos junts. Es toquen dues vegades (barra del c. 9).'),
+           ('OJO', 'El silenci de corxera dura: compta-ho en veu alta!')]),
+        B(3, 'cc. 10-17', "L'estrofa", (2, 3),
+          D('cadena', 'Un ritme nou',
+            [('negra', False), ('corxera amb puntet', False), ('semicorxera', True)]),
+          [('IZQUIERDA', 'Els quatre acords de sempre, un compàs cada un.'),
+           ('DERECHA', 'Al c. 10: corxera amb puntet i semicorxera. A poc a poc.'),
+           ('JUNTAS', 'Els cc. 10-13 i els cc. 14-17 són iguals: n\'aprens quatre i en valen vuit.'),
+           ('OJO', 'Lligadura dels cc. 12-13: la corxera es toca una vegada i s\'allarga.')]),
+        B(4, 'cc. 18-21', 'Notes repetides', (4, 4),
+          D('cadena', 'La dreta als cc. 18-19',
+            [('silenci', False), ('La-Sol', False), ('La', False), ('La-Sol', True)]),
+          [('IZQUIERDA', 'Fa-Do llarg als cc. 18-20 (els dos primers lligats). No el repeteixis.'),
+           ('DERECHA', 'La-Sol i La repetits. Al c. 20 baixa: La, Sol, Mi-Re, Do.'),
+           ('JUNTAS', "L'esquerra aguanta i la dreta porta el ritme."),
+           ('OJO', "Al c. 21 l'esquerra entra amb dues corxeres, La-Sol, al final.")]),
+        B(5, 'cc. 22-33', 'Primera i segona vegada', (5, 6),
+          D('cadena', 'El recorregut',
+            [('22-29 (1.a)', False), ('↩ al c. 10', True), ('10-21', False),
+             ('30-33 (2.a)', True)]),
+          [('IZQUIERDA', 'Cc. 22-29: els quatre acords. Cc. 30-33: una sola nota, La greu i '
                          'La aguda.'),
-           ('DERECHA', 'Cc. 22-29: la frase del principio, dos veces. Cc. 30-33: en silencio.'),
-           ('JUNTAS', 'Toca los cc. 22-29 y vuelve al c. 10 (barra del c. 29).'),
-           ('OJO', 'La 2.ª vez te saltas la casilla 1.ª: del c. 21 pasas al c. 30.')]),
-        B(6, 'cc. 34-42', 'La parte nueva', (7, 8),
-          D('capas', 'Dos capas a la vez',
-            [('Derecha: corcheas', 'puntos', AZUL, 6), ('Izquierda: una nota', 'barras', OCRE)]),
-          [('IZQUIERDA', 'Cc. 34-37: una nota larga por compás, La aguda y La grave. Cc. 38-39: '
-                         'vuelven los acordes.'),
-           ('DERECHA', 'Do-Si-La y notas rápidas. Los cc. 34-35 se repiten en 36-37 y 38-39.'),
-           ('JUNTAS', 'De dos en dos compases: 34-35, 36-37, 38-39.'),
-           ('OJO', 'Cc. 40-42: la bajada final y una nota larga ligada.')]),
-        B(7, 'cc. 43-55', 'Vuelve el tema y el final', (9, 11),
-          D('cadena', 'El recorrido',
-            [('43-46 (x2)', False), ('47-50', False), ('51-54', False), ('55 FIN', True)]),
-          [('IZQUIERDA', 'Otra vez La-Mi, Do-Sol, Sol-Re, Fa-Do. En el c. 55 la izquierda calla.'),
-           ('DERECHA', 'Es la frase del principio. El c. 54 acaba con Mi-Re-Re-Do.'),
-           ('JUNTAS', 'Los cc. 51-55 sin parar hasta la última nota.'),
-           ('A TEMPO', 'La pieza entera, una vez al día, con repeticiones y casillas.')]),
+           ('DERECHA', 'Cc. 22-29: la frase del principi, dues vegades. Cc. 30-33: en silenci.'),
+           ('JUNTAS', 'Toca els cc. 22-29 i torna al c. 10 (barra del c. 29).'),
+           ('OJO', 'La 2.a vegada et saltes la casella 1.a: del c. 21 passes al c. 30.')]),
+        B(6, 'cc. 34-42', 'La part nova', (7, 8),
+          D('capas', 'Dues capes alhora',
+            [('Dreta: corxeres', 'puntos', AZUL, 6), ('Esquerra: una nota', 'barras', OCRE)]),
+          [('IZQUIERDA', 'Cc. 34-37: una nota llarga per compàs, La aguda i La greu. Cc. 38-39: '
+                         'tornen els acords.'),
+           ('DERECHA', 'Do-Si-La i notes ràpides. Els cc. 34-35 es repeteixen als 36-37 i 38-39.'),
+           ('JUNTAS', 'De dos en dos compassos: 34-35, 36-37, 38-39.'),
+           ('OJO', 'Cc. 40-42: la baixada final i una nota llarga lligada.')]),
+        B(7, 'cc. 43-55', 'Torna el tema i el final', (9, 11),
+          D('cadena', 'El recorregut',
+            [('43-46 (x2)', False), ('47-50', False), ('51-54', False), ('55 FINAL', True)]),
+          [('IZQUIERDA', "Un altre cop La-Mi, Do-Sol, Sol-Re, Fa-Do. Al c. 55 l'esquerra calla."),
+           ('DERECHA', 'És la frase del principi. El c. 54 acaba amb Mi-Re-Re-Do.'),
+           ('JUNTAS', "Els cc. 51-55 sense parar fins a l'última nota."),
+           ('A TEMPO', 'La peça sencera, un cop al dia, amb repeticions i cases.')]),
     ],
     cortes={1: [184.0, 296.2, 413.0, 529.2, 648.2], 2: [145.2, 264.0, 395.5, 521.0, 646.0]},
     corte_titulo=76.0, inicio={1: 18.5, 2: 30.0}, fin={1: 762.0, 2: 762.0},
     burb={
-        0: [('arriba', 250, 'DER', 'Empiezas aquí: Re-Mi-Sol-Mi. Cuenta 1-2-3-4.', 0.1),
-            ('abajo', 330, 'IZQ', 'Cuatro acordes, uno por compás: La-Mi, Do-Sol, Sol-Re, Fa-Do. La barra del c. 4 te devuelve al c. 1.',
-             0.2)],
-        1: [('arriba', 300, 'OJO', 'Cc. 6-9: se tocan dos veces. Cuenta el silencio de corchea '
-                                   'antes de las corcheas.', 0.1)],
-        2: [('arriba', 300, 'DER', 'Corchea con puntillo y semicorchea: la segunda nota es muy '
-                                   'corta. Despacio.', 0.12)],
-        4: [('arriba', 300, 'AMB', 'La izquierda aguanta Fa-Do (ligados): no la toques otra vez. '
-                                   'La derecha repite La-Sol.', 0.15)],
-        5: [('arriba', 300, 'OJO', 'Casilla 1.ª: toca los cc. 22-29 y vuelve al c. 10.', 0.1)],
-        6: [('abajo', 300, 'OJO', 'Casilla 2.ª (cc. 30-33): derecha en silencio, izquierda sola. '
-                                  'La 2.ª vez llegas aquí desde el c. 21.', 0.8)],
-        7: [('arriba', 250, 'DER', 'Parte nueva. Las notas muy rápidas son semicorcheas: cuatro '
-                                   'por golpe.', 0.1),
-            ('abajo', 250, 'IZQ', 'Una sola nota larga por compás: La aguda y La grave.', 0.2)],
-        8: [('arriba', 300, 'AMB', 'Cc. 38-39 repiten 34-35, ahora con acordes. Cc. 40-42: La, Sol, '
-                                   'Mi-Re, Do y nota larga.', 0.2)],
-        9: [('arriba', 300, 'OJO', 'Vuelve el tema. Cc. 43-46 se tocan dos veces (barra del c. 46).',
-             0.1)],
-        11: [('arriba', 300, 'AMB', 'Último compás: La larga en la derecha y silencio en la '
-                                    'izquierda. Déjala sonar.', 0.9)],
+        0: [('arriba', 250, 'DER', 'Comences aquí: Re-Mi-Sol-Mi. Compta 1-2-3-4.', 0.1),
+            ('abajo', 330, 'IZQ', 'Quatre acords, un per compàs: La-Mi, Do-Sol, Sol-Re, Fa-Do. '
+                                  'La barra del c. 4 et torna al c. 1.', 0.2)],
+        1: [('arriba', 300, 'OJO', 'Cc. 6-9: es toquen dues vegades. Compta el silenci de '
+                                   'corxera abans de les corxeres!', 0.1)],
+        2: [('arriba', 300, 'DER', 'Corxera amb puntet i semicorxera: la segona nota és molt '
+                                   'curta. A poc a poc.', 0.12)],
+        4: [('arriba', 300, 'AMB', "L'esquerra aguanta Fa-Do (lligats): no la toquis un altre cop. "
+                                   'La dreta repeteix La-Sol.', 0.15)],
+        5: [('arriba', 300, 'OJO', 'Casella 1.a: toca els cc. 22-29 i torna al c. 10. No et '
+                                   'perdis!', 0.1)],
+        6: [('abajo', 300, 'OJO', "Casella 2.a (cc. 30-33): dreta en silenci, esquerra sola. "
+                                  'La 2.a vegada hi arribes des del c. 21.', 0.8)],
+        7: [('arriba', 250, 'DER', 'Part nova. Les notes molt ràpides són semicorxeres: quatre '
+                                   'per temps.', 0.1),
+            ('abajo', 250, 'IZQ', 'Una sola nota llarga per compàs: La aguda i La greu.', 0.2)],
+        8: [('arriba', 300, 'AMB', 'Cc. 38-39 repeteixen 34-35, ara amb acords. Cc. 40-42: La, '
+                                   'Sol, Mi-Re, Do i nota llarga.', 0.2)],
+        9: [('arriba', 300, 'OJO', 'Torna el tema! Els cc. 43-46 es toquen dues vegades (barra '
+                                   'del c. 46).', 0.1)],
+        11: [('arriba', 300, 'OJO', "Últim compàs: La llarga a la dreta i silenci a l'esquerra. "
+                                    'Deixa-la sonar!', 0.9)],
     },
     marcas=[],
-    pie_pauta='la clave la pones tú · copia los cuatro acordes de la izquierda')
+    misol=dict(manos="Truc: posa nom a cada acord (La menor, Do, Sol, Fa) i recita'ls mentre toques. "
+                     "Així te'ls grava el cap.",
+               guia="Ànim! Compta només 1-2-3-4. Quan els quatre acords et surtin sols, la resta "
+                    "és cosa de la dreta.",
+               pauta="Escriu els quatre acords de l'esquerra (La-Mi, Do-Sol, Sol-Re, Fa-Do) i "
+                     "inventa't una melodia de quatre compassos!"),
+    pie_pauta="la clau la poses tu · copia els quatre acords de l'esquerra")
 
 if __name__ == '__main__':
     wr, n = construir_pieza(SPEC, 1)

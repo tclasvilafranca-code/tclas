@@ -25,7 +25,7 @@ SPEC = dict(
         secciones=[('A', 1, 9, 'El tema', AZUL), ('A\'', 10, 17, 'Acords arpegiats', OCRE),
                    ('B', 18, 21, 'Nova', AZUL), ('A', 22, 33, 'Torna i accelera', OCRE),
                    ('A\'\'', 34, 51, 'Sis bemolls · ♩=140', AZUL)],
-        ideas=[('IZQUIERDA', 'Baix, tresquiàlteres i silencis',
+        ideas=[('IZQUIERDA', 'Baix i tresquiàlteres',
                 'Calla al c. 1; després, baix i acords curts. Tresquiàlteres de corxeres als '
                 'cc. 5-6 i 25-26.'),
                ('DERECHA', 'El tema, entre silencis',
@@ -47,14 +47,14 @@ SPEC = dict(
         reto='Controlar el canvi de ritme: de ♩=83 a l\'acceleració del c. 29 i al ♩=140 sense que '
              'se t\'escapi la mà.',
         truco='Estudia per lletres, una per dia: A (cc. 1-9), A\' (cc. 10-17), B (cc. 18-21)... '
-              'Les tresquiàlteres, soles i a poc a poc, dient "tres-qui-àl".',
+              'Les tresquiàlteres, soles i a poc a poc, dient "tri-o-la".',
         sabias='Nino Rota va compondre la música d\'«El Padrí» (1972), i també la de moltes pel·lícules de Fellini.',
         qr_texto='Escolta-ho amb la partitura al davant: notes on accelera?', ts=(4, 4)),
     manos=dict(
         izq=[('Calla i entra', 'Als cc. 1 i 10 l\'esquerra no toca. Del c. 2: baix i acords '
                                'curts; al c. 3 puja en quatre corxeres fins a una blanca.'),
              ('Les tresquiàlteres', 'Als cc. 5-6 hi ha dues tresquiàlteres de corxeres (tres notes per '
-                               'temps) i una blanca. Digues "tres-qui-àl" i puja amb el regulador.'),
+                               'temps) i una blanca. Digues "tri-o-la" i puja amb el regulador.'),
              ('La pujada del c. 14', 'Vuit semicorxeres lligades que pugen fins a una blanca. '
                                      'Estudia-les soles, molt a poc a poc, i accelera de mica en mica.'),
              ('Acords i calderó', 'Als cc. 29-33 són acords. Al c. 32 baixa en vuit '
@@ -78,11 +78,11 @@ SPEC = dict(
            ('JUNTAS', 'Compta 1-2-3-i i entra la dreta; l\'esquerra no toca fins al c. 2.'),
            ('A TEMPO', 'Negra = 83: lent. Comença en mp i creix cap a mf.')]),
         B(2, 'cc. 5-8', 'Les tresquiàlteres', (1, 1),
-          D('grupos', 'Tresquiàltera: 3 notes en un temps', (2, 3, ['tres-qui-àl', 'tres-qui-àl'])),
+          D('grupos', 'Tresquiàltera: 3 notes en un temps', (2, 3, ['tri-o-la', 'tri-o-la'])),
           [('IZQUIERDA', 'Cc. 5-6: dues tresquiàlteres de corxeres i una blanca. Cc. 7-8: sis '
                          'corxeres i quatre negres.'),
            ('DERECHA', 'Cada compàs es tanca amb tres corxeres que pugen (cc. 5-7).'),
-           ('JUNTAS', 'Una mà compta "tres-qui-àl" mentre l\'altra toca les tres corxeres.'),
+           ('JUNTAS', 'Una mà compta "tri-o-la" mentre l\'altra toca les tres corxeres.'),
            ('OJO', 'mp al c. 5 i mf al c. 6: puja el so amb el regulador.')]),
         B(3, 'cc. 9-12', 'Acords arpegiats (A\')', (2, 2),
           D('cadena', 'La lletra A\'', [('f i mp (c. 9)', False), ('A\' al c. 10', False),

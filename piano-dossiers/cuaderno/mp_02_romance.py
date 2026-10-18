@@ -30,7 +30,7 @@ SPEC = dict(
                 'baixen suaus i lligades.'),
                ('ELS MATISOS', 'p dolce → f → pp',
                 'Comença suau i dolça, creix fins a la f i acaba en pp amb un calderó.'),
-               ('LA REPETICIÓ', 'Els cc. 1-8, dues vegades',
+               ('LA REPETICIÓ', 'Cc. 1-8, dues vegades',
                 'Una barra de repetició al final del c. 8 mana tornar al principi.')],
         especial=[
             'Hi diu "Andantino" i "p dolce": pas tranquil i so dolç.',

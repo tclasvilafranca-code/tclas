@@ -153,19 +153,19 @@ SPEC = dict(
             ('abajo', 262, 'SEC', 'Acordes en el 2 y el 4; abajo, blancas.', 0.3)],
         1: [('arriba', 520, 'OJO', 'Casilla 1 (cc. 7-8): al final vuelves al c. 1. La 2.ª vez '
                                    'saltas del c. 6 a la casilla 2 (c. 9).', 0.65),
-            ('abajo', 262, 'PRIMO', 'C. 7: D♯. C. 8: Si♭ en la izquierda.', 0.7)],
+            ('abajo', 520, 'PRIMO', 'C. 7: D♯. C. 8: Si♭ en la izquierda.', 0.72)],
         2: [('arriba', 262, 'AMB', 'Casilla 2 (cc. 9-10). C. 10: f en el Primo.', 0.4),
             ('arriba', 262, 'SEC', 'C. 11: mf. Acordes largos y bajo en negras.', 0.75)],
         3: [('arriba', 262, 'PRIMO', 'C. 13: cuatro negras que bajan: Sol-Fa♯-Mi-Re.', 0.05),
             ('arriba', 262, 'SEC', 'C. 16: Do♯ al final del bajo.', 0.95)],
-        4: [('arriba', 262, 'SEC', 'C. 18: el bajo sube en negras.', 0.3),
+        4: [('arriba', 262, 'SEC', 'C. 18: el bajo sube en negras.', 0.42),
             ('arriba', 262, 'AMB', 'C. 19: vuelve el tema del c. 1. Primo mf, Secondo mp.',
              0.65)],
         5: [('arriba', 262, 'PRIMO', 'C. 22: redonda, cuatro tiempos enteros.', 0.3),
             ('arriba', 262, 'SEC', 'C. 24: tresillo, tres notas iguales en un tiempo.', 0.95)],
         6: [('arriba', 520, 'AMB', 'Cc. 25-27: f, p, f en el Primo y mf, pp, mf en el Secondo. '
                                    'Contrastad bien.', 0.3),
-            ('abajo', 262, 'OJO', 'Final: Sol, Fa♯, Sol en el Primo. Soltad a la vez.', 0.9)],
+            ('abajo', 520, 'OJO', 'Final: Sol, Fa♯, Sol en el Primo. Soltad a la vez.', 0.97)],
     },
     marcas=[],
     pie_pauta='la clave la pones tú · copia un compás o escribe la escala de Sol mayor')

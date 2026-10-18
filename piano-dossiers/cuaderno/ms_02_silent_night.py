@@ -129,6 +129,7 @@ SPEC = dict(
            ('JUNTAS', 'Toca la pieza con repetición: 1.ª vez casilla 1, 2.ª vez casilla 2.'),
            ('A TEMPO', 'rit. e dim.: más lenta y más suave hasta el calderón.')]),
     ],
+    inicio={1: 71.5},
     cortes={1: [238, 320, 473, 545], 2: [186, 225, 384, 416, 586, 610]},
     burb={
         0: [('arriba', 262, 'AMB', 'Gently y mp: suave y despacio. Compás de 3/4: cuenta '
@@ -140,16 +141,16 @@ SPEC = dict(
             ('arriba', 262, 'OJO', 'Sol/Si y La menor/Do: el mismo acorde con otra nota en el '
                                    'bajo (inversión).', 0.85)],
         2: [('arriba', 262, 'IZQ', 'Si♭ (c. 8) y Fa♯ (c. 10): alteraciones, valen solo en su '
-                                   'compás.', 0.12),
+                                   'compás.', 0.03),
             ('arriba', 262, 'DER', 'C. 10: negra con puntillo, corchea y negra: el ritmo del c. '
                                    '1.', 0.8)],
-        3: [('arriba', 262, 'DER', 'La melodía repite los cc. 1-2 y 9-10: ya la sabes.', 0.2),
-            ('arriba', 262, 'IZQ', 'C. 11 empieza en Mi, no en Do. Fa♯ en el c. 14.', 0.8)],
-        4: [('arriba', 262, 'IZQ', 'C. 18: Sol♯ en el bajo y Si largo.', 0.85),
-            ('arriba', 262, 'DER', 'En el c. 18 la melodía sube: «heav-».', 0.8)],
-        5: [('arriba', 262, 'IZQ', 'Cc. 19-20: seis notas con alteraciones, hasta el Do '
-                                   'central.', 0.2),
-            ('arriba', 262, 'OJO', 'Calderón (c. 20): alarga la nota; tú decides cuánto.', 0.5)],
+        3: [('arriba', 262, 'IZQ', 'C. 11 empieza en Mi, no en Do. Fa♯ en el c. 14.', 0.04),
+            ('arriba', 262, 'DER', 'La melodía repite los cc. 1-2 y 9-10: ya la sabes.', 0.5)],
+        4: [('arriba', 520, 'AMB', 'C. 18: la melodía sube («heav-») y la izquierda lleva un '
+                                   'Sol♯, sostenido solo en este compás.', 0.85)],
+        5: [('arriba', 520, 'IZQ', 'Cc. 19-20: seis notas con alteraciones hasta el Do central. '
+                                   'Calderón en el c. 20: alarga la nota, tú decides cuánto.',
+             0.3)],
         6: [('arriba', 520, 'OJO', 'Al final de la casilla 1 hay una repetición: vuelves al c. 1. '
                                    'La 2.ª vez saltas a la casilla 2.', 0.4),
             ('abajo', 520, 'AMB', 'rit. e dim.: cada vez más lenta y más suave. El último '

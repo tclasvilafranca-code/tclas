@@ -24,16 +24,16 @@ SPEC = dict(
         secciones=[('A', 1, 9, 'La entrada', AZUL), ('B', 10, 21, 'La estrofa', OCRE),
                    ('C', 22, 33, 'Casillas 1.ª y 2.ª', AZUL), ('D', 34, 42, 'La parte nueva', OCRE),
                    ('E', 43, 55, 'Vuelve y final', AZUL)],
-        ideas=[('IZQUIERDA', 'Cuatro acordes que giran',
+        ideas=[('IZQUIERDA', 'Acordes que giran',
                 'Dos notas largas a la vez, una vuelta por cuatro compases: La-Mi, Do-Sol, Sol-Re, '
                 'Fa-Do (quintas vacías).'),
                ('DERECHA', 'Una frase que vuelve',
                 'Cuatro compases cortos (Re-Mi-Sol-Mi...) que se repiten casi iguales a lo '
                 'largo de la pieza.'),
-               ('EL RITMO', 'Negras, corcheas y silencios',
+               ('EL RITMO', 'Negras y corcheas',
                 'Hay silencios de corchea al empezar el compás y, pocas veces, notas muy '
                 'rápidas (semicorcheas).'),
-               ('EL RECORRIDO', 'Repeticiones y casillas',
+               ('EL RECORRIDO', 'Repeticiones',
                 'Hay cuatro barras de repetición y una casilla 1.ª y 2.ª. Hay que saber '
                 'por dónde vas.')],
         especial=[
@@ -130,9 +130,8 @@ SPEC = dict(
     corte_titulo=76.0, inicio={1: 18.5, 2: 30.0}, fin={1: 762.0, 2: 762.0},
     burb={
         0: [('arriba', 250, 'DER', 'Empiezas aquí: Re-Mi-Sol-Mi. Cuenta 1-2-3-4.', 0.1),
-            ('abajo', 250, 'IZQ', 'Cuatro acordes, uno por compás: La-Mi, Do-Sol, Sol-Re, Fa-Do.',
-             0.2),
-            ('abajo', 250, 'OJO', 'La barra de repetición del c. 4 te devuelve al c. 1.', 0.75)],
+            ('abajo', 330, 'IZQ', 'Cuatro acordes, uno por compás: La-Mi, Do-Sol, Sol-Re, Fa-Do. La barra del c. 4 te devuelve al c. 1.',
+             0.2)],
         1: [('arriba', 300, 'OJO', 'Cc. 6-9: se tocan dos veces. Cuenta el silencio de corchea '
                                    'antes de las corcheas.', 0.1)],
         2: [('arriba', 300, 'DER', 'Corchea con puntillo y semicorchea: la segunda nota es muy '

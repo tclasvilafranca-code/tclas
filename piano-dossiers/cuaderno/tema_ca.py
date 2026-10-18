@@ -11,7 +11,8 @@
 import os
 import re
 
-ACTIU = os.environ.get('ALUMNA', 'eva') != 'eva'
+ACTIU = os.environ.get('ALUMNA', 'eva') != 'eva'          # tema de Sharifa (paleta + Mussol Misol)
+TRAD = os.environ.get('IDIOMA', 'ca') == 'ca'              # cadenes fixes en catala (totes dues alumnes)
 
 # ------------------------------------------------------------------ paleta
 PAL = dict(
@@ -135,10 +136,30 @@ MESOS = {'Noviembre': 'Novembre', 'Diciembre': 'Desembre', 'Enero': 'Gener', 'Fe
          'Marzo': 'Març', 'Abril': 'Abril', 'Mayo': 'Maig', 'Junio': 'Juny', 'Julio': 'Juliol'}
 
 
+EVA = {'OJO': 'ULL', "El truco": 'El truc',
+       'EL TRUCO': 'EL TRUC'}
+PREFIXOS_EVA = [
+    ('El paréntesis de color del margen izquierdo',
+     'El parèntesi de color del marge esquerre i el seu número diuen en quin bloc ets. Les '
+     'bombolles expliquen què practicar: «mà esquerra» i «mà dreta» (color ocre i blau), «les '
+     'dues», «ull» (alguna cosa que no s\'ha de deixar passar) i, als duets, «Primo» i '
+     '«Secondo». Els requadres fins amb número emmarquen el més important: ratlleu el número amb '
+     'llapis quan el tingueu. Els acords es diuen com sempre (La menor, Sol major…); a sobre de '
+     'algunes partitures surten en xifrat americà (A = La, B = Si, C = Do, D = Re, E = Mi, '
+     'F = Fa, G = Sol).'),
+]
+
+
 def tr(s):
     """Tradueix una cadena fixa; si no la coneix, la torna igual."""
-    if not ACTIU or not isinstance(s, str) or not s:
+    if not TRAD or not isinstance(s, str) or not s:
         return s
+    if not ACTIU:
+        if s in EVA:
+            return EVA[s]
+        for pre, t in PREFIXOS_EVA:
+            if s.startswith(pre):
+                return t
     r = EXACTES.get(s)
     if r is not None:
         return r
@@ -180,15 +201,16 @@ def _tr_up(s):
 
 def instalar():
     """Parcheja el canvas i el _wrap de portada. Es crida una sola vegada, abans dels imports."""
-    if not ACTIU:
+    if not ACTIU and not TRAD:
         return
     from reportlab.pdfgen import canvas as _cv
     import portada
     from reportlab.lib.colors import HexColor
 
-    for nom in ('NAVY', 'NAVY_SOFT', 'CREAM', 'RULE', 'INK', 'MUTED', 'ACCENT', 'PANEL'):
-        setattr(portada, nom, HexColor(PAL[nom]))
-    portada.BLUE = HexColor(PAL['BLUE'])
+    if ACTIU:
+        for nom in ('NAVY', 'NAVY_SOFT', 'CREAM', 'RULE', 'INK', 'MUTED', 'ACCENT', 'PANEL'):
+            setattr(portada, nom, HexColor(PAL[nom]))
+        portada.BLUE = HexColor(PAL['BLUE'])
 
     for m in ('drawString', 'drawCentredString', 'drawRightString'):
         orig = getattr(_cv.Canvas, m)

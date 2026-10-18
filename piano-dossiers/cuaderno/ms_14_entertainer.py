@@ -13,166 +13,174 @@ from mayores_motor import *                                        # noqa: F401,
 
 SPEC = dict(
     num=14, slug='entertainer', pdf='el_golpe.pdf', time_sig=(2, 2),
-    titulo='The Entertainer', autor='Scott Joplin · arr. Gilbert DeBenedetti',
-    kicker='Sharifa · pieza 14 · The Entertainer', mes='Julio · 1.ª quincena',
+    titulo="The Entertainer", autor="Scott Joplin · arr. Gilbert DeBenedetti",
+    kicker="Sharifa · peça 14 · The Entertainer", mes="Juliol · 1.a quinzena",
     yt='https://www.youtube.com/results?search_query=scott+joplin+the+entertainer+piano',
-    credito='Partitura: S. Joplin, arr. G. DeBenedetti, nivel 3 (gradimi.com). Anotaciones: T-Clas.',
+    credito="Partitura: S. Joplin, arr. G. DeBenedetti, nivell 3 (gradimi.com). Anotacions: T-Clas.",
     ficha=FICHA(
-        datos=[('Tonalidad', 'Do mayor'), ('Compás', '2/2 (¢)'), ('Tempo', 'Not fast: sin prisa'),
-               ('Figura corta', 'Negra'), ('Compases', '40')],
+        datos=[("Tonalitat", "Do major"), ("Compàs", "2/2 (¢)"), ("Caràcter", "Not fast: sense pressa"),
+               ("Figura curta", "Negra"), ("Compassos", "40")],
         total=40,
-        secciones=[('A', 1, 8, 'Entrada', AZUL),
-                   ('B', 9, 17, 'Entra la izquierda', OCRE),
-                   ('C', 18, 26, 'Fa♯ y vuelve el tema', AZUL),
-                   ('D', 27, 35, 'Tema y bajada', OCRE),
-                   ('E', 36, 40, 'Final', AZUL)],
-        ideas=[('IZQUIERDA', 'Bajo y acorde',
-                'Desde el c. 9: una nota grave, un silencio, un acorde, otro silencio. Es el paso '
-                'de marcha del ragtime.'),
-               ('DERECHA', 'Notas atadas',
-                'Muchas notas se atan por encima de la barra y caen entre pulsos. Eso es el '
-                'ragtime: tiempo «roto».'),
-               ('LOS ACORDES', 'Do · Fa · Sol',
-                'Do mayor; Do con séptima (el si♭ del c. 10); Fa mayor (c. 11); Sol con séptima, '
-                'la dominante (c. 8).'),
-               ('LOS MATICES', 'p ↔ f',
-                'p en el c. 1, f en el c. 8 y luego p y f cada cuatro compases: cc. 12, 16, 20, '
-                '24 y 28.')],
+        secciones=[("A", 1, 8, "Entrada", AZUL),
+                   ("B", 9, 17, "Entra l'esquerra", OCRE),
+                   ("C", 18, 26, "Fa♯ i torna el tema", AZUL),
+                   ("D", 27, 35, "Tema i baixada", OCRE),
+                   ("E", 36, 40, "Final", AZUL)],
+        ideas_titulo="La peça en quatre idees",
+        ideas=[("ESQUERRA", "Baix i acord",
+                "Des del c. 9: una nota greu, un silenci, un acord i un altre silenci. És el pas de "
+                "marxa del ragtime."),
+               ("DRETA", "Notes lligades",
+                "Moltes notes es lliguen per sobre de la barra i cauen entre temps. Això és el "
+                "ragtime: temps «trencat»."),
+               ("ELS ACORDS", "Do · Fa · Sol",
+                "Do major; Do amb sèptima (el si♭ del c. 10); Fa major (c. 11); Sol amb sèptima, "
+                "la dominant (c. 8)."),
+               ("ELS MATISOS", "p ↔ f",
+                "p al c. 1, f al c. 8 i després p i f cada quatre compassos: cc. 12, 16, 20, 24 "
+                "i 28.")],
         especial=[
-            'Pone «Not fast»: sin prisa. No trae metrónomo.',
-            'Es 2/2 (¢): dos golpes por compás, cada uno de blanca.',
-            'La izquierda no toca hasta el c. 8; antes, la derecha va sola.',
-            'Los cc. 1-2 llevan 8va: suenan una octava más agudos de lo escrito.',
-            'Alteraciones: la♭ (c. 6), re♯ (cc. 8, 12, 16, 24 y 28), fa♯ (c. 21) y, en la '
-            'izquierda, si♭ y la♭.',
-            'Hay un calderón sobre el silencio del c. 8 y acaba con notas cortas (staccato).'],
-        reto='Mantener la izquierda «bajo-acorde» firme y pareja mientras la derecha juega con '
-             'las ligaduras.',
-        truco='Aprende la izquierda de los cc. 9-12 de memoria. Cuenta «uno-dos» (una blanca cada '
-              'número) y toca la derecha encima.',
-        sabias='Scott Joplin, el «rey del ragtime», publicó The Entertainer en 1902. Se hizo '
-               'famosa en todo el mundo en 1973 con la película «El golpe» (The Sting). Joplin '
-               'avisaba: «nunca es correcto tocar ragtime deprisa».',
-        qr_texto='Escúchala y busca el «bajo-acorde» de la izquierda.', ts=(2, 2),
-        cuenta_titulo='Dos compases de la pieza',
-        cuenta_pie='Arriba, la derecha (c. 1): cuatro negras. Abajo, la izquierda (c. 9): bajo, '
-                   'silencio, acorde, silencio. En 2/2 hay dos golpes de blanca.',
-        ritmos=[('MD', 'c. 1 · el motivo',
+            "Posa «Not fast»: sense pressa. No porta metrònom.",
+            "És 2/2 (¢): dos temps per compàs, cadascun de blanca.",
+            "L'esquerra no toca fins al c. 8; abans, la dreta va sola.",
+            "Els cc. 1-2 porten 8va: sonen una octava més aguda del que està escrit.",
+            "Alteracions: la♭ (c. 6), re♯ (cc. 8, 12, 16, 24 i 28), fa♯ (c. 21) i, a l'esquerra, "
+            "si♭ i la♭.",
+            "Hi ha un calderó sobre el silenci del c. 8 i acaba amb notes curtes (staccato)."],
+        reto="Mantenir l'esquerra «baix-acord» ferma i regular mentre la dreta juga amb les "
+             "lligadures. Ho aconseguiràs sense mirar-te les mans?",
+        truco="Aprèn-te l'esquerra dels cc. 9-12 de memòria. Compta «un-dos» (una blanca cada "
+              "número) i toca la dreta a sobre.",
+        sabias="Scott Joplin, el «rei del ragtime», va publicar The Entertainer el 1902. Es va fer "
+               "famosa a tot el món el 1973 amb la pel·lícula «The Sting» (en castellà, «El golpe»). "
+               "Joplin avisava: «mai no és correcte tocar ragtime de pressa».",
+        qr_texto="Escolta-la i busca el «baix-acord» de l'esquerra.", ts=(2, 2),
+        cuenta_titulo="Dos compassos de la peça",
+        cuenta_pie="A dalt, la dreta (c. 1): quatre negres. A baix, l'esquerra (c. 9): baix, "
+                   "silenci, acord, silenci. En 2/2 hi ha dos temps de blanca.",
+        ritmos=[("MD", "c. 1 · el motiu",
                  [{'pitch': 'D5', 'dur': 'q'}, {'pitch': 'E5', 'dur': 'q'},
                   {'pitch': 'C5', 'dur': 'q'}, {'pitch': 'A4', 'dur': 'q'}],
                  AZUL, 'treble', None),
-                ('MI', 'c. 9 · bajo y acorde',
+                ("ME", "c. 9 · baix i acord",
                  [{'pitch': 'C3', 'dur': 'q'}, {'rest': True, 'dur': 'q'},
                   {'pitches': ['E3', 'G3'], 'dur': 'q'}, {'rest': True, 'dur': 'q'}],
                  OCRE, 'bass', None)]),
     manos=dict(
-        izq=[('Cuenta antes de entrar', 'La izquierda calla hasta el c. 8. Cuenta «uno-dos» en '
-                                        'voz alta siete compases y entra con el Sol grave.'),
-             ('Bajo y acorde', 'Cc. 9-12: nota grave, silencio, acorde, silencio. Primero solo el '
-                               'bajo; luego, el acorde.'),
-             ('Los acordes cambian', 'C. 10: el acorde lleva un si♭ (Do con séptima). C. 11: '
-                                     'Fa mayor. C. 12: Do mayor.'),
-             ('La bajada', 'En los cc. 34-37 la nota de arriba baja por semitonos: si♭, la, la♭, '
-                           'sol, sobre un do que no cambia.')],
-        der=[('El motivo', 'Cc. 1-4: re, mi, do, la / la, si, sol. Tócalo despacio, sabiendo que '
-                           'con el 8va suena una octava más aguda.'),
-             ('La atadura', 'El la del c. 1 está atado al c. 2: se toca una vez y se aguanta. '
-                            'Cuenta «uno-dos» sin parar.'),
-             ('Re, re♯, mi', 'Cc. 8, 12 y 16: la mano sube por semitonos (re, re♯) y llega al '
-                             'mi. Despacio y ligera.'),
-             ('Con la izquierda', 'Une los cc. 9-12 a dos manos, muy despacio. Si te pierdes, '
-                                  'vuelve a una mano.')],
-        tecnica=['Muñeca suelta: el ragtime se toca ligero, sin golpear.',
-                 'La izquierda marca el pulso: el bajo, algo más fuerte que el acorde.',
-                 'No corras: pone «Not fast».']),
+        izq=[("Compta abans d'entrar", "L'esquerra calla fins al c. 8. Compta «un-dos» en veu alta "
+                                       "set compassos i entra amb el Sol greu."),
+             ("Baix i acord", "Cc. 9-12: nota greu, silenci, acord, silenci. Primer només el baix; "
+                              "després, l'acord."),
+             ("Els acords canvien", "C. 10: l'acord porta un si♭ (Do amb sèptima). C. 11: Fa major. "
+                                    "C. 12: Do major."),
+             ("La baixada", "Als cc. 34-37 la nota de dalt baixa per semitons: si♭, la, la♭, sol, "
+                            "sobre un do que no canvia.")],
+        der=[("El motiu", "Cc. 1-4: re, mi, do, la / la, si, sol. Toca'l a poc a poc: amb l'8va "
+                          "sona una octava més aguda."),
+             ("La lligadura", "El la del c. 1 està lligat al c. 2: es toca una vegada i "
+                              "s'aguanta. Compta «un-dos» sense parar."),
+             ("Re, re♯, mi", "Cc. 8, 12 i 16: la mà puja per semitons (re, re♯) i arriba al mi. "
+                             "Lleugera i a poc a poc."),
+             ("Amb l'esquerra", "Ajunta els cc. 9-12 a dues mans, molt a poc a poc. Si et perds, "
+                                "torna a una mà.")],
+        tecnica=["Canell solt: el ragtime es toca lleuger, sense picar.",
+                 "L'esquerra marca el pols: el baix, una mica més fort que l'acord.",
+                 "No correguis: posa «Not fast»."]),
+    misol=dict(
+        manos="Aquí el ritme és «bum-ts»: baix, silenci, acord, silenci. Digues-ho en veu alta "
+              "abans de tocar-ho i et sortirà molt millor!",
+        guia="Els cc. 27-30 són els mateixos que els cc. 11-14: aprofita-ho! Només has d'estudiar "
+             "bé la part nova, a partir del c. 31.",
+        pauta="Inventa un compàs de ragtime: nota greu, silenci, acord, silenci a l'esquerra. O "
+              "copia el motiu del c. 1: re, mi, do, la!"),
     bloques=[
-        B(1, 'cc. 1-4', 'La entrada', (0, 0),
-          D('cuenta', 'Un compás de 2/2: dos golpes de blanca',
-            [('un compás', 2, 2)]),
-          [('IZQUIERDA', 'Calla. Cuenta «uno-dos» en voz alta con ella.'),
-           ('DERECHA', 'Re, mi, do, la. El la se ata al c. 2. Luego la, si, sol.'),
-           ('OJO', 'El 8va: lo lees donde está, suena una octava más aguda.'),
-           ('A TEMPO', '«Not fast»: pulso tranquilo, sin prisa.')]),
-        B(2, 'cc. 5-8', 'La♭ y calderón', (1, 1),
-          D('cadena', 'Del silencio al tema',
-            [('f', False), ('calderón', False), ('p: re, re♯', True)]),
-          [('IZQUIERDA', 'Entra por fin: Sol grave con acento, a la vez que el acorde.'),
-           ('DERECHA', 'Como el c. 1; en el c. 6 sale un la♭. El c. 8, acorde con f.'),
-           ('OJO', 'El calderón está sobre el silencio: espera y sigue en p.'),
-           ('JUNTAS', 'Toca solo el c. 8 muchas veces: acorde, silencio, re, re♯.')]),
-        B(3, 'cc. 9-12', 'Entra el tema', (2, 2),
-          D('cadena', 'Izquierda, compás a compás',
-            [('bajo', False), ('silencio', False), ('acorde', False), ('silencio', True)]),
-          [('IZQUIERDA', 'Bajo, silencio, acorde, silencio. En el c. 10 el acorde lleva si♭.'),
-           ('DERECHA', 'Mi, do (larga), mi. Do (larga), mi, do atado. Do, re, re♯ con f.'),
-           ('JUNTAS', 'Dos compases cada vez: 9-10, 11-12 y luego los cuatro.'),
-           ('OJO', 'En el c. 11 el acorde es de Fa, con el do abajo. C. 12: acorde corto.')]),
-        B(4, 'cc. 13-17', 'Segunda frase', (3, 3),
-          D('cadena', 'El camino de la frase',
-            [('cc. 13-15', False), ('c. 16: p', False), ('c. 17 = c. 9', True)]),
-          [('IZQUIERDA', 'Do y acorde (c. 13); Sol largo (c. 14); do y sol cortos (c. 15).'),
-           ('DERECHA', 'Mi, do, re, mi atado; mi, si, re. En el c. 15, un do largo.'),
-           ('JUNTAS', 'Cc. 13-14 y 15-16 por separado; luego los cinco compases.'),
-           ('OJO', 'C. 16: p, otra vez re, re♯. En el c. 17 vuelve el tema.')]),
-        B(5, 'cc. 18-21', 'Aparece el fa♯', (4, 4),
-          D('cadena', 'La izquierda, compás a compás',
-            [('Do con si♭', False), ('Fa', False), ('Do', False), ('Re', True)]),
-          [('IZQUIERDA', 'Do con si♭, Fa y Do. En el c. 21: Re grave y acorde con fa♯.'),
-           ('DERECHA', 'Como los cc. 10-11. Luego la, sol con f; y fa♯, la, do, mi en el c. 21.'),
-           ('JUNTAS', 'Haz el c. 21 solo: es nuevo. Después, de c. 18 a 21.'),
-           ('OJO', 'El fa♯ del c. 21 está en las dos manos: léelo antes de tocar.')]),
-        B(6, 'cc. 22-26', 'Vuelve el tema', (5, 5),
-          D('cadena', 'Hacia el tema',
-            [('Re y Sol', False), ('p: re, re♯', False), ('la, si, do', False), ('tema', True)]),
-          [('IZQUIERDA', 'Re (c. 22), Sol alto y Sol grave (c. 23); sube la, si, do (cc. 24-25).'),
-           ('DERECHA', 'Mi, re, do, la; re larga; en el c. 24, p: re, re♯.'),
-           ('JUNTAS', 'Toca la subida la-si-do de la izquierda y entra en el tema.'),
-           ('OJO', 'Los cc. 25-26 son como los cc. 9-10: ya los sabes.')]),
-        B(7, 'cc. 27-35', 'El tema y la bajada', (6, 7),
-          D('cadena', 'Qué se repite',
-            [('cc. 27-30 = 11-14', False), ('c. 32: do, re', False), ('mi, do, re', True)]),
-          [('IZQUIERDA', 'Cc. 27-32 como los cc. 11-16. Desde el c. 33, acordes largos.'),
-           ('DERECHA', 'Cc. 27-30 = cc. 11-14. En el c. 32, solo do-re (sin re♯).'),
-           ('JUNTAS', 'Estudia los cc. 27-30; luego 31-35 en dos mitades.'),
-           ('OJO', '«Mi, do, re, mi» se repite en los cc. 33 a 37: no pierdas la cuenta.')]),
-        B(8, 'cc. 36-40', 'El final', (8, 8),
-          D('cadena', 'La izquierda al final',
-            [('Do + la♭', False), ('Do + sol', False), ('Sol largo', False),
-             ('do, sol, do', True)]),
-          [('IZQUIERDA', 'Do + la♭, Do + sol, Sol largo; y do, sol, do grave cortos.'),
-           ('DERECHA', 'Dos frases «mi, do, re»; mi, si, re (c. 38); do corto (c. 39).'),
-           ('JUNTAS', 'Cc. 36-38 a dos manos; después, los dos últimos compases.'),
-           ('A TEMPO', 'Termina corto (staccato). El c. 40 es solo la izquierda.')]),
+        B(1, 'cc. 1-4', "L'entrada", (0, 0),
+          D('cuenta', "Un compàs de 2/2: dos temps de blanca",
+            [("un compàs", 2, 2)]),
+          [('IZQUIERDA', "Calla. Compta «un-dos» en veu alta amb ella."),
+           ('DERECHA', "Re, mi, do, la. El la es lliga al c. 2. Després la, si, sol."),
+           ('OJO', "Psst! L'8va: el llegeixes on és, però sona una octava més aguda."),
+           ('A TEMPO', "«Not fast»: pols tranquil, sense pressa.")]),
+        B(2, 'cc. 5-8', "La♭ i calderó", (1, 1),
+          D('cadena', "Del silenci al tema",
+            [("f", False), ("calderó", False), ("p: re, re♯", True)]),
+          [('IZQUIERDA', "Per fi entra: Sol greu amb accent, a la vegada que l'acord."),
+           ('DERECHA', "Com el c. 1; al c. 6 surt un la♭. El c. 8, acord amb f."),
+           ('OJO', "El calderó és sobre el silenci: espera i continua en p."),
+           ('JUNTAS', "Toca només el c. 8 moltes vegades: acord, silenci, re, re♯.")]),
+        B(3, 'cc. 9-12', "Entra el tema", (2, 2),
+          D('cadena', "Esquerra, compàs a compàs",
+            [("baix", False), ("silenci", False), ("acord", False), ("silenci", True)]),
+          [('IZQUIERDA', "Baix, silenci, acord, silenci. Al c. 10 l'acord porta si♭."),
+           ('DERECHA', "Mi, do (llarga), mi. Do (llarga), mi, do lligat. Do, re, re♯ amb f."),
+           ('JUNTAS', "Dos compassos cada cop: 9-10, 11-12 i després els quatre."),
+           ('OJO', "Al c. 11 l'acord és de Fa, amb el do a baix. C. 12: acord curt.")]),
+        B(4, 'cc. 13-17', "Segona frase", (3, 3),
+          D('cadena', "El camí de la frase",
+            [("cc. 13-15", False), ("c. 16: p", False), ("c. 17 = c. 9", True)]),
+          [('IZQUIERDA', "Do i acord (c. 13); Sol llarg (c. 14); do i sol curts (c. 15)."),
+           ('DERECHA', "Mi, do, re, mi lligat; mi, si, re. Al c. 15, un do llarg."),
+           ('JUNTAS', "Cc. 13-14 i 15-16 per separat; després els cinc compassos."),
+           ('OJO', "C. 16: p, altra vegada re, re♯. Al c. 17 torna el tema!")]),
+        B(5, 'cc. 18-21', "Apareix el fa♯", (4, 4),
+          D('cadena', "L'esquerra, compàs a compàs",
+            [("Do amb si♭", False), ("Fa", False), ("Do", False), ("Re", True)]),
+          [('IZQUIERDA', "Do amb si♭, Fa i Do. Al c. 21: Re greu i acord amb fa♯."),
+           ('DERECHA', "Com els cc. 10-11. Després la, sol amb f; i fa♯, la, do, mi al c. 21."),
+           ('JUNTAS', "Fes el c. 21 sol: és nou. Després, del c. 18 al 21."),
+           ('OJO', "El fa♯ del c. 21 és nou a les dues mans: llegeix-lo abans de tocar.")]),
+        B(6, 'cc. 22-26', "Torna el tema", (5, 5),
+          D('cadena', "Cap al tema",
+            [("Re i Sol", False), ("p: re, re♯", False), ("la, si, do", False), ("tema", True)]),
+          [('IZQUIERDA', "Re (c. 22), Sol agut i Sol greu (c. 23); puja la, si, do (cc. 24-25)."),
+           ('DERECHA', "Mi, re, do, la; re llarga; al c. 24, p: re, re♯."),
+           ('JUNTAS', "Toca la pujada la-si-do de l'esquerra i entra al tema."),
+           ('OJO', "Els cc. 25-26 són com els cc. 9-10: ja els saps!")]),
+        B(7, 'cc. 27-35', "El tema i la baixada", (6, 7),
+          D('cadena', "Què es repeteix",
+            [("cc. 27-30 = 11-14", False), ("c. 32: do, re", False), ("mi, do, re", True)]),
+          [('IZQUIERDA', "Cc. 27-32 com els cc. 11-16. Des del c. 33, acords llargs."),
+           ('DERECHA', "Cc. 27-30 = cc. 11-14. Al c. 32, només do-re (sense re♯)."),
+           ('JUNTAS', "Estudia els cc. 27-30; després 31-35 en dues meitats."),
+           ('OJO', "«Mi, do, re, mi» es repeteix als cc. 33 a 37: no perdis el compte!")]),
+        B(8, 'cc. 36-40', "El final", (8, 8),
+          D('cadena', "L'esquerra al final",
+            [("Do + la♭", False), ("Do + sol", False), ("Sol llarg", False),
+             ("do, sol, do", True)]),
+          [('IZQUIERDA', "Do + la♭, Do + sol, Sol llarg; i do, sol, do greu curts."),
+           ('DERECHA', "Dues frases «mi, do, re»; mi, si, re (c. 38); do curt (c. 39)."),
+           ('JUNTAS', "Cc. 36-38 a dues mans; després, els dos últims compassos."),
+           ('A TEMPO', "Acaba curt (staccato). El c. 40 és només l'esquerra.")]),
     ],
     cortes={1: [259.5, 293.5, 417.4, 442.9, 574.0, 592.0],
             2: [180.5, 196.5, 326.9, 345.4, 474.5, 489.5, 608.0, 619.5]},
     corte_titulo=154.8,
     fin={1: 717.8, 2: 750.0},
     burb={
-        0: [('abajo', 262, 'DER', '8va en los cc. 1-2: suenan una octava más agudos de lo escrito. '
-                                  'El la del c. 1 se ata al c. 2.', 0.3),
-            ('abajo', 262, 'IZQ', 'La izquierda no toca hasta el c. 8: cuenta «uno-dos» con ella.',
+        0: [('abajo', 262, 'DER', "8va als cc. 1-2: sonen una octava més aguda del que està "
+                                  "escrit. El la del c. 1 es lliga al c. 2.", 0.3),
+            ('abajo', 262, 'IZQ', "L'esquerra no toca fins al c. 8: compta «un-dos» amb ella.",
              0.6)],
-        1: [('arriba', 470, 'OJO', 'Calderón sobre el silencio del c. 8: espera y sigue con p, '
-                                   're, re♯.', 0.85),
-            ('abajo', 262, 'IZQ', 'Entra con un Sol grave (acento) a la vez que el acorde.',
+        1: [('arriba', 470, 'OJO', "Psst! Calderó sobre el silenci del c. 8: espera i continua "
+                                   "en p, re, re♯.", 0.85),
+            ('abajo', 262, 'IZQ', "Entra amb un Sol greu (accent) a la vegada que l'acord.",
              0.9)],
-        2: [('abajo', 300, 'IZQ', 'Bajo, silencio, acorde, silencio. En el c. 10 lleva si♭ (Do con '
-                                  'séptima); en el c. 11, Fa.', 0.4)],
-        3: [('abajo', 300, 'IZQ', 'C. 14: Sol grave largo. C. 15: do y sol cortos (staccato).',
+        2: [('abajo', 300, 'IZQ', "Baix, silenci, acord, silenci. Al c. 10 porta si♭ (Do amb "
+                                  "sèptima); al c. 11, Fa.", 0.4)],
+        3: [('abajo', 300, 'IZQ', "C. 14: Sol greu llarg. C. 15: do i sol curts (staccato).",
              0.5)],
-        4: [('arriba', 480, 'OJO', 'Fa♯ en el c. 21: nuevo en las dos manos. A la izquierda, '
-                                   'Re mayor.', 0.9)],
-        5: [('abajo', 300, 'IZQ', 'Cc. 24-25: la, si, do suben hasta el tema.', 0.45)],
-        6: [('arriba', 300, 'AMB', 'Cc. 27-30 = cc. 11-14: ya lo sabes. El f está en el c. 28.',
+        4: [('arriba', 480, 'OJO', "Fixa-t'hi: fa♯ al c. 21, nou a les dues mans. A l'esquerra, "
+                                   "Re major.", 0.9)],
+        5: [('abajo', 300, 'IZQ', "Cc. 24-25: la, si, do pugen fins al tema.", 0.45)],
+        6: [('arriba', 300, 'AMB', "Cc. 27-30 = cc. 11-14: ja ho saps! La f és al c. 28.",
              0.3)],
-        7: [('abajo', 440, 'IZQ', 'La nota de arriba baja: si♭ (c. 34), la (c. 35), la♭ y sol '
-                                  '(cc. 36-37).', 0.7)],
-        8: [('abajo', 440, 'AMB', 'Final corto: do, sol y do grave. El último compás es solo la '
-                                  'izquierda.', 0.7)],
+        7: [('abajo', 440, 'IZQ', "La nota de dalt baixa: si♭ (c. 34), la (c. 35), la♭ i sol "
+                                  "(cc. 36-37).", 0.7)],
+        8: [('abajo', 440, 'AMB', "Final curt: do, sol i do greu. L'últim compàs és només "
+                                  "l'esquerra.", 0.7)],
     },
     marcas=[],
-    pie_pauta='la clave la pones tú · copia un compás o escribe la escala de Do mayor')
+    pie_pauta="la clau la poses tu · copia un compàs o escriu l'escala de Do major")
 
 if __name__ == '__main__':
     wr, n = construir_pieza(SPEC, 1)

@@ -15,152 +15,151 @@ from mayores_motor import *                                        # noqa: F401,
 
 SPEC = dict(
     num=6, slug='vie_en_rose', pdf='edith_piaf_la_vie_en_rose_pdf.pdf', time_sig=(4, 4),
-    titulo='La vie en rose', autor='Louiguy · letra original de Édith Piaf',
-    kicker='Eva · pieza 6 · La vie en rose', mes='Enero · 2.ª quincena',
+    titulo='La vie en rose', autor='Louiguy · lletra original d\'Édith Piaf',
+    kicker='Eva · peça 6 · La vie en rose', mes='Gener · 2.a quinzena',
     yt='https://www.youtube.com/results?search_query=la+vie+en+rose+piano+tutorial',
-    credito='Partitura: Louiguy, La vie en rose (nephele.kulichki.com). Anotaciones: T-Clas.',
+    credito='Partitura: Louiguy, La vie en rose (nephele.kulichki.com). Anotacions: T-Clas.',
     ficha=FICHA(
-        datos=[('Tonalidad', 'Do mayor'), ('Compás', '4/4'), ('Tempo', 'Slowly (lento)'),
-               ('Figura corta', 'Semicorchea'), ('Compases', '27 + anacrusa')],
+        datos=[('Tonalitat', 'Do major'), ('Compàs', '4/4'), ('Tempo', 'Slowly (lent)'),
+               ('Figura curta', 'Semicorxera'), ('Compassos', '27 + anacrusi')],
         total=27,
-        secciones=[('A', 1, 6, 'Introducción', AZUL), ('B', 7, 18, 'El tema · se repite', OCRE),
-                   ('C', 19, 27, 'Cambio, casillas y final', AZUL)],
-        ideas=[('IZQUIERDA', 'Notas largas y acordes',
-                'En el tema, casi siempre dos notas largas por compás: bajo grave y acorde.'),
-               ('DERECHA', 'Corcheas y acordes',
-                'La melodía va en corcheas ligadas, con acordes de dos y tres notas debajo.'),
-               ('LA REPETICIÓN', 'Dos finales',
-                'Del c. 7 al c. 26 se repite: casilla 1 (c. 26) la 1.ª vez; casilla 2 (c. 27) la 2.ª.'),
-               ('LAS PAUSAS', 'Fermatas, rit. y rall.',
-                'Fermatas en los cc. 2, 22 y 27. "rit." en el c. 6 y "rall." en el c. 27.')],
+        secciones=[('A', 1, 6, 'Introducció', AZUL), ('B', 7, 18, 'El tema · es repeteix', OCRE),
+                   ('C', 19, 27, 'Canvi, caselles i final', AZUL)],
+        ideas=[('IZQUIERDA', 'Notes llargues i acords',
+                'Al tema, quasi sempre dues notes llargues per compàs: baix greu i acord.'),
+               ('DERECHA', 'Corxeres i acords',
+                'La melodia va en corxeres lligades, amb acords de dues i tres notes a sota.'),
+               ('LA REPETICIÓ', 'Dos finals',
+                'Del c. 7 al c. 26 es repeteix: casella 1 (c. 26) la 1.a vegada; casella 2 (c. 27) la 2.a.'),
+               ('LES PAUSES', 'Fermates, rit. i rall.',
+                'Fermates als cc. 2, 22 i 27. "rit." al c. 6 i "rall." al c. 27.')],
         especial=[
-            'Pone "Slowly" (lento). El compás es C, es decir, 4/4.',
-            'No hay armadura: ni sostenidos ni bemoles fijos. Es Do mayor: los bajos de los cc. '
-            '7-8 y 26-27 son de Do.',
-            'Empieza con un compás incompleto de un tiempo (anacrusa), que no se numera.',
-            'Las dos rayitas // de los cc. 2-5 marcan una pausa breve.',
-            'En el c. 7 hay barra de repetición, "a tempo" y mp - mf. Termina en el c. 26.',
-            'El c. 27 lleva acordes arpegiados (línea ondulada), "rall.", p y seis notas rápidas '
-            '(sextillo) en la izquierda.'],
-        reto='Contar bien las pausas y las fermatas, y recordar por dónde se vuelve en la '
-             'repetición y qué casilla toca cada vez.',
-        truco='Antes de tocar, recorre la partitura con el dedo: 1-6, luego 7-26, vuelta al 7, '
-              'hasta el 25 y salto a la casilla 2 (c. 27).',
-        sabias='La música es de Louiguy, escrita en 1945, y la letra original en francés es de Édith Piaf, que la grabó en 1947. Mack David hizo la letra en inglés.',
-        qr_texto='Escúchala con la partitura delante: marca las fermatas y el rit.',
+            'Hi diu "Slowly" (lent). El compàs és C, és a dir, 4/4.',
+            'No hi ha armadura: ni sostinguts ni bemolls fixos. És Do major: els baixos dels cc. '
+            '7-8 i 26-27 són de Do.',
+            'Comença amb un compàs incomplet d\'un temps (anacrusi), que no es numera.',
+            'Les dues ratlletes // dels cc. 2-5 marquen una pausa breu.',
+            'Al c. 7 hi ha barra de repetició, "a tempo" i mp - mf. Acaba al c. 26.',
+            'El c. 27 duu acords arpegiats (línia ondulada), "rall.", p i sis notes ràpides '
+            '(sextolet) a l\'esquerra.'],
+        reto='Comptar bé les pauses i les fermates, i recordar per on es torna a la '
+             'repetició i quina casella toca cada vegada.',
+        truco='Abans de tocar, recorre la partitura amb el dit: 1-6, després 7-26, tornada al 7, '
+              'fins al 25 i salt a la casella 2 (c. 27).',
+        sabias='La música és de Louiguy, escrita el 1945, i la lletra original en francès és d\'Édith Piaf, que la va gravar el 1947. Mack David va fer la lletra en anglès.',
+        qr_texto='Escolta-la amb la partitura al davant: marca les fermates i el rit.',
         ts=(4, 4)),
     manos=dict(
-        izq=[('Notas largas', 'En el tema la izquierda toca dos notas largas por compás. Toca '
-                              'solo los cc. 7-10, despacio, hasta que salgan sin mirar.'),
-             ('Cambio de acorde', 'Antes de cada compás mira qué acorde viene y coloca la mano '
-                                  'antes de tocar.'),
-             ('Cuando cambia el dibujo', 'En los cc. 19-22 la izquierda va en negras con notas '
-                                         'largas debajo, y en el c. 27 hay seis notas rápidas.'),
-             ('Con fermata', 'En los cc. 2 y 22 hay fermata: aguanta la nota y cuenta.')],
-        der=[('Cantar la melodía', 'Las corcheas van ligadas en frases cortas. Cántalas por '
-                                   'dentro y respira al acabar cada ligadura.'),
-             ('Los acordes', 'Debajo de la melodía hay notas de dos y tres sonidos. Tócalos '
-                             'juntos, sin que sobresalga ninguno.'),
-             ('Alteraciones', 'En los cc. 19-22 cada compás empieza con una alteración: ♭, ♮, ♯ '
-                              'y ♮. Di cada nota despacio.'),
-             ('Con la izquierda', 'Une despacio cuatro compases con la izquierda ya segura.')],
-        tecnica=['Muñeca suelta: las corcheas ligadas salen cantadas.',
-                 'Cuenta 1-2-3-4 despacio, también en las pausas.',
-                 'Mira dónde empieza y acaba la repetición antes de tocar.']),
+        izq=[('Notes llargues', 'Al tema l\'esquerra toca dues notes llargues per compàs. Toca '
+                                'només els cc. 7-10, a poc a poc, fins que surtin sense mirar.'),
+             ('Canvi d\'acord', 'Abans de cada compàs mira quin acord ve i col·loca la mà '
+                                'abans de tocar.'),
+             ('Quan canvia el dibuix', 'Als cc. 19-22 l\'esquerra va en negres amb notes '
+                                       'llargues a sota, i al c. 27 hi ha sis notes ràpides.'),
+             ('Amb fermata', 'Als cc. 2 i 22 hi ha fermata: aguanta la nota i compta.')],
+        der=[('Cantar la melodia', 'Les corxeres van lligades en frases curtes. Canta-les per '
+                                   'dins i respira en acabar cada lligadura.'),
+             ('Els acords', 'Sota la melodia hi ha notes de dos i tres sons. Toca-les '
+                            'juntes, sense que en sobresurti cap.'),
+             ('Alteracions', 'Als cc. 19-22 cada compàs comença amb una alteració: ♭, ♮, ♯ '
+                             'i ♮. Digues cada nota a poc a poc.'),
+             ('Amb l\'esquerra', 'Uneix a poc a poc quatre compassos amb l\'esquerra ja segura.')],
+        tecnica=['Canell solt: les corxeres lligades surten cantades.',
+                 'Compta 1-2-3-4 a poc a poc, també a les pauses.',
+                 'Mira on comença i acaba la repetició abans de tocar.']),
     bloques=[
-        B(1, 'cc. 0-3', 'La anacrusa', (0, 0),
-          D('cuenta', 'Una anacrusa de 1 tiempo y un compás de 4',
+        B(1, 'cc. 0-3', 'L\'anacrusi', (0, 0),
+          D('cuenta', 'Una anacrusi d\'1 temps i un compàs de 4',
             [('anac.', 1, 2), ('c. 1', 4, 2)]),
-          [('IZQUIERDA', 'Un solo acorde en la anacrusa y cuatro acordes de negra en el c. 1.'),
-           ('DERECHA', 'Dos corcheas ligadas en la anacrusa. En el c. 2, nota con fermata.'),
-           ('JUNTAS', 'Cuenta 1-2-3 en silencio y entra en el 4. Aguanta la fermata del c. 2.'),
-           ('A TEMPO', 'Slowly: lento. Las rayitas // piden una pausa breve.')]),
-        B(2, 'cc. 4-6', 'Se frena', (1, 1),
-          D('cadena', 'Hacia la doble barra',
-            [('cc. 4-5: frases con //', False), ('c. 6: rit.', False), ('doble barra', True)]),
-          [('IZQUIERDA', 'Blancas ligadas, silencio de corchea y acordes: mira dónde cae cada '
-                         'uno.'),
-           ('DERECHA', 'Frases cortas de corcheas ligadas. Respira en las rayitas //.'),
-           ('JUNTAS', 'Primero la derecha cantando; luego añade la izquierda.'),
-           ('OJO', 'rit. en el c. 6: frena poco a poco hasta la doble barra.')]),
-        B(3, 'cc. 7-10', 'Empieza el tema', (2, 2),
-          D('cadena', 'Desde aquí se repite',
-            [('barra |: en el c. 7', False), ('a tempo · mp - mf', True)]),
-          [('IZQUIERDA', 'Dos blancas por compás en los cc. 7-8 (bajo y acorde). En el c. 9, '
-                         'blanca y dos negras.'),
-           ('DERECHA', 'Corcheas ligadas con acordes. En el c. 9 hay un regulador <, en el c. 10 '
+          [('IZQUIERDA', 'Un sol acord a l\'anacrusi i quatre acords de negra al c. 1.'),
+           ('DERECHA', 'Dues corxeres lligades a l\'anacrusi. Al c. 2, nota amb fermata.'),
+           ('JUNTAS', 'Compta 1-2-3 en silenci i entra al 4. Aguanta la fermata del c. 2.'),
+           ('A TEMPO', 'Slowly: lent. Les ratlletes // demanen una pausa breu.')]),
+        B(2, 'cc. 4-6', 'Es frena', (1, 1),
+          D('cadena', 'Cap a la doble barra',
+            [('cc. 4-5: frases amb //', False), ('c. 6: rit.', False), ('doble barra', True)]),
+          [('IZQUIERDA', 'Blanques lligades, silenci de corxera i acords: mira on cau cadascun.'),
+           ('DERECHA', 'Frases curtes de corxeres lligades. Respira a les ratlletes //.'),
+           ('JUNTAS', 'Primer la dreta cantant; després afegeix l\'esquerra.'),
+           ('OJO', 'rit. al c. 6: frena a poc a poc fins a la doble barra.')]),
+        B(3, 'cc. 7-10', 'Comença el tema', (2, 2),
+          D('cadena', 'Des d\'aquí es repeteix',
+            [('barra |: al c. 7', False), ('a tempo · mp - mf', True)]),
+          [('IZQUIERDA', 'Dues blanques per compàs als cc. 7-8 (baix i acord). Al c. 9, '
+                         'blanca i dues negres.'),
+           ('DERECHA', 'Corxeres lligades amb acords. Al c. 9 hi ha un regulador <, al c. 10 '
                        'un >.'),
-           ('JUNTAS', 'Un compás cada vez (7, 8, 9, 10) y luego los cuatro en bucle.'),
-           ('A TEMPO', 'a tempo y mp - mf: sonido medio, sin correr.')]),
-        B(4, 'cc. 11-18', 'El tema sigue', (3, 4),
-          D('capas', 'Dos capas a la vez',
-            [('Derecha: melodía', 'barras', AZUL), ('Izquierda: notas largas', 'puntos', OCRE)]),
-          [('IZQUIERDA', 'En el c. 14 hay cuatro negras con un sostenido y un becuadro: míralas '
-                         'antes.'),
-           ('DERECHA', 'Cc. 15-16 muy parecidos a 7-8. En el c. 17 hay un bemol y el c. 18 acaba '
-                       'en un acorde largo.'),
-           ('JUNTAS', 'Un sistema cada día: cc. 11-14 y cc. 15-18.'),
-           ('OJO', 'Reguladores en los cc. 13-14 y 17-18: sube y baja el sonido sin acentuar.')]),
-        B(5, 'cc. 19-22', 'Cambia el dibujo', (5, 5),
-          D('cadena', 'Lo que cambia',
-            [('derecha: corcheas repetidas', False), ('izquierda en negras', False),
+           ('JUNTAS', 'Un compàs cada vegada (7, 8, 9, 10) i després els quatre en bucle.'),
+           ('A TEMPO', 'a tempo i mp - mf: so mitjà, sense córrer.')]),
+        B(4, 'cc. 11-18', 'El tema segueix', (3, 4),
+          D('capas', 'Dues capes alhora',
+            [('Dreta: melodia', 'barras', AZUL), ('Esquerra: notes llargues', 'puntos', OCRE)]),
+          [('IZQUIERDA', 'Al c. 14 hi ha quatre negres amb un sostingut i un becaire: mira-les '
+                         'abans.'),
+           ('DERECHA', 'Cc. 15-16 molt semblants als 7-8. Al c. 17 hi ha un bemoll i el c. 18 '
+                       'acaba en un acord llarg.'),
+           ('JUNTAS', 'Un sistema cada dia: cc. 11-14 i cc. 15-18.'),
+           ('OJO', 'Reguladors als cc. 13-14 i 17-18: puja i baixa el so sense accentuar.')]),
+        B(5, 'cc. 19-22', 'Canvia el dibuix', (5, 5),
+          D('cadena', 'El que canvia',
+            [('dreta: corxeres repetides', False), ('esquerra en negres', False),
              ('fermata c. 22', True)]),
-          [('IZQUIERDA', 'Cuatro negras arriba y notas largas graves debajo. Alteraciones: ♭ en '
-                         'el 19, ♯ en el 21.'),
-           ('DERECHA', 'Notas repetidas, corcheas y negras, parejas y suaves. Un regulador en '
-                       'cada compás.'),
-           ('JUNTAS', 'Compás a compás, despacio, hasta unirlos sin parar.'),
-           ('OJO', 'Fermata en el c. 22 (en las dos manos): aguanta y cuenta antes de seguir.')]),
-        B(6, 'cc. 23-25', 'Vuelve el tema', (6, 6),
-          D('cadena', 'Hacia las casillas',
-            [('c. 23: tema', False), ('c. 25: ligadura', False), ('casilla 1 o 2', True)]),
-          [('IZQUIERDA', 'Dos blancas por compás en los cc. 23-24. En el c. 25: blanca, dos '
-                         'corcheas y negra.'),
-           ('DERECHA', 'Frase parecida a la de los cc. 7-9. El c. 25 acaba con una ligadura hacia '
-                       'el siguiente compás.'),
-           ('JUNTAS', 'Los tres compases en bucle.'),
-           ('OJO', 'La nota ligada del c. 25 sigue en la casilla 1 y en la casilla 2: no la '
-                   'pulses otra vez.')]),
-        B(7, 'cc. 26-27', 'Casillas y final', (7, 7),
-          D('cadena', 'Las dos vueltas',
-            [('1.ª vez: casilla 1', False), ('↩ al c. 7', False), ('2.ª vez: casilla 2', True)]),
-          [('IZQUIERDA', 'Casilla 1: negras y acordes. Casilla 2: seis notas rápidas que suben '
-                         '(sextillo).'),
-           ('DERECHA', 'Casilla 1: corcheas con ♭ y ♮. Casilla 2: acordes arpegiados y fermata.'),
-           ('JUNTAS', 'Recorre con el dedo: 7→26, vuelta al 7, hasta el 25 y salto al 27.'),
-           ('A TEMPO', 'rall.: frena poco a poco y acaba en p. Aguanta la fermata.')]),
+          [('IZQUIERDA', 'Quatre negres a dalt i notes llargues greus a sota. Alteracions: ♭ al '
+                         '19, ♯ al 21.'),
+           ('DERECHA', 'Notes repetides, corxeres i negres, regulars i suaus. Un regulador a '
+                       'cada compàs.'),
+           ('JUNTAS', 'Compàs a compàs, a poc a poc, fins a unir-los sense parar.'),
+           ('OJO', 'Fermata al c. 22 (a les dues mans): aguanta i compta abans de seguir.')]),
+        B(6, 'cc. 23-25', 'Torna el tema', (6, 6),
+          D('cadena', 'Cap a les caselles',
+            [('c. 23: tema', False), ('c. 25: lligadura', False), ('casella 1 o 2', True)]),
+          [('IZQUIERDA', 'Dues blanques per compàs als cc. 23-24. Al c. 25: blanca, dues '
+                         'corxeres i negra.'),
+           ('DERECHA', 'Frase semblant a la dels cc. 7-9. El c. 25 acaba amb una lligadura cap '
+                       'al compàs següent.'),
+           ('JUNTAS', 'Els tres compassos en bucle.'),
+           ('OJO', 'La nota lligada del c. 25 continua a la casella 1 i a la casella 2: no la '
+                   'premis un altre cop.')]),
+        B(7, 'cc. 26-27', 'Caselles i final', (7, 7),
+          D('cadena', 'Les dues voltes',
+            [('1.a vegada: casella 1', False), ('↩ al c. 7', False), ('2.a vegada: casella 2', True)]),
+          [('IZQUIERDA', 'Casella 1: negres i acords. Casella 2: sis notes ràpides que pugen '
+                         '(sextolet).'),
+           ('DERECHA', 'Casella 1: corxeres amb ♭ i ♮. Casella 2: acords arpegiats i fermata.'),
+           ('JUNTAS', 'Recorre-ho amb el dit: 7→26, tornada al 7, fins al 25 i salt al 27.'),
+           ('A TEMPO', 'rall.: frena a poc a poc i acaba en p. Aguanta la fermata.')]),
     ],
     cortes={1: [273.2, 420.2, 588.8], 2: [223.2, 396.8, 547.5]},
     corte_titulo=125.5, inicio={2: 56.0},
     burb={
-        0: [('arriba', 250, 'OJO', 'Slowly: lento. Compás C (4/4), sin sostenidos ni bemoles '
-                                   'fijos.', 130),
-            ('arriba', 250, 'AMB', 'Fermata del c. 2: aguanta la nota. Las rayitas // son una '
-                                   'pausa breve.', 330),
-            ('abajo', 330, 'IZQ', 'Anacrusa: el compás empieza incompleto, con un solo acorde de '
-                                  'un tiempo. No se numera.', 135)],
-        1: [('arriba', 480, 'OJO', 'rit. en el c. 6: frena poco a poco hasta la doble barra.',
+        0: [('arriba', 250, 'OJO', 'Slowly: lent. Compàs C (4/4), sense sostinguts ni bemolls '
+                                   'fixos.', 130),
+            ('arriba', 250, 'AMB', 'Fermata del c. 2: aguanta la nota. Les ratlletes // són una '
+                                   'pausa breu.', 330),
+            ('abajo', 330, 'IZQ', 'Anacrusi: el compàs comença incomplet, amb un sol acord d\'un '
+                                  'temps. No es numera.', 135)],
+        1: [('arriba', 480, 'OJO', 'rit. al c. 6: frena a poc a poc fins a la doble barra.',
              481)],
-        2: [('arriba', 300, 'AMB', 'Barra |: del c. 7, "a tempo" y mp - mf. Desde aquí se '
-                                   'repite.', 88)],
-        3: [('arriba', 500, 'OJO', 'c. 14: sostenido y becuadro en las cuatro negras, en las dos '
-                                   'manos.', 500)],
-        5: [('arriba', 540, 'OJO', 'Fermata del c. 22, en las dos manos: aguanta y cuenta.', 546),
-            ('abajo', 330, 'AMB', 'Cada compás empieza con una alteración: ♭ (c. 19), ♮ (c. 20), '
-                                  '♯ (c. 21) y ♮ (c. 22).', 300)],
-        6: [('arriba', 520, 'AMB', 'c. 25: la ligadura del final une con la primera nota de la '
-                                   'casilla. No la pulses otra vez.', 530)],
-        7: [('arriba', 250, 'OJO', 'Casilla 1 (c. 26): la primera vez. Acaba en :| y vuelves al '
+        2: [('arriba', 300, 'AMB', 'Barra |: del c. 7, "a tempo" i mp - mf. Des d\'aquí es '
+                                   'repeteix.', 88)],
+        3: [('arriba', 500, 'OJO', 'c. 14: sostingut i becaire a les quatre negres, a les dues '
+                                   'mans.', 500)],
+        5: [('arriba', 540, 'OJO', 'Fermata del c. 22, a les dues mans: aguanta i compta.', 546),
+            ('abajo', 330, 'AMB', 'Cada compàs comença amb una alteració: ♭ (c. 19), ♮ (c. 20), '
+                                  '♯ (c. 21) i ♮ (c. 22).', 300)],
+        6: [('arriba', 520, 'AMB', 'c. 25: la lligadura del final uneix amb la primera nota de la '
+                                   'casella. No la premis un altre cop.', 530)],
+        7: [('arriba', 250, 'OJO', 'Casella 1 (c. 26): la primera vegada. Acaba en :| i tornes al '
                                    'c. 7.', 110),
-            ('arriba', 250, 'AMB', 'Casilla 2 (c. 27): la segunda vez. "rall." y p, con acordes '
-                                   'arpegiados.', 350),
-            ('abajo', 400, 'IZQ', 'Seis notas rápidas que suben (sextillo): estúdialas aparte, '
-                                  'despacio.', 470)],
+            ('arriba', 250, 'AMB', 'Casella 2 (c. 27): la segona vegada. "rall." i p, amb acords '
+                                   'arpegiats.', 350),
+            ('abajo', 400, 'IZQ', 'Sis notes ràpides que pugen (sextolet): estudia-les a part, '
+                                  'a poc a poc.', 470)],
     },
     marcas=[(1, 323.5, 151, 21, 16, 1, 1, 'caja'), (1, 483, 357, 26, 16, 2, 1, 'caja'),
             (1, 113, 506, 74, 34, 3, 1, 'caja'), (2, 547, 244, 26, 16, 5, 1, 'caja'),
             (2, 179, 561, 210, 16, 7, 1, 'caja'), (2, 417, 561, 258, 16, 7, 2, 'caja')],
-    pie_pauta='la clave la pones tú · copia un compás o escribe la escala de Do mayor')
+    pie_pauta='la clau la poses tu · copia un compàs o escriu l\'escala de Do major')
 
 if __name__ == '__main__':
     wr, n = construir_pieza(SPEC, 1)

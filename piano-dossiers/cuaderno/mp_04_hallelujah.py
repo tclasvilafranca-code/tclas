@@ -12,136 +12,136 @@ from mayores_motor import *                                        # noqa: F401,
 
 SPEC = dict(
     num=4, slug='hallelujah', pdf='leonard_cohen_hallelujah.pdf', time_sig=(6, 8),
-    titulo='Hallelujah', autor='Leonard Cohen · arreglo para piano (sheetsfree)',
-    kicker='Eva · pieza 4 · Hallelujah', mes='Diciembre · 2.ª quincena (concierto de Navidad)',
+    titulo='Hallelujah', autor='Leonard Cohen · arranjament per a piano (sheetsfree)',
+    kicker='Eva · peça 4 · Hallelujah', mes='Desembre · 2.ª quinzena (concert de Nadal)',
     yt='https://www.youtube.com/results?search_query=hallelujah+leonard+cohen+piano+tutorial',
-    credito='Partitura: Leonard Cohen, Hallelujah (sheetsfree.com). Anotaciones: T-Clas.',
+    credito='Partitura: Leonard Cohen, Hallelujah (sheetsfree.com). Anotacions: T-Clas.',
     ficha=FICHA(
-        datos=[('Tonalidad', 'Do mayor → Re mayor'), ('Compás', '6/8'), ('Tempo', '♩. = 60 lento'),
-               ('Figura corta', 'Corchea'), ('Compases', '68')],
+        datos=[('Tonalitat', 'Do major → Re major'), ('Compàs', '6/8'), ('Tempo', '♩. = 60 lent'),
+               ('Figura curta', 'Corxera'), ('Compassos', '68')],
         total=68,
-        secciones=[('A', 1, 4, 'Introducción', AZUL), ('B', 5, 32, 'Do mayor · se repite', OCRE),
-                   ('C', 33, 68, 'Re mayor · final', AZUL)],
-        ideas=[('IZQUIERDA', 'Arpegio de seis corcheas',
-                'Cada compás, una figura que sube y baja sobre el acorde. Casi no cambia en toda '
-                'la pieza.'),
-               ('DERECHA', 'Melodía y luego acordes',
-                'Empieza con notas sueltas y, al cambiar de tonalidad, pasa a notas dobles con '
-                'ligaduras largas.'),
-               ('LA REPETICIÓN', 'Tres vueltas, tres casillas',
-                'Desde el c. 5 se repite. Las dos primeras veces vas a la casilla 1, 2; la '
+        secciones=[('A', 1, 4, 'Introducció', AZUL), ('B', 5, 32, 'Do major · es repeteix', OCRE),
+                   ('C', 33, 68, 'Re major · final', AZUL)],
+        ideas=[('IZQUIERDA', 'Arpegi de sis corxeres',
+                'Cada compàs, una figura que puja i baixa sobre l\'acord. Gairebé no canvia en '
+                'tota la peça.'),
+               ('DERECHA', 'Melodia i després acords',
+                'Comença amb notes soltes i, en canviar de tonalitat, passa a notes dobles amb '
+                'lligadures llargues.'),
+               ('LA REPETICIÓ', 'Tres voltes, tres caselles',
+                'Des del c. 5 es repeteix. Les dues primeres vegades vas a la casella 1, 2; la '
                 'tercera, a la 3.'),
-               ('EL CAMBIO', 'Do mayor → Re mayor',
-                'En el c. 33 aparece una doble barra y dos sostenidos: sube un tono.')],
+               ('EL CANVI', 'Do major → Re major',
+                'Al c. 33 apareix una doble barra i dos sostinguts: puja un to.')],
         especial=[
-            'Pone "Moderately slow, in 2" y negra con puntillo = 60: lento y a dos.',
-            'El compás es 6/8: dos golpes, cada uno de tres corcheas.',
-            'Los cc. 5-28 se repiten: casilla "1, 2." (c. 29) y casilla "3." (cc. 30-32).',
-            'En el c. 33 hay doble barra y dos sostenidos: Re mayor (fa♯ y do♯).',
-            'La izquierda hace el mismo arpegio de seis corcheas casi todo el rato.',
-            'Acaba con "rit." y un calderón en el último acorde.'],
-        reto='Mantener el arpegio de la izquierda siempre igual mientras la derecha canta, y '
-             'acordarse de por dónde se va en las repeticiones y las casillas.',
-        truco='Antes de tocar, recorre la partitura con el dedo siguiendo las repeticiones: '
-              '5 → 29 → 5 → 29 → 5 → 30-32 → 33. Cuando lo sepas, toca.',
-        sabias='Leonard Cohen publicó «Hallelujah» en 1984, en el disco «Various Positions». Se hizo famosa con la versión de Jeff Buckley, de 1994.',
-        qr_texto='Escúchala despacio y cuenta "uno-dos" con la cabeza: es un 6/8 lento.',
+            'Hi diu "Moderately slow, in 2" i negra amb punt = 60: lent i a dos.',
+            'El compàs és 6/8: dos temps, cadascun de tres corxeres.',
+            'Els cc. 5-28 es repeteixen: casella "1, 2." (c. 29) i casella "3." (cc. 30-32).',
+            'Al c. 33 hi ha doble barra i dos sostinguts: Re major (fa♯ i do♯).',
+            'L\'esquerra fa el mateix arpegi de sis corxeres quasi tot el temps.',
+            'Acaba amb "rit." i un calderó a l\'últim acord.'],
+        reto='Mantenir l\'arpegi de l\'esquerra sempre igual mentre la dreta canta, i '
+             'recordar per on vas a les repeticions i les caselles.',
+        truco='Abans de tocar, recorre la partitura amb el dit seguint les repeticions: '
+              '5 → 29 → 5 → 29 → 5 → 30-32 → 33. Quan ho sàpigues, toca.',
+        sabias='Leonard Cohen va publicar «Hallelujah» el 1984, al disc «Various Positions». Es va fer famosa amb la versió de Jeff Buckley, de 1994.',
+        qr_texto='Escolta-la a poc a poc i compta "un-dos" amb el cap: és un 6/8 lent.',
         ts=(6, 8)),
     manos=dict(
-        izq=[('Un arpegio, un compás', 'Cada compás son seis corcheas que suben y bajan sobre el '
-                                       'acorde. Toca solo el primer compás, despacio, diez veces '
-                                       'seguidas sin fallar.'),
-             ('Cambiar de acorde', 'El dibujo es el mismo y cambia la posición. Antes de tocar, '
-                                   'mira qué acorde viene y coloca ya la mano.'),
-             ('Parejo y suave', 'Metrónomo lento, seis corcheas iguales y en mp: la melodía manda.'),
-             ('De memoria', 'Si sabes el dibujo, solo tienes que saber dónde cambia: apréndelo '
-                            'sin partitura.')],
-        der=[('Contar en dos', 'En 6/8 lento cuentas dos golpes: 1-2-3, 4-5-6. La melodía '
-                               'empieza con negras con puntillo.'),
-             ('Corchea y puntillo', 'Lee las notas sueltas con su ritmo: dilo en voz alta '
-                                    '"ta-a-a ta-a-a" antes de tocar.'),
-             ('Notas ligadas y dobles', 'Desde el c. 33 la derecha toca notas dobles con '
-                                        'ligaduras: mantén la ligada, no la repitas.'),
-             ('Con la izquierda', 'Une despacio un sistema con la izquierda ya segura. Si se '
-                                  'rompe, vuelve a una mano.')],
-        tecnica=['Muñeca suelta: el arpegio sale solo si no aprietas.',
-                 'Cuenta en dos, despacio: 1-2-3, 4-5-6.',
-                 'Mira dónde empieza y dónde acaba cada repetición antes de tocar.']),
+        izq=[('Un arpegi, un compàs', 'Cada compàs són sis corxeres que pugen i baixen sobre '
+                                      'l\'acord. Toca només el primer compàs, a poc a poc, deu '
+                                      'vegades seguides sense fallar.'),
+             ('Canviar d\'acord', 'El dibuix és el mateix i canvia la posició. Abans de tocar, '
+                                  'mira quin acord ve i col·loca ja la mà.'),
+             ('Regular i suau', 'Metrònom lent, sis corxeres iguals i en mp: la melodia mana.'),
+             ('De memòria', 'Si saps el dibuix, només has de saber on canvia: aprèn-lo '
+                            'sense partitura.')],
+        der=[('Comptar a dos', 'En 6/8 lent comptes dos temps: 1-2-3, 4-5-6. La melodia '
+                               'comença amb negres amb punt.'),
+             ('Corxera i punt', 'Llegeix les notes soltes amb el seu ritme: digues-lo en veu '
+                                'alta "ta-a-a ta-a-a" abans de tocar.'),
+             ('Notes lligades i dobles', 'Des del c. 33 la dreta toca notes dobles amb '
+                                         'lligadures: mantén la lligada, no la repeteixis.'),
+             ('Amb l\'esquerra', 'Uneix a poc a poc un sistema amb l\'esquerra ja segura. Si es '
+                                 'trenca, torna a una mà.')],
+        tecnica=['Canell solt: l\'arpegi surt sol si no fas força.',
+                 'Compta a dos, a poc a poc: 1-2-3, 4-5-6.',
+                 'Mira on comença i on acaba cada repetició abans de tocar.']),
     bloques=[
-        B(1, 'cc. 1-4', 'La introducción', (0, 0),
-          D('cuenta', '6/8 lento: dos golpes de tres corcheas', [('un compás', 2, 3)]),
-          [('IZQUIERDA', 'Arpegio de seis corcheas por compás: Do, La menor, Do, La menor.'),
-           ('DERECHA', 'Notas largas con puntillo; cántalas y cuéntalas enteras.'),
-           ('JUNTAS', 'Compás a compás, y después los cuatro.'),
-           ('A TEMPO', 'negra con puntillo = 60: muy despacio, en dos.')]),
-        B(2, 'cc. 5-12', 'Empieza la repetición', (1, 2),
-          D('cadena', 'Desde aquí se repite', [('barra |: en el c. 5', False),
-                                              ('tocas hasta la casilla', True)]),
-          [('IZQUIERDA', 'El mismo arpegio; cambia el acorde en cada compás.'),
-           ('DERECHA', 'Aparecen corcheas y ligaduras entre notas: léelas despacio.'),
-           ('JUNTAS', 'Un sistema cada día: cc. 5-8 y cc. 9-12.'),
-           ('OJO', 'La barra con puntos del c. 5 marca dónde se vuelve.')]),
-        B(3, 'cc. 13-28', 'Lo que se repite', (3, 6),
-          D('capas', 'Dos capas a la vez',
-            [('Derecha: melodía', 'barras', AZUL), ('Izquierda: arpegio', 'puntos', OCRE)]),
-          [('IZQUIERDA', 'Sigue el arpegio: lo difícil es no frenar al cambiar de acorde.'),
-           ('DERECHA', 'Las frases acaban en notas largas ligadas: respira ahí.'),
-           ('JUNTAS', 'Un sistema cada día hasta el c. 28.'),
-           ('OJO', 'Esto se toca tres veces: cuídalo, que lo oirás muchas veces.')]),
-        B(4, 'cc. 29-32', 'Las casillas', (7, 7),
-          D('cadena', 'Las tres vueltas',
-            [('casilla 1, 2 (c. 29)', False), ('↩ al c. 5', False), ('3.ª vez: casilla 3', True)]),
-          [('IZQUIERDA', 'Sigue el arpegio en las dos casillas.'),
-           ('DERECHA', 'En la casilla 3 hay un compás de silencio: cuéntalo.'),
-           ('JUNTAS', 'Recorred el camino con el dedo antes de tocar.'),
-           ('OJO', 'Las dos primeras veces, casilla 1, 2 y vuelta al c. 5.')]),
-        B(5, 'cc. 33-44', 'Cambio a Re mayor', (8, 10),
-          D('cadena', 'La armadura cambia', [('Do mayor: sin alteraciones', False),
-                                           ('Re mayor: fa♯ y do♯', True)]),
-          [('IZQUIERDA', 'Misma figura, pero ahora con sostenidos: fa♯ y do♯.'),
-           ('DERECHA', 'Notas dobles y ligaduras largas: tócalas pesadas y cantadas.'),
-           ('JUNTAS', 'Un sistema cada día, sin prisa.'),
-           ('OJO', 'Dos sostenidos al principio de cada pentagrama: valen toda la pieza.')]),
-        B(6, 'cc. 45-60', 'Re mayor', (11, 14),
-          D('capas', 'Dos capas a la vez',
-            [('Derecha: notas dobles', 'barras', AZUL), ('Izquierda: arpegio', 'puntos', OCRE)]),
-          [('IZQUIERDA', 'El arpegio de siempre en Re mayor: cuida los sostenidos.'),
-           ('DERECHA', 'Notas dobles con ligadura: mantén la ligada y cambia la otra.'),
-           ('JUNTAS', 'Dos sistemas cada vez.'),
-           ('OJO', 'Es el tramo más largo: dividid por sistemas.')]),
+        B(1, 'cc. 1-4', 'La introducció', (0, 0),
+          D('cuenta', '6/8 lent: dos temps de tres corxeres', [('un compàs', 2, 3)]),
+          [('IZQUIERDA', 'Arpegi de sis corxeres per compàs: Do, La menor, Do, La menor.'),
+           ('DERECHA', 'Notes llargues amb punt; canta-les i compta-les senceres.'),
+           ('JUNTAS', 'Compàs a compàs, i després els quatre.'),
+           ('A TEMPO', 'negra amb punt = 60: molt a poc a poc, a dos.')]),
+        B(2, 'cc. 5-12', 'Comença la repetició', (1, 2),
+          D('cadena', 'Des d\'aquí es repeteix', [('barra |: al c. 5', False),
+                                                 ('toques fins a la casella', True)]),
+          [('IZQUIERDA', 'El mateix arpegi; l\'acord canvia a cada compàs.'),
+           ('DERECHA', 'Apareixen corxeres i lligadures entre notes: llegeix-les a poc a poc.'),
+           ('JUNTAS', 'Un sistema cada dia: cc. 5-8 i cc. 9-12.'),
+           ('OJO', 'La barra amb punts del c. 5 marca on es torna.')]),
+        B(3, 'cc. 13-28', 'El que es repeteix', (3, 6),
+          D('capas', 'Dues capes alhora',
+            [('Dreta: melodia', 'barras', AZUL), ('Esquerra: arpegi', 'puntos', OCRE)]),
+          [('IZQUIERDA', 'Segueix l\'arpegi: el difícil és no frenar en canviar d\'acord.'),
+           ('DERECHA', 'Les frases acaben en notes llargues lligades: respira aquí.'),
+           ('JUNTAS', 'Un sistema cada dia fins al c. 28.'),
+           ('OJO', 'Això es toca tres vegades: cuida\'l, que l\'escoltaràs moltes vegades.')]),
+        B(4, 'cc. 29-32', 'Les caselles', (7, 7),
+          D('cadena', 'Les tres voltes',
+            [('casella 1, 2 (c. 29)', False), ('↩ al c. 5', False), ('3.ª vegada: casella 3', True)]),
+          [('IZQUIERDA', 'Segueix l\'arpegi a les dues caselles.'),
+           ('DERECHA', 'A la casella 3 hi ha un compàs de silenci: compta\'l.'),
+           ('JUNTAS', 'Recorre el camí amb el dit abans de tocar.'),
+           ('OJO', 'Les dues primeres vegades, casella 1, 2 i torna al c. 5.')]),
+        B(5, 'cc. 33-44', 'Canvi a Re major', (8, 10),
+          D('cadena', 'L\'armadura canvia', [('Do major: sense alteracions', False),
+                                             ('Re major: fa♯ i do♯', True)]),
+          [('IZQUIERDA', 'La mateixa figura, però ara amb sostinguts: fa♯ i do♯.'),
+           ('DERECHA', 'Notes dobles i lligadures llargues: toca-les pesades i cantades.'),
+           ('JUNTAS', 'Un sistema cada dia, sense pressa.'),
+           ('OJO', 'Dos sostinguts al principi de cada pentagrama: valen per a tota la peça.')]),
+        B(6, 'cc. 45-60', 'Re major', (11, 14),
+          D('capas', 'Dues capes alhora',
+            [('Dreta: notes dobles', 'barras', AZUL), ('Esquerra: arpegi', 'puntos', OCRE)]),
+          [('IZQUIERDA', 'L\'arpegi de sempre en Re major: cuida els sostinguts.'),
+           ('DERECHA', 'Notes dobles amb lligadura: mantén la lligada i canvia l\'altra.'),
+           ('JUNTAS', 'Dos sistemes cada vegada.'),
+           ('OJO', 'És el tram més llarg: dividiu-lo per sistemes.')]),
         B(7, 'cc. 61-68', 'El final', (15, 16),
-          D('cadena', 'Hacia el final', [('notas largas ligadas', False), ('rit.', False),
-                                       ('calderón', True)]),
-          [('IZQUIERDA', 'Sigue el arpegio hasta el último compás.'),
-           ('DERECHA', 'Notas largas ligadas: cuéntalas enteras.'),
-           ('JUNTAS', 'Los dos últimos sistemas en bucle.'),
-           ('A TEMPO', 'rit.: frena poco a poco. Alarga el último acorde.')]),
+          D('cadena', 'Cap al final', [('notes llargues lligades', False), ('rit.', False),
+                                       ('calderó', True)]),
+          [('IZQUIERDA', 'Segueix l\'arpegi fins a l\'últim compàs.'),
+           ('DERECHA', 'Notes llargues lligades: compta-les senceres.'),
+           ('JUNTAS', 'Els dos últims sistemes en bucle.'),
+           ('A TEMPO', 'rit.: frena a poc a poc. Allarga l\'últim acord.')]),
     ],
     cortes={1: [225.0, 344.8, 460.5, 583.2], 2: [162.0, 267.8, 387.0, 498.5, 612.5],
             3: [157.8, 266.0, 379.8, 488.8, 596.0]},
     corte_titulo=103.5, inicio={2: 47.0, 3: 44.5}, fin={1: 688.5},
     burb={
-        0: [('arriba', 330, 'AMB', 'Moderately slow, in 2: lento y a dos. Negra con puntillo = 60: '
-                                   'dos golpes por compás, cada uno de tres corcheas.', 0.3),
-            ('abajo', 300, 'IZQ', 'Un arpegio por compás: seis corcheas que suben y bajan. '
-                                  'Despacio y parejo.', 0.25)],
-        1: [('arriba', 330, 'OJO', 'La barra con puntos al empezar este sistema marca dónde se '
-                                   'vuelve cada vez que se repite.', 0.05)],
-        4: [('arriba', 300, 'DER', 'Las frases acaban en una nota larga ligada: respira ahí, antes '
-                                   'de empezar la siguiente.', 0.5)],
-        7: [('arriba', 330, 'OJO', 'Casillas: las dos primeras veces tocas la casilla "1, 2." y '
-                                   'vuelves al c. 5. La tercera, la casilla "3.".', 0.3)],
-        8: [('arriba', 330, 'AMB', 'Doble barra y dos sostenidos: cambia la tonalidad a Re mayor '
-                                   '(fa♯ y do♯ en toda la pieza).', 0.05)],
-        9: [('arriba', 330, 'DER', 'Ahora la derecha toca notas dobles con ligaduras: mantén la '
-                                   'ligada y no la repitas.', 0.3)],
-        13: [('arriba', 300, 'IZQ', 'Misma figura de la izquierda, ahora en Re mayor: cuida los '
-                                    'sostenidos.', 0.2)],
-        16: [('arriba', 330, 'AMB', 'rit. y calderón: frena poco a poco y alarga el último acorde '
-                                    'hasta que se apague.', 0.8)],
+        0: [('arriba', 330, 'AMB', 'Moderately slow, in 2: lent i a dos. Negra amb punt = 60: '
+                                   'dos temps per compàs, cadascun de tres corxeres.', 0.3),
+            ('abajo', 300, 'IZQ', 'Un arpegi per compàs: sis corxeres que pugen i baixen. '
+                                  'A poc a poc i regular.', 0.25)],
+        1: [('arriba', 330, 'OJO', 'La barra amb punts a l\'inici d\'aquest sistema marca on es '
+                                   'torna cada cop que es repeteix.', 0.05)],
+        4: [('arriba', 300, 'DER', 'Les frases acaben en una nota llarga lligada: respira aquí, '
+                                   'abans de començar la següent.', 0.5)],
+        7: [('arriba', 330, 'OJO', 'Caselles: les dues primeres vegades toques la casella "1, 2." '
+                                   'i tornes al c. 5. La tercera, la casella "3.".', 0.3)],
+        8: [('arriba', 330, 'AMB', 'Doble barra i dos sostinguts: la tonalitat canvia a Re major '
+                                   '(fa♯ i do♯ a tota la peça).', 0.05)],
+        9: [('arriba', 330, 'DER', 'Ara la dreta toca notes dobles amb lligadures: mantén la '
+                                   'lligada i no la repeteixis.', 0.3)],
+        13: [('arriba', 300, 'IZQ', 'La mateixa figura de l\'esquerra, ara en Re major: cuida els '
+                                    'sostinguts.', 0.2)],
+        16: [('arriba', 330, 'AMB', 'rit. i calderó: frena a poc a poc i allarga l\'últim acord '
+                                    'fins que s\'apagui.', 0.8)],
     },
     marcas=[],
-    pie_pauta='la clave la pones tú · copia un compás o escribe la escala de Do mayor')
+    pie_pauta='la clau la poses tu · copia un compàs o escriu l\'escala de Do major')
 
 if __name__ == '__main__':
     wr, n = construir_pieza(SPEC, 1)

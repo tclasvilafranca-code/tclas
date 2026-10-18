@@ -63,12 +63,12 @@ SPEC = dict(
                   {'pitch': 'E4', 'dur': 'e', 'beam': 0}, {'pitch': 'E4', 'dur': 'e'},
                   {'pitch': 'D4', 'dur': 'q'}, {'pitch': 'B3', 'dur': 'e', 'lig': True},
                   {'pitch': 'B3', 'dur': 'h'}, {'rest': True, 'dur': 'h'}],
-                 AZUL, 'treble', 'Sol major'),
+                 AZUL, 'treble', 'Sol mayor'),
                 ("ME", "cc. 1-2 · parelles de notes",
                  [{'pitches': ['E2', 'B2'], 'dur': 'h'}, {'pitches': ['F#2', 'D3'], 'dur': 'q.'},
                   {'pitches': ['G2', 'D3'], 'dur': 'e', 'lig': True},
                   {'pitches': ['G2', 'D3'], 'dur': 'w'}],
-                 OCRE, 'bass', 'Sol major')]),
+                 OCRE, 'bass', 'Sol mayor')]),
     manos=dict(
         izq=[("Parelles de notes", "L'esquerra gairebé sempre toca dues notes alhora (una quinta): "
                                    "mi-si, sol-re, do-sol, la-mi. Aprèn cada parella."),
@@ -93,7 +93,7 @@ SPEC = dict(
         manos="Al principi sembla que repeteixes la mateixa nota mil cops. Tranquil·la! Compta "
               "«1 i 2 i» i els dits ja s'hi apanyen sols.",
         guia="Els cc. 1-4 i 5-8 són iguals, i els cc. 40-47 repeteixen els 17-24. Estudia menys i "
-             "toca més: mitja peça ja la saps!",
+             "toca més: bona part de la peça ja la saps!",
         pauta="Escriu les parelles de l'esquerra dels cc. 1-2 (mi-si, fa♯-re, sol-re) o inventa "
               "una melodia amb una sola nota repetida!"),
     bloques=[

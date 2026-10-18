@@ -173,6 +173,9 @@ def tr(s):
     if m:
         n = {'DOS': 'DUES', 'TRES': 'TRES', 'CUATRO': 'QUATRE', 'UNA': 'UNA'}.get(m.group(1), m.group(1))
         return 'LA TÈCNICA, EN %s FRASE%s' % (n, '' if m.group(1) == 'UNA' else 'S')
+    m = re.match(r'^CÓMO SE CUENTA EL (\d+/\d+)$', s)
+    if m:
+        return 'COM ES COMPTA EL %s' % m.group(1)
     m = re.match(r'^Cómo se cuenta el (\d+/\d+)$', s)
     if m:
         return 'Com es compta el %s' % m.group(1)

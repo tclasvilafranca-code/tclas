@@ -14,151 +14,151 @@ from mayores_motor import *                                        # noqa: F401,
 
 SPEC = dict(
     num=11, slug='padrino', pdf='el_padrino.pdf', time_sig=(4, 4),
-    titulo='El Padrino', autor='Nino Rota · arreglo para piano',
-    kicker='Eva · pieza 11 · El Padrino', mes='Abril · 1.ª quincena',
+    titulo='El Padrí', autor='Nino Rota · arranjament per a piano',
+    kicker='Eva · peça 11 · El Padrí', mes='Abril · 1.a quinzena',
     yt='https://www.youtube.com/results?search_query=el+padrino+the+godfather+nino+rota+piano+tutorial',
-    credito='Partitura: N. Rota, El Padrino (arreglo para piano). Anotaciones: T-Clas.',
+    credito='Partitura: N. Rota, El Padrí (arranjament per a piano). Anotacions: T-Clas.',
     ficha=FICHA(
-        datos=[('Tonalidad', 'Do menor → 6 bemoles'), ('Compás', '4/4'),
-               ('Tempo', '♩=83 → ♩=140'), ('Figura corta', 'Semicorchea'), ('Compases', '51')],
+        datos=[('Tonalitat', 'Do menor → 6 bemolls'), ('Compàs', '4/4'),
+               ('Tempo', '♩=83 → ♩=140'), ('Figura curta', 'Semicorxera'), ('Compassos', '51')],
         total=51,
-        secciones=[('A', 1, 9, 'El tema', AZUL), ('A\'', 10, 17, 'Acordes arpegiados', OCRE),
-                   ('B', 18, 21, 'Nueva', AZUL), ('A', 22, 33, 'Vuelve y acelera', OCRE),
-                   ('A\'\'', 34, 51, 'Seis bemoles · ♩=140', AZUL)],
-        ideas=[('IZQUIERDA', 'Bajo, tresillos y silencios',
-                'Calla en el c. 1; después, bajo y acordes cortos. Tresillos de corcheas en los '
-                'cc. 5-6 y 25-26.'),
-               ('DERECHA', 'El tema, entre silencios',
-                'Entra tras un silencio, en corcheas, y más adelante lleva acordes con línea '
-                'ondulada (arpegio).'),
-               ('EL CAMBIO', 'Más rápido',
-                '"accelerando poco a poco" en el c. 29, ♩=140 en el c. 32 y seis bemoles desde el '
+        secciones=[('A', 1, 9, 'El tema', AZUL), ('A\'', 10, 17, 'Acords arpegiats', OCRE),
+                   ('B', 18, 21, 'Nova', AZUL), ('A', 22, 33, 'Torna i accelera', OCRE),
+                   ('A\'\'', 34, 51, 'Sis bemolls · ♩=140', AZUL)],
+        ideas=[('IZQUIERDA', 'Baix, tresquiàlteres i silencis',
+                'Calla al c. 1; després, baix i acords curts. Tresquiàlteres de corxeres als '
+                'cc. 5-6 i 25-26.'),
+               ('DERECHA', 'El tema, entre silencis',
+                'Entra després d\'un silenci, en corxeres, i més endavant duu acords amb línia '
+                'ondulada (arpegi).'),
+               ('EL CANVI', 'Més ràpid',
+                '"accelerando poco a poco" al c. 29, ♩=140 al c. 32 i sis bemolls des del '
                 'c. 34.'),
-               ('LOS MATICES', 'mp · mf · f · p · sf',
-                'Empieza en mp, crece a mf y f, baja a p en la letra B y vuelve a subir.')],
+               ('ELS MATISOS', 'mp · mf · f · p · sf',
+                'Comença en mp, creix a mf i f, baixa a p a la lletra B i torna a pujar.')],
         especial=[
-            'Pone negra = 83 al principio y negra = 140 en el c. 32.',
-            'Es 4/4 de principio a fin: no hay cambios de compás.',
-            'Tres bemoles (si♭, mi♭, la♭); tras la doble barra del c. 33 pasa a seis.',
-            'Letras: A (c. 1), A\' (c. 10), B (c. 18), A (c. 22) y A\'\' (c. 34).',
-            'La izquierda calla en los cc. 1 y 10 y hace tresillos en los cc. 5-6 y 25-26.',
-            'Hay acordes con línea ondulada (arpegio), "accelerando" en el c. 29 y calderón en el '
+            'Posa negra = 83 al principi i negra = 140 al c. 32.',
+            'És 4/4 d\'un cap a l\'altre: no hi ha canvis de compàs.',
+            'Tres bemolls (si♭, mi♭, la♭); després de la doble barra del c. 33 passa a sis.',
+            'Lletres: A (c. 1), A\' (c. 10), B (c. 18), A (c. 22) i A\'\' (c. 34).',
+            'L\'esquerra calla als cc. 1 i 10 i fa tresquiàlteres als cc. 5-6 i 25-26.',
+            'Hi ha acords amb línia ondulada (arpegi), "accelerando" al c. 29 i calderó al '
             'c. 32.'],
-        reto='Controlar el cambio de ritmo: de ♩=83 a la aceleración del c. 29 y al ♩=140 sin que '
-             'se te escape la mano.',
-        truco='Estudia por letras, una por día: A (cc. 1-9), A\' (cc. 10-17), B (cc. 18-21)... '
-              'Los tresillos, solos y despacio, diciendo "tre-si-llo".',
-        sabias='Nino Rota compuso la música de «El Padrino» (1972), y también la de muchas películas de Fellini.',
-        qr_texto='Escúchalo con la partitura delante: ¿notas dónde acelera?', ts=(4, 4)),
+        reto='Controlar el canvi de ritme: de ♩=83 a l\'acceleració del c. 29 i al ♩=140 sense que '
+             'se t\'escapi la mà.',
+        truco='Estudia per lletres, una per dia: A (cc. 1-9), A\' (cc. 10-17), B (cc. 18-21)... '
+              'Les tresquiàlteres, soles i a poc a poc, dient "tres-qui-àl".',
+        sabias='Nino Rota va compondre la música d\'«El Padrí» (1972), i també la de moltes pel·lícules de Fellini.',
+        qr_texto='Escolta-ho amb la partitura al davant: notes on accelera?', ts=(4, 4)),
     manos=dict(
-        izq=[('Calla y entra', 'En los cc. 1 y 10 la izquierda no toca. Del c. 2: bajo y acordes '
-                               'cortos; en el c. 3 sube en cuatro corcheas hasta una blanca.'),
-             ('Los tresillos', 'En los cc. 5-6 hay dos tresillos de corcheas (tres notas por '
-                               'tiempo) y una blanca. Di "tre-si-llo" y sube con el regulador.'),
-             ('La subida del c. 14', 'Ocho semicorcheas ligadas que suben hasta una blanca. '
-                                     'Estúdialas sola, muy despacio, y acelera poco a poco.'),
-             ('Acordes y calderón', 'En los cc. 29-33 son acordes. En el c. 32 baja en ocho '
-                                    'corcheas con calderón en la primera nota.')],
-        der=[('Entrar a destiempo', 'En el c. 1 hay silencio de blanca y de corchea, y entran tres '
-                                    'corcheas. Cuenta 1-2-3-y y entra en el "y".'),
-             ('Tres corcheas al final', 'En los cc. 5-7 cada compás acaba con tres corcheas que '
-                                        'suben: es el mismo gesto, aprendido una vez.'),
-             ('Acordes arpegiados', 'En los cc. 10-17 hay acordes con línea ondulada: toca las '
-                                    'notas de abajo arriba, rápido, y sigue con las corcheas.'),
-             ('La aceleración', 'Los cc. 29-30 son semicorcheas de mp a f. Empieza lenta y sube '
-                                'la velocidad poco a poco.')],
-        tecnica=['Cuenta 1-2-3-4 y no te saltes los silencios.',
-                 'Acelera poco a poco, no de golpe: primero lento, luego rápido.',
-                 'Los acordes arpegiados, con la muñeca suelta y sin apretar.']),
+        izq=[('Calla i entra', 'Als cc. 1 i 10 l\'esquerra no toca. Del c. 2: baix i acords '
+                               'curts; al c. 3 puja en quatre corxeres fins a una blanca.'),
+             ('Les tresquiàlteres', 'Als cc. 5-6 hi ha dues tresquiàlteres de corxeres (tres notes per '
+                               'temps) i una blanca. Digues "tres-qui-àl" i puja amb el regulador.'),
+             ('La pujada del c. 14', 'Vuit semicorxeres lligades que pugen fins a una blanca. '
+                                     'Estudia-les soles, molt a poc a poc, i accelera de mica en mica.'),
+             ('Acords i calderó', 'Als cc. 29-33 són acords. Al c. 32 baixa en vuit '
+                                    'corxeres amb calderó a la primera nota.')],
+        der=[('Entrar a contratemps', 'Al c. 1 hi ha silenci de blanca i de corxera, i entren tres '
+                                    'corxeres. Compta 1-2-3-i i entra a la "i".'),
+             ('Tres corxeres al final', 'Als cc. 5-7 cada compàs acaba amb tres corxeres que '
+                                        'pugen: és el mateix gest, après un cop.'),
+             ('Acords arpegiats', 'Als cc. 10-17 hi ha acords amb línia ondulada: toca les '
+                                    'notes de baix a dalt, ràpid, i continua amb les corxeres.'),
+             ('L\'acceleració', 'Els cc. 29-30 són semicorxeres de mp a f. Comença lenta i puja '
+                                'la velocitat de mica en mica.')],
+        tecnica=['Compta 1-2-3-4 i no et saltis els silencis.',
+                 'Accelera de mica en mica, no de cop: primer lent, després ràpid.',
+                 'Els acords arpegiats, amb el canell solt i sense fer força.']),
     bloques=[
         B(1, 'cc. 1-4', 'El tema en mp', (0, 0),
-          D('cadena', 'Lo primero', [('♩=83', False), ('mp', False), ('regulador < a mf (c. 3)', True)]),
-          [('IZQUIERDA', 'Calla en el c. 1. Bajo y acordes cortos; en el c. 3 sube en 4 corcheas.'),
-           ('DERECHA', 'Silencio de blanca y de corchea, y entran tres corcheas. Cuenta 1-2-3-y.'),
-           ('JUNTAS', 'Cuenta 1-2-3-y y entra la derecha; la izquierda no toca hasta el c. 2.'),
-           ('A TEMPO', 'Negra = 83: lento. Empieza en mp y crece hacia mf.')]),
-        B(2, 'cc. 5-8', 'Los tresillos', (1, 1),
-          D('grupos', 'Tresillo: 3 notas en un tiempo', (2, 3, ['tre-si-llo', 'tre-si-llo'])),
-          [('IZQUIERDA', 'Cc. 5-6: dos tresillos de corcheas y una blanca. Cc. 7-8: seis corcheas '
-                         'y cuatro negras.'),
-           ('DERECHA', 'Cada compás cierra con tres corcheas que suben (cc. 5-7).'),
-           ('JUNTAS', 'Una mano cuenta "tre-si-llo" mientras la otra toca las tres corcheas.'),
-           ('OJO', 'mp en el c. 5 y mf en el c. 6: sube el sonido con el regulador.')]),
-        B(3, 'cc. 9-12', 'Acordes arpegiados (A\')', (2, 2),
-          D('cadena', 'La letra A\'', [('f y mp (c. 9)', False), ('A\' en el c. 10', False),
-                                      ('acorde arpegiado', True)]),
-          [('IZQUIERDA', 'Nota larga en el c. 9, silencio en el c. 10, y luego negra y blanca.'),
-           ('DERECHA', 'Dos voces: arriba corcheas, abajo negras, con arpegios.'),
-           ('JUNTAS', 'Solo el c. 9 y el c. 10; después el c. 11.'),
-           ('OJO', 'La línea ondulada: toca las notas de abajo arriba, rápido.')]),
-        B(4, 'cc. 13-16', 'La subida del c. 14', (3, 3),
-          D('cadena', 'Los cc. 13-16', [('acordes (c. 13)', False), ('subida en semicorcheas', False),
-                                        ('f y acordes (c. 15)', True)]),
-          [('IZQUIERDA', 'C. 14: ocho semicorcheas ligadas que suben a una blanca. Despacio.'),
-           ('DERECHA', 'Acordes arpegiados y tres corcheas al final de cada compás.'),
-           ('JUNTAS', 'Un compás cada vez, y los cuatro seguidos.'),
-           ('OJO', 'f en el c. 15 y acordes con sostenidos en la izquierda.')]),
-        B(5, 'cc. 17-24', 'La parte B y vuelta de A', (4, 5),
-          D('cadena', 'El cambio', [('doble barra: B en p (c. 18)', False),
-                                    ('vuelve A en mf (c. 22)', True)]),
-          [('IZQUIERDA', 'En la B sube y baja en ocho corcheas por compás. En el c. 22 vuelve el '
-                         'bajo del tema.'),
-           ('DERECHA', 'La B empieza con una blanca y corcheas en p; léela despacio.'),
-           ('JUNTAS', 'La B compás a compás; la A ya la conoces.'),
-           ('OJO', 'Sostenidos en el c. 20 (dos semicorcheas en la izquierda).')]),
-        B(6, 'cc. 25-33', 'Se acelera', (6, 8),
-          D('cadena', 'Hacia el cambio', [('tresillos (cc. 25-26)', False),
+          D('cadena', 'Primer de tot', [('♩=83', False), ('mp', False), ('regulador < a mf (c. 3)', True)]),
+          [('IZQUIERDA', 'Calla al c. 1. Baix i acords curts; al c. 3 puja en 4 corxeres.'),
+           ('DERECHA', 'Silenci de blanca i de corxera, i entren tres corxeres. Compta 1-2-3-i.'),
+           ('JUNTAS', 'Compta 1-2-3-i i entra la dreta; l\'esquerra no toca fins al c. 2.'),
+           ('A TEMPO', 'Negra = 83: lent. Comença en mp i creix cap a mf.')]),
+        B(2, 'cc. 5-8', 'Les tresquiàlteres', (1, 1),
+          D('grupos', 'Tresquiàltera: 3 notes en un temps', (2, 3, ['tres-qui-àl', 'tres-qui-àl'])),
+          [('IZQUIERDA', 'Cc. 5-6: dues tresquiàlteres de corxeres i una blanca. Cc. 7-8: sis '
+                         'corxeres i quatre negres.'),
+           ('DERECHA', 'Cada compàs es tanca amb tres corxeres que pugen (cc. 5-7).'),
+           ('JUNTAS', 'Una mà compta "tres-qui-àl" mentre l\'altra toca les tres corxeres.'),
+           ('OJO', 'mp al c. 5 i mf al c. 6: puja el so amb el regulador.')]),
+        B(3, 'cc. 9-12', 'Acords arpegiats (A\')', (2, 2),
+          D('cadena', 'La lletra A\'', [('f i mp (c. 9)', False), ('A\' al c. 10', False),
+                                      ('acord arpegiat', True)]),
+          [('IZQUIERDA', 'Nota llarga al c. 9, silenci al c. 10, i després negra i blanca.'),
+           ('DERECHA', 'Dues veus: a dalt corxeres, a baix negres, amb arpegis.'),
+           ('JUNTAS', 'Només el c. 9 i el c. 10; després el c. 11.'),
+           ('OJO', 'La línia ondulada: toca les notes de baix a dalt, ràpid.')]),
+        B(4, 'cc. 13-16', 'La pujada del c. 14', (3, 3),
+          D('cadena', 'Els cc. 13-16', [('acords (c. 13)', False), ('pujada en semicorxeres', False),
+                                        ('f i acords (c. 15)', True)]),
+          [('IZQUIERDA', 'C. 14: vuit semicorxeres lligades que pugen a una blanca. A poc a poc.'),
+           ('DERECHA', 'Acords arpegiats i tres corxeres al final de cada compàs.'),
+           ('JUNTAS', 'Un compàs cada cop, i els quatre seguits.'),
+           ('OJO', 'f al c. 15 i acords amb sostinguts a l\'esquerra.')]),
+        B(5, 'cc. 17-24', 'La part B i tornada d\'A', (4, 5),
+          D('cadena', 'El canvi', [('doble barra: B en p (c. 18)', False),
+                                    ('torna A en mf (c. 22)', True)]),
+          [('IZQUIERDA', 'A la B puja i baixa en vuit corxeres per compàs. Al c. 22 torna el '
+                         'baix del tema.'),
+           ('DERECHA', 'La B comença amb una blanca i corxeres en p; llegeix-la a poc a poc.'),
+           ('JUNTAS', 'La B compàs a compàs; l\'A ja la coneixes.'),
+           ('OJO', 'Sostinguts al c. 20 (dues semicorxeres a l\'esquerra).')]),
+        B(6, 'cc. 25-33', 'S\'accelera', (6, 8),
+          D('cadena', 'Cap al canvi', [('tresquiàlteres (cc. 25-26)', False),
                                           ('accelerando (c. 29)', False),
-                                          ('♩=140 y calderón (c. 32)', True)]),
-          [('IZQUIERDA', 'Tresillos en los cc. 25-26, luego acordes y en el c. 32 ocho corcheas '
-                         'que bajan.'),
-           ('DERECHA', 'Semicorcheas en los cc. 29-30, de mp a f; sf en los cc. 31-33.'),
-           ('JUNTAS', 'Empieza lento y aprieta poco a poco.'),
-           ('A TEMPO', 'Calderón en el c. 32; después, negra = 140.')]),
-        B(7, 'cc. 34-41', 'Seis bemoles (A\'\')', (9, 10),
-          D('cadena', 'Lo que cambia', [('doble barra', False), ('seis bemoles', False),
+                                          ('♩=140 i calderó (c. 32)', True)]),
+          [('IZQUIERDA', 'Tresquiàlteres als cc. 25-26, després acords i al c. 32 vuit corxeres '
+                         'que baixen.'),
+           ('DERECHA', 'Semicorxeres als cc. 29-30, de mp a f; sf als cc. 31-33.'),
+           ('JUNTAS', 'Comença lent i ves accelerant a poc a poc.'),
+           ('A TEMPO', 'Calderó al c. 32; després, negra = 140.')]),
+        B(7, 'cc. 34-41', 'Sis bemolls (A\'\')', (9, 10),
+          D('cadena', 'El que canvia', [('doble barra', False), ('sis bemolls', False),
                                          ('♩=140 en f', True)]),
-          [('IZQUIERDA', 'El mismo bajo del tema, ahora con seis bemoles.'),
-           ('DERECHA', 'El tema en f, en corcheas; acordes y blancas entre las frases.'),
-           ('JUNTAS', 'Un sistema cada día: cc. 34-37 y cc. 38-41.'),
-           ('OJO', 'Seis bemoles al principio de cada pentagrama; mp en el c. 41.')]),
+          [('IZQUIERDA', 'El mateix baix del tema, ara amb sis bemolls.'),
+           ('DERECHA', 'El tema en f, en corxeres; acords i blanques entre les frases.'),
+           ('JUNTAS', 'Un sistema cada dia: cc. 34-37 i cc. 38-41.'),
+           ('OJO', 'Sis bemolls al principi de cada pentagrama; mp al c. 41.')]),
         B(8, 'cc. 42-51', 'El final', (11, 13),
-          D('cadena', 'Hacia el final', [('mp (c. 45)', False), ('mf (c. 48)', False),
-                                         ('mp (c. 49)', False), ('acorde final', True)]),
-          [('IZQUIERDA', 'Mismo bajo; en los cc. 50-51 solo blancas.'),
-           ('DERECHA', 'Corcheas bajo una ligadura larga y acordes arpegiados al final.'),
-           ('JUNTAS', 'Tres sistemas: cc. 42-45, 46-49 y 50-51.'),
-           ('A TEMPO', 'Doble barra final: aguanta el último acorde.')]),
+          D('cadena', 'Cap al final', [('mp (c. 45)', False), ('mf (c. 48)', False),
+                                         ('mp (c. 49)', False), ('acord final', True)]),
+          [('IZQUIERDA', 'Mateix baix; als cc. 50-51 només blanques.'),
+           ('DERECHA', 'Corxeres sota una lligadura llarga i acords arpegiats al final.'),
+           ('JUNTAS', 'Tres sistemes: cc. 42-45, 46-49 i 50-51.'),
+           ('A TEMPO', 'Doble barra final: aguanta l\'últim acord.')]),
     ],
     cortes={1: [320.0, 452.0, 600.0], 2: [212.5, 333.0, 454.5, 588.2],
             3: [225.5, 351.5, 475.5, 605.0]},
     corte_titulo=184.5, fin={2: 730.0, 3: 736.0},
     burb={
-        0: [('arriba', 330, 'AMB', 'Negra = 83, 4/4 y tres bemoles. Empieza en mp: la izquierda '
-                                   'calla y la derecha entra con tres corcheas.', 0.12)],
-        1: [('arriba', 330, 'IZQ', 'Tresillos en los cc. 5-6: tres notas en cada tiempo, y sube '
-                                   'con el regulador hasta mf.', 0.12)],
-        2: [('arriba', 330, 'DER', 'Letra A\': acordes con línea ondulada, toca de abajo arriba. '
-                                   'La izquierda calla en el c. 10.', 0.32)],
-        3: [('arriba', 330, 'IZQ', 'C. 14: subida de ocho semicorcheas ligadas, despacio y '
-                                   'parejas. En el c. 15 llega f.', 0.35)],
-        4: [('arriba', 300, 'AMB', 'Doble barra: empieza la B en p (c. 18). La izquierda sube y '
-                                   'baja en corcheas.', 0.35)],
-        6: [('arriba', 300, 'IZQ', 'Otra vez los tresillos (cc. 25-26), como en los cc. 5-6.',
+        0: [('arriba', 330, 'AMB', 'Negra = 83, 4/4 i tres bemolls. Comença en mp: l\'esquerra '
+                                   'calla i la dreta entra amb tres corxeres.', 0.12)],
+        1: [('arriba', 330, 'IZQ', 'Tresquiàlteres als cc. 5-6: tres notes a cada temps, i puja '
+                                   'amb el regulador fins a mf.', 0.12)],
+        2: [('arriba', 330, 'DER', 'Lletra A\': acords amb línia ondulada, toca de baix a dalt. '
+                                   'L\'esquerra calla al c. 10.', 0.32)],
+        3: [('arriba', 330, 'IZQ', 'C. 14: pujada de vuit semicorxeres lligades, a poc a poc i '
+                                   'regulars. Al c. 15 arriba f.', 0.35)],
+        4: [('arriba', 300, 'AMB', 'Doble barra: comença la B en p (c. 18). L\'esquerra puja i '
+                                   'baixa en corxeres.', 0.35)],
+        6: [('arriba', 300, 'IZQ', 'Altra vegada les tresquiàlteres (cc. 25-26), com als cc. 5-6.',
              0.12)],
-        7: [('arriba', 330, 'OJO', '"accelerando poco a poco": semicorcheas de mp a f; sube la '
-                                   'velocidad despacio.', 0.2)],
-        8: [('arriba', 330, 'AMB', 'C. 32: calderón y ♩=140. Tras la doble barra del c. 33, '
-                                   'seis bemoles.', 0.5)],
-        9: [('arriba', 330, 'AMB', 'Letra A\'\' en f: seis bemoles y ♩=140. Es el tema otra vez.',
+        7: [('arriba', 330, 'OJO', '"accelerando poco a poco": semicorxeres de mp a f; puja la '
+                                   'velocitat a poc a poc.', 0.2)],
+        8: [('arriba', 330, 'AMB', 'C. 32: calderó i ♩=140. Després de la doble barra del c. 33, '
+                                   'sis bemolls.', 0.5)],
+        9: [('arriba', 330, 'AMB', 'Lletra A\'\' en f: sis bemolls i ♩=140. És el tema una altra vegada.',
              0.1)],
-        12: [('arriba', 330, 'OJO', 'mf en el c. 48 y mp en el c. 49: el sonido baja de golpe.',
+        12: [('arriba', 330, 'OJO', 'mf al c. 48 i mp al c. 49: el so baixa de cop.',
               0.5)],
-        13: [('arriba', 330, 'AMB', 'Corcheas bajo una ligadura larga y acordes arpegiados. Fin.',
+        13: [('arriba', 330, 'AMB', 'Corxeres sota una lligadura llarga i acords arpegiats. Fi.',
               0.4)],
     },
     marcas=[],
-    pie_pauta='la clave la pones tú · copia un compás o escribe la escala de Do menor')
+    pie_pauta='la clau la poses tu · copia un compàs o escriu l\'escala de Do menor')
 
 if __name__ == '__main__':
     wr, n = construir_pieza(SPEC, 1)

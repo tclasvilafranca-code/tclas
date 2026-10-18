@@ -12,151 +12,157 @@ from mayores_motor import *                                        # noqa: F401,
 
 SPEC = dict(
     num=10, slug='perfect', pdf='perfect.pdf', time_sig=(6, 8),
-    titulo='Perfect', autor='Ed Sheeran · arreglo de Elaine Kelkel',
-    kicker='Sharifa · pieza 10 · Perfect', mes='Mayo · 1.ª quincena',
+    titulo='Perfect', autor='Ed Sheeran · arranjament d\'Elaine Kelkel',
+    kicker='Sharifa · peça 10 · Perfect', mes='Maig · 1.a quinzena',
     yt='https://www.youtube.com/results?search_query=ed+sheeran+perfect+piano+tutorial',
-    credito='Partitura: arreglo de Elaine Kelkel (Musescore, 2021). Anotaciones: T-Clas.',
+    credito='Partitura: arranjament d\'Elaine Kelkel (Musescore, 2021). Anotacions: T-Clas.',
     ficha=FICHA(
-        datos=[('Tonalidad', 'Sol mayor'), ('Compás', '6/8'), ('Tempo', '♩. = 70'),
-               ('Figura corta', 'Corchea'), ('Compases', '54')],
+        datos=[('Tonalitat', 'Sol major'), ('Compàs', '6/8'), ('Tempo', '♩. = 70'),
+               ('Figura curta', 'Corxera'), ('Compassos', '54')],
         total=54,
-        secciones=[('A', 1, 17, 'Primera parte', AZUL),
-                   ('B', 18, 33, 'Segunda parte', OCRE),
-                   ('C', 34, 45, 'Un acorde por compás', AZUL),
+        secciones=[('A', 1, 17, 'Primera part', AZUL),
+                   ('B', 18, 33, 'Segona part', OCRE),
+                   ('C', 34, 45, 'Un acord per compàs', AZUL),
                    ('D', 46, 54, 'Final', OCRE)],
-        ideas=[('LOS ACORDES', 'Cuatro, en bucle',
-                'Sol mayor, Mi menor, Do mayor y Re mayor (la partitura los imprime como G, Em, '
-                'C y D). Casi toda la pieza gira entre ellos.'),
-               ('IZQUIERDA', 'Un arpegio por compás',
-                'Tres notas del acorde, de abajo arriba, dos veces por compás: seis corcheas.'),
-               ('DERECHA', 'Melodía con puntillos',
-                'Notas largas con puntillo y algunas corcheas. Empieza antes del compás (anacrusa).'),
-               ('EL FINAL', 'Cambia la izquierda',
-                'En los cc. 46-49 la izquierda toca acordes largos y en los cc. 50-53 notas '
-                'sueltas.')],
+        ideas_titulo='La peça en quatre idees',
+        ideas=[('ELS ACORDS', 'Quatre, en bucle',
+                'Sol major, Mi menor, Do major i Re major (la partitura els imprimeix com G, Em, '
+                'C i D). Gairebé tota la peça gira entre ells.'),
+               ('ESQUERRA', 'Un arpegi per compàs',
+                'Tres notes de l\'acord, de baix a dalt, dues vegades per compàs: sis corxeres.'),
+               ('DRETA', 'Melodia amb puntets',
+                'Notes llargues amb puntet i algunes corxeres. Comença abans del compàs '
+                '(anacrusa).'),
+               ('EL FINAL', 'Canvia l\'esquerra',
+                'Als cc. 46-49 l\'esquerra toca acords llargs i als cc. 50-53, notes soltes.')],
         especial=[
-            'Pone negra con puntillo = 70: dos pulsos por compás.',
-            'El c. 1 es una anacrusa: tres corcheas que empiezan antes del primer compás.',
-            'Cifrados impresos: G = Sol mayor, Em = Mi menor, C = Do mayor, D = Re mayor.',
-            'En el c. 50 aparece D/F♯: Re mayor con Fa♯ en el bajo (primera inversión).',
-            'No hay repeticiones ni matices escritos: elige tú dónde suena más suave.',
-            'Los cc. 46-49 tienen acordes de tres notas en la izquierda.'],
-        reto='Mantener las seis corcheas de la izquierda parejas mientras la derecha canta '
-             'notas largas por encima.',
-        truco='Estudia la izquierda en bucle: cuatro compases (Sol, Mi menor, Do, Re). Cuando salga '
-              'sola, añade la derecha de dos en dos compases.',
-        sabias='«Perfect» (2017) es una balada de Ed Sheeran del álbum «÷» (Divide). Fue el número 1 '
-               'de Navidad de 2017 en Reino Unido y habla de su pareja, Cherry Seaborn.',
-        qr_texto='Escúchala y cuenta dos pulsos por compás con la partitura delante.',
-        ts=(6, 8), cuenta_pie='Un compás de 6/8: dos golpes, cada uno con tres corcheas. Aquí '
-                              'solo el ritmo, sobre una nota cualquiera.'),
+            'Posa negra amb puntet = 70: dos pulsos per compàs.',
+            'El c. 1 és una anacrusa: tres corxeres que comencen abans del primer compàs.',
+            'Cifrats impresos: G = Sol major, Em = Mi menor, C = Do major, D = Re major.',
+            'Al c. 50 apareix D/F♯: Re major amb Fa♯ al baix (primera inversió).',
+            'No hi ha repeticions ni matisos escrits: tria tu on sona més suau.',
+            'Als cc. 46-49 l\'esquerra toca acords de tres notes.'],
+        reto='Mantén les sis corxeres de l\'esquerra ben iguals mentre la dreta canta notes '
+             'llargues per sobre. Pots amb això?',
+        truco='Estudia l\'esquerra en bucle: quatre compassos (Sol, Mi menor, Do, Re). Quan et surti '
+              'sola, afegeix la dreta de dos en dos compassos.',
+        sabias='«Perfect» (2017) és una balada d\'Ed Sheeran de l\'àlbum «÷» (Divide). Va ser el '
+               'número 1 de Nadal del 2017 al Regne Unit i parla de la seva parella, Cherry Seaborn.',
+        qr_texto='Escolta-la i compta dos pulsos per compàs amb la partitura al davant.',
+        ts=(6, 8), cuenta_titulo='Com es compta el 6/8',
+        cuenta_pie='Un compàs de 6/8: dos temps, cadascun amb tres corxeres. Aquí només el ritme, '
+                   'sobre una nota qualsevol.', cuenta_rotulo='EL COMPTE'),
     manos=dict(
-        izq=[('Tres notas que suben', 'En cada compás la izquierda toca tres notas del acorde, de '
-                                      'abajo arriba, y repite. Haz solo el primer compás, diez '
-                                      'veces.'),
-             ('Cuatro compases', 'Sol, Mi menor, Do, Re: cuatro dibujos casi iguales. Cámbialos '
-                                 'sin parar el pulso.'),
-             ('Parejo y suave', 'Las seis corcheas iguales y muy suaves. Cuenta 1-2-3, 4-5-6.'),
-             ('Los acordes del final', 'Cc. 46-49: acordes de tres notas con blanca con puntillo. '
-                                       'Las tres juntas, sin romper.')],
-        der=[('Antes del compás', 'La pieza empieza con tres corcheas de anacrusa. Cántalas y '
-                                  'entra en la última corchea del compás.'),
-             ('Notas con puntillo', 'La melodía va en negras con puntillo y blancas con '
-                                    'puntillo. Cuenta 1-2-3 por cada una.'),
-             ('Las corcheas', 'Hay grupos de corcheas entre las notas largas. Tócalas '
-                              'tranquilas, sin correr.'),
-             ('Con la izquierda', 'Une los cc. 2-5 despacio, con metrónomo. Si se rompe, vuelve a '
-                                  'una mano.')],
-        tecnica=['Muñeca suelta: el arpegio de la izquierda sube y baja sin golpear.',
-                 'Cuenta dos pulsos largos por compás (1-2-3, 4-5-6), no seis rápidos.',
-                 'Empieza a la mitad de la velocidad y sube poco a poco.']),
+        izq=[('Tres notes que pugen', 'A cada compàs l\'esquerra toca tres notes de l\'acord, de '
+                                      'baix a dalt, i repeteix. Fes només el primer compàs, deu '
+                                      'cops.'),
+             ('Quatre compassos', 'Sol, Mi menor, Do, Re: quatre dibuixos quasi iguals. Canvia\'ls '
+                                  'sense aturar el pols.'),
+             ('Igual i suau', 'Les sis corxeres iguals i molt suaus. Compta 1-2-3, 4-5-6.'),
+             ('Els acords del final', 'Cc. 46-49: acords de tres notes amb blanca amb puntet. '
+                                      'Les tres juntes, sense trencar-les.')],
+        der=[('Abans del compàs', 'La peça comença amb tres corxeres d\'anacrusa. Canta-les i '
+                                  'entra a l\'última corxera del compàs.'),
+             ('Notes amb puntet', 'La melodia va en negres amb puntet i blanques amb puntet. '
+                                  'Compta 1-2-3 per cadascuna.'),
+             ('Les corxeres', 'Hi ha grups de corxeres entre les notes llargues. Toca-les '
+                              'tranquil·les, sense córrer.'),
+             ('Amb l\'esquerra', 'Uneix els cc. 2-5 a poc a poc, amb metrònom. Si es trenca, '
+                                  'torna a una sola mà.')],
+        tecnica=['Canell solt: l\'arpegi de l\'esquerra puja i baixa sense cops.',
+                 'Compta dos temps llargs per compàs (1-2-3, 4-5-6), no sis de ràpids.',
+                 'Comença a la meitat de la velocitat i puja a poc a poc.']),
     bloques=[
-        B(1, 'cc. 1-5', 'Anacrusa y primera frase', (0, 0),
-          D('grupos', 'Un compás de 6/8 = 2 golpes · 3 corcheas cada uno',
-            (2, 3, ['golpe 1', 'golpe 2'])),
-          [('DERECHA', 'Tres corcheas de anacrusa y notas largas. Cántalas antes de tocar.'),
-           ('IZQUIERDA', 'Silencio en el c. 1. Desde el c. 2 el arpegio de Sol y, en el c. 4, de '
-                         'Mi menor.'),
-           ('JUNTAS', 'Cc. 2-5 en bucle, con la anacrusa de entrada.'),
-           ('A TEMPO', 'Negra con puntillo = 70. Empieza a la mitad.')]),
-        B(2, 'cc. 6-9', 'Do y Re', (1, 1),
-          D('cadena', 'Los acordes del bloque', [('Do mayor', False), ('Re mayor', True)]),
-          [('DERECHA', 'Corcheas y notas largas. Cuenta bien las notas largas de los cc. 8-9.'),
-           ('IZQUIERDA', 'Dos compases de arpegio de Do y dos de Re.'),
-           ('JUNTAS', 'De dos en dos compases, y luego los cuatro.'),
-           ('OJO', 'Al final de los cc. 5, 9 y 13 hay corcheas que llevan al compás siguiente.')]),
-        B(3, 'cc. 10-13', 'Vuelve la primera frase', (2, 2),
-          D('cadena', 'El camino', [('Sol', False), ('Mi menor', True)]),
-          [('DERECHA', 'Sol mayor y Mi menor otra vez. La melodía es nueva: léela antes.'),
-           ('IZQUIERDA', 'Cuatro compases de arpegios, como en los cc. 2-5.'),
-           ('JUNTAS', 'Los cuatro compases y la última corchea, que lleva al siguiente.'),
-           ('OJO', 'Compara con los cc. 2-5: parecidos, pero no iguales.')]),
-        B(4, 'cc. 14-17', 'Do, Re y arriba', (3, 3),
-          D('cadena', 'El camino', [('Do mayor', False), ('Re mayor', False), ('seis corcheas', True)]),
-          [('DERECHA', 'En el c. 17 hay seis corcheas seguidas. Cuéntalas de tres en '
-                       'tres.'),
-           ('IZQUIERDA', 'Arpegios de Do y de Re, igual que en el bloque 2.'),
-           ('JUNTAS', 'Dos compases y luego cuatro, sin parar.'),
-           ('A TEMPO', 'Prepárate para el cambio de Re a Sol en el c. 18.')]),
-        B(5, 'cc. 18-25', 'Segunda vez', (4, 5),
-          D('cadena', 'Mismo camino', [('Sol', False), ('Mi m.', False), ('Do', False),
-                                       ('Re', True)]),
-          [('DERECHA', 'La melodía hace notas largas en el mismo orden que antes.'),
-           ('IZQUIERDA', 'Mismos cuatro arpegios: Sol, Mi menor, Do, Re.'),
-           ('JUNTAS', 'Un sistema cada vez: cc. 18-21 y 22-25.'),
-           ('OJO', 'La melodía es nueva: lee con cuidado antes de tocar.')]),
-        B(6, 'cc. 26-33', 'Tercera vez', (6, 7),
-          D('cadena', 'Mismo camino', [('Sol', False), ('Mi m.', False), ('Do', False),
-                                       ('Re', True)]),
-          [('DERECHA', 'Mismos acordes; la melodía se parece a la de los cc. 18-25.'),
-           ('IZQUIERDA', 'Mismos arpegios: ya los sabes de memoria.'),
-           ('JUNTAS', 'Los cc. 26-29 y 30-33, uno cada día.'),
-           ('A TEMPO', 'Toca los cc. 18-33 seguidos.')]),
-        B(7, 'cc. 34-45', 'Un acorde por compás', (8, 10),
-          D('cadena', 'Los acordes cambian cada compás',
+        B(1, 'cc. 1-5', 'Anacrusa i primera frase', (0, 0),
+          D('grupos', 'Un compàs de 6/8 = 2 temps · 3 corxeres cadascun',
+            (2, 3, ['temps 1', 'temps 2'])),
+          [('DERECHA', 'Tres corxeres d\'anacrusa i notes llargues. Canta-les abans de tocar.'),
+           ('IZQUIERDA', 'Silenci al c. 1. Des del c. 2 l\'arpegi de Sol i, al c. 4, de Mi menor.'),
+           ('JUNTAS', 'Cc. 2-5 en bucle, amb l\'anacrusa d\'entrada.'),
+           ('A TEMPO', 'Negra amb puntet = 70. Comença a la meitat.')]),
+        B(2, 'cc. 6-9', 'Do i Re', (1, 1),
+          D('cadena', 'Els acords del bloc', [('Do major', False), ('Re major', True)]),
+          [('DERECHA', 'Corxeres i notes llargues. Compta bé les notes llargues dels cc. 8-9.'),
+           ('IZQUIERDA', 'Dos compassos d\'arpegi de Do i dos de Re.'),
+           ('JUNTAS', 'De dos en dos compassos, i després els quatre.'),
+           ('OJO', 'Al final dels cc. 5, 9 i 13 hi ha corxeres que porten al compàs següent.')]),
+        B(3, 'cc. 10-13', 'Torna la primera frase', (2, 2),
+          D('cadena', 'El camí', [('Sol', False), ('Mi menor', True)]),
+          [('DERECHA', 'Sol major i Mi menor un altre cop. La melodia és nova: llegeix-la abans.'),
+           ('IZQUIERDA', 'Quatre compassos d\'arpegis, com als cc. 2-5.'),
+           ('JUNTAS', 'Els quatre compassos i l\'última corxera, que porta al següent.'),
+           ('OJO', 'Compara amb els cc. 2-5: semblants, però no iguals.')]),
+        B(4, 'cc. 14-17', 'Do, Re i amunt', (3, 3),
+          D('cadena', 'El camí', [('Do major', False), ('Re major', False),
+                                  ('sis corxeres', True)]),
+          [('DERECHA', 'Al c. 17 hi ha sis corxeres seguides. Compta-les de tres en tres.'),
+           ('IZQUIERDA', 'Arpegis de Do i de Re, igual que al bloc 2.'),
+           ('JUNTAS', 'Dos compassos i després quatre, sense parar.'),
+           ('A TEMPO', 'Prepara\'t per al canvi de Re a Sol al c. 18.')]),
+        B(5, 'cc. 18-25', 'Segona vegada', (4, 5),
+          D('cadena', 'Mateix camí', [('Sol', False), ('Mi m.', False), ('Do', False),
+                                      ('Re', True)]),
+          [('DERECHA', 'La melodia és nova: llegeix amb cura abans de tocar.'),
+           ('IZQUIERDA', 'Els mateixos quatre arpegis: Sol, Mi menor, Do, Re.'),
+           ('JUNTAS', 'Un sistema cada cop: cc. 18-21 i 22-25.'),
+           ('OJO', 'L\'esquerra no canvia: tota l\'atenció és per a la dreta.')]),
+        B(6, 'cc. 26-33', 'Tercera vegada', (6, 7),
+          D('cadena', 'Mateix camí', [('Sol', False), ('Mi m.', False), ('Do', False),
+                                      ('Re', True)]),
+          [('DERECHA', 'Mateixos acords; la melodia s\'assembla a la dels cc. 18-25.'),
+           ('IZQUIERDA', 'Els mateixos arpegis: ja te\'ls saps de memòria.'),
+           ('JUNTAS', 'Els cc. 26-29 i 30-33, un cada dia.'),
+           ('A TEMPO', 'Toca els cc. 18-33 seguits.')]),
+        B(7, 'cc. 34-45', 'Un acord per compàs', (8, 10),
+          D('cadena', 'L\'acord canvia a cada compàs',
             [('Mi menor', False), ('Do', False), ('Sol', False), ('Re', True)]),
-          [('DERECHA', 'Notas más agudas, con notas largas y corcheas. Cambian los '
-                       'dibujos.'),
-           ('IZQUIERDA', 'Un arpegio distinto por compás: Mi menor, Do, Sol, Re.'),
-           ('JUNTAS', 'Un sistema cada día: cc. 34-37, 38-41 y 42-45.'),
-           ('OJO', 'El orden de los acordes se repite cada cuatro compases.')]),
+          [('DERECHA', 'Notes més agudes, amb notes llargues i corxeres. Els dibuixos canvien.'),
+           ('IZQUIERDA', 'Un arpegi diferent per compàs: Mi menor, Do, Sol, Re.'),
+           ('JUNTAS', 'Un sistema cada dia: cc. 34-37, 38-41 i 42-45.'),
+           ('OJO', 'L\'ordre dels acords es repeteix cada quatre compassos.')]),
         B(8, 'cc. 46-54', 'Final', (11, 12),
-          D('cadena', 'Hacia el final',
-            [('acordes largos', False), ('notas sueltas', False), ('Sol', True)]),
-          [('DERECHA', 'Notas largas, cada vez más tranquilas. El último compás es Sol.'),
-           ('IZQUIERDA', 'Cc. 46-49: acordes de tres notas. Cc. 50-53: notas sueltas, '
-                         'con Fa♯ en el c. 50.'),
-           ('JUNTAS', 'Cc. 46-49 y 50-54 por separado, y luego juntos.'),
-           ('OJO', 'El acorde del último compás es de Sol mayor: déjalo sonar.')]),
+          D('cadena', 'Cap al final',
+            [('acords llargs', False), ('notes soltes', False), ('Sol', True)]),
+          [('DERECHA', 'Notes llargues, cada cop més tranquil·les. L\'últim compàs és Sol.'),
+           ('IZQUIERDA', 'Cc. 46-49: acords de tres notes. Cc. 50-53: notes soltes, amb Fa♯ '
+                         'al c. 50.'),
+           ('JUNTAS', 'Cc. 46-49 i 50-54 per separat, i després junts.'),
+           ('OJO', 'L\'acord de l\'últim compàs és de Sol major: deixa\'l sonar.')]),
     ],
     cortes={1: [206.5, 319.5, 437.5, 555.5, 672.5],
             2: [154.2, 256.8, 357.0, 459.8, 574.0, 682.0]},
     corte_titulo=93.0, inicio={1: 30, 2: 52},
     burb={
-        0: [('arriba', 330, 'DER', 'Tres corcheas de anacrusa: entras antes del compás, en la '
-                                   'última corchea. Cántalas.', 0.1),
-            ('abajo', 330, 'IZQ', 'Silencio en el c. 1. Desde el c. 2: tres notas de Sol, dos '
-                                  'veces por compás.', 0.4)],
-        1: [('arriba', 330, 'AMB', 'Do mayor (C) y Re mayor (D): la izquierda cambia de dibujo '
-                                   'cada dos compases.', 0.3)],
-        2: [('arriba', 330, 'OJO', 'Vuelve la primera frase: Sol mayor (G) y Mi menor (Em).',
-             0.3)],
-        3: [('arriba', 330, 'AMB', 'Cuenta 1-2-3, 4-5-6. En el c. 17 hay seis corcheas '
-                                   'seguidas: cuéntalas de tres en tres.', 0.5)],
-        4: [('arriba', 330, 'AMB', 'Segunda vez: la izquierda repite Sol, Mi menor, Do y Re.',
+        0: [('arriba', 330, 'DER', 'Tres corxeres d\'anacrusa: entres abans del compàs, a l\'última '
+                                   'corxera. Canta-les.', 0.1),
+            ('abajo', 330, 'IZQ', 'Silenci al c. 1. Des del c. 2: tres notes de Sol, dues vegades '
+                                  'per compàs.', 0.4)],
+        1: [('arriba', 330, 'AMB', 'Do major (C) i Re major (D): l\'esquerra canvia de dibuix '
+                                   'cada dos compassos.', 0.3)],
+        2: [('arriba', 330, 'OJO', 'Torna la primera frase: Sol major (G) i Mi menor (Em). '
+                                   'Ja l\'has sentida, oi?', 0.3)],
+        3: [('arriba', 330, 'AMB', 'Compta 1-2-3, 4-5-6. Al c. 17 hi ha sis corxeres seguides: '
+                                   'compta-les de tres en tres.', 0.5)],
+        4: [('arriba', 330, 'AMB', 'Segona vegada: l\'esquerra repeteix Sol, Mi menor, Do i Re.',
              0.2)],
-        7: [('arriba', 330, 'OJO', 'Tercera vez. Compara con los cc. 18-25: lo que cambia es la '
-                                   'derecha.', 0.3)],
-        8: [('arriba', 330, 'AMB', 'Ahora el acorde cambia cada compás: Mi menor, Do, Sol, Re.',
+        7: [('arriba', 330, 'OJO', 'Tercera vegada! Compara amb els cc. 18-25: el que canvia és '
+                                   'la dreta.', 0.3)],
+        8: [('arriba', 330, 'AMB', 'Ara l\'acord canvia a cada compàs: Mi menor, Do, Sol, Re.',
              0.2)],
-        11: [('arriba', 330, 'IZQ', 'Cc. 46-49: la izquierda toca acordes de tres notas, de blanca '
-                                    'con puntillo.', 0.2)],
-        12: [('arriba', 330, 'IZQ', 'Cc. 50-53: notas sueltas. En el c. 50, D/F♯ = Re mayor con '
-                                    'Fa♯ en el bajo.', 0.1),
-             ('abajo', 330, 'AMB', 'Último compás: acorde de Sol mayor. Déjalo sonar.', 0.9)],
+        11: [('arriba', 330, 'IZQ', 'Cc. 46-49: l\'esquerra toca acords de tres notes, de blanca '
+                                    'amb puntet.', 0.2)],
+        12: [('arriba', 330, 'IZQ', 'Cc. 50-53: notes soltes. Al c. 50, D/F♯ = Re major amb '
+                                    'Fa♯ al baix.', 0.1),
+             ('abajo', 330, 'OJO', 'Últim compàs: acord de Sol major. Deixa\'l sonar i somriu!',
+              0.9)],
     },
     marcas=[],
-    pie_pauta='la clave la pones tú · copia un compás o escribe la escala de Sol mayor')
+    misol=dict(
+        manos='Toca l\'esquerra en bucle: Sol, Mi menor, Do, Re. Quan et surti sola, la dreta '
+              'serà un joc.',
+        guia='Compta dos temps llargs, 1-2-3 i 4-5-6, no sis de ràpids. El 6/8 és com un gronxador.',
+        pauta='Escriu un compàs de 6/8 amb sis corxeres, tres amunt i tres avall, com a Perfect.'),
+    pie_pauta='la clau la poses tu · copia un compàs o escriu l\'escala de Sol major')
 
 if __name__ == '__main__':
     wr, n = construir_pieza(SPEC, 1)

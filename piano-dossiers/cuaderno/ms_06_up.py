@@ -125,7 +125,7 @@ SPEC = dict(
     marcas=[],
     misol=dict(manos='Truc: taral·leja la melodia mentre toques els acords. Si la cantes, la '
                      'mà dreta no es perd.',
-               guia='Ànim! La peça només té quatre trossos i el segon és el primer més agut. '
+               guia='Ànim! La peça només té quatre trossos i el tercer és el primer més agut. '
                     'Ja en saps la meitat!',
                pauta='Copia el c. 1 (dos silencis i tres corxeres) i inventa\'t tu la '
                      'continuació en Fa major!'),

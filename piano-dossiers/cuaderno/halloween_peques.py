@@ -402,13 +402,13 @@ def fitxa_fantasma(c):
         [('A4', 1, 'Fan', 1), ('A4', 1, 'tas', 1), ('A4', 1, 'ma', 1), (None, 1, 'xt!', None)],
         [('C5', 1, 'Fan', 3), ('C5', 1, 'tas', 3), ('C5', 1, 'ma', 3), (None, 1, 'xt!', None)],
         [('E5', 1, 'Fan', 5), ('E5', 1, 'tas', 5), ('E5', 1, 'ma', 5), (None, 1, 'xt!', None)],
-        [('E5', 2, 'BU!', 5), ('A4', 2, 'uuu...', 1)],
+        [('E5', 1, 'BU!', 5), (None, 1, 'xt!', None), ('A4', 2, 'uuu', 1)],
     ]
     fitxa_canco(c, 4, ['EL FANTASMA BUUU'], dib_fantasma,
                 ['Fantasma, fantasma, fantasma...', 'BUUUUU!'],
                 'les notes sí, els silencis xt!',
                 comp, None, ['LA', 'DO', 'MI'],
-                "Cada fantasma és més agut que l'anterior. I l'últim, BU!, el cantes ben fort!")
+                "Cada fantasma és més agut que l'anterior: crescendo! Al compàs 4, BU! fort, silenci i uuu fluix.")
 
 
 # ------------------------------------------------------------------ fitxa 5: l'esquelet balla
@@ -433,12 +433,12 @@ def fitxa_esquelet(c):
     gap = 11.0
     comp_d = [
         [('E5', 1, 'Cap', 5), ('D5', 1, 'es', 4), ('C5', 1, 'pat', 3), ('B4', 1, 'lles', 2)],
-        [('A4', 1, 'ge', 1), ('B4', 1, 'nolls', 2), ('C5', 1, 'i', 3), ('A4', 1, 'peus', 1)],
+        [('C5', 1, 'ge', 3), ('B4', 1, 'nolls', 2), ('A4', 1, 'i', 1), ('B4', 1, 'peus', 2)],
         [('C5', 1, 'os', 3), ('C5', 1, 'sos', 3), ('E5', 1, 'os', 5), ('E5', 1, 'sos', 5)],
         [('D5', 1, 'a', 4), ('B4', 1, 'ba', 2), ('A4', 2, 'llar!', 1)],
     ]
     comp_e = [
-        [('A2', 4, '', 5)], [('A2', 4, '', 5)], [('E3', 4, '', 1)], [('A2', 4, '', 5)],
+        [('A2', 4, '', 5)], [('E3', 4, '', 1)], [('A2', 4, '', 5)], [('E3', 2, '', 1), ('A2', 2, '', 5)],
     ]
     yb1, _ = pauta_cancio(c, 44, 296, 506, comp_d, 'treble', gap)
     yb2, cen = pauta_cancio(c, 44, 200, 506, comp_e, 'bass', gap, lletra=False, dits=False)
@@ -450,7 +450,7 @@ def fitxa_esquelet(c):
     texto(c, 566, 246, 'Mà esquerra:', 14, HA)
     texto(c, 566, 228, 'LA greu = dit 5', 14, HA)
     texto(c, 566, 210, 'MI = dit 1', 14, HA)
-    texto(c, 566, 192, 'aguanta quatre temps', 12.5, HA)
+    texto(c, 566, 192, 'aguanta cada nota', 12.5, HA)
     texto(c, 44, 112, 'Pinta cada nota del color del seu nom:', 14.5, HA)
     llegenda(c, 44, 58, ['LA', 'SI', 'DO', 'RE', 'MI'], w=92, h=44, gap=10)
     globus(c, 566, 116, 232, "La mà esquerra fa tum-tum llarg, com el cor de l'esquelet!", 12.5, cua='dre')

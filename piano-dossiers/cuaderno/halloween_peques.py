@@ -452,7 +452,7 @@ def fitxa_esquelet(c):
     texto(c, 566, 192, 'aguanta quatre temps', 12.5, HA)
     texto(c, 44, 112, 'Pinta cada nota del color del seu nom:', 14.5, HA)
     llegenda(c, 44, 58, ['LA', 'SI', 'DO', 'RE', 'MI'], w=92, h=44, gap=10)
-    globus(c, 566, 138, 232, "La mà esquerra fa «tum-tum» llarg, com el cor de l'esquelet!", 12.5, cua='dre')
+    globus(c, 566, 138, 232, "La mà esquerra fa tum-tum llarg, com el cor de l'esquelet!", 12.5, cua='dre')
     mussol(c, 760, 76, 0.28, color=False, bruixa=True)
     peu(c, 5)
     c.showPage()

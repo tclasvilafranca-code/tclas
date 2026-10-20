@@ -323,16 +323,16 @@ def dib_bruixa(c):
 
 def fitxa_bruixa(c):
     comp = [
-        [('A4', 1, 'Bru', 1), ('A4', 1, 'xa', 1), ('C5', 1, 'bru', 3), ('C5', 1, 'xa', 3)],
-        [('E5', 1, 'vo', 5), ('E5', 1, 'la', 5), ('D5', 1, 'vo', 4), ('D5', 1, 'la', 4)],
-        [('C5', 1, 'vo', 3), ('C5', 1, 'la', 3), ('B4', 1, 'vo', 2), ('B4', 1, 'la', 2)],
+        [('A4', 1, 'Bru', 1), ('C5', 1, 'xa', 3), ('E5', 1, 'bru', 5), ('C5', 1, 'xa', 3)],
+        [('D5', 1, 'vo', 4), ('B4', 1, 'la', 2), ('D5', 1, 'vo', 4), ('B4', 1, 'la', 2)],
+        [('A4', 1, 'Bru', 1), ('C5', 1, 'xa', 3), ('E5', 1, 'bru', 5), ('C5', 1, 'xa', 3)],
         [('C5', 1, 'sen', 3), ('B4', 1, 'se', 2), ('A4', 2, 'por!', 1)],
     ]
     fitxa_canco(c, 2, ['LA BRUIXA VOLA'], dib_bruixa,
-                ['Bruixa, bruixa, vola, vola,', 'vola, vola, sense por!'],
+                ['Bruixa, bruixa, vola, vola,', 'bruixa, bruixa, sense por!'],
                 'una palma per cada síl·laba',
                 comp, None, ['LA', 'SI', 'DO', 'RE', 'MI'],
-                "Els dits van 1-2-3-4-5, com si pugessis una escala. L'últim LA dura dos temps!")
+                "Compàs 1 i 3: puja pels dits 1-3-5-3. Compàs 2: balanceja 4-2-4-2. Si algú toca LA + MI a l'esquerra, sona de pel·lícula!")
 
 
 # ------------------------------------------------------------------ fitxa 3: carbassa per notes

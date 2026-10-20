@@ -126,9 +126,9 @@ def sistema(c, x, y, w, gap, ev, clau='treble', ts=(4, 4), caption=None, show_ti
     return bot - after_system(gap, ev, clau)
 
 
-def gran(c, x, y, w, gap, ev_t, ev_b, ts=(4, 4), caption=None, sep=7.6):
+def gran(c, x, y, w, gap, ev_t, ev_b, ts=(4, 4), caption=None, sep=7.6, cap_dy=0):
     if caption:
-        cap_pent(c, x, y, caption)
+        cap_pent(c, x, y + cap_dy, caption)
     yy = y - before_staff(gap, ev_t, 'treble')
     t_top, t_bot = nt.draw_system(c, x, yy, w, gap, ev_t, clef='treble', time_sig=ts)
     yy2 = t_bot - gap * sep
@@ -431,14 +431,14 @@ def f2(c):
           acord(['A2', 'Eb3'], 'h'), acord(['A2', 'Eb3'], 'h'), acord(['A2', 'E3'], 'h'),
           acord(['A2', 'E3'], 'w')]
     y = gran(c, M, y - 6, CW, g, et, eb, (4, 4),
-             'LA + MI♭ = tritó (compassos 1-3) · el MI♭ puja un semitò i arriba la quinta LA + MI (compàs 4)')
+             'LA + MI♭ = tritó (cc. 1-2 i meitat del 3) · al temps 3 del c. 3 el MI♭ puja un semitò: quinta LA + MI')
     y -= 8
     h1 = caixa_nota(c, M, y, 250, 'ON ÉS EL TRITÓ AL PIANO?',
                     "Compta sis semitons (sis tecles, blanques i negres) des de DO: arribes a FA♯. "
                     "Prova-ho des de RE, MI, FA...")
     caixa_nota(c, M + 265, y, CW - 265, 'REPTE',
-               "Toca els compassos 1-3 molt fluix (pp) amb pedal de silenci mental: només escolta. "
-               "Al compàs 4 fes un diminuendo: sents com el misteri es calma?")
+               "Toca els compassos 1-3 molt fluix (pp) i escolta el tritó. En arribar a la quinta "
+               "(compàs 3, temps 3) fes un diminuendo: sents com el misteri es calma?")
     c.showPage()
 
 
@@ -449,8 +449,8 @@ def f3(c):
     acords = [('La menor', 'la · do · mi'), ('Sol major', 'sol · si · re'),
               ('Fa major', 'fa · la · do'), ('Mi major', 'mi · sol♯ · si')]
     y = seccio(c, y, '01', 'PINTA', 'vitralls de la casa embruixada')
-    mandala_vitralls(c, M + 8, y - 118, CW - 16, 74, acords)
-    yy = y - 118 - 32
+    mandala_vitralls(c, M + 8, y - 104, CW - 16, 58, acords)
+    yy = y - 104 - 30
     h = caixa_nota(c, M, yy, CW, 'COM ES PINTA',
                    "Pinta cada vitrall amb una família de colors (per exemple: La menor, morats; Sol, blaus; "
                    "Fa, verds; Mi, vermells). El Mi major és el més brillant: té el SOL♯ que «demana» tornar "
@@ -460,12 +460,12 @@ def f3(c):
                          "mi-sol♯-si. Després canta només la nota més greu de cada acord: LA – SOL – FA – MI, "
                          "una escala que baixa.")
     y = seccio(c, y, '03', 'TOCA', 'acords i arpegis')
-    g = 7.0
+    g = 6.7
     sets = [('La menor', ['A4', 'C5', 'E5'], 'A2'), ('Sol major', ['G4', 'B4', 'D5'], 'G2'),
             ('Fa major', ['F4', 'A4', 'C5'], 'F2'), ('Mi major', ['E4', 'G#4', 'B4'], 'E2')]
     et = [acord(ps, 'w', label=nom) for nom, ps, _ in sets]
     eb = [nota(r, 'w') for _, _, r in sets]
-    y = gran(c, M, y - 4, CW, g, et, eb, (4, 4), 'ACORDS · mà dreta 1-3-5, mà esquerra la nota més greu', sep=5.8)
+    y = gran(c, M, y - 4, CW, g, et, eb, (4, 4), 'ACORDS · mà dreta 1-3-5, mà esquerra la nota més greu', sep=5.4)
     y -= 4
     et = []
     eb = []
@@ -475,7 +475,7 @@ def f3(c):
         for i, p in enumerate(arp):
             et.append(nota(p, 'e', beam=k * 2 + i // 4))
         eb += [nota(r, 'h'), nota(quinta[r], 'h')]
-    y = gran(c, M, y - 18, CW, g, et, eb, (4, 4), 'ARPEGIS · els mateixos acords repartits en corxeres', sep=5.8)
+    y = gran(c, M, y - 22, CW, g, et, eb, (4, 4), 'ARPEGIS · els mateixos acords repartits en corxeres', sep=5.4, cap_dy=12)
     caixa_nota(c, M, y + 6, CW, 'REPTE',
                "Toca la progressió amb la mà dreta en acords i la mà esquerra en octaves (LA, SOL, FA, MI). "
                "Després inventa un ritme propi de dos compassos i repeteix-lo sobre els quatre acords.")
@@ -513,7 +513,7 @@ def f4(c):
     for i, p in enumerate(['A2', 'E3', 'A2', 'E3']):
         eb.append(nota(p, 'e', beam=20))
     eb.append(nota('A2', 'h'))
-    y = gran(c, M, y - 16, CW, g, et, eb, (4, 4), 'RIFF · p (suau) als compassos 1, 2 i 4 · f (fort) al compàs 3')
+    y = gran(c, M, y - 26, CW, g, et, eb, (4, 4), 'RIFF · p (suau) als compassos 1, 2 i 4 · f (fort) al compàs 3', cap_dy=14)
     y -= 6
     h1 = caixa_nota(c, M, y, 250, 'PAS A PAS',
                     "1) Mà esquerra sola, ♩ = 70. 2) Mà dreta sola. 3) Juntes, a poc a poc. "

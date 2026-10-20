@@ -386,6 +386,7 @@ def fitxa_carbassa(c):
     d.carbassa(c, 70, 100, 0.5)
     mussol(c, 160, 98, 0.36, color=False, bruixa=True)
     globus(c, 214, 62, 248, "Pista: les caselles de RE formen el cos de la carbassa!", 12.5, cua='esq')
+    texto(c, W - 44, 52, 'Solució (mestre): 64 caselles de RE', 9, HA, 'r')
     peu(c, 3)
     c.showPage()
 
@@ -452,7 +453,7 @@ def fitxa_esquelet(c):
     texto(c, 566, 192, 'aguanta quatre temps', 12.5, HA)
     texto(c, 44, 112, 'Pinta cada nota del color del seu nom:', 14.5, HA)
     llegenda(c, 44, 58, ['LA', 'SI', 'DO', 'RE', 'MI'], w=92, h=44, gap=10)
-    globus(c, 566, 138, 232, "La mà esquerra fa tum-tum llarg, com el cor de l'esquelet!", 12.5, cua='dre')
+    globus(c, 566, 116, 232, "La mà esquerra fa tum-tum llarg, com el cor de l'esquelet!", 12.5, cua='dre')
     mussol(c, 760, 76, 0.28, color=False, bruixa=True)
     peu(c, 5)
     c.showPage()
@@ -468,9 +469,9 @@ def fitxa_jocs(c):
     etiqueta(c, 40, 482, 1, 'LABERINT', 17)
     laberint(c, 40, 456, 11, 10, 24, seed=7, lw=2.0)
     texto(c, 40, 460, 'ENTRADA', 10.5, HA)
-    texto(c, 40, 180, 'ajuda la bruixa a arribar a casa', 13, HA)
-    d.casa(c, 292, 178, 0.34)
-    texto(c, 212, 208, 'SORTIDA', 10.5, HA)
+    texto(c, 40, 170, 'ajuda la bruixa a arribar a casa', 13, HA)
+    d.casa(c, 292, 160, 0.34)
+    texto(c, 292, 202, 'SORTIDA', 10.5, HA, 'c')
     # sopa de lletres
     etiqueta(c, 340, 482, 2, 'SOPA DE LLETRES', 17)
     paraules = ['BRUIXA', 'FANTASMA', 'CARBASSA', 'ESQUELET', 'ARANYA']
@@ -483,9 +484,9 @@ def fitxa_jocs(c):
     for r in range(9):
         for k in range(9):
             texto(c, gx + k * cs + cs / 2, gy - r * cs - cs + 7, g[r][k], 17, HA, 'c')
-    texto(c, 344, 224, 'Busca:', 14.5, HA)
+    texto(c, 344, 214, 'Busca:', 14.5, HA)
     for i, w_ in enumerate(paraules):
-        texto(c, 344 + (i % 2) * 110, 202 - (i // 2) * 22, w_, 15, HA)
+        texto(c, 344 + (i % 2) * 110, 192 - (i // 2) * 22, w_, 15, HA)
     # diploma
     caja(c, 586, 120, 230, 356, r=16, lw=3.0)
     caja(c, 594, 128, 214, 340, r=12, lw=1.2, fill=False, dash=(2, 3))

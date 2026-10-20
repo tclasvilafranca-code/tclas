@@ -20,7 +20,7 @@ def _c(color, clau):
     return HexColor(PAL[clau]) if color else white
 
 
-def mussol(c, cx, cy, s=1.0, color=False, saluda=False, lw=3.0):
+def mussol(c, cx, cy, s=1.0, color=False, saluda=False, lw=3.0, bruixa=False):
     tra = HexColor(PAL['tra']) if color else black
     amp0 = getattr(c, 'amp', None)
     if amp0 is not None:
@@ -86,6 +86,16 @@ def mussol(c, cx, cy, s=1.0, color=False, saluda=False, lw=3.0):
         c.circle(*T(sg * 29 - 4, 25), 2 * s, stroke=0, fill=1)
     # --- bec
     poli([(-11, 12), (11, 12), (0, -9)], 'bec')
+    if bruixa:
+        # --- barret de bruixa (Halloween) en lloc del birret
+        poli([(-52, 86), (-34, 146), (-4, 178), (26, 204), (22, 166), (38, 128), (52, 88)],
+             'birret' if color else 'cos')
+        el(0, 86, 84, 15, 'birret' if color else 'cos')
+        estil('borla', 2.0)
+        poli([(-48, 96), (50, 96), (46, 112), (-46, 112)], 'borla', w=2.0)
+        if amp0 is not None:
+            c.amp = amp0
+        return
     # --- birret: copa, tapa, botó i borla
     poli([(-50, 80), (50, 80), (44, 60), (-44, 60)], 'birret' if color else 'cos')
     poli([(-84, 88), (-3, 116), (86, 94), (3, 68)], 'birret' if color else 'cos')

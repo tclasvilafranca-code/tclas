@@ -16,3 +16,10 @@
 ## General
 - Cerrar los enlaces públicos de Drive de Martina, Jaume y Alan (partituras con copyright).
 - Las partituras no se versionan (students/*/source/).
+
+## Abril (dosier en catalán, 122 págs, con Mussol Misol; empieza ahora, bases)
+- Piezas 2, 3, 4, 9, 11, 14 reutilizadas de Sharifa (mismas partituras, verificadas por md5).
+- The Scientist y Mamma Mia escritas a mano; resto por asistentes (interrumpidos al final): revisadas a ojo las fichas y varias páginas, no todas.
+- Hijo de la luna, Mamma Mia, The Beginner: página apaisada recortada/re-laid; notas algo más pequeñas (≈74 %).
+- «Sabies que?» de memoria, sin verificar en línea.
+- Mamma Mia: alturas de la melodía no transcritas nota a nota; The Scientist: acordes de la derecha leídos por medición (Fa-La, Fa-Si♭, Fa-Sol).

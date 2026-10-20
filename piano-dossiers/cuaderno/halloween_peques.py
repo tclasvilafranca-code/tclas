@@ -382,7 +382,7 @@ def fitxa_carbassa(c):
           13.5, 262, 16)
     etiqueta(c, 500, 138, 3, 'CONTA', 17)
     par_h(c, 534, 114, 'Quantes caselles de RE hi ha a la carbassa?', 13.5, 262, 16)
-    caja(c, 534, 62, 70, 28, r=8, lw=1.6, dash=(3, 2))
+    caja(c, 534, 54, 70, 26, r=8, lw=1.6, dash=(3, 2))
     d.carbassa(c, 70, 100, 0.5)
     mussol(c, 160, 98, 0.36, color=False, bruixa=True)
     globus(c, 214, 62, 248, "Pista: les caselles de RE formen el cos de la carbassa!", 12.5, cua='esq')
@@ -405,7 +405,7 @@ def fitxa_fantasma(c):
     ]
     fitxa_canco(c, 4, ['EL FANTASMA BUUU'], dib_fantasma,
                 ['Fantasma, fantasma, fantasma...', 'BUUUUU!'],
-                'les notes sí, els silencis «xt!»',
+                'les notes sí, els silencis xt!',
                 comp, None, ['LA', 'DO', 'MI'],
                 "Cada fantasma és més agut que l'anterior. I l'últim, BU!, el cantes ben fort!")
 

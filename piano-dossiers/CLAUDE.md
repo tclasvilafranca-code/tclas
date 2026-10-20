@@ -1238,3 +1238,8 @@ según su nivel, no las mismas 20 de este álbum. El flujo recomendado por alumn
 - DIBUIXOS: han de semblar reals i professionals (teclat amb 88 tecles reals, piano vertical amb detalls, mà anatòmica), mai ninots infantils. Revisar cada dibuix a 150 dpi abans de donar-lo per bo.
 - Dits (posició de Do): mà dreta DO-RE-MI-FA-SOL = 1-2-3-4-5; mà esquerra DO3-RE3-MI3-FA3-SOL3 = 5-4-3-2-1. Posició de Sol: dreta SOL4-RE5 = 1-5; esquerra SOL2-RE3 = 5-1.
 - Les fonts Andika/Quicksand són a `assets/fonts_nens/` (no cal apt).
+
+## Fitxes de Halloween (pintar · cantar · tocar), en català
+- `cuaderno/halloween_peques.py` → `output/Halloween_Peques.pdf` (portada + 6 fitxes A4 apaïsades, 6-10 anys, estil a mà de `dibujo_mano.py`, en Mussol Misol bruixa: `mussol(..., bruixa=True)`).
+- `cuaderno/halloween_joves.py` → `output/Halloween_Joves.pdf` (portada + 6 fitxes A4 verticals, 12-20 anys, mandales per acolorir + pentagrames gravats amb `engine/notation`).
+- Dibuixos: `cuaderno/halloween_dib.py`. Tot el material musical és propi o teoria (cap dret d'autor). La tipografia 'Hand' no té el punt final ni les cometes «».

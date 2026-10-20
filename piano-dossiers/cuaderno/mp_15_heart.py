@@ -178,7 +178,7 @@ _SIST = {1: (0, 0), 2: (1, 1), 3: (2, 2), 4: (3, 5), 5: (6, 6), 6: (7, 10), 7: (
 
 SPEC = dict(
     num=15, slug='heart', pdf='michael_nyman_the_heart_asks.pdf',
-    titulo=demo.CFG['titulo'], autor=demo.CFG['autor'], time_sig=(12, 8),
+    titulo=demo.CFG['titulo'], autor=FICHA_CA['autor'], time_sig=(12, 8),
     kicker='Eva · peça 15 · The Heart Asks Pleasure First', mes='Juny-juliol',
     yt=demo.YT, ficha=FICHA_CA,
     credito="Partitura: Michael Nyman, transcripció de David Jůna (DJ's Sheet Music Archive). "

@@ -58,7 +58,7 @@ SPEC = dict(
              ('Corxera-silenci', 'Més endavant cada compàs comença amb un silenci de corxera. '
                                  'Compta-lo: el silenci dura, no se salta.'),
              ('Puntet i adorns', 'Als cc. 34-50 apareixen ritmes amb puntet i notetes d\'adorn. '
-                                 'Estudia-los sols i a poc a poc.'),
+                                 "Estudia'ls sols i a poc a poc."),
              ('Amb el Secondo', 'Toqueu juntes a poc a poc. El Primo escolta el Secondo.')],
         tecnica=['Canells solts, dits corbats i so regular.',
                  'Compta en veu alta "un-dos": cada compàs, dues negres.',

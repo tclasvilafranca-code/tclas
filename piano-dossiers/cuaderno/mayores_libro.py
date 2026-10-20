@@ -19,6 +19,9 @@ DIFIC = {1: 1, 2: 1, 3: 2, 4: 2, 5: 2, 6: 3, 7: 3, 8: 3, 9: 3, 10: 3, 11: 4, 12:
 if ALUMNA != 'eva':
     DIFIC = {1: 1, 2: 1, 3: 1, 4: 2, 5: 2, 6: 2, 7: 2, 8: 3, 9: 3, 10: 3, 11: 3, 12: 4, 13: 4,
              14: 4, 15: 5}
+if ALUMNA == 'abril':
+    DIFIC = {1: 1, 2: 1, 3: 1, 4: 2, 5: 2, 6: 2, 7: 2, 8: 3, 9: 3, 10: 3, 11: 3, 12: 4, 13: 4,
+             14: 4, 15: 5}
 AUTOR_CORTO = {}
 
 
@@ -30,7 +33,7 @@ def corta(t, n):
 
 def cargar():
     specs = []
-    for f in sorted(glob.glob(os.path.join(HERE, ('mp' if ALUMNA == 'eva' else 'ms') + '_[0-9][0-9]_*.py'))):
+    for f in sorted(glob.glob(os.path.join(HERE, {'eva': 'mp', 'sharifa': 'ms', 'abril': 'ab'}.get(ALUMNA, 'ms') + '_[0-9][0-9]_*.py'))):
         mod = importlib.import_module(os.path.basename(f)[:-3])
         if hasattr(mod, 'SPEC'):
             specs.append(mod.SPEC)
@@ -236,7 +239,7 @@ def construir(salida, solo=None):
                 'Quince piezas · de menos a más · 30 minutos por clase',
                 'Curso de noviembre a julio',
                 extra=(lambda cc: tema_ca.caixa_misol(
-                    cc, MARGIN + 30, 232, CONTENT_W - 60, "Hola, Sharifa! Soc en Mussol Misol. Aquest "
+                    cc, MARGIN + 30, 232, CONTENT_W - 60, "Hola, " + ALUMNA.capitalize() + "! Soc en Mussol Misol. Aquest "
                     "quadern té quinze peces, de les més fàcils a les més difícils. Jo seré al teu "
                     "costat, i de tant en tant et donaré algun truc.", 'happy', 84.0))
                 if tema_ca.ACTIU else None)

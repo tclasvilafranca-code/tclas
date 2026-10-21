@@ -23,3 +23,10 @@
 - Hijo de la luna, Mamma Mia, The Beginner: página apaisada recortada/re-laid; notas algo más pequeñas (≈74 %).
 - «Sabies que?» de memoria, sin verificar en línea.
 - Mamma Mia: alturas de la melodía no transcritas nota a nota; The Scientist: acordes de la derecha leídos por medición (Fa-La, Fa-Si♭, Fa-Sol).
+
+## Próximos dosieres (carpeta SANT CUGAT del Drive), en este orden
+1. LOLA (Drive id 1aDMlko7CHgOwvGAROJvD_NDux2iMsOKz): versiones fáciles (You've Got a Friend in Me, Spring, Gladiator easy, Perfect easy, Twinkle…)
+2. Alba (1hIaL54x0hOcsI4YaV8IRXNT5cQzlxDjD): A Thousand Years, Can't Stop, Up, I Have a Dream, Boig per tu…
+3. Txell (1oVlVhtWn9ta9FYpug8qhUXJAWzYb-WZf): Perfect, Shallow, Counting Stars, El Golpe, Blanca Navidad…
+- Sin partituras en su carpeta (no se puede hacer dosier todavía): NORA, FOIX, ELSA, HERA.
+- Ya hechos: EVA, Sharifa, ABRIL. Método: catalán, tema Mussol Misol, sin asistentes, ALUMNA=<nombre>, bajar con gdown si la carpeta es pública.

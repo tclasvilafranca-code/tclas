@@ -12,7 +12,7 @@ from colorear_notas import colorear
 FONTS = [('pTwinkle', 'twinkle', False), ('pAlouette', 'alouette', True), ('pSaints', 'saints', True),
          ('pOde', 'ode', True), ('clementine', 'clementine', False), ('MyBonnie', 'bonnie', False),
          ('puff-the-magic', 'puff', False), ('youve-got-a-friend', 'friend', False),
-         ('panthere', 'panthere', False), ('PRIMAVERA', 'primavera', False),
+         ('panthere', 'panthere', True), ('PRIMAVERA', 'primavera', False),
          ('i-have-a-dream', 'dream', False), ('gladiator', 'gladiator', False),
          ('perfect-ed', 'perfect', False), ('spring-easy', 'spring', False),
          ('nocturne', 'nocturne', False)]

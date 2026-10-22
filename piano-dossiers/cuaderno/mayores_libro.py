@@ -33,7 +33,7 @@ def corta(t, n):
 
 def cargar():
     specs = []
-    for f in sorted(glob.glob(os.path.join(HERE, {'eva': 'mp', 'sharifa': 'ms', 'abril': 'ab'}.get(ALUMNA, 'ms') + '_[0-9][0-9]_*.py'))):
+    for f in sorted(glob.glob(os.path.join(HERE, {'eva': 'mp', 'sharifa': 'ms', 'abril': 'ab', 'lola': 'lo', 'alba': 'ba', 'txell': 'tx'}.get(ALUMNA, 'ms') + '_[0-9][0-9]_*.py'))):
         mod = importlib.import_module(os.path.basename(f)[:-3])
         if hasattr(mod, 'SPEC'):
             specs.append(mod.SPEC)

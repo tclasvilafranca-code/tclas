@@ -109,13 +109,13 @@ def cabezas(dr, gap):
         kinds = ''.join(i[0] for i in p['items'])
         if set(kinds) != {'c'}:
             continue
-        if not (0.85 * gap < r.width < 1.6 * gap and 0.6 * gap < r.height < 1.2 * gap):
+        if not (0.85 * gap < r.width < 1.8 * gap and 0.6 * gap < r.height < 1.2 * gap):
             continue
-        res.append(((r.x0 + r.x1) / 2.0, (r.y0 + r.y1) / 2.0, r.width, 'n' if len(kinds) <= 10 else 'b'))
+        res.append(((r.x0 + r.x1) / 2.0, (r.y0 + r.y1) / 2.0, r.width, 'n' if len(kinds) <= 10 else ('b' if len(kinds) <= 13 else 'r')))
     return res
 
 
-def colorear(entrada, salida, imprimir=False):
+def colorear(entrada, salida, quitar_imagenes=False):
     doc = pymupdf.open(entrada)
     informe = []
     for pn, pg in enumerate(doc):
@@ -129,6 +129,11 @@ def colorear(entrada, salida, imprimir=False):
         gl, claves = glifos(pg)
         cab += gl
         sh = pg.new_shape()
+        if quitar_imagenes:     # dibujos decorativos (pajaro, barco...): se tapan en blanco
+            for im in pg.get_images(full=True):
+                for r in pg.get_image_rects(im[0]):
+                    sh.draw_rect(r)
+                    sh.finish(color=(1, 1, 1), fill=(1, 1, 1), width=0)
         cuenta = collections.Counter()
         n = 0
         # clave de cada pentagrama: glifo de clave a su izquierda; si no, alterna sol/fa
@@ -167,5 +172,5 @@ def colorear(entrada, salida, imprimir=False):
 
 
 if __name__ == '__main__':
-    for fila in colorear(sys.argv[1], sys.argv[2]):
+    for fila in colorear(sys.argv[1], sys.argv[2], '--sin-imagenes' in sys.argv):
         print(fila)

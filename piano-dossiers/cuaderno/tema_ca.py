@@ -11,7 +11,7 @@
 import os
 import re
 
-ACTIU = os.environ.get('ALUMNA', 'eva') != 'eva'          # tema de Sharifa (paleta + Mussol Misol)
+ACTIU = os.environ.get('ALUMNA', 'eva') not in ('eva', 'alba')   # tema de Sharifa (paleta + Mussol Misol); Alba (adulta): sobri
 TRAD = os.environ.get('IDIOMA', 'ca') == 'ca'              # cadenes fixes en catala (totes dues alumnes)
 
 # ------------------------------------------------------------------ paleta

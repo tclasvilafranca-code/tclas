@@ -29,7 +29,7 @@ SPEC = dict(
         secciones=[('A', 1, 7, '«Oh, when the saints…»', AZUL),
                    ('B', 8, 11, '«Lord, I want to be…»', OCRE),
                    ('A', 12, 16, '«When the saints…»', AZUL)],
-        ideas=[('LA FRASE', 'Do Mi Fa i una nota llarga',
+        ideas=[('LA FRASE', 'Curtes i llarga',
                 'La frase comença amb tres notes curtes (Do Mi Fa) i acaba amb una nota llarga.'),
                ('ELS SILENCIS', 'La música també calla',
                 'Hi ha silencis de negra i de blanca. Compta-los: hi són per respirar.'),

@@ -15,7 +15,7 @@ FONTS = [('pTwinkle', 'twinkle', False), ('pAlouette', 'alouette', True), ('pSai
          ('panthere', 'panthere', True), ('PRIMAVERA', 'primavera', False),
          ('i-have-a-dream', 'dream', False), ('gladiator', 'gladiator', False),
          ('perfect-ed', 'perfect', False), ('spring-easy', 'spring', False),
-         ('nocturne', 'nocturne', False)]
+         ('nocturne', 'nocturne', False), ('piano-man', 'pianoman', False)]
 
 
 def main(origen):

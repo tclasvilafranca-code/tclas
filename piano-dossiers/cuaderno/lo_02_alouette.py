@@ -35,7 +35,7 @@ SPEC = dict(
                 "Sol al compàs 2 i, al 6, baixa Sol Fa Mi Re Do. Poques notes, ben triades."),
                ('EL TEMPO', 'Ràpid, lent, ràpid',
                 'Comença ràpid, al compàs 8 va «més lent» (amb un calderó) i al 9 torna com abans.'),
-               ('LES REPETICIONS', 'Quasi la meitat és igual',
+               ('LES REPETICIONS', 'Meitat repetida',
                 'Els compassos 1-4 i 9-12 són la mateixa música: només cal aprendre-la una vegada.')],
         ideas_titulo='La peça en quatre idees',
         ideas_pie='Do = vermell · Re = taronja · Mi = groc · Fa = verd · Sol = blau · La = lila · Si = gris.',

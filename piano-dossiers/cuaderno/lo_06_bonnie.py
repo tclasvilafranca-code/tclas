@@ -30,7 +30,7 @@ SPEC = dict(
         secciones=[('A', 1, 4, '«My Bonnie lies over the ocean»', AZUL),
                    ('A', 5, 10, '«…over the sea. My Bonnie…»', OCRE),
                    ('B', 11, 16, '«Oh, bring back my Bonnie to me»', AZUL)],
-        ideas=[('LES DUES MANS', 'Per primera vegada, de debò',
+        ideas=[('LES DUES MANS', 'Dues mans de debò',
                 "L'esquerra no només acompanya: comença la cançó (anacrusi) i toca notes llargues pròpies."),
                ("LA POSICIÓ", 'Marques «shift»',
                 'La partitura diu «shift» cada cop que la mà ha de canviar de lloc. Mira-ho abans!'),

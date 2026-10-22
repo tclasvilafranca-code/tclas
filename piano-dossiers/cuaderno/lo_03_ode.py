@@ -31,7 +31,7 @@ SPEC = dict(
         secciones=[('A', 1, 8, 'La melodia coneguda', AZUL),
                    ('B', 9, 12, 'La part nova', OCRE),
                    ('A', 13, 16, 'Torna el principi', AZUL)],
-        ideas=[('LA MELODIA', 'Puja i baixa per graons',
+        ideas=[('LA MELODIA', 'Pas a pas',
                 'La dreta va de Do a Sol sense fer salts: cada nota és la veïna de l\'anterior.'),
                ("L'ESQUERRA", 'Una nota per compàs',
                 'Nomes rodones, quatre temps cadascuna: Do, Sol, Do, Sol... Fàcil i fort com una columna.'),

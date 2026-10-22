@@ -13,7 +13,7 @@ from portada import build_cover, _wrap
 import tema_ca
 
 ASSETS = os.path.join(HERE, '..', 'assets')
-FRONT = 4                                                          # portada + 3 hojas
+FRONT = 6 if ALUMNA == 'lola' else 4                              # portada + 3 hojas (Lola: + colors i figures)
 DIFIC = {1: 1, 2: 1, 3: 2, 4: 2, 5: 2, 6: 3, 7: 3, 8: 3, 9: 3, 10: 3, 11: 4, 12: 4, 13: 4,
          14: 4, 15: 5}
 if ALUMNA != 'eva':
@@ -86,6 +86,12 @@ def pag_como(c, n):
              ('4', 'La partitura', 'Tu partitura con los bloques en color y burbujas que explican '
                                    'qué practicar en cada sitio.'),
              ('5', 'Papel pautado', 'Para copiar un compás, escribir la escala o inventar.')]
+    if ALUMNA == 'lola':
+        items = [('1', 'Fitxa de la partitura', 'Les dades de la peça, el seu mapa, el repte, un truc i un QR per escoltar-la.'),
+                 ('2', 'Mans', 'Quatre passos per a la mà esquerra i quatre per a la dreta, i la tècnica en tres frases.'),
+                 ('3', 'Guia per blocs', 'La cançó partida en trossos petits: què toca cada mà i com ajuntar-les.'),
+                 ('4', 'La partitura', 'La teva partitura amb les notes pintades del seu color i bocadillos del Mussol.'),
+                 ('5', 'Paper pautat', 'Per escriure notes i pintar-les, o inventar una cançó.')]
     for k, t, d in items:
         c.setFillColor(PANEL)
         c.roundRect(MARGIN, y - 34, CONTENT_W, 34, 4, fill=1, stroke=0)
@@ -128,7 +134,7 @@ def pag_como(c, n):
     y -= 104
     c.setFont('DejaVuSans-Bold', 8.4)
     c.setFillColor(NAVY_SOFT)
-    c.drawString(MARGIN, y, 'CÓMO LEER LA PARTITURA ANOTADA')
+    c.drawString(MARGIN, y, 'CÓMO LEER LA PARTITURA ANOTADA' if ALUMNA != 'lola' else 'COM LLEGIR LA PARTITURA')
     y -= 12
     h = 74
     c.setFillColor(PANEL)
@@ -142,6 +148,11 @@ def pag_como(c, n):
            'lápiz cuando lo tengáis. Los acordes se llaman como siempre (La menor, Sol mayor…); '
            'encima de algunas partituras vienen en cifrado americano (A = La, B = Si, C = Do, '
            'D = Re, E = Mi, F = Fa, G = Sol).')
+    if ALUMNA == 'lola':
+        txt = ("Les notes ja estan pintades: DO vermell, RE taronja, MI groc, FA verd, SOL blau, LA lila i SI gris. "
+               "Al marge hi ha un parèntesi de color amb un número: és el bloc on ets. Els bocadillos expliquen "
+               "què practicar: «mà esquerra» (ocre), «mà dreta» (blau), «les dues» i «ojo» (el Mussol et diu "
+               "alguna cosa important). Quan tinguis un bloc ben après, marca'l amb un llapis!")
     _wrap(c, txt, MARGIN + 14, y - 14, 'DejaVuSans', 8.2, CONTENT_W - 28, 11, INK)
     misol_pie(c, y - h - 22, "Hola! Soc en Mussol Misol i et faré companyia a cada peça. Si un "
               "consell em ve al cap, el trobaràs en aquest quadre. Fes cas a l'ocell!", 'normal')
@@ -244,8 +255,15 @@ def construir(salida, solo=None):
                     "costat, i de tant en tant et donaré algun truc.", 'happy', 84.0))
                 if tema_ca.ACTIU else None)
     pag_como(c, 2)
-    pag_calendario(c, 3, specs, inicio)
-    pag_registro(c, 4, specs)
+    if ALUMNA == 'lola':
+        import lo_front
+        lo_front.pag_colors(c, 3, marco_pag, misol_pie)
+        lo_front.pag_figures(c, 4, marco_pag, misol_pie)
+        pag_calendario(c, 5, specs, inicio)
+        pag_registro(c, 6, specs)
+    else:
+        pag_calendario(c, 3, specs, inicio)
+        pag_registro(c, 4, specs)
     c.save()
     wr = PdfWriter()
     for p in PdfReader(f).pages:

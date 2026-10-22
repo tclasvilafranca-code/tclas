@@ -13,7 +13,7 @@ from portada import build_cover, _wrap
 import tema_ca
 
 ASSETS = os.path.join(HERE, '..', 'assets')
-FRONT = 6 if ALUMNA in ('lola', 'txell') else 4                              # portada + 3 hojas (Lola: + colors i figures)
+FRONT = {'lola': 6, 'txell': 6, 'alba': 14}.get(ALUMNA, 4)                              # portada + 3 hojas (Lola: + colors i figures)
 DIFIC = {1: 1, 2: 1, 3: 2, 4: 2, 5: 2, 6: 3, 7: 3, 8: 3, 9: 3, 10: 3, 11: 4, 12: 4, 13: 4,
          14: 4, 15: 5}
 if ALUMNA != 'eva':
@@ -70,7 +70,9 @@ def pag_como(c, n):
     marco_pag(c, n, 'Cómo usar el dosier')
     y = titulo_pag(c, 'Cómo usar este dosier',
                    'Pensado para clases de media hora: una pieza cada dos semanas, de la más '
-                   'fácil a la más difícil.')
+                   'fácil a la más difícil.' if ALUMNA != 'alba' else
+                   "Pensat per a classes de mitja hora. Abans de les peces hi ha una secció d'exercicis de base "
+                   "(pàgines 5 a 14): postura, notes, escales, acords i ritme. Fes-los entre peça i peça.")
     y -= 16
     # esquema de cada pieza
     c.setFont('DejaVuSans-Bold', 8.4)
@@ -261,6 +263,21 @@ def construir(salida, solo=None):
         lo_front.pag_figures(c, 4, marco_pag, misol_pie)
         pag_calendario(c, 5, specs, inicio)
         pag_registro(c, 6, specs)
+    elif ALUMNA == 'alba':
+        import ba_front
+        import lo_front
+        pag_calendario(c, 3, specs, inicio)
+        pag_registro(c, 4, specs)
+        ba_front.pag_postura(c, 5, marco_pag)
+        lo_front.pag_colors(c, 6, marco_pag, misol_pie, color=False)
+        lo_front.pag_figures(c, 7, marco_pag, misol_pie)
+        ba_front.pag_ex_dreta(c, 8, marco_pag)
+        ba_front.pag_ex_esquerra(c, 9, marco_pag)
+        ba_front.pag_ex_juntes(c, 10, marco_pag)
+        ba_front.pag_escales(c, 11, marco_pag)
+        ba_front.pag_acords(c, 12, marco_pag)
+        ba_front.pag_ritme(c, 13, marco_pag)
+        ba_front.pag_pla(c, 14, marco_pag)
     else:
         pag_calendario(c, 3, specs, inicio)
         pag_registro(c, 4, specs)

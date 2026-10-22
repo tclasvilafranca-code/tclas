@@ -30,3 +30,20 @@
 3. Txell (1oVlVhtWn9ta9FYpug8qhUXJAWzYb-WZf): Perfect, Shallow, Counting Stars, El Golpe, Blanca Navidad…
 - Sin partituras en su carpeta (no se puede hacer dosier todavía): NORA, FOIX, ELSA, HERA.
 - Ya hechos: EVA, Sharifa, ABRIL. Método: catalán, tema Mussol Misol, sin asistentes, ALUMNA=<nombre>, bajar con gdown si la carpeta es pública.
+
+
+## Lola, Alba i Txell (fets — dosiers en català)
+- **Lola** (8 anys, comença de zero, ha de veure els colors): `ALUMNA=lola python3 cuaderno/mayores_libro.py` → 96 pàgines.
+  Partitures pintades amb `cuaderno/colorear_notas.py` (les notes pel seu nom: DO vermell… SI gris); les fonts es
+  regeneren amb `python3 cuaderno/lola_preparar.py <carpeta de Drive>`. Les 15 peces: Twinkle, Alouette, Ode to Joy,
+  Saints, Clementine, My Bonnie, Puff, You've Got a Friend in Me, La Pantera Rosa, La Primavera (Vivaldi), I Have a Dream,
+  Piano Man, Nocturn Op. 9, Honor Him (Gladiator), Perfect. Han quedat fora: «Eso que tú me das» (només xifrat),
+  «I See the Light» (escanejada, no es pot pintar), «Himno a la Alegría» (duplica Ode) i «Spring easy» (és la mateixa peça que la
+  Primavera). Pendent/atenció: les dades de les peces 7-15 es van llegir amb `volcar_notas.py` + inspecció visual; revisar
+  amb la professora els compassos citats si vol validar-los; els «Sabies que?» d'Alouette i My Bonnie estan marcats com a no verificats.
+- **Alba** (23 anys, comença ara): `ALUMNA=alba` → 124 pàgines; secció d'exercicis de base (pàgs. 5-14, `ba_front.py`: postura i dits, notes,
+  figures, mà dreta, mà esquerra, mans juntes, escales Do/Sol, acords i arpegis, ritme i lectura, rutina setmanal) + 15 peces. Disseny sobri
+  (sense Mussol ni colors). Per a Alba no hi ha «Para Elisa»: la seva edició (amb semicorxeres) és massa difícil; s'ha posat el Scherzo de Diabelli.
+- **Txell** (12 anys, un any de piano): `ALUMNA=txell` → 124 pàgines; quasi tota la seva carpeta coincideix byte a byte amb partitures ja mesurades
+  de Sharifa/Abril (`clonar_spec.py` copia la fitxa canviant número/nom/mes). Dues pàgines inicials: notes (sense colors) i figures.
+- Recordatori: tancar els enllaços públics de Drive (partitures amb copyright).

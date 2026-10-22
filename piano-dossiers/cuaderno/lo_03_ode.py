@@ -59,7 +59,7 @@ SPEC = dict(
                  [_q('B4'), _q('B4'), _q('B4'), _q('B4')], OCRE, 'treble', None),
                 ('UNA RODONA', "4/4 · mà esquerra · 1-2-3-4",
                  [{'pitch': 'D3', 'dur': 'w'}], AZUL, 'bass', None),
-                ('NEGRA, DUES CORXERES, DUES NEGRES', '4/4 · c. 10 · 1 · 2-i · 3 · 4',
+                ('AMB CORXERES', '4/4 · c. 10 · 1 · 2-i · 3 · 4',
                  [_q('B4'), _e(0), _e(0), _q('B4'), _q('B4')], VERDE, 'treble', None)]),
     manos=dict(
         izq=[('Do i Sol, rodones', "Compassos 1-4: Do (dit 5), Sol (dit 1), Do, Sol. Una nota per compàs, compta 1-2-3-4."),

@@ -48,7 +48,7 @@ SPEC = dict(
         reto='Toca sencers els 29 compassos, sense aturar-te, cantant la lletra.',
         truco="Divideix-la en 4 frases (A, B, C, D). Aprèn-ne una cada setmana i, al final, junta-les.",
         sabias="«I Have a Dream» és de ABBA, un grup suec, i va sortir l'any 1979. "
-               "La nena protagonista de la cançó somia que, amb una mica de màgia, tot pot sortir bé.",
+               "La lletra parla de somniar i de creure en els àngels.",
         qr_texto='Escolta-la i canta amb la partitura al davant.',
         ts=(4, 4),
         cuenta_titulo='Com es compta el c. 1',

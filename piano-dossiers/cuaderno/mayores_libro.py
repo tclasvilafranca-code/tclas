@@ -13,7 +13,7 @@ from portada import build_cover, _wrap
 import tema_ca
 
 ASSETS = os.path.join(HERE, '..', 'assets')
-FRONT = 6 if ALUMNA == 'lola' else 4                              # portada + 3 hojas (Lola: + colors i figures)
+FRONT = 6 if ALUMNA in ('lola', 'txell') else 4                              # portada + 3 hojas (Lola: + colors i figures)
 DIFIC = {1: 1, 2: 1, 3: 2, 4: 2, 5: 2, 6: 3, 7: 3, 8: 3, 9: 3, 10: 3, 11: 4, 12: 4, 13: 4,
          14: 4, 15: 5}
 if ALUMNA != 'eva':
@@ -255,9 +255,9 @@ def construir(salida, solo=None):
                     "costat, i de tant en tant et donaré algun truc.", 'happy', 84.0))
                 if tema_ca.ACTIU else None)
     pag_como(c, 2)
-    if ALUMNA == 'lola':
+    if ALUMNA in ('lola', 'txell'):
         import lo_front
-        lo_front.pag_colors(c, 3, marco_pag, misol_pie)
+        lo_front.pag_colors(c, 3, marco_pag, misol_pie, color=(ALUMNA == 'lola'))
         lo_front.pag_figures(c, 4, marco_pag, misol_pie)
         pag_calendario(c, 5, specs, inicio)
         pag_registro(c, 6, specs)

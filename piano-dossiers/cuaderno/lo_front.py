@@ -15,13 +15,13 @@ COL = dict(C='#E4392B', D='#F28C0E', E='#F9C80E', F='#76B82A', G='#2E86C8', A='#
 NOM = dict(C='DO', D='RE', E='MI', F='FA', G='SOL', A='LA', B='SI')
 
 
-def _tecles(c, x, y, w, h):
+def _tecles(c, x, y, w, h, color=True):
     """Una octava de piano (Do a Do) amb les tecles blanques pintades i el seu nom a sota."""
     n = 8
     kw = w / n
     lletres = 'CDEFGABC'
     for i, l in enumerate(lletres):
-        c.setFillColor(HexColor(COL[l]))
+        c.setFillColor(HexColor(COL[l]) if color else BLANCO)
         c.setStrokeColor(NAVY)
         c.setLineWidth(1.0)
         c.roundRect(x + i * kw, y, kw, h, 5, fill=1, stroke=1)
@@ -34,7 +34,7 @@ def _tecles(c, x, y, w, h):
         c.roundRect(bx, y + h * 0.38, kw * 0.6, h * 0.62, 3, fill=1, stroke=0)
 
 
-def _pauta(c, x, ytop, w, clau, notes, gap=8.0):
+def _pauta(c, x, ytop, w, clau, notes, gap=8.0, color=True):
     """Pentagrama amb les set notes pintades; notes = [(pitch, lletra), ...]."""
     ys = draw_staff(c, x, ytop, w, gap)
     yb = ys[-1]
@@ -49,7 +49,7 @@ def _pauta(c, x, ytop, w, clau, notes, gap=8.0):
             c.setLineWidth(0.8)
             yy = cy
             c.line(cx - gap * 0.85, yy, cx + gap * 0.85, yy)
-        c.setFillColor(HexColor(COL[l]))
+        c.setFillColor(HexColor(COL[l]) if color else HexColor('#1A2332'))
         c.setStrokeColor(HexColor('#1A2332'))
         c.setLineWidth(0.7)
         c.ellipse(cx - gap * 0.66, cy - gap * 0.5, cx + gap * 0.66, cy + gap * 0.5, fill=1, stroke=1)
@@ -59,16 +59,19 @@ def _pauta(c, x, ytop, w, clau, notes, gap=8.0):
     return yb
 
 
-def pag_colors(c, n, marco_pag, misol_pie):
-    marco_pag(c, n, 'Els colors de les notes')
-    y = titulo_pag(c, 'Els colors de les notes',
-                   'Cada nota té un nom i un color. A totes les partitures d\'aquest dossier les notes '
-                   'estan pintades així. Aprendre-les serà un joc!')
+def pag_colors(c, n, marco_pag, misol_pie, color=True):
+    tit = 'Els colors de les notes' if color else 'Les notes: nom i lloc'
+    marco_pag(c, n, tit)
+    y = titulo_pag(c, tit,
+                   ('Cada nota té un nom i un color. A totes les partitures d\'aquest dossier les notes '
+                    'estan pintades així. Aprendre-les serà un joc!') if color else
+                   ('Cada nota té un nom i un lloc a la pauta. Si te\'ls saps de memòria, llegiràs '
+                    'qualsevol partitura molt més de pressa.'))
     y -= 14
     c.setFont('DejaVuSans-Bold', 8.4)
     c.setFillColor(NAVY_SOFT)
     c.drawString(MARGIN, y, 'AL PIANO: LES TECLES BLANQUES')
-    _tecles(c, MARGIN, y - 134, CONTENT_W, 120)
+    _tecles(c, MARGIN, y - 134, CONTENT_W, 120, color)
     y -= 154
     c.setFillColor(PANEL)
     c.roundRect(MARGIN, y - 46, CONTENT_W, 46, 4, fill=1, stroke=0)
@@ -83,18 +86,20 @@ def pag_colors(c, n, marco_pag, misol_pie):
     c.drawString(MARGIN, y, 'A LA PAUTA: MÀ DRETA (CLAU DE SOL)')
     y -= 22
     notes_d = [('C4', 'C'), ('D4', 'D'), ('E4', 'E'), ('F4', 'F'), ('G4', 'G'), ('A4', 'A'), ('B4', 'B')]
-    yb = _pauta(c, MARGIN, y, CONTENT_W, 'treble', notes_d, 9.0)
+    yb = _pauta(c, MARGIN, y, CONTENT_W, 'treble', notes_d, 9.0, color)
     y = yb - 58
     c.setFont('DejaVuSans-Bold', 8.4)
     c.setFillColor(NAVY_SOFT)
     c.drawString(MARGIN, y, 'A LA PAUTA: MÀ ESQUERRA (CLAU DE FA)')
     y -= 22
     notes_e = [('C3', 'C'), ('D3', 'D'), ('E3', 'E'), ('F3', 'F'), ('G3', 'G'), ('A3', 'A'), ('B3', 'B')]
-    yb = _pauta(c, MARGIN, y, CONTENT_W, 'bass', notes_e, 9.0)
+    yb = _pauta(c, MARGIN, y, CONTENT_W, 'bass', notes_e, 9.0, color)
     y = yb - 50
-    misol_pie(c, y, "Si t'oblides d'una nota, mira el seu color! Passa el dit sobre el piano del DO al SI "
-                    "dient els noms en veu alta: DO, RE, MI... Ho fas servir cada dia i en una setmana "
-                    "te'ls saps tots.", 'happy', 62.0)
+    misol_pie(c, y, ("Si t'oblides d'una nota, mira el seu color! Passa el dit sobre el piano del DO al SI "
+                     "dient els noms en veu alta: DO, RE, MI... Ho fas servir cada dia i en una setmana "
+                     "te'ls saps tots.") if color else
+              ("Cada dia, abans de tocar, passa el dit sobre el piano del DO al SI dient els noms en veu alta. "
+               "I després, a la pauta: quina és la nota que és just a sobre del DO central?"), 'happy', 62.0)
     c.showPage()
 
 

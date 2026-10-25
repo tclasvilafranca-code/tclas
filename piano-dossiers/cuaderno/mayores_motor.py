@@ -890,7 +890,20 @@ def construir_pieza(spec, num_pag0):
     # 3) partitura
     f3 = os.path.join(OUT, '_s_%s.pdf' % slug)
     ns = montar_partitura(spec, f3, num_pag0 + 2 + ng)
-    total = 1 + 1 + ng + ns
+    # DUETS A QUATRE MANS: les dues pagines de la partitura han de quedar ENFRONTADES (comencen en pagina parell);
+    # si no, s'intercala davant una fulla de paper pautat
+    duo = spec.get('duo', any(k in spec['pdf'] for k in ('4_manos', 'bela_ciao', 'beginner')))
+    extra = 1 if (duo and ns >= 2 and (num_pag0 + 2 + ng) % 2 == 1) else 0
+    f2b = None
+    if extra:
+        ns = montar_partitura(spec, f3, num_pag0 + 2 + ng + 1)
+        f2b = os.path.join(OUT, '_e_%s.pdf' % slug)
+        c = canvas.Canvas(f2b, pagesize=(W, H))
+        build_pauta(c, dict(kicker=kicker, page_num=num_pag0 + 2 + ng, titulo_pauta='Per escriure',
+                            misol=None, pie_pauta='espai per apuntar passos, digitació o els compassos que us costen · '
+                                                  'la partitura del duet s\'obre a la pàgina següent'))
+        c.save()
+    total = 1 + 1 + ng + extra + ns
     # 4) pauta (una, o dos si hace falta que la pieza ocupe un numero PAR de hojas)
     npau = 1 if (total + 1) % 2 == 0 else 2
     f4 = os.path.join(OUT, '_p_%s.pdf' % slug)
@@ -904,7 +917,9 @@ def construir_pieza(spec, num_pag0):
                                                             'o inventa algo')))
     c.save()
     wr = PdfWriter()
-    for f in (f1, f2, f3, f4):
+    for f in (f1, f2, f2b, f3, f4):
+        if f is None:
+            continue
         for p in PdfReader(f).pages:
             wr.add_page(p)
         os.remove(f)

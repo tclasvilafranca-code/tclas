@@ -331,7 +331,7 @@ def montar_partitura(spec, salida, num0):
 # ------------------------------------------------------------ partitura CONTINUA (sense tallar en tires)
 CONTINUA = ALUMNA in ('eva', 'sharifa', 'abril', 'alba', 'txell') and os.environ.get('PARTITURA', 'continua') != 'tiras'
 ML_C = 30.0                 # marge esquerre: parentesi de bloc i numero
-WC_C = 392.0                # ample maxim de la partitura; a la dreta queda el marge de les indicacions
+MAX_ESC_C = 1.12            # escala maxima de la partitura (a tot l'ample; les indicacions van a sota)
 
 
 def nota_marge(c, x, y, w, lletra, tipo, txt):
@@ -374,9 +374,37 @@ def marca_punt(c, x, y, col, lletra):
     c.drawCentredString(x, PAGE_H - y - 2.2, lletra)
 
 
+def _items_pagina(spec, sy):
+    """Indicacions de la pagina en ordre: [(k_sistema, tipus, text, cx)]."""
+    out = []
+    for k, t in enumerate(sy):
+        for (st, w_, tp, tx, cx) in spec.get('burb', {}).get(t['sid'], []):
+            out.append((k, tp, tx, cx))
+    return out
+
+
+def _banda(items, ancho):
+    """Reparteix les indicacions en files de fins a 3 columnes. -> (cw, files[[idx...]], alts[idx], alt_total)"""
+    n = len(items)
+    if n == 0:
+        return 0, [], [], 0.0
+    nc = 3 if ancho > 380 else 2
+    nc = min(nc, n) if n > 1 else 1
+    if n == 1:
+        nc = 1
+    cw = (ancho - (nc - 1) * 8) / nc if n > 1 else min(ancho, 270.0)
+    alts = [15 + 8.8 * len(_lin(tx, cw - 14, 'DejaVuSans', 6.7)) + 3 for (k, tp, tx, cx) in items]
+    files, tot = [], 0.0
+    for r in range(0, n, nc):
+        fila = list(range(r, min(r + nc, n)))
+        files.append(fila)
+        tot += max(alts[j] for j in fila) + 6
+    return cw, files, alts, tot
+
+
 def montar_partitura_continua(spec, salida, num0):
-    """La partitura de Drive TAL COM ES (una pagina per pagina), reduida una mica, amb els trams com a parentesis
-       al marge esquerre i les indicacions al marge dret; cada indicacio porta una lletra repetida en un punt
+    """La partitura de Drive TAL COM ES (una pagina per pagina), a tot l'ample, amb els trams com a parentesis al marge
+       esquerre i les indicacions en una banda sota la partitura; cada indicacio porta una lletra repetida en un punt
        de la partitura. Retorna el nombre de pagines."""
     import pymupdf
     pdf = os.path.join(SRCDIR, spec['pdf'])
@@ -385,6 +413,7 @@ def montar_partitura_continua(spec, salida, num0):
     src = pymupdf.open(pdf)
     nuevo = pymupdf.open()
     info = []
+    ancho_util = PAGE_W - 22.0 - ML_C
     for pg_no in range(1, len(P) + 1):
         sy = [t for t in tiras if t['pag'] == pg_no and t['sid'] is not None]
         if not sy:
@@ -395,13 +424,17 @@ def montar_partitura_continua(spec, salida, num0):
         co = np.where(sub.any(0))[0]
         x0 = max(0.0, (co.min() + 20) / 2.0 - 3)
         x1 = min(wpt, (co.max() + 20) / 2.0 + 3)
-        s = min(WC_C / (x1 - x0), 760.0 / (yb - ya))
-        wout = (x1 - x0) * s
+        items = _items_pagina(spec, sy)
+        cw, files, alts, alt_banda = _banda(items, ancho_util)
         ytop = 36.0
+        lib = 806.0 - ytop - (alt_banda + 16 if items else 0)
+        s = min(ancho_util / (x1 - x0), MAX_ESC_C, lib / (yb - ya))
+        wout = (x1 - x0) * s
         pg = nuevo.new_page(width=PAGE_W, height=PAGE_H)
         pg.show_pdf_page(pymupdf.Rect(ML_C, ytop, ML_C + wout, ytop + (yb - ya) * s), src, pg_no - 1,
                          clip=pymupdf.Rect(x0, ya, x1, yb))
-        info.append(dict(pag=pg_no, ya=ya, yb=yb, x0=x0, s=s, wout=wout, ytop=ytop, sy=sy, ancho=P[pg_no - 1]['ancho']))
+        info.append(dict(pag=pg_no, ya=ya, yb=yb, x0=x0, s=s, wout=wout, ytop=ytop, sy=sy, ancho=P[pg_no - 1]['ancho'],
+                         items=items, cw=cw, files=files, alts=alts))
     tmp = salida + '.base.pdf'
     nuevo.save(tmp)
     base = PdfReader(tmp)
@@ -424,14 +457,12 @@ def montar_partitura_continua(spec, salida, num0):
 def _anotar_continua(c, spec, I, n):
     s, ya, x0, ML, ytop = I['s'], I['ya'], I['x0'], ML_C, I['ytop']
     sy = I['sy']
-    # geometria de cada sistema a la pagina nova
     G = []
     for t in sy:
         g = t['sys']
         top = max(ytop + (g['top'] - 2 - ya) * s, ytop - 2)
         bot = min(ytop + (g['bot'] + 4 - ya) * s, ytop + (I['yb'] - ya) * s)
         G.append(dict(t=t, top=top, bot=bot, left=ML + (g['left'] - x0) * s, gl=g['left']))
-    # parentesis de bloc
     segs = []
     for k, d in enumerate(G):
         b = _bloque_de(spec, d['t']['sid'])
@@ -450,52 +481,36 @@ def _anotar_continua(c, spec, I, n):
             col = [q for q in spec['bloques'] if q['num'] == bn_][0]['color']
             f = s / ((PAGE_W - 24) / I['ancho'])          # w i h estan pensats per a l'escala antiga
             marca(c, ML + (x - x0) * s, ytop + (y - ya) * s, w * f, h * f, col, k, tipo)
-    # indicacions: caixes al marge dret + lletra-marca a la partitura
-    rx = ML + I['wout'] + 9
-    wm = PAGE_W - rx - 18
-    items = []
-    for k, d in enumerate(G):
-        for (st, w_, tp, tx, cx) in spec.get('burb', {}).get(d['t']['sid'], []):
-            items.append((k, d, tp, tx, cx))
+    # banda d'indicacions sota la partitura
+    items, cw, files, alts = I['items'], I['cw'], I['files'], I['alts']
     letras = 'abcdefghijklmnopqrstuvwxyz'
-    alturas = []
-    for (k, d, tp, tx, cx) in items:
-        lin = _lin(tx, wm - 14, 'DejaVuSans', 6.7)
-        alturas.append(15 + 8.8 * len(lin) + 3)
-    ys, fin_prev = [], 30.0
-    for (k, d, tp, tx, cx), h in zip(items, alturas):
-        y = max(d['top'] - 2, fin_prev + 5)
-        ys.append(y)
-        fin_prev = y + h
-    exceso = fin_prev - 806.0
-    if exceso > 0:                                   # si no cap, puja les ultimes mantenint-les separades
-        lim = 806.0
-        for j in range(len(ys) - 1, -1, -1):
-            if ys[j] + alturas[j] > lim:
-                ys[j] = lim - alturas[j]
-            lim = ys[j] - 5
+    ybanda = ytop + (I['yb'] - ya) * s + 14
     usados = []
-    for j, ((k, d, tp, tx, cx), h) in enumerate(zip(items, alturas)):
-        col = LEAD[tp][0]
-        lt = letras[j % len(letras)]
-        nota_marge(c, rx, ys[j], wm, lt, tp, tx)
-        # punt de la partitura
-        gx = (d['gl'] + cx * (I['ancho'] - 30 - d['gl'])) if cx <= 1.0 else cx
-        px = min(max(ML + (gx - x0) * s, ML + 6), ML + I['wout'] - 6)
-        prev_bot = G[k - 1]['bot'] if k > 0 else ytop - 14
-        next_top = G[k + 1]['top'] if k + 1 < len(G) else ytop + (I['yb'] - ya) * s + 14
-        if d['top'] - prev_bot >= 12:
-            py = d['top'] - 5.5
-        elif next_top - d['bot'] >= 12:
-            py = d['bot'] + 5.5
-        else:
-            py, px = (d['top'] + d['bot']) / 2.0, ML + I['wout'] + 4
-        while any(abs(px - qx) < 10 and abs(py - qy) < 8 for qx, qy in usados):
-            px += 10
-            if px > ML + I['wout'] - 4:
-                px, py = ML + I['wout'] + 4, py + 10
-        usados.append((px, py))
-        marca_punt(c, px, py, col, lt)
+    for fila in files:
+        hfila = max(alts[j] for j in fila)
+        for pos, j in enumerate(fila):
+            k, tp, tx, cx = items[j]
+            col = LEAD[tp][0]
+            lt = letras[j % len(letras)]
+            nota_marge(c, ML + pos * (cw + 8), ybanda, cw, lt, tp, tx)
+            d = G[k]
+            gx = (d['gl'] + cx * (I['ancho'] - 30 - d['gl'])) if cx <= 1.0 else cx
+            px = min(max(ML + (gx - x0) * s, ML + 6), ML + I['wout'] - 6)
+            prev_bot = G[k - 1]['bot'] if k > 0 else ytop - 14
+            next_top = G[k + 1]['top'] if k + 1 < len(G) else ytop + (I['yb'] - ya) * s + 14
+            if d['top'] - prev_bot >= 12:
+                py = d['top'] - 5.5
+            elif next_top - d['bot'] >= 12:
+                py = d['bot'] + 5.5
+            else:
+                py, px = (d['top'] + d['bot']) / 2.0, ML + I['wout'] + 4
+            while any(abs(px - qx) < 10 and abs(py - qy) < 8 for qx, qy in usados):
+                px += 10
+                if px > ML + I['wout'] - 4:
+                    px, py = ML + I['wout'] + 4, py + 10
+            usados.append((px, py))
+            marca_punt(c, px, py, col, lt)
+        ybanda += hfila + 6
     c.setFont('DejaVuSans', 6.4)
     c.setFillColor(MUTED)
     c.drawString(34, 22, spec.get('credito', ''))

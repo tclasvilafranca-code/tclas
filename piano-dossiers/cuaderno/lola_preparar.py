@@ -18,8 +18,8 @@ FONTS = [('pTwinkle', 'twinkle', False), ('pAlouette', 'alouette', True), ('pSai
          ('nocturne', 'nocturne', False), ('piano-man', 'pianoman', False)]
 
 
-def main(origen):
-    dst = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'students', 'lola', 'source')
+def main(origen, bn=False):
+    dst = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'students', 'lola', 'source_bn' if bn else 'source')
     os.makedirs(dst, exist_ok=True)
     arx = sorted(glob.glob(os.path.join(origen, '*.pdf')))
     for frag, nom, sin in FONTS:
@@ -27,9 +27,9 @@ def main(origen):
         if not f:
             print('FALTA', frag)
             continue
-        r = colorear(f[-1], os.path.join(dst, nom + '.pdf'), sin)
+        r = colorear(f[-1], os.path.join(dst, nom + '.pdf'), sin, pintar=not bn)
         print(nom, sum(x[2] for x in r), 'notes')
 
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    main(sys.argv[1], '--bn' in sys.argv)

@@ -21,6 +21,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.colors import HexColor, Color
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from pypdf import PdfReader, PdfWriter
+import bn
+bn.instalar()
 import tema_ca
 tema_ca.instalar()
 from portada import (W, H, MARGIN, CONTENT_W, NAVY, NAVY_SOFT, CREAM, INK, MUTED, _wrap)
@@ -31,7 +33,8 @@ from hoja_pauta import build_pauta
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ALUMNA = os.environ.get('ALUMNA', 'eva')
-SRCDIR = os.path.join(HERE, '..', 'students', 'eva_sc' if ALUMNA == 'eva' else ALUMNA, 'source')
+SRCDIR = os.path.join(HERE, '..', 'students', 'eva_sc' if ALUMNA == 'eva' else ALUMNA,
+                      'source_bn' if (ALUMNA == 'lola' and os.environ.get('BN') == '1') else 'source')
 OUT = os.path.join(HERE, 'entrega')
 PAGE_W, PAGE_H = 595.276, 841.89
 OCRE = HexColor('#8C6A3F')
@@ -289,6 +292,8 @@ def disponer(tiras, burb, esc_pag):
 
 def montar_partitura(spec, salida, num0):
     """PDF con la partitura recolocada y anotada. Devuelve (n_paginas, tiras)."""
+    if CONTINUA:
+        return montar_partitura_continua(spec, salida, num0)
     import pymupdf
     pdf = os.path.join(SRCDIR, spec['pdf'])
     P, tiras = tiras_por_cortes(pdf, spec['cortes'], spec.get('corte_titulo'), spec.get('pie', ()),
@@ -321,6 +326,180 @@ def montar_partitura(spec, salida, num0):
         wr.write(f)
     os.remove(tmp)
     return len(pags)
+
+
+# ------------------------------------------------------------ partitura CONTINUA (sense tallar en tires)
+CONTINUA = ALUMNA in ('eva', 'sharifa', 'abril', 'alba', 'txell') and os.environ.get('PARTITURA', 'continua') != 'tiras'
+ML_C = 30.0                 # marge esquerre: parentesi de bloc i numero
+WC_C = 392.0                # ample maxim de la partitura; a la dreta queda el marge de les indicacions
+
+
+def nota_marge(c, x, y, w, lletra, tipo, txt):
+    """Indicacio al marge dret: caixa amb la lletra-marca, el tipus (mA esquerra...) i el text. y des de dalt. -> alt."""
+    col, lead = LEAD[tipo]
+    size = 6.7
+    lin = _lin(txt, w - 14, 'DejaVuSans', size)
+    h = 15 + 8.8 * len(lin) + 3
+    x0, y0 = x, PAGE_H - y - h
+    c.setFillColor(BLANCO)
+    c.setStrokeColor(col)
+    c.setLineWidth(0.9)
+    c.roundRect(x0, y0, w, h, 4, fill=1, stroke=1)
+    c.setFillColor(col)
+    c.circle(x0 + 9, PAGE_H - y - 8.5, 4.6, fill=1, stroke=0)
+    c.setFillColor(BLANCO)
+    c.setFont('DejaVuSans-Bold', 6.2)
+    c.drawCentredString(x0 + 9, PAGE_H - y - 10.6, lletra)
+    c.setFillColor(col)
+    c.setFont('DejaVuSans-Bold', 6.1)
+    if tema_ca.ACTIU and tipo == 'OJO':
+        tema_ca.buho(c, x0 + 16, PAGE_H - y - 12.2, 10, 'happy')
+        c.drawString(x0 + 28, PAGE_H - y - 10.6, lead)
+    else:
+        c.drawString(x0 + 17, PAGE_H - y - 10.6, lead)
+    c.setFont('DejaVuSans', size)
+    c.setFillColor(NAVY)
+    yy = PAGE_H - y - 20.5
+    for l in lin:
+        c.drawString(x0 + 7, yy, l)
+        yy -= 8.8
+    return h
+
+
+def marca_punt(c, x, y, col, lletra):
+    c.setFillColor(col)
+    c.circle(x, PAGE_H - y, 4.4, fill=1, stroke=0)
+    c.setFillColor(BLANCO)
+    c.setFont('DejaVuSans-Bold', 6.2)
+    c.drawCentredString(x, PAGE_H - y - 2.2, lletra)
+
+
+def montar_partitura_continua(spec, salida, num0):
+    """La partitura de Drive TAL COM ES (una pagina per pagina), reduida una mica, amb els trams com a parentesis
+       al marge esquerre i les indicacions al marge dret; cada indicacio porta una lletra repetida en un punt
+       de la partitura. Retorna el nombre de pagines."""
+    import pymupdf
+    pdf = os.path.join(SRCDIR, spec['pdf'])
+    P, tiras = tiras_por_cortes(pdf, spec['cortes'], spec.get('corte_titulo'), spec.get('pie', ()),
+                                  spec.get('inicio'), spec.get('fin'))
+    src = pymupdf.open(pdf)
+    nuevo = pymupdf.open()
+    info = []
+    for pg_no in range(1, len(P) + 1):
+        sy = [t for t in tiras if t['pag'] == pg_no and t['sid'] is not None]
+        if not sy:
+            continue
+        ya, yb = sy[0]['ya'], sy[-1]['yb']
+        t, wpt, hpt = _tinta(pdf, pg_no)
+        sub = t[int(ya * 2):int(yb * 2)]
+        co = np.where(sub.any(0))[0]
+        x0 = max(0.0, (co.min() + 20) / 2.0 - 3)
+        x1 = min(wpt, (co.max() + 20) / 2.0 + 3)
+        s = min(WC_C / (x1 - x0), 760.0 / (yb - ya))
+        wout = (x1 - x0) * s
+        ytop = 36.0
+        pg = nuevo.new_page(width=PAGE_W, height=PAGE_H)
+        pg.show_pdf_page(pymupdf.Rect(ML_C, ytop, ML_C + wout, ytop + (yb - ya) * s), src, pg_no - 1,
+                         clip=pymupdf.Rect(x0, ya, x1, yb))
+        info.append(dict(pag=pg_no, ya=ya, yb=yb, x0=x0, s=s, wout=wout, ytop=ytop, sy=sy, ancho=P[pg_no - 1]['ancho']))
+    tmp = salida + '.base.pdf'
+    nuevo.save(tmp)
+    base = PdfReader(tmp)
+    wr = PdfWriter()
+    for i, I in enumerate(info):
+        buf = io.BytesIO()
+        c = canvas.Canvas(buf, pagesize=(PAGE_W, PAGE_H))
+        _anotar_continua(c, spec, I, num0 + i)
+        c.save()
+        buf.seek(0)
+        pg = base.pages[i]
+        pg.merge_page(PdfReader(buf).pages[0])
+        wr.add_page(pg)
+    with open(salida, 'wb') as f:
+        wr.write(f)
+    os.remove(tmp)
+    return len(info)
+
+
+def _anotar_continua(c, spec, I, n):
+    s, ya, x0, ML, ytop = I['s'], I['ya'], I['x0'], ML_C, I['ytop']
+    sy = I['sy']
+    # geometria de cada sistema a la pagina nova
+    G = []
+    for t in sy:
+        g = t['sys']
+        top = max(ytop + (g['top'] - 2 - ya) * s, ytop - 2)
+        bot = min(ytop + (g['bot'] + 4 - ya) * s, ytop + (I['yb'] - ya) * s)
+        G.append(dict(t=t, top=top, bot=bot, left=ML + (g['left'] - x0) * s, gl=g['left']))
+    # parentesis de bloc
+    segs = []
+    for k, d in enumerate(G):
+        b = _bloque_de(spec, d['t']['sid'])
+        if segs and segs[-1][0] is b and abs(segs[-1][2] - d['top']) < 45:
+            segs[-1][2] = d['bot']
+        else:
+            segs.append([b, d['top'], d['bot'], d['t']['sid'] == b['sist'][0]])
+    xb = ML - 7
+    for b, top, bot, primero in segs:
+        col = b['color']
+        c.setFillColor(Color(col.red, col.green, col.blue, alpha=0.055))
+        c.roundRect(xb + 3, PAGE_H - bot, ML + I['wout'] - xb - 3, bot - top, 4, fill=1, stroke=0)
+        margen(c, xb, b['num'], b['cc'] if primero else 'sigue', col, top, bot)
+    for (pg_o, x, y, w, h, bn_, k, tipo) in spec.get('marcas', []):
+        if pg_o == I['pag'] and I['ya'] <= y <= I['yb']:
+            col = [q for q in spec['bloques'] if q['num'] == bn_][0]['color']
+            f = s / ((PAGE_W - 24) / I['ancho'])          # w i h estan pensats per a l'escala antiga
+            marca(c, ML + (x - x0) * s, ytop + (y - ya) * s, w * f, h * f, col, k, tipo)
+    # indicacions: caixes al marge dret + lletra-marca a la partitura
+    rx = ML + I['wout'] + 9
+    wm = PAGE_W - rx - 18
+    items = []
+    for k, d in enumerate(G):
+        for (st, w_, tp, tx, cx) in spec.get('burb', {}).get(d['t']['sid'], []):
+            items.append((k, d, tp, tx, cx))
+    letras = 'abcdefghijklmnopqrstuvwxyz'
+    alturas = []
+    for (k, d, tp, tx, cx) in items:
+        lin = _lin(tx, wm - 14, 'DejaVuSans', 6.7)
+        alturas.append(15 + 8.8 * len(lin) + 3)
+    ys, fin_prev = [], 30.0
+    for (k, d, tp, tx, cx), h in zip(items, alturas):
+        y = max(d['top'] - 2, fin_prev + 5)
+        ys.append(y)
+        fin_prev = y + h
+    exceso = fin_prev - 806.0
+    if exceso > 0:                                   # si no cap, puja les ultimes mantenint-les separades
+        lim = 806.0
+        for j in range(len(ys) - 1, -1, -1):
+            if ys[j] + alturas[j] > lim:
+                ys[j] = lim - alturas[j]
+            lim = ys[j] - 5
+    usados = []
+    for j, ((k, d, tp, tx, cx), h) in enumerate(zip(items, alturas)):
+        col = LEAD[tp][0]
+        lt = letras[j % len(letras)]
+        nota_marge(c, rx, ys[j], wm, lt, tp, tx)
+        # punt de la partitura
+        gx = (d['gl'] + cx * (I['ancho'] - 30 - d['gl'])) if cx <= 1.0 else cx
+        px = min(max(ML + (gx - x0) * s, ML + 6), ML + I['wout'] - 6)
+        prev_bot = G[k - 1]['bot'] if k > 0 else ytop - 14
+        next_top = G[k + 1]['top'] if k + 1 < len(G) else ytop + (I['yb'] - ya) * s + 14
+        if d['top'] - prev_bot >= 12:
+            py = d['top'] - 5.5
+        elif next_top - d['bot'] >= 12:
+            py = d['bot'] + 5.5
+        else:
+            py, px = (d['top'] + d['bot']) / 2.0, ML + I['wout'] + 4
+        while any(abs(px - qx) < 10 and abs(py - qy) < 8 for qx, qy in usados):
+            px += 10
+            if px > ML + I['wout'] - 4:
+                px, py = ML + I['wout'] + 4, py + 10
+        usados.append((px, py))
+        marca_punt(c, px, py, col, lt)
+    c.setFont('DejaVuSans', 6.4)
+    c.setFillColor(MUTED)
+    c.drawString(34, 22, spec.get('credito', ''))
+    c.drawRightString(561, 22, str(n))
 
 
 def _bloque_de(spec, sid):

@@ -94,6 +94,9 @@ def pag_como(c, n):
                  ('3', 'Guia per blocs', 'La cançó partida en trossos petits: què toca cada mà i com ajuntar-les.'),
                  ('4', 'La partitura', 'La teva partitura amb les notes pintades del seu color i bocadillos del Mussol.'),
                  ('5', 'Paper pautat', 'Per escriure notes i pintar-les, o inventar una cançó.')]
+    if CONTINUA and ALUMNA != 'lola':
+        items = list(items)
+        items[3] = ('4', 'La partitura', 'La teva partitura sencera, tal com és: els trams, al marge esquerre, i les indicacions, al dret.')
     for k, t, d in items:
         c.setFillColor(PANEL)
         c.roundRect(MARGIN, y - 34, CONTENT_W, 34, 4, fill=1, stroke=0)
@@ -155,6 +158,12 @@ def pag_como(c, n):
                "Al marge hi ha un parèntesi de color amb un número: és el bloc on ets. Els bocadillos expliquen "
                "què practicar: «mà esquerra» (ocre), «mà dreta» (blau), «les dues» i «ojo» (el Mussol et diu "
                "alguna cosa important). Quan tinguis un bloc ben après, marca'l amb un llapis!")
+    if CONTINUA and ALUMNA != 'lola':
+        txt = ("La partitura surt sencera, com la tens a Drive. El parèntesi de color del marge esquerre i el seu número diuen en quin tram "
+               "ets. Les indicacions són al marge dret, cadascuna amb una lletra que es repeteix en un punt damunt de la partitura: "
+               "«mà esquerra», «mà dreta», «les dues» i «ull» (alguna cosa que no s'ha de passar per alt)"
+               + (" i, en els duets, «Primo» i «Secondo»" if ALUMNA != 'alba' else '') + ". Els acords es diuen com sempre (La menor, Sol major…); "
+               "a sobre d'algunes partitures surten en xifrat americà (A = La, B = Si, C = Do, D = Re, E = Mi, F = Fa, G = Sol).")
     _wrap(c, txt, MARGIN + 14, y - 14, 'DejaVuSans', 8.2, CONTENT_W - 28, 11, INK)
     misol_pie(c, y - h - 22, "Hola! Soc en Mussol Misol i et faré companyia a cada peça. Si un "
               "consell em ve al cap, el trobaràs en aquest quadre. Fes cas a l'ocell!", 'normal')
@@ -296,5 +305,5 @@ def construir(salida, solo=None):
 
 if __name__ == '__main__':
     solo = [int(x) for x in sys.argv[1:]] or None
-    out = os.path.join(OUT, 'DOSIER_%s_completo.pdf' % ALUMNA.upper())
+    out = os.path.join(OUT, 'DOSIER_%s_completo%s.pdf' % (ALUMNA.upper(), '_BN' if os.environ.get('BN') == '1' else ''))
     print(construir(out, solo), 'paginas ->', out)

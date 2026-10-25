@@ -11,6 +11,8 @@ from mayores_motor import (MARGIN, CONTENT_W, NAVY, NAVY_SOFT, INK, MUTED, PANEL
 from notation import draw_staff, draw_clef, note_y, draw_system, GRAY
 import tema_ca
 
+BN = os.environ.get('BN') == '1'
+CNOM = dict(C='vermell', D='taronja', E='groc', F='verd', G='blau', A='lila', B='gris')
 COL = dict(C='#E4392B', D='#F28C0E', E='#F9C80E', F='#76B82A', G='#2E86C8', A='#A58AC9', B='#A7A397')
 NOM = dict(C='DO', D='RE', E='MI', F='FA', G='SOL', A='LA', B='SI')
 
@@ -28,6 +30,9 @@ def _tecles(c, x, y, w, h, color=True):
         c.setFillColor(INK)
         c.setFont('DejaVuSans-Bold', 10.5)
         c.drawCentredString(x + i * kw + kw / 2, y + 9, NOM[l])
+        if BN and color:
+            c.setFont('DejaVuSans', 7.2)
+            c.drawCentredString(x + i * kw + kw / 2, y + 22, CNOM[l])
     for i in (0, 1, 3, 4, 5):          # negres: entre Do-Re, Re-Mi, Fa-Sol, Sol-La, La-Si
         bx = x + (i + 1) * kw - kw * 0.3
         c.setFillColor(INK)
@@ -56,6 +61,9 @@ def _pauta(c, x, ytop, w, clau, notes, gap=8.0, color=True):
         c.setFillColor(INK)
         c.setFont('DejaVuSans-Bold', 8.2)
         c.drawCentredString(cx, yb - gap * 2.6 if cy >= yb - 1 else cy - gap * 1.7, NOM[l])
+        if BN and color:
+            c.setFont('DejaVuSans', 6.4)
+            c.drawCentredString(cx, (yb - gap * 2.6 if cy >= yb - 1 else cy - gap * 1.7) - 8, CNOM[l])
     return yb
 
 
@@ -63,8 +71,10 @@ def pag_colors(c, n, marco_pag, misol_pie, color=True):
     tit = 'Els colors de les notes' if color else 'Les notes: nom i lloc'
     marco_pag(c, n, tit)
     y = titulo_pag(c, tit,
-                   ('Cada nota té un nom i un color. A totes les partitures d\'aquest dossier les notes '
-                    'estan pintades així. Aprendre-les serà un joc!') if color else
+                   (('Cada nota té un nom i un color. A totes les partitures d\'aquest dossier les notes '
+                     'estan pintades així. Aprendre-les serà un joc!') if not BN else
+                    ('Cada nota té un nom i un color. En aquesta còpia en blanc i negre, pinta TU les notes de cada partitura '
+                     'amb llapis de colors, seguint aquest cartell.')) if color else
                    ('Cada nota té un nom i un lloc a la pauta. Si te\'ls saps de memòria, llegiràs '
                     'qualsevol partitura molt més de pressa.'))
     y -= 14

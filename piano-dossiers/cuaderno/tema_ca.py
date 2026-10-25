@@ -265,7 +265,16 @@ def buho(c, x, y, alto, pose='normal'):
     """El mussol amb la cantonada inferior esquerra a (x, y). Torna l'amplada."""
     from reportlab.lib.utils import ImageReader
     if pose not in _IMG:
-        _IMG[pose] = ImageReader(os.path.join(_DIR, 'owl_%s_color.png' % pose))
+        _ruta = os.path.join(_DIR, 'owl_%s_color.png' % pose)
+        if os.environ.get('BN', '') == '1':        # versio per imprimir en blanc i negre: mussol en grisos
+            from PIL import Image, ImageEnhance
+            im = Image.open(_ruta).convert('RGBA')
+            a = im.split()[3]
+            g = ImageEnhance.Contrast(im.convert('L')).enhance(1.25).convert('RGBA')
+            g.putalpha(a)
+            _IMG[pose] = ImageReader(g)
+        else:
+            _IMG[pose] = ImageReader(_ruta)
     iw, ih = _IMG[pose].getSize()
     amp = alto * iw / float(ih)
     c.drawImage(_IMG[pose], x, y, amp, alto, mask='auto')

@@ -8,6 +8,10 @@
 """
 import os
 import sys
+if os.environ.get('BN') == '1':          # versio per imprimir en blanc i negre
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import bn
+    bn.instalar()
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -24,7 +28,7 @@ import nens_t07 as c7                                            # noqa: E402
 import nens_annex as an                                          # noqa: E402
 import nens_x01 as x1                                            # noqa: E402
 
-OUT = os.path.join(HERE, '..', 'output', 'Quadern_Pekes.pdf')
+OUT = os.path.join(HERE, '..', 'output', 'Quadern_Pekes_BN.pdf' if os.environ.get('BN') == '1' else 'Quadern_Pekes.pdf')
 
 MODULS = {range(1, 5): c1, range(5, 8): c2, range(8, 14): c3, range(14, 20): c4, range(20, 24): c5, range(24, 31): c6,
           range(31, 35): c7}

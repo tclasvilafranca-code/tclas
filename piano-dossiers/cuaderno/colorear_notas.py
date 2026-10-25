@@ -115,7 +115,7 @@ def cabezas(dr, gap):
     return res
 
 
-def colorear(entrada, salida, quitar_imagenes=False):
+def colorear(entrada, salida, quitar_imagenes=False, pintar=True):
     doc = pymupdf.open(entrada)
     informe = []
     for pn, pg in enumerate(doc):
@@ -144,7 +144,7 @@ def colorear(entrada, salida, quitar_imagenes=False):
                 if abs(cx - xl) < 40 and ys[0] - 2 * gap <= cy <= ys[4] + 2 * gap:
                     mejor = c
             tipo_clave.append(mejor or ('G' if k % 2 == 0 else 'F'))
-        for cx, cy, w, tp in cab:
+        for cx, cy, w, tp in (cab if pintar else []):
             mejor, dmin = None, 1e9
             for k, (xl, xr, ys) in enumerate(sts):
                 cen = (ys[0] + ys[4]) / 2.0

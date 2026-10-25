@@ -368,10 +368,10 @@ def nota_marge(c, x, y, w, lletra, tipo, txt):
 
 def marca_punt(c, x, y, col, lletra):
     c.setFillColor(col)
-    c.circle(x, PAGE_H - y, 4.4, fill=1, stroke=0)
+    c.circle(x, PAGE_H - y, 5.4, fill=1, stroke=0)
     c.setFillColor(BLANCO)
-    c.setFont('DejaVuSans-Bold', 6.2)
-    c.drawCentredString(x, PAGE_H - y - 2.2, lletra)
+    c.setFont('DejaVuSans-Bold', 7.4)
+    c.drawCentredString(x, PAGE_H - y - 2.6, lletra)
 
 
 def _items_pagina(spec, sy):

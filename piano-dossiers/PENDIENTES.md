@@ -47,3 +47,10 @@
 - **Txell** (12 anys, un any de piano): `ALUMNA=txell` → 124 pàgines; quasi tota la seva carpeta coincideix byte a byte amb partitures ja mesurades
   de Sharifa/Abril (`clonar_spec.py` copia la fitxa canviant número/nom/mes). Dues pàgines inicials: notes (sense colors) i figures.
 - Recordatori: tancar els enllaços públics de Drive (partitures amb copyright).
+
+## Cuaderno «Mi cuaderno de piano · Nivel 1 · Adultos» (castellano)
+- Origen: `NIVEL 1 ADULTS` de Canva (Drive id `1Pb_rpHyaORPRqMjpaNglgCvZp95u7vnH`), rehecho en el diseño T-Clas de adultos y ampliado.
+- Montaje: `cd cuaderno && python3.13 n1_libro.py` → `entrega/CUADERNO_NIVEL1_ADULTOS.pdf` (`BN=1` para blanco y negro). Módulos `n1_base.py` (flujo de páginas, componentes), `n1_sep…n1_jun.py` (un mes cada uno), `n1_anexos.py` (portada, calendario, chuleta, glosario, diario, soluciones, pautas).
+- Las soluciones del final salen de los mismos datos que dibujan los ejercicios (`sol(...)`).
+- Pendiente de confirmar con el cliente: la portada original dice «NIVEL 2» (el archivo, «nivel 1»); versión en catalán si hace falta (`IDIOMA=ca` no traduce este libro: habría que traducir los textos).
+- Entorno: `dibujo_mano.py` pide fuentes (CabinSketch, dkgBd, Leckerli) que en una sesión nueva pueden faltar; para `nens_dib.ma_real` basta copiar DejaVu a esas rutas.

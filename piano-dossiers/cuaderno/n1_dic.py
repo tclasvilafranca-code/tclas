@@ -47,7 +47,7 @@ def diag_escala():
 
 
 def diag_digitacion():
-    h = 150
+    h = 184
 
     def f(c, x, y, w):
         g = 8.4
@@ -67,16 +67,16 @@ def diag_digitacion():
                 draw_note(c, cx, ys[-1], ys[0], g, p, 'q', clef=clef, stem_dir='up' if True else None)
                 c.setFont('DejaVuSans-Bold', 8)
                 c.setFillColor(OCRE)
-                c.drawCentredString(cx, ys[-1] - 15, str(dsub[k]))
+                c.drawCentredString(cx, ys[-1] - 23, str(dsub[k]))
             # bajada
-            ys2 = draw_staff(c, x + off, y - 100, ww, g)
+            ys2 = draw_staff(c, x + off, y - 112, ww, g)
             draw_clef(c, x + off + 3, ys2[-1], g, clef)
             for k, p in enumerate(reversed(esc)):
                 cx = x0 + paso * (k + 0.5)
                 draw_note(c, cx, ys2[-1], ys2[0], g, p, 'q', clef=clef, stem_dir='up')
                 c.setFont('DejaVuSans-Bold', 8)
                 c.setFillColor(OCRE)
-                c.drawCentredString(cx, ys2[-1] - 17, str(dbaj[k]))
+                c.drawCentredString(cx, ys2[-1] - 23, str(dbaj[k]))
     return Blk(h, f)
 
 
@@ -158,7 +158,7 @@ def construir(d):
         'Un **intervalo** es la distancia entre dos notas. Se cuenta **incluyendo las dos notas**: de Do a Mi hay tres notas '
         '(Do – Re – Mi), así que es un intervalo de **tercera** (3.ª). Se puede contar sobre el pentagrama: una nota en línea y la siguiente '
         'línea es una **tercera**; una línea y el siguiente espacio, una **segunda**.']),
-        tabla([60, 60, 60, 60, 60, 60, 60, 71], [['Do – Do', 'Do – Re', 'Do – Mi', 'Do – Fa', 'Do – Sol', 'Do – La', 'Do – Si', 'Do – Do'],
+        tabla([66, 56, 56, 56, 56, 56, 56, 89], [['Do – Do (igual)', 'Do – Re', 'Do – Mi', 'Do – Fa', 'Do – Sol', 'Do – La', 'Do – Si', 'Do – Do agudo'],
                                                   ['1.ª (unísono)', '2.ª', '3.ª', '4.ª', '5.ª', '6.ª', '7.ª', '8.ª (octava)']], None, alto=24, size=7.6, zebra=True))
     d.add(ejercicio(3, 'Secuencia de intervalos',
                     ['Escribe debajo de cada pareja de notas el intervalo que forman (2.ª, 3.ª, 4.ª, 5.ª, 6.ª, 7.ª u 8.ª). Cuenta incluyendo las dos notas.',

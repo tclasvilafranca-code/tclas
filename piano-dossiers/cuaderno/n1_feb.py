@@ -1,136 +1,124 @@
 # -*- coding: utf-8 -*-
-"""FEBRERO · Ritmo y subdivision."""
+"""FEBRERO · La escala de Do mayor, alteraciones e intervalos."""
 from n1_base import *
-from fractions import Fraction
+from n1_base import _abs_idx
+from n1_comun import *
 
 MES = 'Febrero'
-SEC = 'abcdef'
-N = lambda dd: ('n', dd)
-R = lambda dd: ('r', dd)
-
-# valor de cada figura en tiempos de negra (fracciones exactas)
-VAL = {'redonda': Fraction(4), 'blanca': Fraction(2), 'negra': Fraction(1), 'corchea': Fraction(1, 2),
-       'semicorchea': Fraction(1, 4), 'fusa': Fraction(1, 8)}
-PLURAL = {'redonda': 'redondas', 'blanca': 'blancas', 'negra': 'negras', 'corchea': 'corcheas', 'semicorchea': 'semicorcheas',
-          'fusa': 'fusas'}
-
-
-def valor(n, fig, puntillo=False):
-    v = VAL[fig] * n
-    return v * Fraction(3, 2) if puntillo else v
+ESC = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5']
+ESC_B = ['C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3', 'C4']
+GRADOS = [('I', 'Do', 'tónica'), ('II', 'Re', 'supertónica'), ('III', 'Mi', 'mediante'), ('IV', 'Fa', 'subdominante'),
+          ('V', 'Sol', 'dominante'), ('VI', 'La', 'superdominante'), ('VII', 'Si', 'sensible')]
 
 
 def construir(d):
-    d.nuevo('Febrero · Ritmo y subdivisión')
-    d.add(banda_mes('Febrero', '2.º trimestre', 'Ritmo y subdivisión',
-                    'Cada tiempo se puede partir en trozos iguales: la herramienta para leer ritmos rápidos sin perderse.'))
-    d.add(caja('dato', 'Pulso, ritmo y subdivisión', [
-        'El **pulso** es el latido constante de la música: lo que marcas con el pie. El **ritmo** es la combinación de duraciones '
-        '(largas, cortas, silencios) que se dibuja **sobre** ese pulso. Y la **subdivisión** consiste en partir cada tiempo en partes iguales: '
-        'en **dos** (corcheas) o en **cuatro** (semicorcheas).',
-        'Por ejemplo, en un compás de 4/4 hay cuatro tiempos, y cada tiempo se puede tocar entero, partido en dos o partido en cuatro. '
-        'Si mantienes el pulso mientras cambias la subdivisión, el ritmo se vuelve cada vez más rápido sin que la música se acelere.']),
-        fila_compases([[N('q')] * 4, [N('e')] * 8, [N('s')] * 16], ts=(4, 4), titulo='Un mismo compás, tres maneras de llenarlo: 1 = negra · 2 = corcheas · 4 = semicorcheas',
-                       rotulos=['ta  ta  ta  ta', 'ti-ti  ti-ti  ti-ti  ti-ti', 'ti-ka-ti-ka × 4'], ancho_rel=[0.9, 1.2, 2.4]),
-        caja('tip', 'Las palabras tienen ritmo', [
-            'Al igual que las palabras tienen sílabas, la música usa figuras para marcar los tiempos. **Relacionar palabras con duraciones** ayuda a entender '
-            'cómo se leen y se sienten los sonidos musicales: «man-za-na» son tres sílabas, tres sonidos.',
-            'Dos corcheas seguidas se unen con una **barra** horizontal: así se ve de un vistazo a qué tiempo pertenece cada una. '
-            'Cuando la música se agrupa por tiempos, se lee mucho más rápido.']))
+    d.nuevo('Febrero · Escala de Do mayor')
+    d.add(banda_mes('Febrero', 'Etapa 2', 'Escala de Do mayor',
+                    'Tonos y semitonos, alteraciones, construcción de la escala, grados e intervalos.'))
+    d.add(caja('dato', 'Tono, semitono y alteraciones', [
+        'La distancia más pequeña entre dos teclas contiguas del piano es el **semitono**; dos semitonos forman un **tono**. Entre Mi–Fa y Si–Do no hay tecla negra: '
+        'son los dos **semitonos naturales** de la escala de Do.',
+        'Las **alteraciones** modifican la altura de una nota: el **sostenido (♯)** la sube un semitono, el **bemol (♭)** la baja un semitono y el **becuadro (♮)** anula una alteración anterior. '
+        'Cada tecla negra recibe dos nombres, según se alcance subiendo o bajando: Do♯ y Re♭ son la misma tecla (notas **enarmónicas**). Una alteración escrita ante una nota '
+        'vale hasta el final de ese compás.']),
+        diag_semitonos())
+    d.add(ejercicio(1, 'Teclas negras',
+                    ['Escribe en el primer teclado el nombre de cada negra como **sostenido** y en el segundo como **bemol**.',
+                     'En el tercero, marca las notas de la lista: Do♯ · Mi♭ · Fa♯ · La♭ · Si♭.'],
+                    'Identificar cualquier tecla del piano por sus dos nombres.'))
+    d.add(bloque_teclado(h=66, desde=('C', 4), n_blancas=8, cajas={'%s#4' % L for L in 'CDFGA'}, titulo='a) Sostenidos'),
+          bloque_teclado(h=66, desde=('C', 4), n_blancas=8, cajas={'%s#4' % L for L in 'CDFGA'}, titulo='b) Bemoles'),
+          bloque_teclado(h=66, desde=('C', 4), n_blancas=8, titulo='c) Marca las teclas de la lista'))
+    sol(MES, 1, 'Teclas negras', ['a) Do♯ Re♯ Fa♯ Sol♯ La♯.  b) Re♭ Mi♭ Sol♭ La♭ Si♭.  c) Do♯ = 1.ª negra · Mi♭ = 2.ª negra (Re♯) · Fa♯ = 3.ª negra · La♭ = 4.ª negra (Sol♯) · Si♭ = 5.ª negra (La♯).'])
 
-    # ---- Ejercicio 1: palabras y figuras
-    d.add(ejercicio(1, 'Ritmo de palabras y figuras',
-                    ['Cada palabra tiene un ritmo: una sílaba = un sonido. Di la palabra marcando el pulso con el pie y escribe su ritmo en el compás de al lado.',
-                     'Marca con un círculo las sílabas que van **más largas**. Hay varias soluciones válidas.'],
-                    'Visualizar el ritmo y sentir cómo se relaciona con las figuras.'))
-    palabras = [('sol', 'q'), ('lu-na', 'qq'), ('pla-ta-no', 'eeq'), ('ma-ri-po-sa', 'eeee'), ('pia-no', 'qq'), ('me-lo-co-tón', 'eeqq')]
-    filas = []
-    sol_p = []
-    for w_, patt in palabras:
-        pass
-    comp, rot = [], []
-    for w_, patt in palabras:
-        comp.append([('x', 4)])
-        rot.append('«%s»' % w_)
-    d.add(fila_compases(comp[0:3], ts=(4, 4), titulo='a)', rotulos=rot[0:3]),
-          fila_compases(comp[3:6], ts=(4, 4), titulo='b)', rotulos=rot[3:6]))
-    ritmos_txt = {'q': 'una negra («ta»)', 'qq': 'dos negras («ta ta»)', 'eeq': 'dos corcheas y una negra («ti-ti ta»)',
-                  'eeee': 'cuatro corcheas («ti-ti ti-ti»)', 'eeqq': 'dos corcheas y dos negras («ti-ti ta ta»)'}
-    sol(MES, 1, 'Ritmo de palabras', ['Una posibilidad: ' + ' · '.join('%s = %s' % (w_, ritmos_txt[p]) for w_, p in palabras) + '. Otras respuestas son válidas si cada sílaba lleva un sonido y el compás suma 4 tiempos (rellena con silencios si faltan).'])
+    # ---------------------------------------------------------------- escala
+    d.add(caja('dato', 'La escala de Do mayor', [
+        'Una **escala** es una sucesión de notas por grados conjuntos. La de **Do mayor** no lleva ninguna alteración: son las ocho teclas blancas de un Do al siguiente. '
+        'Su estructura de distancias —**T T S T T T S** (tono, tono, semitono, tono, tono, tono, semitono)— es la que define toda escala mayor, empiece en la nota que empiece.',
+        'Cada nota ocupa un **grado**. Algunos tienen nombre propio: el I es la **tónica** (la nota de reposo), el IV la **subdominante**, el V la **dominante** y el VII la **sensible** '
+        '(a un semitono de la tónica).']),
+        diag_escala(),
+        tabla([90, 100, 170], [[g[0], g[1], g[2]] for g in GRADOS], ['Grado', 'Nota en Do mayor', 'Nombre'], alto=17, size=8.4))
+    d.add(h2('Digitación de la escala'))
+    d.add(diag_digitacion(ESC, ESC_B, [1, 2, 3, 1, 2, 3, 4, 5], [5, 4, 3, 2, 1, 3, 2, 1], [5, 4, 3, 2, 1, 3, 2, 1], [1, 2, 3, 1, 2, 3, 4, 5]),
+          par('Con cinco dedos no se alcanza una octava: tras el 3 (mano derecha, subiendo) el **pulgar pasa por debajo** para ocupar el Fa, y al bajar el 3 pasa **por encima** del pulgar. '
+              'En la mano izquierda ocurre al revés. El brazo acompaña a la mano; la muñeca no se tuerce.', 9.3))
+    d.add(ejercicio(2, 'Estructura de la escala',
+                    ['Escribe entre cada dos notas consecutivas si hay un **tono (T)** o un **semitono (S)**. Utiliza el teclado de arriba para comprobarlo.'],
+                    'Entender la escala como una estructura de distancias, no como una lista de nombres.'))
+    d.add(tabla([61] * 8, [['Do', 'Re', 'Mi', 'Fa', 'Sol', 'La', 'Si', 'Do'], ['T/S:', '', '', '', '', '', '', '']], None, alto=24, size=9, zebra=False))
+    sol(MES, 2, 'Estructura de la escala', ['Do–Re T · Re–Mi T · Mi–Fa S · Fa–Sol T · Sol–La T · La–Si T · Si–Do S (5 tonos y 2 semitonos).'])
+    d.add(ejercicio(3, 'Escribir la escala con digitación',
+                    ['La primera nota de cada fila está escrita. Completa la escala con sus nombres y anota encima el dedo de cada nota.',
+                     'Mano derecha en clave de sol; mano izquierda en clave de fa.'],
+                    'Fijar a la vez la grafía de la escala y su digitación.'))
+    d.add(fila_notas('treble', ['C4'] + [None] * 7, 'q', bajo='linea', encima=[1] + [''] * 7, titulo='a) Mano derecha, subiendo'),
+          fila_notas('treble', ['C5'] + [None] * 7, 'q', bajo='linea', encima=[5] + [''] * 7, titulo='b) Mano derecha, bajando'),
+          fila_notas('bass', ['C3'] + [None] * 7, 'q', bajo='linea', encima=[5] + [''] * 7, titulo='c) Mano izquierda, subiendo'),
+          fila_notas('bass', ['C4'] + [None] * 7, 'q', bajo='linea', encima=[1] + [''] * 7, titulo='d) Mano izquierda, bajando'))
+    sol(MES, 3, 'Escala con digitación',
+        ['a) Do Re Mi Fa Sol La Si Do — 1 2 3 1 2 3 4 5.  b) Do Si La Sol Fa Mi Re Do — 5 4 3 2 1 3 2 1.',
+         'c) Do Re Mi Fa Sol La Si Do (grave) — 5 4 3 2 1 3 2 1.  d) Do Si La Sol Fa Mi Re Do — 1 2 3 1 2 3 4 5.'])
 
-    # ---- Ejercicio 2: ritmos del dia a dia
-    d.add(ejercicio(2, 'Ritmos del día a día',
-                    ['La música está en todas partes: en cómo caminamos, en el tic-tac del reloj, en las gotas de lluvia. Piensa en **tres cosas** que hagan sonidos repetidos.',
-                     'Escribe debajo de cada una el ritmo que le pondrías con las figuras que conoces. Ejemplo: una pelota que bota rápido puede ser dos corcheas seguidas.'],
-                    'Asociar el ritmo musical a la vida cotidiana y fomentar la creatividad auditiva.'))
-    for k in range(3):
-        d.add(lineas_escribir(1, '%d)  Sonido: ________________________________' % (k + 1), 18),
-              pauta_vacia('treble', 2, (4, 4)))
+    # ---------------------------------------------------------------- intervalos
+    d.add(caja('dato', 'Intervalos', [
+        'Un **intervalo** es la distancia entre dos notas. Se mide **contando las dos notas extremas**: de Do a Mi hay tres notas (Do – Re – Mi), luego es una **tercera**. '
+        'Sobre el pentagrama, de una línea a la línea siguiente hay una tercera; de una línea al espacio contiguo, una segunda. Si las dos notas son la misma, es un unísono; '
+        'si hay ocho notas entre los extremos, una **octava**.']),
+        tabla([66, 56, 56, 56, 56, 56, 56, 89], [['Do – Do', 'Do – Re', 'Do – Mi', 'Do – Fa', 'Do – Sol', 'Do – La', 'Do – Si', 'Do – Do agudo'],
+                                                  ['unísono', '2.ª', '3.ª', '4.ª', '5.ª', '6.ª', '7.ª', '8.ª (octava)']], None, alto=24, size=7.6))
+    d.add(ejercicio(4, 'Reconocer intervalos',
+                    ['Escribe debajo de cada pareja el intervalo que forman. Cuenta incluyendo las dos notas; comprueba algunos en el teclado.'],
+                    'Medir distancias a primera vista para leer en bloques en lugar de nota a nota.'))
+    r = rnd(33)
+    pares = []
+    for _ in range(8):
+        a = r.choice(['C4', 'D4', 'E4', 'F4', 'G4', 'A4'])
+        k = r.choice([1, 2, 3, 4, 5, 6, 7])
+        pares.append((a, mover(a, k)))
+    s4 = []
+    for fila in range(2):
+        sub = pares[fila * 4:(fila + 1) * 4]
+        d.add(fila_notas('treble', [p for pr in sub for p in pr], 'w', bajo='nada', barras=2, titulo='%s)' % SEC[fila]))
 
-    # ---- Ejercicio 3: que figura dura mas
-    d.add(ejercicio(3, '¿Qué figura dura más?',
-                    ['Compara las dos duraciones de cada fila y escribe en el círculo **>** (la primera dura más), **<** (dura menos) o **=** (dura lo mismo).',
-                     'Si te cuesta, sube todo a «tiempos de negra» y suma: una corchea = ½, una semicorchea = ¼.'],
-                    'Mantener el pulso constante mientras se manejan subdivisiones complejas.'))
-    comps = [
-        ((2, 'corchea', False), (1, 'negra', False)),
-        ((1, 'blanca', False), (3, 'negra', False)),
-        ((4, 'semicorchea', False), (1, 'negra', False)),
-        ((1, 'negra', True), (3, 'corchea', False)),
-        ((1, 'redonda', False), (2, 'blanca', False)),
-        ((3, 'semicorchea', False), (1, 'corchea', False)),
-        ((1, 'blanca', True), (2, 'negra', False)),
-        ((6, 'semicorchea', False), (1, 'negra', True)),
-    ]
+        def lin(c, x, y, w):
+            cur0 = x + 4 + GAP * 5.4
+            slot = (w - 8 - GAP * 5.4 - 4) / 8.0
+            c.setStrokeColor(NAVY_SOFT)
+            c.setLineWidth(0.6)
+            for i in range(4):
+                cx = cur0 + slot * (2 * i + 1)
+                c.line(cx - 22, y - 12, cx + 22, y - 12)
+        d.add(Blk(20, lin))
+        s4.append('%s) ' % SEC[fila] + ' · '.join('%s–%s = %d.ª' % (nombre(a), nombre(b), _abs_idx(b) - _abs_idx(a) + 1) for a, b in sub))
+    sol(MES, 4, 'Reconocer intervalos', s4)
+    d.add(ejercicio(5, 'Construir intervalos',
+                    ['Escribe la nota que forma con la dada el intervalo indicado (hacia arriba).'],
+                    'Pasar del nombre del intervalo a su posición en el pentagrama.'))
+    cons = [('C4', 3), ('D4', 5), ('E4', 4), ('G4', 6), ('F4', 5), ('A4', 3)]
+    d.add(fila_notas('treble', [c_[0] for c_ in cons], 'w', bajo=['%d.ª' % c_[1] for c_ in cons], titulo='Nota dada y intervalo pedido (el segundo sonido se escribe a su derecha)'))
+    sol(MES, 5, 'Construir intervalos', [' · '.join('%s + %d.ª = %s' % (nombre(a), n, nombre(mover(a, n - 1))) for a, n in cons) + '.'])
 
-    def txt(t):
-        n, f_, pt = t
-        base = ('%d %s' % (n, PLURAL[f_] if n > 1 else f_)) if n > 1 else ('1 %s' % f_)
-        return base + (' con puntillo' if pt else '')
-    filas = []
-    sol3 = []
-    for (a, b) in comps:
-        va, vb = valor(*a), valor(*b)
-        signo = '>' if va > vb else ('<' if va < vb else '=')
-        sol3.append('%s %s %s' % (txt(a), signo, txt(b)))
-
-        def circ(c, cx, cy, w, h):
-            c.setStrokeColor(NAVY)
-            c.setLineWidth(0.9)
-            c.circle(cx, cy, 8, fill=0, stroke=1)
-        filas.append([txt(a), circ, txt(b)])
-    d.add(tabla([190, 40, 190], filas, ['Primera', '', 'Segunda'], alto=24, size=9.6, zebra=True))
-    sol(MES, 3, '¿Qué figura dura más?', ['; '.join('%d) %s' % (i + 1, s_) for i, s_ in enumerate(sol3)) + '.'])
-
-    # completar con subdivision
-    d.add(par('**Completa con subdivisiones.** Rellena cada hueco usando el tipo de figura que se indica:', 9.4, INK, despues=4))
-    sub = [((2, 4), [[N('q'), ('x', 1)]], 'con dos corcheas'),
-           ((4, 4), [[N('q'), N('q'), ('x', 2)]], 'con semicorcheas (ocho)'),
-           ((3, 4), [[N('e'), N('e'), N('e'), N('e'), ('x', 1)]], 'con una negra')]
-    for k, (ts, comp, ind) in enumerate(sub):
-        d.add(fila_compases(comp, ts=ts, titulo='%s) %d/%d: rellena %s' % (SEC[k], ts[0], ts[1], ind)))
-    sol(MES, '3 (subdivisiones)', 'Completa con subdivisiones',
-        ['a) dos corcheas (1 tiempo)  ·  b) ocho semicorcheas (2 tiempos)  ·  c) una negra (1 tiempo).'])
-
-    # ---- Ejercicio 4: ritmo y palmas
-    d.add(ejercicio(4, 'Ritmo y palmas',
-                    ['Lee cada línea marcando el pulso con el pie y palmeando las figuras. Di las sílabas: negra = **ta**, dos corcheas = **ti-ti**, '
-                     'cuatro semicorcheas = **ti-ka-ti-ka**.',
-                     'Repite cada línea hasta que salga sin dudar, y después tócala con una sola nota en el piano.'],
-                    'Desarrollar la percepción auditiva y la coordinación entre lectura, pulso y ejecución.'))
-    lect = [
-        ('a) 2/4 con corcheas', (2, 4), [[N('q'), N('e'), N('e')], [N('e'), N('e'), N('q')], [N('e'), N('e'), N('e'), N('e')], [N('q'), N('q')]]),
-        ('b) 3/4 con silencios', (3, 4), [[N('q'), N('e'), N('e'), N('q')], [N('q'), R('q'), N('q')], [N('e'), N('e'), N('e'), N('e'), N('q')], [N('h'), R('q')]]),
-        ('c) 4/4 con semicorcheas', (4, 4), [[N('s'), N('s'), N('s'), N('s'), N('q'), N('q'), N('q')], [N('q'), N('s'), N('s'), N('s'), N('s'), N('q'), N('q')],
-                                            [N('e'), N('e'), N('s'), N('s'), N('s'), N('s'), N('q'), N('q')], [N('h'), N('q'), R('q')]]),
-    ]
-    for tit, ts, comp in lect:
-        d.add(fila_compases(comp, ts=ts, titulo=tit))
-
-    d.add(caja('piano', 'Al piano: la escala con metrónomo', [
-        'Toca la escala de Do mayor (mano derecha, una octava) con **corcheas** y después con **semicorcheas**. '
-        'Usa un metrónomo: empieza **despacio (♩ = 60)** y sube de **4 en 4** solo cuando la escala salga **limpia tres veces seguidas**. '
-        'Apunta aquí hasta dónde llegas cada semana:'],),
-          tabla([100, 100, 100, 100, 91], [['Semana', '1', '2', '3', '4'], ['♩ =', '', '', '', ''], ['Notas limpias (de 3)', '', '', '', '']],
-                None, alto=22, zebra=False, size=8.4))
-    sol(MES, 'Ritmo y palmas', 'Ritmo y palmas', ['Todos los compases suman los tiempos de su cifra (2, 3 o 4). Cuenta los silencios como si fueran sonidos.'])
+    # ---------------------------------------------------------------- al piano
+    d.add(caja('piano', 'Al piano: escala a dos manos y con ritmos', [
+        'Primero cada mano por separado, después juntas, **en movimiento paralelo** (las dos tocan la misma nota con una octava de diferencia). '
+        'Usa metrónomo: empieza hacia ♩ = 60 y sube de 4 en 4 **solo cuando salga limpia tres veces seguidas**.']))
+    rh = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in zip(ESC, [1, 2, 3, 1, 2, 3, 4, 5])]
+    lh = [{'pitch': p, 'dur': 'q', 'number': n} for p, n in zip(ESC_B, [5, 4, 3, 2, 1, 3, 2, 1])]
+    d.add(sistema_piano('Escala de Do mayor a dos manos, subiendo (una octava de distancia entre ellas)', rh[:4], lh[:4], alto=190))
+    d.add(sistema_piano('… continuación', rh[4:], lh[4:], alto=190))
+    pats = [('Negras', [[N('q')] * 4, [N('q')] * 4]), ('Corcheas', [[N('e')] * 8, [N('e')] * 8]),
+            ('Negra con puntillo y corchea', [[N('q.'), N('e'), N('q.'), N('e')], [N('q.'), N('e'), N('q.'), N('e')]]),
+            ('Blanca y dos negras', [[N('h'), N('q'), N('q')], [N('h'), N('q'), N('q')]])]
+    d.add(par('**Variantes rítmicas.** Toca la escala (una nota por golpe) con cada uno de estos ritmos:', 9.3, INK, despues=3))
+    for k, (tit, comp) in enumerate(pats):
+        d.add(fila_compases(comp, ts=(4, 4), titulo='%s) %s' % (SEC[k], tit)))
+    d.add(tabla([100, 98, 98, 98, 97], [['♩ =', '', '', '', ''], ['Escala limpia (de 3)', '', '', '', '']],
+                ['Semana', '1', '2', '3', '4'], alto=22, size=8.4, zebra=False))
+    d.add(ejercicio(6, 'Composición breve en Do mayor',
+                    ['Escribe una frase de **cuatro compases en 4/4**, en clave de sol y solo con notas de Do mayor. Debe empezar en una nota del acorde de Do (Do, Mi o Sol) y **terminar en Do** (la tónica).',
+                     'Incluye al menos una blanca, un par de corcheas y un puntillo. Toca después tu frase.'],
+                    'Aplicar la teoría en la práctica: componer obliga a decidir figuras, alturas y final.'))
+    d.add(pauta_vacia('treble', 4, (4, 4), titulo='Mi frase'))
+    sol(MES, 6, 'Composición breve', ['Libre. Criterios: 4 compases de 4/4, notas de Do mayor, empieza en Do/Mi/Sol, termina en Do, incluye blanca, dos corcheas y puntillo; cada compás suma 4 tiempos.'])
+    sol(MES, 'Al piano', 'Escala a dos manos', ['Derecha: Do Re Mi Fa Sol La Si Do (1 2 3 1 2 3 4 5). Izquierda: la misma escala una octava más grave (5 4 3 2 1 3 2 1).'])

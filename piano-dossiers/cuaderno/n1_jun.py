@@ -1,136 +1,97 @@
 # -*- coding: utf-8 -*-
-"""JUNIO · Repaso final y gran concierto."""
+"""JUNIO · Acordes y acompanamiento."""
 from n1_base import *
-from reportlab.lib.colors import HexColor
+from n1_base import _abs_idx
+from n1_comun import *
 
 MES = 'Junio'
-
-# (mes, pregunta, opciones | None si verdadero/falso, respuesta)
-TEST = [
-    ('Septiembre', '¿Cuál de estas figuras dura menos que la negra?', ['Corchea', 'Blanca', 'Redonda'], 'A'),
-    ('Septiembre', 'La blanca dura la mitad que la redonda.', None, 'Verdadero'),
-    ('Octubre', 'En clave de sol, el Do central se escribe…', ['en la 1.ª línea adicional inferior', 'en la 3.ª línea', 'en la 1.ª línea adicional superior'], 'A'),
-    ('Octubre', 'Las líneas adicionales solo pueden ir por encima del pentagrama.', None, 'Falso'),
-    ('Noviembre', 'Una octava del teclado (de un Do al siguiente) tiene…', ['8 teclas blancas y 4 negras', '7 teclas blancas y 5 negras', '6 teclas blancas y 6 negras'], 'B'),
-    ('Noviembre', 'Entre Mi y Fa hay una tecla negra.', None, 'Falso'),
-    ('Diciembre', 'La escala de Do mayor completa tiene…', ['6 tonos y 1 semitono', '5 tonos y 2 semitonos', '7 tonos'], 'B'),
-    ('Diciembre', 'En la escala de Do mayor los semitonos están entre Mi–Fa y Si–Do.', None, 'Verdadero'),
-    ('Enero', 'En un compás de 3/4 caben…', ['tres negras', 'cuatro negras', 'tres blancas'], 'A'),
-    ('Enero', 'Un compás de 2/4 puede llenarse con una sola blanca.', None, 'Verdadero'),
-    ('Febrero', '¿Cuántas semicorcheas caben en una negra?', ['2', '4', '8'], 'B'),
-    ('Febrero', 'Dos corcheas duran lo mismo que una negra.', None, 'Verdadero'),
-    ('Marzo', 'La clave de fa se coloca sobre…', ['la 2.ª línea', 'la 4.ª línea', 'la 5.ª línea'], 'B'),
-    ('Marzo', 'En clave de fa, la nota de la 1.ª línea es…', ['Mi', 'Sol', 'La'], 'B'),
-    ('Abril', 'El silencio de blanca se coloca…', ['colgado de la 4.ª línea', 'apoyado en la 3.ª línea', 'en el 1.er espacio'], 'B'),
-    ('Abril', 'En un compás de 4/4, un silencio de blanca, un silencio de negra y una negra lo completan.', None, 'Verdadero'),
-    ('Mayo', 'Una blanca con puntillo dura…', ['2 tiempos', '3 tiempos', '4 tiempos'], 'B'),
-    ('Mayo', 'La ligadura de prolongación une dos notas de sonido distinto y suma sus tiempos.', None, 'Falso'),
-    ('Repaso', 'La nota de la que parte una escala se llama…', ['tónica', 'sensible', 'dominante'], 'A'),
-    ('Repaso', 'En clave de sol, la 2.ª línea es Sol.', None, 'Verdadero'),
-]
+PC = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11}
+# (cifrado, nombre, fundamental, tercera, quinta)
+TRIADAS = [('C', 'Do mayor', 'C4', 'E4', 'G4'), ('Dm', 'Re menor', 'D4', 'F4', 'A4'), ('Em', 'Mi menor', 'E4', 'G4', 'B4'),
+           ('F', 'Fa mayor', 'F4', 'A4', 'C5'), ('G', 'Sol mayor', 'G4', 'B4', 'D5'), ('Am', 'La menor', 'A3', 'C4', 'E4')]
 
 
-def diploma():
-    h = 330
-
-    def f(c, x, y, w):
-        c.setStrokeColor(NAVY)
-        c.setLineWidth(2.2)
-        c.roundRect(x, y - h, w, h, 8, fill=0, stroke=1)
-        c.setStrokeColor(OCRE)
-        c.setLineWidth(0.9)
-        c.roundRect(x + 8, y - h + 8, w - 16, h - 16, 5, fill=0, stroke=1)
-        c.setFillColor(OCRE)
-        c.setFont('DejaVuSans-Bold', 8.4)
-        c.drawCentredString(x + w / 2, y - 42, 'T-CLAS  ·  EL CUADERNO DEL PIANISTA')
-        c.setFillColor(NAVY)
-        c.setFont('DejaVuSerif-Bold', 30)
-        c.drawCentredString(x + w / 2, y - 92, 'Diploma')
-        c.setFont('DejaVuSerif', 12)
-        c.drawCentredString(x + w / 2, y - 120, 'de Explorador / Exploradora Musical · Nivel 1')
-        c.setFont('DejaVuSans', 9.4)
-        c.setFillColor(INK)
-        c.drawCentredString(x + w / 2, y - 156, 'Se concede el presente diploma a')
-        c.setStrokeColor(NAVY_SOFT)
-        c.setLineWidth(0.8)
-        c.line(x + 80, y - 188, x + w - 80, y - 188)
-        c.drawCentredString(x + w / 2, y - 220, 'por haber completado el curso 2026/27: notación, teclado, escala de Do mayor,')
-        c.drawCentredString(x + w / 2, y - 234, 'compases, ritmo, clave de fa, silencios, ligadura y puntillo.')
-        c.line(x + 60, y - 290, x + 190, y - 290)
-        c.line(x + w - 190, y - 290, x + w - 60, y - 290)
-        c.setFont('DejaVuSans', 7.6)
-        c.setFillColor(MUTED)
-        c.drawCentredString(x + 125, y - 302, 'Fecha')
-        c.drawCentredString(x + w - 125, y - 302, 'El / la profesor(a)')
-    return Blk(h + 8, f)
-
-
-def marco_libre(titulo, alto):
-    def f(c, x, y, w):
-        c.setStrokeColor(NAVY_SOFT)
-        c.setLineWidth(0.9)
-        c.setDash(3, 3)
-        c.roundRect(x, y - alto, w, alto, 6, fill=0, stroke=1)
-        c.setDash()
-        c.setFont('DejaVuSans-Bold', 8)
-        c.setFillColor(NAVY_SOFT)
-        c.drawString(x + 10, y - 14, titulo)
-    return Blk(alto + 8, f)
+def semitonos(a, b):
+    """Semitonos entre dos notas naturales (b por encima de a)."""
+    def n(p):
+        return PC[p[0]] + 12 * int(p[-1])
+    return n(b) - n(a)
 
 
 def construir(d):
-    d.nuevo('Junio · Repaso final y gran concierto')
-    d.add(banda_mes('Junio', '3.er trimestre', 'Repaso final y gran concierto',
-                    'Mirar atrás todo lo aprendido, prepararse para tocar delante de otros y celebrarlo.'))
-    d.add(caja('dato', '¡Llegó el final del curso!', [
-        'Este mes **repasamos** lo aprendido, preparamos un **pequeño concierto**, demostramos nuestra creatividad y compartimos el trabajo con los compañeros. '
-        'Es el momento de mostrar todo lo que sabes.']))
-    d.add(ejercicio(1, 'Me aprendo mi partitura',
-                    ['Elige **una pieza** trabajada durante el curso (puede ser el Himno de la Alegría o cualquiera de tu clase). Repásala y practícala con el método de abajo. '
-                     'Si quieres un reto, busca la misma pieza **en otra tonalidad**.',
-                     'Anota a la derecha el título, el compositor y la fecha del concierto.'],
-                    'Desarrollar la autonomía musical, la memoria auditiva y la expresividad.'))
-    d.add(lineas_escribir(1, 'Título y autor: ________________________________________________      Fecha del concierto: ____ / ____ / ______', 20))
-    d.add(h2('Mi método de estudio en cuatro pasos'))
-    d.add(tabla([30, 120, 341], [
-        ['1', '**Aísla**', 'Marca los pasajes difíciles y estudia **solo ese trozo** (dos o cuatro compases), no la pieza entera.'],
-        ['2', '**Reduce**', 'Hazlo más fácil: **manos separadas**, más despacio, solo el ritmo, solo con una nota…'],
-        ['3', '**Reinserta**', 'Vuelve a **ponerlo en su sitio**: toca desde unos compases antes hasta unos compases después, con las dos manos.'],
-        ['4', '**Toca de seguido**', 'Una vez entera, **sin parar** aunque te equivoques, como en el concierto. Después, corrige lo que falló.'],
-    ], None, alto=36, zebra=True, size=9.2, alin=['c', 'l', 'l']))
-    d.add(casillas(['Sé dónde están los compases difíciles.', 'Toco la mano derecha de memoria.', 'Toco la mano izquierda de memoria.',
-                    'La toco entera sin parar.', 'Cuento los silencios y respeto los puntillos.', 'La toco delante de alguien.'], cols=2))
-    sol(MES, 1, 'Me aprendo mi partitura', ['Ejercicio personal: se valora seguir los cuatro pasos y tocar sin detenerse.'])
+    d.nuevo('Junio · Acordes')
+    d.add(banda_mes('Junio', 'Etapa 3', 'Acordes y acompañamiento',
+                    'Qué es un acorde, tríadas mayores y menores, funciones armónicas y primeras cadencias para acompañar.'))
+    d.add(caja('dato', 'La tríada', [
+        'Un **acorde** son tres o más sonidos que suenan a la vez. El más sencillo es la **tríada**: tres notas separadas por **terceras**, es decir, una nota, la que está dos grados por encima '
+        '(**tercera**) y la que está cuatro grados por encima (**quinta**). La nota de la que se parte es la **fundamental** y da nombre al acorde. En **estado fundamental** '
+        'la fundamental es la nota más grave.',
+        'Según la distancia entre sus notas, la tríada es **mayor** (tercera mayor, 4 semitonos, más tercera menor, 3 semitonos) o **menor** (tercera menor y después tercera mayor). '
+        'El modo, mayor o menor, determina el carácter: el mayor suena más luminoso, el menor más sombrío.']),
+        sistema('Tríadas de la escala de Do mayor sobre cada grado (estado fundamental)',
+                [{'pitches': [t[2], t[3], t[4]], 'dur': 'h'} for t in TRIADAS[:4]] + [], ts=(4, 4), alto=118),
+        sistema('… y las dos restantes', [{'pitches': [t[2], t[3], t[4]], 'dur': 'h'} for t in TRIADAS[4:]], ts=(4, 4), alto=118),
+        tabla([60, 100, 90, 120, 121], [[t[0], t[1], '%s – %s – %s' % (nombre(t[2]), nombre(t[3]), nombre(t[4])),
+                                         '%d + %d semitonos' % (semitonos(t[2], t[3]), semitonos(t[3], t[4])), 'mayor' if semitonos(t[2], t[3]) == 4 else 'menor']
+                                        for t in TRIADAS], ['Cifrado', 'Acorde', 'Notas', 'Distancias', 'Modo'], alto=19, size=8.6))
+    d.add(caja('nota', 'El cifrado de acordes', [
+        'En canciones, libros de acordes y partituras de pop los acordes se indican con **letras**: C = Do, D = Re, E = Mi, F = Fa, G = Sol, A = La, B = Si. La letra sola indica acorde '
+        '**mayor** (C = Do mayor); una **m** añadida indica **menor** (Am = La menor).']))
+    d.add(ejercicio(1, 'Construir tríadas',
+                    ['La primera nota de cada fila es la fundamental. Escribe la **tercera** y la **quinta** (hacia arriba, en estado fundamental) y escribe el nombre de las tres notas.'],
+                    'Construir acordes sobre la tríada sin memorizarlos: saltando una nota entre cada dos.'))
+    ej1 = [('C', 'C4'), ('F', 'F4'), ('G', 'G4'), ('Am', 'A3'), ('Dm', 'D4'), ('Em', 'E4')]
+    s1 = []
+    for k in range(0, 6, 3):
+        sub = ej1[k:k + 3]
+        notas = []
+        bajo = []
+        for cif, raiz in sub:
+            tri = [raiz, mover(raiz, 2), mover(raiz, 4)]
+            notas += [raiz, None, None]
+            bajo += [cif, '_', '_']
+            s1.append('%s: %s' % (cif, ' – '.join(nombre(p) for p in tri)))
+        d.add(fila_notas('treble', notas, 'w', bajo=bajo, titulo='%s)' % SEC[k // 3], barras=3, caja_ancho=26))
+    sol(MES, 1, 'Construir tríadas', ['; '.join(s1) + '.'])
+    d.add(ejercicio(2, 'Modo de cada acorde',
+                    ['Cuenta los semitonos entre las notas del acorde (ayúdate del teclado) y decide si es mayor o menor.'],
+                    'Distinguir a oído y a la vista el modo mayor del menor.'))
+    pr = [('Do – Mi – Sol', 'C4', 'E4', 'G4'), ('Re – Fa – La', 'D4', 'F4', 'A4'), ('Fa – La – Do', 'F4', 'A4', 'C5'), ('Mi – Sol – Si', 'E4', 'G4', 'B4'), ('Sol – Si – Re', 'G4', 'B4', 'D5')]
+    d.add(tabla([130, 120, 120, 121], [[a, '', '', ''] for a, *_ in pr], ['Notas', '1.ª → 3.ª (semitonos)', '3.ª → 5.ª (semitonos)', 'Modo'], alto=24, size=9))
+    sol(MES, 2, 'Modo de cada acorde', ['; '.join('%s: %d + %d → %s' % (a, semitonos(x, y), semitonos(y, z), 'mayor' if semitonos(x, y) == 4 else 'menor') for a, x, y, z in pr) + '.'])
+    d.add(ejercicio(3, 'Reconocer acordes',
+                    ['Escribe el cifrado de cada acorde (C, Dm, Em, F, G o Am). Identifica primero la fundamental y comprueba si la tercera está a 4 o a 3 semitonos.'],
+                    'Leer acordes de un vistazo para acompañar canciones.'))
+    r = rnd(63)
+    orden = list(range(6))
+    r.shuffle(orden)
+    ac = [TRIADAS[i] for i in orden[:4]]
+    d.add(sistema('Escribe el cifrado debajo de cada acorde', [{'pitches': [t[2], t[3], t[4]], 'dur': 'h'} for t in ac], ts=(4, 4), alto=120))
+    d.add(lineas_escribir(1, 'Cifrados:   ______     ______     ______     ______', 22))
+    sol(MES, 3, 'Reconocer acordes', ['  ·  '.join(t[0] for t in ac) + '.'])
 
-    d.add(ejercicio(2, 'Test musical de repaso',
-                    ['Responde a las preguntas de cada mes. En las de **A/B/C** rodea la correcta; en las de **V/F**, marca si es verdadero o falso.',
-                     'Hazlo sin ayuda; luego mira las soluciones al final del cuaderno.'],
-                    'Repasar los conceptos básicos de teoría musical de forma autónoma.'))
-    actual = None
-    ans = []
-    for i, (mes, preg, ops, resp) in enumerate(TEST):
-        if mes != actual:
-            actual = mes
-            d.add(h2(mes))
-        if ops:
-            txt = '**%d.** %s\n   A) %s     B) %s     C) %s' % (i + 1, preg, ops[0], ops[1], ops[2])
-        else:
-            txt = '**%d.** %s     ☐ Verdadero    ☐ Falso' % (i + 1, preg)
-        d.add(par(txt, 9.0, INK, despues=3, sangria=0))
-        ans.append('%d) %s' % (i + 1, resp))
-    sol(MES, 2, 'Test musical de repaso', ['  ·  '.join(ans)])
+    # ---- funciones y cadencia
+    d.add(caja('dato', 'Funciones armónicas y cadencia', [
+        'Los acordes de una tonalidad se agrupan en tres funciones principales: **tónica** (grado I: reposo, punto de partida y de llegada), **subdominante** (grado IV: movimiento, aleja de la tónica) '
+        'y **dominante** (grado V: tensión, pide volver a la tónica). La secuencia **I – IV – V – I** es la cadencia más básica y sirve de esqueleto a un gran número de canciones.',
+        'En Do mayor: **C – F – G – C**. En Sol mayor: **G – C – D – G**. En Fa mayor: **F – B♭ – C – F**.']))
+    d.add(sistema_piano('Cadencia I – IV – V – I en Do mayor (acordes en la derecha, fundamental en la izquierda)',
+                        [{'pitches': ['C4', 'E4', 'G4'], 'dur': 'w'}, {'pitches': ['F4', 'A4', 'C5'], 'dur': 'w'}],
+                        [{'pitch': 'C3', 'dur': 'w'}, {'pitch': 'F3', 'dur': 'w'}], alto=190),
+          sistema_piano('… continuación', [{'pitches': ['G4', 'B4', 'D5'], 'dur': 'w'}, {'pitches': ['C4', 'E4', 'G4'], 'dur': 'w'}],
+                        [{'pitch': 'G2', 'dur': 'w'}, {'pitch': 'C3', 'dur': 'w'}], alto=190))
+    d.add(ejercicio(4, 'Cadencias en otras tonalidades',
+                    ['Escribe la cadencia I – IV – V – I en Sol mayor y en Fa mayor: tres notas por acorde, en estado fundamental, en clave de sol. Usa la armadura indicada.'],
+                    'Aplicar la misma estructura en tonalidades distintas.'))
+    d.add(sistema('a) Sol mayor (G – C – D – G)', [{'rest': True, 'dur': 'w'}] * 4, key_sig='Sol mayor', alto=96),
+          sistema('b) Fa mayor (F – B♭ – C – F)', [{'rest': True, 'dur': 'w'}] * 4, key_sig='Fa mayor', alto=96))
+    sol(MES, 4, 'Cadencias en otras tonalidades',
+        ['a) G: Sol–Si–Re · C: Do–Mi–Sol · D: Re–Fa♯–La · G: Sol–Si–Re.  b) F: Fa–La–Do · B♭: Si♭–Re–Fa · C: Do–Mi–Sol · F: Fa–La–Do.'])
 
-    d.add(ejercicio(3, 'Concurso de dibujo musical',
-                    ['Tienes una semana para hacer tu mejor **dibujo musical**: instrumentos, notas con colores, una escena de un concierto o de una clase… Usa los recursos que quieras: cartulinas, hojas de colores, pergaminos, pinturas…'],
-                    'Estimular la creatividad visual ligada al aprendizaje musical.'),
-          marco_libre('Mi dibujo musical (o pégalo aquí)', 210))
-    sol(MES, 3, 'Concurso de dibujo', ['Libre. Se elegirán los tres dibujos más creativos y musicales.'])
-    d.add(ejercicio(4, 'Fiesta final y entrega de premios',
-                    ['Prepara tu mejor sonrisa: haremos una **merienda compartida** con todos los compañeros. Expondremos los dibujos musicales, se elegirán los 3 ganadores del concurso '
-                     'y se entregará un **diploma musical** por haber completado el curso.'],
-                    'Fomentar la convivencia, valorar el esfuerzo del grupo y cerrar el curso con alegría y motivación.'))
-    d.add(diploma(),
-          caja('tip', 'La actitud del buen pianista', [
-              'Un buen pianista sabe que **aprender es un viaje**, un descubrimiento de infinitos tesoros. Para practicar cada día, la pasión por la música que hace que cada nota sea especial '
-              'y las ganas de seguir mejorando son claves. Además, **disfrutar y divertirse** mientras tocas es lo que hace que el piano realmente cobre vida.',
-              '**Desde T-Clas: ¡feliz musiverano!**']))
+    d.add(caja('piano', 'Al piano: acordes de la mano izquierda', [
+        'La izquierda toca los tres sonidos de cada acorde **a la vez** (digitación **5 – 3 – 1**), con el peso del brazo y sin golpear. Primero cada acorde por separado hasta que la mano lo reconozca; después la cadencia seguida. '
+        'Cuando salga, toca la melodía de la derecha sobre ella.']))
+    lh = [{'pitches': ['C3', 'E3', 'G3'], 'dur': 'w'}, {'pitches': ['F3', 'A3', 'C4'], 'dur': 'w'}, {'pitches': ['G2', 'B2', 'D3'], 'dur': 'w'}, {'pitches': ['C3', 'E3', 'G3'], 'dur': 'w'}]
+    d.add(sistema('Cadencia I – IV – V – I con la mano izquierda en acordes (Do mayor)', lh, clef='bass', alto=116))
+    d.add(par('**Reto:** toca el Himno de la Alegría (noviembre y abril) con la derecha y, con la izquierda, un acorde de **C** en los compases 1 y 3 y de **G** en los compases 2 y 4.', 9.3, NAVY_SOFT))
+    sol(MES, 'Al piano', 'Acordes de la mano izquierda', ['C = Do Mi Sol · F = Fa La Do · G = Sol Si Re (una octava más grave para quedar en la zona de la izquierda).'])

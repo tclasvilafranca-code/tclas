@@ -1,107 +1,72 @@
 # -*- coding: utf-8 -*-
-"""MAYO · La ligadura y el puntillo."""
+"""MAYO · Armaduras: Sol mayor y Fa mayor."""
 from n1_base import *
-from n1_base import _abs_idx
-from page_layout_common import system_block
-from fractions import Fraction
+from n1_comun import *
 
 MES = 'Mayo'
-SEC = 'abcdef'
-N = lambda dd, p=None: ('n', dd) if p is None else ('n', dd, p)
-R = lambda dd: ('r', dd)
-V = {'w': 4.0, 'h': 2.0, 'q': 1.0, 'e': 0.5, 'h.': 3.0, 'q.': 1.5, 'w.': 6.0, 'e.': 0.75}
-
-
-def sistema(titulo, ev, ts=(4, 4), alto=110, clef='treble'):
-    return Blk(alto, lambda c, x, y, w: system_block(c, x, w, y, GAP + 0.6, titulo, ev, clef=clef, time_sig=ts))
-
-
-def tx(v):
-    s = '%g' % v
-    return s.replace('.5', ' ½') if '.5' in s else s
 
 
 def construir(d):
-    d.nuevo('Mayo · La ligadura y el puntillo')
-    d.add(banda_mes('Mayo', '3.er trimestre', 'La ligadura y el puntillo',
-                    'Dos recursos para escribir cualquier duración: unir notas y alargarlas con un punto.'))
-    d.add(caja('dato', 'Dos formas de alargar una nota', [
-        '▸ **Ligadura de prolongación:** une dos notas **del mismo sonido** para que se toquen como una sola, **sumando sus valores**. '
-        'Es muy común cuando una nota se prolonga **de un compás a otro**, porque una figura no puede cruzar la barra de compás.',
-        '▸ **Puntillo:** el punto a la derecha de una figura la alarga **la mitad de su valor**: una blanca con puntillo dura 3 tiempos.',
-        '▸ **Ligadura de expresión (legato):** si une notas **distintas**, no suma tiempos: indica que se toquen **ligadas**, sin cortar el sonido entre una y otra. '
-        'Se dibuja igual (un arco), pero significa otra cosa; fíjate siempre en si las notas son iguales o diferentes.',
-        'Estos recursos dan **flexibilidad** a la escritura: permiten duraciones que no existen como figura suelta.']),
-        sistema('Ligadura de prolongación: la blanca y la negra suman 3 tiempos',
-                [{'pitch': 'G4', 'dur': 'q'}, {'pitch': 'A4', 'dur': 'q'}, {'pitch': 'G4', 'dur': 'h', 'lig': True},
-                 {'pitch': 'G4', 'dur': 'q'}, {'pitch': 'F4', 'dur': 'q'}, {'pitch': 'E4', 'dur': 'h'}], alto=100),
-        sistema('Ligadura de expresión (legato): notas distintas, no se suman tiempos',
-                [{'pitch': 'E4', 'dur': 'q', 'lig': True}, {'pitch': 'F4', 'dur': 'q', 'lig': True}, {'pitch': 'G4', 'dur': 'q'}, {'pitch': 'E4', 'dur': 'q'},
-                 {'pitch': 'D4', 'dur': 'h'}, {'pitch': 'C4', 'dur': 'h'}], alto=100))
+    d.nuevo('Mayo · Armaduras')
+    d.add(banda_mes('Mayo', 'Etapa 3', 'Armaduras: Sol y Fa mayor',
+                    'Cómo una alteración fija define la tonalidad: construcción de las escalas de Sol mayor y de Fa mayor.'))
+    d.add(caja('dato', 'Tonalidad y armadura', [
+        'Una **tonalidad** es el conjunto de notas y relaciones que organiza una pieza alrededor de una tónica. Para no repetir una alteración cada vez que aparece, se escribe una vez '
+        'tras la clave: la **armadura**. Las alteraciones de la armadura valen **para todas las notas del mismo nombre, en todas las octavas y durante toda la pieza**.',
+        'Una escala mayor siempre sigue la receta **T T S T T T S**. Empezando en otra nota que no sea Do, alguna nota natural no cumple la receta y hay que alterarla:',
+        '▸ **Sol mayor** (tónica Sol): para que el séptimo grado esté a un semitono de la tónica, el Fa debe ser **Fa♯**. Armadura: **un sostenido (Fa♯)**.',
+        '▸ **Fa mayor** (tónica Fa): para que el cuarto grado esté a un tono del tercero, el Si debe ser **Si♭**. Armadura: **un bemol (Si♭)**.',
+        'Orden de las alteraciones: sostenidos **Fa – Do – Sol – Re – La – Mi – Si**; bemoles **Si – Mi – La – Re – Sol – Do – Fa** (el orden inverso).']),
+        sistema('Do mayor: sin armadura', [{'pitch': p, 'dur': 'q'} for p in ['C4', 'D4', 'E4', 'F4']], alto=96, key_sig=None),
+        sistema('Sol mayor: un sostenido en la armadura (Fa♯)', [{'pitch': p, 'dur': 'q'} for p in ['G4', 'A4', 'B4', 'C5']], alto=96, key_sig='Sol mayor'),
+        sistema('Fa mayor: un bemol en la armadura (Si♭)', [{'pitch': p, 'dur': 'q'} for p in ['F4', 'G4', 'A4', 'Bb4']], alto=96, key_sig='Fa mayor'))
+    d.add(ejercicio(1, 'Construir la escala',
+                    ['Escribe en la tabla el tono (T) o semitono (S) entre las notas **naturales** de cada escala. Compara con la receta T T S T T T S y señala dónde no coincide: '
+                     'ahí hay que alterar la nota.'],
+                    'Deducir la armadura a partir de la estructura de la escala, en lugar de memorizarla.'))
+    d.add(tabla([66, 66, 66, 66, 66, 66, 66, 29], [['Sol', 'La', 'Si', 'Do', 'Re', 'Mi', 'Fa', 'Sol'], ['T/S:', '', '', '', '', '', '', ''],
+                                                    ['Receta', 'T', 'T', 'S', 'T', 'T', 'T', 'S']], None, alto=22, size=8.8, zebra=False))
+    d.add(tabla([66, 66, 66, 66, 66, 66, 66, 29], [['Fa', 'Sol', 'La', 'Si', 'Do', 'Re', 'Mi', 'Fa'], ['T/S:', '', '', '', '', '', '', ''],
+                                                    ['Receta', 'T', 'T', 'S', 'T', 'T', 'T', 'S']], None, alto=22, size=8.8, zebra=False))
+    sol(MES, 1, 'Construir la escala',
+        ['Sol mayor con notas naturales: T T S T T S T → no coincide en los dos últimos intervalos: hay que subir el Fa (Fa♯) para que Mi–Fa♯ sea T y Fa♯–Sol sea S.',
+         'Fa mayor con notas naturales: T T T S T T S → no coincide en los intervalos tercero y cuarto: hay que bajar el Si (Si♭) para que La–Si♭ sea S y Si♭–Do sea T.'])
+    d.add(ejercicio(2, 'Escribir las escalas con alteraciones',
+                    ['Completa cada escala escribiendo **a mano** las alteraciones donde hagan falta (sin armadura). Después, nombra la alteración que has necesitado.'],
+                    'Comprobar que cada escala mayor necesita exactamente las alteraciones que predice su estructura.'))
+    d.add(fila_notas('treble', ['G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5'], 'q', bajo='nada', titulo='a) Sol mayor (¿qué nota hay que alterar?)', barras=4),
+          fila_notas('treble', ['F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5'], 'q', bajo='nada', titulo='b) Fa mayor (¿qué nota hay que alterar?)', barras=4))
+    sol(MES, 2, 'Escribir las escalas', ['a) Fa♯ (7.º grado).  b) Si♭ (4.º grado).'])
+    d.add(ejercicio(3, 'Identificar la tonalidad',
+                    ['Escribe la tonalidad (Do, Sol o Fa mayor) de cada armadura.'],
+                    'Reconocer una tonalidad al primer vistazo.'))
+    sig = ['Fa mayor', 'Do mayor', 'Sol mayor', 'Fa mayor']
+    for k, kn in enumerate(sig):
+        d.add(sistema('%s) Tonalidad: ____________' % SEC[k], [{'rest': True, 'dur': 'w'}], alto=86, key_sig=None if kn == 'Do mayor' else kn))
+    sol(MES, 3, 'Identificar la tonalidad', ['  ·  '.join('%s) %s' % (SEC[k], kn) for k, kn in enumerate(sig))])
 
-    # ---- Ejercicio 1: la ligadura
-    d.add(ejercicio(1, 'La ligadura',
-                    ['Observa las parejas de notas ligadas y escribe **cuánto dura en total** cada nota (suma los valores de las dos).',
-                     'Después, escribe con **una sola figura** (con o sin puntillo) lo que valen: dos blancas, dos negras, una blanca y una negra…'],
-                    'Identificar visualmente la ligadura y comprender su función.'))
-    lig = [
-        [{'pitch': 'C5', 'dur': 'h', 'lig': True}, {'pitch': 'C5', 'dur': 'q'}, {'pitch': 'B4', 'dur': 'q'},
-         {'pitch': 'A4', 'dur': 'q', 'lig': True}, {'pitch': 'A4', 'dur': 'q'}, {'pitch': 'G4', 'dur': 'h'}],
-        [{'pitch': 'E4', 'dur': 'q'}, {'pitch': 'G4', 'dur': 'q'}, {'pitch': 'C5', 'dur': 'h', 'lig': True}, {'pitch': 'C5', 'dur': 'w'}],
-    ]
-    tot = [('C5: blanca + negra', 3.0, 'A4: negra + negra', 2.0), ('C5: blanca + redonda', 6.0, '', 0)]
-    for k, ev in enumerate(lig):
-        d.add(sistema('%s) %s' % (SEC[k], 'Escribe cuánto dura cada nota ligada: ____ tiempos' + ('   y   ____ tiempos' if k == 0 else '')), ev, alto=104))
-    d.add(lista(['Dos blancas ligadas = ______ (una sola figura).', 'Dos negras ligadas = ______.', 'Blanca + negra ligadas = ______.',
-                 'Redonda + blanca ligadas = ______.'], marca='▸', size=9.6, sep=5))
-    sol(MES, 1, 'La ligadura',
-        ['a) C5: blanca + negra = 3 tiempos; A4: negra + negra = 2 tiempos.  b) C5: blanca + redonda = 6 tiempos.',
-         'Dos blancas = redonda · Dos negras = blanca · Blanca + negra = blanca con puntillo · Redonda + blanca = redonda con puntillo (6 tiempos).'])
-
-    # ---- Ejercicio 2: puntillo en contexto
-    d.add(ejercicio(2, 'El puntillo en contexto',
-                    ['Escribe la duración exacta de cada figura con puntillo en subdivisiones más pequeñas.',
-                     'Recuerda: el punto suma la mitad. Si te pierdes, pasa todo a la figura más pequeña.'],
-                    'Interiorizar que el puntillo añade la mitad del valor y expresarlo en subdivisiones reales.'))
-    ppt = [('Negra con puntillo', 'corcheas', Fraction(3, 2) / Fraction(1, 2)), ('Blanca con puntillo', 'negras', Fraction(3)),
-           ('Corchea con puntillo', 'semicorcheas', Fraction(3, 4) / Fraction(1, 4)), ('Redonda con puntillo', 'blancas', Fraction(6, 2)),
-           ('Semicorchea con puntillo', 'fusas', Fraction(3, 8) / Fraction(1, 8))]
-    d.add(lista(['%s = ______ %s.' % (a, b) for a, b, _ in ppt] + ['Semicorchea con puntillo = ______ semifusas.'], marca='▸', size=9.8, sep=6))
-    sol(MES, 2, 'El puntillo en contexto', ['  ·  '.join('%s = %d %s' % (a, int(v), b) for a, b, v in ppt) + '  ·  Semicorchea con puntillo = 6 semifusas.'])
-
-    d.add(caja('tip', 'El «salto» del puntillo', [
-        'Una **negra con puntillo seguida de una corchea** (1 ½ + ½ = 2 tiempos) da a la música un ritmo **saltarín y vivo**, muy típico de la danza, el jazz y las canciones populares. '
-        'Lo oirás en la última frase de «Jingle Bells» («all the **way**»). El puntillo no solo alarga: **cambia el carácter** de lo que se toca.']))
-
-    # ---- Ejercicio 3: lectura
-    d.add(ejercicio(3, 'Lectura con pulso y subdivisión',
-                    ['Lee cada línea en voz alta marcando el pulso con el pie: **TA** para las negras y blancas, **TI-TI** para las corcheas y **SHH** para los silencios.',
-                     'Cuenta en la cabeza lo que dura cada nota y sigue siempre el mismo pulso: la ligadura hace que **no se vuelva a atacar** la segunda nota.'],
-                    'Sentir el «empuje» de cada nota dentro del pulso y su subdivisión.'))
-    lect = [
-        ('a) Con puntillo', [[N('q.'), N('e'), N('q'), N('q')], [N('h.'), N('q')], [N('q.'), N('e'), N('q.'), N('e')]]),
-        ('b) Con silencios', [[N('q'), N('q'), R('q'), N('q')], [N('q.'), N('e'), R('h')], [N('h.'), R('q')]]),
-    ]
-    for tit, comp in lect:
-        d.add(fila_compases(comp, ts=(4, 4), titulo=tit))
-
-    # ---- Ejercicio 4: creativa
-    d.add(ejercicio(4, 'Aplicación creativa',
-                    ['Escribe un **motivo** de un compás en 4/4 que use al menos **un puntillo**, **una ligadura** y **un silencio**.',
-                     'Repite el motivo **tres veces** con una variación rítmica distinta cada vez (cambia la posición del puntillo, invierte corcheas y semicorcheas, desplaza acentos…). '
-                     'Señala cuál versión alarga más y por qué.'],
-                    'Convertir la teoría del puntillo en música con dirección y carácter.'))
-    d.add(pauta_vacia('treble', 1, (4, 4), titulo='Motivo'), pauta_vacia('treble', 1, (4, 4), titulo='Variación 1'),
-          pauta_vacia('treble', 1, (4, 4), titulo='Variación 2'), pauta_vacia('treble', 1, (4, 4), titulo='Variación 3'))
-    sol(MES, 3, 'Lectura con pulso y subdivisión', ['Cada compás de a) y b) suma 4 tiempos. Con ligadura, la segunda nota no se vuelve a tocar.'])
-    sol(MES, 4, 'Aplicación creativa', ['Ejercicio libre. Criterios: 4/4, un puntillo, una ligadura de prolongación y un silencio; cada variación suma 4 tiempos.'])
-
-    # ---- Al piano
-    d.add(caja('piano', 'Al piano: la segunda frase del Himno de la Alegría', [
-        'La melodía repite el principio, pero **acaba distinto**: el compás final lleva un **puntillo** (negra con puntillo + corchea) y termina en la tónica, Do. '
-        'Tócala con la derecha, posición de Do.']))
-    himno2 = [('E4', 'q', 3), ('E4', 'q', 3), ('F4', 'q', 4), ('G4', 'q', 5), ('G4', 'q', 5), ('F4', 'q', 4), ('E4', 'q', 3), ('D4', 'q', 2),
-              ('C4', 'q', 1), ('C4', 'q', 1), ('D4', 'q', 2), ('E4', 'q', 3), ('D4', 'q.', 2), ('C4', 'e', 1), ('C4', 'h', 1)]
-    ev = [{'pitch': p, 'dur': dd, 'number': n} for p, dd, n in himno2]
-    d.add(sistema('Himno de la Alegría · L. van Beethoven (tema, 2.ª frase)', ev, alto=108))
-    sol(MES, 'Himno (2.ª frase)', 'Himno de la Alegría (2.ª frase)', ['Mi Mi Fa Sol · Sol Fa Mi Re · Do Do Re Mi · Re. Do Do. Último compás: negra con puntillo + corchea + blanca = 4 tiempos.'])
+    # ---- al piano
+    d.add(caja('piano', 'Al piano: escalas de Sol y de Fa mayor', [
+        'La digitación de **Sol mayor** es la misma que la de Do mayor en las dos manos. En **Fa mayor** la mano derecha usa **1 2 3 4 1 2 3 4** (el pulgar pasa por debajo tras el 4, '
+        'que toca el Si♭, para tocar el Do) y la izquierda **5 4 3 2 1 3 2 1**.']))
+    g_d = ['G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F#5', 'G5']
+    f_d = ['F4', 'G4', 'A4', 'Bb4', 'C5', 'D5', 'E5', 'F5']
+    d.add(sistema('Sol mayor · mano derecha', [{'pitch': p, 'dur': 'q', 'number': n} for p, n in zip(g_d, [1, 2, 3, 1, 2, 3, 4, 5])], key_sig='Sol mayor', alto=112),
+          sistema('Fa mayor · mano derecha', [{'pitch': p, 'dur': 'q', 'number': n} for p, n in zip(f_d, [1, 2, 3, 4, 1, 2, 3, 4])], key_sig='Fa mayor', alto=112))
+    g_i = ['G2', 'A2', 'B2', 'C3', 'D3', 'E3', 'F#3', 'G3']
+    f_i = ['F2', 'G2', 'A2', 'Bb2', 'C3', 'D3', 'E3', 'F3']
+    d.add(sistema('Sol mayor · mano izquierda', [{'pitch': p, 'dur': 'q', 'number': n} for p, n in zip(g_i, [5, 4, 3, 2, 1, 3, 2, 1])], clef='bass', key_sig='Sol mayor', alto=112),
+          sistema('Fa mayor · mano izquierda', [{'pitch': p, 'dur': 'q', 'number': n} for p, n in zip(f_i, [5, 4, 3, 2, 1, 3, 2, 1])], clef='bass', key_sig='Fa mayor', alto=112))
+    d.add(caja('piano', 'Minueto en Sol · C. Petzold (antes atribuido a J. S. Bach)', [
+        'Primera frase, mano derecha. Antes de tocar, analiza: tonalidad, compás y dónde aparece el Fa♯. La digitación es libre: busca la posición de la mano que evite saltos.']))
+    mn = [{'pitch': 'D5', 'dur': 'q'}, {'pitch': 'G4', 'dur': 'e'}, {'pitch': 'A4', 'dur': 'e'}, {'pitch': 'B4', 'dur': 'e'}, {'pitch': 'C5', 'dur': 'e'},
+          {'pitch': 'D5', 'dur': 'q'}, {'pitch': 'G4', 'dur': 'q'}, {'pitch': 'G4', 'dur': 'q'},
+          {'pitch': 'E5', 'dur': 'q'}, {'pitch': 'C5', 'dur': 'e'}, {'pitch': 'D5', 'dur': 'e'}, {'pitch': 'E5', 'dur': 'e'}, {'pitch': 'F#5', 'dur': 'e'},
+          {'pitch': 'G5', 'dur': 'q'}, {'pitch': 'G4', 'dur': 'q'}, {'pitch': 'G4', 'dur': 'q'}]
+    d.add(sistema('Minueto en Sol · primera frase', mn, ts=(3, 4), key_sig='Sol mayor', alto=118))
+    d.add(ejercicio(4, 'Análisis del Minueto',
+                    ['Contesta sobre la partitura.'], 'Preparar una pieza analizándola antes de tocarla.'))
+    d.add(tabla([260, 231], [['Tonalidad y armadura', ''], ['Cifra de compás y tiempos por compás', ''], ['Figura de menor duración', ''],
+                              ['Nota alterada que aparece en la frase', ''], ['Nota más aguda y más grave', '']], ['Pregunta', 'Respuesta'], alto=26, alin=['l', 'l'], size=9))
+    sol(MES, 4, 'Análisis del Minueto', ['Sol mayor (un sostenido, Fa♯) · 3/4, tres tiempos · corchea · Fa♯ (compás 3) · más aguda Sol5, más grave Sol4.'])
+    sol(MES, 'Al piano', 'Escalas de Sol y Fa', ['Sol mayor: Sol La Si Do Re Mi Fa♯ Sol. Fa mayor: Fa Sol La Si♭ Do Re Mi Fa. Minueto: Re5 · Sol4 La4 Si4 Do5 · Re5 Sol4 Sol4 · Mi5 Do5 Re5 Mi5 Fa♯5 · Sol5 Sol4 Sol4.'])

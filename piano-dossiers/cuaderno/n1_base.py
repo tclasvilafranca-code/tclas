@@ -198,8 +198,8 @@ def banda_mes(mes, trimestre, titulo, sub):
     return Blk(h, f)
 
 
-ICONOS = {'dato': ('!', OCRE, 'TECLA AL DATO'), 'tip': ('♪', NAVY, 'TIP MUSICAL'), 'ojo': ('!', ROJO, 'OJO'),
-          'nota': ('i', AZUL, 'PARA SABER MÁS'), 'piano': ('♫', VERDE, 'AL PIANO')}
+ICONOS = {'dato': ('!', OCRE, 'CONCEPTO'), 'tip': ('♪', NAVY, 'CONSEJO DE ESTUDIO'), 'ojo': ('!', ROJO, 'ATENCIÓN'),
+          'nota': ('i', AZUL, 'AMPLIACIÓN'), 'piano': ('♫', VERDE, 'AL PIANO')}
 
 
 def caja(tipo, titulo, bloques, w=CONTENT_W, pad=13, keep=True):
@@ -274,8 +274,8 @@ def ejercicio(num, titulo, hacer, para=None, hecho_en=None):
             yy -= 1
             c.setFillColor(OCRE)
             c.setFont('DejaVuSans-Bold', 7.6)
-            c.drawString(x + 38, yy - 8, 'PARA QUÉ SIRVE')
-            pinta_lineas(c, lp, x + 38 + 76, yy - 0.5, 8.6, 11.6, NAVY_SOFT)
+            c.drawString(x + 38, yy - 8, 'OBJETIVO')
+            pinta_lineas(c, lp, x + 38 + 56, yy - 0.5, 8.6, 11.6, NAVY_SOFT)
     return Blk(h, f, keep_next=True)
 
 
@@ -415,7 +415,7 @@ def fila_notas(clef, notas, dur='q', gap=GAP, bajo='linea', encima=None, caja_an
         inf = max(inf, -cy)
     pad_up = max(gap * 2.0, sup + gap * 1.4) + (gap * 2.0 if encima else 0)
     ydn = max(gap * 2.9, inf + gap * 1.9)
-    pad_dn = ydn + (6 if bajo != 'nada' else 0)
+    pad_dn = ydn + (6 if bajo != 'nada' else 0) + (0 if not isinstance(bajo, list) else 0)
     tit_h = 12 if titulo else 0
     h = tit_h + pad_up + 4 * gap + pad_dn
 
@@ -457,6 +457,11 @@ def fila_notas(clef, notas, dur='q', gap=GAP, bajo='linea', encima=None, caja_an
                 ww = min(slot * 0.78, caja_ancho or 34)
                 yl = bot - ydn
                 c.line(cx - ww / 2, yl, cx + ww / 2, yl)
+            elif isinstance(bajo, list) and bajo[k] == '_':
+                c.setStrokeColor(NAVY_SOFT)
+                c.setLineWidth(0.6)
+                ww = min(slot * 0.78, caja_ancho or 34)
+                c.line(cx - ww / 2, bot - ydn, cx + ww / 2, bot - ydn)
             elif isinstance(bajo, list) and bajo[k]:
                 c.setFont('DejaVuSans-Bold', 8.6)
                 c.setFillColor(NAVY)
@@ -531,7 +536,7 @@ BEATS = {'w': 4.0, 'h': 2.0, 'q': 1.0, 'e': 0.5, 's': 0.25, 'h.': 3.0, 'q.': 1.5
 
 
 def fila_compases(compases, ts=(4, 4), clef='treble', gap=GAP, titulo=None, final=True, pitch='B4',
-                  contar=False, ancho_rel=None, nota_bajo=None, caja_hueco=True, rotulos=None):
+                  contar=False, ancho_rel=None, nota_bajo=None, caja_hueco=True, rotulos=None, agrupa=1.0):
     """Compases dibujados con figuras y/o silencios y/o huecos.
        compases: lista de compases; cada compas = lista de items:
          ('n', dur[, pitch])  nota          ('r', dur) silencio     ('x', beats)  hueco para que el alumno escriba
@@ -585,7 +590,7 @@ def fila_compases(compases, ts=(4, 4), clef='treble', gap=GAP, titulo=None, fina
                     p = it[2] if len(it) > 2 else pitch
                     sd = 'up'
                     if it[1] in ('e', 's'):
-                        grupos.setdefault(int(b0 + 1e-6), []).append((idx, cxm, p))
+                        grupos.setdefault(int((b0 + 1e-6) / agrupa), []).append((idx, cxm, p))
                     else:
                         cx, cy, _ = draw_note(c, min(cxm, xb(b0) + (xb(b0 + bb) - xb(b0)) * 0.5), bot, top, gap, p,
                                               dur=it[1], stem_dir=sd, clef=clef)
@@ -1007,3 +1012,105 @@ def gran_pauta_notas(treble, bass, gap=GAP, titulo=None, nombres=None, linea_nom
                 c.setLineWidth(0.6)
                 c.line(cx - 14, by - 4 * gap - gap * 4.4, cx + 14, by - 4 * gap - gap * 4.4)
     return Blk(h, f)
+
+
+# ------------------------------------------------------------------ figuras y silencios sobre pentagrama
+def fila_figuras(gap=GAP, titulo=None):
+    """Las siete figuras sobre el pentagrama (de mayor a menor), con su nombre y su valor debajo."""
+    orden = ['w', 'h', 'q', 'e', 's', 'f', 'g']
+    tit = 12 if titulo else 0
+    h = tit + gap * 8.4 + 4 * gap + 40
+
+    def f(c, x, y, w):
+        if titulo:
+            c.setFont('DejaVuSans-Bold', 8.2)
+            c.setFillColor(NAVY_SOFT)
+            c.drawString(x, y - 8.5, titulo)
+        top = y - tit - gap * 7.4
+        ys = draw_staff(c, x, top, w, gap)
+        bot = ys[-1]
+        draw_barline(c, x, ys[0], bot)
+        draw_clef(c, x + 4, bot, gap, 'treble')
+        cur = x + 4 + gap * 5.4
+        slot = (x + w - 6 - cur) / 7.0
+        for k, dd in enumerate(orden):
+            cx = cur + slot * (k + 0.5)
+            figura(c, cx - gap * 0.3, bot + 2 * gap, gap, dd, linea=False)
+            c.setFont('DejaVuSans-Bold', 8.2)
+            c.setFillColor(NAVY)
+            c.drawCentredString(cx, bot - gap * 2.5, NOM_FIG[dd])
+            c.setFont('DejaVuSans', 7.6)
+            c.setFillColor(MUTED)
+            c.drawCentredString(cx, bot - gap * 2.5 - 11, FIG[dd][4])
+        draw_barline(c, x + w - 4, ys[0], bot, final=True)
+    return Blk(h, f)
+
+
+def fila_silencios(gap=GAP, titulo=None):
+    """Los siete silencios dentro del pentagrama: el de redonda cuelga de la 4.ª línea, el de blanca se apoya en la 3.ª."""
+    orden = ['w', 'h', 'q', 'e', 's', 'f', 'g']
+    tit = 12 if titulo else 0
+    h = tit + gap * 3.2 + 4 * gap + 44
+
+    def f(c, x, y, w):
+        if titulo:
+            c.setFont('DejaVuSans-Bold', 8.2)
+            c.setFillColor(NAVY_SOFT)
+            c.drawString(x, y - 8.5, titulo)
+        top = y - tit - gap * 3.0
+        ys = draw_staff(c, x, top, w, gap)
+        bot = ys[-1]
+        draw_barline(c, x, ys[0], bot)
+        draw_clef(c, x + 4, bot, gap, 'treble')
+        cur = x + 4 + gap * 5.4
+        slot = (x + w - 6 - cur) / 7.0
+        for k, dd in enumerate(orden):
+            cx = cur + slot * (k + 0.5)
+            if dd in ('f', 'g'):
+                c.setFillColor(INK)
+                c.setFont('FreeSerif', gap * 2.6)
+                mid = bot + 2 * gap
+                c.drawCentredString(cx, mid - gap * 0.6 - (gap * 0.55 if dd == 'f' else gap * 1.0),
+                                    '\U0001D140' if dd == 'f' else '\U0001D141')
+            else:
+                draw_rest(c, cx, bot, ys[0], gap, dd)
+            c.setFont('DejaVuSans-Bold', 7.8)
+            c.setFillColor(NAVY)
+            c.drawCentredString(cx, bot - gap * 2.2, NOM_FIG[dd])
+            c.setFont('DejaVuSans', 7.4)
+            c.setFillColor(MUTED)
+            c.drawCentredString(cx, bot - gap * 2.2 - 11, FIG[dd][4])
+        draw_barline(c, x + w - 4, ys[0], bot, final=True)
+    return Blk(h, f)
+
+
+def autobeam(ev, agrupa=1.0):
+    """Asigna 'beam' a corcheas/semicorcheas seguidas dentro de un mismo grupo de tiempos (solo si hay al menos dos)."""
+    out = [dict(e) for e in ev]
+    t = 0.0
+    grupos = {}
+    for i, e in enumerate(out):
+        dd = e.get('dur', 'q')
+        if not e.get('rest') and dd.rstrip('.') in ('e', 's'):
+            grupos.setdefault(int((t + 1e-6) / agrupa), []).append(i)
+        t += BEATS.get(dd, 1.0)
+    bid = 0
+    for g_, idx in sorted(grupos.items()):
+        if len(idx) >= 2 and all(idx[k + 1] == idx[k] + 1 for k in range(len(idx) - 1)):
+            for i in idx:
+                out[i]['beam'] = bid
+            bid += 1
+    return out
+
+
+def sistema(titulo, ev, ts=(4, 4), alto=110, clef='treble', key_sig=None, gap=None, agrupa=1.0):
+    """Sistema del motor (con rotulo) como bloque."""
+    from page_layout_common import system_block
+    ev = autobeam(ev, agrupa)
+    return Blk(alto, lambda c, x, y, w: system_block(c, x, w, y, gap or GAP + 0.6, titulo, ev, clef=clef, time_sig=ts, key_sig=key_sig))
+
+
+def sistema_piano(titulo, rh, lh, ts=(4, 4), alto=190, key_sig=None):
+    """Sistema de piano (sol + fa) con las dos manos; rh y lh deben sumar los mismos tiempos."""
+    from page_layout_common import grand_staff_block
+    return Blk(alto, lambda c, x, y, w: grand_staff_block(c, x, w, y, GAP + 0.4, rh, lh, titulo, time_sig=ts, key_sig=key_sig))

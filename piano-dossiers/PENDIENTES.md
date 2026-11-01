@@ -48,9 +48,10 @@
   de Sharifa/Abril (`clonar_spec.py` copia la fitxa canviant número/nom/mes). Dues pàgines inicials: notes (sense colors) i figures.
 - Recordatori: tancar els enllaços públics de Drive (partitures amb copyright).
 
-## Cuaderno «Mi cuaderno de piano · Nivel 1 · Adultos» (castellano)
-- Origen: `NIVEL 1 ADULTS` de Canva (Drive id `1Pb_rpHyaORPRqMjpaNglgCvZp95u7vnH`), rehecho en el diseño T-Clas de adultos y ampliado.
-- Montaje: `cd cuaderno && python3.13 n1_libro.py` → `entrega/CUADERNO_NIVEL1_ADULTOS.pdf` (`BN=1` para blanco y negro). Módulos `n1_base.py` (flujo de páginas, componentes), `n1_sep…n1_jun.py` (un mes cada uno), `n1_anexos.py` (portada, calendario, chuleta, glosario, diario, soluciones, pautas).
-- Las soluciones del final salen de los mismos datos que dibujan los ejercicios (`sol(...)`).
-- Pendiente de confirmar con el cliente: la portada original dice «NIVEL 2» (el archivo, «nivel 1»); versión en catalán si hace falta (`IDIOMA=ca` no traduce este libro: habría que traducir los textos).
-- Entorno: `dibujo_mano.py` pide fuentes (CabinSketch, dkgBd, Leckerli) que en una sesión nueva pueden faltar; para `nens_dib.ma_real` basta copiar DejaVu a esas rutas.
+## Cuaderno «Mi cuaderno de piano · Nivel 1 · Adultos» (castellano, noviembre–julio)
+- Rehecho para un alumno adulto que empieza de cero en noviembre (50 años, aprende rápido). Origen: `NIVEL 1 ADULTS` de Canva (Drive id `1Pb_rpHyaORPRqMjpaNglgCvZp95u7vnH`), con el temario reordenado y ampliado.
+- Montaje: `cd cuaderno && python3.13 n1_libro.py` → `entrega/CUADERNO_NIVEL1_ADULTOS.pdf` (`BN=1` para blanco y negro). Módulos: `n1_base.py` (flujo de páginas y componentes), `n1_comun.py` (diagramas), `n1_nov…n1_jul.py` (un mes cada uno), `n1_anexos.py` (portada, calendario, chuleta, glosario, diario, soluciones, pautas).
+- Temario: nov fundamentos (postura, dedos, teclado, pentagrama) · dic figuras, silencios y compás · ene notas adicionales · feb escala de Do, alteraciones, intervalos · mar ritmo, ligadura, 6/8 · abr clave de fa y manos juntas · may armaduras (Sol, Fa) · jun acordes y cadencias · jul expresión y repaso.
+- Normas de este cuaderno (petición del cliente): tono adulto sin explicaciones infantiles; los ejercicios de nombrar notas parten del Do (clave de sol) y del Fa (clave de fa); los silencios se muestran dentro del pentagrama (redonda colgando de la 4.ª línea, blanca sobre la 3.ª); dedos y pentagrama al principio.
+- Las soluciones salen de los mismos datos que dibujan los ejercicios (`sol(...)`). Verificar con partitura impresa las notas de Himno de la Alegría, Jingle Bells, Au clair de la lune, Frère Jacques y Minueto en Sol (escritas de memoria).
+- Entorno: `dibujo_mano.py` pide fuentes (CabinSketch, dkgBd, Leckerli) que pueden faltar en una sesión nueva; basta copiar DejaVu a esas rutas.

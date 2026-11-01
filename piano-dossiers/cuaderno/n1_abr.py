@@ -1,109 +1,75 @@
 # -*- coding: utf-8 -*-
-"""ABRIL · Recordamos los silencios musicales."""
+"""ABRIL · Clave de fa y manos juntas."""
 from n1_base import *
 from n1_base import _abs_idx
-from page_layout_common import system_block
-from n1_sep import fig_celda
+from n1_comun import *
 
 MES = 'Abril'
-SEC = 'abcdef'
-N = lambda dd, p=None: ('n', dd) if p is None else ('n', dd, p)
-R = lambda dd: ('r', dd)
 
 
 def construir(d):
-    d.nuevo('Abril · Silencios musicales')
-    d.add(banda_mes('Abril', '3.er trimestre', 'Recordamos los silencios',
-                    'Cuando no suena nada, la música sigue: cómo se escriben, cómo se cuentan y para qué sirven.'))
-    d.add(caja('dato', 'Un silencio es música también', [
-        'En música hay momentos de silencio, y tienen un **valor rítmico igual** que el de las figuras. Cada figura tiene su silencio: '
-        'redonda, blanca, negra, corchea, semicorchea, fusa y semifusa.',
-        'Dos reglas de escritura que conviene no olvidar: el silencio de **redonda cuelga** de la 4.ª línea y el de **blanca se apoya** en la 3.ª. '
-        'Y un detalle muy útil: el **silencio de redonda** sirve para indicar **un compás entero de silencio**, sea cual sea el compás '
-        '(2/4, 3/4, 4/4…), no solo cuando dura cuatro tiempos.']),
-        tabla([100, 190, 110, 91], [[fig_celda(x, True), NOM_SIL[x], FIG[x][4], fig_celda(x)] for x in ['w', 'h', 'q', 'e', 's']],
-              ['Silencio', 'Nombre', 'Dura', 'Figura'], alto=30, size=8.6),
-        caja('tip', 'Pausas mágicas', [
-            'En música, **el silencio vale tanto como su figura**. Piensa en los silencios como **pausas mágicas** en las que no se toca, pero la música sigue sonando '
-            'dentro de ti. **Respetarlos** es lo que hace que una pieza suene bien: un silencio acortado o ignorado es la señal más clara de que se está '
-            'tocando «a trompicones».']))
+    d.nuevo('Abril · Clave de fa y manos juntas')
+    d.add(banda_mes('Abril', 'Etapa 2', 'Clave de fa y manos juntas',
+                    'Lectura de las notas graves y primera coordinación de las dos manos sobre el sistema de piano.'))
+    d.add(caja('dato', 'La clave de fa', [
+        'La **clave de fa** se usa para el registro grave: mano izquierda del piano, violonchelo, trombón, fagot o tuba. Se escribe al inicio del pentagrama y sus **dos puntos rodean la 4.ª línea**, que es **Fa**.',
+        'Las notas siguen el mismo orden, pero **no coinciden con las de la clave de sol**: la 1.ª línea es Mi en sol y **Sol en fa**. '
+        'Líneas, de abajo arriba: **Sol – Si – Re – Fa – La**. Espacios: **La – Do – Mi – Sol**. Se lee por tanto de forma independiente, tomando el Fa de la 4.ª línea como referencia.']),
+        fila_notas('bass', ['G2', 'A2', 'B2', 'C3', 'D3', 'E3', 'F3', 'G3', 'A3'], 'w', bajo=['Sol', 'La', 'Si', 'Do', 'Re', 'Mi', 'Fa', 'Sol', 'La'],
+                   titulo='De la 1.ª línea (Sol) a la 5.ª (La), por líneas y espacios'),
+        caja('tip', 'Leer con el cuerpo', [
+            'Asocia cada nota grave con la tecla y con la posición de tu **mano izquierda** antes de tocar: visualizar la nota en el teclado y anticipar el movimiento '
+            'refuerza la lectura. En pasajes rápidos o repetidos, no dependas solo de la vista: tu mano debe conocer el camino.']))
+    d.add(ejercicio(1, 'Lectura desde el Fa',
+                    ['La primera nota de cada fila es el **Fa de la 4.ª línea**, ya nombrado. Cuenta a partir de él y nombra las demás.'],
+                    'Leer con seguridad en clave de fa, partiendo de su nota de referencia.'))
+    r = rnd(301)
+    pb = ['G2', 'A2', 'B2', 'C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'F2', 'E2', 'B3', 'C4']
+    bl, s1 = bloque_lectura(r, 'bass', 4, 'Clave de fa', pool=pb)
+    d.add(*bl)
+    sol(MES, 1, 'Lectura desde el Fa', s1)
+    d.add(ejercicio(2, 'Transcribir de clave de sol a clave de fa',
+                    ['Escribe cada melodía **una octava más grave**, en clave de fa. Para bajar una octava, cada nota desciende siete posiciones (línea→espacio, siete veces): '
+                     'el Mi de la 1.ª línea de sol pasa a ser el Mi del 3.er espacio de fa. Comprueba el resultado en el piano.'],
+                    'Dominar la correspondencia entre las dos claves y el concepto de octava.'))
+    t1 = ['E4', 'E4', 'F4', 'G4', 'G4', 'F4', 'E4', 'D4']
+    t2 = ['C5', 'B4', 'A4', 'G4', 'A4', 'B4', 'C5', 'C5']
+    d.add(gran_pauta_notas(t1, [None] * 8, titulo='a) Una octava más grave', linea_nombre=False, dur='q'),
+          gran_pauta_notas(t2, [None] * 8, titulo='b) Una octava más grave', linea_nombre=False, dur='q'))
+    sol(MES, 2, 'Transcribir de sol a fa',
+        ['a) ' + ' · '.join('%s (%s)' % (nombre(mover(p, -7)), posicion(mover(p, -7), 'bass')) for p in t1),
+         'b) ' + ' · '.join('%s (%s)' % (nombre(mover(p, -7)), posicion(mover(p, -7), 'bass')) for p in t2)])
+    d.add(ejercicio(3, 'Ritmo y cuenta en clave de fa',
+                    ['Cada compás está escrito en clave de fa sobre la nota Re. Escribe debajo el número de cada golpe (1 y 2 y …) y toca el ritmo con la mano izquierda sobre una sola tecla.'],
+                    'Trasladar la lectura rítmica al registro grave sin perder el pulso.'))
+    rit = [('a) 4/4', (4, 4), [[N('q', 'D3'), N('q', 'D3'), N('h', 'D3')], [N('e', 'F3'), N('e', 'F3'), N('q', 'F3'), N('h', 'F3')], [N('q', 'A2'), R('q'), N('q', 'A2'), R('q')]]),
+           ('b) 3/4', (3, 4), [[N('q', 'D3'), N('q', 'D3'), N('q', 'D3')], [N('h', 'F3'), N('q', 'F3')], [N('e', 'A2'), N('e', 'A2'), N('e', 'A2'), N('e', 'A2'), N('q', 'A2')]])]
+    for tit, ts, comp in rit:
+        d.add(fila_compases(comp, ts=ts, clef='bass', pitch='D3', titulo=tit, rotulos=['______'] * len(comp)))
+    sol(MES, 3, 'Ritmo en clave de fa', ['Se cuenta «1 2 3 4» (4/4) o «1 2 3» (3/4), con «y» en las corcheas. Cada compás suma los tiempos de su cifra.'])
 
-    # ---- Ejercicio 1
-    d.add(ejercicio(1, 'Elige el silencio correcto',
-                    ['Une cada figura con el silencio que dura lo mismo.',
-                     'Después rellena los huecos de los compases con **silencios** que completen el tiempo que falta.'],
-                    'Comprender la función y la duración de los silencios en un compás.'))
-    orden = ['q', 'h', 'e', 'w', 's']
-    r = rnd(4)
-    der = list(orden)
-    r.shuffle(der)
-    d.add(une([fig_celda(x) for x in orden], [fig_celda(x, True) for x in der], alto=32, izq_w=80, der_w=80, hueco=140))
-    sol(MES, 1, 'Une figuras y silencios',
-        ['Cada figura se une con el silencio del mismo nombre: ' + ' · '.join('%s ↔ %s' % (NOM_FIG[x].lower(), NOM_SIL[x].lower()) for x in orden) + '.'])
-    rell = [
-        ((3, 4), [[N('q'), ('x', 2)], [N('h'), ('x', 1)]], ['silencio de blanca', 'silencio de negra']),
-        ((4, 4), [[N('h'), ('x', 2)], [N('q'), N('q'), ('x', 2)]], ['silencio de blanca', 'dos silencios de negra']),
-    ]
-    sol1 = []
-    for k, (ts, comp, resp) in enumerate(rell):
-        d.add(fila_compases(comp, ts=ts, titulo='%s) %d/%d' % (SEC[k], ts[0], ts[1])))
-        sol1.append('%s) %d/%d: ' % (SEC[k], ts[0], ts[1]) + ' y '.join(resp) + ' (o combinaciones equivalentes).')
-    sol(MES, '1 (huecos)', 'Rellena con silencios', sol1)
-
-    # ---- Ejercicio 2: huecos ocultos
-    d.add(ejercicio(2, 'Huecos ocultos',
-                    ['En estos compases faltan silencios. Observa y completa los huecos con el silencio correcto para que cada compás sume sus tiempos.',
-                     'Después escribe debajo el nombre de las notas (clave de fa).'],
-                    'Entender cómo los silencios completan el ritmo en un compás.'))
-    hu = [
-        ((3, 4), [[N('q', 'A2'), ('x', 1), N('q', 'F3')], [N('h', 'D3'), ('x', 1)]]),
-        ((4, 4), [[N('q', 'G2'), N('q', 'B2'), ('x', 2)], [('x', 1), N('q', 'D3'), N('h', 'F3')]]),
-        ((2, 4), [[N('e', 'A3'), N('e', 'F3'), ('x', 1)], [('x', 1), N('q', 'D3')]]),
-    ]
-    sol2 = []
-    for k, (ts, comp) in enumerate(hu):
-        d.add(fila_compases(comp, ts=ts, clef='bass', titulo='%s) %d/%d' % (SEC[k], ts[0], ts[1]),
-                            rotulos=['_____ _____ _____'] * len(comp)))
-        sol2.append('%s) %d/%d: huecos de %s' % (SEC[k], ts[0], ts[1], ' y '.join('%g tiempo%s' % (it[1], '' if it[1] == 1 else 's') for m in comp for it in m if it[0] == 'x')))
-    sol(MES, 2, 'Huecos ocultos', sol2 + ['Un hueco de 1 tiempo = silencio de negra; de 2 tiempos = silencio de blanca. Notas: A2 La · F3 Fa · D3 Re · G2 Sol · B2 Si · A3 La.'])
-
-    # ---- Ejercicio 3: suena o calla
-    d.add(ejercicio(3, '¿Suena o calla?',
-                    ['Observa cada compás. Cuenta **cuántas notas suenan**, **cuántos silencios** hay y **cuántos tiempos callan** en total.',
-                     'Escribe los tres números debajo.'],
-                    'Reforzar la distinción entre sonidos y silencios y la lectura rítmica.'))
-    cs = [
-        ((4, 4), [[N('q'), R('q'), N('h')], [R('h'), N('q'), N('q')], [N('e'), N('e'), R('q'), N('h')]]),
-        ((3, 4), [[N('h'), R('q')], [R('q'), N('q'), N('q')], [N('q'), R('q'), R('q')]]),
-    ]
-    sol3 = []
-    for k, (ts, comp) in enumerate(cs):
-        rot = ['suenan __  silencios __  callan __ t.'] * len(comp)
-        d.add(fila_compases(comp, ts=ts, titulo='%s) %d/%d' % (SEC[k], ts[0], ts[1]), rotulos=rot))
-        parts = []
-        for j, m in enumerate(comp):
-            parts.append('c.%d: suenan %d, silencios %d, callan %g' % (j + 1, sum(1 for it in m if it[0] == 'n'), sum(1 for it in m if it[0] == 'r'),
-                                                                     sum(BEATS[it[1]] for it in m if it[0] == 'r')))
-        sol3.append('%s) %s' % (SEC[k], ' · '.join(parts)))
-    sol(MES, 3, '¿Suena o calla?', sol3)
-
-    # ---- Ejercicio 4: imaginando compases
-    d.add(ejercicio(4, 'Imaginando compases',
-                    ['Compón dos compases con **notas, figuras y silencios**: uno para la mano derecha (clave de sol) y otro para la izquierda (clave de fa). '
-                     'Usa al menos **dos silencios**.',
-                     'Dale un título que lo inspire (alegre, tranquilo, misterioso…) y toca tu composición en el teclado.'],
-                    'Aplicar el conocimiento creando un ritmo con notas, figuras y silencios.'))
-    d.add(pauta_piano_vacia(2, (4, 4), titulo='Título: ________________________________'))
-    sol(MES, 4, 'Imaginando compases', ['Ejercicio libre. Criterio: cada compás suma 4 tiempos y hay al menos dos silencios.'])
-
-    # ---- Al piano
-    d.add(caja('piano', 'Al piano: una pieza con silencios', [
-        'Pieza corta para la **mano derecha**, posición de Do. Los silencios son parte de la música: **cuéntalos en voz alta** («1 2 3 4») '
-        'y levanta suavemente la mano en cada uno.']))
-    ev = [{'pitch': 'C4', 'dur': 'q', 'number': 1}, {'pitch': 'E4', 'dur': 'q', 'number': 3}, {'pitch': 'G4', 'dur': 'h', 'number': 5},
-          {'pitch': 'G4', 'dur': 'q', 'number': 5}, {'rest': True, 'dur': 'q'}, {'pitch': 'E4', 'dur': 'h', 'number': 3},
-          {'pitch': 'F4', 'dur': 'q', 'number': 4}, {'pitch': 'D4', 'dur': 'q', 'number': 2}, {'pitch': 'E4', 'dur': 'q', 'number': 3}, {'rest': True, 'dur': 'q'},
-          {'pitch': 'C4', 'dur': 'w', 'number': 1}]
-    d.add(Blk(110, lambda c, x, y, w: system_block(c, x, w, y, GAP + 0.6, 'Pieza con silencios (T-Clas, para este cuaderno)', ev,
-                                                  clef='treble', time_sig=(4, 4))))
-    sol(MES, 'Pieza con silencios', 'Pieza con silencios', ['Cuatro compases de 4/4: C E G(h) · G r E(h) · F D E r · C(w).'])
+    # ---- manos juntas
+    d.add(caja('dato', 'El sistema de piano: leer las dos manos a la vez', [
+        'En el **sistema de piano** las dos claves se unen con una llave y se leen **en vertical**: las notas que están una sobre otra suenan **a la vez**. Todo lo que cae en la misma vertical '
+        'debe tocarse junto, incluso cuando las dos manos escriben figuras distintas (por ejemplo, la derecha en negras sobre una redonda de la izquierda).',
+        'Tocar a dos manos exige **independencia**. El método: leer cada mano por separado hasta dominarla, después **juntar por compases**, siempre despacio, '
+        'y solo acelerar cuando se pueda tocar sin mirar las manos.']))
+    d.add(ejercicio(4, 'Análisis del sistema de piano',
+                    ['Para cada fragmento contesta con los nombres de las notas que suenan **en el primer tiempo** de cada compás (derecha / izquierda).'],
+                    'Leer en vertical y asociar cada nota con su mano.'))
+    f1 = ([{'pitch': p, 'dur': 'q'} for p in ['C4', 'D4', 'E4', 'F4']] + [{'pitch': 'G4', 'dur': 'w'}], [{'pitch': 'C3', 'dur': 'w'}, {'pitch': 'G2', 'dur': 'w'}])
+    f2 = ([{'pitch': 'E4', 'dur': 'h'}, {'pitch': 'D4', 'dur': 'q'}, {'pitch': 'C4', 'dur': 'h.'}], [{'pitch': 'C3', 'dur': 'q'}, {'pitch': 'E3', 'dur': 'q'}, {'pitch': 'G3', 'dur': 'q'}, {'pitch': 'G2', 'dur': 'h.'}])
+    d.add(sistema_piano('a) 4/4', f1[0], f1[1], alto=190), sistema_piano('b) 3/4', f2[0], f2[1], ts=(3, 4), alto=190))
+    d.add(tabla([120, 185, 186], [['Fragmento a) compás 1', '', ''], ['Fragmento a) compás 2', '', ''], ['Fragmento b) compás 1', '', ''], ['Fragmento b) compás 2', '', '']],
+                ['', 'Mano derecha', 'Mano izquierda'], alto=24, size=8.6, alin=['l', 'c', 'c']))
+    sol(MES, 4, 'Análisis del sistema de piano', ['a) c. 1: Do4 / Do3 · c. 2: Sol4 / Sol2.   b) c. 1: Mi4 / Do3 · c. 2: Do4 / Sol2.'])
+    d.add(caja('piano', 'Al piano: Himno de la Alegría a dos manos', [
+        'La derecha toca la melodía que ya conoces; la izquierda sostiene una **redonda por compás**, alternando Do y Sol (el grado I y el grado V). Estudia primero cada mano sola, '
+        'después de dos en dos compases. La digitación de la izquierda queda a tu criterio: elige la que no te obligue a saltos.']))
+    h = [('E', 'q', 3), ('E', 'q', 3), ('F', 'q', 4), ('G', 'q', 5), ('G', 'q', 5), ('F', 'q', 4), ('E', 'q', 3), ('D', 'q', 2),
+         ('C', 'q', 1), ('C', 'q', 1), ('D', 'q', 2), ('E', 'q', 3), ('E', 'q.', 3), ('D', 'e', 2), ('D', 'h', 2)]
+    rh = [{'pitch': l + '4', 'dur': dd, 'number': n} for l, dd, n in h]
+    d.add(sistema_piano('Himno de la Alegría · compases 1 y 2', rh[:8], [{'pitch': 'C3', 'dur': 'w'}, {'pitch': 'G2', 'dur': 'w'}], alto=190),
+          sistema_piano('Himno de la Alegría · compases 3 y 4', rh[8:], [{'pitch': 'C3', 'dur': 'w'}, {'pitch': 'G2', 'dur': 'w'}], alto=190))
+    sol(MES, 'Himno a dos manos', 'Himno de la Alegría a dos manos',
+        ['Derecha: Mi Mi Fa Sol · Sol Fa Mi Re · Do Do Re Mi · Mi. Re Re. Izquierda: Do (redonda), Sol (redonda), Do (redonda), Sol (redonda).'])

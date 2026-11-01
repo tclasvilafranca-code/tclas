@@ -9,11 +9,11 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import n1_base
 from n1_base import *
-import n1_sep, n1_oct, n1_nov, n1_dic, n1_ene, n1_feb, n1_mar, n1_abr, n1_may, n1_jun, n1_anexos
+import n1_nov, n1_dic, n1_ene, n1_feb, n1_mar, n1_abr, n1_may, n1_jun, n1_jul, n1_anexos
 from reportlab.pdfgen import canvas
 
-MODULOS = [('Septiembre', n1_sep), ('Octubre', n1_oct), ('Noviembre', n1_nov), ('Diciembre', n1_dic), ('Enero', n1_ene),
-           ('Febrero', n1_feb), ('Marzo', n1_mar), ('Abril', n1_abr), ('Mayo', n1_may), ('Junio', n1_jun)]
+MODULOS = [('Noviembre', n1_nov), ('Diciembre', n1_dic), ('Enero', n1_ene), ('Febrero', n1_feb), ('Marzo', n1_mar), ('Abril', n1_abr),
+           ('Mayo', n1_may), ('Junio', n1_jun), ('Julio', n1_jul)]
 
 
 def montar(c, prev, portada=True):

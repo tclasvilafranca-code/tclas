@@ -179,11 +179,11 @@ def mayo(d):
     pausa(d, M_, 0)
     actividad(d, 2, 'Puntillos', 'Calcula cuánto dura cada figura con puntillo.',
               ['Mira la figura.', 'Suma la mitad.', 'Escribe el resultado.'],
-              [K_vf(['Blanca con puntillo = ___ tiempos', 'Negra con puntillo = ___ tiempos', 'Redonda con puntillo = ___ tiempos', 'Corchea con puntillo = ___ tiempo'], 14)])
+              [K_resp(['Blanca con puntillo = ___ tiempos', 'Negra con puntillo = ___ tiempos', 'Redonda con puntillo = ___ tiempos', 'Corchea con puntillo = ___ tiempo'], 14)])
     sol(M_, 2, 'Puntillos', ['3 · 1 ½ · 6 · ¾'])
     actividad(d, 3, 'Ligo y sumo', 'Dos notas ligadas suman sus tiempos.',
               ['Mira las dos figuras ligadas.', 'Suma sus tiempos.', 'Escribe el total.'],
-              [K_vf(['Blanca + negra = ___', 'Negra + negra = ___', 'Redonda + blanca = ___', 'Blanca + blanca = ___'], 14)])
+              [K_resp(['Blanca + negra = ___', 'Negra + negra = ___', 'Redonda + blanca = ___', 'Blanca + blanca = ___'], 14)])
     sol(M_, 3, 'Ligo y sumo', ['3 · 2 · 6 · 4'])
     actividad(d, 4, 'El ritmo del puntillo', 'Negra con puntillo y corchea suenan «larga-corta».',
               ['Di «ta-i ti»: ta dura más, i dura menos.', 'Aplaude el ritmo.', 'Colorea los puntillos.'],

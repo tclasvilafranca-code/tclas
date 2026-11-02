@@ -22,10 +22,10 @@ def construir(d):
     d.nuevo()
     d.add(K_titulo('Diciembre', 'Los números de los dedos', 'Los números te dicen qué dedo usar.'),
           K_mussol('Mano derecha subiendo: 1 2 3, y el pulgar pasa por debajo: 1 2 3 4 5.'),
-          K_panel('', 'MIRA', [Blk(120, lambda c, x, y, w: (K.teclat(c, x + 6, y - 90, w - 12, 82, nb=8, dits={i: n for i, n in enumerate([1, 2, 3, 1, 2, 3, 4, 5])}),
-                                                           txt(c, x, y - 10, 'MANO DERECHA SUBIENDO', 11, ETQ, OCRE))),
-                               Blk(120, lambda c, x, y, w: (K.teclat(c, x + 6, y - 90, w - 12, 82, nb=8, dits={i: n for i, n in enumerate([5, 4, 3, 2, 1, 3, 2, 1])}),
-                                                           txt(c, x, y - 10, 'MANO IZQUIERDA SUBIENDO', 11, ETQ, OCRE)))]))
+          K_panel('', 'MIRA', [Blk(112, lambda c, x, y, w: (txt(c, x, y - 12, 'MANO DERECHA SUBIENDO', 11, ETQ, OCRE),
+                                                           K.teclat(c, x + 6, y - 104, w - 12, 74, nb=8, dits={i: n for i, n in enumerate([1, 2, 3, 1, 2, 3, 4, 5])}))),
+                               Blk(112, lambda c, x, y, w: (txt(c, x, y - 12, 'MANO IZQUIERDA SUBIENDO', 11, ETQ, OCRE),
+                                                           K.teclat(c, x + 6, y - 104, w - 12, 74, nb=8, dits={i: n for i, n in enumerate([5, 4, 3, 2, 1, 3, 2, 1])})))]))
     actividad(d, 1, 'Escribo la escala', 'La primera nota es DO. Escribe las que faltan.',
               ['Dibuja las notas de la escala subiendo.', 'Escribe el nombre debajo.', 'Escribe también el número del dedo de la mano derecha: 1 2 3 1 2 3 4 5.'],
               [K_notas('treble', ['C4'] + [None] * 7, nombres=['DO', 'RE', 'MI', 'FA', 'SOL', 'LA', 'SI', 'DO'], titulo='Subiendo')])
@@ -47,7 +47,7 @@ def construir(d):
                                K_notas('treble', ['C4', 'D4', 'E4', 'F4', 'G4'], titulo='DO – SOL = 5', nombres=['1', '2', '3', '4', '5'], color=False)]))
     actividad(d, 3, 'Cuento las notas', 'Usa la escala como ayuda y cuenta con los dedos.',
               ['Cuenta las dos notas de cada pareja.', 'Escribe el número.'],
-              [K_vf(['DO – FA = ___', 'RE – LA = ___', 'MI – SOL = ___', 'FA – SI = ___', 'SOL – DO agudo = ___', 'DO – DO agudo = ___'], 14)])
+              [K_resp(['DO – FA = ___', 'RE – LA = ___', 'MI – SOL = ___', 'FA – SI = ___', 'SOL – DO agudo = ___', 'DO – DO agudo = ___'], 14)])
     sol(MES, 3, 'Cuento las notas', ['DO–FA 4 · RE–LA 5 · MI–SOL 3 · FA–SI 4 · SOL–DO agudo 5 · DO–DO agudo 8'])
     # villancico
     d.nuevo()

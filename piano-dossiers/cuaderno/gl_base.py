@@ -157,7 +157,7 @@ def g_alteracion(tipo):
     """Nota con su alteracion delante."""
     def fn(c, ctx):
         xs = reparto(ctx, 1)
-        x = xs[0] + 6
+        x = xs[0] + 14
         gap = ctx['gap']
         if tipo in ('#', 'b', 'n'):
             nota_en(c, ctx, x, {'#': 'F#4', 'b': 'Bb4', 'n': 'Fn4'}[tipo], 'q', 'up')
@@ -170,7 +170,7 @@ def g_alteracion(tipo):
             c.setFillColor(INK)
             c.setFont('FreeSerif', gap * 3.0)
             c.drawRightString(x - gap * 0.9, cy - gap * 0.65, '\U0001D12A' if tipo == 'x' else '\U0001D12B')
-    return celda_pauta(fn, clef='treble', ancho=70, gap=4.6)
+    return celda_pauta(fn, clef='treble', ancho=84, gap=5.4)
 
 
 def g_dim(txt, size=15):
@@ -301,7 +301,7 @@ def g_sincopa():
         nota_en(c, ctx, xs[1] - 4, 'B4', 'q', 'up')
         nota_en(c, ctx, xs[2] + 2, 'B4', 'e', 'up')
         nota_en(c, ctx, xs[3], 'B4', 'q', 'up')
-    return celda_pauta(fn, clef=None, ts=(4, 4), ancho=118, gap=4.2)
+    return celda_pauta(fn, clef=None, ts=(4, 4), ancho=100, gap=4.0)
 
 
 def g_contratiempo():
@@ -313,7 +313,7 @@ def g_contratiempo():
                 draw_rest(c, x, ctx['bot'], ctx['top'], gap, 'e')
             else:
                 nota_en(c, ctx, x, 'B4', 'e', 'up')
-    return celda_pauta(fn, clef=None, ts=(2, 4), ancho=100, gap=4.2)
+    return celda_pauta(fn, clef=None, ts=(2, 4), ancho=92, gap=4.0)
 
 
 def g_anacrusa():
@@ -323,7 +323,7 @@ def g_anacrusa():
         barra(c, ctx, (xs[0] + xs[1]) / 2 + 2)
         for x in xs[1:]:
             nota_en(c, ctx, x, 'B4', 'q', 'up')
-    return celda_pauta(fn, clef='treble', ts=(4, 4), ancho=124, gap=4.2)
+    return celda_pauta(fn, clef='treble', ts=(4, 4), ancho=104, gap=4.0)
 
 
 def g_pedal():
@@ -357,24 +357,25 @@ def g_acorde(pitches, clef='treble', dur='w', ancho=62):
     return celda_pauta(fn, clef=clef, ancho=ancho, gap=4.4)
 
 
-def g_teclas(desde, n, marcas=None, arco=None, h=26, ancho=92):
-    """Miniteclado con un arco que une dos teclas (tono o semitono)."""
+def g_teclas(desde, n, marcas=None, arco=None, h=24, ancho=88):
+    """Miniteclado con un arco DEBAJO que une dos teclas (tono o semitono)."""
     def g(c, cx, cy, w, hh):
         x0 = cx - ancho / 2.0
-        teclado(c, x0, cy - 12, ancho, h, desde=desde, n_blancas=n, marcas=marcas or {}, grosor=0.6)
+        yb = cy - 4
+        teclado(c, x0, yb, ancho, h, desde=desde, n_blancas=n, marcas=marcas or {}, grosor=0.6)
         if arco:
             kw = ancho / float(n)
-            a, b, txt, col = arco
-            xa, xb = x0 + kw * (a + 0.5), x0 + kw * (b + 0.5)
+            a, b_, txt_, col = arco
+            xa, xb = x0 + kw * (a + 0.5), x0 + kw * (b_ + 0.5)
             c.setStrokeColor(col)
             c.setLineWidth(1.2)
             p = c.beginPath()
-            p.moveTo(xa, cy + h - 10)
-            p.curveTo(xa, cy + h + 3, xb, cy + h + 3, xb, cy + h - 10)
+            p.moveTo(xa, yb - 3)
+            p.curveTo(xa, yb - 14, xb, yb - 14, xb, yb - 3)
             c.drawPath(p, stroke=1, fill=0)
             c.setFont('DejaVuSans-Bold', 7)
             c.setFillColor(col)
-            c.drawCentredString((xa + xb) / 2, cy + h + 5, txt)
+            c.drawCentredString((xa + xb) / 2, yb - 22, txt_)
     return g
 
 

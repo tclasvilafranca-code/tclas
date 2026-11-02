@@ -24,11 +24,12 @@ def construir(d):
     d.nuevo()
     d.add(K_titulo('Noviembre', 'Manos y territorio', 'Cada mano toca una zona del piano.'),
           K_mussol('La mano derecha toca los sonidos agudos. La mano izquierda toca los graves. El DO central está en medio.'),
-          K_panel('', 'MIRA', [Blk(190, lambda c, x, y, w: (K.teclat(c, x + 6, y - 90, w - 12, 80, nb=14, inici=3, noms=None, color=False),
-                                                           c.setFillColor(OCRE), c.circle(x + 6 + (w - 12) / 14 * 3.5, y - 80, 5, stroke=0, fill=1),
-                                                           txt(c, x + 6 + (w - 12) / 14 * 3.5, y - 108, 'DO CENTRAL', 11, ETQ, NAVY, 'c'),
-                                                           txt(c, x + 70, y - 128, '◄ mano izquierda · graves · clave de fa', 11.5, ETQ, OCRE),
-                                                           txt(c, x + w - 70, y - 150, 'mano derecha · agudos · clave de sol ►', 11.5, ETQ, OCRE, 'r')))]),
+          K_panel('', 'MIRA', [Blk(170, lambda c, x, y, w: (K.teclat(c, x + 6, y - 86, w - 12, 76, nb=14, inici=3, noms=None, color=False),
+                                                           c.setFillColor(OCRE), c.circle(x + 6 + (w - 12) / 14 * 3.5, y - 76, 5, stroke=0, fill=1),
+                                                           txt(c, x + 6 + (w - 12) / 14 * 3.5, y - 104, 'DO CENTRAL', 11.5, ETQ, NAVY, 'c'),
+                                                           trac(c, 2, OCRE), c.line(x + 6, y - 124, x + 6 + (w - 12) / 14 * 3.5 - 40, y - 124), c.line(x + 6 + (w - 12) / 14 * 3.5 + 40, y - 124, x + w - 6, y - 124),
+                                                           txt(c, x + 6, y - 144, 'MANO IZQUIERDA · graves · clave de fa', 11.5, ETQ, OCRE),
+                                                           txt(c, x + w - 6, y - 144, 'MANO DERECHA · agudos · clave de sol', 11.5, ETQ, OCRE, 'r')))]),
           K_cajita('RECUERDA', 'Dedos curvados, como si sujetaras una pelota pequeña. Muñecas relajadas.'))
 
     actividad(d, 1, '¿Dónde está cada nota?', 'Cada tecla blanca tiene un nombre.',

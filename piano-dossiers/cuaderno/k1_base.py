@@ -470,3 +470,18 @@ def actividad(d, num, titulo, mussol_txt, pasos, interior, mes=None, fin=True):
     d.nuevo(mes if mes is not None else None)
     inner = [K_pasos(pasos), K_espacio(4)] + list(interior) + ([K_hecho()] if fin else [])
     d.add(K_titulo_act(num, titulo), K_mussol(mussol_txt), K_panel('', 'HAZLO ASÍ', inner))
+
+
+def K_resp(items, size=14):
+    """Lista de operaciones/preguntas con una casilla grande de respuesta a la derecha (el '___' del texto se quita)."""
+    ancho = CW - 32 - 120
+    alts = [max(40, _alto(t.replace(' ___', '').replace('___', ''), size, ancho) + 14) for t in items]
+
+    def f(c, x, y, w):
+        yy = y
+        for t, hh in zip(items, alts):
+            t2 = t.replace(' = ___ tiempos', ' =').replace(' = ___ tiempo', ' =').replace(' = ___', ' =').replace('___', '')
+            kpar(c, x, yy - 18, t2, size, w - 120, size * 1.38, SANS, INK)
+            K.caseta(c, x + w - 100, yy - hh + 6, 92, 30, 8)
+            yy -= hh
+    return Blk(sum(alts) + 6, f)

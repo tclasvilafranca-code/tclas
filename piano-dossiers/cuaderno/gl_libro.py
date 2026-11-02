@@ -74,6 +74,10 @@ def portada(c):
 
 
 # ------------------------------------------------------------------ piano (diagramas)
+def K_gap(h):
+    return Blk(h, lambda c, x, y, w: None)
+
+
 def diag_piano():
     h = 262
 
@@ -114,7 +118,7 @@ def diag_mecanismo():
 
     def f(c, x, y, w):
         pasos = [('TECLA', 'se pulsa'), ('MECÁNICA', 'transmite el impulso'), ('MARTILLO', 'golpea la cuerda y rebota'), ('CUERDA', 'vibra libremente'),
-                 ('TABLA ARMÓNICA', 'amplifica el sonido')]
+                 ('TABLA ARMÓN.', 'amplifica el sonido')]
         bw, gp = 84, 17.5
         x0 = x
         for k, (t, sub) in enumerate(pasos):
@@ -151,29 +155,59 @@ def diag_mecanismo():
 
 def diag_dedos():
     def f(c, x, y, w):
-        kw = 21
-        teclado(c, x + 20, y - 60, w - 40, 54, desde=('G', 3), n_blancas=14, etiqueta_blancas=False)
-        # etiqueta Do central
-        k0 = x + 20
-        ww = (w - 40) / 14.0
-        # Do4 es la 5.ª blanca desde G3 (G A B C -> indice 3)
+        k0 = x + 10
+        ww = (w - 20) / 14.0
+        teclado(c, k0, y - 92, w - 20, 80, desde=('G', 3), n_blancas=14, etiqueta_blancas=False)
         xd = k0 + ww * 3.5
         c.setFillColor(OCRE)
-        c.circle(xd, y - 54, 3.6, fill=1, stroke=0)
-        c.setFont('DejaVuSans-Bold', 7.4)
+        c.circle(xd, y - 84, 4, fill=1, stroke=0)
+        c.setFont('DejaVuSans-Bold', 8)
         c.setFillColor(NAVY)
-        c.drawCentredString(xd, y - 76, 'DO CENTRAL')
+        c.drawCentredString(xd, y - 108, 'DO CENTRAL')
         c.setStrokeColor(OCRE)
-        c.setLineWidth(1.0)
-        c.line(k0, y - 86, xd - 10, y - 86)
-        c.line(xd + 10, y - 86, k0 + 14 * ww, y - 86)
-        c.setFont('DejaVuSans-Bold', 7.2)
+        c.setLineWidth(1.2)
+        c.line(k0, y - 118, xd - 14, y - 118)
+        c.line(xd + 14, y - 118, k0 + 14 * ww, y - 118)
+        c.setFont('DejaVuSans-Bold', 7.6)
         c.setFillColor(OCRE)
-        c.drawString(k0 + 20, y - 97, '◄  territorio de la clave de fa (mano izquierda)')
-        c.drawRightString(k0 + 14 * ww - 20, y - 97, 'territorio de la clave de sol (mano derecha)  ►')
-        nens_dib.ma_real(c, x + 135, y - 273, 0.85, esq=True, dits=True, color=False)
-        nens_dib.ma_real(c, x + 355, y - 273, 0.85, esq=False, dits=True, color=False)
-    return Blk(310, f)
+        c.drawString(k0 + 4, y - 130, '◄  territorio de la clave de fa (mano izquierda)')
+        c.drawRightString(k0 + 14 * ww - 4, y - 130, 'territorio de la clave de sol (mano derecha)  ►')
+        nens_dib.ma_real(c, x + 140, y - 292, 0.9, esq=True, dits=True, color=False)
+        nens_dib.ma_real(c, x + 355, y - 292, 0.9, esq=False, dits=True, color=False)
+        c.setFont('DejaVuSans-Bold', 8.6)
+        c.setFillColor(NAVY)
+        c.drawCentredString(x + 140, y - 362, 'MANO IZQUIERDA')
+        c.drawCentredString(x + 355, y - 362, 'MANO DERECHA')
+    return Blk(378, f)
+
+
+def diag_cinco_dedos():
+    """Posicion de cinco dedos sobre el Do: derecha (pulgar en el Do central) e izquierda (menique en el Do grave)."""
+    h = 160
+
+    def f(c, x, y, w):
+        for fila, (tit, desde, dits, nom) in enumerate((('MANO DERECHA · pulgar en el Do central', ('C', 4), [1, 2, 3, 4, 5], ['Do', 'Re', 'Mi', 'Fa', 'Sol']),
+                                                       ('MANO IZQUIERDA · meñique en el Do grave, pulgar en el Sol', ('C', 3), [5, 4, 3, 2, 1], ['Do', 'Re', 'Mi', 'Fa', 'Sol']))):
+            yy = y - fila * 80
+            c.setFont('DejaVuSans-Bold', 7.8)
+            c.setFillColor(NAVY_SOFT)
+            c.drawString(x, yy - 8, tit.upper())
+            kw = 56
+            x0 = x + (w - 5 * kw) / 2.0
+            for i in range(5):
+                c.setFillColor(BLANCO)
+                c.setStrokeColor(NAVY)
+                c.setLineWidth(1.0)
+                c.roundRect(x0 + i * kw, yy - 66, kw, 50, 3, fill=1, stroke=1)
+                c.setFillColor(NAVY)
+                c.circle(x0 + i * kw + kw / 2, yy - 30, 9, fill=1, stroke=0)
+                c.setFillColor(BLANCO)
+                c.setFont('DejaVuSans-Bold', 9.4)
+                c.drawCentredString(x0 + i * kw + kw / 2, yy - 33.2, str(dits[i]))
+                c.setFillColor(INK)
+                c.setFont('DejaVuSans-Bold', 8.6)
+                c.drawCentredString(x0 + i * kw + kw / 2, yy - 60, nom[i])
+    return Blk(h, f)
 
 
 # ------------------------------------------------------------------ tablas especiales
@@ -218,7 +252,7 @@ def figura_blanca(c, cx, cy, gap, d_):
     figura(c, cx, cy, gap, d_, linea=False)
 
 
-def fig_celda_local(c, cx, cy, d_, gap=3.7):
+def fig_celda_local(c, cx, cy, d_, gap=4.2):
     nf = FIG[d_][0]
     alto = gap * (3.4 + 0.95 * max(0, nf - 2)) + gap * 0.5 if FIG[d_][2] else gap
     figura(c, cx - gap * 0.6, cy - alto / 2.0 + gap * 0.5, gap, d_, linea=False)
@@ -231,10 +265,10 @@ def tabla_figuras_silencios():
     return tabla([100, 100, 150, 141], filas, ['Figura', 'Silencio', 'Nombre', 'Valor (negra = 1)'], alto=32, size=9.2)
 
 
-def fig_cel(d_, silencio_=False, gap=3.7):
+def fig_cel(d_, silencio_=False, gap=4.2):
     def f(c, cx, cy, w, hh):
         if silencio_:
-            silencio(c, cx, cy, gap * 1.35, d_, linea=False)
+            silencio(c, cx, cy, gap * 1.9, d_, linea=False)
         else:
             fig_celda_local(c, cx, cy, d_, gap)
     return f
@@ -325,8 +359,10 @@ def indice(d):
                     c.setFont('DejaVuSans', 7.8)
                     c.setFillColor(INK)
                     t = fila[1]
-                    while stringWidth(t, 'DejaVuSans', 7.8) > cw - 34:
-                        t = t[:-2]
+                    if stringWidth(t, 'DejaVuSans', 7.8) > cw - 34:
+                        while stringWidth(t + '…', 'DejaVuSans', 7.8) > cw - 34:
+                            t = t[:-1]
+                        t = t.rstrip(' ·(') + '…'
                     c.drawString(xx, yy - 9, t)
                     c.setFont('DejaVuSans-Bold', 7.8)
                     c.setFillColor(NAVY)
@@ -378,22 +414,28 @@ def construir(d):
         def f(c, x, y, w):
             cx = x + w / 2.0
             nens_dib.piano(c, cx, y - 214, 0.95, color=False)
-            for px, tit in ((cx - 26, 'izq.'), (cx - 1, 'central'), (cx + 25, 'der.')):
-                c.setFont('DejaVuSans-Bold', 7.4)
+            yp = y - 214 + 30
+            for px, tit, lx, ly in ((cx - 26, 'PEDAL IZQUIERDO', cx - 130, y - 236), (cx - 1, 'PEDAL CENTRAL', cx, y - 246), (cx + 25, 'PEDAL DERECHO', cx + 130, y - 236)):
+                c.setStrokeColor(OCRE)
+                c.setLineWidth(0.8)
+                c.line(px, yp - 3, lx if lx != cx else cx, ly + 8)
+                c.setFont('DejaVuSans-Bold', 7.8)
                 c.setFillColor(OCRE)
-                c.drawCentredString(px, y - 232, tit)
-        return Blk(240, f)
+                c.drawCentredString(lx, ly, tit)
+        return Blk(256, f)
     d.add(diag_ped())
     d.add(tabla([105, 150, 236], [
         ['**Pedal derecho**', 'Sustain · de resonancia · «fuerte»', 'Levanta todos los apagadores: las notas siguen sonando tras soltar las teclas y las cuerdas vibran por simpatía. Da resonancia y une frases; se cambia a cada cambio de armonía.'],
         ['**Pedal central**', 'Sostenuto', 'Mantiene solo las notas que estaban pulsadas al pisarlo, permitiendo tocar otras sin que se prolonguen. En muchos pianos verticales no es sostenuto, sino un pedal de **sordina** (para estudiar con poco volumen).'],
         ['**Pedal izquierdo**', 'Una corda · «suave»', 'Suaviza y vela el sonido. En el piano de cola desplaza la mecánica para que el martillo golpee menos cuerdas; en el vertical acerca los martillos a las cuerdas.'],
     ], ['Pedal', 'Nombre', 'Función'], alto=52, alin=['l', 'l', 'l'], size=8.4))
+    d.add(K_gap(10))
     d.marca('t:Ped. (signo de pedal)')
     TERMINOS.append('Ped. (signo de pedal)')
     entradas(d, [E('Signo de pedal', 'En la partitura **Ped.** indica pisar el pedal derecho y la línea con el gancho final (o el asterisco ✱) indica soltarlo. Pisar y soltar a tiempo con cada cambio de armonía evita que los sonidos se mezclen.', g_pedal(), 'Ped.')])
     TERMINOS.remove('Signo de pedal')
 
+    d.add(K_gap(12))
     d.marca('t:Tipos de piano')
     TERMINOS.append('Tipos de piano')
     d.add(tabla([120, 371], [
@@ -407,6 +449,7 @@ def construir(d):
     TERMINOS.append('Posición de los dedos')
     d.add(h2('Posición de los dedos y territorio de las manos'))
     d.add(diag_dedos())
+    d.add(diag_cinco_dedos())
     d.add(par('Los dedos se numeran **del 1 (pulgar) al 5 (meñique) en las dos manos**. El **Do central** (Do4) divide el teclado en dos territorios habituales: a su izquierda, el de la **clave de fa** '
               '(mano izquierda, graves); a su derecha, el de la **clave de sol** (mano derecha, agudos). En la posición de cinco dedos sobre el Do, el pulgar derecho está en el Do central.', 9.0))
     d.marca('t:Técnica de dedos')
@@ -452,8 +495,8 @@ def construir(d):
         E('Clave de do', 'Fija el Do en la línea que rodea su centro: en la 3.ª línea (**clave de alto**, usada por la viola) o en la 4.ª (**clave de tenor**, usada por el violonchelo y el trombón en registros agudos). Poco usada en el piano.', g_clave('alto')),
         E('Línea adicional', 'Trazo corto, a la misma distancia que las líneas del pentagrama, que se añade por encima (superior) o por debajo (inferior) para escribir notas fuera de él. Cada nota lleva solo las que necesita.', g_linea_adicional()),
         E('Do central', 'La tecla Do más próxima al centro del teclado (Do4). Es la nota de enlace entre las dos claves: 1.ª línea adicional inferior en clave de sol y 1.ª superior en clave de fa.'),
-        E('Tono', 'Distancia de **dos semitonos** entre dos notas (por ejemplo, de Do a Re). También se llama tono entero.', g_teclas(('C', 4), 3, {'C4': CREMA_T, 'D4': CREMA_T}, (0, 1, '1 tono', NAVY)), alto=52),
-        E('Semitono', 'La distancia más pequeña entre dos teclas contiguas, blancas o negras (por ejemplo, Mi–Fa o Do–Do♯). Entre Mi–Fa y Si–Do hay semitono natural.', g_teclas(('E', 4), 3, {'E4': CREMA_T, 'F4': CREMA_T}, (0, 1, '½ tono', ROJO)), alto=52),
+        E('Tono', 'Distancia de **dos semitonos** entre dos notas (por ejemplo, de Do a Re). También se llama tono entero.', g_teclas(('C', 4), 3, {'C4': CREMA_T, 'D4': CREMA_T}, (0, 1, '1 tono', NAVY)), alto=60),
+        E('Semitono', 'La distancia más pequeña entre dos teclas contiguas, blancas o negras (por ejemplo, Mi–Fa o Do–Do♯). Entre Mi–Fa y Si–Do hay semitono natural.', g_teclas(('E', 4), 3, {'E4': CREMA_T, 'F4': CREMA_T}, (0, 1, '½ tono', ROJO)), alto=60),
         E('Escala cromática', 'La que avanza **de semitono en semitono** utilizando todas las teclas, blancas y negras: doce sonidos por octava.'),
         E('Enarmonía', 'Dos notas que suenan igual y se escriben distinto: Do♯ = Re♭, Fa♯ = Sol♭. La escritura correcta depende de la tonalidad y de la dirección de la melodía.'),
     ])
@@ -480,7 +523,7 @@ def construir(d):
     entradas(d, [
         E('Silencio', 'Signo que indica una pausa con la misma duración que la figura de igual nombre. El de **redonda** cuelga de la 4.ª línea y el de **blanca** se apoya en la 3.ª; el de redonda sirve también para un compás entero de silencio, sea cual sea el compás.'),
         E('Puntillo', 'Punto a la derecha de una figura o un silencio: le añade **la mitad de su valor**. Blanca con puntillo = 2 + 1 = 3 tiempos; negra con puntillo = 1 + ½ = 1 ½.',
-          lambda c, cx, cy, w, h: (figura(c, cx - 22, cy - 5, 3.9, 'h', linea=False, dot=True), figura(c, cx + 22, cy - 5, 3.9, 'q', linea=False, dot=True))),
+          lambda c, cx, cy, w, h: (figura(c, cx - 22, cy - 9, 5.4, 'h', linea=False, dot=True), figura(c, cx + 22, cy - 9, 5.4, 'q', linea=False, dot=True))),
         E('Doble puntillo', 'Dos puntos: el primero añade la mitad y el segundo la mitad del primero (un cuarto del valor). Negra con doble puntillo = 1 + ½ + ¼ = 1 ¾ tiempos.'),
         E('Ligadura de prolongación', 'Arco que une dos notas **del mismo sonido**: se tocan como una sola, sumando sus duraciones. Permite cruzar la barra de compás y escribir duraciones que no existen como figura.', g_ligadura(True)),
         E('Tresillo', 'Grupo de **tres notas de igual valor** que ocupan el tiempo de dos de ellas (tres corcheas en el tiempo de dos). Se marca con un **3**.', g_tresillo()),
@@ -554,6 +597,20 @@ def construir(d):
         E('Octavas (intervalo)', 'Intervalo entre dos notas del mismo nombre; la más aguda tiene el doble de frecuencia que la grave.'),
     ])
 
+    d.marca('t:Acordes de la escala de Do mayor')
+    TERMINOS.append('Acordes de la escala de Do mayor')
+    d.add(h2('Los acordes de la escala de Do mayor'))
+    d.add(tabla([48, 60, 100, 120, 163], [
+        ['I', 'C', 'Do mayor', 'Do – Mi – Sol', 'Tónica: reposo'],
+        ['II', 'Dm', 'Re menor', 'Re – Fa – La', 'Subdominante (sustituye al IV)'],
+        ['III', 'Em', 'Mi menor', 'Mi – Sol – Si', 'Tónica (sustituye al I)'],
+        ['IV', 'F', 'Fa mayor', 'Fa – La – Do', 'Subdominante: movimiento'],
+        ['V', 'G', 'Sol mayor', 'Sol – Si – Re', 'Dominante: tensión'],
+        ['VI', 'Am', 'La menor', 'La – Do – Mi', 'Tónica (relativa menor)'],
+        ['VII', 'Bdim', 'Si disminuido', 'Si – Re – Fa', 'Dominante: inestable, pide resolver'],
+    ], ['Grado', 'Cifrado', 'Acorde', 'Notas', 'Función'], alto=21, size=8.4, alin=['c', 'c', 'l', 'l', 'l']))
+    d.add(par('Los acordes mayores son los de los grados **I, IV y V**; los menores, **II, III y VI**; el de **VII** es disminuido. Con **I – IV – V** (C, F, G) se armonizan muchísimas canciones sencillas.', 8.8, NAVY_SOFT))
+
     # ============================================================ V. EXPRESION
     d.nuevo('V · Expresión')
     d.marca('sec:V')
@@ -599,6 +656,16 @@ def construir(d):
         E('Grazioso', 'Con gracia, ligero.'), E('Scherzando', 'Juguetón, bromista.'), E('Agitato', 'Agitado, inquieto.'), E('Con brio', 'Con ímpetu y vivacidad.'),
         E('Sostenuto', 'Sosteniendo los sonidos; a veces también algo más lento.'), E('Tranquillo', 'Tranquilo, sin prisa.'),
     ])
+
+    d.marca('t:Palabras italianas que modifican')
+    TERMINOS.append('Palabras italianas que modifican')
+    d.add(h2('Palabras italianas que modifican otros términos'))
+    d.add(tabla([110, 140, 241], [
+        ['molto', 'mucho', 'molto allegro = muy rápido'], ['poco', 'poco', 'poco forte = algo fuerte'], ['poco a poco', 'poco a poco, gradualmente', 'poco a poco cresc. = ir aumentando la intensidad gradualmente'],
+        ['più', 'más', 'più mosso = más movido (más rápido)'], ['meno', 'menos', 'meno mosso = menos movido (más lento)'], ['assai', 'bastante, muy', 'allegro assai = muy rápido'],
+        ['non troppo', 'no demasiado', 'allegro ma non troppo = rápido, pero no demasiado'], ['sempre', 'siempre', 'sempre legato = siempre ligado'], ['subito', 'de repente', 'subito piano = suave de pronto'],
+        ['con · senza', 'con · sin', 'con pedale = con pedal · senza pedale = sin pedal'],
+    ], ['Palabra', 'Significado', 'Ejemplo'], alto=20, size=8.4, alin=['l', 'l', 'l']))
 
     # ============================================================ VI. SIGNOS Y REPETICIONES
     d.nuevo('VI · Signos y repeticiones')
@@ -672,7 +739,7 @@ def montar(c, prev, portada_=True):
     del TERMINOS[:]
     if portada_:
         portada(c)
-    d = Doc(c, 2 if portada_ else 1, prev)
+    d = Doc(c, (2 if portada_ else 1) + int(os.environ.get('GL_OFFSET', '0')), prev)
     construir(d)
     fin = d.fin()
     return d, fin
@@ -686,7 +753,7 @@ def main():
     c1 = canvas.Canvas(buf, pagesize=(W, H))
     d1, _ = montar(c1, {})
     c1.save()
-    dst = os.path.join(out, 'GLOSARIO_MUSICAL_TCLAS%s.pdf' % ('_BN' if bn else ''))
+    dst = os.path.join(out, os.environ.get('GL_OUT', 'GLOSARIO_MUSICAL_TCLAS') + '%s.pdf' % ('_BN' if bn else ''))
     c2 = canvas.Canvas(dst, pagesize=(W, H))
     c2.setTitle('Glosario musical · T-Clas')
     c2.setAuthor('T-Clas')

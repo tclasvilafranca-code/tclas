@@ -23,6 +23,7 @@ import pymupdf
 import pedro_datos as PD
 
 BN = os.environ.get('BN') == '1'
+OFF = int(os.environ.get('PEDRO_OFFSET', '0'))        # paginas que van delante (p. ej. el cuaderno de teoria); debe ser PAR para que los duos sigan enfrentados
 SRC = os.path.join(HERE, '..', 'students', 'pedro', 'source')
 SRC_BN = os.path.join(HERE, '..', 'students', 'pedro', 'source_bn')
 OUT = os.path.join(HERE, 'entrega')
@@ -178,7 +179,7 @@ def pagines_partitura(v, num0, tmpdir):
 
 # ------------------------------------------------------------------ índex
 def pag_index(c, llista, inicio):
-    marco(c, KICK, 'El repertori de menys a més', 1)
+    marco(c, KICK, 'El repertori de menys a més', 1 + OFF)
     y = titulo_pag(c, 'El repertori, de menys a més',
                    '%d peces ordenades per dificultat. Les marcades «només fitxa» tenen la partitura impresa a part: '
                    'la fitxa és la guia per treballar-la.' % len(llista))
@@ -233,7 +234,7 @@ def muntar(destino, llista):
     import tempfile
     with tempfile.TemporaryDirectory() as tmp:
         # pas 1: calcular les pàgines de cada peça (per fer l'índex amb números)
-        inicio, pag, plan = {}, 2, []
+        inicio, pag, plan = {}, 2 + OFF, []
         for v in llista:
             inicio[v['slug']] = pag
             plan.append(('fitxa', v, pag))
@@ -266,12 +267,12 @@ def muntar(destino, llista):
         wr.add_metadata({'/Title': 'Dosier de Pedro · repertori', '/Author': 'T-Clas'})
         with open(destino, 'wb') as fh:
             wr.write(fh)
-    return pag - 1, inicio
+    return pag - 1 - OFF, inicio
 
 
 if __name__ == '__main__':
     llista = ordenar()
-    dst = os.path.join(OUT, 'DOSIER_PEDRO_completo%s.pdf' % ('_BN' if BN else ''))
+    dst = os.path.join(OUT, os.environ.get('PEDRO_OUT', 'DOSIER_PEDRO_completo') + '%s.pdf' % ('_BN' if BN else ''))
     n, inicio = muntar(dst, llista)
     print(n, 'pàgines ->', dst)
     for v in llista:

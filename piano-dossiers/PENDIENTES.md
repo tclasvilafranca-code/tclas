@@ -61,3 +61,9 @@
 - `gdown` da 401: la carpeta/archivos no son públicos. Hay que compartir la carpeta como «Cualquiera con el enlace» (lector) para poder bajar los PDF y medirlos; el MCP de Drive solo devuelve base64 y no cabe en el contexto.
 - Duplicados por contenido (mismo tamaño): My Bonnie ×2 (ninguno NO); We Wish You ×2 (uno NO, otro no) → decidir cuál manda; el criterio por defecto previsto es que «NO» manda.
 - «Copia de pFirstNo.pdf» NO es una pieza «NO»: es *First Noël*.
+
+## Cuaderno «Mi cuaderno de piano · Nivel 1 KIDS» (castellano; alumno con TEA + TDAH)
+- Origen: `NIVEL 1 KIDS` de Canva (75 pág.). Mismo contenido (sept–junio), rehecho con el diseño T-Clas niños (Mussol Misol, paneles con pestaña, letra Andika) y adaptado: una tarea por página, misma estructura siempre (título → Mussol → HAZLO ASÍ con pasos → ¡HECHO!), pausa activa fija, tablero de logros mensual, horario de la clase, actividades opcionales marcadas con ★, lenguaje literal.
+- Montaje: `cd cuaderno && python3.13 k1_libro.py` → `entrega/CUADERNO_NIVEL1_KIDS.pdf` (`BN=1` blanco y negro). Módulos: `k1_base.py` (componentes), `k1_comun.py`, `k1_sep/oct/nov/dic.py`, `k1_ene_jun.py`, `k1_libro.py`.
+- Incluye guía para familia/profesorado (adaptaciones generales; no sustituye a la valoración profesional) y solucionario.
+- Pendiente de validar con el cliente: ritmo real de las piezas copiables (Jingle Bells va solo con alturas), ajustes según el alumno.

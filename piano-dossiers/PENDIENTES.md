@@ -67,3 +67,11 @@
 - Montaje: `cd cuaderno && python3.13 k1_libro.py` → `entrega/CUADERNO_NIVEL1_KIDS.pdf` (`BN=1` blanco y negro). Módulos: `k1_base.py` (componentes), `k1_comun.py`, `k1_sep/oct/nov/dic.py`, `k1_ene_jun.py`, `k1_libro.py`.
 - Incluye guía para familia/profesorado (adaptaciones generales; no sustituye a la valoración profesional) y solucionario.
 - Pendiente de validar con el cliente: ritmo real de las piezas copiables (Jingle Bells va solo con alturas), ajustes según el alumno.
+
+## Dosier de Pedro (montado)
+- `cd cuaderno && python3.13 pedro_libro.py` → `entrega/DOSIER_PEDRO_completo.pdf` (`BN=1` → `_BN`; antes `python3.13 pedro_bn_fuentes.py` para pasar a grises las partituras con color). Datos medidos de las 27 piezas en `pedro_datos.py`; contador de compases en `pedro_contar_compases.py`. Partituras en `students/pedro/source/` (no se versionan).
+- 12 piezas con «NO» (solo ficha), 15 con ficha + partitura; los duos a 4 manos con partitura empiezan en página par (se intercala hoja pautada si hace falta).
+- No medible por ordenador (foto de 72–103 ppi, mirado a ojo): figura más corta y compases de Ode to Joy, Jolly Old, Mexican Hat, Saints, We Wish, Cucaracha, My Bonnie, First Noel, Morning Song y The Entertainer. Compases = recuento de barras contrastado con la numeración impresa; anacrusas anotadas aparte.
+- Duplicados: My Bonnie ×2 (mismo md5) → una ficha; We Wish ×2 (mismo md5) → manda el NO (solo ficha).
+- Orden de dificultad: puntos por longitud, figura corta, compás, mano izquierda, alteraciones, cambios de posición, matices, 4 manos, anacrusa y cifrado (`pedro_libro.puntuar`).
+- Las curiosidades de «Sabies que…?» no están verificadas sobre la partitura (se avisa en el índice).

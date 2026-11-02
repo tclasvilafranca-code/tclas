@@ -55,3 +55,9 @@
 - Normas de este cuaderno (petición del cliente): tono adulto sin explicaciones infantiles; los ejercicios de nombrar notas parten del Do (clave de sol) y del Fa (clave de fa); los silencios se muestran dentro del pentagrama (redonda colgando de la 4.ª línea, blanca sobre la 3.ª); dedos y pentagrama al principio.
 - Las soluciones salen de los mismos datos que dibujan los ejercicios (`sol(...)`). Verificar con partitura impresa las notas de Himno de la Alegría, Jingle Bells, Au clair de la lune, Frère Jacques y Minueto en Sol (escritas de memoria).
 - Entorno: `dibujo_mano.py` pide fuentes (CabinSketch, dkgBd, Leckerli) que pueden faltar en una sesión nueva; basta copiar DejaVu a esas rutas.
+
+## Dosier de Pedro (bloqueado: falta acceso a las partituras)
+- Carpeta Drive `PEDRO` (id `1Yc2ktXg5dRYJXaLk_YZCT2jslW-5S1Hm`): 29 archivos, 12 con «NO» (solo ficha). Lista y marca NO en `students/pedro/manifest_drive.json`.
+- `gdown` da 401: la carpeta/archivos no son públicos. Hay que compartir la carpeta como «Cualquiera con el enlace» (lector) para poder bajar los PDF y medirlos; el MCP de Drive solo devuelve base64 y no cabe en el contexto.
+- Duplicados por contenido (mismo tamaño): My Bonnie ×2 (ninguno NO); We Wish You ×2 (uno NO, otro no) → decidir cuál manda; el criterio por defecto previsto es que «NO» manda.
+- «Copia de pFirstNo.pdf» NO es una pieza «NO»: es *First Noël*.

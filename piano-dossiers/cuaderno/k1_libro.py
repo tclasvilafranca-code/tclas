@@ -93,18 +93,18 @@ def guia_adultos(d):
     d.nuevo('Para familia y profesorado')
     d.add(K_titulo('Anexo', 'Guía para familia y profesorado', 'Cómo está pensado este cuaderno y cómo sacarle partido.'),
           K_panel('', 'ESTE CUADERNO ES EL MISMO CONTENIDO, ADAPTADO', [
-              K_par('El contenido es el del Nivel 1 KIDS: pentagrama, notas, teclado, escala de Do, compases, ritmo, claves, silencios, ligadura y puntillo. Lo que cambia es **cómo se presenta**, para que sea predecible, corto y con poco ruido visual.', 12, INK, 6),
+              K_par('El contenido es el del Nivel 1 KIDS: pentagrama, notas, teclado, escala de Do, compases, ritmo, claves, silencios, ligadura y puntillo. Lo que cambia es cómo se presenta, para que sea predecible, corto y con poco ruido visual.', 12, INK, 6),
               K_par('Estas adaptaciones se basan en recomendaciones generales de apoyo visual y estructura para alumnado con TEA y TDAH. No sustituyen la valoración de los profesionales que conocen al alumno: conviene ajustarlas con su familia y su equipo.', 11.5, NAVY_SOFT, 4)]))
     d.add(tabla_adapt())
     d.add(K_cajita('TRUCO', 'Si una actividad no sale, no la repitas igual: redúcela (una sola fila, una sola mano) y vuelve a subir. Las páginas de color de las notas sirven de apoyo; pueden retirarse poco a poco.'))
     d.nuevo()
     d.add(K_titulo('Anexo', 'Ideas para cada clase', 'Pequeñas decisiones que ayudan.'),
           K_panel('', 'ANTES, DURANTE Y DESPUÉS', [
-              K_par('**Antes.** Mostrar el horario de la clase (página 3) y decir qué actividad toca. Evitar cambios de última hora; si los hay, avisar con tiempo.', 12, INK, 6),
-              K_par('**Durante.** Una instrucción cada vez, en frases cortas y literales. Dejar tiempo para responder. Alternar actividad de mesa y movimiento (pausa activa) cada 5–8 minutos. '
+              K_par('Antes. Mostrar el horario de la clase (página 3) y decir qué actividad toca. Evitar cambios de última hora; si los hay, avisar con tiempo.', 12, INK, 6),
+              K_par('Durante. Una instrucción cada vez, en frases cortas y literales. Dejar tiempo para responder. Alternar actividad de mesa y movimiento (pausa activa) cada 5–8 minutos. '
                     'Ofrecer elegir entre dos opciones (por ejemplo, qué color usar) para dar sensación de control.', 12, INK, 6),
-              K_par('**Si hay agobio.** Bajar el volumen del instrumento, reducir la tarea o pasar a una actividad que ya domine. Valorar el esfuerzo, no solo el acierto.', 12, INK, 6),
-              K_par('**Después.** Pintar los logros del día. Terminar siempre con algo que el alumno sepa hacer bien.', 12, INK, 6)]))
+              K_par('Si hay agobio. Bajar el volumen del instrumento, reducir la tarea o pasar a una actividad que ya domine. Valorar el esfuerzo, no solo el acierto.', 12, INK, 6),
+              K_par('Después. Pintar los logros del día. Terminar siempre con algo que el alumno sepa hacer bien.', 12, INK, 6)]))
     d.add(K_cajita('RECUERDA', 'Los juegos de sopa de letras, el test y el concierto son opcionales: se hacen solo si el alumno quiere y está tranquilo.'))
 
 
@@ -112,7 +112,7 @@ def tabla_adapt():
     filas = [('Una tarea por página', 'Menos distractores y un solo objetivo claro.'), ('Mismo orden en todas las páginas', 'Es predecible: título, ayuda, pasos, HECHO.'),
              ('Pasos numerados y frases cortas', 'Cada paso es una acción concreta; sin metáforas ni dobles sentidos.'),
              ('Casilla ¡HECHO! y tablero de logros', 'Ver el progreso motiva y permite parar sin perder el hilo.'), ('Pausa activa fija', 'Movimiento regulado cada pocas tareas.'),
-             ('Color solo en las notas', 'El color significa algo siempre (cada nota, su color).'), ('Tareas opcionales marcadas con ★', 'Se pueden dejar sin que pase nada.')]
+             ('Color solo en las notas', 'El color significa algo siempre (cada nota, su color).'), ('Tareas opcionales marcadas con una estrella', 'Se pueden dejar sin que pase nada.')]
     h = 20 + len(filas) * 38
 
     def f(c, x, y, w):
@@ -131,8 +131,8 @@ def soluciones(d):
     for mes, num, tit, ls in n1_base.SOLUCIONES:
         if mes != act:
             act = mes
-            d.add(K_par('**%s**' % mes.upper(), 12.5, OCRE, 3))
-        d.add(K_par('**%s · %s:** %s' % (num if isinstance(num, str) else 'Act. %s' % num, tit, ' '.join(ls)), 10.5, INK, 4))
+            d.add(K_par(mes.upper(), 12.5, OCRE, 3, bold=True))
+        d.add(K_par('%s · %s: %s' % (num if isinstance(num, str) else 'Act. %s' % num, tit, ' '.join(ls)), 10.5, INK, 4))
 
 
 def pautas(d):

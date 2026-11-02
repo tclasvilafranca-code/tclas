@@ -42,7 +42,7 @@ def portada(c):
     c.setFillColor(NAVY)
     c.rect(18, H - 24, W - 36, 6, fill=1, stroke=0)
     try:
-        c.drawImage(os.path.join(ASSETS, 'asset_logo_tclas.png'), W / 2 - 55, H - 190, 110, 110, mask='auto', preserveAspectRatio=True)
+        c.drawImage(os.path.join(ASSETS, 'asset_logo_tclas_v2.png'), W / 2 - 55, H - 190, 110, 110, mask='auto', preserveAspectRatio=True)
     except Exception:
         pass
     c.setFillColor(OCRE)

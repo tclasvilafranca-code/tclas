@@ -30,7 +30,7 @@ def portada(c):
     c.setFillColor(NAVY)
     c.rect(0, H - 9, W, 9, stroke=0, fill=1)
     try:
-        c.drawImage(os.path.join(ASSETS, 'asset_logo_tclas.png'), W / 2 - 45, H - 140, 90, 90, mask='auto', preserveAspectRatio=True)
+        c.drawImage(os.path.join(ASSETS, 'asset_logo_tclas_v2.png'), W / 2 - 45, H - 140, 90, 90, mask='auto', preserveAspectRatio=True)
     except Exception:
         pass
     mussol(c, W / 2, H - 330, 0.62, color=os.environ.get('BN') != '1', lw=3.2)

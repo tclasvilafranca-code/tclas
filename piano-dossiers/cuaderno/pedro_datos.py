@@ -201,7 +201,7 @@ P('nocturne_NO', no=True, titulo='Nocturne Op. 9', autor='Frédéric Chopin · a
   ideas=[('LA MELODÍA', 'Notas ligadas', 'Blancas con puntillo y ligaduras: la frase respira.'),
          ('LA IZQUIERDA', 'Silencios y notas sueltas', 'Silencios largos y notas sueltas; en el c. 6 hay una figura con corcheas y alteraciones.'),
          ('LAS ALTERACIONES', 'Bemol y sostenido', 'En la mano izquierda del c. 6 hay un bemol y un sostenido: tómalos con calma.'),
-         ('EL FINAL', 'Calderón', "El último compás lleva un calderón (𝄐) sobre la nota final: aguántala más de la cuenta.")],
+         ('EL FINAL', 'Calderón', "El último compás lleva un calderón sobre la nota final: aguántala más de la cuenta.")],
   ideas_pie='El calderón no tiene valor fijo: lo decides tú, según tu gusto.',
   especial=['Empieza con una anacrusa: silencio en la derecha y una negra en la mano izquierda.',
             'Matiz impreso: mp.',

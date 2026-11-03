@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
-"""Dosier de Pedro (adult, nivell 1-4): índex de menys a més dificultat + una fitxa per partitura
-   (i la partitura original a continuació, tret de les que porten «NO» al nom: d'aquestes només la fitxa).
+"""Dosier de Pedro (adulto, nivel 1-4): índice de menos a más dificultad + una ficha por partitura
+   (y la partitura original a continuación, salvo las que llevan «NO» en el nombre: de esas solo la ficha).
 
    python3 pedro_libro.py            -> entrega/DOSIER_PEDRO_completo.pdf
    BN=1 python3 pedro_libro.py       -> entrega/DOSIER_PEDRO_completo_BN.pdf
 
-   Les dades de cada peça (mesurades sobre el PDF) són a pedro_datos.py. Les partitures NO es versionen:
-   students/pedro/source/ (veure .gitignore). Norma de les peces a quatre mans: la partitura comença en
-   pàgina PARELLA (pàgines enfrontades) i, si cal, s'intercala un full de paper pautat."""
+   Los datos de cada pieza (medidos sobre el PDF) están en pedro_datos.py. Las partituras NO se versionan:
+   students/pedro/source/ (ver .gitignore). Norma de las piezas a cuatro manos: la partitura empieza en
+   página PAR (páginas enfrentadas) y, si hace falta, se intercala una hoja de papel pautado."""
 import io
 import os
 import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-os.environ.setdefault('ALUMNA', 'alba')          # tema sobri d'adult (sense Mussol Misol), text fix en català
-os.environ.setdefault('IDIOMA', 'ca')
+os.environ.setdefault('ALUMNA', 'alba')          # tema sobrio de adulto (sin Mussol Misol), texto fijo en castellano
+os.environ.setdefault('IDIOMA', 'es')
 from mayores_motor import (W, H, MARGIN, CONTENT_W, NAVY, NAVY_SOFT, INK, MUTED, PANEL, OCRE, AZUL, GRIS, COLORES_BLOQUE,
                            marco, titulo_pag, FICHA, build_ficha, build_pauta, _qr, _wrap)
 from reportlab.pdfgen import canvas
@@ -27,13 +27,13 @@ OFF = int(os.environ.get('PEDRO_OFFSET', '0'))        # paginas que van delante 
 SRC = os.path.join(HERE, '..', 'students', 'pedro', 'source')
 SRC_BN = os.path.join(HERE, '..', 'students', 'pedro', 'source_bn')
 OUT = os.path.join(HERE, 'entrega')
-KICK = 'DOSIER DE PEDRO · REPERTORI'
+KICK = 'DOSIER DE PEDRO · REPERTORIO'
 TEMPOS_IT = ('Largo', 'Adagio', 'Allegro', 'Allegretto', 'Andantino', 'Moderato')
 
 
-# ------------------------------------------------------------------ dificultat (criteri declarat i comprovable)
+# ------------------------------------------------------------------ dificultad (criterio declarado y comprobable)
 def puntuar(s):
-    """Punts de dificultat a partir de dades MESURADES (vegeu pedro_datos.py)."""
+    """Puntos de dificultad a partir de datos MEDIDOS (véase pedro_datos.py)."""
     c = sum(s['segs'])
     lon = 0 if c <= 16 else 1 if c <= 24 else 2 if c <= 34 else 3 if c <= 48 else 4
     comp = {(4, 4): 0, (2, 4): 0, (3, 4): 0.5, (2, 2): 1.0, (12, 8): 2.0}.get(s['ts'], 1.0)
@@ -51,9 +51,9 @@ def ordenar():
     return llista
 
 
-# ------------------------------------------------------------------ fitxa
+# ------------------------------------------------------------------ ficha
 class _Lienzo(canvas.Canvas):
-    """Retén el showPage de build_ficha per poder afegir, amb la y final que retorna, el quadre de notes de classe."""
+    """Retiene el showPage de build_ficha para poder añadir, con la y final que devuelve, el cuadro de notas de clase."""
     retener = False
 
     def showPage(self):
@@ -62,17 +62,17 @@ class _Lienzo(canvas.Canvas):
 
 
 def notas_clase(c, y):
-    """Quadre per escriure a mà (digitació, passatges difícils, data de la classe): omple el que queda de full."""
+    """Cuadro para escribir a mano (digitación, pasajes difíciles, fecha de la clase): llena lo que queda de hoja."""
     top = y - 18
     bot = 46
     if top - bot < 60:
         return
     c.setFont('DejaVuSans-Bold', 7.6)
     c.setFillColor(NAVY_SOFT)
-    c.drawString(MARGIN, top, 'NOTES DE CLASSE')
+    c.drawString(MARGIN, top, 'NOTAS DE CLASE')
     c.setFont('DejaVuSans', 7.2)
     c.setFillColor(MUTED)
-    c.drawString(MARGIN + 82, top, 'digitació · passatges a repassar · què treballem la propera setmana')
+    c.drawString(MARGIN + 82, top, 'digitación · pasajes a repasar · qué trabajamos la próxima semana')
     c.setStrokeColor(GRIS)
     c.setLineWidth(0.8)
     yy = top - 20
@@ -85,24 +85,24 @@ def fitxa(v, num_pag, ruta):
     c = _Lienzo(ruta, pagesize=(W, H))
     c.retener = True
     tempo = v['tempo']
-    if tempo.startswith('No indicat («'):
+    if tempo.startswith('No indicado («'):
         txt = tempo.split('«')[1].rstrip('»)')
-        datos_t = ('Caràcter', txt)
-    elif tempo == 'No indicat':
-        datos_t = ('Tempo', 'No indicat')
+        datos_t = ('Carácter', txt)
+    elif tempo == 'No indicado':
+        datos_t = ('Tempo', 'No indicado')
     elif tempo.startswith('♩'):
         datos_t = ('Tempo', tempo)
     else:
-        datos_t = ('Tempo' if tempo in TEMPOS_IT else 'Caràcter', tempo)
+        datos_t = ('Tempo' if tempo in TEMPOS_IT else 'Carácter', tempo)
     ton = v['ton']
-    ton_l = 'Tonalitat' if ('major' in ton or 'menor' in ton) else 'Armadura'
-    ton = (ton.replace('Sense alteracions a l\'armadura', 'Sense armadura').replace('Sense alteracions', 'Sense armadura')
-           .replace(' (acords impresos)', '').replace('Armadura de tres sostinguts (Fa♯ Do♯ Sol♯)', '3 sostinguts')
-           .replace('Armadura d\'un sostingut (Sol major)', 'Sol major (1 ♯)').replace(' (un sostingut)', ' (1 ♯)'))
+    ton_l = 'Tonalidad' if ('mayor' in ton or 'menor' in ton) else 'Armadura'
+    ton = (ton.replace('Sin alteraciones en la armadura', 'Sin armadura').replace('Sin alteraciones', 'Sin armadura')
+           .replace(' (acordes impresos)', '').replace('Armadura de tres sostenidos (Fa♯ Do♯ Sol♯)', '3 sostenidos')
+           .replace('Armadura de un sostenido (Sol mayor)', 'Sol mayor (1 ♯)').replace(' (un sostenido)', ' (1 ♯)'))
     total = v['compases']
-    ncomp = '%d%s' % (total, ' + anacrusi' if v['ana'] else '')
-    datos = [(ton_l, ton), ('Compàs', v['compas']), datos_t, ('Figura curta', PD.FIGS[v['fig']].capitalize()), ('Compassos', ncomp)]
-    # mapa: seccions formals si la forma és clara; si no, un tram per sistema de la partitura (és el que s'ha mesurat)
+    ncomp = '%d%s' % (total, ' + anacrusa' if v['ana'] else '')
+    datos = [(ton_l, ton), ('Compás', v['compas']), datos_t, ('Figura corta', PD.FIGS[v['fig']].capitalize()), ('Compases', ncomp)]
+    # mapa: secciones formales si la forma es clara; si no, un tramo por sistema de la partitura (es lo que se ha medido)
     segs, forma = v['segs'], v.get('forma')
     g = 1 if (forma or len(segs) <= 6) else 2
     grup = [sum(segs[i:i + g]) for i in range(0, len(segs), g)]
@@ -114,16 +114,16 @@ def fitxa(v, num_pag, ruta):
         a = b + 1
     ideas_pie = v['ideas_pie']
     if not forma:
-        ideas_pie += ' · Mapa: %s de la teva partitura.' % ('cada tram és un sistema' if g == 1 else 'cada tram són dos sistemes')
+        ideas_pie += ' · Mapa: %s de tu partitura.' % ('cada tramo es un sistema' if g == 1 else 'cada tramo son dos sistemas')
     sp = FICHA(datos=datos, secciones=secs, total=total, ideas=v['ideas'], especial=v['especial'], reto=v['reto'],
-               truco=v['truco'], sabias=v['sabias'], qr_texto='Escolta-la amb la partitura al davant.', ts=v['ts'],
-               ideas_titulo='La peça en quatre idees', ideas_pie=ideas_pie,
-               cuenta_titulo='Com es compta un compàs de %d/%d' % v['ts'],
-               cuenta_pie='Un compàs de %d/%d en corxeres. Aquí només el ritme; les notes, a la teva partitura.' % v['ts'])
+               truco=v['truco'], sabias=v['sabias'], qr_texto='Escúchala con la partitura delante.', ts=v['ts'],
+               ideas_titulo='La pieza en cuatro ideas', ideas_pie=ideas_pie,
+               cuenta_titulo='Cómo se cuenta un compás de %d/%d' % v['ts'],
+               cuenta_pie='Un compás de %d/%d en corcheas. Aquí solo el ritmo; las notas, en tu partitura.' % v['ts'])
     qr = os.path.join(OUT, '_qr_pedro_%s.png' % v['slug'])
     _qr('https://www.youtube.com/results?search_query=' + v['yt'], qr)
     cfg = dict(sp)
-    cfg.update(kicker='Pedro · peça %d · %s' % (v['num'], v['titulo']), page_num=num_pag, time_sig=v['ts'],
+    cfg.update(kicker='Pedro · pieza %d · %s' % (v['num'], v['titulo']), page_num=num_pag, time_sig=v['ts'],
                qr=dict(sp['qr'], png=qr), titulo=v['titulo'], autor=v['autor'], misol_buho=False)
     y = build_ficha(c, cfg)
     c.retener = False
@@ -136,23 +136,23 @@ def fitxa(v, num_pag, ruta):
 
 def pauta(num_pag, ruta, titol):
     c = canvas.Canvas(ruta, pagesize=(W, H))
-    build_pauta(c, dict(kicker='Pedro · ' + titol, page_num=num_pag, titulo_pauta='Per escriure', misol=None,
-                        pie_pauta='espai per apuntar passos, digitació o els compassos que us costen · '
-                                  'la partitura del duet s\'obre a la pàgina següent'))
+    build_pauta(c, dict(kicker='Pedro · ' + titol, page_num=num_pag, titulo_pauta='Para escribir', misol=None,
+                        pie_pauta='espacio para apuntar pasos, digitación o los compases que os cuestan · '
+                                  'la partitura del dúo se abre en la página siguiente'))
     c.save()
     return ruta
 
 
-# ------------------------------------------------------------------ pàgines de partitura
+# ------------------------------------------------------------------ páginas de partitura
 def pagines_partitura(v, num0, tmpdir):
-    """Retorna [(ruta_pdf_d_una_pagina, num)]: cada pàgina de la partitura original, escalada a A4 i amb el peu T-Clas."""
+    """Devuelve [(ruta_pdf_de_una_pagina, num)]: cada página de la partitura original, escalada a A4 y con el pie T-Clas."""
     src = os.path.join(SRC_BN if BN and os.path.exists(os.path.join(SRC_BN, v['slug'] + '.pdf')) else SRC, v['slug'] + '.pdf')
     rd = PdfReader(src)
     out = []
     for k, pg in enumerate(rd.pages):
         n = num0 + k
         ruta = os.path.join(tmpdir, '_s_%s_%d.pdf' % (v['slug'], k))
-        # base A4 blanca amb el peu
+        # base A4 blanca con el pie
         buf = canvas.Canvas(ruta, pagesize=(W, H))
         buf.setFillColor(NAVY_SOFT)
         buf.setFont('DejaVuSans', 7.4)
@@ -177,15 +177,15 @@ def pagines_partitura(v, num0, tmpdir):
     return out
 
 
-# ------------------------------------------------------------------ índex
+# ------------------------------------------------------------------ índice
 def pag_index(c, llista, inicio):
-    marco(c, KICK, 'El repertori de menys a més', 1 + OFF)
-    y = titulo_pag(c, 'El repertori, de menys a més',
-                   '%d peces ordenades per dificultat. Les marcades «només fitxa» tenen la partitura impresa a part: '
-                   'la fitxa és la guia per treballar-la.' % len(llista))
+    marco(c, KICK, 'El repertorio de menos a más', 1 + OFF)
+    y = titulo_pag(c, 'El repertorio, de menos a más',
+                   '%d piezas ordenadas por dificultad. Las marcadas «solo ficha» tienen la partitura impresa aparte: '
+                   'la ficha es la guía para trabajarla.' % len(llista))
     y -= 8
     xs = [MARGIN, MARGIN + 26, MARGIN + 270, MARGIN + 392, MARGIN + 462]
-    for x, t in zip(xs, ['Nº', 'PEÇA', 'QUÈ PORTA', 'NIVELL', 'PÀG.']):
+    for x, t in zip(xs, ['Nº', 'PIEZA', 'QUÉ INCLUYE', 'NIVEL', 'PÁG.']):
         c.setFont('DejaVuSans-Bold', 7)
         c.setFillColor(MUTED)
         c.drawString(x, y, t)
@@ -207,11 +207,11 @@ def pag_index(c, llista, inicio):
         c.drawString(xs[1], y - 18, v['autor'][:70])
         c.setFont('DejaVuSans', 7.2)
         c.setFillColor(OCRE if v['no'] else INK)
-        c.drawString(xs[2], y - (10 if v['duo'] else 13.5), 'Només fitxa' if v['no'] else 'Fitxa + partitura')
+        c.drawString(xs[2], y - (10 if v['duo'] else 13.5), 'Solo ficha' if v['no'] else 'Ficha + partitura')
         if v['duo']:
             c.setFont('DejaVuSans', 6.2)
             c.setFillColor(MUTED)
-            c.drawString(xs[2], y - 18, 'peça a quatre mans')
+            c.drawString(xs[2], y - 18, 'pieza a cuatro manos')
         for k in range(5):
             c.setFillColor(NAVY if k < v['nivel'] else GRIS)
             c.circle(xs[3] + 4 + k * 9.6, y - 12.5, 3.1, fill=1, stroke=0)
@@ -220,20 +220,20 @@ def pag_index(c, llista, inicio):
         c.drawString(xs[4], y - 13.5, str(inicio[v['slug']]))
         y -= h + 2.0
     y -= 10
-    y = _wrap(c, 'Criteri: longitud (compassos), figura més curta, compàs, activitat de la mà esquerra, alteracions, canvis de '
-                 'posició, matisos i indicacions, quatre mans, anacrusi i xifrats. Tot mesurat sobre la teva edició. '
-                 'Les curiositats del «Sabies que…?» són culturals i no estan verificades sobre la partitura.',
+    y = _wrap(c, 'Criterio: longitud (compases), figura más corta, compás, actividad de la mano izquierda, alteraciones, cambios de '
+                 'posición, matices e indicaciones, cuatro manos, anacrusa y cifrados. Todo medido sobre tu edición. '
+                 'Las curiosidades del «¿Sabías que…?» son culturales y no están verificadas sobre la partitura.',
               MARGIN, y, 'DejaVuSans', 7.2, CONTENT_W, 9.6, MUTED)
     c.showPage()
     return y
 
 
-# ------------------------------------------------------------------ muntatge
+# ------------------------------------------------------------------ montaje
 def muntar(destino, llista):
     os.makedirs(OUT, exist_ok=True)
     import tempfile
     with tempfile.TemporaryDirectory() as tmp:
-        # pas 1: calcular les pàgines de cada peça (per fer l'índex amb números)
+        # paso 1: calcular las páginas de cada pieza (para hacer el índice con números)
         inicio, pag, plan = {}, 2 + OFF, []
         for v in llista:
             inicio[v['slug']] = pag
@@ -264,7 +264,7 @@ def muntar(destino, llista):
                 for ruta, k in pagines_partitura(v, n, tmp):
                     for p in PdfReader(ruta).pages:
                         wr.add_page(p)
-        wr.add_metadata({'/Title': 'Dosier de Pedro · repertori', '/Author': 'T-Clas'})
+        wr.add_metadata({'/Title': 'Dosier de Pedro · repertorio', '/Author': 'T-Clas'})
         with open(destino, 'wb') as fh:
             wr.write(fh)
     return pag - 1 - OFF, inicio
@@ -274,7 +274,7 @@ if __name__ == '__main__':
     llista = ordenar()
     dst = os.path.join(OUT, os.environ.get('PEDRO_OUT', 'DOSIER_PEDRO_completo') + '%s.pdf' % ('_BN' if BN else ''))
     n, inicio = muntar(dst, llista)
-    print(n, 'pàgines ->', dst)
+    print(n, 'páginas ->', dst)
     for v in llista:
         print('%2d  %-34s pts=%4.1f nivel=%d  %s  p.%d' % (v['num'], v['titulo'][:34], v['pts'], v['nivel'],
                                                            'NO ' if v['no'] else 'sí ', inicio[v['slug']]))

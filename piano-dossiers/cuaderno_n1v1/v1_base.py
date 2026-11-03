@@ -384,6 +384,21 @@ class Doc:
             for i, b in enumerate(bl):
                 b.f(self.c, MARGIN, y, CONTENT_W)
                 y -= b.h + (extra if i in huecos else 0)
+            # espacio sobrante: practica libre en pentagramas (solo en las paginas de los temas)
+            resto = y - BOTTOM
+            if resto >= 82 and 'Anexo' not in pg['der'] and 'Calendario' not in pg['der'] and 'Cómo usar' not in pg['der']:
+                alto_p = 4 * GAP + GAP * 4.6
+                n_p = int((resto - 24) // alto_p)
+                if n_p >= 1:
+                    self.c.setFont('DejaVuSans-Bold', 8.2)
+                    self.c.setFillColor(OCRE)
+                    self.c.drawString(MARGIN, y - 12, 'PRÁCTICA LIBRE · escribe, copia o inventa')
+                    for j in range(min(n_p, 4)):
+                        ys_ = draw_staff(self.c, MARGIN, y - 24 - j * alto_p - GAP * 1.6, CONTENT_W, GAP)
+                        clef_ = 'treble' if j % 2 == 0 else 'bass'
+                        draw_clef(self.c, MARGIN + 4, ys_[-1], GAP, clef_)
+                        draw_barline(self.c, MARGIN, ys_[0], ys_[-1])
+                        draw_barline(self.c, MARGIN + CONTENT_W - 4, ys_[0], ys_[-1], final=True)
             self.c.showPage()
             self.paginas.append((num, pg['der']))
         return self.n0 + len(pages)

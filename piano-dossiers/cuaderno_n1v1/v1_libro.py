@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import v1_base
 from v1_base import *
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import v1_extra
 import v1_sep, v1_oct, v1_nov, v1_dic, v1_ene, v1_feb, v1_mar, v1_abr, v1_may, v1_jun, v1_anexos
 from reportlab.pdfgen import canvas
 
@@ -26,7 +27,9 @@ def montar(c, prev, portada=True):
     v1_anexos.calendario(d)
     for mes, mod in MODULOS:
         d.marca(mes)
+        v1_extra.apertura(d, mes)
         mod.construir(d)
+        v1_extra.al_piano(d, mes)
     d.marca('Anexos')
     v1_anexos.chuleta(d)
     v1_anexos.glosario(d)

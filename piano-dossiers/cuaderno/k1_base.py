@@ -112,7 +112,7 @@ def K_titulo_act(num, titulo, mes=''):
     def f(c, x, y, w):
         c.setFillColor(OCRE)
         c.circle(x + 20, y - 24, 20, stroke=0, fill=1)
-        txt(c, x + 20, y - 31, str(num), 22, SANSB if str(num) != '★' else 'DejaVuSans-Bold', white, 'c')
+        txt(c, x + 20, y - 31, str(num), 22, SANSB if str(num) not in ('★', '♫') else 'DejaVuSans-Bold', white, 'c')
         ts_ = 26
         while stringWidth(titulo, SERIFB, ts_) > w - 56 and ts_ > 16:
             ts_ -= 1

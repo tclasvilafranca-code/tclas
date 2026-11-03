@@ -13,7 +13,7 @@ if os.environ.get('BN') == '1':
 from k1_base import *
 from k1_comun import *
 import k1_base as KB
-import k1_sep, k1_oct, k1_nov, k1_dic, k1_ene_jun as ej
+import k1_sep, k1_oct, k1_nov, k1_dic, k1_ene_jun as ej, k1_piano
 import n1_base
 from dibujo_mano import ManoCanvas
 
@@ -149,9 +149,17 @@ def montar(c, prev, portada_=True):
     d = Doc(c, 2 if portada_ else 1, prev)
     como_funciona(d)
     calendario(d, {m: prev.get('m:' + m, '·') for m, _, _ in MESES})
+    k1_piano.mapa_curso(d, MESES)
     for mes, fn, _ in MESES:
         d.marca('m:' + mes)
+        n0 = len(d.items)
         fn(d)
+        # la pagina «Al piano» va justo antes del tablero de logros (ultima pagina del mes)
+        ult = max(i for i in range(n0, len(d.items)) if d.items[i][0] == 'break')
+        cola = d.items[ult:]
+        del d.items[ult:]
+        k1_piano.al_piano(d, mes)
+        d.items.extend(cola)
     guia_adultos(d)
     soluciones(d)
     pautas(d)
